@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holographic Universe</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #010103;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+  canvas { display: block; position: fixed; inset: 0; }
+  .vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(1,1,3,0.7) 100%);
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+let mouseX = 0.5, mouseY = 0.5;
+let tmx = 0.5, tmy = 0.5;
+let t = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initStars();
+}
+
+document.addEventListener('mousemove', e => {
+  tmx = e.clientX / W;
+  tmy = e.clientY / H;
+});
+
+const chars = '·.:;+*#01アイウカキ◇◆△▽∞∅∆⊕'.split('');
+
+// Ultra-fine starfield
+let stars = [];
+
+function initStars() {
+  // Dense but performant — cap at 15000 for smooth 60fps
+  const rawCount = Math.floor((W * H) / 80);
+  const count = Math.min(15000, rawCount);
+  stars = new Float32Array(count * 7); // x, y, z, baseHue, twinkleSpeed, twinkleOffset, hueShift
+
+  for (let i = 0; i < count; i++) {
+    const idx = i * 7;
+    stars[idx]     = Math.random(); // x
+    stars[idx + 1] = Math.random(); // y
+    stars[idx + 2] = Math.random(); // z (depth)
+    stars[idx + 3] = Math.random() * 360; // baseHue
+    stars[idx + 4] = 0.3 + Math.random() * 3; // twinkleSpeed
+    stars[idx + 5] = Math.random() * 6.283; // twinkleOffset
+    stars[idx + 6] = 40 + Math.random() * 260; // hueShift sensitivity
+  }
+}
+
+resize();
+window.addEventListener('resize', resize);
+
+// Pre-pick characters for performance
+const charCache = [];
+for (let i = 0; i < 5000; i++) charCache.push(chars[Math.floor(Math.random() * chars.length)]);
+
+// Shimmer wave
+let shimmerX = -1, shimmerActive = false;
+let shimmerTimer = 0, nextShimmer = 2000;
+
+function draw() {
+  t += 0.006;
+  shimmerTimer += 16;
+  mouseX += (tmx - mouseX) * 0.025;
+  mouseY += (tmy - mouseY) * 0.025;
+
+  // Shimmer cascade
+  if (shimmerTimer > nextShimmer) {
+    shimmerActive = true;
+    shimmerX = -0.1;
+    shimmerTimer = 0;
+    nextShimmer = 3000 + Math.random() * 6000;
+  }
+  if (shimmerActive) {
+    shimmerX += 0.004;
+    if (shimmerX > 1.15) shimmerActive = false;
+  }
+
+  // Fade (very slight trail for sparkle persistence)
+  ctx.fillStyle = 'rgba(1, 1, 3, 0.25)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Nebula undertones that shift with mouse
+  const nh1 = (mouseX * 150 + 180) % 360;
+  const nh2 = (mouseY * 120 + 300) % 360;
+  const g1 = ctx.createRadialGradient(
+    W * (0.25 + mouseX * 0.15), H * (0.35 + mouseY * 0.1), 0,
+    W * (0.25 + mouseX * 0.15), H * (0.35 + mouseY * 0.1), W * 0.4
+  );
+  g1.addColorStop(0, `hsla(${nh1}, 70%, 8%, 0.03)`);
+  g1.addColorStop(1, 'transparent');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, W, H);
+
+  const g2 = ctx.createRadialGradient(
+    W * (0.75 - mouseX * 0.1), H * (0.65 - mouseY * 0.1), 0,
+    W * (0.75 - mouseX * 0.1), H * (0.65 - mouseY * 0.1), W * 0.35
+  );
+  g2.addColorStop(0, `hsla(${nh2}, 60%, 6%, 0.025)`);
+  g2.addColorStop(1, 'transparent');
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const count = stars.length / 7;
+
+  for (let i = 0; i < count; i++) {
+    const idx = i * 7;
+    const x = stars[idx];
+    const y = stars[idx + 1];
+    const z = stars[idx + 2];
+    const baseHue = stars[idx + 3];
+    const twinkleSpeed = stars[idx + 4];
+    const twinkleOffset = stars[idx + 5];
+    const hueShift = stars[idx + 6];
+
+    // Twinkle — many stars dim at any given time
+    const twinkle = Math.sin(t * twinkleSpeed + twinkleOffset);
+    if (twinkle < -0.3) continue; // skip dim stars for performance + realism
+
+    const brightness = twinkle * 0.5 + 0.5;
+
+    // Holographic hue shift based on mouse (viewing angle)
+    const angleShift = (mouseX - 0.5) * hueShift + (mouseY - 0.5) * hueShift * 0.6;
+    const hue = (baseHue + angleShift + t * 3) % 360;
+
+    // Shimmer boost
+    let sBoost = 0;
+    if (shimmerActive) {
+      const sd = Math.abs(x - shimmerX);
+      if (sd < 0.06) sBoost = (1 - sd / 0.06) * 0.8;
+    }
+
+    const finalBright = Math.min(1, brightness + sBoost);
+    const alpha = (0.15 + z * 0.85) * finalBright;
+    if (alpha < 0.06) continue;
+
+    // Parallax
+    const px = (x + (mouseX - 0.5) * z * 0.04) * W;
+    const py = (y + (mouseY - 0.5) * z * 0.04) * H;
+
+    const size = 2 + z * 4; // 2-6px — very fine
+    const sat = 50 + Math.random() * 40 + sBoost * 30;
+    const lit = 25 + finalBright * 55 + sBoost * 20;
+
+    ctx.font = `${size}px monospace`;
+    ctx.fillStyle = `hsla(${hue}, ${sat}%, ${lit}%, ${alpha})`;
+    ctx.fillText(charCache[i % charCache.length], px, py);
+
+    // Bright stars get glow dot
+    if (alpha > 0.7 && z > 0.8) {
+      ctx.fillStyle = `hsla(${hue}, ${sat}%, ${lit + 15}%, ${alpha * 0.12})`;
+      ctx.font = `${size * 2.5}px monospace`;
+      ctx.fillText('·', px, py);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

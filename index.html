@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Digital Rain Background -->
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link active">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <!-- Hero -->
+    <section class="hero container">
+      <div class="hero__content">
+        <p class="label">Signal Detected</p>
+        <h1 class="heading-xl glitch">
+          Building things<br>
+          <span class="text-teal">between dimensions.</span>
+        </h1>
+        <div class="hero__subtitle">
+          <span class="typing-target" data-text="Software architect. App developer. Quiet observer of patterns in the static." style="visibility:hidden;">
+            Software architect. App developer. Quiet observer of patterns in the static.
+          </span>
+        </div>
+        <div class="hero__cta mt-4">
+          <a href="portfolio.html" class="btn btn--primary">View Work</a>
+          <a href="about.html" class="btn btn--ghost">About &raquo;</a>
+        </div>
+      </div>
+      <div class="hero__line" aria-hidden="true"></div>
+    </section>
+
+    <!-- Featured Work Preview -->
+    <section class="section container">
+      <div class="reveal">
+        <p class="label">Active Transmissions</p>
+        <h2 class="heading-lg">Recent builds</h2>
+      </div>
+
+      <div class="card-grid stagger mt-4">
+        <div class="card card--teal">
+          <div class="card__category">Intelligence &middot; OSINT</div>
+          <h3 class="card__title">Deep Seer</h3>
+          <p class="card__desc">90+ live data sources. Real-time 3D globe. AI-powered analysis. Court-ready evidence. Sees everything.</p>
+          <div class="card__tags">
+            <span class="tag">OSINT</span>
+            <span class="tag">AI</span>
+            <span class="tag">3D Viz</span>
+          </div>
+          <span class="status status--dev"><span class="status__dot"></span> In development</span>
+        </div>
+
+        <div class="card card--teal">
+          <div class="card__category">Developer &middot; Security</div>
+          <h3 class="card__title">Dagda</h3>
+          <p class="card__desc">514 security tools. 8 operational modes. One AI that understands them all. Watches, hunts, traps, and fights.</p>
+          <div class="card__tags">
+            <span class="tag">Cybersecurity</span>
+            <span class="tag">AI</span>
+            <span class="tag">514 Tools</span>
+          </div>
+          <span class="status status--dev"><span class="status__dot"></span> In development</span>
+        </div>
+
+        <div class="card card--violet">
+          <div class="card__category">Research &middot; Knowledge</div>
+          <h3 class="card__title">The Archive</h3>
+          <p class="card__desc">22 sacred texts. 14 traditions. One knowledge graph. AI that thinks like a scholar.</p>
+          <div class="card__tags">
+            <span class="tag">Knowledge Graph</span>
+            <span class="tag">AI</span>
+            <span class="tag">Research</span>
+          </div>
+          <span class="status status--dev"><span class="status__dot"></span> In development</span>
+        </div>
+      </div>
+
+      <div class="mt-6 reveal" style="text-align: center;">
+        <a href="portfolio.html" class="btn">All Projects</a>
+      </div>
+    </section>
+
+    <!-- Ambient divider -->
+    <div class="divider"></div>
+
+    <!-- Brief signal -->
+    <section class="section container" style="text-align: center;">
+      <div class="reveal">
+        <p class="heading-sm text-dim" style="margin-bottom: 0.5rem;">
+          <span class="coord-display">α:042.7.891.33</span>
+        </p>
+        <p class="heading-md" style="max-width: 600px; margin: 0 auto;">
+          Nine applications. Multiple architectures.<br>
+          <span class="text-dim">More incoming from adjacent timelines.</span>
+        </p>
+        <div class="mt-4">
+          <a href="connect.html" class="btn btn--ghost">Establish Contact</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moonlit Events — DJ Scene</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; cursor: default; }
+  canvas { display: block; position: fixed; inset: 0; }
+</style>
+</head>
+<body>
+<canvas id="output"></canvas>
+<script>
+const sceneCanvas = document.createElement('canvas');
+const sctx = sceneCanvas.getContext('2d');
+const outCanvas = document.getElementById('output');
+const ctx = outCanvas.getContext('2d');
+
+let W, H, t = 0;
+const CELL = 6;
+let cols, rows;
+
+const codeChars = '01{}[]<>():;=+-*/|!~#@_アイウカキ∞◇◆□∆∇⊕'.split('');
+let charGrid = [];
+let charTimer = 0;
+
+function resize() {
+  W = outCanvas.width = sceneCanvas.width = window.innerWidth;
+  H = outCanvas.height = sceneCanvas.height = window.innerHeight;
+  cols = Math.ceil(W / CELL);
+  rows = Math.ceil(H / CELL);
+  regenerateChars();
+}
+
+function regenerateChars() {
+  charGrid = [];
+  for (let r = 0; r < rows; r++) {
+    const row = [];
+    for (let c = 0; c < cols; c++) row.push(codeChars[Math.floor(Math.random() * codeChars.length)]);
+    charGrid.push(row);
+  }
+}
+
+resize();
+window.addEventListener('resize', resize);
+
+// Beam angles — ethereally slow drift
+const pinkBeam = { angle: 0.40, target: 0.40, timer: 0 };
+const blueBeam = { angle: -0.20, target: -0.20, timer: 0 };
+function updateBeam(b) {
+  b.timer++;
+  if (b.timer > 350 + Math.random() * 250) {
+    b.timer = 0;
+    b.target += (Math.random() - 0.5) * 0.2;
+    b.target = Math.max(-0.5, Math.min(0.5, b.target));
+  }
+  b.angle += (b.target - b.angle) * 0.003;
+}
+
+// ═══ SCENE: pure abstract light and shadow ═══
+// No cartoon people. No silhouettes. Just the atmosphere of the photo.
+function renderScene() {
+  sctx.fillStyle = '#000';
+  sctx.fillRect(0, 0, W, H);
+  updateBeam(pinkBeam);
+  updateBeam(blueBeam);
+
+  // ── HOT PINK/MAGENTA SOURCE — upper left ──
+  // Intense radial source like the photo's pink light
+  const pSX = W * 0.10, pSY = H * 0.02;
+  sctx.save();
+  sctx.globalCompositeOperation = 'lighter';
+
+  // Hot core
+  const pCore = sctx.createRadialGradient(pSX, pSY, 0, pSX, pSY, 90);
+  pCore.addColorStop(0, 'rgba(255, 200, 230, 0.95)');
+  pCore.addColorStop(0.2, 'rgba(255, 80, 150, 0.7)');
+  pCore.addColorStop(0.5, 'rgba(255, 40, 100, 0.3)');
+  pCore.addColorStop(1, 'transparent');
+  sctx.fillStyle = pCore;
+  sctx.fillRect(pSX - 90, pSY - 90, 180, 180);
+
+  // Massive pink atmospheric wash
+  const pWash = sctx.createRadialGradient(pSX, pSY, 0, pSX + W * 0.2, pSY + H * 0.4, W * 0.7);
+  pWash.addColorStop(0, 'rgba(200, 20, 80, 0.50)');
+  pWash.addColorStop(0.2, 'rgba(160, 15, 65, 0.25)');
+  pWash.addColorStop(0.5, 'rgba(100, 8, 45, 0.08)');
+  pWash.addColorStop(1, 'transparent');
+  sctx.fillStyle = pWash;
+  sctx.fillRect(0, 0, W, H);
+
+  // Directional beam from source
+  const pA = Math.PI / 2 + pinkBeam.angle + 0.3;
+  const pEX = pSX + Math.cos(pA) * H * 1.5, pEY = pSY + Math.sin(pA) * H * 1.5;
+  const ppX = Math.cos(pA - Math.PI / 2), ppY = Math.sin(pA - Math.PI / 2);
+  const pBm = sctx.createLinearGradient(pSX, pSY, pEX, pEY);
+  pBm.addColorStop(0, 'rgba(255, 50, 120, 0.55)');
+  pBm.addColorStop(0.08, 'rgba(220, 30, 90, 0.30)');
+  pBm.addColorStop(0.25, 'rgba(160, 15, 60, 0.10)');
+  pBm.addColorStop(0.5, 'rgba(80, 5, 30, 0.03)');
+  pBm.addColorStop(1, 'transparent');
+  sctx.fillStyle = pBm;
+  sctx.beginPath();
+  sctx.moveTo(pSX + ppX * 20, pSY + ppY * 20);
+  sctx.lineTo(pSX - ppX * 20, pSY - ppY * 20);
+  sctx.lineTo(pEX - ppX * W * 0.3, pEY - ppY * W * 0.3);
+  sctx.lineTo(pEX + ppX * W * 0.3, pEY + ppY * W * 0.3);
+  sctx.fill();
+
+  // ── BLUE SOURCE — upper right / right side ──
+  const bSX = W * 0.85, bSY = H * 0.08;
+
+  // Blue atmospheric wash — floods the right and center
+  const bWash = sctx.createRadialGradient(bSX, bSY, 0, bSX - W * 0.15, bSY + H * 0.35, W * 0.65);
+  bWash.addColorStop(0, 'rgba(20, 60, 220, 0.45)');
+  bWash.addColorStop(0.15, 'rgba(15, 45, 180, 0.22)');
+  bWash.addColorStop(0.4, 'rgba(10, 30, 120, 0.08)');
+  bWash.addColorStop(1, 'transparent');
+  sctx.fillStyle = bWash;
+  sctx.fillRect(0, 0, W, H);
+
+  // Blue beam
+  const bA = Math.PI / 2 + blueBeam.angle - 0.2;
+  const bEX = bSX + Math.cos(bA) * H * 1.5, bEY = bSY + Math.sin(bA) * H * 1.5;
+  const bpX = Math.cos(bA - Math.PI / 2), bpY = Math.sin(bA - Math.PI / 2);
+  const bBm = sctx.createLinearGradient(bSX, bSY, bEX, bEY);
+  bBm.addColorStop(0, 'rgba(40, 80, 255, 0.50)');
+  bBm.addColorStop(0.08, 'rgba(30, 60, 220, 0.25)');
+  bBm.addColorStop(0.25, 'rgba(20, 40, 150, 0.08)');
+  bBm.addColorStop(0.5, 'rgba(10, 20, 80, 0.02)');
+  bBm.addColorStop(1, 'transparent');
+  sctx.fillStyle = bBm;
+  sctx.beginPath();
+  sctx.moveTo(bSX + bpX * 15, bSY + bpY * 15);
+  sctx.lineTo(bSX - bpX * 15, bSY - bpY * 15);
+  sctx.lineTo(bEX - bpX * W * 0.25, bEY - bpY * W * 0.25);
+  sctx.lineTo(bEX + bpX * W * 0.25, bEY + bpY * W * 0.25);
+  sctx.fill();
+
+  // Blue source glow
+  const bCore = sctx.createRadialGradient(bSX, bSY, 0, bSX, bSY, 50);
+  bCore.addColorStop(0, 'rgba(100, 160, 255, 0.6)');
+  bCore.addColorStop(0.4, 'rgba(50, 100, 230, 0.2)');
+  bCore.addColorStop(1, 'transparent');
+  sctx.fillStyle = bCore;
+  sctx.fillRect(bSX - 50, bSY - 50, 100, 100);
+
+  // ── Roaming color pools in the crowd zone ──
+  const spotC = [[180,30,80],[20,50,180],[90,20,160],[0,160,120],[200,15,50]];
+  for (let i = 0; i < spotC.length; i++) {
+    const sc = spotC[i];
+    const sx = W * 0.12 + (Math.sin(t * 0.012 + i * 1.8) * 0.5 + 0.5) * W * 0.76;
+    const sy = H * 0.28 + (Math.sin(t * 0.009 + i * 2.3) * 0.5 + 0.5) * H * 0.40;
+    const br = Math.sin(t * 0.015 + i * 1.1) * 0.5 + 0.5;
+    const rad = 70 + br * 60;
+    const al = br * 0.18;
+    if (al > 0.02) {
+      const sg = sctx.createRadialGradient(sx, sy, 0, sx, sy, rad);
+      sg.addColorStop(0, `rgba(${sc[0]},${sc[1]},${sc[2]},${al})`);
+      sg.addColorStop(0.5, `rgba(${sc[0]},${sc[1]},${sc[2]},${al * 0.25})`);
+      sg.addColorStop(1, 'transparent');
+      sctx.fillStyle = sg;
+      sctx.fillRect(sx - rad, sy - rad, rad * 2, rad * 2);
+    }
+  }
+
+  // ── Hazy crowd mass — not individual people, just a warm dense glow ──
+  // Crowd zone: abstract density of warm dim light, shapes implied not drawn
+  const crowdGrad = sctx.createLinearGradient(0, H * 0.30, 0, H * 0.75);
+  crowdGrad.addColorStop(0, 'rgba(15, 8, 30, 0.15)');
+  crowdGrad.addColorStop(0.3, 'rgba(20, 12, 40, 0.12)');
+  crowdGrad.addColorStop(0.7, 'rgba(18, 10, 35, 0.08)');
+  crowdGrad.addColorStop(1, 'transparent');
+  sctx.fillStyle = crowdGrad;
+  sctx.fillRect(0, H * 0.30, W, H * 0.45);
+
+  // Scattered crowd glints — tiny random bright spots like catch-lights on heads/phones
+  for (let i = 0; i < 60; i++) {
+    const gx = W * 0.05 + Math.random() * W * 0.9;
+    const gy = H * 0.30 + Math.random() * H * 0.42;
+    const twinkle = Math.sin(t * (0.3 + i * 0.05) + i * 2.1) * 0.5 + 0.5;
+    if (twinkle > 0.6) {
+      const gr = 1 + Math.random() * 1.5;
+      const nx = gx / W;
+      let hue = 280;
+      if (nx < 0.35) hue = 320;
+      else if (nx > 0.65) hue = 220;
+      const gg = sctx.createRadialGradient(gx, gy, 0, gx, gy, gr * 3);
+      gg.addColorStop(0, `hsla(${hue}, 70%, 60%, ${twinkle * 0.4})`);
+      gg.addColorStop(1, 'transparent');
+      sctx.fillStyle = gg;
+      sctx.fillRect(gx - gr * 3, gy - gr * 3, gr * 6, gr * 6);
+    }
+  }
+
+  // ── Back bar — line of warm bottle glints ──
+  for (let i = 0; i < 40; i++) {
+    const bx = W * 0.15 + (i / 39) * W * 0.7;
+    const by = H * 0.11 + Math.sin(i * 0.7) * H * 0.02;
+    const tw = Math.sin(t * 0.4 + i * 0.8) * 0.3 + 0.7;
+    const bg = sctx.createRadialGradient(bx, by, 0, bx, by, 5);
+    bg.addColorStop(0, `rgba(255, 180, 80, ${0.3 * tw})`);
+    bg.addColorStop(1, 'transparent');
+    sctx.fillStyle = bg;
+    sctx.fillRect(bx - 5, by - 5, 10, 10);
+  }
+
+  // Red accent left
+  const rg = sctx.createRadialGradient(W * 0.02, H * 0.15, 0, W * 0.02, H * 0.15, 50);
+  rg.addColorStop(0, 'rgba(200, 50, 20, 0.45)');
+  rg.addColorStop(0.5, 'rgba(150, 30, 10, 0.15)');
+  rg.addColorStop(1, 'transparent');
+  sctx.fillStyle = rg;
+  sctx.fillRect(0, H * 0.05, 100, 200);
+
+  sctx.restore();
+
+  // ── BOOTH ZONE — bottom portion ──
+  // Dark horizontal band with equipment glows
+  const bt = H * 0.76;
+  sctx.fillStyle = 'rgba(5, 2, 10, 0.8)';
+  sctx.fillRect(0, bt, W, H - bt);
+
+  // Booth edge — bright reflection line
+  const edgeG = sctx.createLinearGradient(0, bt, W, bt);
+  edgeG.addColorStop(0, 'rgba(200, 50, 100, 0.5)');
+  edgeG.addColorStop(0.35, 'rgba(120, 25, 65, 0.25)');
+  edgeG.addColorStop(0.55, 'rgba(80, 60, 140, 0.20)');
+  edgeG.addColorStop(1, 'rgba(30, 60, 200, 0.4)');
+  sctx.fillStyle = edgeG;
+  sctx.fillRect(0, bt - 1, W, 2);
+
+  // Equipment glow spots — jog wheels as abstract circular glows
+  // Left CDJ — pink glow circle
+  const cdjLX = W * 0.22, cdjY = H * 0.86;
+  const cdjG1 = sctx.createRadialGradient(cdjLX, cdjY, 0, cdjLX, cdjY, 40);
+  cdjG1.addColorStop(0, 'rgba(200, 50, 100, 0.4)');
+  cdjG1.addColorStop(0.3, 'rgba(150, 30, 70, 0.2)');
+  cdjG1.addColorStop(0.6, 'rgba(100, 15, 45, 0.08)');
+  cdjG1.addColorStop(1, 'transparent');
+  sctx.fillStyle = cdjG1;
+  sctx.fillRect(cdjLX - 40, cdjY - 40, 80, 80);
+  // Ring
+  sctx.beginPath(); sctx.arc(cdjLX, cdjY, 25, 0, Math.PI * 2);
+  sctx.strokeStyle = 'rgba(255, 80, 140, 0.5)'; sctx.lineWidth = 1.5; sctx.stroke();
+  sctx.beginPath(); sctx.arc(cdjLX, cdjY, 10, 0, Math.PI * 2);
+  sctx.strokeStyle = 'rgba(255, 60, 120, 0.3)'; sctx.lineWidth = 1; sctx.stroke();
+
+  // Mixer — center glow
+  const mixX = W * 0.44;
+  const mixG = sctx.createRadialGradient(mixX, cdjY - 5, 0, mixX, cdjY - 5, 35);
+  mixG.addColorStop(0, 'rgba(140, 80, 200, 0.25)');
+  mixG.addColorStop(0.5, 'rgba(100, 50, 150, 0.10)');
+  mixG.addColorStop(1, 'transparent');
+  sctx.fillStyle = mixG;
+  sctx.fillRect(mixX - 35, cdjY - 40, 70, 70);
+  // Fader LEDs
+  for (let i = 0; i < 6; i++) {
+    const lx = mixX - 15 + (i / 5) * 30;
+    sctx.beginPath(); sctx.arc(lx, cdjY - 20, 1.5, 0, Math.PI * 2);
+    sctx.fillStyle = i < 3 ? 'rgba(0, 255, 100, 0.6)' : 'rgba(255, 60, 60, 0.6)';
+    sctx.fill();
+  }
+
+  // Right CDJ — blue glow circle
+  const cdjRX = W * 0.68;
+  const cdjG2 = sctx.createRadialGradient(cdjRX, cdjY, 0, cdjRX, cdjY, 40);
+  cdjG2.addColorStop(0, 'rgba(30, 60, 200, 0.35)');
+  cdjG2.addColorStop(0.3, 'rgba(20, 40, 150, 0.18)');
+  cdjG2.addColorStop(0.6, 'rgba(10, 25, 100, 0.06)');
+  cdjG2.addColorStop(1, 'transparent');
+  sctx.fillStyle = cdjG2;
+  sctx.fillRect(cdjRX - 40, cdjY - 40, 80, 80);
+  sctx.beginPath(); sctx.arc(cdjRX, cdjY, 25, 0, Math.PI * 2);
+  sctx.strokeStyle = 'rgba(60, 100, 255, 0.5)'; sctx.lineWidth = 1.5; sctx.stroke();
+  sctx.beginPath(); sctx.arc(cdjRX, cdjY, 10, 0, Math.PI * 2);
+  sctx.strokeStyle = 'rgba(50, 80, 230, 0.3)'; sctx.lineWidth = 1; sctx.stroke();
+
+  // Scattered equipment LEDs
+  for (let i = 0; i < 15; i++) {
+    const lx = W * 0.12 + (i / 14) * W * 0.65;
+    const ly = H * 0.80 + Math.random() * H * 0.05;
+    sctx.beginPath(); sctx.arc(lx, ly, 1 + Math.random(), 0, Math.PI * 2);
+    const lhue = lx < W * 0.4 ? 330 : (lx > W * 0.6 ? 220 : 280);
+    sctx.fillStyle = `hsla(${lhue}, 80%, 55%, ${0.3 + Math.random() * 0.3})`;
+    sctx.fill();
+  }
+}
+
+// ═══ RENDER AS CODE ═══
+function renderAsCode() {
+  const imageData = sctx.getImageData(0, 0, W, H);
+  const pixels = imageData.data;
+
+  ctx.fillStyle = '#000';
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  charTimer++;
+  if (charTimer > 25) {
+    charTimer = 0;
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        if (Math.random() < 0.04)
+          charGrid[r][c] = codeChars[Math.floor(Math.random() * codeChars.length)];
+  }
+
+  ctx.font = `${CELL - 1}px monospace`;
+
+  for (let r = 0; r < rows; r++) {
+    if (r >= charGrid.length) break;
+    for (let c = 0; c < cols; c++) {
+      if (c >= charGrid[r].length) break;
+      const px = c * CELL + CELL / 2;
+      const py = r * CELL + CELL / 2;
+      const sx = Math.min(Math.floor(px), W - 1);
+      const sy = Math.min(Math.floor(py), H - 1);
+      const pidx = (sy * W + sx) * 4;
+      let pr = pixels[pidx], pg = pixels[pidx + 1], pb = pixels[pidx + 2];
+      const brightness = pr * 0.299 + pg * 0.587 + pb * 0.114;
+
+      if (brightness < 1) {
+        if (Math.random() < 0.07) {
+          ctx.fillStyle = 'rgba(12,5,22,0.3)';
+          ctx.fillText(charGrid[r][c], px, py);
+        }
+        continue;
+      }
+
+      const boost = brightness < 20 ? 3.0 : (brightness < 60 ? 2.0 : 1.3);
+      pr = Math.min(255, Math.floor(pr * boost));
+      pg = Math.min(255, Math.floor(pg * boost));
+      pb = Math.min(255, Math.floor(pb * boost));
+      const alpha = Math.min(0.95, 0.2 + brightness / 50);
+      ctx.fillStyle = `rgba(${pr},${pg},${pb},${alpha})`;
+      ctx.fillText(charGrid[r][c], px, py);
+    }
+  }
+}
+
+function draw() {
+  t += 0.016;
+  renderScene();
+  renderAsCode();
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

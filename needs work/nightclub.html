@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moonlit Events — Nightclub</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; cursor: default; }
+  canvas { display: block; position: fixed; inset: 0; }
+</style>
+</head>
+<body>
+<canvas id="output"></canvas>
+<script>
+const sceneCanvas = document.createElement('canvas');
+const sctx = sceneCanvas.getContext('2d');
+const outCanvas = document.getElementById('output');
+const ctx = outCanvas.getContext('2d');
+
+let W, H, t = 0;
+const CELL = 6;
+let cols, rows;
+
+const codeChars = '01{}[]<>():;=+-*/|!~#_アイウカキ∞◇◆□∆∇⊕⊗'.split('');
+let charGrid = [];
+let charTimer = 0;
+
+function resize() {
+  W = outCanvas.width = sceneCanvas.width = window.innerWidth;
+  H = outCanvas.height = sceneCanvas.height = window.innerHeight;
+  cols = Math.ceil(W / CELL);
+  rows = Math.ceil(H / CELL);
+  regenerateChars();
+}
+
+function regenerateChars() {
+  charGrid = [];
+  for (let r = 0; r < rows; r++) {
+    const row = [];
+    for (let c = 0; c < cols; c++) row.push(codeChars[Math.floor(Math.random() * codeChars.length)]);
+    charGrid.push(row);
+  }
+}
+
+resize();
+window.addEventListener('resize', resize);
+
+// Light beam drift
+class Beam {
+  constructor(angle) { this.angle = angle; this.target = angle; this.timer = Math.random() * 400; }
+  update() {
+    this.timer++;
+    if (this.timer > 350 + Math.random() * 250) {
+      this.timer = 0;
+      this.target = this.angle + (Math.random() - 0.5) * 0.3;
+    }
+    this.angle += (this.target - this.angle) * 0.004;
+  }
+}
+const beams = [
+  new Beam(Math.PI / 2 + 0.45),
+  new Beam(Math.PI / 2 + 0.2),
+  new Beam(Math.PI / 2),
+  new Beam(Math.PI / 2 - 0.15),
+  new Beam(Math.PI / 2 - 0.35),
+];
+const beamHues = [320, 310, 280, 215, 195];
+const beamIntensities = [0.40, 0.28, 0.20, 0.25, 0.38];
+const beamXs = [0.08, 0.22, 0.50, 0.72, 0.88];
+const beamYs = [0.18, 0.15, 0.13, 0.17, 0.19];
+
+function renderScene() {
+  sctx.fillStyle = '#000';
+  sctx.fillRect(0, 0, W, H);
+  sctx.save();
+  sctx.globalCompositeOperation = 'lighter';
+
+  // ── MASSIVE COLOR WASHES ──
+  // Pink from left
+  const pw = sctx.createRadialGradient(W * 0.08, H * 0.15, 0, W * 0.15, H * 0.35, W * 0.7);
+  pw.addColorStop(0, 'rgba(220, 30, 120, 0.55)');
+  pw.addColorStop(0.15, 'rgba(160, 18, 80, 0.22)');
+  pw.addColorStop(0.4, 'rgba(90, 8, 45, 0.06)');
+  pw.addColorStop(1, 'transparent');
+  sctx.fillStyle = pw;
+  sctx.fillRect(0, 0, W, H);
+
+  // Blue from right
+  const bw = sctx.createRadialGradient(W * 0.90, H * 0.18, 0, W * 0.80, H * 0.35, W * 0.65);
+  bw.addColorStop(0, 'rgba(25, 70, 220, 0.45)');
+  bw.addColorStop(0.15, 'rgba(18, 50, 160, 0.18)');
+  bw.addColorStop(0.4, 'rgba(10, 28, 100, 0.05)');
+  bw.addColorStop(1, 'transparent');
+  sctx.fillStyle = bw;
+  sctx.fillRect(0, 0, W, H);
+
+  // Purple atmosphere center
+  const purp = sctx.createRadialGradient(W * 0.5, H * 0.35, 0, W * 0.5, H * 0.35, W * 0.4);
+  purp.addColorStop(0, 'rgba(70, 20, 130, 0.12)');
+  purp.addColorStop(1, 'transparent');
+  sctx.fillStyle = purp;
+  sctx.fillRect(0, 0, W, H);
+
+  // ── LIGHT BEAMS (directional, from fixture positions) ──
+  for (let i = 0; i < beams.length; i++) {
+    beams[i].update();
+    const ox = beamXs[i] * W, oy = beamYs[i] * H;
+    const a = beams[i].angle;
+    const len = H * 1.4;
+    const ex = ox + Math.cos(a) * len, ey = oy + Math.sin(a) * len;
+    const px = Math.cos(a - Math.PI / 2), py = Math.sin(a - Math.PI / 2);
+    const inten = beamIntensities[i];
+    const hue = beamHues[i];
+
+    const bg = sctx.createLinearGradient(ox, oy, ex, ey);
+    bg.addColorStop(0, `hsla(${hue}, 90%, 65%, ${inten})`);
+    bg.addColorStop(0.10, `hsla(${hue}, 85%, 50%, ${inten * 0.5})`);
+    bg.addColorStop(0.3, `hsla(${hue}, 75%, 40%, ${inten * 0.12})`);
+    bg.addColorStop(0.6, 'transparent');
+    sctx.fillStyle = bg;
+    sctx.beginPath();
+    sctx.moveTo(ox + px * 6, oy + py * 6);
+    sctx.lineTo(ox - px * 6, oy - py * 6);
+    sctx.lineTo(ex - px * W * 0.12, ey - py * W * 0.12);
+    sctx.lineTo(ex + px * W * 0.12, ey + py * W * 0.12);
+    sctx.fill();
+
+    // Source glow
+    const sg = sctx.createRadialGradient(ox, oy, 0, ox, oy, 35);
+    sg.addColorStop(0, `hsla(${hue}, 95%, 80%, ${Math.min(1, inten * 1.8)})`);
+    sg.addColorStop(0.5, `hsla(${hue}, 85%, 60%, ${inten * 0.4})`);
+    sg.addColorStop(1, 'transparent');
+    sctx.fillStyle = sg;
+    sctx.fillRect(ox - 35, oy - 35, 70, 70);
+  }
+
+  // ── RIBBONS — soft draped light, not drawn shapes ──
+  // Gentle bright curves across the upper ceiling area
+  for (let i = 0; i < 6; i++) {
+    const baseY = H * (0.04 + i * 0.025);
+    const hue = [320, 290, 260, 310, 240, 300][i];
+    const amplitude = 12 + i * 4;
+    sctx.beginPath();
+    for (let x = 0; x <= W; x += 3) {
+      const p = x / W;
+      const ry = baseY + Math.sin(p * (1.5 + i * 0.3) * Math.PI + t * 0.015 + i * 0.5) * amplitude;
+      if (x === 0) sctx.moveTo(x, ry);
+      else sctx.lineTo(x, ry);
+    }
+    sctx.strokeStyle = `hsla(${hue}, 70%, 50%, ${0.12 + Math.sin(t * 0.02 + i) * 0.03})`;
+    sctx.lineWidth = 3 + i * 0.5;
+    sctx.stroke();
+    // Soft glow along ribbon
+    sctx.strokeStyle = `hsla(${hue}, 60%, 40%, ${0.04 + Math.sin(t * 0.02 + i) * 0.01})`;
+    sctx.lineWidth = 12 + i * 2;
+    sctx.stroke();
+  }
+
+  // ── 9-POINTED STAR LANTERN — bright glowing feature ──
+  const starCX = W * 0.62, starCY = H * 0.24;
+  const oR = Math.min(W, H) * 0.16 * (Math.sin(t * 0.06) * 0.04 + 1);
+  const iR = oR * 0.42;
+
+  // Massive glow
+  const starGlow = sctx.createRadialGradient(starCX, starCY, 0, starCX, starCY, oR * 3);
+  starGlow.addColorStop(0, 'rgba(200, 170, 255, 0.50)');
+  starGlow.addColorStop(0.15, 'rgba(150, 100, 220, 0.20)');
+  starGlow.addColorStop(0.4, 'rgba(80, 40, 150, 0.06)');
+  starGlow.addColorStop(1, 'transparent');
+  sctx.fillStyle = starGlow;
+  sctx.fillRect(starCX - oR * 3, starCY - oR * 3, oR * 6, oR * 6);
+
+  // Star shape
+  sctx.beginPath();
+  for (let i = 0; i < 18; i++) {
+    const a = (i * Math.PI / 9) - Math.PI / 2;
+    const r = i % 2 === 0 ? oR : iR;
+    const x = starCX + Math.cos(a) * r, y = starCY + Math.sin(a) * r;
+    if (i === 0) sctx.moveTo(x, y); else sctx.lineTo(x, y);
+  }
+  sctx.closePath();
+  const sGrad = sctx.createRadialGradient(starCX, starCY, 0, starCX, starCY, oR);
+  sGrad.addColorStop(0, 'rgba(240, 220, 255, 0.90)');
+  sGrad.addColorStop(0.25, 'rgba(180, 140, 240, 0.65)');
+  sGrad.addColorStop(0.5, 'rgba(130, 80, 200, 0.40)');
+  sGrad.addColorStop(0.8, 'rgba(90, 50, 160, 0.20)');
+  sGrad.addColorStop(1, 'rgba(60, 30, 120, 0.10)');
+  sctx.fillStyle = sGrad;
+  sctx.fill();
+
+  // ── CROWD ZONE — hazy abstract warmth ──
+  // Scattered catch-light glints
+  for (let i = 0; i < 50; i++) {
+    const gx = W * 0.05 + Math.random() * W * 0.9;
+    const gy = H * 0.62 + Math.random() * H * 0.36;
+    const tw = Math.sin(t * (0.25 + i * 0.04) + i * 2.3) * 0.5 + 0.5;
+    if (tw > 0.55) {
+      const gr = 1 + Math.random() * 1.5;
+      const nx = gx / W;
+      let hue = 280;
+      if (nx < 0.3) hue = 315;
+      else if (nx > 0.7) hue = 215;
+      const gg = sctx.createRadialGradient(gx, gy, 0, gx, gy, gr * 3);
+      gg.addColorStop(0, `hsla(${hue}, 65%, 55%, ${tw * 0.35})`);
+      gg.addColorStop(1, 'transparent');
+      sctx.fillStyle = gg;
+      sctx.fillRect(gx - gr * 3, gy - gr * 3, gr * 6, gr * 6);
+    }
+  }
+
+  // Stage figure area — subtle silhouette hint (just a dark shape, not a cartoon)
+  const sfx = W * 0.52, sfy = H * 0.57;
+  const sfg = sctx.createRadialGradient(sfx, sfy, 0, sfx, sfy, 30);
+  sfg.addColorStop(0, 'rgba(30, 12, 50, 0.15)');
+  sfg.addColorStop(1, 'transparent');
+  sctx.fillStyle = sfg;
+  sctx.fillRect(sfx - 30, sfy - 40, 60, 70);
+
+  sctx.restore();
+}
+
+// ═══ RENDER AS CODE ═══
+function renderAsCode() {
+  const imageData = sctx.getImageData(0, 0, W, H);
+  const pixels = imageData.data;
+
+  ctx.fillStyle = '#000';
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  charTimer++;
+  if (charTimer > 20) {
+    charTimer = 0;
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        if (Math.random() < 0.03)
+          charGrid[r][c] = codeChars[Math.floor(Math.random() * codeChars.length)];
+  }
+
+  ctx.font = `${CELL - 1}px monospace`;
+
+  for (let r = 0; r < rows; r++) {
+    if (r >= charGrid.length) break;
+    for (let c = 0; c < cols; c++) {
+      if (c >= charGrid[r].length) break;
+      const px = c * CELL + CELL / 2;
+      const py = r * CELL + CELL / 2;
+      const sx = Math.min(Math.floor(px), W - 1);
+      const sy = Math.min(Math.floor(py), H - 1);
+      const pidx = (sy * W + sx) * 4;
+      let pr = pixels[pidx], pg = pixels[pidx + 1], pb = pixels[pidx + 2];
+      const brightness = pr * 0.299 + pg * 0.587 + pb * 0.114;
+
+      if (brightness < 1) {
+        if (Math.random() < 0.06) {
+          ctx.fillStyle = 'rgba(12,5,25,0.28)';
+          ctx.fillText(charGrid[r][c], px, py);
+        }
+        continue;
+      }
+
+      const boost = brightness < 20 ? 3.0 : (brightness < 60 ? 2.0 : 1.3);
+      pr = Math.min(255, Math.floor(pr * boost));
+      pg = Math.min(255, Math.floor(pg * boost));
+      pb = Math.min(255, Math.floor(pb * boost));
+      const alpha = Math.min(0.95, 0.2 + brightness / 50);
+      ctx.fillStyle = `rgba(${pr},${pg},${pb},${alpha})`;
+      ctx.fillText(charGrid[r][c], px, py);
+    }
+  }
+}
+
+function draw() {
+  t += 0.016;
+  renderScene();
+  renderAsCode();
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>

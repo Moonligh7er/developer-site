@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab | Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <section class="section--hero container">
+      <div class="reveal">
+        <p class="label">Transmissions</p>
+        <h1 class="heading-xl glitch">Lab</h1>
+        <p class="text-body mt-2 text-dim">Devlogs, experiments, and dispatches from the build process.</p>
+      </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0; max-width: 800px;">
+
+      <div class="stagger">
+
+        <article class="lab-entry">
+          <p class="lab-entry__date">2026.03 &mdash; Cycle 03</p>
+          <h3 class="lab-entry__title">Eight signals, one frequency</h3>
+          <p class="lab-entry__excerpt">
+            Portfolio site is live. Eight applications in parallel development — each one a
+            different answer to the same question. Notes on building multiple complex systems
+            simultaneously without losing coherence.
+          </p>
+        </article>
+
+        <article class="lab-entry">
+          <p class="lab-entry__date">2026.03 &mdash; Cycle 02</p>
+          <h3 class="lab-entry__title">On architecture as archaeology</h3>
+          <p class="lab-entry__excerpt">
+            The best code architectures aren't designed — they're excavated. You remove what
+            doesn't belong until the structure reveals itself. Thoughts on letting the problem
+            space dictate the solution shape.
+          </p>
+        </article>
+
+        <article class="lab-entry">
+          <p class="lab-entry__date">2026.02 &mdash; Cycle 01</p>
+          <h3 class="lab-entry__title">First transmission</h3>
+          <p class="lab-entry__excerpt">
+            Initial signal. Setting up the workbench, calibrating the instruments. Notes on
+            choosing a stack for a portfolio that needs to feel both ancient and impossible.
+            Why static files can carry more weight than a framework.
+          </p>
+        </article>
+
+      </div>
+
+      <!-- Placeholder for future entries -->
+      <div class="divider"></div>
+      <div class="reveal" style="text-align: center;">
+        <p class="heading-sm text-dim coord-display">γ:308.2.041.77</p>
+        <p class="text-body mt-2 text-dim" style="text-align: center;">
+          More transmissions pending. Frequency varies.
+        </p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

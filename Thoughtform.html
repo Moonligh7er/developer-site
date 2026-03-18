@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thought+Form — The Command Center You Didn't Know You Needed</title>
+<meta name="description" content="39 interconnected modules. AI-powered intelligence. One solo founder. Zero context switching. Thought+Form is the developer command center that replaces your entire tool stack.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0E0A;
+    --surface: #0D1F0D;
+    --green: #33FF33;
+    --green-dim: #1A8C1A;
+    --cyan: #00FFFF;
+    --amber: #FFB000;
+    --red: #FF3333;
+    --mint: #00FF88;
+    --text: #E0E0E0;
+    --dim: #8A8A8A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  }
+
+  .glow { text-shadow: 0 0 4px var(--green), 0 0 12px rgba(51,255,51,0.3); }
+  .glow-cyan { text-shadow: 0 0 4px var(--cyan), 0 0 12px rgba(0,255,255,0.3); }
+
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 60px 0;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    margin-bottom: 32px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.15;
+    margin-bottom: 24px;
+  }
+
+  .hero .sub {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--dim);
+    max-width: 640px;
+    margin-bottom: 40px;
+  }
+
+  .hero .sub strong { color: var(--text); }
+
+  .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--bg);
+  }
+  .btn-primary:hover { filter: brightness(1.15); text-decoration: none; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+  }
+  .btn-ghost:hover { border-color: var(--green); text-decoration: none; }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 60px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    text-align: left;
+  }
+
+  .hero-stat .num {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .hero-stat .label {
+    font-size: 10px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 0; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-sub {
+    color: var(--dim);
+    max-width: 600px;
+    margin-bottom: 48px;
+    font-size: 14px;
+  }
+
+  /* ── PROBLEM ── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid transparent;
+    padding: 28px 24px;
+    transition: border-color 0.3s;
+  }
+  .problem-card:hover { border-color: var(--green-dim); }
+
+  .problem-card .icon {
+    font-size: 20px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .problem-card h3 {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .problem-card p {
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  /* ── FEATURES ── */
+  .feature-category {
+    margin-bottom: 48px;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .category-header h3 {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .feature-item {
+    background: var(--surface);
+    border: 1px solid transparent;
+    padding: 16px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .feature-item:hover { border-color: var(--green-dim); transform: translateY(-1px); }
+
+  .feature-item .name {
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .feature-item .desc {
+    color: var(--dim);
+    font-size: 10px;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ── INTELLIGENCE ── */
+  .intel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .intel-card {
+    border: 1px solid var(--green-dim);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .intel-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+  }
+
+  .intel-card.cyan::before { background: var(--cyan); }
+  .intel-card.amber::before { background: var(--amber); }
+  .intel-card.green::before { background: var(--mint); }
+  .intel-card.red::before { background: var(--red); }
+
+  .intel-card h4 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .intel-card.cyan h4 { color: var(--cyan); }
+  .intel-card.amber h4 { color: var(--amber); }
+  .intel-card.green h4 { color: var(--mint); }
+  .intel-card.red h4 { color: var(--red); }
+
+  .intel-card p {
+    color: var(--dim);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  /* ── WORKFLOW ── */
+  .workflow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .workflow-steps::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--green-dim);
+  }
+
+  .workflow-step {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+    position: relative;
+  }
+
+  .step-marker {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    flex-shrink: 0;
+    background: var(--bg);
+    z-index: 1;
+  }
+
+  .step-content h4 {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .step-content p {
+    color: var(--dim);
+    font-size: 12px;
+  }
+
+  /* ── COMPARISON ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .compare-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(26,140,26,0.3);
+    color: var(--text);
+  }
+
+  .compare-table tr:hover td { background: var(--surface); }
+
+  .check { color: var(--green); }
+  .cross { color: var(--dim); }
+  .star { color: var(--amber); }
+
+  /* ── QUOTE ── */
+  .quote-section {
+    text-align: center;
+    padding: 80px 0;
+    border-top: 1px solid var(--green-dim);
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .quote {
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 600;
+    color: var(--green);
+    max-width: 800px;
+    margin: 0 auto 16px;
+    line-height: 1.4;
+  }
+
+  .quote-author {
+    color: var(--dim);
+    font-size: 12px;
+  }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    text-align: center;
+    padding: 120px 0;
+  }
+
+  .final-cta h2 {
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .final-cta p {
+    color: var(--dim);
+    max-width: 500px;
+    margin: 0 auto 40px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--green-dim);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--dim);
+    font-size: 11px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-stats { gap: 24px; }
+    .cta-row { flex-direction: column; }
+    .btn { text-align: center; }
+    section { padding: 60px 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::after { display: none; }
+    .glow, .glow-cyan { text-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">For solo founders who build empires</div>
+    <h1 class="glow">Stop juggling 12 tabs.<br>Start commanding your empire.</h1>
+    <p class="sub">
+      Thought+Form is a <strong>developer command center</strong> that replaces your project manager, CRM, content scheduler, revenue tracker, AI assistant, and 15 other tools — with one unified system that actually understands how your work connects.
+    </p>
+    <div class="cta-row">
+      <a href="#features" class="btn btn-primary">See What's Inside</a>
+      <a href="#workflow" class="btn btn-ghost">How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num glow">39</div><div class="label">Modules</div></div>
+      <div class="hero-stat"><div class="num glow">8</div><div class="label">Intelligence Engines</div></div>
+      <div class="hero-stat"><div class="num glow">6</div><div class="label">Platforms Published To</div></div>
+      <div class="hero-stat"><div class="num glow">0</div><div class="label">Context Switches</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROBLEM ═══ -->
+<section>
+  <div class="container">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title glow">Your tools don't talk to each other.</h2>
+    <p class="section-sub">You make a decision in Notion. Create a task in Linear. Write content in Buffer. Track revenue in Stripe. Contact a lead in HubSpot. None of them know about each other. You are the integration layer. And it's exhausting.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <span class="icon">◈</span>
+        <h3>Context Amnesia</h3>
+        <p>Switch back to a project after 5 days. What changed? What decisions were made? You have no idea. You spend 30 minutes reconstructing context that a machine should remember for you.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">⚖</span>
+        <h3>Decision Drift</h3>
+        <p>You decided to pivot from feature A to feature B. Two weeks later, 80% of your work is still on feature A. No tool tells you you've drifted from your own plan.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">◬</span>
+        <h3>Content Black Hole</h3>
+        <p>You publish 50 posts. Revenue goes up. But which posts drove the revenue? Which platform has the best ROI? You're flying blind on the only metric that matters.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">∿</span>
+        <h3>Invisible Patterns</h3>
+        <p>Your most productive sessions happen after AI brainstorming and a rest gap. But you'll never know that, because no tool correlates your work patterns with your outcomes.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">☷</span>
+        <h3>Relationship Blindness</h3>
+        <p>Your best client's sentiment has been declining for 3 weeks. Their deal is about to stall. You won't notice until they ghost you — because your CRM only stores data, it doesn't analyze trajectories.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">▦</span>
+        <h3>Blocker Paralysis</h3>
+        <p>One card is blocking 5 others. You don't know which one. Your velocity tanks and you blame yourself instead of the invisible dependency chain in your backlog.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SOLUTION ═══ -->
+<section>
+  <div class="container">
+    <div class="section-label">The Solution</div>
+    <h2 class="section-title glow">One system. Everything connected.</h2>
+    <p class="section-sub">Thought+Form doesn't just store your data — it <strong>understands the relationships between your decisions, your work, your content, your revenue, and your relationships</strong>. Then it tells you what you're missing.</p>
+  </div>
+</section>
+
+<!-- ═══ INTELLIGENCE ═══ -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">Intelligence Layer</div>
+    <h2 class="section-title glow-cyan" style="color: var(--cyan);">8 engines analyzing your data in ways no other tool can.</h2>
+    <p class="section-sub">These aren't dashboards. They're insight engines that cross-reference your work, decisions, content, revenue, and relationships to surface things you'd never see on your own.</p>
+    <div class="intel-grid">
+      <div class="intel-card cyan">
+        <h4>Decision Audit</h4>
+        <p>Tracks which decisions you've actually executed vs. which are sitting untouched. Detects decision drift — when your work diverges from your own plan. Flags conflicts between active decisions.</p>
+      </div>
+      <div class="intel-card green">
+        <h4>Content → Revenue Attribution</h4>
+        <p>Links your published posts to revenue events within a 30-day attribution window. Shows ROI by platform. Tells you whether to write more Twitter threads or LinkedIn articles.</p>
+      </div>
+      <div class="intel-card amber">
+        <h4>Productivity Causality</h4>
+        <p>Finds YOUR personal leading indicators of productive sessions. "You're 3.5x more productive when preceded by AI brainstorming and a 12+ hour rest gap." Data-driven self-optimization.</p>
+      </div>
+      <div class="intel-card red">
+        <h4>Blocking Chain Analysis</h4>
+        <p>Maps dependency graphs across your cards. Finds the one blocker that's silently killing your velocity. Shows impact scores so you fix the highest-leverage item first.</p>
+      </div>
+      <div class="intel-card cyan">
+        <h4>Relationship Momentum</h4>
+        <p>Time-series health scoring for every contact. Combines interaction frequency, sentiment trend, and deal velocity into a single score. Surfaces at-risk relationships before they churn.</p>
+      </div>
+      <div class="intel-card green">
+        <h4>Context Coherence</h4>
+        <p>Switch back to a project and instantly see: what changed, what decisions were made, what cards moved, what's blocking. A context score tells you how much you've missed.</p>
+      </div>
+      <div class="intel-card amber">
+        <h4>Cross-Project Patterns</h4>
+        <p>Compares velocity, session duration, mood, and burnout across project types. "Your SaaS projects have 2x the velocity of your CLI tools." Optimize your project mix.</p>
+      </div>
+      <div class="intel-card red">
+        <h4>Orphan Detection</h4>
+        <p>Finds unexecuted decisions, neglected contacts, isolated cards, stale drafts, and unattributed revenue. Everything disconnected, surfaced in one place. Keep your system clean.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">39 Modules</div>
+    <h2 class="section-title glow">Everything a solo founder needs. Nothing they don't.</h2>
+    <p class="section-sub">Each module is deep enough to replace a standalone tool. Together, they form a system that's more than the sum of its parts.</p>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Core</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">Dashboard</div><div class="desc">Activity feed, project stats, velocity metrics at a glance</div></div>
+        <div class="feature-item"><div class="name">Kanban Board</div><div class="desc">Drag-drop cards with filtering, bulk ops, card templates, swimlanes</div></div>
+        <div class="feature-item"><div class="name">Calendar</div><div class="desc">Event scheduling with .ics import/export</div></div>
+        <div class="feature-item"><div class="name">Session Journal</div><div class="desc">Time tracking with mood, category, and analytics</div></div>
+        <div class="feature-item"><div class="name">Snippet Vault</div><div class="desc">Searchable code & documentation library per project</div></div>
+      </div>
+    </div>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Build</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">Inception Framework</div><div class="desc">12-phase product launch checklist with AI-assisted planning</div></div>
+        <div class="feature-item"><div class="name">Product Forge</div><div class="desc">Idea → Research → Validate → Build → Launch pipeline with scoring</div></div>
+        <div class="feature-item"><div class="name">Features</div><div class="desc">Feature planning, scoping, and tracking across projects</div></div>
+        <div class="feature-item"><div class="name">GitHub</div><div class="desc">Repos, commits, issues, PRs — without leaving the app</div></div>
+        <div class="feature-item"><div class="name">DevOps</div><div class="desc">CI/CD pipeline status and deploy history</div></div>
+        <div class="feature-item"><div class="name">Terminal</div><div class="desc">Full embedded terminal with xterm.js (desktop only)</div></div>
+      </div>
+    </div>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Content & Social</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">Content Hub</div><div class="desc">Compose, schedule, publish to 6 platforms with AI variants</div></div>
+        <div class="feature-item"><div class="name">Social Dashboard</div><div class="desc">Multi-account management, real engagement metrics, analytics</div></div>
+        <div class="feature-item"><div class="name">Brands</div><div class="desc">Voice, vocabulary, forbidden words — AI enforces your brand in every post</div></div>
+        <div class="feature-item"><div class="name">Automation</div><div class="desc">Trigger → action pipelines with retry, dry-run, conditional logic</div></div>
+      </div>
+    </div>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Creative Suite</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">Worlds</div><div class="desc">Worldbuilding with AI-expandable lore, geography, culture, rules</div></div>
+        <div class="feature-item"><div class="name">Stories</div><div class="desc">Plot outlines, act structures, scene beats — all AI-assisted</div></div>
+        <div class="feature-item"><div class="name">Characters</div><div class="desc">AI polish, SDXL/DALL-E image prompts, ElevenLabs voice design</div></div>
+      </div>
+    </div>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Business</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">CRM</div><div class="desc">Pipeline analytics, deal forecasting, auto follow-ups, CSV import</div></div>
+        <div class="feature-item"><div class="name">Revenue</div><div class="desc">MRR charts, cohort retention, 3-month forecast, multi-source tracking</div></div>
+        <div class="feature-item"><div class="name">Funnels</div><div class="desc">Conversion funnel tracking with source attribution</div></div>
+        <div class="feature-item"><div class="name">Competitor Radar</div><div class="desc">Track competitors, positioning matrix, market analysis</div></div>
+        <div class="feature-item"><div class="name">Portfolio</div><div class="desc">Build and deploy a portfolio site from your project data</div></div>
+      </div>
+    </div>
+
+    <div class="feature-category">
+      <div class="category-header"><h3>Intelligence & AI</h3></div>
+      <div class="feature-grid">
+        <div class="feature-item"><div class="name">AI Quick Ask</div><div class="desc">Claude-powered project-aware conversations in 5 modes</div></div>
+        <div class="feature-item"><div class="name">Agent Workflows</div><div class="desc">Multi-step AI workflows with variable substitution</div></div>
+        <div class="feature-item"><div class="name">Name Research</div><div class="desc">USPTO trademark search, AI name generation, variant analysis</div></div>
+        <div class="feature-item"><div class="name">Decision Archaeology</div><div class="desc">Full decision history with rationale, reversals, and audit trail</div></div>
+        <div class="feature-item"><div class="name">Temporal Patterns</div><div class="desc">Productivity peaks, burnout risk, session rhythm analysis</div></div>
+        <div class="feature-item"><div class="name">Intelligence Dashboard</div><div class="desc">8 cross-referencing engines analyzing your entire data graph</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUOTE ═══ -->
+<div class="quote-section">
+  <div class="container">
+    <p class="quote glow">"The best tool is the one that makes you forget you're using a tool."</p>
+    <p class="quote-author">— The philosophy behind Thought+Form</p>
+  </div>
+</div>
+
+<!-- ═══ WORKFLOW ═══ -->
+<section id="workflow">
+  <div class="container">
+    <div class="section-label">Workflow</div>
+    <h2 class="section-title glow">From zero to commanding in 5 minutes.</h2>
+    <p class="section-sub">No onboarding hell. No 47-step setup wizard. Just open it and start building.</p>
+    <div class="workflow-steps">
+      <div class="workflow-step">
+        <div class="step-marker">1</div>
+        <div class="step-content">
+          <h4>Set your passphrase</h4>
+          <p>One passphrase. No email verification, no OAuth dance, no "verify your identity." Your data is encrypted with your passphrase. You own it.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-marker">2</div>
+        <div class="step-content">
+          <h4>Create a project</h4>
+          <p>Name it. Pick an archetype (SaaS, CLI, Mobile, etc.). The system pre-configures inception phases, default kanban columns, and analytics baseline.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-marker">3</div>
+        <div class="step-content">
+          <h4>Work naturally</h4>
+          <p>Start a session. Create cards. Make decisions. Write content. Track contacts. The Intelligence layer silently cross-references everything in the background.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-marker">4</div>
+        <div class="step-content">
+          <h4>Check your Intelligence dashboard</h4>
+          <p>After a few days, the system knows your productivity patterns, flags drifting decisions, identifies blocking chains, and scores your relationship health. No setup required — it just learns.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-marker">5</div>
+        <div class="step-content">
+          <h4>Scale with confidence</h4>
+          <p>Add more projects. Connect social accounts. Start publishing. The system tracks content → revenue attribution automatically. You focus on building. It focuses on connecting the dots.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMPARISON ═══ -->
+<section style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">Comparison</div>
+    <h2 class="section-title glow">What you're currently paying for, separately.</h2>
+    <p class="section-sub">Each row is a tool you no longer need. Each check is a feature that talks to every other feature.</p>
+    <div style="overflow-x: auto;">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Capability</th><th>Standalone Tool</th><th>$/mo</th><th>Thought+Form</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Project Management</td><td>Linear</td><td>$10/mo</td><td><span class="check">● Built-in</span></td></tr>
+          <tr><td>CRM & Pipeline</td><td>HubSpot Starter</td><td>$20/mo</td><td><span class="check">● Built-in</span></td></tr>
+          <tr><td>Content & Social</td><td>Buffer (3 channels)</td><td>$18/mo</td><td><span class="check">● Built-in · 6 platforms</span></td></tr>
+          <tr><td>Revenue Analytics</td><td>Baremetrics</td><td>$50/mo</td><td><span class="check">● Built-in · cohort + forecast</span></td></tr>
+          <tr><td>AI Assistant</td><td>ChatGPT Plus</td><td>$20/mo</td><td><span class="check">● Built-in · Claude API</span></td></tr>
+          <tr><td>Notes & Decisions</td><td>Notion Plus</td><td>$10/mo</td><td><span class="check">● Built-in · decision audit</span></td></tr>
+          <tr><td>Time Tracking</td><td>Toggl Starter</td><td>$9/mo</td><td><span class="check">● Built-in · mood + causality</span></td></tr>
+          <tr><td>Trademark Research</td><td>Corsearch / TrademarkNow</td><td>$14/mo</td><td><span class="check">● Built-in · USPTO + AI variants</span></td></tr>
+          <tr><td>Worldbuilding</td><td>World Anvil</td><td>$7/mo</td><td><span class="check">● Built-in · AI + voice + image gen</span></td></tr>
+          <tr><td>Cross-tool Intelligence</td><td><span class="star">★ Doesn't exist anywhere</span></td><td>—</td><td><span class="check">● 8 engines</span></td></tr>
+          <tr style="border-top: 2px solid var(--green-dim);">
+            <td><strong>Total</strong></td><td></td><td><strong style="color:var(--red);">$158/mo</strong></td>
+            <td><strong style="color:var(--green);">$0 — you own it</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TECH ═══ -->
+<section>
+  <div class="container">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title glow">Built for solo founders. Not enterprise committees.</h2>
+    <div class="problem-grid" style="margin-top: 32px;">
+      <div class="problem-card">
+        <span class="icon">⚡</span>
+        <h3>Cloudflare Workers + D1</h3>
+        <p>Your backend runs at the edge. SQLite database. R2 storage. Durable Objects for real-time. Millisecond cold starts. Pennies to run.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">▸</span>
+        <h3>Desktop + PWA</h3>
+        <p>Full Electron desktop app with embedded terminal. Or use the PWA from any browser. Same codebase, same data, same experience.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon">⚙</span>
+        <h3>You Own Your Data</h3>
+        <p>Passphrase-encrypted secrets. AES-256-GCM for API keys. Export everything as JSON anytime. No vendor lock-in. No data hostage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<div class="final-cta">
+  <div class="container">
+    <h2 class="glow">Your empire needs a command center.</h2>
+    <p>39 modules. 8 intelligence engines. Every decision, every card, every post, every relationship — connected.</p>
+    <div class="cta-row" style="justify-content: center;">
+      <a href="https://github.com/thoughtform/thoughtform" class="btn btn-primary">Get Thought+Form</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <p style="color: var(--green); margin-bottom: 8px;" class="glow">THOUGHT+FORM</p>
+    <p>The developer command center for solo founders who refuse to be limited by their tools.</p>
+    <p style="margin-top: 16px;">Built with TypeScript · React · Cloudflare Workers · Claude AI</p>
+  </div>
+</footer>
+
+</body>
+</html>

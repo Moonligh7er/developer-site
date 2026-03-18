@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect | Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <section class="section--hero container">
+      <div class="reveal">
+        <p class="label">Open Channel</p>
+        <h1 class="heading-xl glitch">Connect</h1>
+        <p class="text-body mt-2 text-dim">Multiple frequencies available. Choose your wavelength.</p>
+      </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+
+      <!-- Tabs -->
+      <div class="tabs" data-tabs="connect">
+        <button class="tab active" data-target="social">Social</button>
+        <button class="tab" data-target="contact">Contact</button>
+        <button class="tab" data-target="collab">Collaborate</button>
+        <button class="tab" data-target="partner">Partner</button>
+      </div>
+
+      <!-- SOCIAL -->
+      <div class="tab-content active" id="social">
+        <div class="reveal">
+          <p class="heading-md mb-4">Find me in the network.</p>
+          <div class="social-grid stagger">
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+              <span class="social-link__icon">&#9670;</span>
+              <div>
+                <p class="social-link__label">GitHub</p>
+                <p class="social-link__handle">Source & contributions</p>
+              </div>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+              <span class="social-link__icon">&#9670;</span>
+              <div>
+                <p class="social-link__label">LinkedIn</p>
+                <p class="social-link__handle">Professional signal</p>
+              </div>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+              <span class="social-link__icon">&#9670;</span>
+              <div>
+                <p class="social-link__label">Twitter / X</p>
+                <p class="social-link__handle">Intermittent dispatches</p>
+              </div>
+            </a>
+            <a href="#" class="social-link" target="_blank" rel="noopener">
+              <span class="social-link__icon">&#9670;</span>
+              <div>
+                <p class="social-link__label">Discord</p>
+                <p class="social-link__handle">Real-time channel</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="tab-content" id="contact">
+        <div class="reveal">
+          <p class="heading-md mb-4">Direct transmission.</p>
+          <p class="text-body mb-4 text-dim">
+            For general inquiries, project questions, or if you've detected an anomaly
+            you think I should know about.
+          </p>
+          <form class="connect-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="contact-name">Identifier</label>
+              <input type="text" id="contact-name" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="contact-email">Return Frequency</label>
+              <input type="email" id="contact-email" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="contact-subject">Subject</label>
+              <input type="text" id="contact-subject" placeholder="What's this about?">
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Transmission</label>
+              <textarea id="contact-message" placeholder="Your message..."></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Send Transmission</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- COLLABORATE -->
+      <div class="tab-content" id="collab">
+        <div class="reveal">
+          <p class="heading-md mb-4">Build together.</p>
+          <p class="text-body mb-2">
+            I'm interested in collaborating with developers, designers, and domain experts
+            who see the same patterns I do. Particularly interested in:
+          </p>
+          <ul class="about__list mb-4" style="max-width: 600px;">
+            <li>AI/ML engineers with experience in NLP and sentiment analysis</li>
+            <li>UI/UX designers who think in systems, not screens</li>
+            <li>Domain experts in psychology, wellness, or education</li>
+            <li>Mobile developers (React Native / cross-platform)</li>
+            <li>Backend architects comfortable with graph databases</li>
+          </ul>
+          <p class="text-body text-dim mb-4">
+            If your work operates on a similar frequency, let's talk about what we
+            could build at the intersection.
+          </p>
+          <form class="connect-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="collab-name">Identifier</label>
+              <input type="text" id="collab-name" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="collab-email">Return Frequency</label>
+              <input type="email" id="collab-email" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="collab-specialty">Specialization</label>
+              <input type="text" id="collab-specialty" placeholder="Your area of expertise">
+            </div>
+            <div class="form-group">
+              <label for="collab-interest">Which project(s) interest you?</label>
+              <select id="collab-interest">
+                <option value="">Select a project...</option>
+                <option value="deep-seer">Deep Seer</option>
+                <option value="psystat">Psystat</option>
+                <option value="thoughtform">Thoughtform</option>
+                <option value="astro-deep">Astro Deep</option>
+                <option value="bartenders">Bartender's Black Book</option>
+                <option value="archive">The Archive</option>
+                <option value="studybreak">StudyBreak</option>
+                <option value="dagda">Dagda</option>
+                <option value="entropic-tarot">Entropic Tarot</option>
+                <option value="multiple">Multiple / General</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="collab-message">Proposal</label>
+              <textarea id="collab-message" placeholder="What would you like to build together?"></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Send Proposal</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- PARTNER -->
+      <div class="tab-content" id="partner">
+        <div class="reveal">
+          <p class="heading-md mb-4">Strategic alignment.</p>
+          <p class="text-body mb-2">
+            For businesses, organizations, or individuals interested in licensing,
+            integration partnerships, investment, or strategic collaboration around
+            any of the active projects.
+          </p>
+          <p class="text-body text-dim mb-4">
+            I'm building a constellation of tools that share underlying architecture
+            and philosophy. Partnership opportunities exist at both the individual
+            product level and across the ecosystem.
+          </p>
+
+          <div class="card-grid mb-4" style="max-width: 700px;">
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Integration</p>
+              <p class="card__desc" style="margin-bottom: 0;">Embed or connect with one of the active projects via API or white-label.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Licensing</p>
+              <p class="card__desc" style="margin-bottom: 0;">Enterprise or institutional licensing for specific applications.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Investment</p>
+              <p class="card__desc" style="margin-bottom: 0;">Funding conversations for scaling individual products or the full portfolio.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Strategic</p>
+              <p class="card__desc" style="margin-bottom: 0;">Joint ventures, distribution partnerships, or ecosystem alignment.</p>
+            </div>
+          </div>
+
+          <form class="connect-form" onsubmit="return false;">
+            <div class="form-group">
+              <label for="partner-name">Identifier</label>
+              <input type="text" id="partner-name" placeholder="Your name" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="partner-org">Organization</label>
+              <input type="text" id="partner-org" placeholder="Company or organization">
+            </div>
+            <div class="form-group">
+              <label for="partner-email">Return Frequency</label>
+              <input type="email" id="partner-email" placeholder="your@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="partner-type">Partnership Type</label>
+              <select id="partner-type">
+                <option value="">Select type...</option>
+                <option value="integration">Integration</option>
+                <option value="licensing">Licensing</option>
+                <option value="investment">Investment</option>
+                <option value="strategic">Strategic Partnership</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="partner-message">Proposal</label>
+              <textarea id="partner-message" placeholder="Describe the partnership opportunity..."></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Send Proposal</button>
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

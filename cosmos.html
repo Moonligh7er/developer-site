@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmos</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; cursor: crosshair; }
+  canvas { display: block; position: fixed; inset: 0; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H, t = 0;
+let mouseX = 0.5, mouseY = 0.5, tmx = 0.5, tmy = 0.5;
+const CELL = 10;
+let cols, rows;
+
+const codeChars = '01{}[]<>():;=+-*/|!~#@_アイウカキ∞◇◆□∆∇⊕⊗·.:'.split('');
+let charGrid = [];
+let charTimer = 0;
+
+// Scene elements — generated once
+let stars = [];
+let nebulaClouds = [];
+let galaxyArms = [];
+let cosmicBodies = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  cols = Math.ceil(W / CELL);
+  rows = Math.ceil(H / CELL);
+  charGrid = [];
+  for (let r = 0; r < rows; r++) {
+    const row = [];
+    for (let c = 0; c < cols; c++) row.push(codeChars[Math.floor(Math.random() * codeChars.length)]);
+    charGrid.push(row);
+  }
+  buildCosmos();
+}
+
+document.addEventListener('mousemove', e => { tmx = e.clientX / W; tmy = e.clientY / H; });
+
+function buildCosmos() {
+  stars = [];
+  nebulaClouds = [];
+  galaxyArms = [];
+  cosmicBodies = [];
+
+  // ── Dense starfield ──
+  const starCount = Math.min(4000, Math.floor(W * H / 300));
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      z: Math.random(), // depth/parallax
+      size: 1 + Math.random() * 3 + (Math.random() > 0.95 ? 3 : 0), // occasional bright stars
+      hue: Math.random() > 0.7 ? (200 + Math.random() * 60) : (Math.random() > 0.5 ? (320 + Math.random() * 40) : (40 + Math.random() * 20)),
+      sat: 30 + Math.random() * 50,
+      twinkleSpd: 0.3 + Math.random() * 2,
+      twinkleOff: Math.random() * Math.PI * 2,
+      brightness: 0.3 + Math.random() * 0.7,
+    });
+  }
+
+  // ── Nebula clouds — large soft colored regions ──
+  const nebulaCount = 8;
+  for (let i = 0; i < nebulaCount; i++) {
+    nebulaClouds.push({
+      x: 0.1 + Math.random() * 0.8,
+      y: 0.1 + Math.random() * 0.8,
+      rx: 0.08 + Math.random() * 0.15,
+      ry: 0.06 + Math.random() * 0.12,
+      hue: [280, 320, 190, 230, 340, 270, 200, 300][i],
+      sat: 50 + Math.random() * 30,
+      light: 25 + Math.random() * 20,
+      alpha: 0.08 + Math.random() * 0.10,
+      driftSpd: 0.002 + Math.random() * 0.003,
+      seed: Math.random() * 100,
+    });
+  }
+
+  // ── Galaxy spiral arms — curved bands of concentrated stars ──
+  const galaxyCX = 0.35 + Math.random() * 0.3;
+  const galaxyCY = 0.35 + Math.random() * 0.3;
+  for (let arm = 0; arm < 3; arm++) {
+    const baseAngle = (arm / 3) * Math.PI * 2;
+    const points = [];
+    for (let i = 0; i < 30; i++) {
+      const dist = 0.02 + (i / 30) * 0.22;
+      const angle = baseAngle + (i / 30) * Math.PI * 1.2;
+      points.push({
+        x: galaxyCX + Math.cos(angle) * dist,
+        y: galaxyCY + Math.sin(angle) * dist * 0.7, // slightly elliptical
+        width: 0.015 + (1 - i / 30) * 0.02,
+        brightness: 0.8 - (i / 30) * 0.4,
+      });
+    }
+    galaxyArms.push({ points, hue: [280, 200, 320][arm], seed: Math.random() * 100 });
+  }
+
+  // Galaxy core
+  cosmicBodies.push({
+    type: 'core',
+    x: galaxyCX, y: galaxyCY,
+    r: 0.04,
+    hue: 275, sat: 60, light: 70,
+  });
+
+  // ── Cosmic bodies — a few distinct objects ──
+  // Bright star cluster
+  cosmicBodies.push({
+    type: 'cluster',
+    x: 0.15 + Math.random() * 0.2,
+    y: 0.2 + Math.random() * 0.3,
+    r: 0.035,
+    hue: 200, sat: 70, light: 65,
+    starCount: 40,
+  });
+
+  // Another cluster
+  cosmicBodies.push({
+    type: 'cluster',
+    x: 0.65 + Math.random() * 0.2,
+    y: 0.55 + Math.random() * 0.25,
+    r: 0.025,
+    hue: 330, sat: 60, light: 55,
+    starCount: 25,
+  });
+
+  // Distant galaxy (small bright ellipse)
+  cosmicBodies.push({
+    type: 'distant',
+    x: 0.8 + Math.random() * 0.1,
+    y: 0.15 + Math.random() * 0.2,
+    r: 0.012,
+    angle: Math.random() * Math.PI,
+    hue: 40, sat: 40, light: 60,
+  });
+}
+
+resize();
+window.addEventListener('resize', resize);
+
+function draw() {
+  t += 0.008;
+  mouseX += (tmx - mouseX) * 0.03;
+  mouseY += (tmy - mouseY) * 0.03;
+
+  if (!W || !H) { requestAnimationFrame(draw); return; }
+
+  // Slow fade — star trails persist slightly
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Cycle characters
+  charTimer++;
+  if (charTimer > 40) {
+    charTimer = 0;
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        if (Math.random() < 0.03)
+          charGrid[r][c] = codeChars[Math.floor(Math.random() * codeChars.length)];
+  }
+
+  // ── NEBULA CLOUDS — large soft colored code regions ──
+  for (const neb of nebulaClouds) {
+    const nx = neb.x + Math.sin(t * neb.driftSpd + neb.seed) * 0.02;
+    const ny = neb.y + Math.cos(t * neb.driftSpd * 0.7 + neb.seed) * 0.015;
+    const breathe = 1 + Math.sin(t * 0.05 + neb.seed) * 0.05;
+
+    // Render nebula as colored code characters in the region
+    const left = Math.max(0, Math.floor((nx - neb.rx * breathe * 1.5) * cols));
+    const right = Math.min(cols - 1, Math.ceil((nx + neb.rx * breathe * 1.5) * cols));
+    const top = Math.max(0, Math.floor((ny - neb.ry * breathe * 1.5) * rows));
+    const bot = Math.min(rows - 1, Math.ceil((ny + neb.ry * breathe * 1.5) * rows));
+
+    for (let r = top; r <= bot; r++) {
+      for (let c = left; c <= right; c++) {
+        if (r >= charGrid.length || c >= charGrid[r].length) continue;
+        const px = (c + 0.5) / cols;
+        const py = (r + 0.5) / rows;
+        const dx = (px - nx) / (neb.rx * breathe);
+        const dy = (py - ny) / (neb.ry * breathe);
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 1.3) continue;
+
+        const falloff = Math.max(0, 1 - dist);
+        const alpha = neb.alpha * falloff * falloff;
+        if (alpha < 0.01) continue;
+
+        // Skip some for texture
+        if (Math.random() > 0.6 + alpha * 0.4) continue;
+
+        const light = neb.light + falloff * 20;
+        const screenX = c * CELL + CELL / 2;
+        const screenY = r * CELL + CELL / 2;
+
+        ctx.font = `${CELL}px monospace`;
+        ctx.fillStyle = `hsla(${neb.hue}, ${neb.sat}%, ${light}%, ${alpha})`;
+        ctx.fillText(charGrid[r][c], screenX, screenY);
+      }
+    }
+  }
+
+  // ── GALAXY ARMS — spiral bands of brighter code ──
+  for (const arm of galaxyArms) {
+    for (const pt of arm.points) {
+      const left = Math.max(0, Math.floor((pt.x - pt.width * 1.5) * cols));
+      const right = Math.min(cols - 1, Math.ceil((pt.x + pt.width * 1.5) * cols));
+      const top = Math.max(0, Math.floor((pt.y - pt.width * 1.5) * rows));
+      const bot = Math.min(rows - 1, Math.ceil((pt.y + pt.width * 1.5) * rows));
+
+      for (let r = top; r <= bot; r++) {
+        for (let c = left; c <= right; c++) {
+          if (r >= charGrid.length || c >= charGrid[r].length) continue;
+          const px = (c + 0.5) / cols;
+          const py = (r + 0.5) / rows;
+          const dist = Math.hypot(px - pt.x, py - pt.y) / pt.width;
+          if (dist > 1.5) continue;
+
+          const falloff = Math.max(0, 1 - dist);
+          const alpha = pt.brightness * falloff * 0.15;
+          if (alpha < 0.01 || Math.random() > 0.4 + alpha * 2) continue;
+
+          const screenX = c * CELL + CELL / 2;
+          const screenY = r * CELL + CELL / 2;
+          ctx.font = `${CELL}px monospace`;
+          ctx.fillStyle = `hsla(${arm.hue + falloff * 30}, ${50 + falloff * 30}%, ${35 + falloff * 35}%, ${alpha})`;
+          ctx.fillText(charGrid[r][c], screenX, screenY);
+        }
+      }
+    }
+  }
+
+  // ── COSMIC BODIES ──
+  for (const body of cosmicBodies) {
+    if (body.type === 'core') {
+      // Galaxy core — bright concentrated glow
+      const pulse = 1 + Math.sin(t * 0.08) * 0.05;
+      const coreR = body.r * pulse;
+      const left = Math.max(0, Math.floor((body.x - coreR * 2) * cols));
+      const right = Math.min(cols - 1, Math.ceil((body.x + coreR * 2) * cols));
+      const top = Math.max(0, Math.floor((body.y - coreR * 2) * rows));
+      const bot = Math.min(rows - 1, Math.ceil((body.y + coreR * 2) * rows));
+
+      for (let r = top; r <= bot; r++) {
+        for (let c = left; c <= right; c++) {
+          if (r >= charGrid.length || c >= charGrid[r].length) continue;
+          const px = (c + 0.5) / cols, py = (r + 0.5) / rows;
+          const dist = Math.hypot(px - body.x, py - body.y) / coreR;
+          if (dist > 2) continue;
+          const falloff = Math.max(0, 1 - dist * 0.5);
+          const alpha = falloff * falloff * 0.5;
+          if (alpha < 0.01) continue;
+
+          const screenX = c * CELL + CELL / 2, screenY = r * CELL + CELL / 2;
+          const light = 40 + falloff * 55;
+          ctx.font = `${CELL}px monospace`;
+          ctx.fillStyle = `hsla(${body.hue + falloff * 20}, ${body.sat}%, ${light}%, ${alpha})`;
+          ctx.fillText(charGrid[r][c], screenX, screenY);
+        }
+      }
+    }
+
+    if (body.type === 'cluster') {
+      // Star cluster — dense pack of bright code chars
+      for (let i = 0; i < body.starCount; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = Math.random() * body.r;
+        const sx = body.x + Math.cos(angle) * dist;
+        const sy = body.y + Math.sin(angle) * dist * 0.8;
+        const col = Math.floor(sx * cols), row = Math.floor(sy * rows);
+        if (row < 0 || row >= rows || col < 0 || col >= cols) continue;
+        if (row >= charGrid.length || col >= charGrid[row].length) continue;
+
+        const brightness = 0.3 + (1 - dist / body.r) * 0.6;
+        const twinkle = Math.sin(t * (1 + i * 0.1) + i * 2) * 0.3 + 0.7;
+        const alpha = brightness * twinkle * 0.7;
+        const screenX = col * CELL + CELL / 2, screenY = row * CELL + CELL / 2;
+        const light = 40 + brightness * 45;
+        ctx.font = `${CELL}px monospace`;
+        ctx.fillStyle = `hsla(${body.hue + (1 - dist / body.r) * 30}, ${body.sat}%, ${light}%, ${alpha})`;
+        ctx.fillText(charGrid[row][col], screenX, screenY);
+      }
+    }
+
+    if (body.type === 'distant') {
+      // Distant galaxy — small bright smudge
+      const left = Math.max(0, Math.floor((body.x - body.r * 2) * cols));
+      const right = Math.min(cols - 1, Math.ceil((body.x + body.r * 2) * cols));
+      const top = Math.max(0, Math.floor((body.y - body.r * 2) * rows));
+      const bot = Math.min(rows - 1, Math.ceil((body.y + body.r * 2) * rows));
+      for (let r = top; r <= bot; r++) {
+        for (let c = left; c <= right; c++) {
+          if (r >= charGrid.length || c >= charGrid[r].length) continue;
+          const px = (c + 0.5) / cols, py = (r + 0.5) / rows;
+          // Rotated ellipse distance
+          const dx = px - body.x, dy = py - body.y;
+          const rx = dx * Math.cos(body.angle) + dy * Math.sin(body.angle);
+          const ry = -dx * Math.sin(body.angle) + dy * Math.cos(body.angle);
+          const dist = Math.sqrt((rx / body.r) * (rx / body.r) + (ry / (body.r * 0.3)) * (ry / (body.r * 0.3)));
+          if (dist > 1.5) continue;
+          const falloff = Math.max(0, 1 - dist);
+          const alpha = falloff * 0.5;
+          const screenX = c * CELL + CELL / 2, screenY = r * CELL + CELL / 2;
+          ctx.font = `${CELL}px monospace`;
+          ctx.fillStyle = `hsla(${body.hue}, ${body.sat}%, ${50 + falloff * 35}%, ${alpha})`;
+          ctx.fillText(charGrid[r][c], screenX, screenY);
+        }
+      }
+    }
+  }
+
+  // ── STARS — individual twinkling code characters ──
+  for (const star of stars) {
+    const twinkle = Math.sin(t * star.twinkleSpd + star.twinkleOff);
+    if (twinkle < -0.2) continue; // dim phase
+
+    const bright = star.brightness * (twinkle * 0.4 + 0.6);
+    const alpha = bright * 0.8;
+    if (alpha < 0.05) continue;
+
+    // Parallax from mouse
+    const px = (star.x + (mouseX - 0.5) * star.z * 0.03) * W;
+    const py = (star.y + (mouseY - 0.5) * star.z * 0.03) * H;
+
+    if (px < 0 || px > W || py < 0 || py > H) continue;
+
+    const col = Math.floor(px / CELL), row = Math.floor(py / CELL);
+    if (row >= charGrid.length || col >= charGrid[0].length) continue;
+
+    const light = 30 + bright * 60;
+    ctx.font = `${star.size + CELL - 2}px monospace`;
+    ctx.fillStyle = `hsla(${star.hue}, ${star.sat}%, ${light}%, ${alpha})`;
+    ctx.fillText(charGrid[row][col], px, py);
+
+    // Bright stars get a glow character
+    if (bright > 0.7 && star.size > 3) {
+      ctx.font = `${star.size + CELL + 4}px monospace`;
+      ctx.fillStyle = `hsla(${star.hue}, ${star.sat - 10}%, ${light + 10}%, ${alpha * 0.15})`;
+      ctx.fillText('·', px, py);
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+</body>
+</html>

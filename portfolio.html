@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page">
+    <section class="section--hero container">
+      <div class="reveal">
+        <p class="label">Catalog</p>
+        <h1 class="heading-xl glitch">Portfolio</h1>
+        <p class="text-body mt-2 text-dim">Nine applications across multiple architectures. Each one a different frequency.</p>
+      </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+      <!-- Tabs -->
+      <div class="tabs" data-tabs="portfolio">
+        <button class="tab active" data-target="all">All</button>
+        <button class="tab" data-target="intelligence">Intelligence & Research</button>
+        <button class="tab" data-target="lifestyle">Lifestyle & Utility</button>
+        <button class="tab" data-target="productivity">Productivity</button>
+        <button class="tab" data-target="devtools">Developer & Security</button>
+      </div>
+
+      <!-- ALL -->
+      <div class="tab-content active" id="all">
+        <div class="card-grid stagger">
+
+          <div class="card card--teal">
+            <div class="card__category">Intelligence &middot; OSINT</div>
+            <h3 class="card__title">Deep Seer</h3>
+            <p class="card__desc">The world's most comprehensive open-source intelligence platform. 90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and court-ready evidence packaging. Sees everything. Proves everything.</p>
+            <div class="card__tags">
+              <span class="tag">OSINT</span>
+              <span class="tag">AI/NLP</span>
+              <span class="tag">3D Viz</span>
+              <span class="tag">Full-Stack</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="Deep-Seer.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--violet">
+            <div class="card__category">Research &middot; Knowledge</div>
+            <h3 class="card__title">The Archive</h3>
+            <p class="card__desc">The world's most advanced comparative religion research platform. 22 sacred texts across 14 traditions, unified by a knowledge graph and AI that thinks like a scholar. Everything connects to everything else.</p>
+            <div class="card__tags">
+              <span class="tag">Knowledge Graph</span>
+              <span class="tag">AI</span>
+              <span class="tag">Full-Stack</span>
+              <span class="tag">Research</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--rose">
+            <div class="card__category">Research &middot; Science</div>
+            <h3 class="card__title">PsyStat Nexus</h3>
+            <p class="card__desc">The future of behavioral science research. Statistical analysis platform purpose-built for psychology — from study design to publication-ready output. Makes the invisible measurable.</p>
+            <div class="card__tags">
+              <span class="tag">Data Science</span>
+              <span class="tag">Statistics</span>
+              <span class="tag">Research</span>
+              <span class="tag">Visualization</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--violet">
+            <div class="card__category">Lifestyle &middot; Science</div>
+            <h3 class="card__title">AstroDeep</h3>
+            <p class="card__desc">The first astrology app built for skeptics. 55+ statistical engines, Granger causality testing, a falsification engine, blind testing, 16 biological layers, and three prediction systems competing for accuracy. The instrument, not the belief.</p>
+            <div class="card__tags">
+              <span class="tag">Statistics</span>
+              <span class="tag">AI</span>
+              <span class="tag">Computation</span>
+              <span class="tag">Full-Stack</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--violet">
+            <div class="card__category">Lifestyle &middot; Divination</div>
+            <h3 class="card__title">Entropic Tarot</h3>
+            <p class="card__desc">Quantum divination through sacred randomness. The first tarot app powered by true physical entropy — your device's sensors create genuinely unpredictable readings no algorithm can replicate. Bank-grade cryptography meets ancient wisdom.</p>
+            <div class="card__tags">
+              <span class="tag">Entropy</span>
+              <span class="tag">Cryptography</span>
+              <span class="tag">Tarot</span>
+              <span class="tag">Mobile</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="Entropic-Tarot.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--amber">
+            <div class="card__category">Lifestyle &middot; Utility</div>
+            <h3 class="card__title">Bartender's Black Book</h3>
+            <p class="card__desc">181 recipes. 44 data points each. AI-powered pairing, floor plan management, menu engineering, training systems, and inventory — the only app that knows your bar as well as you do. Zero bullshit.</p>
+            <div class="card__tags">
+              <span class="tag">Mobile</span>
+              <span class="tag">AI</span>
+              <span class="tag">Hospitality</span>
+              <span class="tag">Full-Stack</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="Bartenders-Black-Book.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--violet">
+            <div class="card__category">Productivity &middot; Education</div>
+            <h3 class="card__title">StudyBreak</h3>
+            <p class="card__desc">40+ features that replace Quizlet, Anki, Notion, and Google Calendar — powered by AI that actually reads your course materials. The last study app you'll ever download.</p>
+            <div class="card__tags">
+              <span class="tag">Education</span>
+              <span class="tag">AI</span>
+              <span class="tag">Mobile</span>
+              <span class="tag">Cross-Platform</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="StudyBreak.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--teal">
+            <div class="card__category">Developer &middot; Security</div>
+            <h3 class="card__title">Dagda</h3>
+            <p class="card__desc">AI-powered cybersecurity command platform. 514 security tools across 8 operational modes. One AI that understands them all. Watches, hunts, traps, and fights. Named after the Celtic god of knowledge.</p>
+            <div class="card__tags">
+              <span class="tag">Cybersecurity</span>
+              <span class="tag">AI</span>
+              <span class="tag">Automation</span>
+              <span class="tag">514 Tools</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="Dagda.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+          <div class="card card--teal">
+            <div class="card__category">Developer &middot; Productivity</div>
+            <h3 class="card__title">Thought+Form</h3>
+            <p class="card__desc">The developer command center that replaces your entire tool stack. 39 interconnected modules, AI-powered intelligence, zero context switching. The command center you didn't know you needed.</p>
+            <div class="card__tags">
+              <span class="tag">Dev Tools</span>
+              <span class="tag">AI</span>
+              <span class="tag">39 Modules</span>
+              <span class="tag">Full-Stack</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <a href="Thoughtform.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- INTELLIGENCE & RESEARCH -->
+      <div class="tab-content" id="intelligence">
+        <div class="card-grid stagger">
+          <div class="card card--teal">
+            <div class="card__category">Intelligence &middot; OSINT</div>
+            <h3 class="card__title">Deep Seer</h3>
+            <p class="card__desc">90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and court-ready evidence packaging.</p>
+            <div class="card__tags"><span class="tag">OSINT</span><span class="tag">AI/NLP</span><span class="tag">3D Viz</span></div>
+            <div class="flex justify-between items-center">
+              <a href="Deep-Seer.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+          <div class="card card--violet">
+            <div class="card__category">Research &middot; Knowledge</div>
+            <h3 class="card__title">The Archive</h3>
+            <p class="card__desc">22 sacred texts across 14 traditions, unified by a knowledge graph and AI that thinks like a scholar.</p>
+            <div class="card__tags"><span class="tag">Knowledge Graph</span><span class="tag">AI</span><span class="tag">Research</span></div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+          <div class="card card--rose">
+            <div class="card__category">Research &middot; Science</div>
+            <h3 class="card__title">PsyStat Nexus</h3>
+            <p class="card__desc">Statistical analysis platform purpose-built for behavioral science — study design to publication-ready output.</p>
+            <div class="card__tags"><span class="tag">Data Science</span><span class="tag">Statistics</span><span class="tag">Research</span></div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIFESTYLE & UTILITY -->
+      <div class="tab-content" id="lifestyle">
+        <div class="card-grid stagger">
+          <div class="card card--violet">
+            <div class="card__category">Lifestyle &middot; Science</div>
+            <h3 class="card__title">AstroDeep</h3>
+            <p class="card__desc">55+ statistical engines, Granger causality testing, falsification engine, blind testing, and three competing prediction systems. Built for skeptics.</p>
+            <div class="card__tags"><span class="tag">Statistics</span><span class="tag">AI</span><span class="tag">Computation</span></div>
+            <div class="flex justify-between items-center">
+              <a href="#" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+          <div class="card card--violet">
+            <div class="card__category">Lifestyle &middot; Divination</div>
+            <h3 class="card__title">Entropic Tarot</h3>
+            <p class="card__desc">Quantum divination through sacred randomness. True physical entropy from your device's sensors. No algorithm can replicate these readings.</p>
+            <div class="card__tags"><span class="tag">Entropy</span><span class="tag">Cryptography</span><span class="tag">Tarot</span></div>
+            <div class="flex justify-between items-center">
+              <a href="Entropic-Tarot.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+          <div class="card card--amber">
+            <div class="card__category">Lifestyle &middot; Utility</div>
+            <h3 class="card__title">Bartender's Black Book</h3>
+            <p class="card__desc">181 recipes, 44 data points each. AI pairing, floor plans, menu engineering, training, and inventory management.</p>
+            <div class="card__tags"><span class="tag">Mobile</span><span class="tag">AI</span><span class="tag">Hospitality</span></div>
+            <div class="flex justify-between items-center">
+              <a href="Bartenders-Black-Book.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTIVITY -->
+      <div class="tab-content" id="productivity">
+        <div class="card-grid stagger">
+          <div class="card card--violet">
+            <div class="card__category">Productivity &middot; Education</div>
+            <h3 class="card__title">StudyBreak</h3>
+            <p class="card__desc">40+ features replacing Quizlet, Anki, Notion, and Google Calendar. AI that reads your course materials.</p>
+            <div class="card__tags"><span class="tag">Education</span><span class="tag">AI</span><span class="tag">Mobile</span></div>
+            <div class="flex justify-between items-center">
+              <a href="StudyBreak.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEV & SECURITY TOOLS -->
+      <div class="tab-content" id="devtools">
+        <div class="card-grid stagger">
+          <div class="card card--teal">
+            <div class="card__category">Developer &middot; Security</div>
+            <h3 class="card__title">Dagda</h3>
+            <p class="card__desc">AI-powered cybersecurity command platform. 514 security tools across 8 operational modes. Watches, hunts, traps, fights.</p>
+            <div class="card__tags"><span class="tag">Cybersecurity</span><span class="tag">AI</span><span class="tag">514 Tools</span></div>
+            <div class="flex justify-between items-center">
+              <a href="Dagda.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+          <div class="card card--teal">
+            <div class="card__category">Developer &middot; Productivity</div>
+            <h3 class="card__title">Thought+Form</h3>
+            <p class="card__desc">39 interconnected modules. AI-powered intelligence. Zero context switching. Replaces your entire tool stack.</p>
+            <div class="card__tags"><span class="tag">Dev Tools</span><span class="tag">AI</span><span class="tag">39 Modules</span></div>
+            <div class="flex justify-between items-center">
+              <a href="Thoughtform.html" class="card__link">Explore</a>
+              <span class="status status--dev"><span class="status__dot"></span> Dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Pipeline teaser -->
+    <div class="divider"></div>
+    <section class="section container" style="text-align: center;">
+      <div class="reveal">
+        <p class="heading-sm text-dim coord-display">β:117.4.203.89</p>
+        <p class="heading-md mt-2">More signals incoming.</p>
+        <p class="text-body mt-2" style="margin: 1rem auto 0; text-align: center; color: var(--text-dim);">
+          Additional projects are in various stages of materialization across adjacent timelines.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

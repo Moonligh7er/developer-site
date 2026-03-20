@@ -979,4 +979,44 @@ body::before {
   .container { padding: 0 1.25rem; }
   .card-grid { grid-template-columns: 1fr; }
   .hero__line { display: none; }
+
+  /* Hero text breathing room */
+  .heading-xl { font-size: clamp(2rem, 8vw, 2.8rem); }
+  .hero__cta { flex-direction: column; align-items: stretch; }
+  .hero__cta .btn { text-align: center; justify-content: center; }
+
+  /* Tabs scroll horizontally, larger tap targets */
+  .tabs { gap: 0; padding-bottom: 2px; }
+  .tab { padding: 0.85rem 1rem; font-size: 0.65rem; }
+
+  /* Social grid single column */
+  .social-grid { grid-template-columns: 1fr; }
+
+  /* Form inputs — larger touch targets */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 1rem;
+    padding: 0.85rem 1rem;
+  }
+
+  /* Buttons — minimum tap target 44px */
+  .btn {
+    padding: 0.85rem 1.5rem;
+    min-height: 44px;
+  }
+
+  /* Lab entries — less indent on mobile */
+  .lab-entry { padding-left: 1.25rem; }
+
+  /* Footer breathing room */
+  .footer { padding: 1.5rem 1.25rem; }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .container { padding: 0 1rem; }
+  .nav { padding: 0 1rem; }
+  .nav__logo { font-size: 0.75rem; }
+  .card { padding: 1.5rem; }
 }

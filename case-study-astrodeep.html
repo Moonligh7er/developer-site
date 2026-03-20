@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: AstroDeep | dev://portfolio</title>
+  <meta name="description" content="How I built a citizen science platform that treats astrology as a testable hypothesis — with 55+ statistical engines, a falsification report, and the intellectual honesty to prove itself wrong.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: AstroDeep | dev://portfolio">
+  <meta property="og:description" content="Building a citizen science platform that treats astrology as a testable hypothesis.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-astrodeep.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: AstroDeep">
+  <meta name="twitter:description" content="Building a citizen science platform that treats astrology as a testable hypothesis.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .layer-stack { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+    .layer {
+      border: 1px solid var(--border); padding: 1.5rem;
+      background: var(--surface); position: relative;
+      padding-left: 1.5rem;
+    }
+    .layer::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+    }
+    .layer--strong::before { background: var(--teal); }
+    .layer--speculative::before { background: var(--violet); }
+    .layer--correlational::before { background: var(--amber); }
+    .layer__tag {
+      font-family: var(--font-mono); font-size: 0.55rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .layer--strong .layer__tag { color: var(--teal); }
+    .layer--speculative .layer__tag { color: var(--violet); }
+    .layer--correlational .layer__tag { color: var(--amber); }
+    .layer__title {
+      font-family: var(--font-display); font-size: 1.1rem;
+      color: var(--text-bright); margin-bottom: 0.5rem;
+    }
+    .layer__desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <!-- Header -->
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">AstroDeep</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          The first astrology app built to prove itself wrong. A citizen science platform
+          with <span class="highlight">55+ statistical engines</span>, a falsification report,
+          and the intellectual honesty to show you what the data actually says.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React Native &middot; Expo &middot; Supabase</span></div>
+          <div>Engines <span>129 Service Modules</span></div>
+        </div>
+      </header>
+
+      <!-- The Question -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Question</p>
+        <h2 class="case-study__h2">What if you actually tested it?</h2>
+        <p>
+          Astrology has 4,000 years of tradition and zero controlled trials. Its critics
+          dismiss it without testing it. Its believers accept it without questioning it. Both
+          sides are intellectually lazy.
+        </p>
+        <p>
+          I wanted to build the instrument that could actually answer the question:
+          <em class="highlight">do astrological models predict personality and mood better than chance?</em>
+          Not with opinion. With data. With blind tests. With pre-registered predictions
+          and falsification reports that explicitly show you where the theory breaks down.
+        </p>
+        <p>
+          And if the traditional model fails &mdash; maybe the mechanism isn't archetypal. Maybe
+          it's closer to <em>influence</em>. Photoperiod imprinting. Geomagnetic modulation.
+          Circadian calibration. Physical mechanisms that happen to align with the same
+          celestial calendar astrologers have been watching for millennia.
+        </p>
+        <p class="dim">
+          Even if the system can't build a new model of astrology, the features
+          are fascinating enough to stand on their own. Theories that can't be wrong can't be right.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">56</p>
+            <p class="stat-block__label">Statistical Engines</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">44</p>
+            <p class="stat-block__label">Astro Services</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">12</p>
+            <p class="stat-block__label">Bio Layers</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">36</p>
+            <p class="stat-block__label">Specification Variants</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Competing Models</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">0</p>
+            <p class="stat-block__label">External ML Libraries</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Approach -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Approach</p>
+        <h2 class="case-study__h2">Three layers of decreasing certainty</h2>
+        <p>
+          Instead of treating astrology as one monolithic claim, I decomposed it into three
+          testable layers &mdash; each with a different evidence grade and a different physical mechanism.
+          The app pits them against each other and lets the data decide.
+        </p>
+        <div class="layer-stack">
+          <div class="layer layer--strong">
+            <p class="layer__tag">Established &mdash; Strong Evidence</p>
+            <p class="layer__title">Layer 1: Photoperiod Imprinting</p>
+            <p class="layer__desc">
+              Birth season's day length permanently calibrates the suprachiasmatic nucleus &mdash;
+              imprinting dopamine, serotonin, and melatonin systems. Predicts chronotype,
+              seasonal sensitivity, and mood patterns. Replicated in Nature Neuroscience
+              (Ciarleglio et al., 2011). This is real biology that happens to align with the
+              tropical zodiac calendar.
+            </p>
+          </div>
+          <div class="layer layer--speculative">
+            <p class="layer__tag">Emerging &mdash; Physically Grounded</p>
+            <p class="layer__title">Layer 2: Cosmic Ray Flux</p>
+            <p class="layer__desc">
+              Different ecliptic sectors face different galactic radiation levels. Sidereal
+              position indicates which sector at birth. Could influence radiation exposure
+              and immune programming. No direct evidence yet, but the mechanism is testable
+              and physically real.
+            </p>
+          </div>
+          <div class="layer layer--correlational">
+            <p class="layer__tag">Correlational &mdash; Weaker Evidence</p>
+            <p class="layer__title">Layer 3: Geomagnetic Modulation</p>
+            <p class="layer__desc">
+              Planetary magnetic fields modulate solar wind and geomagnetic activity. Current
+              transits could influence biological rhythms through magnetosphere interactions.
+              Measurable but correlational. This is where traditional transit astrology lives.
+            </p>
+          </div>
+        </div>
+        <p class="dim">
+          Every analysis in the app is tagged with its evidence grade. The user always knows
+          what's established science, what's plausible speculation, and what's pure tradition.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Client-side ML with no libraries</strong>
+            <span>PCA, k-means clustering, decision trees, Bayesian updating &mdash; all implemented
+            in pure TypeScript. No scikit-learn, no TensorFlow. Everything runs on-device for
+            privacy and offline capability. Writing a PCA decomposition from scratch teaches
+            you exactly how much linear algebra you've forgotten.</span>
+          </li>
+          <li>
+            <strong>Multiple testing correction at scale</strong>
+            <span>Each user can generate 60+ statistical tests (12 signs &times; 5 personality traits).
+            Without correction, you'd expect ~3 false positives by chance alone. Benjamini-Hochberg
+            FDR control across all categories prevents the app from lying to users with
+            noise dressed up as signal.</span>
+          </li>
+          <li>
+            <strong>Timezone and DST precision</strong>
+            <span>Off by one hour changes house cusps, which can flip an entire chart interpretation.
+            Standard UTC offsets don't account for DST. Integrated Google Timezone API for
+            DST-aware calculations with IANA database fallback. Birth time accuracy is
+            everything in natal astrology.</span>
+          </li>
+          <li>
+            <strong>Small-N time series analysis</strong>
+            <span>Users have 20&ndash;100 daily mood ratings, not thousands. Granger causality testing
+            needs careful lag selection with limited data. Solution: multiple lag windows,
+            Mann-Whitney U when normality fails, explicit uncertainty reporting. The app
+            never overstates what small samples can support.</span>
+          </li>
+          <li>
+            <strong>Confirmation bias by design</strong>
+            <span>Users know their chart before rating their mood. You can't fully blind them
+            to the product they're using. Mitigation: blind validation tests (real chart vs
+            randomized shadow chart), retrodiction (predict past moods before seeing data),
+            and a specification curve that tests 36 analytical variants to show which
+            findings survive scrutiny.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- The Falsification Engine -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Feature No Other App Would Build</p>
+        <h2 class="case-study__h2">The falsification report</h2>
+        <p>
+          This is the feature I'm most proud of and the one no astrology company would ever ship.
+          The falsification engine reads every testable prediction the app has made for you,
+          checks what your actual data contradicts, and presents severity-graded disconfirmations.
+        </p>
+        <p>
+          Strong disconfirmation: effect size |d| &ge; 0.5. Mild: 0.2&ndash;0.5. None: below 0.2.
+          Categories span personality predictions, bio-layer effects, transit forecasts, and
+          blind test accuracy. All corrected for multiple testing via FDR.
+        </p>
+        <p>
+          The app doesn't just tell you what's working. It tells you what's failing.
+          Every claim is grounded in your data, not in tradition. If your Sun sign traits
+          don't match your Big Five scores, you'll see it in black and white.
+        </p>
+        <div class="verdict">
+          <p>
+            Most apps sell you confirmation. This one sells you the truth &mdash; and trusts
+            that the truth is more interesting than comfort.
+          </p>
+          <p class="dim">
+            An astrology app with a falsification engine is either the most honest thing
+            in the category or the worst business decision. Probably both.
+          </p>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          Offline-first React Native with Expo. Twelve Zustand stores manage state across
+          31 screens. The 129 service modules break down into 44 astronomical calculators
+          and 56 statistical engines, plus AI interpretation, cloud sync, and export services.
+        </p>
+        <p>
+          Authentication and cloud sync through Supabase with row-level security &mdash; users
+          see only their own data. AI interpretations via Claude through Supabase Edge Functions.
+          Dual-mode theming: Solar (warm, growth-oriented) and Void (dark, brutally honest) &mdash;
+          same statistics, different perspective.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Expo 54</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Zustand</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">astronomy-engine</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">RevenueCat</span>
+          <span class="tech-tag">Pure TS ML</span>
+        </div>
+      </section>
+
+      <!-- What I Learned -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What I Learned</p>
+        <h2 class="case-study__h2">The honest retrospective</h2>
+        <p>
+          Building something designed to disprove its own premise is a strange experience.
+          Every feature I added made the app more useful <em>and</em> more likely to show
+          that the thing it's measuring might not exist. That tension turned out to be
+          the product's greatest strength.
+        </p>
+        <p>
+          The three-layer model was the breakthrough. Instead of asking "is astrology real?"
+          &mdash; a question too blunt to be useful &mdash; the app asks "which specific mechanisms,
+          if any, produce measurable effects?" Photoperiod imprinting is real science.
+          Geomagnetic modulation is measurable. Traditional transit astrology is testable.
+          Separating them lets each stand or fall on its own evidence.
+        </p>
+        <p>
+          The biggest unsolved problem is confirmation bias. Users know their chart. You
+          can't fully blind someone to the product they chose to download. The blind test
+          and retrodiction systems help, but a true answer would require an external
+          randomized controlled trial. The app is the instrument. The experiment hasn't
+          been run yet.
+        </p>
+        <p class="dim">
+          Where this goes depends on the data. Maybe the system builds a new model.
+          Maybe it cleanly disproves the old one. Maybe the truth is stranger than either
+          &mdash; closer to influence than archetype, closer to biology than myth. The point
+          was never to have the answer. The point was to build something honest enough
+          to find it.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://devportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

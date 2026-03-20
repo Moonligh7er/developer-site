@@ -128,9 +128,45 @@ function initCursorGlow() {
   animateGlow();
 }
 
+// --- Page Transition ---
+function initPageTransition() {
+  const overlay = document.querySelector('.page-transition');
+  const loader = document.querySelector('.page-loader');
+
+  if (loader) {
+    loader.classList.add('loading');
+  }
+
+  window.addEventListener('load', () => {
+    if (loader) {
+      loader.classList.remove('loading');
+      loader.classList.add('done');
+    }
+    if (overlay) {
+      overlay.classList.add('loaded');
+    }
+  });
+
+  // Intercept internal navigation for smooth exit
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    // Only intercept local page links
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || link.target === '_blank') return;
+
+    e.preventDefault();
+    if (overlay) {
+      overlay.classList.remove('loaded');
+    }
+    setTimeout(() => { window.location.href = href; }, 250);
+  });
+}
+
 // --- Initialize all effects ---
 function initEffects() {
-  // Digital rain canvas (only on home page or always, very subtle)
+  initPageTransition();
+
   const rainCanvas = document.getElementById('rain-canvas');
   if (rainCanvas) {
     new DigitalRain(rainCanvas);

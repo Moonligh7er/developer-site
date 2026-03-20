@@ -12,16 +12,23 @@
   <meta property="og:title" content="dev://portfolio">
   <meta property="og:description" content="Software architect building at the intersection of technology and human experience. Nine applications across multiple architectures.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.svg">
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.svg">
   <meta name="twitter:title" content="dev://portfolio">
   <meta name="twitter:description" content="Software architect building at the intersection of technology and human experience.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
 </head>
 <body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <!-- Digital Rain Background -->
   <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
@@ -39,7 +46,7 @@
     </ul>
   </nav>
 
-  <main class="page">
+  <main class="page" id="main-content">
     <!-- Hero -->
     <section class="hero container">
       <div class="hero__content">
@@ -141,5 +148,6 @@
 
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
+  <script data-goatcounter="https://devportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

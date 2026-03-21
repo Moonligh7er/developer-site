@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Study Break | dev://portfolio</title>
+  <meta name="description" content="How a student-athlete with ADHD built the study app that replaced six others — because none of them understood how students actually learn.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Study Break | dev://portfolio">
+  <meta property="og:description" content="How a student-athlete with ADHD built the study app that replaced six others.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-studybreak.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Study Break">
+  <meta name="twitter:description" content="How a student-athlete with ADHD built the study app that replaced six others.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .feature-stack { display: flex; flex-direction: column; gap: 1rem; margin: 2rem 0; }
+    .feature-item {
+      border: 1px solid var(--border); padding: 1.5rem;
+      background: var(--surface); position: relative;
+      padding-left: 1.5rem;
+    }
+    .feature-item::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px;
+    }
+    .feature-item--teal::before { background: var(--teal); }
+    .feature-item--violet::before { background: var(--violet); }
+    .feature-item--amber::before { background: var(--amber); }
+    .feature-item--rose::before { background: var(--rose); }
+    .feature-item__title {
+      font-family: var(--font-display); font-size: 1.1rem;
+      color: var(--text-bright); margin-bottom: 0.5rem;
+    }
+    .feature-item__desc { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <!-- Header -->
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Study Break</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          The study app that replaced six others. Built by a student-athlete with ADHD
+          who got tired of context-switching between apps that didn't understand how
+          students actually learn &mdash; or how professors actually organize.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Background <span>Senior-Year Psychology Major</span></div>
+          <div>Stack <span>React &middot; Node &middot; Claude AI &middot; Supabase</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Too many apps, none of them complete</h2>
+        <p>
+          Picture the setup: three browsers maxed with tabs. A flashcard app for memorization.
+          A separate app for scheduling. Another for notes. Another for the calendar your
+          professor half-filled out. A to-do list somewhere. Maybe a timer app for focus sessions.
+          All of them requiring separate accounts, separate logins, separate paywalls for features
+          that should have been free.
+        </p>
+        <p>
+          Now add ADHD to that equation. Every app switch is a context switch. Every context
+          switch is an invitation to lose the thread. The tools designed to help you focus were
+          actively fragmenting your attention.
+        </p>
+        <p>
+          And the content problem was worse. Most study apps offer generic material &mdash;
+          different terminology, different emphasis, sometimes different conclusions entirely
+          from what your professor taught. When the exam is based on Dr. Chen's slides, not
+          a crowdsourced flashcard deck, generic content isn't just unhelpful. It's actively
+          wasting your time.
+        </p>
+        <p>
+          Meanwhile, the AI revolution was happening and study tools were barely keeping up.
+          Algorithms being updated years after the research was published. Paywalls on basic
+          features. No awareness of your actual coursework. I was already running on a schedule
+          that left zero room for inefficiency &mdash; and every one of these tools was adding
+          friction instead of removing it.
+        </p>
+      </section>
+
+      <!-- The Schedule -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Context</p>
+        <h2 class="case-study__h2">The schedule that demanded this</h2>
+        <p>
+          Wrestling. Six months a year, five days a week &mdash; plus private club training three
+          additional days and competition most weekends for at least three of those months.
+          You come home exhausted. You still have assignments due. You still have a dog who
+          needs you. You still have a job.
+        </p>
+        <p>
+          My coaches were understanding &mdash; academics and feeding ourselves came first. But
+          something instilled in me since martial arts as a teenager made being late to
+          practice feel unacceptable. You wait respectfully until invited to join. You don't
+          show up after that moment has passed. So the time I had for studying wasn't just
+          limited &mdash; it was non-negotiable. Every minute had to count.
+        </p>
+        <p>
+          That's the real origin of Study Break. Not a hackathon idea. Not a business plan.
+          A schedule that couldn't afford a single wasted study session and an ecosystem of
+          tools that wasted them constantly.
+        </p>
+      </section>
+
+      <!-- The Professor Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Catalyst</p>
+        <h2 class="case-study__h2">The professor calendar problem</h2>
+        <p>
+          This is the thing that pushed me over the edge. Professors manage their course
+          calendars with wildly inconsistent levels of care. Some add every assignment to
+          the LMS calendar. Some add half. Some add none and don't even publish a course
+          outline. Some publish a syllabus with one set of due dates, post a different date
+          in announcements, and have a third date on the learning management platform.
+        </p>
+        <p>
+          For students with jobs, athletics, or other commitments &mdash; people who need to plan
+          their semester in advance &mdash; this is genuinely destabilizing. Adding some assignments
+          but not others is worse than adding none, because it's <em>misleading</em>. You think
+          you have a clear week. You don't. The missing entry costs you.
+        </p>
+        <p>
+          It cost me a few near-misses before I decided to solve it. I used to map out every
+          due date manually, cross-referencing syllabi, announcements, and the LMS. Now the AI
+          pulls them into the calendar automatically and I double-check its work. It also flags
+          when a professor has given conflicting dates across sources &mdash; something I used to
+          discover the hard way.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">40+</p>
+            <p class="stat-block__label">Features</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5</p>
+            <p class="stat-block__label">AI Tutor Modes</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">196</p>
+            <p class="stat-block__label">Automated Tests</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">37</p>
+            <p class="stat-block__label">Service Modules</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">100%</p>
+            <p class="stat-block__label">Offline Capable</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">Everything in one place, finally</h2>
+        <p>
+          Study Break consolidates flashcards, scheduling, note processing, AI tutoring,
+          campus navigation, analytics, and grade tracking into a single app. One account.
+          One interface. One place where all your academic data lives together &mdash; so the AI
+          can actually see connections between your classes that you might miss.
+        </p>
+        <div class="feature-stack">
+          <div class="feature-item feature-item--teal">
+            <p class="feature-item__title">Document-Aware AI</p>
+            <p class="feature-item__desc">
+              Upload your syllabus, your lecture notes, your professor's slides. The AI reads
+              <em>your</em> material &mdash; not generic content, not crowdsourced decks. When it
+              generates flashcards or quiz questions, they use the same terminology and emphasis
+              your professor does. Because that's what's on the exam.
+            </p>
+          </div>
+          <div class="feature-item feature-item--violet">
+            <p class="feature-item__title">Interdisciplinary Study Mode</p>
+            <p class="feature-item__desc">
+              The feature I'm most proud of. The AI analyzes your classes in pairs and finds
+              conceptual bridges &mdash; where Statistics meets Economics, where Biology
+              overlaps with Psychology. It generates cross-class flashcards and quizzes
+              that let you study multiple subjects simultaneously. It saves enormous
+              amounts of time, and because you're constantly switching contexts, it never
+              gets stale. No more figuring out why Sarah has 600 apples.
+            </p>
+          </div>
+          <div class="feature-item feature-item--amber">
+            <p class="feature-item__title">Emergency Catch-Up Planner</p>
+            <p class="feature-item__desc">
+              Missed a week? The AI reads your late policies, calculates which assignments
+              are still worth submitting, ranks them by grade impact, and builds a recovery
+              plan that fits your available hours. It knows the difference between "10% per
+              day" and "no late work accepted" &mdash; and it won't waste your time on assignments
+              that are already unsalvageable.
+            </p>
+          </div>
+          <div class="feature-item feature-item--rose">
+            <p class="feature-item__title">Smart Calendar</p>
+            <p class="feature-item__desc">
+              AI extracts due dates from syllabi, course outlines, and uploaded documents.
+              Flags conflicting dates across sources. Collision detection warns when three
+              or more deadlines converge in a 48-hour window. The calendar your professors
+              should have filled out, filled out for you.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The AI Philosophy -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Philosophy</p>
+        <h2 class="case-study__h2">AI that teaches, not replaces</h2>
+        <p>
+          I'd been thinking a lot about AI's role in education &mdash; what it helps,
+          what it risks, where the line is. That shaped everything about how Study Break
+          uses AI.
+        </p>
+        <p>
+          Most AI study tools optimize for output: generate the answer, pass the exam.
+          Study Break optimizes for <em>learning</em>. The AI tutor has five modes, and
+          none of them just hand you answers. Socratic mode asks strategic questions to
+          guide you to discovery. Teach-Back mode makes you explain the concept, then
+          evaluates your understanding. Adaptive mode reads your mastery levels and
+          adjusts &mdash; direct explanation when you're lost, probing questions when
+          you're close, nuance and edge cases when you've got it.
+        </p>
+        <p>
+          There's a difference between a tool that helps you learn and a tool that
+          learns for you. Study Break stays on the right side of that line.
+        </p>
+        <div class="verdict">
+          <p>
+            The five tutor modes &mdash; Socratic, Adaptive, Teach-Back, Summary, General &mdash;
+            exist because different concepts need different approaches, and different
+            moments in a study session need different energy. Sometimes you need to be
+            challenged. Sometimes you need a clear explanation. The app reads the room.
+          </p>
+          <p class="dim">
+            If the AI is doing the thinking, the student isn't learning. That's the line
+            Study Break refuses to cross.
+          </p>
+        </div>
+      </section>
+
+      <!-- ADHD by Design -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Design Constraint</p>
+        <h2 class="case-study__h2">Built by an ADHD brain, for ADHD brains</h2>
+        <p>
+          Every design decision in Study Break passed through a filter most apps never
+          consider: will this survive a brain that's actively looking for a reason to
+          context-switch?
+        </p>
+        <p>
+          Fewer tabs, fewer accounts, fewer logins. That's not a convenience feature &mdash;
+          it's a survival feature. Every external app is an exit ramp. Every new browser
+          tab is a trapdoor. Consolidating everything into one place isn't about aesthetics.
+          It's about keeping the door closed long enough to actually study.
+        </p>
+        <p>
+          Ambient sounds &mdash; white noise, rain, caf&eacute; hum &mdash; because silence is
+          its own kind of distraction. Pomodoro timers with structured breaks because
+          "just keep going" is not a strategy that works for every brain. Speed-running
+          detection that flags when you're flipping cards too fast &mdash; catching the
+          moment your eyes are moving but your mind checked out. Interleaved practice
+          that deliberately mixes subjects, because monotony is where ADHD focus goes
+          to die.
+        </p>
+        <p class="dim">
+          These aren't accessibility features bolted on after the fact. They're the
+          architecture. The app was designed this way because it had to be &mdash;
+          for the person building it to use it.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>FSRS-5 spaced repetition from current research</strong>
+            <span>The algorithm that decides when you see a card again matters more than
+            anything else in a flashcard app. Study Break implements FSRS-5 &mdash; the latest
+            generation, with 19 optimized parameters and a full state machine tracking
+            stability, difficulty, and retrievability per card. Five review formats
+            (standard, reversed, cloze, free recall, multiple choice) because recognition
+            and recall are different cognitive processes.</span>
+          </li>
+          <li>
+            <strong>Parsing the unparseable</strong>
+            <span>Syllabi have no standard format. Due dates are embedded in prose, buried in
+            tables, contradicted by announcements. Late policies range from "10% per day"
+            to "tiered: 1&ndash;2 days 5%, 3+ days zero credit" to "don't bother." The AI
+            extracts structured data from all of it &mdash; penalty types, grace periods,
+            maximum late days &mdash; and normalizes it into something the catch-up planner
+            can actually calculate against.</span>
+          </li>
+          <li>
+            <strong>AI context that actually knows you</strong>
+            <span>The tutor doesn't just answer questions. It carries per-class memory &mdash;
+            your struggles, your misconceptions, your upcoming deadlines, your mastery
+            levels ranked by Bloom's taxonomy. Every conversation builds on the last.
+            That required careful context management: injecting student state, class
+            documents, and conversation history without blowing past token limits.</span>
+          </li>
+          <li>
+            <strong>Full offline support with sync</strong>
+            <span>Students study on buses, in gyms, in buildings with terrible WiFi. Study Break
+            runs entirely offline via IndexedDB with background sync when connectivity returns.
+            Not read-cache. Full offline &mdash; create cards, complete reviews, log sessions,
+            all without a connection.</span>
+          </li>
+          <li>
+            <strong>Keeping it free</strong>
+            <span>Students are broke. Putting paywalls on basic study features felt wrong.
+            The free tier includes everything except AI messages. OpenStreetMap instead of
+            Google Maps. Supabase instead of Firebase. Every architectural decision was
+            filtered through "can I afford to give this away?" We'll see if I missed
+            something that starts costing money, but the intent is to keep as much
+            free as possible.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React frontend with TypeScript, built on Vite. 30+ Radix UI primitives for
+          accessibility out of the box (WCAG 2.1 AA). Express backend with Drizzle ORM
+          over Supabase PostgreSQL. Claude AI powers tutoring, flashcard generation, document
+          summarization, late policy parsing, and catch-up planning. Capacitor wraps the
+          whole thing for iOS and Android.
+        </p>
+        <p>
+          The AI integration runs through 37 service modules &mdash; each handling a discrete
+          capability. Document processing is async and non-blocking: text extraction happens
+          immediately, summarization and formula detection run in the background. The tutor's
+          context injection layers student state, class data, mastery levels, and conversation
+          memory into every prompt.
+        </p>
+        <p>
+          196 automated tests. Sentry for crash reporting. Axe-core accessibility testing
+          in CI. The campus map runs on Leaflet and OpenStreetMap because Google Maps API
+          pricing is not student-friendly &mdash; and honestly, most campus maps could use
+          the upgrade anyway.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React 18</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Vite</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">Drizzle ORM</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">FSRS-5</span>
+          <span class="tech-tag">Capacitor</span>
+          <span class="tech-tag">Radix UI</span>
+          <span class="tech-tag">IndexedDB</span>
+          <span class="tech-tag">OpenStreetMap</span>
+        </div>
+      </section>
+
+      <!-- What I Learned -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What I Learned</p>
+        <h2 class="case-study__h2">The honest retrospective</h2>
+        <p>
+          The biggest lesson was that consolidation is the feature. Not any single tool &mdash;
+          not the flashcards, not the AI, not the calendar. The value is that everything
+          lives together. When all your academic data is in one place, the AI can find
+          interdisciplinary connections your professors never mentioned. The calendar can
+          warn you about deadline collisions before they happen. The catch-up planner can
+          read your late policies and your grade weights simultaneously and tell you
+          where your time is best spent.
+        </p>
+        <p>
+          None of that works when your data is scattered across six apps. Fragmentation
+          isn't just inconvenient. It's a ceiling on how smart your tools can be.
+        </p>
+        <p>
+          The other lesson was personal. I spent years thinking my brain was the problem &mdash;
+          that I couldn't focus, couldn't plan, couldn't keep track of things the way other
+          students seemed to. Turns out the tools were the problem. When the environment
+          is designed for how your brain actually works, the brain works fine.
+        </p>
+        <p class="dim">
+          Study Break exists because advancements in AI finally made it possible for one person
+          to build what used to require a team. I took a bunch of services that usually require
+          multiple sites, multiple accounts, and multiple paywalls, and made as much of it
+          free as I could. For every student running on a schedule that can't afford a single
+          wasted session &mdash; this is what I needed. I'm really excited about it.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://devportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

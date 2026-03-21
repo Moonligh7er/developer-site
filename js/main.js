@@ -123,6 +123,56 @@ function initCoordinates() {
   });
 }
 
+// --- Decrypt Name Animation ---
+function initDecryptName() {
+  const el = document.querySelector('.decrypt-name');
+  if (!el) return;
+
+  const names = JSON.parse(el.dataset.names);
+  const binary = '01';
+  let currentIndex = 0;
+  let holdTimeout;
+
+  function scrambleTo(target, callback) {
+    const len = target.length;
+    let resolved = 0;
+    const chars = new Array(len).fill(null);
+    const intervals = [];
+
+    // Start all positions scrambling
+    for (let i = 0; i < len; i++) {
+      const delay = i * 40 + Math.random() * 60;
+      const resolveTime = delay + 300 + Math.random() * 400;
+
+      // Scramble phase
+      intervals[i] = setInterval(() => {
+        chars[i] = binary[Math.floor(Math.random() * 2)];
+        el.textContent = chars.map((c, j) => c !== null ? c : (j < target.length ? ' ' : '')).join('');
+      }, 50);
+
+      // Resolve to final character
+      setTimeout(() => {
+        clearInterval(intervals[i]);
+        chars[i] = target[i];
+        el.textContent = chars.join('');
+        resolved++;
+        if (resolved === len && callback) callback();
+      }, resolveTime);
+    }
+  }
+
+  function cycle() {
+    const nextIndex = (currentIndex + 1) % names.length;
+    scrambleTo(names[nextIndex], () => {
+      currentIndex = nextIndex;
+      holdTimeout = setTimeout(cycle, 4000);
+    });
+  }
+
+  // Start first cycle after initial hold
+  holdTimeout = setTimeout(cycle, 3000);
+}
+
 // --- Initialize everything ---
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
@@ -130,4 +180,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypingEffect();
   initSmoothScroll();
   initCoordinates();
+  initDecryptName();
 });

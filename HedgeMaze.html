@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HedgeMaze — Can You Find the Center?</title>
+<meta name="description" content="Navigate terrifying procedurally-generated mazes. Fog of war. Weeping Angel statues. 24 unique maps. 8-player multiplayer. Play free in your browser.">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-alt: #0d1a0d;
+  --bg-card: #111a11;
+  --green: #22cc44;
+  --green-dim: #198c30;
+  --green-glow: rgba(34, 204, 68, 0.3);
+  --red: #cc2222;
+  --red-glow: rgba(204, 34, 34, 0.25);
+  --gold: #d4a017;
+  --ice: #88ccff;
+  --text: #e8e8e8;
+  --text-dim: #999;
+  --text-muted: #666;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── UTILITY ─── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-left.visible, .reveal-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(34, 204, 68, 0.08);
+  transition: background 0.3s;
+}
+nav.scrolled { background: rgba(10, 10, 10, 0.95); border-bottom-color: rgba(34, 204, 68, 0.15); }
+.nav-logo {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--green);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); }
+.nav-cta {
+  background: var(--green) !important;
+  color: #000 !important;
+  padding: 8px 20px !important;
+  border-radius: 6px;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--green-glow); }
+
+@media (max-width: 768px) {
+  .nav-links a:not(.nav-cta) { display: none; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 120px 24px 80px;
+}
+
+/* Fog layers */
+.fog-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fog-layer::before, .fog-layer::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  border-radius: 50%;
+  opacity: 0.04;
+}
+.fog-layer::before {
+  background: radial-gradient(ellipse at 30% 40%, var(--green) 0%, transparent 60%);
+  animation: fogDrift1 25s ease-in-out infinite;
+}
+.fog-layer::after {
+  background: radial-gradient(ellipse at 70% 60%, var(--green) 0%, transparent 55%);
+  animation: fogDrift2 30s ease-in-out infinite;
+}
+@keyframes fogDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(5%, -3%) scale(1.1); }
+  66% { transform: translate(-3%, 5%) scale(0.95); }
+}
+@keyframes fogDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1.05); }
+  50% { transform: translate(-5%, 3%) scale(0.9); }
+}
+
+/* Particle canvas */
+#particles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+/* Vignette */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-content { position: relative; z-index: 3; max-width: 900px; }
+
+.hero-pre {
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--green-dim);
+  margin-bottom: 24px;
+  animation: fadeUp 1s ease 0.2s both;
+}
+
+.hero-title {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin-bottom: 32px;
+  animation: fadeUp 1s ease 0.4s both;
+  background: linear-gradient(180deg, #ffffff 0%, #88cc88 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 40px rgba(34, 204, 68, 0.2));
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  color: var(--text-dim);
+  max-width: 600px;
+  margin: 0 auto 48px;
+  font-style: italic;
+  animation: fadeUp 1s ease 0.6s both;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 1s ease 0.8s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 40px;
+  background: var(--green);
+  color: #000;
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%);
+  animation: btnShine 3s ease-in-out infinite;
+}
+@keyframes btnShine {
+  0%, 70%, 100% { transform: translateX(-100%); }
+  85% { transform: translateX(100%); }
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px var(--green-glow), 0 0 80px rgba(34, 204, 68, 0.15);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-secondary:hover {
+  border-color: var(--green);
+  background: rgba(34, 204, 68, 0.05);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  animation: bounce 2s ease-in-out infinite;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* ─── SOCIAL PROOF BAR ─── */
+.proof-bar {
+  background: var(--bg-alt);
+  border-top: 1px solid rgba(34, 204, 68, 0.08);
+  border-bottom: 1px solid rgba(34, 204, 68, 0.08);
+  padding: 28px 24px;
+  overflow: hidden;
+}
+.proof-bar-inner {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.proof-stat {
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.proof-stat strong {
+  color: var(--green);
+  font-weight: 700;
+}
+.proof-dot {
+  color: var(--text-muted);
+  user-select: none;
+}
+
+/* ─── SECTION COMMON ─── */
+.section {
+  padding: 120px 24px;
+  position: relative;
+}
+.section-dark { background: var(--bg); }
+.section-alt { background: var(--bg-alt); }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+.section-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.section-subtitle {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ─── FEATURE ROWS ─── */
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 120px;
+}
+.feature-row:last-child { margin-bottom: 0; }
+.feature-row.reversed .feature-visual { order: -1; }
+
+.feature-visual {
+  position: relative;
+  aspect-ratio: 4/3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 204, 68, 0.1);
+}
+
+.feature-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.feature-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.feature-desc {
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+.feature-list li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.feature-list.danger li::before { background: var(--red); }
+
+@media (max-width: 768px) {
+  .feature-row { grid-template-columns: 1fr; gap: 40px; }
+  .feature-row.reversed .feature-visual { order: 0; }
+}
+
+/* ─── VISUAL SCENES (CSS art inside feature visuals) ─── */
+.scene { position: absolute; inset: 0; }
+
+/* Maze alive scene */
+.scene-maze {
+  background:
+    linear-gradient(180deg, #060d06 0%, #0a1a0a 100%);
+}
+.maze-grid {
+  position: absolute;
+  inset: 20px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+}
+.maze-cell {
+  border-radius: 2px;
+  transition: opacity 1.5s, background 1.5s;
+}
+.maze-wall { background: #1a3a1a; }
+.maze-path { background: #0a0a0a; }
+.maze-closing { animation: hedgeClose 3s ease-in-out infinite; }
+@keyframes hedgeClose {
+  0%, 40% { background: #0a0a0a; }
+  60%, 100% { background: #1a3a1a; }
+}
+.flashlight-cone {
+  position: absolute;
+  width: 120px;
+  height: 180px;
+  bottom: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 240, 180, 0.12) 0%, transparent 70%);
+  clip-path: polygon(40% 100%, 0% 0%, 100% 0%, 60% 100%);
+  animation: flashlightSway 4s ease-in-out infinite;
+}
+@keyframes flashlightSway {
+  0%, 100% { transform: translateX(-50%) rotate(-3deg); }
+  50% { transform: translateX(-50%) rotate(3deg); }
+}
+.player-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  bottom: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 12px var(--green-glow);
+}
+.fog-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 72%, transparent 15%, rgba(0,0,0,0.85) 40%);
+}
+
+/* Enemies scene */
+.scene-enemies {
+  background: linear-gradient(180deg, #0d0808 0%, #1a0a0a 100%);
+}
+.statue {
+  position: absolute;
+  width: 24px;
+  height: 40px;
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  border-radius: 4px 4px 0 0;
+  left: 30%;
+  bottom: 30%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+.statue::before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--red);
+  border-radius: 50%;
+  top: 8px;
+  left: 6px;
+  box-shadow: 8px 0 0 var(--red), 0 0 8px var(--red), 8px 0 8px var(--red);
+  animation: eyePulse 3s ease-in-out infinite;
+}
+@keyframes eyePulse {
+  0%, 60%, 100% { opacity: 1; }
+  30% { opacity: 0.3; }
+}
+.minotaur {
+  position: absolute;
+  right: 15%;
+  bottom: 25%;
+  width: 36px;
+  height: 52px;
+  background: linear-gradient(180deg, #3a1a0a 0%, #2a0a00 100%);
+  border-radius: 6px 6px 2px 2px;
+}
+.minotaur::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -4px;
+  width: 44px;
+  height: 16px;
+  background: #3a1a0a;
+  clip-path: polygon(0% 100%, 15% 0%, 25% 100%, 75% 100%, 85% 0%, 100% 100%);
+}
+.minotaur::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: #ff2200;
+  border-radius: 50%;
+  top: 8px;
+  left: 10px;
+  box-shadow: 12px 0 0 #ff2200, 0 0 15px #ff2200, 12px 0 15px #ff2200;
+  animation: eyePulse 2s ease-in-out infinite;
+}
+.shadow-entity {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  left: 60%;
+  bottom: 20%;
+  background: radial-gradient(ellipse at 50% 40%, rgba(30,0,30,0.6) 0%, transparent 70%);
+  animation: shadowFloat 5s ease-in-out infinite;
+}
+@keyframes shadowFloat {
+  0%, 100% { transform: translateY(0) scaleY(1); opacity: 0.6; }
+  50% { transform: translateY(-10px) scaleY(1.05); opacity: 0.9; }
+}
+.red-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(100, 0, 0, 0.2) 100%);
+}
+
+/* Geometry scene */
+.scene-geometry {
+  background: linear-gradient(180deg, #060a10 0%, #0a0d1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.geo-ring {
+  position: absolute;
+  border: 1px solid rgba(34, 204, 68, 0.15);
+  border-radius: 50%;
+  animation: geoSpin 20s linear infinite;
+}
+.geo-ring:nth-child(1) { width: 60%; height: 60%; animation-duration: 30s; }
+.geo-ring:nth-child(2) { width: 45%; height: 45%; animation-duration: 22s; animation-direction: reverse; }
+.geo-ring:nth-child(3) { width: 30%; height: 30%; animation-duration: 18s; border-color: rgba(34, 204, 68, 0.25); }
+.geo-ring:nth-child(4) { width: 15%; height: 15%; animation-duration: 12s; animation-direction: reverse; border-color: rgba(34, 204, 68, 0.35); }
+.geo-ring:nth-child(5) { width: 80%; height: 80%; animation-duration: 40s; border-style: dashed; }
+.geo-ring:nth-child(6) { width: 70%; height: 60%; animation-duration: 25s; animation-direction: reverse; border-style: dotted; }
+@keyframes geoSpin {
+  to { transform: rotate(360deg); }
+}
+.geo-center {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--green), 0 0 40px var(--green-glow);
+  z-index: 1;
+  position: absolute;
+}
+.geo-line {
+  position: absolute;
+  width: 1px;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(34, 204, 68, 0.2), transparent);
+  transform-origin: bottom center;
+}
+.geo-line:nth-child(7) { transform: rotate(0deg); }
+.geo-line:nth-child(8) { transform: rotate(60deg); }
+.geo-line:nth-child(9) { transform: rotate(120deg); }
+.geo-line:nth-child(10) { transform: rotate(180deg); }
+.geo-line:nth-child(11) { transform: rotate(240deg); }
+.geo-line:nth-child(12) { transform: rotate(300deg); }
+
+/* Multiplayer scene */
+.scene-multi {
+  background: linear-gradient(180deg, #060d06 0%, #0a1a0a 100%);
+}
+.multi-players {
+  position: absolute;
+  inset: 20px;
+}
+.mp-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px currentColor;
+}
+.mp-dot:nth-child(1) { background: #22cc44; color: #22cc44; top: 20%; left: 30%; animation: mpMove1 8s ease-in-out infinite; }
+.mp-dot:nth-child(2) { background: #4488ff; color: #4488ff; top: 50%; left: 60%; animation: mpMove2 7s ease-in-out infinite; }
+.mp-dot:nth-child(3) { background: #ff6644; color: #ff6644; top: 70%; left: 25%; animation: mpMove3 9s ease-in-out infinite; }
+.mp-dot:nth-child(4) { background: #cc44cc; color: #cc44cc; top: 35%; left: 75%; animation: mpMove4 6s ease-in-out infinite; }
+.mp-dot:nth-child(5) { background: #cccc22; color: #cccc22; top: 60%; left: 45%; animation: mpMove1 10s ease-in-out infinite reverse; }
+@keyframes mpMove1 { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(20px, -15px); } 50% { transform: translate(-10px, 20px); } 75% { transform: translate(15px, 10px); } }
+@keyframes mpMove2 { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(-25px, 10px); } 50% { transform: translate(15px, -20px); } 75% { transform: translate(-10px, -5px); } }
+@keyframes mpMove3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -10px); } 66% { transform: translate(-20px, 15px); } }
+@keyframes mpMove4 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-15px, 25px); } }
+.maze-bg-lines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background:
+    repeating-linear-gradient(0deg, var(--green) 0px, var(--green) 1px, transparent 1px, transparent 30px),
+    repeating-linear-gradient(90deg, var(--green) 0px, var(--green) 1px, transparent 1px, transparent 30px);
+}
+
+/* ─── PROGRESSION SECTION ─── */
+.prog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.prog-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 204, 68, 0.08);
+  border-radius: 12px;
+  padding: 32px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.prog-card:hover {
+  border-color: rgba(34, 204, 68, 0.2);
+  transform: translateY(-4px);
+}
+.prog-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  display: block;
+}
+.prog-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.prog-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.prog-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.prog-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--green-dim), var(--green));
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.prog-bar-fill.gold { background: linear-gradient(90deg, #8a6a00, var(--gold)); }
+.prog-bar-fill.red { background: linear-gradient(90deg, #8a0000, var(--red)); }
+.prog-bar-fill.ice { background: linear-gradient(90deg, #2266aa, var(--ice)); }
+.prog-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ─── MAP GALLERY ─── */
+.map-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.map-tab {
+  padding: 10px 24px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font);
+  font-weight: 600;
+}
+.map-tab:hover { border-color: var(--green); color: var(--green); }
+.map-tab.active {
+  background: var(--green);
+  color: #000;
+  border-color: var(--green);
+}
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.map-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 204, 68, 0.06);
+  border-radius: 10px;
+  padding: 20px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  cursor: default;
+}
+.map-card:hover {
+  border-color: rgba(34, 204, 68, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+}
+.map-card-icon {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+.map-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.map-card p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.map-card .map-tag {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.tag-geo { background: rgba(34, 204, 68, 0.1); color: var(--green); }
+.tag-hist { background: rgba(212, 160, 23, 0.1); color: var(--gold); }
+.tag-myth { background: rgba(204, 34, 34, 0.1); color: var(--red); }
+.tag-other { background: rgba(136, 204, 255, 0.1); color: var(--ice); }
+
+.map-panel { display: none; }
+.map-panel.active { display: grid; }
+
+/* ─── QUOTES ─── */
+.quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.quote-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 36px;
+  position: relative;
+  transition: transform 0.3s;
+}
+.quote-card:hover { transform: translateY(-4px); }
+.quote-mark {
+  font-size: 3rem;
+  color: var(--green);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-family: Georgia, serif;
+}
+.quote-text {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.quote-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ─── PLATFORMS ─── */
+.platform-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 48px;
+}
+.platform-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 28px;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.platform-badge:hover {
+  border-color: var(--green);
+  transform: translateY(-2px);
+}
+.platform-icon {
+  font-size: 1.8rem;
+}
+.platform-info { text-align: left; }
+.platform-info small { display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.platform-info strong { font-size: 1rem; }
+
+/* ─── FINAL CTA ─── */
+.final-cta {
+  text-align: center;
+  padding: 140px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 80%, rgba(34, 204, 68, 0.06) 0%, transparent 60%);
+}
+.final-cta .section-title {
+  margin-bottom: 16px;
+}
+.final-cta .section-subtitle {
+  margin-bottom: 48px;
+}
+.pulse-btn {
+  animation: ctaPulse 2.5s ease-in-out infinite;
+}
+@keyframes ctaPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--green-glow); }
+  50% { box-shadow: 0 0 0 16px rgba(34, 204, 68, 0); }
+}
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+footer a { color: var(--text-dim); text-decoration: none; }
+footer a:hover { color: var(--green); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 480px) {
+  .section { padding: 80px 16px; }
+  .hero { padding: 100px 16px 60px; }
+  .map-grid { grid-template-columns: 1fr; }
+  .quotes-grid { grid-template-columns: 1fr; }
+  .feature-row { gap: 32px; margin-bottom: 80px; }
+}
+
+/* ─── LOADING ─── */
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s, visibility 0.5s;
+}
+.page-loader.hidden { opacity: 0; visibility: hidden; }
+.loader-ring {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(34, 204, 68, 0.1);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── SEASONAL BANNER ─── */
+.seasonal-banner {
+  background: linear-gradient(90deg, var(--green-dim), var(--green), var(--green-dim));
+  color: #000;
+  text-align: center;
+  padding: 10px 24px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 101;
+}
+
+/* ─── DANGER HIGHLIGHT ─── */
+.danger-title { color: var(--red); }
+.gold-title { color: var(--gold); }
+.ice-title { color: var(--ice); }
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div class="page-loader" id="loader">
+  <div class="loader-ring"></div>
+</div>
+
+<!-- Seasonal Banner -->
+<div class="seasonal-banner" id="seasonalBanner" style="display:none;"></div>
+
+<!-- Nav -->
+<nav id="nav">
+  <a href="#" class="nav-logo">HedgeMaze</a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#maps">Maps</a>
+    <a href="#progression">Progression</a>
+    <a href="#platforms">Platforms</a>
+    <a href="/" class="nav-cta">Play Now</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="fog-layer"></div>
+  <canvas id="particles"></canvas>
+  <div class="hero-content">
+    <p class="hero-pre">A multiplayer maze horror experience</p>
+    <h1 class="hero-title">HedgeMaze</h1>
+    <p class="hero-tagline">Can you find the center before the maze finds you?</p>
+    <div class="hero-buttons">
+      <a href="/" class="btn-primary">
+        <span>&#9654;</span> Play Now
+      </a>
+      <a href="#platforms" class="btn-secondary">
+        <span>&#8595;</span> Download App
+      </a>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true">&#8964;</div>
+</section>
+
+<!-- Social Proof Bar -->
+<div class="proof-bar">
+  <div class="proof-bar-inner reveal">
+    <span class="proof-stat"><strong>24</strong> Unique Maps</span>
+    <span class="proof-dot" aria-hidden="true">&middot;</span>
+    <span class="proof-stat"><strong>8</strong> Players</span>
+    <span class="proof-dot" aria-hidden="true">&middot;</span>
+    <span class="proof-stat"><strong>15+</strong> Items</span>
+    <span class="proof-dot" aria-hidden="true">&middot;</span>
+    <span class="proof-stat"><strong>2</strong> Bosses</span>
+    <span class="proof-dot" aria-hidden="true">&middot;</span>
+    <span class="proof-stat"><strong>5</strong> AI Personalities</span>
+    <span class="proof-dot" aria-hidden="true">&middot;</span>
+    <span class="proof-stat"><strong>Zero</strong> Assets Required</span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     FEATURES
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-dark" id="features">
+
+  <!-- Feature 1: The Maze is Alive -->
+  <div class="feature-row">
+    <div class="feature-visual reveal-left">
+      <div class="scene scene-maze">
+        <div class="maze-grid" id="mazeGrid"></div>
+        <div class="flashlight-cone"></div>
+        <div class="player-dot"></div>
+        <div class="fog-overlay"></div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <p class="feature-label">Survival</p>
+      <h2 class="feature-title">The Maze<br>Is Alive</h2>
+      <p class="feature-desc">Every step forward is a commitment. The hedges seal shut behind you, erasing your path. Your flashlight carves a narrow cone through impenetrable fog. Beyond its reach: darkness.</p>
+      <ul class="feature-list">
+        <li>Fog of war -- you see only what the flashlight reveals</li>
+        <li>Hedges grow closed behind you. No backtracking.</li>
+        <li>Underground tunnel system with ladders and portals</li>
+        <li>Procedurally generated -- no two runs are alike</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 2: You Are Not Alone -->
+  <div class="feature-row reversed">
+    <div class="feature-visual reveal-right">
+      <div class="scene scene-enemies">
+        <div class="statue"></div>
+        <div class="minotaur"></div>
+        <div class="shadow-entity"></div>
+        <div class="shadow-entity" style="left:20%; bottom:40%; width:40px; height:60px; animation-delay:-2s;"></div>
+        <div class="red-vignette"></div>
+      </div>
+    </div>
+    <div class="reveal-left">
+      <p class="feature-label danger-title">Danger</p>
+      <h2 class="feature-title danger-title">You Are Not<br>Alone</h2>
+      <p class="feature-desc">Stone statues stand in the corridors. They don't move while you're looking. <em>Turn away and listen.</em> The Minotaur roams the deepest paths, his red eyes piercing the dark. Shadow entities drift at the maze edges, drawn to sound.</p>
+      <ul class="feature-list danger">
+        <li>Weeping Angel statues -- 4 variants with distinct behaviors</li>
+        <li>The Minotaur: massive, relentless, glowing red eyes</li>
+        <li>The Frost Giant: ice-blue colossus with crystal crown</li>
+        <li>Shadow entities that hunt at the maze perimeter</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 3: Ancient Geometries -->
+  <div class="feature-row">
+    <div class="feature-visual reveal-left">
+      <div class="scene scene-geometry">
+        <div class="geo-ring"></div>
+        <div class="geo-ring"></div>
+        <div class="geo-ring"></div>
+        <div class="geo-ring"></div>
+        <div class="geo-ring"></div>
+        <div class="geo-ring"></div>
+        <div class="geo-center"></div>
+        <div class="geo-line"></div>
+        <div class="geo-line"></div>
+        <div class="geo-line"></div>
+        <div class="geo-line"></div>
+        <div class="geo-line"></div>
+        <div class="geo-line"></div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <p class="feature-label gold-title">Sacred</p>
+      <h2 class="feature-title gold-title">Ancient<br>Geometries</h2>
+      <p class="feature-desc">Each maze is built on patterns older than civilization. Fibonacci spirals. The Flower of Life. Metatron's Cube. Historical recreations of Hampton Court and Knossos. Mythological labyrinths with their own enemies, atmosphere, and visual identity.</p>
+      <ul class="feature-list">
+        <li>9 sacred geometry templates shape the maze structure</li>
+        <li>8 historical recreations of real-world labyrinths</li>
+        <li>5 mythological maps with unique themes and enemies</li>
+        <li>Every map has a fully self-contained visual world</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Feature 4: Compete & Conquer -->
+  <div class="feature-row reversed">
+    <div class="feature-visual reveal-right">
+      <div class="scene scene-multi">
+        <div class="maze-bg-lines"></div>
+        <div class="multi-players">
+          <div class="mp-dot"></div>
+          <div class="mp-dot"></div>
+          <div class="mp-dot"></div>
+          <div class="mp-dot"></div>
+          <div class="mp-dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-left">
+      <p class="feature-label">Multiplayer</p>
+      <h2 class="feature-title">Compete<br>&amp; Conquer</h2>
+      <p class="feature-desc">Race 7 other players to the center. Form teams of 2. Hold the center for 30 seconds in King of the Maze. Or test yourself against AI bots with 5 distinct personality types -- from cautious explorers to aggressive saboteurs.</p>
+      <ul class="feature-list">
+        <li>Up to 8 players: free-for-all or 4 teams of 2</li>
+        <li>3 modes: Race to Center, King of the Maze, Team Race</li>
+        <li>5 AI personalities across 3 difficulty levels</li>
+        <li>Spectator mode, emotes, seamless reconnection</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     ITEMS CALLOUT
+     ════════════════════════════════════════════════════════════════ -->
+<div class="proof-bar">
+  <div class="proof-bar-inner reveal">
+    <span class="proof-stat">&#127993; Slingshot</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#127798; Pepper Spray</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#129512; Dynamite</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#128163; Smoke Bomb</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#129517; Compass</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#128273; Skeleton Key</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#9986; Hedge Clippers</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#129526; Decoy</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat">&#129514; Potion</span>
+    <span class="proof-dot">&middot;</span>
+    <span class="proof-stat"><strong>15+ items</strong></span>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PROGRESSION
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-alt" id="progression">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Progression</p>
+      <h2 class="section-title">Depth That<br>Rewards Mastery</h2>
+      <p class="section-subtitle">Every run teaches you something. Every milestone unlocks something new. The maze remembers how far you've come.</p>
+    </div>
+
+    <div class="prog-grid">
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#9733;</span>
+        <h3>85-Point Mastery</h3>
+        <p>Earn mastery points across every theme and geometry. Each combination has its own challenge rating.</p>
+        <div class="prog-bar"><div class="prog-bar-fill" data-width="68"></div></div>
+        <div class="prog-meta"><span>57 / 85 Points</span><span>Maze Expert</span></div>
+      </div>
+
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#128081;</span>
+        <h3>5 Prestige Tiers</h3>
+        <p>Reset your mastery to climb the prestige ladder. Each tier grants exclusive cosmetics and titles that can't be earned any other way.</p>
+        <div class="prog-bar"><div class="prog-bar-fill gold" data-width="40"></div></div>
+        <div class="prog-meta"><span>Tier 2 / 5</span><span>Labyrinth Knight</span></div>
+      </div>
+
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#127922;</span>
+        <h3>52 Cosmetics</h3>
+        <p>Skins, trails, flashlight beams, titles, and emotes. Unlock them through mastery, prestige, seasonal events, and achievements.</p>
+        <div class="prog-bar"><div class="prog-bar-fill" data-width="35"></div></div>
+        <div class="prog-meta"><span>18 / 52 Unlocked</span><span>Collector</span></div>
+      </div>
+
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#127793;</span>
+        <h3>Seasonal Events</h3>
+        <p>4 seasonal events per year, each with a 30-tier reward track. Same challenges for all players. Limited-time cosmetics that never return.</p>
+        <div class="prog-bar"><div class="prog-bar-fill red" data-width="53"></div></div>
+        <div class="prog-meta"><span>Tier 16 / 30</span><span>18 days remaining</span></div>
+      </div>
+
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#128220;</span>
+        <h3>Daily &amp; Weekly Challenges</h3>
+        <p>52 challenge templates, synchronized across all players. Complete them for bonus XP, mastery, and seasonal event progress.</p>
+        <div class="prog-bar"><div class="prog-bar-fill ice" data-width="75"></div></div>
+        <div class="prog-meta"><span>3 / 4 Daily</span><span>Resets in 6h</span></div>
+      </div>
+
+      <div class="prog-card reveal">
+        <span class="prog-icon">&#128202;</span>
+        <h3>40+ Lifetime Stats</h3>
+        <p>Mazes completed, items used, statues escaped, bosses defeated, tunnels discovered, speed records, win streaks, and more.</p>
+        <div class="prog-bar"><div class="prog-bar-fill" data-width="92"></div></div>
+        <div class="prog-meta"><span>247 Mazes Completed</span><span>All-Time</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     MAP GALLERY
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-dark" id="maps">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Explore</p>
+      <h2 class="section-title">24 Unique Maps</h2>
+      <p class="section-subtitle">From sacred geometry to real historical labyrinths to the mythological underworld. Every map is a different world.</p>
+    </div>
+
+    <div class="map-tabs reveal">
+      <button class="map-tab active" data-tab="geometric">Geometric</button>
+      <button class="map-tab" data-tab="historical">Historical</button>
+      <button class="map-tab" data-tab="mythological">Mythological</button>
+      <button class="map-tab" data-tab="other">Other</button>
+    </div>
+
+    <!-- Geometric -->
+    <div class="map-panel map-grid active" id="tab-geometric">
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#10047;</span>
+        <h4>Fibonacci Spiral</h4>
+        <p>Corridors wind in golden ratio spirals. The deeper you go, the tighter the turns.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#10022;</span>
+        <h4>Flower of Life</h4>
+        <p>Overlapping circles create a maze of infinite intersections.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9672;</span>
+        <h4>Seed of Life</h4>
+        <p>Seven circles. Seven paths. Only one leads to the center.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9014;</span>
+        <h4>Metatron's Cube</h4>
+        <p>Every Platonic solid encoded in a single labyrinth of lines.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9651;</span>
+        <h4>Sri Yantra</h4>
+        <p>Nine interlocking triangles form a cosmic maze of devastating complexity.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#10038;</span>
+        <h4>Vesica Piscis</h4>
+        <p>Two overlapping circles. The sacred intersection defines your path.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#8734;</span>
+        <h4>Torus Knot</h4>
+        <p>A maze that curves back on itself. You may be closer than you think -- or infinitely far.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9775;</span>
+        <h4>Chartres</h4>
+        <p>Based on the medieval labyrinth of Chartres Cathedral. One winding path.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#10070;</span>
+        <h4>Random</h4>
+        <p>Pure procedural chaos. No sacred template. Maximum unpredictability.</p>
+        <span class="map-tag tag-geo">Geometric</span>
+      </div>
+    </div>
+
+    <!-- Historical -->
+    <div class="map-panel map-grid" id="tab-historical">
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127984;</span>
+        <h4>Hampton Court</h4>
+        <p>The most famous hedge maze in the world. Commissioned in 1690 for William III.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127984;</span>
+        <h4>Villa Pisani</h4>
+        <p>The devilishly difficult Italian labyrinth. Napoleon himself reportedly got lost.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9962;</span>
+        <h4>Amiens Cathedral</h4>
+        <p>Octagonal pavement labyrinth from 1288. A pilgrimage in miniature.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9962;</span>
+        <h4>Reims Cathedral</h4>
+        <p>Square labyrinth with corner bastions. Destroyed in 1779, preserved here forever.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127984;</span>
+        <h4>Longleat</h4>
+        <p>The world's longest hedge maze. 1.69 miles of paths in Wiltshire, England.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127984;</span>
+        <h4>Reignac-sur-Indre</h4>
+        <p>The largest plant maze on earth. Four hectares of sunflowers turned to hedges.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127963;</span>
+        <h4>Knossos Palace</h4>
+        <p>The legendary palace of King Minos. Unlocked at INSANE difficulty.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#9653;</span>
+        <h4>Egyptian Labyrinth at Hawara</h4>
+        <p>3,000 rooms. Herodotus called it more impressive than the pyramids. Unlocked at INSANE difficulty.</p>
+        <span class="map-tag tag-hist">Historical</span>
+      </div>
+    </div>
+
+    <!-- Mythological -->
+    <div class="map-panel map-grid" id="tab-mythological">
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#128002;</span>
+        <h4>Minotaur's Labyrinth</h4>
+        <p>The beast waits at the center. Torchlit stone corridors. You hear hooves on rock. Unique enemies. Unique atmosphere.</p>
+        <span class="map-tag tag-myth">Mythological</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127744;</span>
+        <h4>Cretan Spiral</h4>
+        <p>The classical seven-circuit labyrinth. A single path that spirals inward. Meditative -- until it isn't.</p>
+        <span class="map-tag tag-myth">Mythological</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127795;</span>
+        <h4>Norse World-Roots</h4>
+        <p>Navigate the roots of Yggdrasil. Between the nine realms, things lurk in the spaces between worlds.</p>
+        <span class="map-tag tag-myth">Mythological</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#127984;</span>
+        <h4>Troy Town</h4>
+        <p>Turf mazes found across Scandinavia. Ancient patterns tied to luck, fertility, and trapping evil spirits.</p>
+        <span class="map-tag tag-myth">Mythological</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#128293;</span>
+        <h4>Demon Palace</h4>
+        <p>Walls of fire and obsidian. The most hostile environment in the game. Only the best survive.</p>
+        <span class="map-tag tag-myth">Mythological</span>
+      </div>
+    </div>
+
+    <!-- Other -->
+    <div class="map-panel map-grid" id="tab-other">
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#10052;</span>
+        <h4>Frost</h4>
+        <p>Ice physics. Momentum-based sliding. The maze is beautiful and lethal.</p>
+        <span class="map-tag tag-other">Other</span>
+      </div>
+      <div class="map-card reveal">
+        <span class="map-card-icon">&#128214;</span>
+        <h4>The Archive</h4>
+        <p>Infinite bookshelves. Whispered secrets. Something is cataloguing you.</p>
+        <span class="map-tag tag-other">Other</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     QUOTES
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Player Stories</p>
+      <h2 class="section-title">From the Survivors</h2>
+    </div>
+
+    <div class="quotes-grid">
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">I heard the statue move behind me. I didn't turn around. I just ran.</p>
+        <p class="quote-author">-- Player, after their first Weeping Angel encounter</p>
+      </div>
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">The hedges closed and I realized my path back was gone. Pure panic. I've never felt that in a browser game before.</p>
+        <p class="quote-author">-- First-time player, Classic Hedge map</p>
+      </div>
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">We were screaming on Discord the entire match. Someone found a tunnel and we all followed them into the dark. Nobody made it out that way.</p>
+        <p class="quote-author">-- Team of 4, King of the Maze mode</p>
+      </div>
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">I've played every historical map. Knossos on INSANE difficulty is the most terrifying gaming experience I've had this year. And this runs in a browser.</p>
+        <p class="quote-author">-- Prestige Tier 3 player</p>
+      </div>
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">No downloads. No assets. Everything is generated. I thought that was a gimmick until I saw the Frost Giant emerge from the fog. How is this procedural?</p>
+        <p class="quote-author">-- Game developer, after inspecting source</p>
+      </div>
+      <div class="quote-card reveal">
+        <div class="quote-mark">&ldquo;</div>
+        <p class="quote-text">The Fibonacci Spiral map broke my brain. I kept ending up back where I started, but the hedges had changed. The maze is alive.</p>
+        <p class="quote-author">-- Player, 47 minutes in</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     PLATFORMS
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-dark" id="platforms">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Play Anywhere</p>
+      <h2 class="section-title">Your Maze.<br>Every Device.</h2>
+      <p class="section-subtitle">Your progress follows you. Play on your laptop at home. Continue on your phone on the train. Works offline. Zero downloads required for browser play.</p>
+    </div>
+
+    <div class="platform-row reveal">
+      <div class="platform-badge">
+        <span class="platform-icon">&#127760;</span>
+        <div class="platform-info">
+          <small>Instant Play</small>
+          <strong>Browser</strong>
+        </div>
+      </div>
+      <div class="platform-badge">
+        <span class="platform-icon">&#128241;</span>
+        <div class="platform-info">
+          <small>Install to Home Screen</small>
+          <strong>PWA</strong>
+        </div>
+      </div>
+      <div class="platform-badge">
+        <span class="platform-icon">&#63743;</span>
+        <div class="platform-info">
+          <small>App Store</small>
+          <strong>iOS</strong>
+        </div>
+      </div>
+      <div class="platform-badge">
+        <span class="platform-icon">&#129302;</span>
+        <div class="platform-info">
+          <small>Google Play</small>
+          <strong>Android</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:48px;" class="reveal">
+      <p style="color:var(--text-muted); font-size:0.85rem; letter-spacing:0.05em;">Zero external assets &middot; Procedurally generated audio &amp; visuals &middot; Docker deployment &middot; Offline capable</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     LOSS AVERSION / MYSTERY CALLOUT
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-alt" style="padding: 80px 24px;">
+  <div class="container" style="max-width:800px; text-align:center;">
+    <div class="reveal">
+      <p style="font-size: clamp(1.3rem, 3vw, 1.8rem); font-style:italic; color:var(--text-dim); line-height:1.7;">
+        The maze closes behind you. There is no going back.<br>
+        <span style="color:var(--text-muted); font-size:0.85em;">What lives in the tunnels beneath the hedges? Why do the statues know where you are? What happens at the center?</span>
+      </p>
+      <p style="margin-top:24px; font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--green);">
+        20 lore fragments. 16 achievements. The answers are inside.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     POWER FANTASY CALLOUT
+     ════════════════════════════════════════════════════════════════ -->
+<section class="section section-dark" style="padding: 80px 24px;">
+  <div class="container" style="max-width:900px; text-align:center;">
+    <div class="reveal">
+      <p class="section-label">For the Ambitious</p>
+      <h2 class="section-title" style="margin-bottom:24px;">Master All 24 Geometries.<br><span style="color:var(--gold);">Earn the Title of Maze Sovereign.</span></h2>
+      <p style="color:var(--text-dim); font-size:1.05rem; max-width:600px; margin:0 auto 16px;">
+        Outsmart 7 other players -- or 7 AI opponents with distinct personalities. Conquer every historical labyrinth. Survive every mythological nightmare. Reach Prestige Tier 5.
+      </p>
+      <p style="color:var(--text-muted); font-size:0.85rem;">
+        INSANE difficulty unlocks the legendary Knossos and Hawara maps. Only 2% of players have seen them.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     FINAL CTA
+     ════════════════════════════════════════════════════════════════ -->
+<section class="final-cta section-alt">
+  <div class="reveal">
+    <p class="section-label">Ready?</p>
+    <h2 class="section-title">Enter the Maze</h2>
+    <p class="section-subtitle">No download. No signup. Just you, the fog, and whatever is waiting in the dark.</p>
+    <a href="/" class="btn-primary pulse-btn" style="margin-top:16px;">
+      <span>&#9654;</span> Play Now -- Free
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>HedgeMaze &copy; <span id="year"></span> &middot; All visuals and audio procedurally generated &middot; <a href="/">Play Now</a></p>
+</footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ─── Page loader ───
+  window.addEventListener('load', function() {
+    document.getElementById('loader').classList.add('hidden');
+  });
+
+  // ─── Year ───
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ─── Seasonal Banner ───
+  (function() {
+    var month = new Date().getMonth();
+    var seasons = {
+      spring: { months: [2, 3, 4], text: 'SPRING EVENT LIVE NOW — Overgrown theme with exclusive 30-tier reward track' },
+      summer: { months: [5, 6, 7], text: 'SUMMER EVENT LIVE NOW — Frost Giant hunts begin. 30-tier reward track active.' },
+      autumn: { months: [8, 9, 10], text: "HALLOWS' EVE EVENT LIVE NOW — Cemetery & Demon Palace maps. 30 exclusive rewards." },
+      winter: { months: [11, 0, 1], text: 'WINTER EVENT LIVE NOW — Frost theme with ice physics. Limited cosmetics available.' }
+    };
+    for (var key in seasons) {
+      if (seasons[key].months.indexOf(month) !== -1) {
+        var banner = document.getElementById('seasonalBanner');
+        banner.textContent = seasons[key].text;
+        banner.style.display = 'block';
+        break;
+      }
+    }
+  })();
+
+  // ─── Nav scroll ───
+  var nav = document.getElementById('nav');
+  var lastScroll = 0;
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY;
+    nav.classList.toggle('scrolled', y > 60);
+    lastScroll = y;
+  }, { passive: true });
+
+  // ─── Scroll reveal (IntersectionObserver) ───
+  var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  if ('IntersectionObserver' in window) {
+    var revealObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el) { revealObs.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // ─── Progress bar animation ───
+  var progBars = document.querySelectorAll('.prog-bar-fill[data-width]');
+  if ('IntersectionObserver' in window) {
+    var barObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.style.width = entry.target.getAttribute('data-width') + '%';
+          barObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    progBars.forEach(function(el) { barObs.observe(el); });
+  }
+
+  // ─── Map tabs ───
+  var tabs = document.querySelectorAll('.map-tab');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      tabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelectorAll('.map-panel').forEach(function(p) { p.classList.remove('active'); });
+      var panel = document.getElementById('tab-' + tab.getAttribute('data-tab'));
+      if (panel) {
+        panel.classList.add('active');
+        // Re-trigger reveal for newly visible cards
+        panel.querySelectorAll('.reveal:not(.visible)').forEach(function(el) {
+          if ('IntersectionObserver' in window) {
+            revealObs.observe(el);
+          } else {
+            el.classList.add('visible');
+          }
+        });
+      }
+    });
+  });
+
+  // ─── Maze grid (CSS art) ───
+  (function() {
+    var grid = document.getElementById('mazeGrid');
+    if (!grid) return;
+    // Simple maze pattern
+    var pattern = [
+      1,1,1,1,1,1,1,1,1,
+      1,0,0,0,1,0,0,0,1,
+      1,0,1,0,1,0,1,0,1,
+      1,0,1,0,0,0,1,0,1,
+      1,0,1,1,1,0,1,0,1,
+      1,0,0,0,0,0,0,0,1,
+      1,1,1,1,1,1,1,1,1,
+    ];
+    var closingIndices = [10, 12, 19, 30, 37, 46, 48];
+    pattern.forEach(function(cell, i) {
+      var div = document.createElement('div');
+      div.className = 'maze-cell ' + (cell ? 'maze-wall' : 'maze-path');
+      if (cell === 0 && closingIndices.indexOf(i) !== -1) {
+        div.classList.add('maze-closing');
+        div.style.animationDelay = (Math.random() * 3) + 's';
+      }
+      grid.appendChild(div);
+    });
+  })();
+
+  // ─── Particle canvas ───
+  (function() {
+    var canvas = document.getElementById('particles');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var count = 60;
+
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for (var i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3 - 0.15,
+        a: Math.random() * 0.3 + 0.05,
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(34, 204, 68, ' + p.a + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // ─── Smooth scroll for anchor links ───
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+})();
+</script>
+</body>
+</html>

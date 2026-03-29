@@ -594,6 +594,11 @@ body::before {
   text-transform: uppercase;
 }
 
+.card .flex.justify-between {
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+
 .card__link {
   font-family: var(--font-mono);
   font-size: 0.7rem;
@@ -612,6 +617,15 @@ body::before {
 
 .card__link::after {
   content: '\2192';
+}
+
+.card__link + .card__link {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+}
+
+.card__link + .card__link:hover {
+  color: var(--teal);
 }
 
 /* Card accent variants */

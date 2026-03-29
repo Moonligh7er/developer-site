@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Deep Seer | dev://portfolio</title>
+  <meta name="description" content="How one developer built an enterprise-grade OSINT platform with 90+ live data sources, a 3D globe, court-ready evidence packaging, and the statistical rigor to prove what it finds.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-deepseer.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Deep Seer — Open-Source Intelligence Platform",
+    "description": "How one developer built an enterprise-grade OSINT platform with 90+ live data sources and court-ready evidence.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-deepseer.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Deep Seer | dev://portfolio">
+  <meta property="og:description" content="Building an enterprise-grade OSINT platform with 90+ live data sources and court-ready evidence.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-deepseer.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Deep Seer">
+  <meta name="twitter:description" content="Building an enterprise-grade OSINT platform with 90+ live data sources and court-ready evidence.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Deep Seer</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          See everything. Understand everything. Prove everything. An open-source intelligence
+          platform that puts 90+ live data sources on a 3D globe and gives you the statistical
+          rigor and cryptographic evidence chain to prove what you find in court.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React 19 &middot; CesiumJS &middot; Express &middot; PostgreSQL/PostGIS</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Intelligence lives in silos by design</h2>
+        <p>
+          The EPA publishes pollution data. The FAA tracks aircraft. The FEC discloses campaign
+          contributions. The Coast Guard monitors vessels. The USGS records earthquakes. Each
+          database exists in isolation &mdash; different formats, different APIs, different update
+          schedules, different interfaces. By the time a journalist manually cross-references three
+          of them, the situation has changed.
+        </p>
+        <p>
+          This fragmentation isn't accidental. It's structural. And it's the reason a factory
+          can violate EPA permits for years while the health data from the community downwind
+          lives in a completely different database that nobody thinks to check at the same time.
+        </p>
+        <p>
+          Existing platforms either embed iframes to different services (aggregation without
+          integration) or charge enterprise prices that put them out of reach for the journalists,
+          researchers, and NGOs who need them most. There was no platform that unified these
+          sources into a common intelligence picture, applied peer-reviewed statistical methods
+          to the live data, and produced evidence that could survive a courtroom.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">90+</p>
+            <p class="stat-block__label">Live Data Sources</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">106</p>
+            <p class="stat-block__label">Globe Layers</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">98</p>
+            <p class="stat-block__label">Server Adapters</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">94</p>
+            <p class="stat-block__label">Backend Services</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">15K+</p>
+            <p class="stat-block__label">CCTV Feeds</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">8K+</p>
+            <p class="stat-block__label">Satellites Tracked</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">49</p>
+            <p class="stat-block__label">Correlation Rules</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">Unified, not aggregated</h2>
+        <p>
+          Deep Seer normalizes every data source into a common entity model that shares three
+          dimensions: geospatial (coordinates), temporal (timestamps), and relational (links
+          between entities). This means you can cross-reference a ship with a congressional
+          stock trade with an EPA violation &mdash; because they share a place and a time.
+        </p>
+        <p>
+          Everything renders on a single interactive 3D globe built on CesiumJS. 106 layers.
+          Real-time streaming via WebSocket. Aircraft trajectories, vessel tracks, satellite
+          orbits (SGP4 propagation running client-side), pollution facilities, weather systems,
+          seismic events, campaign finance flows &mdash; all alive, all moving, all queryable.
+        </p>
+        <p>
+          The free tier includes all 90+ data sources, 61 real-time map layers, and 15,000+
+          CCTV traffic camera feeds. No credit card. No time limit. Intelligence tools shouldn't
+          be gatekept by price.
+        </p>
+      </section>
+
+      <!-- Evidence -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Evidence Integrity</p>
+        <h2 class="case-study__h2">Built for the courtroom, not the screenshot</h2>
+        <p>
+          Every intelligence platform has screenshots. Deep Seer is built for legal proceedings.
+          Every piece of evidence collected carries a SHA-256 fingerprint, an HMAC-SHA256
+          signature, and an RFC 3161 cryptographic timestamp. The chain of custody is logged
+          immutably.
+        </p>
+        <p>
+          When a defense attorney challenges the authenticity of a satellite image or a social
+          media capture, you don't argue &mdash; you provide the cryptographic proof. Export
+          templates are pre-formatted for ICC Rome Statute, ECHR Rule 47, and US Federal Rules
+          of Evidence 901/902.
+        </p>
+        <p>
+          Data lineage tracks every analytical output back to the raw API response. Full
+          provenance. Full reproducibility. The difference between justice and impunity is
+          often just the quality of evidence.
+        </p>
+      </section>
+
+      <!-- Statistical Rigor -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Scientific Analysis</p>
+        <h2 class="case-study__h2">Peer-reviewed methods, not vibes</h2>
+        <p>
+          Deep Seer implements the statistical methods that actual researchers publish in
+          actual journals. Granger causality testing. Difference-in-Differences.
+          Synthetic Control. Regression Discontinuity. Geographically Weighted Regression
+          with Gaussian kernel weighting. Moran's I spatial autocorrelation. LISA cluster
+          mapping. Holt-Winters + ARIMA ensemble forecasting with walk-forward backtesting.
+        </p>
+        <p>
+          Every statistical claim comes with p-values, confidence intervals, and methodology
+          citations you can look up. An automated Bias Advisor flags selection bias, confirmation
+          bias, base rate fallacy, and ecological fallacy before you publish a conclusion. The
+          most dangerous findings are the ones that feel obvious. Deep Seer helps you check
+          yourself before your critics do.
+        </p>
+        <div class="verdict">
+          <p>
+            49 cross-domain correlation rules are specifically designed to surface conflicts of
+            interest, regulatory capture, and environmental injustice. Donation-to-contract
+            temporal patterns. Permit-versus-reality comparison. Downstream contamination
+            modeling with Gaussian plume transport. Health outcome overlay from CDC WONDER.
+          </p>
+          <p class="dim">
+            Make corruption expensive. That's the design philosophy.
+          </p>
+        </div>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Normalizing 90+ heterogeneous data sources</strong>
+            <span>Every source has a different API, a different format, a different update frequency.
+            98 server adapters translate each one into a common entity model &mdash; shared geospatial,
+            temporal, and relational dimensions. The normalization layer is the platform. Everything
+            else is just rendering.</span>
+          </li>
+          <li>
+            <strong>3D globe with 106 layers at interactive framerates</strong>
+            <span>CesiumJS handles the globe. But 106 simultaneously renderable layers &mdash; with particle
+            animations for traffic flow, trajectory trails for aircraft, custom shaders for visualization
+            modes (CRT, Night Vision, FLIR, Matrix) &mdash; required careful layer management, LOD
+            strategies, and client-side SGP4 satellite propagation to keep the server load sane.</span>
+          </li>
+          <li>
+            <strong>Geolocation verification from photos</strong>
+            <span>Landmark pair matching uses Direct Linear Transform (DLT) homography with 4+ point
+            calibration. Shadow chronolocation sweeps sun positions to determine image capture time.
+            Building footprint comparison queries OpenStreetMap Overpass. All producing cryptographically
+            signed analytical outputs.</span>
+          </li>
+          <li>
+            <strong>Downstream contamination modeling</strong>
+            <span>Gaussian plume transport from pollution point sources, integrated with CDC mortality
+            data and EPA water quality monitoring, overlaid with Social Vulnerability Index mapping.
+            Turning three disconnected datasets into a single visual argument for environmental
+            justice.</span>
+          </li>
+          <li>
+            <strong>Privacy-preserving intelligence</strong>
+            <span>Face detection runs entirely in-browser &mdash; never transmitted to any server.
+            Client-side metadata stripping before upload. AES-256-GCM encryption at rest.
+            SecureDrop integration for source protection. Building an intelligence tool that
+            treats privacy as architecture, not policy.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React 19 frontend with Vite 6. CesiumJS + Resium for the 3D globe. Zustand for state
+          management across 70 stores. Express backend with 94 services. PostgreSQL with PostGIS
+          for geographic queries. Prisma ORM across 35 database models. WebSocket for real-time
+          streaming. Claude AI for document intelligence and entity extraction.
+        </p>
+        <p>
+          The investigation workflow follows the Berkeley Protocol's six-stage pipeline: Discovery,
+          Collection, Preservation, Verification, Analysis, Reporting. It's not an afterthought
+          &mdash; it's first-class. Protected site detection for humanitarian workflows. IHL
+          violation analysis. DBSCAN incident pattern clustering. Entity behavioral profiling
+          with intent classification and next-action prediction.
+        </p>
+        <p>
+          Deployed on Render via two-stage Docker build (Node 20 Alpine). CI/CD through GitHub
+          Actions with type checking, unit tests, and E2E tests. Sentry for error tracking.
+          Stripe for billing. The monorepo uses npm workspaces.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">CesiumJS</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Vite 6</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">PostGIS</span>
+          <span class="tech-tag">Prisma</span>
+          <span class="tech-tag">Zustand</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">Sentry</span>
+        </div>
+      </section>
+
+      <!-- Philosophy -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Philosophy</p>
+        <h2 class="case-study__h2">Democratize access to what's already public</h2>
+        <p>
+          Every data source in Deep Seer is public. Published by governments and institutions
+          about themselves. The EPA publishes its own violation data. The FEC publishes its
+          own donation records. The FAA publishes its own flight data. This isn't surveillance
+          &mdash; it's accountability. The information exists. The question is whether it's
+          accessible to the people who need it.
+        </p>
+        <p>
+          Most intelligence platforms price out the journalists, NGOs, and researchers who
+          would use them for public interest work. Deep Seer's free tier includes all 90+
+          data sources because the people doing accountability work shouldn't have to outbid
+          the people they're investigating.
+        </p>
+        <p class="dim">
+          The world isn't going to watch itself. Every minute you don't have situational
+          awareness is a minute someone else controls the narrative. Deep Seer is live.
+          The data is streaming. The only question is whether you're watching.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: FixThisFaster | dev://portfolio</title>
+  <meta name="description" content="How I built a civic infrastructure reporting platform with 50+ features — AI photo analysis, GPS-based jurisdiction routing, automated legal demand letters, and community verification.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-fixthisfaster.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: FixThisFaster — Civic Infrastructure Reporting Platform",
+    "description": "How I built a civic infrastructure platform with AI photo analysis, GPS jurisdiction routing, and automated legal frameworks.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-fixthisfaster.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: FixThisFaster | dev://portfolio">
+  <meta property="og:description" content="Building a civic infrastructure reporting platform with AI analysis and automated legal frameworks.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-fixthisfaster.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: FixThisFaster">
+  <meta name="twitter:description" content="Building a civic infrastructure reporting platform with AI analysis and automated legal frameworks.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <!-- Header -->
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">FixThisFaster</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Civic infrastructure reporting that turns individual complaints into
+          <span class="highlight">documented patterns with legal weight</span>.
+          50+ features. Report in 10 seconds. AI photo analysis. Automated jurisdiction
+          routing. Legal demand letters citing state statutes.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React &middot; PostgreSQL &middot; PostGIS</span></div>
+          <div>Features <span>50+</span></div>
+          <div>Languages <span>5</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Individual citizens can't force municipal action</h2>
+        <p>
+          You report a pothole. Nothing happens. You report it again. The ticket gets
+          closed. The pothole becomes a sinkhole. Someone's tire blows out. The city
+          pays a $12,000 liability claim on a repair that would have cost $75.
+        </p>
+        <p>
+          This isn't a technology problem. It's a leverage problem. A single citizen
+          filing a complaint has no power. But <em class="highlight">documented patterns
+          combined with community verification combined with legal frameworks</em> &mdash;
+          that's a different equation entirely.
+        </p>
+        <p>
+          FixThisFaster doesn't just report issues. It builds the evidentiary record
+          that makes ignoring them expensive. Three independent reports on the same
+          hazard triggers community verification. GPS coordinates map to specific
+          municipal jurisdictions. Automated legal demand letters cite the exact state
+          statutes that create liability for documented, unaddressed infrastructure
+          failures. The app turns a complaint into a case file.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">50+</p>
+            <p class="stat-block__label">Features</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">24</p>
+            <p class="stat-block__label">Report Categories</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">42</p>
+            <p class="stat-block__label">Pre-Configured Authorities</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5</p>
+            <p class="stat-block__label">Languages</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Report Verification Threshold</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$75</p>
+            <p class="stat-block__label">Fix Now vs $12K Later</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Intelligence Layer -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Intelligence Layer</p>
+        <h2 class="case-study__h2">See it, snap it, it's filed</h2>
+        <p>
+          The core reporting flow takes 10 seconds. Open the app, take a photo, submit.
+          Everything else is automatic. Claude Vision analyzes the photo and classifies
+          the issue &mdash; pothole, broken streetlight, damaged sidewalk, graffiti, drainage
+          failure &mdash; with severity assessment and repair priority scoring. GPS coordinates
+          are captured at sub-meter precision.
+        </p>
+        <p>
+          Voice commands handle the entire flow hands-free. AR overlay shows existing
+          reports in your field of view so you don't duplicate what's already been filed.
+          The friction between seeing a problem and documenting it is as close to zero
+          as I could make it.
+        </p>
+        <p>
+          But the real intelligence happens after submission. The app cross-references
+          your GPS coordinates against Census Bureau boundary data to identify which of
+          42 pre-configured municipal authorities has jurisdiction. Not the city &mdash; the
+          specific department. A water main break routes to the water utility. A traffic
+          signal failure routes to the traffic engineering division. A sidewalk collapse
+          on a state road routes to the state DOT, not the city DPW.
+        </p>
+        <p>
+          Getting this right required mapping the Byzantine overlaps of American municipal
+          governance. The same physical location can fall under city, county, state, and
+          federal jurisdiction depending on what's broken. The Census Bureau's TIGER/Line
+          shapefiles provide the boundary data. PostGIS provides the spatial queries.
+          The authority routing logic encodes the institutional knowledge of which agency
+          actually fixes what.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>GPS boundary-based authority routing via Census data</strong>
+            <span>Municipal boundaries are not simple polygons. They're gerrymandered
+            nightmares with enclaves, exclaves, and disputed territories. Census TIGER/Line
+            data provides authoritative boundaries, but loading and querying shapefiles at
+            runtime requires PostGIS spatial indexing. A single point-in-polygon query needs
+            to check against city limits, county boundaries, special districts, school
+            districts, and state borders &mdash; then apply the institutional routing logic that
+            determines which of those entities actually handles each category of report.</span>
+          </li>
+          <li>
+            <strong>Automated state-specific legal document generation</strong>
+            <span>Massachusetts, Rhode Island, and New Hampshire each have different statutes
+            governing municipal liability for infrastructure failures. M.G.L. c. 84 &sect; 15
+            in Massachusetts. R.I. Gen. Laws &sect; 24-5-14 in Rhode Island. RSA 231:90 in
+            New Hampshire. The demand letter generator cites the correct statute based on
+            jurisdiction, includes the documented evidence chain (photos, timestamps, GPS,
+            community verifications), and formats the letter to the standards expected by
+            municipal legal departments. Getting the law wrong isn't an option.</span>
+          </li>
+          <li>
+            <strong>Claude Vision photo analysis for infrastructure assessment</strong>
+            <span>The AI doesn't just classify the issue &mdash; it estimates severity. A hairline
+            crack in a sidewalk is a 2/10. A six-inch pothole on a main arterial road is
+            an 8/10. A collapsed retaining wall near a school is a 10/10. Training the
+            prompt engineering to produce consistent, defensible severity assessments
+            across 24 report categories required extensive calibration against real
+            municipal prioritization frameworks.</span>
+          </li>
+          <li>
+            <strong>Geospatial clustering for report deduplication</strong>
+            <span>When three people report the same pothole, the system needs to recognize
+            they're describing the same physical defect, not three different ones. GPS
+            coordinates vary by several meters between reports. Photo angles differ. Descriptions
+            use different words. The deduplication engine uses DBSCAN spatial clustering with
+            category matching and temporal proximity to group reports that likely reference
+            the same issue &mdash; then triggers community verification when the threshold is met.</span>
+          </li>
+          <li>
+            <strong>Predictive infrastructure decay modeling</strong>
+            <span>A crack reported today becomes a pothole in six months becomes a sinkhole
+            in two years. The predictive analytics engine models infrastructure degradation
+            curves based on report type, material, climate zone, traffic volume, and repair
+            history. Fiscal impact projections show municipalities what they'll pay later
+            if they don't fix it now. The $75 vs. $12,000 comparison isn't rhetorical &mdash;
+            it's calculated from actuarial liability data.</span>
+          </li>
+          <li>
+            <strong>Cross-municipal shame index</strong>
+            <span>Infrastructure health grades &mdash; A+ through F &mdash; computed from report density,
+            resolution times, repeat reports, and severity trends. Published as a comparative
+            index across municipalities. The political incentive structure changes when your
+            city's D+ infrastructure grade is publicly visible next to the neighboring town's
+            B+. Embarrassment is an underappreciated forcing function in municipal governance.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- The Legal Framework -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Legal Framework</p>
+        <h2 class="case-study__h2">From complaint to case file</h2>
+        <p>
+          The legal layer transforms FixThisFaster from a reporting tool into a
+          civic infrastructure weapon. When community verification confirms a hazard,
+          the app can generate a formal demand letter addressed to the responsible
+          authority, citing the applicable state statute, attaching the photographic
+          evidence chain with timestamps and GPS coordinates, and establishing the
+          documented-notice timeline that creates legal liability.
+        </p>
+        <p>
+          Insurance claim packaging takes it further. For property damage caused by
+          infrastructure failures &mdash; tire damage from a pothole, water damage from a
+          broken main &mdash; the app bundles the evidence into a format that insurance
+          adjusters can process: incident documentation, prior-report history showing
+          the municipality had notice, jurisdictional confirmation, and fiscal impact
+          assessment.
+        </p>
+        <p>
+          The fiscal impact projections speak the language municipalities actually
+          understand: money. A cracked sidewalk costs $75 to patch today. Left
+          unrepaired, it becomes a trip hazard, generates a personal injury claim,
+          and costs $12,000 in legal and medical liability. The app calculates these
+          projections using real actuarial models and presents them to the municipality
+          alongside the repair request. Fix it because it's right. Or fix it because
+          it's cheaper. Either way, fix it.
+        </p>
+        <div class="verdict">
+          <p>
+            Individual citizens can't force municipal action. But documented patterns,
+            community verification, legal frameworks, and fiscal projections create
+            a pressure gradient that makes inaction more expensive than repair.
+          </p>
+          <p class="dim">
+            The app doesn't fight city hall. It makes city hall's own cost-benefit
+            analysis argue for doing the right thing.
+          </p>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React frontend with full accessibility compliance &mdash; WCAG 2.1 AA across all
+          50+ features. Five language localizations (English, Spanish, Portuguese,
+          Haitian Creole, Chinese) because infrastructure failures don't check your
+          English proficiency before breaking your axle.
+        </p>
+        <p>
+          PostgreSQL with PostGIS handles the spatial data layer &mdash; report locations,
+          boundary polygons, spatial clustering, proximity queries. The Census Bureau
+          API provides authoritative boundary data that gets cached and indexed locally
+          for sub-second jurisdiction lookups.
+        </p>
+        <p>
+          Claude Vision handles photo analysis. Open311 and SeeClickFix APIs provide
+          bidirectional integration with existing municipal reporting systems where
+          available. Sentry for error monitoring &mdash; because a civic tool that crashes
+          when someone needs to report a gas leak is worse than no tool at all.
+        </p>
+        <p>
+          The predictive analytics engine runs decay models per report category,
+          calibrated against historical repair data. GIS layers visualize infrastructure
+          health at the neighborhood, ward, and municipal levels. The shame index
+          aggregates across jurisdictions with normalized scoring to account for
+          population and area differences.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Claude Vision AI</span>
+          <span class="tech-tag">Census Bureau API</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">PostGIS</span>
+          <span class="tech-tag">GIS</span>
+          <span class="tech-tag">Open311</span>
+          <span class="tech-tag">SeeClickFix</span>
+          <span class="tech-tag">Sentry</span>
+          <span class="tech-tag">TIGER/Line</span>
+          <span class="tech-tag">WCAG 2.1 AA</span>
+        </div>
+      </section>
+
+      <!-- What I Learned -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What I Learned</p>
+        <h2 class="case-study__h2">The honest retrospective</h2>
+        <p>
+          American municipal governance is a fractal of overlapping jurisdictions,
+          and no one has a map. Building the authority routing system required manually
+          researching which department handles which category of infrastructure failure
+          in each of the 42 configured municipalities. There's no API for institutional
+          knowledge. There's no database of "who actually fixes the streetlights in
+          Cranston, Rhode Island." That information lives in the heads of city clerks
+          and the muscle memory of 311 operators.
+        </p>
+        <p>
+          The legal document generation was the most research-intensive feature I've
+          ever built. Each state's infrastructure liability statutes have different
+          notice requirements, different timelines, different standards of proof. A
+          demand letter that's legally sound in Massachusetts might be worthless in
+          New Hampshire. The template system had to be flexible enough to accommodate
+          three different legal frameworks while generating documents that a municipal
+          attorney would take seriously.
+        </p>
+        <p>
+          The community verification threshold &mdash; three independent reports to confirm
+          a hazard &mdash; was calibrated through research on crowdsourced data reliability.
+          Too low and you get false positives. Too high and real hazards go unverified.
+          Three is the minimum where independent confirmation becomes statistically
+          meaningful without creating an unreachable bar for less-trafficked areas.
+        </p>
+        <p class="dim">
+          The deepest lesson: civic technology isn't about making reporting easier.
+          It's about changing the incentive structure. When documented evidence plus
+          community verification plus legal notice plus fiscal projection all arrive
+          on the same desk, the calculus of inaction changes. That's not an app feature.
+          That's a theory of change.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

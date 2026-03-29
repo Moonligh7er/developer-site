@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: The Archive | dev://portfolio</title>
+  <meta name="description" content="How one developer built 83 research tools across 12 categories to answer the question: why do civilizations that never met tell the same stories?">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-archive.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: The Archive — Comparative Religion Research Platform",
+    "description": "83 research tools across 12 categories bridging 22 sacred texts and 14 traditions.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-archive.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: The Archive | dev://portfolio">
+  <meta property="og:description" content="83 research tools bridging 22 sacred texts and 14 traditions. Why do civilizations that never met tell the same stories?">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-archive.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: The Archive">
+  <meta name="twitter:description" content="83 research tools bridging 22 sacred texts and 14 traditions.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem; }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .dim { color: var(--text-dim); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .stat-block { border: 1px solid var(--border); padding: 1.25rem; background: var(--surface); }
+    .stat-block__number { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; color: var(--teal); line-height: 1; }
+    .stat-block__label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.5rem; }
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--violet); font-size: 0.8rem; }
+    .challenge-list li strong { display: block; font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem; }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+    .verdict { border: 1px solid var(--border); padding: 2rem; background: var(--surface); margin: 2rem 0; position: relative; }
+    .verdict::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber)); }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; padding: 0.3rem 0.7rem; border: 1px solid var(--border); color: var(--text-dim); text-transform: uppercase; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-top: 3rem; transition: gap var(--transition-fast); }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+    @media (max-width: 768px) { .case-study__header { padding: 5rem 0 2rem; } .stat-grid { grid-template-columns: repeat(2, 1fr); } .case-study__meta { gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">The Archive</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Why do civilizations that never met tell the same stories? 83 research tools
+          across 12 categories, bridging 22 sacred texts and 14 religious traditions
+          with a 50,000-node knowledge graph, four modes of AI reasoning, and the
+          intellectual honesty to distinguish signal from noise.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React &middot; Neo4j &middot; WebGL &middot; Claude AI</span></div>
+        </div>
+      </header>
+
+      <!-- The Question -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Question</p>
+        <h2 class="case-study__h2">Patterns that shouldn't exist</h2>
+        <p>
+          The Hindu Churning of the Ocean and the Norse Ginnungagap. The Egyptian weighing
+          of the heart and the Tibetan Bardo. Flood narratives in Mesopotamia, Genesis, and
+          Mesoamerica. Dying-and-rising gods across cultures separated by oceans and millennia.
+          These parallels are either transmission (stories traveling trade routes), cognitive
+          universals (brains wired the same way produce the same myths), or coincidence.
+        </p>
+        <p>
+          Existing tools don't help you distinguish between these explanations. Concordances
+          are keyword searches. Comparative religion textbooks are static arguments. AI chatbots
+          give confident answers without showing their reasoning or citing their sources.
+          There was no platform that let you explore these patterns with the rigor they demand
+          &mdash; tracing transmission routes, testing cognitive universal hypotheses, measuring
+          pattern integrity, and honestly flagging when the evidence is inconclusive.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">83</p>
+            <p class="stat-block__label">Research Tools</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">22</p>
+            <p class="stat-block__label">Sacred Texts</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">14</p>
+            <p class="stat-block__label">Traditions</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">50K+</p>
+            <p class="stat-block__label">Knowledge Graph Nodes</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">211</p>
+            <p class="stat-block__label">Thompson Motifs Mapped</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">152</p>
+            <p class="stat-block__label">Etymology Entries</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">4</p>
+            <p class="stat-block__label">AI Reasoning Modes</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">12</p>
+            <p class="stat-block__label">Tool Categories</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Knowledge Graph -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Core</p>
+        <h2 class="case-study__h2">50,000 nodes. Everything connects.</h2>
+        <p>
+          At the center of The Archive is a knowledge graph with over 50,000 entities &mdash;
+          deities, concepts, places, figures, motifs &mdash; connected by typed relationships
+          and rendered at 60fps via WebGL (Sigma.js + Graphology). You can trace a path from
+          Isis to the Virgin Mary through intermediate syncretism events. You can measure
+          the conceptual distance between karma and divine judgment using Dijkstra's algorithm.
+        </p>
+        <p>
+          Every entity is tagged at the verse level across all 22 texts. The graph isn't
+          a visualization of pre-curated connections &mdash; it's a queryable database of
+          relationships extracted from the texts themselves, enriched with 211 Thompson motif
+          index entries, 152 etymology chains across 31 language families, and 100+ scholarly
+          positions from 50+ academics ranked by epistemic weight.
+        </p>
+        <p>
+          Six parallel Neo4j queries power each AI analysis request, aggregating context
+          from the graph, the texts, scholarly positions, and temporal data simultaneously.
+          The system doesn't just know what Osiris is &mdash; it knows who said what about
+          Osiris, when they said it, what evidence they cited, and where the scholarly
+          consensus currently stands.
+        </p>
+      </section>
+
+      <!-- Four AI Reasoning Modes -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">AI Architecture</p>
+        <h2 class="case-study__h2">Four ways to think, not one</h2>
+        <p>
+          Most AI tools offer one mode: confident summary. The Archive offers four, because
+          different questions need different approaches.
+        </p>
+        <p>
+          <strong>Authoritative</strong> &mdash; expert analysis accompanied by counter-evidence.
+          Every claim comes with the strongest argument against it. If the AI can't find a
+          counter-argument, it says so, and that absence becomes evidence in itself.
+        </p>
+        <p>
+          <strong>Transparent</strong> &mdash; full reasoning chains visible, with a 6-dimension
+          confidence radar (textual, temporal, linguistic, scholarly, archaeological, geographic).
+          You see exactly why the AI is 74% confident, not just that it is.
+        </p>
+        <p>
+          <strong>Dialectical</strong> &mdash; thesis-antithesis-synthesis. The AI argues both
+          sides of a question and attempts a resolution, showing you where the tension lives
+          and whether synthesis is possible or forced.
+        </p>
+        <p>
+          <strong>Socratic</strong> &mdash; guided discovery through questions. The AI doesn't
+          tell you what to think. It asks what you've noticed and why, pushing you toward
+          conclusions you arrive at yourself.
+        </p>
+        <div class="verdict">
+          <p>
+            Every AI output is reproducible. Input data, model version, prompt, and output
+            are SHA-256 hashed together. Another researcher can verify they get identical
+            results from identical inputs. A calibration dashboard tracks whether the AI's
+            stated confidence actually matches its accuracy over time using Brier scoring.
+          </p>
+          <p class="dim">
+            If an AI tells you it's 74% confident and it's actually right 74% of the time,
+            it's calibrated. If it's right 50% of the time, it's overconfident. The Archive
+            tracks this and tells you.
+          </p>
+        </div>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>50,000-node graph at 60fps</strong>
+            <span>WebGL rendering via Sigma.js and Graphology, with force-directed layout,
+            interactive zoom, filter, and click &mdash; all performing smoothly on consumer
+            hardware. Every node is clickable, every edge is typed, every cluster is
+            semantically meaningful.</span>
+          </li>
+          <li>
+            <strong>Source-critical text layering</strong>
+            <span>The Bible isn't one document. It's layers: J, E, P, D sources woven together
+            over centuries. The Quran has Meccan and Medinan periods. The Book of Enoch has
+            five sections from different eras. Implementing real-time toggling between these
+            layers while maintaining verse-level entity tagging required treating each text
+            as a palimpsest, not a flat file.</span>
+          </li>
+          <li>
+            <strong>Bayesian uncertainty propagation</strong>
+            <span>When you chain five pieces of evidence together, the uncertainty compounds.
+            Weak evidence can't masquerade as strong proof just because you stacked enough
+            of it. The Archive implements Bayesian confidence propagation that honestly
+            composes uncertainty through multi-level inference chains.</span>
+          </li>
+          <li>
+            <strong>Temporal anachronism detection</strong>
+            <span>If someone claims Persian Zoroastrian influence on a pre-exilic Hebrew text,
+            the dates don't work. 37 work-dating estimates are tracked, and the system
+            automatically flags impossible chronological claims. You can't cite a source
+            that didn't exist yet.</span>
+          </li>
+          <li>
+            <strong>Concept phylogenetics</strong>
+            <span>Building interactive SVG cladograms that show how ideas evolve, branch, merge
+            (syncretism), and go extinct across cultures and centuries. Like biological
+            phylogenetics, but for concepts &mdash; with the added complexity that ideas can
+            merge (gods can be syncretized) in ways that genes typically can't.</span>
+          </li>
+          <li>
+            <strong>Epistemic weighting</strong>
+            <span>Not all scholars are equal. 23 academics ranked by credentials: language fluency,
+            excavation experience, peer review count, primary source access. A grad student's
+            blog post and a tenured archaeologist's peer-reviewed monograph don't get the same
+            weight. The system knows the difference.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- What Makes It Different -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What Makes It Different</p>
+        <h2 class="case-study__h2">Research tools that insist on honesty</h2>
+        <p>
+          The Archive has a falsifiability engine. It generates testable predictions from
+          hypotheses and tracks whether those predictions hold up against the corpus. A
+          hypothesis engine runs 7 parallel queries against the data and delivers a verdict
+          with confidence scores. A debate simulator runs 3-round pro-vs-con arguments using
+          real scholarly sources. Every claim is traced to its origin.
+        </p>
+        <p>
+          It also has 8 phenomenological practice guides &mdash; vipassana, hesychasm, dhikr,
+          zazen, lectio divina, japa, kabbalistic meditation, taoist sitting &mdash; because
+          understanding a tradition intellectually without understanding how it's practiced
+          is like studying music without ever hearing a note. The Archive takes embodied
+          knowledge seriously.
+        </p>
+        <p>
+          And it meets users where they are. 12 "Teach Me Like I'm Five" explainers break
+          graduate-level concepts into accessible language. 5 difficulty levels per concept.
+          Progressive disclosure that grows the interface with user engagement. The same
+          platform serves the curious amateur and the tenured researcher without
+          condescending to either.
+        </p>
+        <p class="dim">
+          The question &mdash; why do civilizations that never met tell the same stories? &mdash;
+          deserves better than confident answers. It deserves 83 instruments precise enough
+          to find out whether the patterns are real, and honest enough to say when they aren't.
+        </p>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React frontend with WebGL graph rendering (Sigma.js + Graphology). SVG for
+          specialized visualizations: cladograms, cycle overlays, timelines, narrative arcs.
+          Neo4j for the knowledge graph with parallel query execution. Claude AI (Sonnet
+          and Opus with extended thinking) for the four reasoning modes. Server-Sent Events
+          for streaming AI responses. Text-to-speech via OpenAI voices and ElevenLabs HD
+          synthesis.
+        </p>
+        <p>
+          Three-tier subscription: Free (browse, read, explore graph), Sonnet ($14.99/mo
+          for AI chat), Opus ($39.99/mo for deep analysis with extended thinking, HD voice,
+          API access, and reproducible analysis with SHA-256 hashing).
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">WebGL</span>
+          <span class="tech-tag">Sigma.js</span>
+          <span class="tech-tag">Neo4j</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">SVG</span>
+          <span class="tech-tag">SSE</span>
+          <span class="tech-tag">ElevenLabs</span>
+          <span class="tech-tag">Zustand</span>
+          <span class="tech-tag">Vite</span>
+        </div>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

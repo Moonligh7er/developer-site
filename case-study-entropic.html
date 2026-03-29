@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Entropic Tarot | dev://portfolio</title>
+  <meta name="description" content="How I built the first tarot app powered by true physical entropy — harvesting randomness from 3 device sensors, SHA-256 hashed, fed through HMAC-DRBG for cryptographically provable shuffles.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-entropic.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Entropic Tarot — True Entropy Tarot Application",
+    "description": "How I built the first tarot app powered by true physical entropy from device sensors with cryptographically provable shuffles.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-entropic.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Entropic Tarot | dev://portfolio">
+  <meta property="og:description" content="The first tarot app powered by true physical entropy from device sensors.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-entropic.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Entropic Tarot">
+  <meta name="twitter:description" content="The first tarot app powered by true physical entropy from device sensors.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <!-- Header -->
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Entropic Tarot</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          The first tarot app powered by true physical entropy. Three device sensors,
+          <span class="highlight">cryptographically provable shuffles</span>, three historic decks
+          spanning 535 years, and the conviction that spiritual practice and scientific
+          integrity make each other stronger.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React &middot; Express &middot; Capacitor</span></div>
+          <div>Price <span>Free</span></div>
+          <div>Data Collected <span>None</span></div>
+        </div>
+      </header>
+
+      <!-- The Premise -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Premise</p>
+        <h2 class="case-study__h2">The false choice nobody questioned</h2>
+        <p>
+          Every tarot app on the market makes the same lazy compromise. The spiritual ones
+          use Math.random() and dress it up with animations. The technical ones strip away
+          everything that makes tarot meaningful as a practice. Both sides assume you have
+          to choose: either take it seriously as a tool for reflection, or take it seriously
+          as engineering. Never both.
+        </p>
+        <p>
+          That assumption is wrong. A shuffle that draws from <em class="highlight">real physical
+          entropy</em> &mdash; harvested from the noise floor of your device's microphone, the
+          thermal fluctuations in your camera sensor, the chaos of your touch patterns &mdash;
+          is more scientifically rigorous <em>and</em> more spiritually honest than a
+          pseudorandom number generator seeded by a timestamp.
+        </p>
+        <p>
+          The entropy isn't decoration. It's the point. If you believe randomness carries
+          meaning, then the quality of that randomness matters. If you don't believe that,
+          you still get a provably fair shuffle that no algorithm could predict or reproduce.
+          Either way, you win.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Entropy Sources</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Historic Decks</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">535</p>
+            <p class="stat-block__label">Years of Tradition</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">78</p>
+            <p class="stat-block__label">Cards per Deck</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">0</p>
+            <p class="stat-block__label">Data Collected</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">256</p>
+            <p class="stat-block__label">Bit Hash Depth</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Entropy Pipeline -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Core Innovation</p>
+        <h2 class="case-study__h2">From sensor noise to provable randomness</h2>
+        <p>
+          The entropy pipeline is the heart of the application. Three physical sensors feed
+          raw chaos into a cryptographic funnel that produces shuffles no algorithm can
+          predict, reproduce, or reverse-engineer.
+        </p>
+        <p>
+          <strong>Microphone:</strong> ambient audio captured at high sample rates contains
+          thermal noise from the ADC circuit itself &mdash; quantum-level fluctuations in
+          electron flow that are fundamentally unpredictable. The app samples this noise
+          floor, not your voice.
+        </p>
+        <p>
+          <strong>Camera:</strong> even with the lens covered, CMOS sensors produce shot noise
+          from photon arrival statistics and read noise from the amplification circuit.
+          Each frame is a unique thermal fingerprint.
+        </p>
+        <p>
+          <strong>Touch:</strong> human motor control is inherently chaotic. The microsecond
+          timing between touch events, the sub-pixel position drift, the pressure
+          variations &mdash; these are biometric entropy that can't be simulated.
+        </p>
+        <p>
+          All three streams are concatenated and run through SHA-256 to produce a
+          uniform, high-entropy seed. That seed feeds HMAC-DRBG &mdash; the deterministic
+          random bit generator specified in NIST SP 800-90A &mdash; which produces the
+          actual shuffle sequence. The result is cryptographically provable: given the
+          same entropy input, you'd get the same shuffle, but no one can predict or
+          reconstruct that input.
+        </p>
+        <p class="dim">
+          Most tarot apps use Math.random(). That's a linear congruential generator
+          with a period of 2<sup>32</sup>. Entropic Tarot draws from a space so large
+          that the number of possible shuffles exceeds the number of atoms in the
+          observable universe.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Sensor entropy on mobile is adversarial</strong>
+            <span>Browsers throttle microphone access. iOS suspends background audio capture.
+            Android fragments sensor APIs across manufacturers. Camera access requires user
+            permission even for noise-floor sampling. Each platform actively fights you for
+            doing something sensors weren't designed for. The fallback chain &mdash; mic to camera
+            to touch to Web Crypto API &mdash; has to be seamless and invisible.</span>
+          </li>
+          <li>
+            <strong>Offline-first PWA with real-time astronomy</strong>
+            <span>The app calculates planetary positions client-side using astronomy-engine &mdash;
+            real orbital mechanics, not lookup tables. That means computing Keplerian elements,
+            perturbation corrections, and coordinate transformations entirely in the browser.
+            Moon phase, planetary hours, void-of-course periods &mdash; all calculated from
+            ephemeris data without a server call. The entire experience works on airplane mode.</span>
+          </li>
+          <li>
+            <strong>535 years of esoteric knowledge in structured data</strong>
+            <span>Three historic decks &mdash; Visconti-Sforza (1491), Rider-Waite-Smith (1909),
+            Thoth (2026) &mdash; each with distinct iconographic traditions and interpretive
+            frameworks. Every card maps to Qabalistic paths on the Tree of Life, Hebrew
+            letters, Golden Dawn correspondences, decan-level astrological associations.
+            This isn't a database of keywords. It's an ontology of Western esoteric thought
+            that had to be researched, cross-referenced, and structured by hand.</span>
+          </li>
+          <li>
+            <strong>Cross-platform via Capacitor without losing the web</strong>
+            <span>The same codebase ships as a PWA, an iOS app, and an Android app through
+            Capacitor. Sensor access, file system APIs, haptic feedback, and notification
+            scheduling all need platform-specific bridges. The web version can't assume
+            native capabilities. The native version can't break web semantics. Every feature
+            needs three implementations or a graceful degradation path.</span>
+          </li>
+          <li>
+            <strong>AI interpretation via SSE streaming</strong>
+            <span>Claude generates contextual readings that weave card symbolism, spread
+            position, astronomical timing, and Qabalistic correspondences into coherent
+            interpretation. Streamed via Server-Sent Events so the reading unfolds in
+            real time rather than arriving as a wall of text. The prompt engineering alone
+            required encoding centuries of interpretive tradition into system context that
+            produces responses worthy of the source material.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- The Knowledge Layer -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Knowledge Layer</p>
+        <h2 class="case-study__h2">Depth that respects the tradition</h2>
+        <p>
+          Most tarot apps give you a paragraph per card. Entropic Tarot gives you the
+          full esoteric stack. Each of the 78 cards maps to a specific path on the
+          Qabalistic Tree of Life, a Hebrew letter with its own symbolic tradition,
+          Golden Dawn ceremonial correspondences, and decan-level astrological
+          associations that connect the card to specific degrees of the zodiac.
+        </p>
+        <p>
+          The astronomical layer is live. When you pull the Tower during a Mars-Saturn
+          square, the app knows. When you draw the High Priestess on a full moon, that's
+          not coincidence detection &mdash; it's real-time orbital mechanics cross-referenced
+          with traditional planetary rulerships. The astronomy-engine library computes
+          actual celestial positions, not approximations.
+        </p>
+        <p>
+          This depth exists because tarot's power as a reflective tool comes from the
+          density of its symbolic network. A card that connects to a planet that connects
+          to a Hebrew letter that connects to a path on the Tree of Life creates a web
+          of associations that gives the reader something real to work with. Strip that
+          away and you're left with fortune cookie wisdom.
+        </p>
+        <div class="verdict">
+          <p>
+            The false choice was always between rigor and reverence. Entropic Tarot
+            proves they're the same thing &mdash; that caring about the quality of your
+            randomness <em>is</em> caring about the quality of your practice.
+          </p>
+          <p class="dim">
+            Completely free. Completely private. Works offline. No accounts, no tracking,
+            no data collection. The cards are yours.
+          </p>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React 18 frontend with TypeScript, built via Vite for sub-second HMR and
+          optimized production bundles. Express backend handles AI interpretation
+          requests and SSE streaming. Capacitor wraps the web app for native iOS
+          and Android distribution without maintaining separate codebases.
+        </p>
+        <p>
+          The entropy system operates as a layered pipeline: sensor collectors feed
+          raw bytes into a mixing pool, SHA-256 compresses the pool into a uniform
+          seed, and HMAC-DRBG expands that seed into the shuffle sequence. Each
+          layer is independently testable. The DRBG implementation passes NIST
+          test vectors.
+        </p>
+        <p>
+          Styling through Tailwind with Radix UI primitives for accessible,
+          unstyled components &mdash; dialogs, dropdowns, tooltips &mdash; that get the
+          interaction patterns right without fighting a design system. The visual
+          language draws from the esoteric tradition: dark, contemplative, precise.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React 18</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Vite</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">Capacitor</span>
+          <span class="tech-tag">astronomy-engine</span>
+          <span class="tech-tag">Tailwind</span>
+          <span class="tech-tag">Radix UI</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">SHA-256</span>
+          <span class="tech-tag">HMAC-DRBG</span>
+          <span class="tech-tag">Railway</span>
+        </div>
+      </section>
+
+      <!-- What I Learned -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What I Learned</p>
+        <h2 class="case-study__h2">The honest retrospective</h2>
+        <p>
+          The biggest lesson was that the "spiritual vs. scientific" framing is a
+          false dichotomy manufactured by people who are lazy about both. The moment
+          you commit to genuine cryptographic randomness, the spiritual practitioners
+          respect it more, not less. And the moment you commit to genuine esoteric
+          depth, the technical implementation becomes more interesting, not less.
+        </p>
+        <p>
+          Sensor entropy collection on mobile is harder than any documentation suggests.
+          Every browser, every OS version, every device manufacturer has different
+          opinions about when you're allowed to access a microphone, how quickly a
+          camera initializes, and whether touch events fire at 60Hz or 120Hz. The
+          fallback chain isn't an edge case &mdash; it's the primary experience for most users.
+        </p>
+        <p>
+          Running real orbital mechanics client-side was a revelation. astronomy-engine
+          is a masterwork of numerical precision &mdash; but it means your app is computing
+          planetary positions using the same algorithms as professional observatory
+          software. On a phone. Offline. The fact that this is even possible in a
+          browser is something I still find extraordinary.
+        </p>
+        <p class="dim">
+          I built this because I wanted a tarot app I could actually trust &mdash; one where
+          the shuffle was real, the knowledge was deep, and the privacy was absolute.
+          It didn't exist, so I made it. That's the whole story.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

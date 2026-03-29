@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Filament | dev://portfolio</title>
+  <meta name="description" content="How I built a persuasion intelligence platform with 271 techniques, real NLP, graph algorithms, and the philosophy that transparency about influence is the best defense against its abuse.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-filament.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Filament — Persuasion Intelligence Platform",
+    "description": "How I built a persuasion intelligence platform with 271 techniques, real NLP, and defense-first philosophy.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-filament.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Filament | dev://portfolio">
+  <meta property="og:description" content="Building a persuasion intelligence platform with 271 techniques and defense-first philosophy.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-filament.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Filament">
+  <meta name="twitter:description" content="Building a persuasion intelligence platform with 271 techniques and defense-first philosophy.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <!-- Header -->
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Filament</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          A persuasion intelligence platform with <span class="highlight">271 techniques</span>
+          across 10 categories. Real NLP, real graph algorithms, real statistics &mdash;
+          built on the principle that transparency about influence is the best defense
+          against its abuse.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React &middot; Express &middot; PostgreSQL</span></div>
+          <div>Features <span>69+</span></div>
+          <div>Pricing <span>Free / $9.99 / $29.99</span></div>
+        </div>
+      </header>
+
+      <!-- The Premise -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Premise</p>
+        <h2 class="case-study__h2">Influence is infrastructure</h2>
+        <p>
+          Persuasion isn't a dark art. It's infrastructure &mdash; the invisible architecture
+          behind every political campaign, every product launch, every relationship negotiation,
+          every military PSYOP framework. The problem isn't that influence techniques exist.
+          The problem is that the people being influenced can't see them.
+        </p>
+        <p>
+          Filament makes the invisible visible. It catalogs <span class="highlight">271
+          persuasion techniques</span> across 10 categories &mdash; from Cialdini's reciprocity
+          to cognitive biases to full-spectrum information operations &mdash; and gives you
+          tools to identify them in the wild, understand their mechanics, design your own
+          influence campaigns, and build defenses against campaigns targeting you.
+        </p>
+        <p>
+          The defense-first philosophy is non-negotiable. Every offensive technique in
+          the database comes with corresponding defense strategies. Every analysis tool
+          that can identify vulnerabilities can also identify your own. The app assumes
+          its users are adults who deserve access to the same playbook that advertisers,
+          intelligence agencies, and political operatives already use.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">271</p>
+            <p class="stat-block__label">Persuasion Techniques</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">10</p>
+            <p class="stat-block__label">Categories</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">69+</p>
+            <p class="stat-block__label">Features</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">9</p>
+            <p class="stat-block__label">Tool Categories</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Analysis Engine -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Analysis Engine</p>
+        <h2 class="case-study__h2">Real algorithms, not AI guesses</h2>
+        <p>
+          There's a critical design decision that separates Filament from anything
+          that just wraps an LLM. When the app tells you a text scores 67 on the
+          Flesch-Kincaid readability scale, that's a deterministic formula applied to
+          syllable counts and sentence lengths. When it identifies named entities in
+          a document, that's NER pattern matching. When it measures sentiment, that's
+          AFINN lexicon scoring with valence shifting. <em class="highlight">The user always
+          knows what's math and what's interpretation.</em>
+        </p>
+        <p>
+          The NLP pipeline runs real algorithms: TF-IDF for term importance, AFINN
+          for sentiment analysis, Flesch-Kincaid for readability scoring, named entity
+          recognition for actor extraction. These aren't approximations. They're the
+          same techniques used in computational linguistics research, implemented from
+          the specifications.
+        </p>
+        <p>
+          The graph layer is where it gets interesting. Influence networks are modeled
+          as directed graphs where actors are nodes and influence relationships are
+          weighted edges. PageRank identifies the most influential nodes. Louvain
+          community detection finds clusters of coordinated actors. Brandes betweenness
+          centrality reveals the bridges &mdash; the nodes whose removal would fragment
+          the network. These aren't toy implementations. They run on networks with
+          hundreds of nodes in real time.
+        </p>
+        <p>
+          Statistics layer: Monte Carlo simulation for outcome modeling, Bayesian
+          updating for belief tracking over time, chi-squared tests for independence
+          testing in influence campaigns. When the app says a pattern is significant,
+          it means statistically significant, with a p-value you can inspect.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Graph algorithms at scale without a graph database</strong>
+            <span>PageRank, Louvain community detection, and Brandes centrality are typically
+            run on dedicated graph databases like Neo4j. Filament implements them in pure
+            JavaScript against PostgreSQL-backed adjacency lists. The challenge: maintaining
+            acceptable performance on networks with hundreds of nodes while keeping the stack
+            simple enough for a solo developer to maintain. Custom iterative convergence
+            algorithms with configurable tolerance thresholds.</span>
+          </li>
+          <li>
+            <strong>Multi-modal influence analysis</strong>
+            <span>Influence campaigns don't operate in a single channel. A complete analysis
+            might combine text sentiment from news articles, network topology from social
+            graphs, temporal patterns from posting frequency, and linguistic fingerprints
+            from writing style. Each modality has its own analysis pipeline, its own
+            confidence metrics, and its own failure modes. Fusing them into a coherent
+            assessment without false confidence is an unsolved problem in the field. The
+            app is honest about that.</span>
+          </li>
+          <li>
+            <strong>Deception detection that admits its limits</strong>
+            <span>Stylometric fingerprinting compares writing samples across documents to detect
+            authorship patterns. Benford's Law analysis flags statistically improbable number
+            distributions. Bot scoring evaluates behavioral patterns against known automation
+            signatures. Each method has known false-positive rates. The app reports confidence
+            intervals, not verdicts. A high bot score isn't proof &mdash; it's a signal that
+            warrants investigation.</span>
+          </li>
+          <li>
+            <strong>Adversarial wargaming simulation</strong>
+            <span>The simulation engine models influence campaigns as multi-turn strategic
+            interactions. Attacker deploys techniques. Defender deploys countermeasures.
+            Audience responds based on psychological profiles. Each round updates the
+            influence graph, recalculates centrality metrics, and evaluates campaign
+            effectiveness. Building a simulation that's useful without being misleading
+            requires careful calibration of the response models.</span>
+          </li>
+          <li>
+            <strong>OSINT collection at ethical boundaries</strong>
+            <span>Filament collects open-source intelligence from news APIs, Reddit, and RSS
+            feeds for analysis. The ethical line: collect what's public, analyze what's
+            relevant, never store personal data, never enable harassment. The technical line:
+            rate limiting, source attribution, data retention policies, and clear provenance
+            chains so every analytical claim traces back to its source.</span>
+          </li>
+          <li>
+            <strong>Ethical guardrails that don't patronize</strong>
+            <span>The app teaches you how influence operations work. That knowledge is dual-use
+            by definition. The guardrail philosophy: full transparency about capabilities
+            and consequences, defense strategies for every offensive technique, and trust
+            that informed users make better decisions than ignorant ones. The alternative
+            &mdash; pretending this knowledge doesn't exist &mdash; only benefits the people who
+            already have it.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- The Defense Layer -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Defense Layer</p>
+        <h2 class="case-study__h2">Every weapon comes with a shield</h2>
+        <p>
+          The 271-technique database isn't an arsenal. It's an encyclopedia with a
+          defensive index. Each technique entry includes: the mechanism (how it works
+          psychologically), the deployment (how it's used in practice), the indicators
+          (how to spot it), and the countermeasures (how to defend against it).
+        </p>
+        <p>
+          The vulnerability assessment tools work in both directions. You can analyze
+          a target audience's susceptibility to specific techniques &mdash; or you can
+          analyze your own. The same cognitive bias inventory that reveals exploitable
+          patterns in others reveals them in you. That symmetry is intentional.
+        </p>
+        <p>
+          The adversarial wargaming isn't just for planners. It's a training simulator
+          for defenders. Run a simulated information operation against your organization,
+          see where the defenses fail, patch the vulnerabilities before someone exploits
+          them for real. Red team yourself before someone else does.
+        </p>
+        <div class="verdict">
+          <p>
+            Transparency about influence is the best defense against its abuse. The
+            people who want this knowledge hidden are never the ones being protected
+            by the hiding.
+          </p>
+          <p class="dim">
+            Filament bets that an informed population is harder to manipulate than
+            an ignorant one. That's not idealism. It's game theory.
+          </p>
+        </div>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React frontend with TypeScript. Express API server. PostgreSQL for persistent
+          storage &mdash; technique database, user analyses, influence network graphs.
+          WebSocket connections for real-time collaborative analysis sessions and live
+          simulation updates.
+        </p>
+        <p>
+          The NLP pipeline runs server-side for heavier operations (TF-IDF across large
+          document corpora, batch entity extraction) and client-side for interactive
+          analysis (real-time sentiment scoring, readability feedback as you type).
+          Claude AI provides interpretive synthesis &mdash; connecting pattern detections
+          from multiple analytical engines into coherent strategic assessments.
+        </p>
+        <p>
+          Graph algorithms are implemented as standalone modules with consistent
+          interfaces: input an adjacency matrix, output ranked results with metadata.
+          Swappable, testable, and independent of the storage layer. The same PageRank
+          implementation works against a PostgreSQL-backed graph or an in-memory
+          test fixture.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">Tailwind</span>
+          <span class="tech-tag">AFINN NLP</span>
+          <span class="tech-tag">TF-IDF</span>
+          <span class="tech-tag">PageRank</span>
+          <span class="tech-tag">Louvain</span>
+          <span class="tech-tag">Monte Carlo</span>
+        </div>
+      </section>
+
+      <!-- What I Learned -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">What I Learned</p>
+        <h2 class="case-study__h2">The honest retrospective</h2>
+        <p>
+          The hardest part of building Filament wasn't technical. It was epistemic.
+          How do you build a tool that analyzes influence without that tool itself
+          becoming an instrument of influence? The answer, imperfect but honest:
+          show your work. Every score has a formula. Every detection has a confidence
+          interval. Every claim traces to a source. The user is never asked to trust
+          the tool &mdash; they're given the evidence to evaluate it.
+        </p>
+        <p>
+          Implementing graph algorithms from papers taught me more about algorithm
+          design than any course ever did. PageRank's elegance is deceptive &mdash; the
+          core algorithm is twenty lines of iterative matrix multiplication. The
+          engineering is in convergence detection, dangling node handling, and
+          performance optimization for sparse graphs. Louvain is similar: beautiful
+          in concept, tricky in the details of modularity gain calculation.
+        </p>
+        <p>
+          The distinction between deterministic analysis and AI interpretation turned
+          out to be the app's most important design decision. Users trust the sentiment
+          scores because they can verify the math. They trust the AI synthesis because
+          they can see it's built on top of verifiable components. Transparency compounds.
+        </p>
+        <p class="dim">
+          Building tools that make power structures visible is uncomfortable work.
+          The techniques in this database are used every day by people who prefer
+          you don't know about them. Making that knowledge accessible isn't neutral &mdash;
+          it's a position. Filament's position is that you deserve to see the board.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

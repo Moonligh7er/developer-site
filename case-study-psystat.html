@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: PsyStat Nexus | dev://portfolio</title>
+  <meta name="description" content="How one developer built a 240-method statistics platform that replaces SPSS, Stata, and R for behavioral science researchers — and runs on your phone.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-psystat.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: PsyStat Nexus — AI-Powered Behavioral Science Statistics",
+    "description": "240+ statistical methods, AI advisor, mobile-first. The statistics lab that fits in your pocket.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-psystat.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: PsyStat Nexus | dev://portfolio">
+  <meta property="og:description" content="240+ statistical methods for behavioral science. AI-powered. Mobile-first. Publication-ready.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-psystat.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: PsyStat Nexus">
+  <meta name="twitter:description" content="240+ statistical methods for behavioral science. The statistics lab that fits in your pocket.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem; }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .dim { color: var(--text-dim); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .stat-block { border: 1px solid var(--border); padding: 1.25rem; background: var(--surface); }
+    .stat-block__number { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; color: var(--teal); line-height: 1; }
+    .stat-block__label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.5rem; }
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--violet); font-size: 0.8rem; }
+    .challenge-list li strong { display: block; font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem; }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+    .verdict { border: 1px solid var(--border); padding: 2rem; background: var(--surface); margin: 2rem 0; position: relative; }
+    .verdict::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber)); }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; padding: 0.3rem 0.7rem; border: 1px solid var(--border); color: var(--text-dim); text-transform: uppercase; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-top: 3rem; transition: gap var(--transition-fast); }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+    @media (max-width: 768px) { .case-study__header { padding: 5rem 0 2rem; } .stat-grid { grid-template-columns: repeat(2, 1fr); } .case-study__meta { gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">PsyStat Nexus</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          240+ statistical methods for behavioral science. An AI advisor that actually
+          understands psychology research. Assumption checking before you hit Run.
+          Publication-ready output in seconds. And it runs on your phone.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Background <span>Senior-Year Psychology Major</span></div>
+          <div>Stack <span>React Native &middot; FastAPI &middot; Supabase &middot; Claude AI</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">The researchers the software industry forgot</h2>
+        <p>
+          SPSS costs $99 a month. Stata costs $195. Mplus costs $500+. R is free but has
+          a learning curve that filters out half the people who need it. Every one of them
+          requires a desktop computer. None of them check your assumptions before running
+          the test. None of them tell you in plain English what the result means. And when
+          you're done, you still have to manually format the output for APA 7th edition.
+        </p>
+        <p>
+          Behavioral science researchers &mdash; psychologists, sociologists, education
+          researchers, public health analysts &mdash; currently split their workflow across
+          five or more tools: Excel for data entry, SPSS for analysis, Word for writeup,
+          a textbook for interpretation, and maybe R when SPSS can't do what they need.
+          Every tool switch is friction. Every manual formatting step is error-prone.
+          Every $99/month license is a barrier for a grad student on a stipend.
+        </p>
+        <p>
+          As a senior psychology major, I lived this problem. The tools were designed for
+          statisticians, not for the researchers who actually use statistics to answer
+          questions about human behavior. PsyStat exists because the question "is my data
+          normal?" shouldn't require a Stack Overflow deep-dive.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">240+</p>
+            <p class="stat-block__label">Statistical Methods</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">33</p>
+            <p class="stat-block__label">Modules</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">77</p>
+            <p class="stat-block__label">API Router Groups</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">13</p>
+            <p class="stat-block__label">Research Intelligence Tools</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">6</p>
+            <p class="stat-block__label">Self-Paced Courses</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier (all 240 methods)</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">One app, one tap, one workflow</h2>
+        <p>
+          PsyStat consolidates the entire research statistics workflow into a single
+          application. Data preparation with outlier detection and MICE imputation.
+          Test selection via a guided 5-step wizard. 240+ methods from t-tests to
+          Bayesian MCMC. Automatic assumption checking before every analysis.
+          Publication-ready APA 7th edition output. AI interpretation in plain English.
+          Export to PDF, CSV, Excel, PowerPoint, BibTeX.
+        </p>
+        <p>
+          The scope is genuinely comprehensive: psychometrics (Cronbach's alpha, IRT,
+          measurement invariance), SEM (path analysis, multilevel, cross-level mediation),
+          Bayesian analysis (Bayes factors, MCMC, posterior predictive checks), causal
+          inference (DAGs, instrumental variables, propensity scores, E-values),
+          meta-analysis (fixed/random effects, publication bias detection, trim-and-fill),
+          machine learning, time series, network analysis, survival analysis, text analysis,
+          and more. 33 modules. 240+ endpoints. Everything a behavioral scientist reaches
+          for R or SPSS to do.
+        </p>
+        <p>
+          And it runs on your phone. Not a crippled mobile companion &mdash; the full
+          platform via Expo and React Native. Start a Bayesian MCMC on the bus, check
+          results at lunch. Your statistics lab fits in your pocket.
+        </p>
+      </section>
+
+      <!-- Research Intelligence -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Research Intelligence</p>
+        <h2 class="case-study__h2">The tools that make researchers better, not just faster</h2>
+        <p>
+          Speed isn't enough. PsyStat includes 13 research intelligence tools designed
+          to catch the mistakes that ruin studies before they're published.
+        </p>
+        <p>
+          The <strong>Adversarial Reviewer</strong> simulates Reviewer 2 &mdash; the
+          methodological critic every researcher dreads. It reads your analysis and asks
+          the hard questions: "Have you checked for outliers? Your sample size underpowers
+          this effect. Did you correct for multiple comparisons?" Better to hear it from
+          your app than from a journal rejection six months later.
+        </p>
+        <p>
+          <strong>Multiverse Analysis</strong> generates specification curves showing
+          whether your finding survives different analytical choices. Outlier method,
+          missing data strategy, transformation, test variant &mdash; researchers make
+          dozens of arbitrary decisions. The specification curve reveals which findings
+          are robust and which are fragile artifacts of one specific path through the
+          decision space.
+        </p>
+        <div class="verdict">
+          <p>
+            The <strong>Assumption Dashboard</strong> runs automated pre-flight checks
+            before every analysis: Shapiro-Wilk, Levene, Mauchly, D'Agostino,
+            Anderson-Darling. Visual green/amber/red report cards. When violations occur,
+            the system suggests alternative tests. When your data isn't normal, it doesn't
+            just warn you &mdash; it recommends Mann-Whitney instead of the t-test and
+            explains why.
+          </p>
+          <p class="dim">
+            Most tools let you run invalid analyses without warning. PsyStat refuses to
+            let bad methodology leave the building.
+          </p>
+        </div>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>240 methods without monolithic code</strong>
+            <span>Each statistical domain is a separate FastAPI router importing its own
+            libraries (scipy, statsmodels, scikit-learn, lifelines, networkx). 77 router
+            groups, independently versioned and testable. The modular architecture is the
+            only reason one developer can maintain 240+ endpoints.</span>
+          </li>
+          <li>
+            <strong>NumPy serialization</strong>
+            <span>Python's numpy arrays, DataFrames, and complex statistics output don't
+            serialize to JSON. Every API response passes through a custom NumpySafeResponse
+            serializer that converts numpy types to native Python before encoding. Sounds
+            trivial until a single int64 crashes your entire response pipeline.</span>
+          </li>
+          <li>
+            <strong>Mobile-first with heavy computation</strong>
+            <span>React Native on older phones can't handle scipy-level computation. Solution:
+            offload all numerical work to the FastAPI backend. The frontend is pure UI.
+            Results cache client-side (30-minute LRU) to avoid re-computation. The app
+            stays responsive even on budget hardware.</span>
+          </li>
+          <li>
+            <strong>AI context without token bloat</strong>
+            <span>Passing full analysis history and all 240 methods to Claude blows up token
+            usage. The backend maintains a lightweight context: last 5 messages, current
+            module, 20 most recent analysis summaries. Enough for the AI to be genuinely
+            helpful at ~2K tokens per call instead of 20K.</span>
+          </li>
+          <li>
+            <strong>Multiverse combinatorial explosion</strong>
+            <span>Checking all combinations of analytical decisions (outlier method &times;
+            missing data strategy &times; transformation &times; test variant) scales
+            exponentially. The specification curve engine enumerates decision points
+            explicitly, runs each combination, and renders the range of possible conclusions
+            as a visual. Revealing whether a finding is robust shouldn't itself be
+            computationally intractable.</span>
+          </li>
+          <li>
+            <strong>Trusting the libraries</strong>
+            <span>PsyStat doesn't re-implement scipy. That's a feature, not a limitation.
+            Battle-tested algorithms (scipy, statsmodels, scikit-learn, lifelines) produce
+            results that match SPSS and R. Researchers can cite PsyStat output in publications
+            because the math underneath is the same math underneath everything else. The
+            innovation is the interface, not the computation.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React Native frontend via Expo 55 with React 19. File-based routing via Expo
+          Router. 80+ TypeScript components. FastAPI backend with Python 3.12, running on
+          Railway with Uvicorn. Supabase PostgreSQL with row-level security &mdash; every
+          user sees only their own data. JWT authentication. Claude AI (Sonnet default,
+          Opus for Scholar tier) proxied through the backend so the frontend never contacts
+          Anthropic directly.
+        </p>
+        <p>
+          Web deployment via Vercel. Mobile builds via EAS (Expo Application Services) for
+          iOS and Android. Rate limiting: 60 req/min authenticated, 20 req/min unauthenticated.
+          Max body 10 MB. Max array 100K items. 30-minute LRU result cache on the client.
+        </p>
+        <p>
+          Three-tier pricing: Free (all 240 methods, 10 AI messages/month), Researcher
+          ($9.99/mo, unlimited saves, 100 AI messages), Scholar ($49.99/mo, everything
+          including Opus access and priority support). Compare: SPSS $99/month.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Expo 55</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">FastAPI</span>
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">scipy</span>
+          <span class="tech-tag">statsmodels</span>
+          <span class="tech-tag">scikit-learn</span>
+          <span class="tech-tag">Railway</span>
+          <span class="tech-tag">Vercel</span>
+        </div>
+      </section>
+
+      <!-- Why It Matters -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Why It Matters</p>
+        <h2 class="case-study__h2">Democratize rigor, not just access</h2>
+        <p>
+          The free tier includes all 240 methods because statistical rigor shouldn't be
+          behind a paywall. A grad student on a $20K stipend deserves the same assumption
+          checking, the same specification curves, the same publication-ready output as a
+          tenured professor with a site license. The tools that make research better should
+          be available to everyone doing research.
+        </p>
+        <p>
+          But access without understanding is just a different kind of problem. PsyStat
+          includes 6 self-paced courses, interactive simulations (CLT visualizer, p-value
+          explorer, power/error tradeoff), a 62-term glossary, 27 module help guides in
+          both plain and technical language, and a guided wizard that recommends tests
+          based on your research design. The goal isn't to make statistics easier to run.
+          It's to make statistics easier to understand.
+        </p>
+        <p class="dim">
+          The most dangerous analysis is the one that ran without error on data that
+          violated every assumption. PsyStat exists to make sure that doesn't happen
+          &mdash; not by restricting what you can do, but by making sure you know what
+          you're doing before you do it.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

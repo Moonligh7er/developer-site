@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Dystopian Daily News | dev://portfolio</title>
+  <meta name="description" content="How one developer built an AI-powered satirical news platform with 8 journalist personas, semantic clustering, and a multi-stage pipeline that detects dystopian patterns across dozens of international sources.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-ddn.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Dystopian Daily News — AI-Powered Satirical News Platform",
+    "description": "8 AI journalist personas, semantic clustering, multi-stage pipeline detecting dystopian patterns across international sources.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-ddn.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Dystopian Daily News | dev://portfolio">
+  <meta property="og:description" content="AI-powered satirical news platform with 8 journalist personas and semantic pattern detection.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-ddn.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Dystopian Daily News">
+  <meta name="twitter:description" content="AI-powered satirical news with 8 journalist personas and semantic pattern detection.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.5rem; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem; }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .dim { color: var(--text-dim); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; margin: 2rem 0; }
+    .stat-block { border: 1px solid var(--border); padding: 1.25rem; background: var(--surface); }
+    .stat-block__number { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; color: var(--teal); line-height: 1; }
+    .stat-block__label { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.5rem; }
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before { content: '\25B8'; position: absolute; left: 0; color: var(--violet); font-size: 0.8rem; }
+    .challenge-list li strong { display: block; font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem; }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+    .verdict { border: 1px solid var(--border); padding: 2rem; background: var(--surface); margin: 2rem 0; position: relative; }
+    .verdict::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber)); }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; padding: 0.3rem 0.7rem; border: 1px solid var(--border); color: var(--text-dim); text-transform: uppercase; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-top: 3rem; transition: gap var(--transition-fast); }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+    .persona { border: 1px solid var(--border); padding: 1.25rem; background: var(--surface); margin-bottom: 0.75rem; }
+    .persona__name { color: var(--teal); font-family: var(--font-display); font-weight: 400; font-size: 1rem; }
+    .persona__title { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+    .persona__desc { font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem; line-height: 1.6; }
+    @media (max-width: 768px) { .case-study__header { padding: 5rem 0 2rem; } .stat-grid { grid-template-columns: repeat(2, 1fr); } .case-study__meta { gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Dystopian Daily News</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          A real-time intelligence operation disguised as a newspaper disguised as satire.
+          8 AI journalist personas. Semantic clustering that catches patterns across
+          continents. A multi-stage pipeline that turns fragmented news feeds into
+          narrative pattern detection. The farce is the frame. The facts are sacred.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Live</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>Next.js 16 &middot; Supabase &middot; Claude AI &middot; Vercel</span></div>
+          <div>URL <span><a href="https://dystopiandailynews.org" target="_blank" rel="noopener" style="color:var(--teal);">dystopiandailynews.org</a></span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">The news cycle forgets in 48 hours</h2>
+        <p>
+          Voter suppression in Georgia. Surveillance expansion in London. Press crackdowns
+          in Istanbul. Three stories on three continents, covered by three different outlets,
+          forgotten by three different news cycles. Individually, they're headlines. Together,
+          they're a pattern &mdash; democratic backsliding happening in parallel across the
+          globe &mdash; but no single news source connects them because no single news source
+          is looking at all three simultaneously.
+        </p>
+        <p>
+          News aggregators show you individual stories. They don't show you patterns. They
+          don't tell you that 12 countries passed similar surveillance legislation in the same
+          quarter, or that the same lobbying firm appeared in corruption stories on three
+          continents, or that press freedom deteriorated in 7 nations while everyone was
+          watching one of them. The information exists. The synthesis doesn't.
+        </p>
+        <p>
+          And straight reporting of dystopian trends has a paradoxical problem: it numbs
+          people. The hundredth article about democratic erosion reads like the first ninety-nine.
+          The format itself has become invisible. Sometimes the only way to make people see
+          the pattern is to make the pattern absurd enough that they can't look away.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">8</p>
+            <p class="stat-block__label">AI Journalist Personas</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">12</p>
+            <p class="stat-block__label">Dystopia Categories</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5</p>
+            <p class="stat-block__label">Parallel Source Fetchers</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">7</p>
+            <p class="stat-block__label">Pipeline Stages</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">4</p>
+            <p class="stat-block__label">Severity Levels</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">2</p>
+            <p class="stat-block__label">AI Review Layers</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Pipeline -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Pipeline</p>
+        <h2 class="case-study__h2">From aggregation to synthesis in 7 stages</h2>
+        <p>
+          Most news sites aggregate. DDN synthesizes. The difference is a 7-stage pipeline
+          that transforms raw article feeds into narrative pattern intelligence.
+        </p>
+        <p>
+          <strong>Stage 1: Parallel Fetch.</strong> Five fetchers pull concurrently from
+          GDELT, NewsAPI, MediaStack, RSS feeds, and Reddit. Promise.allSettled() handles
+          source failures gracefully &mdash; if Reuters goes down, the pipeline doesn't.
+        </p>
+        <p>
+          <strong>Stage 2: Deduplication.</strong> Trigram-based similarity matching eliminates
+          duplicates while preserving multi-source coverage of the same event. The same story
+          from three outlets becomes three sources for one story, not three separate articles.
+        </p>
+        <p>
+          <strong>Stage 3: Classification.</strong> Three parallel signals: geo-classification
+          (country/state via NLP), VADER sentiment analysis on headlines and snippets, and
+          dystopia-type detection across 12 categories &mdash; theocracy, authoritarianism,
+          fascism, corruption, surveillance, censorship, military aggression, economic
+          exploitation, environmental destruction, propaganda, voter suppression, police state.
+        </p>
+        <p>
+          <strong>Stage 4: Semantic Clustering.</strong> This is where DDN diverges from
+          every other aggregator. Claude Sonnet reads articles in batches and assigns them
+          to topic clusters based on semantic understanding, not keyword matching. A story
+          about "voter purges in Georgia" and "press crackdowns in Istanbul" get clustered
+          together under "democratic backsliding" because the AI understands they're symptoms
+          of the same pattern &mdash; even though they share zero keywords.
+        </p>
+        <p>
+          <strong>Stage 5: Severity Scoring.</strong> A composite algorithm: sentiment
+          intensity (25%), dystopia keyword density (30%), source credibility (15% &mdash;
+          Reuters/AP weighted above independent above social), recency (10%), base score (20%).
+          Maps to four levels: Concerning, Alarming, Critical, Apocalyptic.
+        </p>
+        <p>
+          <strong>Stage 6: Synthesis.</strong> Clusters are routed to one of eight specialist
+          AI journalists based on beat assignment. Claude Sonnet writes through that persona's
+          voice, synthesizing multiple sources into a single narrative with attribution baked in.
+        </p>
+        <p>
+          <strong>Stage 7: Editorial Review (VERITAS).</strong> Claude Opus reviews every
+          synthesized article for factual accuracy, editorial standards, and tone. Approve,
+          edit, or reject. The stronger model fact-checks the faster model. Nothing publishes
+          without editorial oversight.
+        </p>
+      </section>
+
+      <!-- The Voices -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Voices</p>
+        <h2 class="case-study__h2">8 journalists, 8 perspectives, zero AI homogeneity</h2>
+        <p>
+          Generic AI content sounds the same. That sameness is itself a form of flattening
+          &mdash; the exact thing a platform about pattern recognition should resist. DDN
+          solves this with eight specialist personas, each with a distinct voice, beat,
+          editorial philosophy, and signature move.
+        </p>
+        <div class="persona">
+          <p class="persona__name">Erasmus Vael</p>
+          <p class="persona__title">Chief Archivist &middot; Military-Industrial Correspondent</p>
+          <p class="persona__desc">Meticulous and encyclopedic. Covers arms sales, press freedom, whistleblower persecution. Signature: connecting current events to obscure historical parallels nobody remembers.</p>
+        </div>
+        <div class="persona">
+          <p class="persona__name">Margot Vex</p>
+          <p class="persona__title">Senior Correspondent &middot; Department of Obvious Horrors</p>
+          <p class="persona__desc">Sarcasm refined enough to strip paint. Covers corporate capture, billionaire tax evasion, private equity destruction. Signature: taking corporate statements at face value until they collapse under absurdity.</p>
+        </div>
+        <div class="persona">
+          <p class="persona__name">Sable Quill</p>
+          <p class="persona__title">Voice of the Threshold &middot; Theocratic Watch</p>
+          <p class="persona__desc">Prophetic cadence, weighted language. Covers theocratic creep across all Abrahamic traditions equally. Signature: framing mundane legislation in mythic terms.</p>
+        </div>
+        <div class="persona">
+          <p class="persona__name">Cass Meridian</p>
+          <p class="persona__title">Quantitative Threat Analyst</p>
+          <p class="persona__desc">Lab report energy. Covers healthcare failures, environmental justice, data-driven inequality. Signature: building irrefutable statistical cases that lead to devastating conclusions.</p>
+        </div>
+        <p class="dim" style="margin-top: 1rem;">
+          Plus four more &mdash; Harlow Graves (surveillance/authoritarianism),
+          Kira Voss (identity politics), Nathaniel Cross (information warfare),
+          Vera Thorne (resilience and action). Each story gets the voice it deserves,
+          not the voice that was cheapest to generate.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Semantic clustering at cross-continental scale</strong>
+            <span>Keyword matching catches "voter suppression" in two headlines. It doesn't
+            catch that a story about "digital ID mandates" in India and "biometric border
+            screening" in the EU are both surveillance expansion. Claude reads articles in
+            batches and clusters by thematic coherence, creating topic groups that no regex
+            could find. The clustering is the core intelligence product.</span>
+          </li>
+          <li>
+            <strong>Severity scoring without editorializing</strong>
+            <span>A composite algorithm (sentiment 25%, keyword density 30%, source credibility
+            15%, recency 10%, base 20%) produces a 0-100 severity score. Source credibility
+            weighting ensures a Reuters report outranks a Reddit thread. The algorithm is
+            transparent, documented, and consistent &mdash; the severity is computed, not
+            opined.</span>
+          </li>
+          <li>
+            <strong>AI editorial oversight at speed</strong>
+            <span>Every synthesized article passes through VERITAS: Claude Opus reviews for
+            factual accuracy, attribution integrity, editorial standards, and tone. The stronger
+            model checking the faster model. Articles can be approved, edited, or rejected.
+            This adds latency but prevents the kind of confident AI fabrication that would
+            destroy credibility in a journalism context.</span>
+          </li>
+          <li>
+            <strong>Maintaining 8 distinct voices</strong>
+            <span>Generic AI flattens everything to the same cadence. Each journalist persona
+            has a detailed system prompt specifying beat, voice, historical knowledge, and
+            signature techniques. Erasmus Vael's archival precision and Margot Vex's acidic
+            sarcasm are not interchangeable. The prompt engineering is the editorial voice.</span>
+          </li>
+          <li>
+            <strong>Satire without misinformation</strong>
+            <span>The comedic frame makes patterns visible. But satirical framing on top of
+            real news creates a trust problem. DDN solves this with rigid attribution: every
+            major claim includes "Reuters reports," "The Guardian obtained documents," with
+            markdown links to originals. The farce is the frame. The facts are sacred. You
+            can laugh at the headline and verify the source in the same breath.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          Next.js 16.2 with App Router and React 19. Supabase PostgreSQL with full-text
+          search. Claude Sonnet for synthesis, Opus for editorial review. VADER for
+          sentiment analysis. Five source fetchers (GDELT, NewsAPI, MediaStack, RSS,
+          Reddit API). Trigram-based deduplication. Upstash Redis for rate limiting
+          and caching. Deployed on Vercel with serverless functions. GitHub Actions for
+          scheduled pipeline runs. Sentry for error tracking. Capacitor for mobile apps.
+        </p>
+        <p>
+          The pipeline processes articles through: fetch &rarr; dedup &rarr; classify &rarr;
+          cluster &rarr; score &rarr; synthesize &rarr; review. Each stage is independently
+          testable. Source statistics and error rates are logged per run. The system degrades
+          gracefully &mdash; if one fetcher fails, the others continue.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Next.js 16</span>
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">Claude AI</span>
+          <span class="tech-tag">VADER NLP</span>
+          <span class="tech-tag">Tailwind v4</span>
+          <span class="tech-tag">Vercel</span>
+          <span class="tech-tag">Redis</span>
+          <span class="tech-tag">Sentry</span>
+          <span class="tech-tag">Capacitor</span>
+          <span class="tech-tag">GDELT</span>
+        </div>
+      </section>
+
+      <!-- Philosophy -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Philosophy</p>
+        <h2 class="case-study__h2">Critique flows upward. Never down.</h2>
+        <p>
+          DDN has a set of editorial values that aren't negotiable. Critique flows upward
+          &mdash; toward power, institutions, systems &mdash; never downward toward
+          vulnerable populations. Human rights are premises, not positions. Euphemism is
+          the first weapon of oppression, so the platform names things what they are. AI
+          content is always labeled. No violence is endorsed; accountability happens through
+          legal, democratic, civic, and economic channels.
+        </p>
+        <p>
+          The severity levels aren't just color-coding. They're calls to action. "Critical"
+          and "Apocalyptic" stories link to Know Your Rights cards, protest toolkits,
+          whistleblower resources, and the Corruption Tracker &mdash; a database of named
+          political figures implicated in patterns. The Banned Books library catalogs
+          censored works. The heat maps show dystopian activity by country.
+        </p>
+        <div class="verdict">
+          <p>
+            Straight reporting of dystopian trends numbs people. The hundredth article about
+            democratic erosion reads like the first ninety-nine. Sometimes the only way to
+            make people see the pattern is to make the pattern absurd enough that they can't
+            look away. That's not an abandonment of journalism. It's the recognition that
+            journalism has a format problem, and satire is one solution.
+          </p>
+          <p class="dim">
+            What are we mad about today? Everything. But now it's organized, sourced,
+            severity-scored, and funny enough that you might actually read it.
+          </p>
+        </div>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

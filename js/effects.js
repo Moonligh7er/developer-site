@@ -137,13 +137,22 @@ function initPageTransition() {
     loader.classList.add('loading');
   }
 
-  window.addEventListener('load', () => {
+  function revealPage() {
     if (loader) {
       loader.classList.remove('loading');
       loader.classList.add('done');
     }
     if (overlay) {
       overlay.classList.add('loaded');
+    }
+  }
+
+  window.addEventListener('load', revealPage);
+
+  // Handle bfcache (back/forward navigation) — load event doesn't fire
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) {
+      revealPage();
     }
   });
 

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stack | Michael Wylde — Technologies &amp; Tools</title>
+  <meta name="description" content="The technologies Michael Wylde builds with most, ranked by actual usage across 15+ projects. TypeScript, React, Claude AI, PostgreSQL, Express, and more.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/stack.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Stack — Michael Wylde",
+    "description": "Technologies and tools ranked by actual usage across 15+ projects.",
+    "url": "https://moonligh7er.github.io/developer-site/stack.html",
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Stack | Michael Wylde — Technologies & Tools">
+  <meta property="og:description" content="The technologies I build with most, ranked by actual usage across 15+ projects.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/stack.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Stack | Michael Wylde">
+  <meta name="twitter:description" content="Technologies ranked by actual usage across 15+ projects.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .stack-section { margin-bottom: 3rem; }
+    .stack-section__title {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .stack-section__title::before { content: '//'; color: var(--text-dim); }
+
+    .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+
+    .stack-item {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface); position: relative;
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .stack-item__bar {
+      width: 4px; min-height: 100%; border-radius: 2px;
+      flex-shrink: 0; align-self: stretch;
+    }
+    .stack-item__content { flex: 1; }
+    .stack-item__name {
+      font-family: var(--font-display); font-size: 1rem;
+      color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .stack-item__count {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; margin-bottom: 0.5rem;
+    }
+    .stack-item__desc {
+      font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+    }
+    .stack-item__meter {
+      height: 2px; margin-top: 0.75rem; background: var(--border);
+      border-radius: 1px; overflow: hidden;
+    }
+    .stack-item__meter-fill { height: 100%; border-radius: 1px; }
+
+    .stack-philosophy {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 3rem 0; position: relative;
+    }
+    .stack-philosophy::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .stack-philosophy p { font-size: 1rem; line-height: 1.75; color: var(--text-secondary); margin-bottom: 1rem; max-width: 65ch; }
+    .stack-philosophy p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 768px) {
+      .stack-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <section class="section--hero container">
+      <div class="reveal">
+        <p class="label">Toolkit</p>
+        <h1 class="heading-xl glitch">Stack</h1>
+        <p class="text-body mt-2 text-dim" style="max-width: 55ch;">What I build with, ranked by actual usage across 15+ projects. Not a wish list &mdash; a frequency map.</p>
+      </div>
+    </section>
+
+    <section class="section container" style="padding-top: 0;">
+
+      <!-- PRIMARY STACK -->
+      <div class="stack-section reveal">
+        <p class="stack-section__title">Primary Stack &mdash; used in most projects</p>
+        <div class="stack-grid">
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">TypeScript</p>
+              <p class="stack-item__count" style="color: var(--teal);">11 of 15 projects</p>
+              <p class="stack-item__desc">Primary language for everything. Strict mode. Type safety isn't optional when you're the only developer.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:73%;background:var(--teal);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">JWT Authentication</p>
+              <p class="stack-item__count" style="color: var(--teal);">10 of 15 projects</p>
+              <p class="stack-item__desc">Stateless auth across every backend. HS256 tokens, row-level security, rate limiting.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:67%;background:var(--teal);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--violet);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Claude API</p>
+              <p class="stack-item__count" style="color: var(--violet);">9 of 15 projects</p>
+              <p class="stack-item__desc">AI backbone. Sonnet for speed, Opus for depth. Tutoring, synthesis, analysis, document intelligence, vision.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:60%;background:var(--violet);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--violet);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">React / React Native</p>
+              <p class="stack-item__count" style="color: var(--violet);">9 of 15 projects</p>
+              <p class="stack-item__desc">Component architecture for web and mobile. React 18 and 19. Expo for cross-platform. Radix UI and shadcn/ui for accessible primitives.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:60%;background:var(--violet);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--amber);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">WebSockets</p>
+              <p class="stack-item__count" style="color: var(--amber);">8 of 15 projects</p>
+              <p class="stack-item__desc">Real-time everything. Live data feeds, multiplayer, collaborative features, streaming AI responses.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:53%;background:var(--amber);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--amber);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Tailwind CSS</p>
+              <p class="stack-item__count" style="color: var(--amber);">8 of 15 projects</p>
+              <p class="stack-item__desc">Utility-first. Fast iteration. Consistent design tokens. Dark mode by default.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:53%;background:var(--amber);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--rose);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Express.js</p>
+              <p class="stack-item__count" style="color: var(--rose);">7 of 15 projects</p>
+              <p class="stack-item__desc">Backend workhorse. REST APIs, WebSocket servers, file processing pipelines, AI proxy layers.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:47%;background:var(--rose);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--rose);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">PostgreSQL</p>
+              <p class="stack-item__count" style="color: var(--rose);">7 of 15 projects</p>
+              <p class="stack-item__desc">Primary database. PostGIS for geospatial. Full-text search. Row-level security via Supabase. 35 models in the largest project.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:47%;background:var(--rose);"></div></div>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--rose);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Vite</p>
+              <p class="stack-item__count" style="color: var(--rose);">7 of 15 projects</p>
+              <p class="stack-item__desc">Build tool. Fast HMR, ESBuild bundling, clean dev experience. Replaced Webpack everywhere.</p>
+              <div class="stack-item__meter"><div class="stack-item__meter-fill" style="width:47%;background:var(--rose);"></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SECONDARY STACK -->
+      <div class="stack-section reveal">
+        <p class="stack-section__title">Also build in &mdash; used in multiple projects</p>
+        <div class="stack-grid">
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Railway</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">6 projects</p>
+              <p class="stack-item__desc">Primary hosting for backends. Docker deployments, persistent storage, easy scaling.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Prisma</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">5 projects</p>
+              <p class="stack-item__desc">Type-safe ORM. Schema-first migrations. Generates TypeScript types from database schema.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">RevenueCat</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">5 projects</p>
+              <p class="stack-item__desc">Subscription management for mobile. Handles App Store and Play Store billing so I don't have to.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Supabase</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">Hosted PostgreSQL with auth, real-time subscriptions, row-level security, and edge functions.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">ElevenLabs</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">HD voice synthesis, music generation. Three-tier voice quality for different use cases.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Stripe</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">Payment processing for web apps. Webhooks, subscription billing, metered usage.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Vercel</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">Frontend hosting, serverless functions, Next.js deployment. Fast CDN, automatic HTTPS.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">shadcn/ui</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">Copy-paste component library built on Radix UI. Accessible, customizable, no vendor lock-in.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--text-dim);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Vitest</p>
+              <p class="stack-item__count" style="color: var(--text-secondary);">4 projects</p>
+              <p class="stack-item__desc">Fast unit testing. Vite-native, compatible with Jest API. 196 tests in the largest project.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SPECIALIZED -->
+      <div class="stack-section reveal">
+        <p class="stack-section__title">Specialized &mdash; deep expertise, fewer projects</p>
+        <div class="stack-grid">
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--violet);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Python / FastAPI</p>
+              <p class="stack-item__count" style="color: var(--violet);">3 projects</p>
+              <p class="stack-item__desc">Scientific computing backends. scipy, statsmodels, scikit-learn, pandas, numpy. 240+ statistical endpoints in one project.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--violet);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Expo / React Native</p>
+              <p class="stack-item__count" style="color: var(--violet);">3 projects</p>
+              <p class="stack-item__desc">Cross-platform mobile from a single codebase. EAS builds for iOS and Android. File-based routing via Expo Router.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--violet);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Docker</p>
+              <p class="stack-item__count" style="color: var(--violet);">3 projects</p>
+              <p class="stack-item__desc">Containerized deployments. Multi-stage builds (Node 20 Alpine). Reproducible environments.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--amber);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Next.js</p>
+              <p class="stack-item__count" style="color: var(--amber);">2 projects</p>
+              <p class="stack-item__desc">Full-stack React framework. App Router, server components, API routes, ISR. Used for content-heavy sites.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--amber);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Drizzle ORM</p>
+              <p class="stack-item__count" style="color: var(--amber);">2 projects</p>
+              <p class="stack-item__desc">Lightweight, type-safe alternative to Prisma. SQL-like API, minimal abstraction.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--amber);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Playwright</p>
+              <p class="stack-item__count" style="color: var(--amber);">2 projects</p>
+              <p class="stack-item__desc">End-to-end testing. Browser automation, visual regression, CI integration.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ONE-OF-A-KIND -->
+      <div class="stack-section reveal">
+        <p class="stack-section__title">One-of-a-kind &mdash; specialized tools for specific problems</p>
+        <div class="stack-grid">
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">CesiumJS + PostGIS</p>
+              <p class="stack-item__desc">3D globe with 106 data layers. Geospatial queries, SGP4 satellite propagation, GWR statistics.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Neo4j + Sigma.js</p>
+              <p class="stack-item__desc">50,000-node knowledge graph at 60fps. Parallel queries, Dijkstra pathfinding, WebGL rendering.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">astronomy-engine</p>
+              <p class="stack-item__desc">Client-side orbital mechanics. Keplerian calculations with full precession and nutation. 1-arcminute accuracy.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">VADER + AFINN NLP</p>
+              <p class="stack-item__desc">Sentiment analysis, TF-IDF keyword extraction, named entity recognition, Flesch-Kincaid readability. Real computation, not AI guesses.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">HMAC-DRBG + SHA-256</p>
+              <p class="stack-item__desc">Cryptographic randomness from device sensors. Physical entropy harvesting for provably unpredictable outputs.</p>
+            </div>
+          </div>
+
+          <div class="stack-item">
+            <div class="stack-item__bar" style="background: var(--teal);"></div>
+            <div class="stack-item__content">
+              <p class="stack-item__name">Capacitor</p>
+              <p class="stack-item__desc">Web-to-native bridge. Wrap web apps for iOS and Android distribution with access to native APIs.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PHILOSOPHY -->
+      <div class="stack-philosophy reveal">
+        <p style="color: var(--text-bright); font-weight: 500; margin-bottom: 1rem;">How I choose tools</p>
+        <p>
+          Boring where it matters, interesting where it counts. The database should be PostgreSQL
+          because PostgreSQL works. The auth should be JWT because JWT is understood. The build
+          tool should be Vite because Vite is fast. These aren't exciting choices. They're correct
+          choices. Excitement goes into the problem domain &mdash; the statistical engines, the
+          knowledge graphs, the entropy harvesting, the real-time data fusion &mdash; not the plumbing.
+        </p>
+        <p>
+          I trust battle-tested libraries (scipy, statsmodels, scikit-learn) over custom
+          implementations. The innovation is the interface and the integration, not the
+          underlying math. When PsyStat produces a t-test result, it matches SPSS because
+          the computation underneath is scipy &mdash; the same engine the academic world trusts.
+        </p>
+        <p style="color: var(--text-dim);">
+          The right amount of complexity is what the problem actually requires. Three similar
+          lines of code is better than a premature abstraction. A solo developer maintaining
+          15+ projects doesn't have the luxury of architectural tourism.
+        </p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entheo — The Divine Within | Consciousness Exploration Companion</title>
+  <meta name="description" content="A consciousness exploration companion that bridges ancient wisdom and future technology. Journaling, AI analysis, psychedelic session management, integration support, and sacred practices — unified in one tool.">
+  <meta name="keywords" content="consciousness, journaling, meditation, mood tracking, sacred geometry, astrology, psychedelic sessions, integration, breathwork, dream journal, harm reduction, wellness">
+  <meta property="og:title" content="Entheo — The Divine Within">
+  <meta property="og:description" content="A consciousness exploration companion that bridges ancient wisdom and future technology.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon-512.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Entheo — The Divine Within">
+  <meta name="twitter:description" content="A consciousness exploration companion that bridges ancient wisdom and future technology.">
+  <meta name="theme-color" content="#00D4C8">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <!-- Plausible Analytics (privacy-respecting, no cookies) -->
+  <!-- <script defer data-domain="entheo.app" src="https://plausible.io/js/script.js"></script> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════
+       CSS Custom Properties
+       ═══════════════════════════════════════════ */
+    :root {
+      --bg: #0a0a0f;
+      --bg-deep: #110a1f;
+      --bg-bottom: #0d0618;
+      --bg-elevated: #110a1f;
+      --bg-card: #16101F;
+      --cyan: #00D4C8;
+      --cyan-dim: #00D4C833;
+      --cyan-glow: #00D4C866;
+      --gold: #C9A227;
+      --gold-dim: #C9A22733;
+      --violet: #5B00D4;
+      --violet-dim: #5B00D433;
+      --violet-glow: #5B00D466;
+      --text: #E8E6F0;
+      --text-dim: #8A8694;
+      --text-faint: #4A4656;
+      --heading: 'Cormorant Garamond', Georgia, serif;
+      --body: 'JetBrains Mono', 'SF Mono', monospace;
+      --section-gap: clamp(80px, 12vh, 140px);
+    }
+
+    /* ═══════════════════════════════════════════
+       Reset & Base
+       ═══════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: #0a0a0f;
+      color: var(--text);
+      font-family: var(--body);
+      font-size: clamp(13px, 1.4vw, 15px);
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--cyan-dim);
+      color: var(--cyan);
+    }
+
+    a { color: var(--cyan); text-decoration: none; transition: opacity 0.3s; }
+    a:hover { opacity: 0.8; }
+
+    /* ═══════════════════════════════════════════
+       Shared Section Styles
+       ═══════════════════════════════════════════ */
+    .section {
+      position: relative;
+      padding: var(--section-gap) clamp(24px, 6vw, 80px);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 16px;
+    }
+
+    .section-heading {
+      font-family: var(--heading);
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .section-heading em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+
+    .section-heading .gold { color: var(--gold); }
+    .section-heading .violet { color: var(--violet); }
+
+    .section-body {
+      max-width: 640px;
+      color: var(--text-dim);
+      font-size: clamp(13px, 1.4vw, 15px);
+    }
+
+    .section-body p { margin-bottom: 20px; }
+
+    .section-body strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* Scroll-triggered fade in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .reveal-children > * {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-children.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(7) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(8) { transition-delay: 0.7s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(9) { transition-delay: 0.8s; opacity: 1; transform: translateY(0); }
+    .reveal-children.visible > *:nth-child(10) { transition-delay: 0.9s; opacity: 1; transform: translateY(0); }
+
+    /* ═══════════════════════════════════════════
+       CTA Buttons
+       ═══════════════════════════════════════════ */
+    .cta {
+      display: inline-block;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 16px 40px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+    }
+
+    .cta-primary {
+      background: transparent;
+      color: var(--cyan);
+      border: 1px solid rgba(0, 212, 200, 0.35);
+      box-shadow: none;
+    }
+
+    .cta-primary:hover {
+      opacity: 1;
+      color: #fff;
+      border-color: rgba(0, 212, 200, 0.6);
+      transform: translateY(-1px);
+      box-shadow: none;
+    }
+
+    .cta-primary:active {
+      transform: translateY(0);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      color: var(--text-dim);
+      border: 1px solid var(--text-faint);
+    }
+
+    .cta-secondary:hover {
+      opacity: 1;
+      color: var(--text);
+      border-color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       Divider
+       ═══════════════════════════════════════════ */
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--text-faint), transparent);
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      overflow: hidden;
+      background: #0a0a0f;
+    }
+
+    .hero-geometry { display: none; }
+
+    .hero-electric { display: none; }
+
+    .hero::after { display: none; }
+    .hero::before { display: none; }
+
+    /* Floating embers — whole page */
+    .page-embers {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .page-ember {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--cyan);
+      opacity: 0;
+      animation: ember-float linear infinite;
+    }
+
+    @keyframes ember-float {
+      0% { opacity: 0; transform: translateY(100vh) translateX(0); }
+      10% { opacity: 0.5; }
+      90% { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(-20vh) translateX(40px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-family: var(--heading);
+      font-size: clamp(60px, 12vw, 140px);
+      font-weight: 300;
+      letter-spacing: 0.25em;
+      color: #e0fffe;
+      margin-bottom: 16px;
+      animation: hero-fade-in 2s cubic-bezier(0.16, 1, 0.3, 1) both;
+      text-shadow: none;
+    }
+
+    .hero-tagline {
+      font-family: var(--heading);
+      font-size: clamp(14px, 2vw, 20px);
+      font-weight: 400;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 40px;
+      animation: hero-fade-in 2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero-subline {
+      font-family: var(--body);
+      font-size: clamp(13px, 1.5vw, 16px);
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      animation: hero-fade-in 2s 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .hero .cta {
+      animation: hero-fade-in 2s 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes hero-fade-in {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      animation: hero-fade-in 2s 1.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--text-faint);
+      animation: scroll-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(8px); opacity: 0.8; }
+    }
+
+    /* ═══════════════════════════════════════════
+       PROBLEM
+       ═══════════════════════════════════════════ */
+    .problem { text-align: center; }
+
+    .problem .section-heading {
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .problem .section-body {
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .problem-bridge {
+      font-family: var(--heading);
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cyan);
+      margin-top: 48px;
+      opacity: 0.9;
+    }
+
+    /* ═══════════════════════════════════════════
+       TODAY DASHBOARD
+       ═══════════════════════════════════════════ */
+    .dashboard-section {
+      text-align: center;
+    }
+
+    .dashboard-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .dashboard-card {
+      background: var(--bg-card);
+      border: 1px solid #ffffff06;
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.4s, transform 0.4s;
+    }
+
+    .dashboard-card:hover {
+      border-color: #ffffff10;
+      transform: translateY(-4px);
+    }
+
+    .dashboard-card-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .dashboard-card-label {
+      font-family: var(--heading);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .dashboard-card-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       SPIRAL
+       ═══════════════════════════════════════════ */
+    .spiral-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .spiral-section { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .spiral-visual {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .spiral-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: spiral-pulse 4s ease-in-out infinite;
+    }
+
+    .spiral-ring:nth-child(1)  { width: 95%; height: 95%; border-color: #00D4C808; animation-delay: 0s; }
+    .spiral-ring:nth-child(2)  { width: 85%; height: 85%; border-color: #00D4C80D; animation-delay: 0.2s; }
+    .spiral-ring:nth-child(3)  { width: 75%; height: 75%; border-color: #00D4C813; animation-delay: 0.4s; }
+    .spiral-ring:nth-child(4)  { width: 65%; height: 65%; border-color: #00D4C81A; animation-delay: 0.6s; }
+    .spiral-ring:nth-child(5)  { width: 55%; height: 55%; border-color: #00D4C822; animation-delay: 0.8s; }
+    .spiral-ring:nth-child(6)  { width: 45%; height: 45%; border-color: #00D4C82E; animation-delay: 1.0s; }
+    .spiral-ring:nth-child(7)  { width: 35%; height: 35%; border-color: #00D4C83B; animation-delay: 1.2s; }
+    .spiral-ring:nth-child(8)  { width: 25%; height: 25%; border-color: #00D4C84D; animation-delay: 1.4s; }
+    .spiral-ring:nth-child(9)  { width: 15%; height: 15%; border-color: #00D4C866; animation-delay: 1.6s; }
+    .spiral-ring:nth-child(10) { width: 8%;  height: 8%;  border-color: var(--cyan); animation-delay: 1.8s; }
+
+    /* Floating dots */
+    .spiral-dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: spiral-dot-float 6s ease-in-out infinite;
+    }
+
+    .spiral-dot:nth-child(11) { width: 6px;  height: 6px;  background: var(--cyan); top: 10%; left: 55%; animation-delay: 0s; }
+    .spiral-dot:nth-child(12) { width: 4px;  height: 4px;  background: var(--gold); top: 25%; left: 78%; animation-delay: 0.8s; }
+    .spiral-dot:nth-child(13) { width: 8px;  height: 8px;  background: var(--cyan); top: 42%; left: 88%; animation-delay: 1.6s; opacity: 0.7; }
+    .spiral-dot:nth-child(14) { width: 3px;  height: 3px;  background: var(--violet); top: 60%; left: 75%; animation-delay: 2.4s; filter: brightness(2); }
+    .spiral-dot:nth-child(15) { width: 5px;  height: 5px;  background: var(--gold); top: 72%; left: 50%; animation-delay: 3.2s; }
+    .spiral-dot:nth-child(16) { width: 7px;  height: 7px;  background: var(--cyan); top: 55%; left: 20%; animation-delay: 4s; opacity: 0.5; }
+    .spiral-dot:nth-child(17) { width: 4px;  height: 4px;  background: var(--gold); top: 30%; left: 18%; animation-delay: 4.8s; }
+    .spiral-dot:nth-child(18) { width: 5px;  height: 5px;  background: var(--violet); top: 15%; left: 38%; animation-delay: 5.5s; filter: brightness(2); }
+
+    @keyframes spiral-pulse {
+      0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.03); }
+    }
+
+    @keyframes spiral-dot-float {
+      0%, 100% { transform: translateY(0); opacity: 0.8; }
+      50% { transform: translateY(-12px); opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════
+       AI ANALYSIS
+       ═══════════════════════════════════════════ */
+    .ai-section {
+      text-align: center;
+    }
+
+    .ai-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .ai-demo {
+      margin-top: 48px;
+      background: var(--bg-card);
+      border: 1px solid #ffffff08;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .ai-demo-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 16px;
+    }
+
+    .ai-demo-text {
+      color: var(--text-dim);
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    .ai-demo-text .stream-word {
+      display: inline;
+      animation: word-appear 0.3s ease both;
+    }
+
+    .ai-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 500;
+      margin: 2px 4px 2px 0;
+    }
+
+    .ai-tag.mood { background: var(--cyan-dim); color: var(--cyan); }
+    .ai-tag.theme { background: var(--gold-dim); color: var(--gold); }
+    .ai-tag.intensity { background: var(--violet-dim); color: #9B6BFF; }
+
+    /* ═══════════════════════════════════════════
+       SESSIONS
+       ═══════════════════════════════════════════ */
+    .sessions-section {
+      text-align: center;
+    }
+
+    .sessions-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .substance-groups {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .substance-group {
+      background: var(--bg-card);
+      border: 1px solid #ffffff06;
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.4s;
+    }
+
+    .substance-group:hover {
+      border-color: #ffffff10;
+    }
+
+    .substance-group-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 8px;
+    }
+
+    .substance-group-names {
+      font-family: var(--heading);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════
+       INTEGRATION
+       ═══════════════════════════════════════════ */
+    .integration-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .integration-section { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .integration-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .integration-phase {
+      background: var(--bg-card);
+      border: 1px solid #ffffff06;
+      border-radius: 8px;
+      padding: 20px 24px;
+      transition: border-color 0.4s;
+    }
+
+    .integration-phase:hover {
+      border-color: #ffffff10;
+    }
+
+    .integration-phase-label {
+      font-family: var(--heading);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--cyan);
+      margin-bottom: 4px;
+    }
+
+    .integration-phase-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       SAFETY
+       ═══════════════════════════════════════════ */
+    .safety-section {
+      text-align: center;
+      border-top: 1px solid #ffffff06;
+      border-bottom: 1px solid #ffffff06;
+      padding-top: calc(var(--section-gap) + 20px);
+      padding-bottom: calc(var(--section-gap) + 20px);
+    }
+
+    .safety-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .safety-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .safety-item {
+      background: var(--bg-card);
+      border: 1px solid #ffffff06;
+      border-radius: 8px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: border-color 0.4s;
+    }
+
+    .safety-item:hover {
+      border-color: #ffffff10;
+    }
+
+    .safety-item-label {
+      font-family: var(--heading);
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .safety-item-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       COSMIC CONTEXT
+       ═══════════════════════════════════════════ */
+    .cosmic-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .cosmic-section { grid-template-columns: 1fr; gap: 48px; }
+    }
+
+    .zodiac-wheel {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .zodiac-glyph {
+      position: absolute;
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: var(--text-faint);
+      transition: color 0.6s;
+    }
+
+    .zodiac-wheel:hover .zodiac-glyph { color: var(--gold); }
+
+    .zodiac-wheel svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.06;
+      animation: geo-rotate 180s linear infinite reverse;
+    }
+
+    /* ═══════════════════════════════════════════
+       BRIEF SECTIONS (Dreams, Breathwork, Rituals, Search, Accessibility)
+       ═══════════════════════════════════════════ */
+    .brief-section {
+      text-align: center;
+    }
+
+    .brief-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .brief-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .brief-feature-label {
+      font-family: var(--heading);
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .brief-feature-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       PRIVACY
+       ═══════════════════════════════════════════ */
+    .privacy-section {
+      text-align: center;
+    }
+
+    .privacy-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .privacy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .privacy-item {
+      text-align: center;
+    }
+
+    .privacy-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      stroke: var(--cyan);
+      opacity: 0.6;
+    }
+
+    .privacy-label {
+      font-family: var(--heading);
+      font-size: 16px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .privacy-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       RECIPROCITY
+       ═══════════════════════════════════════════ */
+    .reciprocity-section {
+      text-align: center;
+    }
+
+    .reciprocity-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .reciprocity-partners {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .reciprocity-partner {
+      background: var(--bg-card);
+      border: 1px solid #ffffff06;
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: border-color 0.4s;
+    }
+
+    .reciprocity-partner:hover {
+      border-color: #ffffff10;
+    }
+
+    .reciprocity-partner-name {
+      font-family: var(--heading);
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .reciprocity-partner-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       PLATFORM
+       ═══════════════════════════════════════════ */
+    .platform-section {
+      text-align: center;
+    }
+
+    .platform-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .platform-icons {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .platform-item {
+      text-align: center;
+    }
+
+    .platform-item svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--text-faint);
+      margin-bottom: 8px;
+      transition: stroke 0.4s;
+    }
+
+    .platform-item:hover svg { stroke: var(--cyan); }
+
+    .platform-name {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════
+       PRICING
+       ═══════════════════════════════════════════ */
+    .pricing-section {
+      text-align: center;
+    }
+
+    .pricing-section .section-body {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .pricing-tiers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 600px) {
+      .pricing-tiers { grid-template-columns: 1fr; max-width: 300px; }
+    }
+
+    .pricing-tier {
+      background: var(--bg-card);
+      border: 1px solid #ffffff08;
+      border-radius: 8px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color 0.4s;
+    }
+
+    .pricing-tier.featured {
+      border-color: var(--cyan-dim);
+    }
+
+    .pricing-tier-name {
+      font-family: var(--heading);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .pricing-tier-price {
+      font-family: var(--heading);
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--cyan);
+      margin-bottom: 8px;
+    }
+
+    .pricing-tier-desc {
+      font-size: 11px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       FINAL CTA
+       ═══════════════════════════════════════════ */
+    .final-cta {
+      text-align: center;
+      padding: var(--section-gap) 24px calc(var(--section-gap) + 40px);
+      position: relative;
+    }
+
+    .final-cta .section-heading {
+      margin-bottom: 40px;
+    }
+
+    .final-cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .final-cta .secondary-link {
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+
+    .final-cta .secondary-link a {
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--text-faint);
+      padding-bottom: 1px;
+    }
+
+    /* Final CTA geometry */
+    .final-cta-geometry {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .final-cta-geometry svg {
+      width: min(500px, 80vw);
+      height: min(500px, 80vw);
+      opacity: 0.025;
+      animation: geo-rotate 90s linear infinite;
+    }
+
+    .final-cta > *:not(.final-cta-geometry) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Newsletter / Email Capture */
+    .email-capture {
+      margin-bottom: 32px;
+    }
+
+    .email-capture > p {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 16px;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .newsletter-form input[type="email"] {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg-card);
+      border: 1px solid #ffffff12;
+      border-radius: 6px;
+      padding: 14px 20px;
+      font-family: var(--body);
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .newsletter-form input[type="email"]::placeholder {
+      color: var(--text-faint);
+    }
+
+    .newsletter-form input[type="email"]:focus {
+      border-color: var(--cyan);
+    }
+
+    .newsletter-form button {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: var(--body);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .newsletter-form button:hover {
+      background: var(--cyan);
+      color: var(--bg);
+    }
+
+    .newsletter-status {
+      font-size: 13px;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ */
+    footer {
+      border-top: 1px solid #ffffff06;
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-family: var(--heading);
+      font-size: 20px;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .footer-tagline {
+      font-size: 12px;
+      color: var(--text-faint);
+      margin-bottom: 24px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links a:hover { color: var(--text-dim); opacity: 1; }
+
+    .footer-etymology {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-style: italic;
+      opacity: 0.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       DECORATIVE GEOMETRY BETWEEN SECTIONS
+       ═══════════════════════════════════════════ */
+    .geo-separator {
+      display: flex;
+      justify-content: center;
+      padding: 32px 0;
+    }
+
+    .geo-separator svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.06;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page-wide embers -->
+  <div class="page-embers" id="page-embers" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════ -->
+  <header class="hero">
+    <!-- Flower of Life is drawn on the canvas with the neural effects -->
+
+    <!-- Electric neural grid -->
+    <div class="hero-electric" aria-hidden="true">
+      <canvas id="electric-canvas"></canvas>
+    </div>
+
+
+    <div class="hero-content">
+      <h1 class="hero-title">ENTHEO</h1>
+      <p class="hero-tagline">The Divine Within</p>
+      <p class="hero-subline">A consciousness exploration companion bridging ancient wisdom and future technology. Journaling, AI analysis, psychedelic session management, integration support, and sacred practices — unified in one tool.</p>
+      <a href="/register" class="cta cta-primary">Begin Your Journey</a>
+    </div>
+
+    <div class="scroll-indicator" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         THE PROBLEM
+         ═══════════════════════════════════════════ -->
+    <section class="section problem reveal" aria-labelledby="problem-heading">
+      <p class="section-label">The Problem</p>
+      <h2 id="problem-heading" class="section-heading">
+        Your tools are scattered.<br>
+        <em>Your practice deserves better.</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          You journal in one app. Track doses in a spreadsheet. Search for
+          integration prompts on Reddit. Check planetary transits on another
+          site. <strong>Nothing connects. Nothing remembers. Nothing grows
+          with you.</strong>
+        </p>
+        <p>
+          The patterns that matter most -- the ones that connect how you feel
+          to why you feel it -- fall through the gaps between your tools.
+        </p>
+      </div>
+      <p class="problem-bridge reveal">What if one tool could see the whole picture?</p>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" stroke="#00D4C8" stroke-width="0.5"/><polygon points="50,20 80,35 80,65 50,80 20,65 20,35" stroke="#00D4C8" stroke-width="0.5"/><circle cx="50" cy="50" r="15" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         TODAY DASHBOARD
+         ═══════════════════════════════════════════ -->
+    <section class="section dashboard-section reveal" aria-labelledby="dashboard-heading">
+      <p class="section-label">Today Dashboard</p>
+      <h2 id="dashboard-heading" class="section-heading">
+        Every morning,<br><em>one screen</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Every morning, one screen shows you everything: moon phase, cosmic
+          weather, your protocol status, integration prompts, echoes from
+          your past that match today's conditions. <strong>The app knows
+          where you are in your journey.</strong>
+        </p>
+      </div>
+      <div class="dashboard-cards reveal-children">
+        <div class="dashboard-card">
+          <span class="dashboard-card-icon">&#9789;</span>
+          <div class="dashboard-card-label">Moon Phase</div>
+          <div class="dashboard-card-desc">Current lunar cycle at a glance</div>
+        </div>
+        <div class="dashboard-card">
+          <span class="dashboard-card-icon">&#9788;</span>
+          <div class="dashboard-card-label">Cosmic Weather</div>
+          <div class="dashboard-card-desc">Planetary transits and retrogrades</div>
+        </div>
+        <div class="dashboard-card">
+          <span class="dashboard-card-icon">&#8635;</span>
+          <div class="dashboard-card-label">Protocol Status</div>
+          <div class="dashboard-card-desc">Your active microdose schedule</div>
+        </div>
+        <div class="dashboard-card">
+          <span class="dashboard-card-icon">&#9830;</span>
+          <div class="dashboard-card-label">Resonance</div>
+          <div class="dashboard-card-desc">Echoes from your past that match today</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="25" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="10" stroke="#C9A227" stroke-width="0.5"/><line x1="50" y1="10" x2="50" y2="90" stroke="#5B00D4" stroke-width="0.3"/><line x1="10" y1="50" x2="90" y2="50" stroke="#5B00D4" stroke-width="0.3"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         THE SPIRAL
+         ═══════════════════════════════════════════ -->
+    <section class="section reveal" aria-labelledby="spiral-heading">
+      <div class="spiral-section">
+        <div>
+          <p class="section-label">The Consciousness Spiral</p>
+          <h2 id="spiral-heading" class="section-heading">
+            Your entire journey,<br><em>made visible</em>
+          </h2>
+          <div class="section-body">
+            <p>
+              Every journal entry, every dream, every ceremony, every dose,
+              every quest -- all mapped onto an interactive 3D spiral.
+              Color reflects mood. Size reflects intensity. Sessions are
+              golden landmarks. Dreams glow violet.
+            </p>
+            <p>
+              Drag the timeline slider to revisit any moment. Filter by type.
+              Click any point to dive deep. This isn't a chart.
+              <strong>It's a sculpture of who you've been becoming.</strong>
+            </p>
+          </div>
+        </div>
+        <div class="spiral-visual" aria-hidden="true">
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-ring"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+          <div class="spiral-dot"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,10 90,90 10,90" stroke="#00D4C8" stroke-width="0.5"/><polygon points="50,90 90,10 10,10" stroke="#00D4C8" stroke-width="0.5" opacity="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         AI INTELLIGENCE
+         ═══════════════════════════════════════════ -->
+    <section class="section ai-section reveal" aria-labelledby="ai-heading">
+      <p class="section-label">AI Intelligence</p>
+      <h2 id="ai-heading" class="section-heading">
+        Your journal, <em>understood</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Claude doesn't just score your mood. It streams analysis in real time.
+          It recognizes symbols that echo across your journals, dreams, and
+          ceremonies. It builds a persistent understanding of who you are --
+          your recurring themes, your growth patterns, your personal symbolic
+          language.
+        </p>
+        <p>
+          Every AI feature knows your personal patterns, recurring symbols,
+          growth areas, medications, and integration state -- built from
+          90 days of cross-domain data. Three models matched to each task,
+          from fast structured analysis to deep longitudinal insights.
+        </p>
+        <p>
+          And when you need it, <strong>an integration companion who knows
+          your history, remembers your conversation, and asks the questions
+          that matter.</strong>
+        </p>
+      </div>
+      <div class="ai-demo reveal" aria-label="AI analysis example">
+        <div class="ai-demo-label">Live Analysis</div>
+        <div class="ai-demo-text" id="ai-stream">
+          <span class="ai-tag mood">contemplative</span>
+          <span class="ai-tag intensity">intensity: 7/10</span>
+          <span class="ai-tag theme">self-reflection</span>
+          <span class="ai-tag theme">transition</span>
+          <br><br>
+          A quiet reckoning with change. The entry carries a sense of standing
+          at a threshold -- not quite grief, not quite anticipation. There is
+          a gentleness in the uncertainty that suggests growing trust in
+          the process itself. This mirrors the water imagery from your
+          dream three nights ago.
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><rect x="20" y="20" width="60" height="60" stroke="#5B00D4" stroke-width="0.5" transform="rotate(45 50 50)"/><rect x="30" y="30" width="40" height="40" stroke="#00D4C8" stroke-width="0.5" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="5" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PSYCHEDELIC SESSIONS
+         ═══════════════════════════════════════════ -->
+    <section class="section sessions-section reveal" aria-labelledby="sessions-heading">
+      <p class="section-label">Psychedelic Sessions</p>
+      <h2 id="sessions-heading" class="section-heading">
+        Full ceremony <span class="gold">lifecycle</span>
+      </h2>
+      <div class="section-body">
+        <p>
+          Six substances -- Psilocybin, Ayahuasca, Mescaline, DMT, 5-MeO-DMT,
+          MDMA -- each with complete profiles, dosing ranges, timing, and
+          safety data. A 5-step wizard that checks your medications, calculates
+          tolerance, and reviews contraindications before you begin.
+        </p>
+        <p>
+          Ceremony mode keeps your screen awake and captures voice clips and
+          notes while you journey. <strong>Post-ceremony capture structures
+          what you saw, felt, and received before it fades.</strong>
+        </p>
+      </div>
+      <div class="substance-groups reveal-children">
+        <div class="substance-group">
+          <div class="substance-group-label">Traditional Plant Medicines</div>
+          <div class="substance-group-names">Psilocybin<br>Ayahuasca<br>Mescaline</div>
+        </div>
+        <div class="substance-group">
+          <div class="substance-group-label">Traditional Compounds</div>
+          <div class="substance-group-names">DMT<br>5-MeO-DMT</div>
+        </div>
+        <div class="substance-group">
+          <div class="substance-group-label">Therapeutic Compounds</div>
+          <div class="substance-group-names">MDMA</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="45" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="20" r="20" stroke="#00D4C8" stroke-width="0.5"/><circle cx="27" cy="63" r="20" stroke="#00D4C8" stroke-width="0.5"/><circle cx="73" cy="63" r="20" stroke="#00D4C8" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         INTEGRATION
+         ═══════════════════════════════════════════ -->
+    <section class="section reveal" aria-labelledby="integration-heading">
+      <div class="integration-section">
+        <div>
+          <p class="section-label">Integration</p>
+          <h2 id="integration-heading" class="section-heading">
+            30 days of<br><em>structured support</em>
+          </h2>
+          <div class="section-body">
+            <p>
+              Day-appropriate questions that evolve. Track insights, challenges,
+              and practices. Watch how your body sensations migrate across
+              sessions. See if your intentions are resolving.
+              <strong>The AI tracks patterns you can't see yourself.</strong>
+            </p>
+          </div>
+        </div>
+        <div class="integration-timeline reveal-children">
+          <div class="integration-phase">
+            <div class="integration-phase-label">Days 1-3</div>
+            <div class="integration-phase-desc">Immediate processing. Capture what's fresh.</div>
+          </div>
+          <div class="integration-phase">
+            <div class="integration-phase-label">Days 4-14</div>
+            <div class="integration-phase-desc">Meaning-making. Connect insights to your life.</div>
+          </div>
+          <div class="integration-phase">
+            <div class="integration-phase-label">Days 15-21</div>
+            <div class="integration-phase-desc">Embodiment. Turn understanding into practice.</div>
+          </div>
+          <div class="integration-phase">
+            <div class="integration-phase-label">Days 22-30</div>
+            <div class="integration-phase-desc">Assessment. What changed? What endures?</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,10 90,50 50,90 10,50" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="20" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SAFETY
+         ═══════════════════════════════════════════ -->
+    <section class="section safety-section reveal" aria-labelledby="safety-heading">
+      <p class="section-label">Safety First</p>
+      <h2 id="safety-heading" class="section-heading">
+        Harm reduction is the <em>foundation</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Drug interaction checker. Tolerance calculator based on pharmacological
+          half-lives. Contraindications for every substance. Emergency resources
+          one tap away -- Fireside Project, SAMHSA, 988. Grounding techniques
+          for difficult moments. Trip sitter guidelines.
+        </p>
+        <p>
+          <strong>This isn't harm reduction as an afterthought.
+          It's the foundation.</strong>
+        </p>
+      </div>
+      <div class="safety-grid reveal-children">
+        <div class="safety-item">
+          <div class="safety-item-label">Interaction Checker</div>
+          <div class="safety-item-desc">Cross-reference your medications before every session</div>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-label">Tolerance Calculator</div>
+          <div class="safety-item-desc">Know when your sensitivity has fully reset</div>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-label">Contraindications</div>
+          <div class="safety-item-desc">Substance-specific warnings based on your health profile</div>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-label">Emergency Resources</div>
+          <div class="safety-item-desc">Fireside Project, 988, SAMHSA -- one tap away</div>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-label">Grounding Techniques</div>
+          <div class="safety-item-desc">5-4-3-2-1, box breathing, reassurance scripts</div>
+        </div>
+        <div class="safety-item">
+          <div class="safety-item-label">Trip Sitter Guide</div>
+          <div class="safety-item-desc">Phase-by-phase support for those holding space</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,5 61,40 97,40 68,60 79,95 50,73 21,95 32,60 3,40 39,40" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         DREAMS
+         ═══════════════════════════════════════════ -->
+    <section class="section brief-section reveal" aria-labelledby="dreams-heading">
+      <p class="section-label">Dreams</p>
+      <h2 id="dreams-heading" class="section-heading">
+        Your unconscious,<br><span class="violet">illuminated</span>
+      </h2>
+      <div class="section-body">
+        <p>
+          Record your dreams. AI analyzes them through a Jungian lens --
+          symbols, archetypes, emotional tone. Link dreams to ceremonies.
+          <strong>Watch how your dream imagery transforms.</strong>
+        </p>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#00D4C8" stroke-width="0.3"/><ellipse cx="50" cy="50" rx="40" ry="20" stroke="#00D4C8" stroke-width="0.3"/><ellipse cx="50" cy="50" rx="20" ry="40" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="4" fill="#00D4C8" opacity="0.3"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         BREATHWORK & PRACTICES
+         ═══════════════════════════════════════════ -->
+    <section class="section brief-section reveal" aria-labelledby="breathwork-heading">
+      <p class="section-label">Breathwork &amp; Practices</p>
+      <h2 id="breathwork-heading" class="section-heading">
+        Ancient practices,<br><em>guided by technology</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Four guided breathwork timers with animated breathing circles.
+          Forest bathing guides. Zen meditation instructions.
+          <strong>Sacred practices from traditions worldwide.</strong>
+        </p>
+      </div>
+      <div class="brief-features reveal-children">
+        <div>
+          <div class="brief-feature-label">Box Breathing</div>
+          <div class="brief-feature-desc">4-4-4-4 calming pattern with visual guide</div>
+        </div>
+        <div>
+          <div class="brief-feature-label">Wim Hof</div>
+          <div class="brief-feature-desc">Rapid breathing + retention with round tracking</div>
+        </div>
+        <div>
+          <div class="brief-feature-label">4-7-8 Relaxation</div>
+          <div class="brief-feature-desc">Andrew Weil's calming technique</div>
+        </div>
+        <div>
+          <div class="brief-feature-label">Holotropic</div>
+          <div class="brief-feature-desc">Extended breathwork for expanded states</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="35" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="24" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="13" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="4" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         DAILY RITUALS & QUESTS
+         ═══════════════════════════════════════════ -->
+    <section class="section brief-section reveal" aria-labelledby="rituals-heading">
+      <p class="section-label">Daily Rituals &amp; Quests</p>
+      <h2 id="rituals-heading" class="section-heading">
+        Wellness is a practice,<br><em>not a destination</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Build your own daily practice sequence. Weather-locked wellness
+          quests -- sun salutations when the sun shines, rain meditation
+          when it pours. A community heatmap shows anonymized collective
+          practice activity, and shared wisdom surfaces insights from
+          fellow explorers. Entheo Patterns -- our own research engine --
+          discovers what the aggregate data reveals: patterns that may
+          validate indigenous wisdom, confirm Western research, or
+          uncover something neither tradition named.
+          <strong>Gentle gamification where it belongs --
+          journaling streaks, not ceremony scores.</strong>
+        </p>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><rect x="20" y="20" width="60" height="60" stroke="#5B00D4" stroke-width="0.5" transform="rotate(45 50 50)"/><rect x="30" y="30" width="40" height="40" stroke="#00D4C8" stroke-width="0.5" transform="rotate(45 50 50)"/><circle cx="50" cy="50" r="5" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         COSMIC CONTEXT
+         ═══════════════════════════════════════════ -->
+    <section class="section reveal" aria-labelledby="cosmic-heading">
+      <div class="cosmic-section">
+        <div>
+          <p class="section-label">Cosmic Context</p>
+          <h2 id="cosmic-heading" class="section-heading">
+            You don't exist<br>in a <span class="gold">vacuum</span>
+          </h2>
+          <div class="section-body">
+            <p>
+              Sidereal astrology -- not tropical. Ten celestial bodies. Moon
+              phases on every calendar day. Weather snapshots with every entry.
+            </p>
+            <p>
+              Your <strong>environmental correlation matrix</strong> shows which
+              conditions align with your best and worst moods. Mercury retrograde
+              might actually mean something to you -- but only because the
+              data says so, not because someone told you it should.
+            </p>
+          </div>
+        </div>
+        <div class="zodiac-wheel" aria-hidden="true">
+          <svg viewBox="0 0 400 400" fill="none">
+            <circle cx="200" cy="200" r="180" stroke="#C9A227" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="140" stroke="#C9A227" stroke-width="0.3"/>
+            <circle cx="200" cy="200" r="100" stroke="#C9A227" stroke-width="0.3"/>
+            <!-- 12 division lines -->
+            <line x1="200" y1="20" x2="200" y2="60" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="290" y1="47" x2="270" y2="78" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="353" y1="110" x2="323" y2="128" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="380" y1="200" x2="340" y2="200" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="353" y1="290" x2="323" y2="272" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="290" y1="353" x2="270" y2="322" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="200" y1="380" x2="200" y2="340" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="110" y1="353" x2="130" y2="322" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="47" y1="290" x2="77" y2="272" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="20" y1="200" x2="60" y2="200" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="47" y1="110" x2="77" y2="128" stroke="#C9A227" stroke-width="0.3"/>
+            <line x1="110" y1="47" x2="130" y2="78" stroke="#C9A227" stroke-width="0.3"/>
+          </svg>
+          <!-- Zodiac glyphs positioned around the wheel -->
+          <span class="zodiac-glyph" style="top:3%;left:50%;transform:translate(-50%,-50%)">&#9800;</span>
+          <span class="zodiac-glyph" style="top:14.6%;left:75%;transform:translate(-50%,-50%)">&#9801;</span>
+          <span class="zodiac-glyph" style="top:36.6%;left:91.7%;transform:translate(-50%,-50%)">&#9802;</span>
+          <span class="zodiac-glyph" style="top:50%;left:97%;transform:translate(-50%,-50%)">&#9803;</span>
+          <span class="zodiac-glyph" style="top:63.4%;left:91.7%;transform:translate(-50%,-50%)">&#9804;</span>
+          <span class="zodiac-glyph" style="top:85.4%;left:75%;transform:translate(-50%,-50%)">&#9805;</span>
+          <span class="zodiac-glyph" style="top:97%;left:50%;transform:translate(-50%,-50%)">&#9806;</span>
+          <span class="zodiac-glyph" style="top:85.4%;left:25%;transform:translate(-50%,-50%)">&#9807;</span>
+          <span class="zodiac-glyph" style="top:63.4%;left:8.3%;transform:translate(-50%,-50%)">&#9808;</span>
+          <span class="zodiac-glyph" style="top:50%;left:3%;transform:translate(-50%,-50%)">&#9809;</span>
+          <span class="zodiac-glyph" style="top:36.6%;left:8.3%;transform:translate(-50%,-50%)">&#9810;</span>
+          <span class="zodiac-glyph" style="top:14.6%;left:25%;transform:translate(-50%,-50%)">&#9811;</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#00D4C8" stroke-width="0.3"/><ellipse cx="50" cy="50" rx="40" ry="20" stroke="#00D4C8" stroke-width="0.3"/><ellipse cx="50" cy="50" rx="20" ry="40" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="4" fill="#00D4C8" opacity="0.3"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SEARCH, CALENDAR, ANALYTICS
+         ═══════════════════════════════════════════ -->
+    <section class="section brief-section reveal" aria-labelledby="tools-heading">
+      <p class="section-label">Search, Calendar &amp; Analytics</p>
+      <h2 id="tools-heading" class="section-heading">
+        Find anything.<br><em>See everything.</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Unified search across everything you've ever written. A visual
+          calendar with mood-colored days and moon phases. Toast notifications
+          for instant feedback on every action. Keyboard shortcuts for
+          power users (Cmd+K to search, Cmd+J to journal). <strong>Analytics
+          that show whether you're actually improving -- not just tracking.</strong>
+        </p>
+      </div>
+      <div class="brief-features reveal-children">
+        <div>
+          <div class="brief-feature-label">Unified Search</div>
+          <div class="brief-feature-desc">Journals, dreams, sessions, integration -- one search bar</div>
+        </div>
+        <div>
+          <div class="brief-feature-label">Visual Calendar</div>
+          <div class="brief-feature-desc">Mood-colored days, moon phases, activity indicators</div>
+        </div>
+        <div>
+          <div class="brief-feature-label">Analytics</div>
+          <div class="brief-feature-desc">Trend lines, correlations, AI-generated insights</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,10 90,50 50,90 10,50" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="20" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         SECURITY
+         ═══════════════════════════════════════════ -->
+    <section class="section privacy-section reveal" aria-labelledby="privacy-heading">
+      <p class="section-label">Security &amp; Privacy</p>
+      <h2 id="privacy-heading" class="section-heading">
+        Your consciousness is sacred.<br><em>So is your data.</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Two-factor authentication. Journal entries encrypted before they
+          touch our servers. Account lockout. Audit logging. Single-use tokens.
+          Content Security Policy. Login tokens stored in httpOnly cookies
+          that JavaScript can't read. Stripe webhook signatures cryptographically
+          verified. Change your password or email anytime from your profile.
+          <strong>Your consciousness is sacred --
+          so is your data.</strong>
+        </p>
+      </div>
+      <div class="privacy-grid reveal-children">
+        <div class="privacy-item">
+          <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+          <div class="privacy-label">Encrypted</div>
+          <div class="privacy-desc">End-to-end encryption for your most personal thoughts</div>
+        </div>
+        <div class="privacy-item">
+          <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="privacy-label">2FA Protected</div>
+          <div class="privacy-desc">TOTP authentication with any authenticator app</div>
+        </div>
+        <div class="privacy-item">
+          <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+          <div class="privacy-label">No Data Sales</div>
+          <div class="privacy-desc">Your inner world is not a product</div>
+        </div>
+        <div class="privacy-item">
+          <svg class="privacy-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          <div class="privacy-label">Full Deletion</div>
+          <div class="privacy-desc">Delete your account and every trace of your data</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="35" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="24" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="13" stroke="#00D4C8" stroke-width="0.3"/><circle cx="50" cy="50" r="4" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         CEREMONY ACCESSIBILITY
+         ═══════════════════════════════════════════ -->
+    <section class="section brief-section reveal" aria-labelledby="accessibility-heading">
+      <p class="section-label">Ceremony Accessibility</p>
+      <h2 id="accessibility-heading" class="section-heading">
+        Designed for<br><em>altered states</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          For deep experiences: extra-large text, maximum contrast, simplified
+          controls, and a visible <strong>"YOU ARE SAFE"</strong> anchor.
+          Screen stays awake. Voice clips with a single tap.
+          Every element optimized for when you need it most.
+        </p>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" stroke="#00D4C8" stroke-width="0.5"/><polygon points="50,20 80,35 80,65 50,80 20,65 20,35" stroke="#00D4C8" stroke-width="0.5"/><circle cx="50" cy="50" r="15" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         RECIPROCITY
+         ═══════════════════════════════════════════ -->
+    <section class="section reciprocity-section reveal" aria-labelledby="reciprocity-heading">
+      <p class="section-label">Reciprocity</p>
+      <h2 id="reciprocity-heading" class="section-heading">
+        Standing on the shoulders<br>of <span class="gold">ancestors</span>
+      </h2>
+      <div class="section-body">
+        <p>
+          This app draws on knowledge carried by indigenous cultures for
+          millennia. <strong>5% of all subscription revenue</strong> is donated
+          to organizations supporting indigenous rights and cultural preservation.
+        </p>
+      </div>
+      <div class="reciprocity-partners reveal-children">
+        <div class="reciprocity-partner">
+          <div class="reciprocity-partner-name">Chacruna Institute</div>
+          <div class="reciprocity-partner-desc">Bridging plant medicine communities and science</div>
+        </div>
+        <div class="reciprocity-partner">
+          <div class="reciprocity-partner-name">ICEERS</div>
+          <div class="reciprocity-partner-desc">International center for ethnobotanical research</div>
+        </div>
+        <div class="reciprocity-partner">
+          <div class="reciprocity-partner-name">Native American Rights Fund</div>
+          <div class="reciprocity-partner-desc">Legal representation for indigenous sovereignty</div>
+        </div>
+        <div class="reciprocity-partner">
+          <div class="reciprocity-partner-name">Firekeeper Collective</div>
+          <div class="reciprocity-partner-desc">Indigenous-led psychedelic education</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="25" stroke="#5B00D4" stroke-width="0.5"/><circle cx="50" cy="50" r="10" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         MULTI-PLATFORM
+         ═══════════════════════════════════════════ -->
+    <section class="section platform-section reveal" aria-labelledby="platform-heading">
+      <p class="section-label">Multi-Platform</p>
+      <h2 id="platform-heading" class="section-heading">
+        <em>Wherever</em> you are
+      </h2>
+      <div class="section-body">
+        <p>
+          Native iOS and Android. Full web experience. Progressive web app.
+          <strong>Your practice travels with you.</strong>
+        </p>
+      </div>
+      <div class="platform-icons reveal-children">
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/><path d="M15.5 8.5c.5-1.5-.5-3-1.5-3.5-.8 1.2-2 1.8-2 3.5s1.5 2.5 2 2.5c.3 0 .8-.5 1-1"/><path d="M12 11c-1 0-3 1.5-3 5s2 4.5 3 4.5 3-1.5 3-4.5-2-5-3-5z"/></svg>
+          <div class="platform-name">iOS</div>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="14" height="10" rx="2"/><path d="M8 9V6a4 4 0 018 0v3"/><circle cx="9" cy="6" r="0.5" fill="currentColor"/><circle cx="15" cy="6" r="0.5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="16"/><line x1="21" y1="12" x2="21" y2="16"/></svg>
+          <div class="platform-name">Android</div>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          <div class="platform-name">Web</div>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          <div class="platform-name">PWA</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="geo-separator" aria-hidden="true">
+      <svg viewBox="0 0 100 100" fill="none"><polygon points="50,5 61,40 97,40 68,60 79,95 50,73 21,95 32,60 3,40 39,40" stroke="#C9A227" stroke-width="0.5"/></svg>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PRICING
+         ═══════════════════════════════════════════ -->
+    <section class="section pricing-section reveal" aria-labelledby="pricing-heading">
+      <p class="section-label">Pricing</p>
+      <h2 id="pricing-heading" class="section-heading">
+        Safety is <em>always free</em>
+      </h2>
+      <div class="section-body">
+        <p>
+          Three tiers designed so that harm reduction tools are always accessible.
+          Deeper AI, advanced analytics, and the full integration companion
+          unlock as your practice grows.
+        </p>
+      </div>
+      <div class="pricing-tiers reveal-children">
+        <div class="pricing-tier">
+          <div class="pricing-tier-name">Free</div>
+          <div class="pricing-tier-price">$0</div>
+          <div class="pricing-tier-desc">Safety tools, basic journaling, breathwork, ceremony mode</div>
+        </div>
+        <div class="pricing-tier featured">
+          <div class="pricing-tier-name">Plus</div>
+          <div class="pricing-tier-price">$4.99/mo</div>
+          <div class="pricing-tier-desc">Unlimited entries, AI analysis, 3D spiral, dream analysis</div>
+        </div>
+        <div class="pricing-tier">
+          <div class="pricing-tier-name">Premium</div>
+          <div class="pricing-tier-price">$9.99/mo</div>
+          <div class="pricing-tier-desc">AI user model, integration companion, correlation matrix, pattern language</div>
+        </div>
+      </div>
+      <p style="margin-top: 32px; text-align: center;">
+        <a href="/features.html" style="font-size: 13px; color: var(--text-dim); border-bottom: 1px solid var(--text-faint); padding-bottom: 1px;">See full feature comparison</a>
+      </p>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         FINAL CTA
+         ═══════════════════════════════════════════ -->
+    <section class="section final-cta reveal" aria-labelledby="cta-heading">
+      <div class="final-cta-geometry" aria-hidden="true">
+        <svg viewBox="0 0 500 500" fill="none">
+          <circle cx="250" cy="250" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="250" cy="170" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="250" cy="330" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="319.28" cy="210" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="319.28" cy="290" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="180.72" cy="210" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="180.72" cy="290" r="80" stroke="#5B00D4" stroke-width="0.5"/>
+          <circle cx="250" cy="250" r="160" stroke="#5B00D4" stroke-width="0.3"/>
+          <circle cx="250" cy="250" r="240" stroke="#5B00D4" stroke-width="0.2"/>
+        </svg>
+      </div>
+      <h2 id="cta-heading" class="section-heading">
+        The journey begins<br>with a <em>single entry</em>
+      </h2>
+      <div class="email-capture">
+        <p>Not ready yet? Get insights delivered to your inbox.</p>
+        <form id="newsletter-form" class="newsletter-form">
+          <input type="email" placeholder="your@email.com" required />
+          <button type="submit">Subscribe</button>
+        </form>
+        <p id="newsletter-status" class="newsletter-status"></p>
+      </div>
+      <div class="final-cta-buttons">
+        <a href="/register" class="cta cta-primary">Create Your Account</a>
+      </div>
+      <p class="secondary-link">Already a traveler? <a href="/login">Sign in</a></p>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-brand">ENTHEO</div>
+    <div class="footer-tagline">The Divine Within</div>
+    <p class="footer-reciprocity" style="font-size: 12px; color: var(--text-dim); margin: 16px auto 0; max-width: 600px; text-align: center; line-height: 1.7;">
+      5% of subscription revenue supports indigenous communities through
+      <a href="https://chacruna.net" target="_blank" rel="noopener noreferrer">Chacruna Institute</a>,
+      <a href="https://www.iceers.org" target="_blank" rel="noopener noreferrer">ICEERS</a>,
+      <a href="https://www.narf.org" target="_blank" rel="noopener noreferrer">Native American Rights Fund</a>, and
+      <a href="https://firekeepercollective.org" target="_blank" rel="noopener noreferrer">Firekeeper Collective</a>.
+    </p>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/blog/microdosing-journal-guide.html">Microdosing Guide</a>
+      <a href="/blog/mood-tracking-ai.html">AI Mood Analysis</a>
+      <a href="/blog/breathwork-techniques.html">Breathwork</a>
+      <a href="/features.html">Features</a>
+    </nav>
+    <p class="footer-etymology">From the Greek <em>entheos</em> -- "the god within"</p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════
+       JAVASCRIPT
+       ═══════════════════════════════════════════ -->
+  <script>
+    // Intersection Observer for scroll-triggered animations
+    (function () {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.reveal, .reveal-children').forEach((el) => {
+        observer.observe(el);
+      });
+    })();
+
+    // Streaming text animation for AI demo
+    (function () {
+      const aiStream = document.getElementById('ai-stream');
+      if (!aiStream) return;
+
+      let animated = false;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && !animated) {
+              animated = true;
+              animateStream();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      observer.observe(aiStream);
+
+      function animateStream() {
+        const original = aiStream.innerHTML;
+        aiStream.style.opacity = '0';
+        aiStream.style.transition = 'opacity 0.6s';
+
+        setTimeout(() => {
+          aiStream.style.opacity = '1';
+        }, 300);
+      }
+    })();
+
+    // Parallax on hero geometry (subtle, mouse-based on desktop only)
+    (function () {
+      if (window.matchMedia('(pointer: fine)').matches) {
+        const geo = document.querySelector('.hero-geometry svg');
+        if (!geo) return;
+
+        document.addEventListener('mousemove', (e) => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 10;
+          const y = (e.clientY / window.innerHeight - 0.5) * 10;
+          geo.style.transform = `rotate(${parseFloat(getComputedStyle(geo).getPropertyValue('--r') || 0)}deg) translate(${x}px, ${y}px)`;
+        });
+      }
+    })();
+
+    // Newsletter form submission
+    (function () {
+      const form = document.getElementById('newsletter-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = e.target.querySelector('input').value;
+        const status = document.getElementById('newsletter-status');
+        try {
+          const res = await fetch('/api/v1/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'Entheo' },
+            body: JSON.stringify({ email }),
+          });
+          status.textContent = 'Welcome to the journey. Check your inbox.';
+          status.style.color = '#00D4C8';
+          e.target.reset();
+        } catch {
+          status.textContent = 'Something went wrong. Try again.';
+          status.style.color = '#FF4D6A';
+        }
+      });
+    })();
+
+    // Flower of Life — full viewport, electric pulses along arcs
+    (function() {
+      const canvas = document.getElementById('electric-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let vw, vh;
+
+      // Flower of Life: each circle has radius R, centers spaced R apart
+      // This creates the classic overlapping petal pattern
+      let R, circles, nodes;
+
+      function resize() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        vw = rect.width;
+        vh = rect.height;
+        canvas.width = vw * devicePixelRatio;
+        canvas.height = vh * devicePixelRatio;
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        R = Math.min(vw, vh) * 0.045;
+        build();
+      }
+
+      function build() {
+        circles = [];
+        // Hex grid of circle centers — spacing = R between centers
+        // This is the actual Flower of Life geometry
+        const dx = R;            // horizontal step within a row pair
+        const dy = R * Math.sqrt(3) / 2; // vertical step between rows
+        const cols = Math.ceil(vw / dx) + 6;
+        const rows = Math.ceil(vh / dy) + 6;
+        const ox = (vw - cols * dx) / 2;
+        const oy = (vh - rows * dy) / 2;
+
+        for (let row = -3; row < rows; row++) {
+          for (let col = -3; col < cols; col++) {
+            const x = ox + col * dx + (row % 2 !== 0 ? dx / 2 : 0);
+            const y = oy + row * dy;
+            circles.push({ x, y, r: R, glow: 0 });
+          }
+        }
+
+        // Find intersection points between overlapping circles
+        nodes = [];
+        for (let i = 0; i < circles.length; i++) {
+          for (let j = i + 1; j < circles.length; j++) {
+            const a = circles[i], b = circles[j];
+            const ddx = b.x - a.x, ddy = b.y - a.y;
+            const d = Math.sqrt(ddx * ddx + ddy * ddy);
+            if (d >= R * 2 || d < 0.01) continue; // only overlapping circles
+            const aa = (R * R - R * R + d * d) / (2 * d);
+            const h = Math.sqrt(Math.max(0, R * R - aa * aa));
+            const mx = a.x + aa * ddx / d, my = a.y + aa * ddy / d;
+            const p1 = { x: mx + h * ddy / d, y: my - h * ddx / d };
+            const p2 = { x: mx - h * ddy / d, y: my + h * ddx / d };
+            for (const p of [p1, p2]) {
+              if (p.x < -R || p.x > vw + R || p.y < -R || p.y > vh + R) continue;
+              if (!nodes.some(n => Math.abs(n.x - p.x) < 1.5 && Math.abs(n.y - p.y) < 1.5)) {
+                nodes.push({ x: p.x, y: p.y, glow: 0 });
+              }
+            }
+          }
+        }
+      }
+
+      // Pulses: each travels an arc along one circle
+      const pulses = [];
+
+      function spawnPulse() {
+        if (pulses.length > 12) return;
+        const ci = Math.floor(Math.random() * circles.length);
+        const c = circles[ci];
+        // Nodes on this circle
+        const on = [];
+        for (let i = 0; i < nodes.length; i++) {
+          const ddx = nodes[i].x - c.x, ddy = nodes[i].y - c.y;
+          if (Math.abs(Math.sqrt(ddx * ddx + ddy * ddy) - R) < 2) on.push(i);
+        }
+        if (on.length < 2) return;
+        // Sort by angle on this circle
+        on.sort((a, b) =>
+          Math.atan2(nodes[a].y - c.y, nodes[a].x - c.x) -
+          Math.atan2(nodes[b].y - c.y, nodes[b].x - c.x)
+        );
+        const si = Math.floor(Math.random() * on.length);
+        const ni = on[(si + 1) % on.length];
+        const a0 = Math.atan2(nodes[on[si]].y - c.y, nodes[on[si]].x - c.x);
+        const a1 = Math.atan2(nodes[ni].y - c.y, nodes[ni].x - c.x);
+        let sweep = a1 - a0;
+        if (sweep > Math.PI) sweep -= 2 * Math.PI;
+        if (sweep < -Math.PI) sweep += 2 * Math.PI;
+
+        pulses.push({
+          ci, cx: c.x, cy: c.y,
+          a0, sweep,
+          t: 0,
+          speed: 0.004 + Math.random() * 0.006,
+          startNode: on[si], endNode: ni,
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, vw, vh);
+
+        const time = performance.now() * 0.001;
+
+        // 1. Draw all circles with organic breathing — each circle fades in/out on its own slow sine wave
+        for (let ci = 0; ci < circles.length; ci++) {
+          const c = circles[ci];
+          // Each circle has a unique phase based on position
+          const phase = (c.x * 0.007 + c.y * 0.005 + ci * 0.3);
+          // Most circles stay dark. Only small patches glow — and when they glow, they actually glow.
+          const wave = Math.sin(time * 0.35 + phase) * 0.5 + 0.5; // 0-1
+          // Base: all circles always faintly visible. Breathing adds glow to patches.
+          const glow = Math.pow(wave, 5) * 0.1;
+          const breath = 0.035 + glow; // always visible at 0.035, patches glow up to 0.135
+          // Vertical fade — circles near bottom fade out organically
+          const yFade = c.y < vh * 0.45 ? 1 : Math.max(0, 1 - (c.y - vh * 0.45) / (vh * 0.5));
+          const alpha = breath * yFade;
+          if (alpha < 0.005) continue;
+          ctx.strokeStyle = `rgba(0, 212, 200, ${alpha})`;
+          ctx.lineWidth = 0.3;
+          ctx.beginPath();
+          ctx.arc(c.x, c.y, R, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // 2. Draw intersection nodes — subtle, light up softly when pulse passes
+        for (const n of nodes) {
+          n.glow *= 0.96;
+          if (n.glow > 0.1) {
+            const yFade = n.y < vh * 0.45 ? 1 : Math.max(0, 1 - (n.y - vh * 0.45) / (vh * 0.5));
+            if (yFade < 0.01) continue;
+            const s = 0.8 + n.glow * 1.5;
+            const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, s * 2);
+            g.addColorStop(0, `rgba(0, 212, 200, ${n.glow * 0.15 * yFade})`);
+            g.addColorStop(1, 'rgba(0, 212, 200, 0)');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, s * 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Bottom fade handled by per-circle yFade above + CSS ::before
+
+        // 3. Pulses travel along circle arcs
+        for (let i = pulses.length - 1; i >= 0; i--) {
+          const p = pulses[i];
+          p.t += p.speed;
+          const angle = p.a0 + p.sweep * p.t;
+          const px = p.cx + Math.cos(angle) * R;
+          const py = p.cy + Math.sin(angle) * R;
+
+          // Pulse — small traveling dot
+          const g = ctx.createRadialGradient(px, py, 0, px, py, 4);
+          g.addColorStop(0, 'rgba(0, 212, 200, 0.7)');
+          g.addColorStop(0.5, 'rgba(0, 212, 200, 0.15)');
+          g.addColorStop(1, 'rgba(0, 212, 200, 0)');
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(px, py, 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Light up intersections near the pulse
+          for (const n of nodes) {
+            const ddx = n.x - px, ddy = n.y - py;
+            const dist = Math.sqrt(ddx * ddx + ddy * ddy);
+            if (dist < R * 0.35) n.glow = Math.max(n.glow, 1 - dist / (R * 0.35));
+          }
+
+          // Light up the circle being traversed
+          // circles stay dim — only nodes light up
+
+          // When pulse reaches an intersection, chance to fork onto adjacent circle
+          if (p.t >= 1) {
+            // Find circles the end node sits on
+            const en = nodes[p.endNode];
+            if (en && Math.random() < 0.6) {
+              for (let ci2 = 0; ci2 < circles.length; ci2++) {
+                if (ci2 === p.ci) continue;
+                const c2 = circles[ci2];
+                const dd = Math.sqrt((en.x - c2.x) ** 2 + (en.y - c2.y) ** 2);
+                if (Math.abs(dd - R) < 2 && pulses.length < 15) {
+                  // Fork a new pulse onto this circle from this node
+                  const on2 = [];
+                  for (let ni = 0; ni < nodes.length; ni++) {
+                    const dx2 = nodes[ni].x - c2.x, dy2 = nodes[ni].y - c2.y;
+                    if (Math.abs(Math.sqrt(dx2 * dx2 + dy2 * dy2) - R) < 2) on2.push(ni);
+                  }
+                  if (on2.length >= 2) {
+                    on2.sort((a, b) =>
+                      Math.atan2(nodes[a].y - c2.y, nodes[a].x - c2.x) -
+                      Math.atan2(nodes[b].y - c2.y, nodes[b].x - c2.x)
+                    );
+                    const fromAngle = Math.atan2(en.y - c2.y, en.x - c2.x);
+                    // Find the next node after the entry point
+                    let bestIdx = 0;
+                    let bestDiff = Infinity;
+                    for (let k = 0; k < on2.length; k++) {
+                      const na = Math.atan2(nodes[on2[k]].y - c2.y, nodes[on2[k]].x - c2.x);
+                      let diff = na - fromAngle;
+                      if (diff < 0.01) diff += Math.PI * 2;
+                      if (diff < bestDiff) { bestDiff = diff; bestIdx = k; }
+                    }
+                    const nextNode = on2[bestIdx];
+                    const na = Math.atan2(nodes[nextNode].y - c2.y, nodes[nextNode].x - c2.x);
+                    let sw = na - fromAngle;
+                    if (sw > Math.PI) sw -= 2 * Math.PI;
+                    if (sw < -Math.PI) sw += 2 * Math.PI;
+                    if (Math.abs(sw) > 0.1) {
+                      pulses.push({
+                        ci: ci2, cx: c2.x, cy: c2.y,
+                        a0: fromAngle, sweep: sw,
+                        t: 0, speed: 0.0008 + Math.random() * 0.0012,
+                        startNode: -1, endNode: nextNode,
+                      });
+                    }
+                  }
+                  break; // only fork once
+                }
+              }
+            }
+            pulses.splice(i, 1);
+          }
+        }
+
+        if (Math.random() < 0.03) spawnPulse();
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      for (let i = 0; i < 5; i++) spawnPulse();
+      draw();
+    })();
+
+    // Page-wide embers
+    (function() {
+      const container = document.getElementById('page-embers');
+      if (!container) return;
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'page-ember';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (12 + Math.random() * 18) + 's';
+        p.style.animationDelay = (Math.random() * 15) + 's';
+        p.style.width = (1 + Math.random() * 2) + 'px';
+        p.style.height = p.style.width;
+        container.appendChild(p);
+      }
+    })();
+  </script>
+
+</body>
+</html>

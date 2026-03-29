@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding AIS Dark Transits: When Ships Go Silent — Deep Seer Blog</title>
+<meta name="description" content="What it means when a vessel turns off its AIS transponder, how to detect dark transits, and what the gap between last-known and reappearance positions reveals about illicit maritime activity.">
+<meta name="keywords" content="AIS dark transit, ship tracking, maritime OSINT, AIS transponder, sanctions evasion, illegal fishing, vessel monitoring">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/ais-dark-transits">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding AIS Dark Transits: When Ships Go Silent">
+<meta property="og:description" content="What it means when a vessel turns off its AIS transponder, how to detect dark transits, and what the gap between last-known and reappearance positions reveals.">
+<meta property="og:url" content="https://deepseer.io/blog/ais-dark-transits">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Understanding AIS Dark Transits: When Ships Go Silent">
+<meta name="twitter:description" content="What it means when a vessel turns off its AIS transponder, how to detect dark transits, and what the gap between last-known and reappearance positions reveals.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Understanding AIS Dark Transits: When Ships Go Silent",
+  "description": "What it means when a vessel turns off its AIS transponder, how to detect dark transits, and what the gap between last-known and reappearance positions reveals about illicit maritime activity.",
+  "datePublished": "2026-03-14",
+  "dateModified": "2026-03-14",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team",
+    "url": "https://deepseer.io"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/ais-dark-transits",
+  "image": "https://deepseer.io/icons/og-image.png"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(239,68,68,0.15);color:#ef4444}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px;line-height:1.15}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 10px}
+.article p{margin-bottom:16px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article li{margin-bottom:6px}
+.article code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.04);color:#9ca3af;font-size:14px;border-radius:0 8px 8px 0}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Security</span>
+  <h1>Understanding AIS Dark Transits: When Ships Go Silent</h1>
+  <div class="meta">Mar 14, 2026 &middot; 10 min read &middot; Deep Seer Team</div>
+
+  <p>Every vessel over 300 gross tonnage on international voyages is required by the International Maritime Organization to broadcast its position via the Automatic Identification System. AIS is the backbone of global maritime awareness: it transmits a vessel's MMSI, position, speed, heading, and destination at intervals ranging from two seconds to three minutes depending on speed and maneuver status. Terrestrial receivers along coastlines and satellite constellations in low-Earth orbit collect these signals, creating a near-complete picture of commercial shipping worldwide.</p>
+
+  <p>But the picture has holes. When a vessel stops broadcasting — intentionally or otherwise — it enters what analysts call a "dark transit." The gap between last-known and reappearance positions is one of the most valuable signals in maritime intelligence, and understanding how to detect, measure, and interpret these gaps is a foundational skill in OSINT.</p>
+
+  <h2>How AIS Works (and How It Fails)</h2>
+
+  <p>AIS operates on two VHF frequencies — 161.975 MHz and 162.025 MHz — using self-organizing time-division multiple access (SOTDMA). Class A transponders on commercial vessels broadcast at 12.5 watts with a typical range of 15-20 nautical miles to shore stations. Satellite AIS receivers (S-AIS) extend this to global coverage, though with latency of minutes to hours depending on the constellation.</p>
+
+  <p>Legitimate reasons for AIS gaps include equipment failure, passage through areas with poor satellite coverage (historically parts of the South Pacific and Indian Ocean), and brief signal collisions in congested waters where hundreds of vessels compete for transmission slots. These gaps are typically short — minutes to a few hours — and the vessel reappears at a position consistent with its last known course and speed.</p>
+
+  <p>The interesting cases are the ones where the gap doesn't add up.</p>
+
+  <h2>Why Vessels Go Dark</h2>
+
+  <p><strong>Sanctions evasion.</strong> Vessels transporting sanctioned cargo — Iranian crude oil, North Korean coal, Russian petroleum products — routinely disable AIS to obscure port calls. A tanker loading at Bandar Abbas doesn't want to broadcast its position to every compliance desk in the world. The vessel turns off its transponder before approaching the sanctioned port, conducts its operation, and reappears days later at a plausible location.</p>
+
+  <p><strong>Ship-to-ship transfers.</strong> Rather than calling at a sanctioned port directly, vessels rendezvous at sea to transfer cargo between hulls. Both vessels go dark, drift alongside each other for 12-48 hours, and separate. This is the dominant method for moving Iranian and Venezuelan crude to refineries in East Asia.</p>
+
+  <p><strong>Illegal fishing.</strong> Distant-water fishing fleets operating in another nation's exclusive economic zone without authorization will disable AIS to avoid detection. Illegal, unreported, and unregulated (IUU) fishing costs an estimated $23 billion annually, and the first step is always the same: go dark.</p>
+
+  <p><strong>Smuggling.</strong> Drug trafficking, arms transport, and human trafficking all rely on vessels that disappear from AIS at critical moments. Central American drug routes through the Eastern Pacific frequently show patterns of vessels going dark as they approach offload coordinates.</p>
+
+  <p><strong>Military operations.</strong> Naval vessels are not required to broadcast AIS and frequently don't, but they sometimes do during routine transits. When a warship that has been broadcasting AIS suddenly goes dark, it can indicate the start of an exercise or operational deployment.</p>
+
+  <h2>Detecting Dark Transits: The Gap Analysis</h2>
+
+  <p>The core technique is straightforward: for any vessel of interest, compute the time between consecutive AIS messages. Any gap exceeding a threshold — typically 6-12 hours for cargo vessels, adjusted for expected satellite coverage — triggers further analysis.</p>
+
+  <p>But the time gap alone is insufficient. The critical measurement is the <strong>position jump</strong>: the great-circle distance between the last position before the gap and the first position after. Compare this to the <strong>expected distance</strong>, calculated by multiplying the last reported speed by the gap duration.</p>
+
+  <p>Three patterns emerge:</p>
+
+  <ul>
+    <li><strong>Consistent distance:</strong> Actual distance roughly equals expected distance. The vessel likely had a legitimate equipment or coverage gap and continued on course. Low suspicion.</li>
+    <li><strong>Short distance, long gap:</strong> The vessel was stationary or nearly so during the dark period. This suggests it stopped somewhere — a port call, an anchorage, a ship-to-ship transfer — that it wanted to hide. High suspicion.</li>
+    <li><strong>Long distance, heading change:</strong> The vessel reappears far from where it should be based on its last course. It diverted during the gap, potentially visiting a location it wanted to conceal, then resumed a plausible heading. High suspicion.</li>
+  </ul>
+
+  <p>In Deep Seer, we ingest real-time AIS data via AISStream.io and persist vessel tracks to our database. The system automatically flags gaps exceeding configurable thresholds and computes both the position jump distance and the expected-versus-actual ratio, giving analysts an immediate visual indicator on the globe.</p>
+
+  <h2>Case Studies: What Dark Transits Reveal</h2>
+
+  <h3>North Korean Coal Exports</h3>
+
+  <p>UN sanctions prohibit North Korean coal exports, yet satellite imagery of Nampo and other DPRK ports consistently shows bulk carriers loading. The pattern is well-documented: a vessel departs a Chinese port, goes dark in the Yellow Sea, reappears days later heading back toward China with a deeper draft (indicating cargo). The gap analysis shows the vessel was stationary for 24-48 hours at a distance consistent with a North Korean anchorage. Multiple UN Panel of Experts reports have used exactly this methodology.</p>
+
+  <h3>Iranian Oil Ship-to-Ship Transfers</h3>
+
+  <p>Iranian crude oil moves to market through a chain of ship-to-ship transfers, often occurring off the coast of Malaysia, near Khor Fakkan (UAE), or in the waters south of Singapore. Tankers load at Kharg Island with AIS off, transfer to a second vessel in open water, which may transfer to a third before the oil reaches a refinery. Each vessel in the chain shows characteristic dark transit patterns: short distance gaps (vessels drifting alongside each other) with durations matching transfer operations.</p>
+
+  <h3>Russian Fleet Repositioning</h3>
+
+  <p>Following the invasion of Ukraine, Russian naval vessels and Russian-flagged commercial ships began exhibiting significantly increased dark transit behavior. Tankers carrying Russian crude above the G7 price cap routinely disable AIS for the loading and, in some cases, the entire laden voyage. Analysts track these vessels by correlating the last AIS position with satellite synthetic aperture radar (SAR) imagery, which detects vessels regardless of whether their transponder is active.</p>
+
+  <h2>What the Gap Distance Reveals</h2>
+
+  <p>The geometry of a dark transit constrains what happened during the gap. A vessel traveling at 12 knots can cover approximately 288 nautical miles in 24 hours. If the position jump is only 30 nautical miles, the vessel was either stationary or traveling at very low speed — anchored or conducting an operation. If the jump is 500 nautical miles but on a wildly different heading, the vessel made a diversion.</p>
+
+  <p>By drawing a circle centered on the last known position with a radius equal to the maximum possible distance (speed multiplied by gap duration), you define the area within which the vessel must have operated. Overlaying this area on a map reveals which ports, anchorages, or known transfer zones fall within range. This is the starting point for every maritime intelligence assessment of a dark transit.</p>
+
+  <p>More sophisticated analysis incorporates ocean current data, weather routing optimization (vessels save fuel by following favorable currents), and historical patterns for the specific vessel. A tanker that has visited the same anchorage off Khor Fakkan twelve times in the past year, going dark each time, tells a clear story even without direct observation of the transfer.</p>
+
+  <h2>Building a Detection Pipeline</h2>
+
+  <p>An effective dark transit detection system requires four components: a real-time AIS ingestion feed, persistent vessel track storage with indexed timestamps, a gap detection engine that runs against every tracked vessel on a schedule, and an alerting mechanism that notifies analysts when suspicious patterns are detected.</p>
+
+  <p>The gap detection logic is deceptively simple in code but demands careful tuning. Too-sensitive thresholds flood analysts with false positives from satellite coverage gaps. Too-loose thresholds miss short-duration transfers. The solution is vessel-type-specific thresholds: bulk carriers and tankers warrant tighter monitoring than fishing vessels, and known sanctioned routes deserve dedicated watchlists.</p>
+
+  <p>The real power comes from combining dark transit detection with other data layers — satellite imagery tasking based on gap alerts, correlation with port state control records, and cross-referencing vessel ownership through corporate registries. The AIS gap is the starting signal. Everything that follows is the investigation.</p>
+
+  <blockquote>The absence of a signal is itself a signal. In maritime intelligence, the moment a vessel goes dark is often the moment the story begins.</blockquote>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

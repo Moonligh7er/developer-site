@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSINT Investigation Workflow for Journalists — Deep Seer Blog</title>
+<meta name="description" content="A step-by-step framework for conducting open-source intelligence investigations for journalism. Covers hypothesis formation, data collection, verification, analysis, corroboration, and publication with tool recommendations at each stage.">
+<meta name="keywords" content="OSINT workflow, investigative journalism, open source intelligence, Berkeley Protocol, evidence verification, source protection, digital investigation">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/osint-investigation-workflow-journalists">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OSINT Investigation Workflow for Journalists">
+<meta property="og:description" content="A step-by-step framework for conducting open-source investigations — from hypothesis to evidence collection to publication, with tool recommendations at each stage.">
+<meta property="og:url" content="https://deepseer.io/blog/osint-investigation-workflow-journalists">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OSINT Investigation Workflow for Journalists">
+<meta name="twitter:description" content="A step-by-step framework for conducting open-source investigations — from hypothesis to evidence collection to publication, with tool recommendations at each stage.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "OSINT Investigation Workflow for Journalists",
+  "description": "A step-by-step framework for conducting open-source investigations — from hypothesis to evidence collection to publication, with tool recommendations at each stage.",
+  "url": "https://deepseer.io/blog/osint-investigation-workflow-journalists",
+  "datePublished": "2026-02-07",
+  "dateModified": "2026-02-07",
+  "author": {
+    "@type": "Person",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/osint-investigation-workflow-journalists"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article-header{max-width:720px;margin:0 auto;padding:60px 24px 0}
+.article-header h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#666;margin-bottom:32px;flex-wrap:wrap}
+.category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px}
+.cat-journalism{background:rgba(168,85,247,0.15);color:#a855f7}
+
+.article-body{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.article-body h2{font-size:22px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-0.02em}
+.article-body p{margin-bottom:16px;font-size:15px;color:#d1d5db}
+.article-body ul,.article-body ol{margin:0 0 16px 24px;font-size:15px}
+.article-body li{margin-bottom:8px}
+.article-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article-body pre{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:16px;font-size:13px;line-height:1.5}
+.article-body pre code{background:none;padding:0}
+.article-body strong{color:#fff}
+
+.cta-box{background:linear-gradient(135deg,rgba(0,204,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,204,255,0.2);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+.cta-box h3{color:#fff;font-size:18px;margin-bottom:8px}
+.cta-box p{color:#9ca3af;font-size:14px;margin-bottom:16px}
+.cta-box a.btn{display:inline-block;background:#00ccff;color:#000;font-weight:600;font-size:14px;padding:10px 24px;border-radius:8px;text-decoration:none}
+.cta-box a.btn:hover{background:#00b8e6;text-decoration:none}
+
+.related{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.related h3{color:#fff;font-size:16px;margin-bottom:16px}
+.related a{display:block;padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:14px;color:#00ccff}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article-header h1{font-size:28px}
+  .article-header{padding:40px 16px 0}
+  .article-body{padding:0 16px 60px}
+  .related{padding:0 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="article-header">
+  <h1>OSINT Investigation Workflow for Journalists</h1>
+  <div class="article-meta">
+    <span>Feb 7, 2026</span>
+    <span>&middot;</span>
+    <span>14 min read</span>
+    <span>&middot;</span>
+    <span class="category cat-journalism">Journalism</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+<p>Open-source intelligence investigations have moved from the periphery of journalism to its center. Bellingcat's identification of the Salisbury poisoning suspects, the New York Times Visual Investigations team's reconstruction of the Beirut explosion, and countless local investigative projects have demonstrated that publicly available data &mdash; satellite imagery, flight records, corporate filings, social media archives &mdash; can produce journalism as rigorous and impactful as traditional source-based reporting. But OSINT investigations require a structured methodology to produce evidence that withstands scrutiny. This guide presents a six-stage workflow grounded in the Berkeley Protocol on Digital Open Source Investigations, the standard adopted by the UN Human Rights Office.</p>
+
+<h2>Stage 1: Hypothesis Formation</h2>
+
+<p>Every investigation starts with a question, not a dataset. Before touching any tool, articulate what you are trying to determine and what evidence would confirm or refute it. This is not academic formality &mdash; it prevents the most common failure mode of OSINT investigations: pattern-matching noise into a narrative.</p>
+
+<p>Write your hypothesis in falsifiable terms: "Company X discharged pollutants above permit levels into River Y between March and June 2025" is testable. "Company X is polluting" is not specific enough to investigate rigorously. A good hypothesis identifies the actor, the action, the timeframe, and the geographic scope.</p>
+
+<p>At this stage, conduct a <strong>preliminary survey</strong>: spend 30-60 minutes searching public records, news archives, and social media to determine whether the hypothesis is plausible and whether sufficient open-source data exists to test it. Many investigations die here &mdash; and that is fine. It is better to abandon an uninvestigable hypothesis early than to spend weeks collecting data that cannot answer the question.</p>
+
+<p><strong>Tools for this stage:</strong> Google Advanced Search (date-restricted), LexisNexis/ProQuest for news archives, SEC EDGAR for corporate filings, PACER for court records, Google Scholar for prior research on the topic.</p>
+
+<h2>Stage 2: Collection</h2>
+
+<p>Once you have a viable hypothesis, systematic data collection begins. The Berkeley Protocol emphasizes two principles: <strong>collect broadly</strong> (capture more than you think you need, because sources disappear) and <strong>preserve everything</strong> (maintain original copies with metadata intact).</p>
+
+<p>For each piece of evidence, record the following metadata at the time of collection:</p>
+
+<pre><code>Collection Record:
+  Source URL:     https://example.com/document.pdf
+  Access Date:    2026-02-07T14:23:00Z
+  SHA-256 Hash:   a7f9e3b2c4d8...
+  Archive URL:    https://web.archive.org/web/20260207/...
+  Collector:      Jane Reporter
+  Method:         Direct download from public portal
+  Notes:          Found via FOIA request #2025-1234</code></pre>
+
+<p>Hash every file immediately upon download using SHA-256. This creates a cryptographic fingerprint that proves the file has not been altered since collection. If the evidence is later challenged, the hash provides a verifiable chain of integrity.</p>
+
+<p>For web content that may be deleted, use the Wayback Machine's "Save Page Now" feature or archive.today to create independent copies. For social media posts, use specialized archiving tools that capture the post, metadata (timestamp, account details, engagement metrics), and surrounding context.</p>
+
+<p><strong>Tools for this stage:</strong> Hunchly (browser-based evidence capture), Wayback Machine, archive.today, youtube-dl/yt-dlp for video preservation, ExifTool for metadata extraction, shasum/sha256sum for hashing. Deep Seer provides built-in evidence capture with automatic SHA-256 hashing and timestamping for geospatial data.</p>
+
+<h2>Stage 3: Verification</h2>
+
+<p>Verification is what separates journalism from rumor aggregation. Every piece of evidence must be tested for authenticity before it enters your analysis. The four dimensions of verification are:</p>
+
+<p><strong>Provenance:</strong> Where did this data come from? Can you trace it to a primary source? Government databases (FEC, EPA, SEC) are high-provenance sources. A screenshot shared on social media with no source attribution is low-provenance until verified independently.</p>
+
+<p><strong>Integrity:</strong> Has the data been altered? For images, reverse image search (Google, TinEye, Yandex) can find the earliest known version. EXIF data provides camera model, timestamp, and sometimes GPS coordinates, but EXIF is trivially editable. For documents, metadata analysis can reveal editing history. For satellite imagery, compare against multiple providers (Sentinel-2, Planet, Maxar) to confirm consistency.</p>
+
+<p><strong>Temporal accuracy:</strong> When was this data created? Timestamps in digital files can be forged, so corroborate with independent time indicators. For outdoor photos, shadow analysis can estimate the time of day (see our guide on shadow-based geolocation). For video, background audio, weather conditions visible in the frame, and the positions of celestial objects can provide temporal anchors.</p>
+
+<p><strong>Geographic accuracy:</strong> Where does this data represent? For geolocated content, verify that the claimed location matches visual features in the image or video. Use Google Earth, Mapillary, or street-level imagery to confirm landmarks, terrain, vegetation, and infrastructure.</p>
+
+<h2>Stage 4: Analysis</h2>
+
+<p>With verified data in hand, analysis involves finding patterns, connections, and anomalies that address your hypothesis. This is the stage where OSINT tools provide their greatest leverage.</p>
+
+<p><strong>Geospatial analysis:</strong> Plotting data points on a map reveals spatial patterns invisible in tabular data. Facility locations relative to residential areas, flight paths relative to borders, vessel tracks relative to sanctioned ports &mdash; geography is often the dimension that connects otherwise unrelated data points.</p>
+
+<p><strong>Temporal analysis:</strong> Timeline construction shows sequences of events. When did the permit violation occur relative to the lobbying expenditure? Did the flight pattern change before or after the diplomatic meeting? Time-series analysis of ADS-B data, AIS tracks, or satellite imagery revisits can reveal behavioral changes that correlate with known events.</p>
+
+<p><strong>Network analysis:</strong> Mapping relationships between entities &mdash; corporate ownership structures, donor networks, co-travel patterns &mdash; reveals connections that individual records do not. A company with a clean public image may share directors with a firm under sanctions. A politician's top donors may all be executives at subsidiaries of the same parent corporation.</p>
+
+<p><strong>Tools for this stage:</strong> Deep Seer for geospatial/temporal overlay of multiple data types, Maltego for network graphing, i2 Analyst's Notebook for timeline analysis, QGIS for custom geospatial analysis, Python/pandas for large-scale data processing, Gephi for network visualization.</p>
+
+<h2>Stage 5: Corroboration</h2>
+
+<p>The Berkeley Protocol requires that no conclusion rest on a single piece of evidence. Corroboration means finding independent evidence that confirms or refutes what your analysis suggests. This is the discipline that distinguishes rigorous investigation from speculation.</p>
+
+<p>Independent means <strong>truly independent</strong> &mdash; not two social media posts from the same event (which may share a source), but a satellite image that confirms what a ground-level photo shows, or a financial record that confirms what a human source described, or a shipping manifest that matches an AIS track.</p>
+
+<p>Apply the <strong>two-source minimum rule</strong> for any factual claim in your publication. For extraordinary claims, require three or more independent sources. Document the corroboration chain explicitly in your working notes:</p>
+
+<pre><code>Claim: Facility X discharged into River Y on May 12
+Evidence 1: Sentinel-2 satellite imagery showing discolored
+            water plume at discharge point (captured May 12, 14:20 UTC)
+Evidence 2: EPA ECHO inspection report dated May 15 noting
+            "unauthorized discharge" (NPDES permit #TX0012345)
+Evidence 3: Downstream USGS water quality station showing
+            ammonia spike at 18:00 on May 12
+Corroboration: Strong — three independent sources confirm
+               the event via different collection methods</code></pre>
+
+<p>When evidence conflicts, do not discard the outlier without investigation. Conflicting evidence often indicates that your hypothesis needs refinement, not that one source is wrong.</p>
+
+<h2>Stage 6: Publication and Source Protection</h2>
+
+<p>Before publication, conduct a <strong>harm assessment</strong>. OSINT investigations can inadvertently endanger sources, subjects, or bystanders. Satellite imagery of a refugee camp at high resolution could help hostile actors target it. Publishing the home address of a whistleblower you identified through corporate records could put them at risk. The fact that information is publicly available does not mean republishing it is always ethical.</p>
+
+<p>For source protection, strip metadata from any files you publish. EXIF data in photos can contain GPS coordinates, camera serial numbers, and software version strings that identify the device and location. Use <code>exiftool -all= photo.jpg</code> to remove all metadata, or use a purpose-built tool like MAT2 (Metadata Anonymisation Toolkit).</p>
+
+<p>Structure your publication to show your work. Readers &mdash; and subjects of the investigation &mdash; should be able to follow your reasoning and verify your evidence independently. Link to primary sources whenever possible. Describe your methodology explicitly. This transparency is both an ethical obligation and a practical defense against legal challenges.</p>
+
+<p>Finally, <strong>preserve your evidence archive</strong> indefinitely. Investigations sometimes become relevant again years later, when new events provide additional context or when legal proceedings require the underlying data. A well-organized, hashed, and timestamped evidence archive is a professional asset that appreciates over time.</p>
+
+<div class="cta-box">
+  <h3>Try it in Deep Seer</h3>
+  <p>Deep Seer provides a complete investigation workflow with built-in evidence capture, SHA-256 hashing, chain-of-custody tracking, multi-source geospatial analysis, and legal-grade export formats.</p>
+  <a href="/" class="btn">Launch Deep Seer</a>
+</div>
+
+</div>
+
+<div class="related">
+  <h3>Related Articles</h3>
+  <a href="/blog/evidence-chain-holds-up-in-court">Building an Evidence Chain That Holds Up in Court</a>
+  <a href="/blog/verify-photo-location-shadow-analysis">How to Verify the Location of a Photo Using Shadow Analysis</a>
+  <a href="/blog/how-to-file-foia-request">How to File a FOIA Request and Actually Get Results</a>
+  <a href="/blog/reading-the-absence">Reading the Absence: What Missing Data Tells Intelligence Analysts</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

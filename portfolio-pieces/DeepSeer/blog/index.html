@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Seer Blog — OSINT Intelligence & Geospatial Analysis</title>
+<meta name="description" content="Expert guides on open-source intelligence, geospatial analysis, satellite tracking, environmental monitoring, and investigative techniques. From the team behind Deep Seer.">
+<meta name="keywords" content="OSINT blog, geospatial intelligence, satellite tracking, flight tracking, environmental monitoring, investigative journalism, open source intelligence">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Deep Seer Blog — OSINT Intelligence & Geospatial Analysis">
+<meta property="og:description" content="Expert guides on open-source intelligence, geospatial analysis, and investigative techniques.">
+<meta property="og:url" content="https://deepseer.io/blog">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Deep Seer Blog">
+<meta name="twitter:description" content="Expert guides on OSINT, geospatial analysis, and investigative techniques.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Deep Seer Blog",
+  "description": "Expert guides on open-source intelligence, geospatial analysis, and investigative techniques.",
+  "url": "https://deepseer.io/blog",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.hero{max-width:900px;margin:0 auto;padding:60px 24px 40px;text-align:center}
+.hero h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px}
+.hero p{color:#888;font-size:16px;max-width:600px;margin:0 auto}
+
+.posts{max-width:900px;margin:0 auto;padding:0 24px 80px;display:flex;flex-direction:column;gap:16px}
+
+.post-card{display:block;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:24px;transition:border-color 0.2s,background 0.2s;text-decoration:none}
+.post-card:hover{border-color:rgba(0,204,255,0.3);background:rgba(255,255,255,0.05);text-decoration:none}
+.post-card .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:8px}
+.post-card h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:-0.02em}
+.post-card .excerpt{color:#9ca3af;font-size:14px;line-height:1.6;margin-bottom:12px}
+.post-card .meta{display:flex;gap:12px;font-size:12px;color:#666}
+.post-card .meta span{display:flex;align-items:center;gap:4px}
+
+.cat-security{background:rgba(239,68,68,0.15);color:#ef4444}
+.cat-environment{background:rgba(34,197,94,0.15);color:#22c55e}
+.cat-accountability{background:rgba(245,158,11,0.15);color:#f59e0b}
+.cat-journalism{background:rgba(168,85,247,0.15);color:#a855f7}
+.cat-technical{background:rgba(0,204,255,0.15);color:#00ccff}
+.cat-civic{background:rgba(236,72,153,0.15);color:#ec4899}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .hero h1{font-size:28px}
+  .hero{padding:40px 16px 24px}
+  .posts{padding:0 16px 60px}
+  .post-card h2{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="hero">
+  <h1>The Deep Seer Blog</h1>
+  <p>Expert guides on open-source intelligence, geospatial analysis, satellite tracking, environmental monitoring, and investigative techniques.</p>
+</div>
+
+<div class="posts">
+
+  <a href="/blog/causal-inference-geospatial-osint" class="post-card">
+    <span class="category cat-technical">Technical</span>
+    <h2>Causal Inference Methods for Geospatial OSINT Data</h2>
+    <p class="excerpt">Move beyond correlation to establish causation. Granger causality, difference-in-differences, regression discontinuity, and synthetic control methods applied to intelligence data.</p>
+    <div class="meta"><span>Mar 28, 2026</span><span>·</span><span>12 min read</span></div>
+  </a>
+
+  <a href="/blog/rendering-8000-satellites-browser" class="post-card">
+    <span class="category cat-technical">Technical</span>
+    <h2>Rendering 8,000 Satellites in a Browser Without Melting Your GPU</h2>
+    <p class="excerpt">How we render thousands of orbital objects at 60fps using SGP4 propagation, WebGL instancing, level-of-detail switching, and smart culling on CesiumJS.</p>
+    <div class="meta"><span>Mar 28, 2026</span><span>·</span><span>10 min read</span></div>
+  </a>
+
+  <a href="/blog/cesiumjs-vs-mapbox-vs-google-earth" class="post-card">
+    <span class="category cat-technical">Technical</span>
+    <h2>CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine</h2>
+    <p class="excerpt">A practitioner's comparison of the three major web globe engines — rendering quality, data layer support, licensing, performance, and real-world trade-offs.</p>
+    <div class="meta"><span>Mar 21, 2026</span><span>·</span><span>14 min read</span></div>
+  </a>
+
+  <a href="/blog/detect-gps-spoofing-flight-data" class="post-card">
+    <span class="category cat-security">Security</span>
+    <h2>How to Detect GPS Spoofing Using Commercial Flight Data</h2>
+    <p class="excerpt">ADS-B navigation integrity values from commercial aircraft can reveal GPS interference zones in real-time. Here's how to read the signals.</p>
+    <div class="meta"><span>Mar 21, 2026</span><span>·</span><span>9 min read</span></div>
+  </a>
+
+  <a href="/blog/reading-the-absence" class="post-card">
+    <span class="category cat-security">Security</span>
+    <h2>Reading the Absence: What Missing Data Tells Intelligence Analysts</h2>
+    <p class="excerpt">The hole in the map IS the signal. How traffic disappearances, AIS gaps, and reporting silences can reveal more than the data itself.</p>
+    <div class="meta"><span>Mar 14, 2026</span><span>·</span><span>11 min read</span></div>
+  </a>
+
+  <a href="/blog/ais-dark-transits" class="post-card">
+    <span class="category cat-security">Security</span>
+    <h2>Understanding AIS Dark Transits: When Ships Go Silent</h2>
+    <p class="excerpt">What it means when a vessel turns off its AIS transponder, how to detect it, and what the gap between last-known and reappearance positions reveals.</p>
+    <div class="meta"><span>Mar 14, 2026</span><span>·</span><span>10 min read</span></div>
+  </a>
+
+  <a href="/blog/environmental-justice-101" class="post-card">
+    <span class="category cat-civic">Civic Research</span>
+    <h2>Environmental Justice 101: Who Bears the Pollution Burden</h2>
+    <p class="excerpt">Low-income communities and communities of color are disproportionately exposed to pollution. Here's how to use open data to see it for yourself.</p>
+    <div class="meta"><span>Mar 7, 2026</span><span>·</span><span>13 min read</span></div>
+  </a>
+
+  <a href="/blog/congress-member-stock-trades" class="post-card">
+    <span class="category cat-accountability">Accountability</span>
+    <h2>How to Find Out What Your Congress Member Is Trading</h2>
+    <p class="excerpt">STOCK Act disclosures are public record. Here's how to find, interpret, and flag suspicious trades by senators and representatives.</p>
+    <div class="meta"><span>Mar 7, 2026</span><span>·</span><span>8 min read</span></div>
+  </a>
+
+  <a href="/blog/lobbying-regulatory-outcomes" class="post-card">
+    <span class="category cat-accountability">Accountability</span>
+    <h2>The Relationship Between Lobbying Spend and Regulatory Outcomes</h2>
+    <p class="excerpt">Does lobbying actually work? We cross-reference Senate LDA filings with regulatory changes to find out.</p>
+    <div class="meta"><span>Feb 28, 2026</span><span>·</span><span>11 min read</span></div>
+  </a>
+
+  <a href="/blog/is-your-drinking-water-safe" class="post-card">
+    <span class="category cat-environment">Environment</span>
+    <h2>Is Your Drinking Water Safe? How to Check Water Quality Data</h2>
+    <p class="excerpt">USGS and EPA publish water quality measurements for thousands of stations. Here's how to find your nearest station and understand the readings.</p>
+    <div class="meta"><span>Feb 28, 2026</span><span>·</span><span>9 min read</span></div>
+  </a>
+
+  <a href="/blog/monitoring-deforestation-satellite-data" class="post-card">
+    <span class="category cat-environment">Environment</span>
+    <h2>Monitoring Deforestation From Your Desk With Satellite Data</h2>
+    <p class="excerpt">Global Forest Watch GLAD alerts detect tree cover loss within days. Here's how to monitor any forest on Earth for illegal logging and land clearing.</p>
+    <div class="meta"><span>Feb 21, 2026</span><span>·</span><span>10 min read</span></div>
+  </a>
+
+  <a href="/blog/how-to-file-foia-request" class="post-card">
+    <span class="category cat-journalism">Journalism</span>
+    <h2>How to File a FOIA Request and Actually Get Results</h2>
+    <p class="excerpt">A practical guide to Freedom of Information Act requests — what to ask for, which agencies respond, how to appeal denials, and tools that track your requests.</p>
+    <div class="meta"><span>Feb 21, 2026</span><span>·</span><span>12 min read</span></div>
+  </a>
+
+  <a href="/blog/evidence-chain-holds-up-in-court" class="post-card">
+    <span class="category cat-journalism">Journalism</span>
+    <h2>Building an Evidence Chain That Holds Up in Court</h2>
+    <p class="excerpt">SHA-256 hashing, RFC 3161 timestamping, and the Berkeley Protocol — how digital evidence integrity works and why it matters for legal proceedings.</p>
+    <div class="meta"><span>Feb 14, 2026</span><span>·</span><span>11 min read</span></div>
+  </a>
+
+  <a href="/blog/verify-photo-location-shadow-analysis" class="post-card">
+    <span class="category cat-journalism">Journalism</span>
+    <h2>How to Verify the Location of a Photo Using Shadow Analysis</h2>
+    <p class="excerpt">Shadows don't lie. Using sun position calculations and shadow angles to determine when and where a photograph was taken — a core chronolocation technique.</p>
+    <div class="meta"><span>Feb 14, 2026</span><span>·</span><span>10 min read</span></div>
+  </a>
+
+  <a href="/blog/monitoring-gps-jamming-conflict-zones" class="post-card">
+    <span class="category cat-security">Security</span>
+    <h2>Monitoring GPS Jamming Near Conflict Zones</h2>
+    <p class="excerpt">GPS interference is electronic warfare happening in real-time. Here's how to monitor it using open data from aviation, maritime, and crowdsourced reports.</p>
+    <div class="meta"><span>Feb 7, 2026</span><span>·</span><span>9 min read</span></div>
+  </a>
+
+  <a href="/blog/osint-investigation-workflow-journalists" class="post-card">
+    <span class="category cat-journalism">Journalism</span>
+    <h2>OSINT Investigation Workflow for Journalists</h2>
+    <p class="excerpt">A step-by-step framework for conducting open-source investigations — from hypothesis to evidence collection to publication, with tool recommendations at each stage.</p>
+    <div class="meta"><span>Feb 7, 2026</span><span>·</span><span>14 min read</span></div>
+  </a>
+
+  <a href="/blog/following-campaign-finance-money-flows" class="post-card">
+    <span class="category cat-accountability">Accountability</span>
+    <h2>Following Campaign Finance Money Flows</h2>
+    <p class="excerpt">FEC data is public but dense. Here's how to trace donations from individuals and PACs to candidates, and spot patterns between money and policy outcomes.</p>
+    <div class="meta"><span>Jan 31, 2026</span><span>·</span><span>11 min read</span></div>
+  </a>
+
+  <a href="/blog/mapping-epa-violations-near-home" class="post-card">
+    <span class="category cat-environment">Environment</span>
+    <h2>Mapping EPA Violations Near Your Home</h2>
+    <p class="excerpt">Every factory, plant, and facility that reports toxic releases to the EPA is public record. Here's how to find what's polluting near you and what they've been fined.</p>
+    <div class="meta"><span>Jan 31, 2026</span><span>·</span><span>9 min read</span></div>
+  </a>
+
+  <a href="/blog/track-military-aircraft-real-time" class="post-card">
+    <span class="category cat-security">Security</span>
+    <h2>How to Track Military Aircraft in Real-Time</h2>
+    <p class="excerpt">ADS-B data from adsb.lol provides real-time positions of military aircraft worldwide. Here's how to identify tankers, fighters, surveillance planes, and what their patterns mean.</p>
+    <div class="meta"><span>Jan 24, 2026</span><span>·</span><span>10 min read</span></div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

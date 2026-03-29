@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Verify the Location of a Photo Using Shadow Analysis — Deep Seer Blog</title>
+<meta name="description" content="Learn to use shadow analysis for photo verification and chronolocation. Covers sun position calculation, shadow angle measurement, the SunCalc algorithm, estimating time of day from shadow length and direction, and practical geolocation workflows.">
+<meta name="keywords" content="shadow analysis, chronolocation, geolocation, photo verification, sun position, SunCalc, OSINT geolocation, shadow angle, photo forensics">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/verify-photo-location-shadow-analysis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Verify the Location of a Photo Using Shadow Analysis">
+<meta property="og:description" content="Shadows don't lie. Using sun position calculations and shadow angles to determine when and where a photograph was taken — a core chronolocation technique.">
+<meta property="og:url" content="https://deepseer.io/blog/verify-photo-location-shadow-analysis">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Verify the Location of a Photo Using Shadow Analysis">
+<meta name="twitter:description" content="Shadows don't lie. Using sun position calculations and shadow angles to determine when and where a photograph was taken — a core chronolocation technique.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Verify the Location of a Photo Using Shadow Analysis",
+  "description": "Shadows don't lie. Using sun position calculations and shadow angles to determine when and where a photograph was taken — a core chronolocation technique.",
+  "url": "https://deepseer.io/blog/verify-photo-location-shadow-analysis",
+  "datePublished": "2026-02-14",
+  "dateModified": "2026-02-14",
+  "author": {
+    "@type": "Person",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/verify-photo-location-shadow-analysis"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article-header{max-width:720px;margin:0 auto;padding:60px 24px 0}
+.article-header h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#666;margin-bottom:32px;flex-wrap:wrap}
+.category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px}
+.cat-journalism{background:rgba(168,85,247,0.15);color:#a855f7}
+
+.article-body{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.article-body h2{font-size:22px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-0.02em}
+.article-body p{margin-bottom:16px;font-size:15px;color:#d1d5db}
+.article-body ul,.article-body ol{margin:0 0 16px 24px;font-size:15px}
+.article-body li{margin-bottom:8px}
+.article-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article-body pre{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:16px;font-size:13px;line-height:1.5}
+.article-body pre code{background:none;padding:0}
+.article-body strong{color:#fff}
+
+.cta-box{background:linear-gradient(135deg,rgba(0,204,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,204,255,0.2);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+.cta-box h3{color:#fff;font-size:18px;margin-bottom:8px}
+.cta-box p{color:#9ca3af;font-size:14px;margin-bottom:16px}
+.cta-box a.btn{display:inline-block;background:#00ccff;color:#000;font-weight:600;font-size:14px;padding:10px 24px;border-radius:8px;text-decoration:none}
+.cta-box a.btn:hover{background:#00b8e6;text-decoration:none}
+
+.related{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.related h3{color:#fff;font-size:16px;margin-bottom:16px}
+.related a{display:block;padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:14px;color:#00ccff}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article-header h1{font-size:28px}
+  .article-header{padding:40px 16px 0}
+  .article-body{padding:0 16px 60px}
+  .related{padding:0 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="article-header">
+  <h1>How to Verify the Location of a Photo Using Shadow Analysis</h1>
+  <div class="article-meta">
+    <span>Feb 14, 2026</span>
+    <span>&middot;</span>
+    <span>10 min read</span>
+    <span>&middot;</span>
+    <span class="category cat-journalism">Journalism</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+<p>In 2014, Bellingcat used shadow analysis on a single photograph to help establish that a Buk missile launcher was transported through eastern Ukraine on the day Malaysia Airlines Flight 17 was shot down. The technique &mdash; measuring shadow angles to determine sun position, then calculating what time and location that sun position corresponds to &mdash; is one of the most powerful chronolocation methods in the OSINT toolkit. It requires no special equipment beyond a photograph with visible shadows, some geometry, and a sun position calculator. This guide covers the mathematics, the tools, and the practical workflow for shadow-based photo verification.</p>
+
+<h2>The Physics: How Shadows Encode Time and Place</h2>
+
+<p>A shadow is a projection of an object onto a surface, cast by a light source at a specific angle. For outdoor photographs, that light source is the sun. The sun's position in the sky is described by two angles:</p>
+
+<p><strong>Azimuth</strong> is the compass direction of the sun, measured clockwise from true north. At sunrise, the azimuth might be 80 degrees (east-northeast); at solar noon it varies by latitude and season; at sunset it might be 280 degrees (west-northwest).</p>
+
+<p><strong>Altitude (elevation)</strong> is the angle of the sun above the horizon. At sunrise/sunset, altitude is 0 degrees. At solar noon in the tropics, it can reach 90 degrees (directly overhead). The altitude determines the <em>length</em> of shadows, while the azimuth determines their <em>direction</em>.</p>
+
+<p>The critical insight is that for any given location on Earth, the sun's azimuth and altitude are a deterministic function of three variables: latitude, longitude, and time (UTC). If you can measure the sun's position from a photograph, you can solve for the time (if you know the location) or constrain the location (if you know the time).</p>
+
+<h2>Measuring Shadow Direction (Azimuth)</h2>
+
+<p>Shadow direction is the easier measurement. A vertical object &mdash; a pole, a person standing upright, a building corner &mdash; casts a shadow that points directly away from the sun. The shadow azimuth equals the sun's azimuth plus 180 degrees (since the shadow points opposite to the light source).</p>
+
+<p>To measure the shadow azimuth from a photograph:</p>
+
+<ol>
+  <li>Identify a vertical object and its shadow on a horizontal surface (ground, rooftop). Avoid slopes, which distort shadow direction.</li>
+  <li>Determine the cardinal orientation of the scene. Look for clues: satellite dish orientation (pointing toward the equator in mid-latitudes), road layouts matching satellite imagery, text on signs (which establishes which direction the camera is facing).</li>
+  <li>Measure the angle of the shadow relative to north. If you can identify the location on Google Earth or a similar tool, you can overlay the shadow angle on the satellite view to determine the compass bearing.</li>
+</ol>
+
+<p>The sun azimuth is then: <code>shadow_azimuth - 180</code> (or <code>+ 180</code> if the result is negative).</p>
+
+<h2>Measuring Shadow Length (Altitude)</h2>
+
+<p>Shadow length encodes the sun's altitude through basic trigonometry. For a vertical object of known height <em>h</em> casting a shadow of length <em>s</em> on a flat surface:</p>
+
+<pre><code>sun_altitude = arctan(h / s)
+
+Example:
+  Person height: 1.75 meters
+  Shadow length: 2.50 meters
+  Sun altitude: arctan(1.75 / 2.50) = arctan(0.70) = 35.0 degrees</code></pre>
+
+<p>You need either the object's actual height or a ratio. If you can identify a standard object in the image &mdash; a parking meter (roughly 1.2m), a standard door (2.0m), a fire hydrant (0.6m) &mdash; you can estimate height. Alternatively, if two objects of different known heights are visible, you can use the ratio of their shadow lengths to cross-check without knowing the absolute scale.</p>
+
+<p>In practice, measuring shadow length from a single photo is tricky because perspective distortion compresses or stretches distances. If the camera is at an oblique angle to the shadow, the apparent length in the image does not equal the true ground length. There are two approaches to handle this:</p>
+
+<p><strong>Method 1 &mdash; Overhead imagery:</strong> If satellite or drone imagery of the same scene is available (even from a different time), you can measure true shadow lengths directly from the overhead view. Google Earth's historical imagery slider can sometimes provide imagery from the same day.</p>
+
+<p><strong>Method 2 &mdash; Perspective correction:</strong> If you can identify at least four points in the photo whose real-world positions you know (e.g., corners of a building visible in satellite imagery), you can compute a homography matrix that maps image coordinates to ground-plane coordinates. This corrects for perspective distortion and allows accurate shadow measurement from any camera angle.</p>
+
+<h2>The SunCalc Algorithm</h2>
+
+<p>With the sun's azimuth and altitude measured, you need to compute what time and location those values correspond to. The SunCalc library (available in JavaScript, Python, and other languages) implements the standard solar position algorithm based on Jean Meeus's <em>Astronomical Algorithms</em>:</p>
+
+<pre><code>import { getPosition } from 'suncalc';
+
+// Given a candidate location and time, compute sun position
+const date = new Date('2026-02-14T10:30:00Z');
+const lat = 48.8566;  // Paris
+const lng = 2.3522;
+const pos = getPosition(date, lat, lng);
+
+console.log({
+  azimuth: pos.azimuth * 180 / Math.PI + 180,  // degrees from north
+  altitude: pos.altitude * 180 / Math.PI         // degrees above horizon
+});
+// Output: { azimuth: 161.3, altitude: 24.7 }</code></pre>
+
+<p>The algorithm accounts for the Earth's axial tilt (obliquity of the ecliptic), orbital eccentricity, and the equation of time. It is accurate to within approximately 0.01 degrees for dates within a few centuries of the present.</p>
+
+<p>The practical workflow is iterative: you measure the shadow azimuth and altitude from the photo, then test candidate locations and times against the SunCalc output until you find a match. If you know the location but not the time, you sweep through the hours of the day until the computed azimuth and altitude match your measurements. If you know the approximate date and time but not the location, you sweep across candidate latitudes and longitudes.</p>
+
+<h2>Practical Workflow: Step by Step</h2>
+
+<p><strong>Step 1: Identify candidate objects.</strong> Look for vertical objects with clear, complete shadows on flat ground. Flagpoles are ideal. Utility poles, traffic signs, and people standing upright also work. Avoid trees (complex shadow shape), objects on slopes, and shadows that extend under other objects (obscured length).</p>
+
+<p><strong>Step 2: Establish orientation.</strong> Determine which direction is north in the image. Methods include: matching visible features to satellite imagery (roads, buildings, rivers), reading signs or license plates to determine the camera's facing direction, observing satellite dish pointing directions, or using the known geometry of a building whose floor plan you can find.</p>
+
+<p><strong>Step 3: Measure shadow azimuth.</strong> Using a protractor overlay (many image editing tools support angle measurement), measure the angle of the shadow relative to your established north direction. This gives you the sun's azimuth (shadow direction + 180 degrees).</p>
+
+<p><strong>Step 4: Measure shadow length ratio.</strong> If you can identify the object's height (even approximately), measure the shadow length in the image. Apply perspective correction if the camera angle is oblique. Calculate the sun altitude using <code>arctan(height / shadow_length)</code>.</p>
+
+<p><strong>Step 5: Run SunCalc for candidate locations and times.</strong> If you have a candidate location (from other geolocation clues like landmarks, language on signs, terrain), sweep through times on the claimed date. Look for the time where the computed azimuth and altitude match your measurements within a few degrees. If both azimuth and altitude match at the same time for the same location, you have strong confirmation.</p>
+
+<p><strong>Step 6: Assess uncertainty.</strong> Shadow measurements from photos typically have uncertainties of 3-5 degrees for azimuth and 2-4 degrees for altitude, depending on image quality and the precision of your measurements. Report your results with error bars, not false precision.</p>
+
+<h2>Limitations and Caveats</h2>
+
+<p>Shadow analysis cannot determine location uniquely from a single photo without additional constraints. For any measured sun position at a given time, there is a curve of latitude/longitude pairs that produce the same sun angles (a "sun position isoline"). You need additional information &mdash; visual landmarks, language on signs, vegetation type, road markings, architecture style &mdash; to narrow the location from this curve to a point.</p>
+
+<p>Overcast conditions eliminate usable shadows. Indoor photographs, night images, and polar regions during summer (24-hour daylight with very low sun angles) present challenges. Photos taken near solar noon in the tropics produce very short shadows that are difficult to measure accurately.</p>
+
+<p>Reflective surfaces, artificial lighting, and photographer-placed lighting can create misleading shadows. Always verify that shadows are solar by checking consistency across multiple objects in the scene &mdash; all shadows from sunlight should be parallel (for objects at similar distances from the camera) and point in the same direction.</p>
+
+<p>Despite these limitations, shadow analysis remains one of the most reliable chronolocation techniques because it is grounded in physics rather than metadata (which can be forged) or visual matching (which depends on database coverage). The sun's position is computable and falsifiable.</p>
+
+<div class="cta-box">
+  <h3>Try it in Deep Seer</h3>
+  <p>Deep Seer integrates sun position calculations with geospatial analysis, letting you overlay shadow angles on the 3D globe to verify photo locations and timestamps against solar geometry.</p>
+  <a href="/" class="btn">Launch Deep Seer</a>
+</div>
+
+</div>
+
+<div class="related">
+  <h3>Related Articles</h3>
+  <a href="/blog/osint-investigation-workflow-journalists">OSINT Investigation Workflow for Journalists</a>
+  <a href="/blog/evidence-chain-holds-up-in-court">Building an Evidence Chain That Holds Up in Court</a>
+  <a href="/blog/reading-the-absence">Reading the Absence: What Missing Data Tells Intelligence Analysts</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

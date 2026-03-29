@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA COLOSSEUM — UI Preview</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-deep: #0a0e14;
+  --bg-surface: #111820;
+  --bg-card: #151d28;
+  --border: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-teal: #00d4aa;
+  --accent-red: #ef4444;
+  --accent-rose: #e11d48;
+  --accent-amber: #f59e0b;
+  --accent-blue: #39bae6;
+  --accent-purple: #7c3aed;
+  --green: #22c55e;
+}
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ── Header ── */
+.header {
+  height: 52px; background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; padding: 0 20px; gap: 16px;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; }
+.brand-logo { font-size: 1.1rem; font-weight: 700; color: var(--accent-rose); letter-spacing: 2px; }
+.brand-sub { font-size: 0.7rem; color: var(--text-muted); }
+.header-nav { display: flex; gap: 16px; margin-left: auto; }
+.header-nav a { font-size: 0.75rem; color: var(--text-secondary); text-decoration: none; padding: 6px 12px; border-radius: 4px; }
+.header-nav a.active { background: rgba(225,29,72,0.12); color: var(--accent-rose); }
+.header-nav a:hover { color: var(--accent-rose); }
+.header-user { margin-left: 16px; font-size: 0.75rem; color: var(--accent-teal); }
+
+/* ── Stats Bar ── */
+.stats-bar {
+  display: flex; gap: 32px; padding: 14px 20px;
+  background: var(--bg-surface); border-bottom: 1px solid var(--border);
+  justify-content: center;
+}
+.stat { text-align: center; }
+.stat-val { font-size: 1.4rem; font-weight: 700; color: var(--accent-rose); }
+.stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* ── Page Label ── */
+.page-label {
+  text-align: center; padding: 24px 0 8px;
+  font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase;
+}
+.page-title {
+  text-align: center; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+/* ── Scenario Cards ── */
+.scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; padding: 0 20px 32px; max-width: 1200px; margin: 0 auto; }
+.scenario-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 20px; transition: border-color 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.scenario-card:hover { border-color: var(--accent-rose); transform: translateY(-2px); }
+.scenario-name { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.scenario-diff { font-size: 0.75rem; margin-bottom: 10px; }
+.diff-easy { color: var(--green); }
+.diff-medium { color: var(--accent-amber); }
+.diff-hard { color: var(--accent-red); }
+.diff-extreme { color: var(--accent-purple); }
+.scenario-meta { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.8; }
+.scenario-obj { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px; }
+.btn-enter {
+  display: inline-block; padding: 8px 20px; background: var(--accent-rose); color: white;
+  font-family: inherit; font-size: 0.75rem; font-weight: 700; border: none; border-radius: 4px;
+  cursor: pointer; letter-spacing: 0.05em; transition: transform 0.15s;
+}
+.btn-enter:hover { transform: translateY(-1px); }
+
+/* ── Leaderboard Preview ── */
+.leaderboard-section { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+.leaderboard-title { font-size: 0.9rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 12px; }
+.lb-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.lb-table th { text-align: left; padding: 8px 12px; color: var(--accent-rose); background: var(--bg-surface); border-bottom: 1px solid var(--border); }
+.lb-table td { padding: 8px 12px; border-bottom: 1px solid rgba(30,41,59,0.5); color: var(--text-secondary); }
+.lb-table tr:hover td { background: rgba(225,29,72,0.04); }
+.rank-1 { color: var(--accent-amber); font-weight: 700; }
+.rank-2 { color: #c0c0c0; font-weight: 700; }
+.rank-3 { color: #cd7f32; font-weight: 700; }
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+/* ── Terminal Preview ── */
+.terminal-section { max-width: 1000px; margin: 0 auto; padding: 0 20px 40px; }
+.terminal-label { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; text-align: center; margin-bottom: 12px; }
+.terminal-window { background: #000; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.terminal-titlebar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; }
+.terminal-dot { width: 10px; height: 10px; border-radius: 50%; }
+.terminal-dot.r { background: #ef4444; } .terminal-dot.y { background: #f59e0b; } .terminal-dot.g { background: #22c55e; }
+.terminal-title { font-size: 0.7rem; color: #555; margin-left: 8px; }
+.terminal-body { padding: 16px; font-size: 0.78rem; line-height: 1.9; min-height: 300px; color: #ccc; }
+.terminal-body .prompt { color: #22c55e; }
+.terminal-body .info { color: var(--accent-blue); }
+.terminal-body .warning { color: var(--accent-amber); }
+.terminal-body .error { color: var(--accent-red); }
+.terminal-body .dim { color: #555; }
+.terminal-body .teal { color: var(--accent-teal); }
+.terminal-body .rose { color: var(--accent-rose); }
+
+/* ── Status Bar (in terminal) ── */
+.terminal-status {
+  display: flex; gap: 24px; padding: 8px 16px; background: #0a0a0a;
+  border-top: 1px solid #1a1a1a; font-size: 0.7rem;
+}
+.ts-item { color: #555; }
+.ts-val { font-weight: 700; }
+.ts-val.red { color: var(--accent-red); }
+.ts-val.green { color: var(--green); }
+.ts-val.amber { color: var(--accent-amber); }
+.ts-val.teal { color: var(--accent-teal); }
+
+/* ── Results Preview ── */
+.results-section { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+.results-title { text-align: center; font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+.results-sub { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.result-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.result-card h3 { font-size: 0.85rem; margin-bottom: 8px; }
+.result-card .big-num { font-size: 2rem; font-weight: 700; }
+.result-card .detail { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── MITRE Grid ── */
+.mitre-grid { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 24px; }
+.mitre-cell {
+  width: 60px; height: 28px; display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; border-radius: 3px; font-weight: 500;
+}
+.mitre-detected { background: rgba(239,68,68,0.15); color: var(--accent-red); border: 1px solid rgba(239,68,68,0.3); }
+.mitre-undetected { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.mitre-unused { background: rgba(100,116,139,0.1); color: var(--text-muted); border: 1px solid rgba(100,116,139,0.2); }
+
+/* ── Narration Preview ── */
+.narration-section { max-width: 800px; margin: 0 auto; padding: 0 20px 40px; }
+.narration-title { font-size: 0.85rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 12px; }
+.narration-feed { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; font-size: 0.75rem; line-height: 2; }
+.narration-feed .time { color: var(--text-muted); }
+.narration-feed .red-action { color: var(--accent-red); }
+.narration-feed .blue-action { color: var(--accent-blue); }
+.narration-feed .contact { color: var(--accent-amber); font-weight: 700; }
+.narration-feed .referee { color: var(--text-secondary); font-style: italic; }
+
+/* ── Footer ── */
+.footer { text-align: center; padding: 32px; font-size: 0.7rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+.footer a { color: var(--accent-rose); text-decoration: none; }
+
+/* ── Page Label ── */
+.preview-badge {
+  position: fixed; top: 12px; right: 12px; z-index: 100;
+  padding: 4px 12px; background: rgba(225,29,72,0.15); color: var(--accent-rose);
+  font-size: 0.65rem; font-weight: 700; border-radius: 4px; border: 1px solid rgba(225,29,72,0.3);
+  letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+
+<div class="preview-badge">UI PREVIEW — STATIC MOCKUP</div>
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div class="brand">
+    <span class="brand-logo">COLOSSEUM</span>
+    <span class="brand-sub">Live-Fire Training Arena</span>
+  </div>
+  <nav class="header-nav">
+    <a href="#" class="active">Arena</a>
+    <a href="#terminal-preview">Terminal</a>
+    <a href="#results-preview">Results</a>
+    <a href="#leaderboard-preview">Leaderboard</a>
+  </nav>
+  <span class="header-user">ghost_hunter_42</span>
+</header>
+
+<!-- ═══ STATS BAR ═══ -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-val">3</div><div class="stat-label">Active Sessions</div></div>
+  <div class="stat"><div class="stat-val">127</div><div class="stat-label">Total Attackers</div></div>
+  <div class="stat"><div class="stat-val">4</div><div class="stat-label">Scenarios</div></div>
+  <div class="stat"><div class="stat-val">89%</div><div class="stat-label">Dagda Win Rate</div></div>
+</div>
+
+<!-- ═══ LOBBY ═══ -->
+<div class="page-label">Choose Your Battlefield</div>
+<div class="page-title">Scenarios</div>
+
+<div class="scenarios">
+  <div class="scenario-card">
+    <div class="scenario-name">Corporate Network</div>
+    <div class="scenario-diff diff-easy">Difficulty: &#9679;&#9679;&#9675;&#9675; Easy</div>
+    <div class="scenario-meta">4 VMs &bull; 60 min &bull; 5 flags<br>Dagda: SENTINEL + basic IDS</div>
+    <div class="scenario-obj">Objective: Achieve domain administrator access</div>
+    <button class="btn-enter">Enter Arena</button>
+  </div>
+  <div class="scenario-card">
+    <div class="scenario-name">Web Fortress</div>
+    <div class="scenario-diff diff-medium">Difficulty: &#9679;&#9679;&#9679;&#9675; Medium</div>
+    <div class="scenario-meta">3 VMs &bull; 45 min &bull; 3 flags<br>Dagda: SENTINEL + WAF + honeypots</div>
+    <div class="scenario-obj">Objective: Exfiltrate the database backup</div>
+    <button class="btn-enter">Enter Arena</button>
+  </div>
+  <div class="scenario-card">
+    <div class="scenario-name">Cloud Breach</div>
+    <div class="scenario-diff diff-hard">Difficulty: &#9679;&#9679;&#9679;&#9679; Hard</div>
+    <div class="scenario-meta">6 VMs &bull; 90 min &bull; 7 flags<br>Dagda: Full SENTINEL + eBPF + canary tokens</div>
+    <div class="scenario-obj">Objective: Pivot from web to internal K8s cluster</div>
+    <button class="btn-enter">Enter Arena</button>
+  </div>
+  <div class="scenario-card">
+    <div class="scenario-name">Zero Day Lab</div>
+    <div class="scenario-diff diff-extreme">Difficulty: &#9679;&#9679;&#9679;&#9679; Extreme</div>
+    <div class="scenario-meta">8 VMs &bull; 120 min &bull; 10 flags<br>Dagda: Maximum defense + adversarial AI</div>
+    <div class="scenario-obj">Objective: Survive 2 hours without detection</div>
+    <button class="btn-enter">Enter Arena</button>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ TERMINAL PREVIEW ═══ -->
+<div class="terminal-section" id="terminal-preview">
+  <div class="terminal-label">Active Session &mdash; Web Fortress</div>
+  <div class="terminal-window">
+    <div class="terminal-titlebar">
+      <div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div>
+      <span class="terminal-title">colosseum &mdash; session a7f3c2</span>
+    </div>
+    <div class="terminal-body">
+<div><span class="dim">&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;</span></div>
+<div><span class="dim">&#9474;</span> <span class="rose">DAGDA COLOSSEUM</span>              <span class="dim">&#9474;</span></div>
+<div><span class="dim">&#9474;</span> Target network: 10.99.0.0/24    <span class="dim">&#9474;</span></div>
+<div><span class="dim">&#9474;</span> Objective: Exfiltrate DB backup  <span class="dim">&#9474;</span></div>
+<div><span class="dim">&#9474;</span> Time limit: 45:00               <span class="dim">&#9474;</span></div>
+<div><span class="dim">&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</span></div>
+<div>&nbsp;</div>
+<div><span class="prompt">attacker@colosseum:~$</span> nmap -sV 10.99.0.0/24</div>
+<div><span class="info">Starting Nmap 7.94 ( https://nmap.org )</span></div>
+<div>Nmap scan report for 10.99.0.10</div>
+<div>PORT     STATE SERVICE  VERSION</div>
+<div>80/tcp   open  http     Apache httpd 2.4.54</div>
+<div>443/tcp  open  ssl/http Apache httpd 2.4.54</div>
+<div>3306/tcp open  mysql    MySQL 8.0.32</div>
+<div>&nbsp;</div>
+<div>Nmap scan report for 10.99.0.20</div>
+<div>PORT    STATE SERVICE VERSION</div>
+<div>22/tcp  open  ssh     OpenSSH 8.9</div>
+<div>8080/tcp open http    Tomcat 9.0.65</div>
+<div>&nbsp;</div>
+<div><span class="prompt">attacker@colosseum:~$</span> nikto -h http://10.99.0.10</div>
+<div><span class="warning">+ OSVDB-3233: /phpinfo.php: PHP is installed</span></div>
+<div><span class="warning">+ OSVDB-3092: /admin/: Directory indexing found</span></div>
+<div><span class="error">+ OSVDB-637: /~root/: Listing of user home dir found</span></div>
+<div>&nbsp;</div>
+<div><span class="prompt">attacker@colosseum:~$</span> sqlmap -u "http://10.99.0.10/login.php?user=admin" --dbs</div>
+<div><span class="info">[*] testing connection to the target URL</span></div>
+<div><span class="error">[!] the target appears to be behind a WAF</span></div>
+<div><span class="warning">[*] trying to bypass WAF with tamper scripts...</span></div>
+<div><span class="teal">[*] Dagda detected your scan. Adapting...</span></div>
+<div>&nbsp;</div>
+<div><span class="prompt">attacker@colosseum:~$</span> <span style="animation: blink 1s step-end infinite;">_</span></div>
+    </div>
+    <div class="terminal-status">
+      <div class="ts-item">Timer: <span class="ts-val amber">38:42</span></div>
+      <div class="ts-item">Score: <span class="ts-val green">120</span></div>
+      <div class="ts-item">Objectives: <span class="ts-val">1/3</span></div>
+      <div class="ts-item">Dagda: <span class="ts-val red">ALERT &mdash; Scan detected</span></div>
+      <div class="ts-item" style="margin-left:auto"><button class="btn-enter" style="font-size:0.65rem;padding:4px 10px;background:var(--accent-red)">End Session</button></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ NARRATION ═══ -->
+<div class="narration-section">
+  <div class="narration-title">Referee Narration &mdash; Live Feed</div>
+  <div class="narration-feed">
+    <div><span class="time">[00:01:14]</span> <span class="red-action">Attacker opens with SYN scan on 10.99.0.0/24 &mdash; standard reconnaissance.</span></div>
+    <div><span class="time">[00:02:38]</span> <span class="red-action">3 hosts responding. Pivoting to service enumeration on .10 and .20.</span></div>
+    <div><span class="time">[00:03:15]</span> <span class="blue-action">Dagda IDS silent. Scan below detection threshold (rate: 12 pkt/s).</span></div>
+    <div><span class="time">[00:05:47]</span> <span class="red-action">Nikto scan launched against .10. Probing for misconfigurations.</span></div>
+    <div><span class="time">[00:06:22]</span> <span class="contact">FIRST CONTACT. Dagda anomaly detector flags scan spike &mdash; 47 requests in 3 seconds.</span></div>
+    <div><span class="time">[00:06:23]</span> <span class="blue-action">Dagda begins threat assessment. Bayesian score: 0.67 &rarr; 0.82.</span></div>
+    <div><span class="time">[00:08:14]</span> <span class="red-action">SQLMap launched against login.php. WAF detected &mdash; switching to tamper scripts.</span></div>
+    <div><span class="time">[00:08:15]</span> <span class="blue-action">Dagda WAF blocks initial SQLi payloads. Attacker adapting.</span></div>
+    <div><span class="time">[00:09:30]</span> <span class="referee">Analysis: Attacker is methodical, moving through standard web app methodology. Dagda's WAF is holding but the attacker hasn't tried advanced bypass techniques yet. Next likely move: time-based blind SQLi or SSRF.</span></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ RESULTS PREVIEW ═══ -->
+<div class="results-section" id="results-preview">
+  <div class="results-title">Session Complete</div>
+  <div class="results-sub">Web Fortress &bull; 38m 42s &bull; ghost_hunter_42</div>
+
+  <div class="results-grid">
+    <div class="result-card">
+      <h3 style="color:var(--accent-amber)">Score</h3>
+      <div class="big-num" style="color:var(--accent-amber)">2,340</div>
+      <div class="detail">Objectives: 120 &bull; Stealth: &times;1.4 &bull; Speed: &times;1.2 &bull; Techniques: +180</div>
+    </div>
+    <div class="result-card">
+      <h3 style="color:var(--accent-red)">Attack</h3>
+      <div class="big-num" style="color:var(--accent-red)">7</div>
+      <div class="detail">MITRE techniques used &bull; Kill chain: 60% &bull; SQLi + SSRF + LFI</div>
+    </div>
+    <div class="result-card">
+      <h3 style="color:var(--accent-teal)">Defense</h3>
+      <div class="big-num" style="color:var(--accent-teal)">71%</div>
+      <div class="detail">Dagda detection rate &bull; 5/7 techniques detected &bull; Avg response: 8.2s</div>
+    </div>
+    <div class="result-card">
+      <h3 style="color:var(--green)">Stealth</h3>
+      <div class="big-num" style="color:var(--green)">1.4x</div>
+      <div class="detail">Multiplier &bull; 2 techniques went undetected &bull; Low noise ratio</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:16px;font-size:0.8rem;font-weight:700;color:var(--accent-amber)">MITRE ATT&CK Coverage</div>
+  <div class="mitre-grid">
+    <div class="mitre-cell mitre-detected">T1046</div>
+    <div class="mitre-cell mitre-detected">T1190</div>
+    <div class="mitre-cell mitre-undetected">T1059</div>
+    <div class="mitre-cell mitre-detected">T1078</div>
+    <div class="mitre-cell mitre-detected">T1110</div>
+    <div class="mitre-cell mitre-undetected">T1005</div>
+    <div class="mitre-cell mitre-detected">T1071</div>
+    <div class="mitre-cell mitre-unused">T1055</div>
+    <div class="mitre-cell mitre-unused">T1053</div>
+    <div class="mitre-cell mitre-unused">T1547</div>
+    <div class="mitre-cell mitre-unused">T1021</div>
+    <div class="mitre-cell mitre-unused">T1003</div>
+    <div class="mitre-cell mitre-unused">T1048</div>
+    <div class="mitre-cell mitre-unused">T1572</div>
+  </div>
+  <div style="font-size:0.65rem;color:var(--text-muted);margin-bottom:24px">
+    <span style="color:var(--accent-red)">&#9632;</span> Detected by Dagda &nbsp;
+    <span style="color:var(--green)">&#9632;</span> Undetected &nbsp;
+    <span style="color:var(--text-muted)">&#9632;</span> Not used
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ═══ LEADERBOARD ═══ -->
+<div class="leaderboard-section" id="leaderboard-preview">
+  <div class="leaderboard-title">Global Leaderboard</div>
+  <table class="lb-table">
+    <thead>
+      <tr><th>Rank</th><th>Attacker</th><th>Score</th><th>Sessions</th><th>Scenarios</th><th>Stealth</th><th>Best Time</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="rank-1">#1</td><td>xpl0it_king</td><td>14,280</td><td>12</td><td>4/4</td><td>1.8x</td><td>18m 32s</td></tr>
+      <tr><td class="rank-2">#2</td><td>shadow_root</td><td>11,750</td><td>9</td><td>3/4</td><td>1.6x</td><td>22m 15s</td></tr>
+      <tr><td class="rank-3">#3</td><td>null_byte_99</td><td>9,420</td><td>8</td><td>3/4</td><td>1.3x</td><td>28m 41s</td></tr>
+      <tr><td>#4</td><td>ghost_hunter_42</td><td>7,890</td><td>6</td><td>2/4</td><td>1.4x</td><td>34m 18s</td></tr>
+      <tr><td>#5</td><td>red_phoenix</td><td>6,230</td><td>5</td><td>2/4</td><td>1.1x</td><td>41m 02s</td></tr>
+      <tr><td>#6</td><td>cipher_break</td><td>4,810</td><td>4</td><td>1/4</td><td>1.2x</td><td>45m 00s</td></tr>
+      <tr><td>#7</td><td>packet_storm</td><td>3,560</td><td>3</td><td>1/4</td><td>0.9x</td><td>&mdash;</td></tr>
+      <tr><td>#8</td><td>sudo_master</td><td>2,100</td><td>2</td><td>1/4</td><td>1.0x</td><td>&mdash;</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <a href="landing.html">DAGDA</a> Colosseum &mdash; Live-Fire Training Arena<br>
+  Powered by autonomous AI defense. <a href="colosseum-plan.md">Architecture</a> &bull; <a href="colosseum-server-setup.html">Deploy</a>
+</footer>
+
+<style>@keyframes blink { 50% { opacity: 0; } }</style>
+</body>
+</html>

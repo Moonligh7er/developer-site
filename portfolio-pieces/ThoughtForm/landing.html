@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thought+Form — The Command Center for Solo Founders</title>
+<meta name="description" content="44 interconnected modules. AI-powered intelligence. One command center. Zero context switching. Thought+Form replaces your entire tool stack for $19/mo.">
+<meta name="keywords" content="developer command center, solo founder tools, project management, AI writing, content scheduling, CRM, kanban, worldbuilding">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thoughtform.app/">
+<meta property="og:title" content="Thought+Form — One Command Center. Everything Connected.">
+<meta property="og:description" content="Stop scattering your genius across 12 tabs. 44 modules, 8 intelligence engines, 5 AI agents. Built for solo founders.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thoughtform.app/">
+<meta property="og:image" content="https://thoughtform.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Thought+Form">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Thought+Form — The Command Center for Solo Founders">
+<meta name="twitter:description" content="44 interconnected modules. AI-powered intelligence. One command center. Zero context switching. Replaces your entire tool stack for $19/mo.">
+<meta name="twitter:image" content="https://thoughtform.app/og-image.png">
+<meta name="theme-color" content="#33FF33">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Thought+Form",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Windows, macOS, Linux, Web",
+  "description": "Developer command center for solo founders. 44 interconnected modules replacing your project manager, CRM, content scheduler, writing platform, and AI assistant.",
+  "url": "https://thoughtform.app",
+  "offers": [
+    {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "name": "Free",
+      "description": "Core workspace tools"
+    },
+    {
+      "@type": "Offer",
+      "price": "19",
+      "priceCurrency": "USD",
+      "name": "Pro",
+      "description": "All 44+ modules, AI agents, intelligence engines",
+      "billingIncrement": "P1M"
+    }
+  ],
+  "featureList": "Kanban Board, Narrative Studio, AI Agent Workflows, Brand Voice Content Factory, Revenue Intelligence, CRM Pipeline, Terminal, Git Integration, Creative Suite, Worldbuilding"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0E0A;
+    --surface: #0D1F0D;
+    --surface-2: #112211;
+    --green: #33FF33;
+    --green-dim: #1A8C1A;
+    --green-ghost: rgba(51,255,51,0.06);
+    --cyan: #00FFFF;
+    --amber: #FFB000;
+    --red: #FF3333;
+    --mint: #00FF88;
+    --text: #E0E0E0;
+    --dim: #8A8A8A;
+    --dim-2: #555;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── CRT Scanlines ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  }
+
+  /* ── Glow Effects ── */
+  .glow { text-shadow: 0 0 6px var(--green), 0 0 20px rgba(51,255,51,0.25); }
+  .glow-cyan { text-shadow: 0 0 6px var(--cyan), 0 0 20px rgba(0,255,255,0.25); }
+  .glow-amber { text-shadow: 0 0 6px var(--amber), 0 0 20px rgba(255,176,0,0.25); }
+
+  /* ── Scroll Reveal ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── Base ── */
+  a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 100px 0; }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-sub {
+    color: var(--dim);
+    max-width: 640px;
+    margin-bottom: 48px;
+    font-size: 14px;
+  }
+
+  .section-sub strong { color: var(--text); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10,14,10,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,140,26,0.2);
+    padding: 0 24px;
+    transition: box-shadow 0.3s;
+  }
+
+  nav.scrolled {
+    box-shadow: 0 2px 20px rgba(51,255,51,0.05);
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px rgba(51,255,51,0.3);
+  }
+  .nav-logo:hover { text-decoration: none; }
+
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--dim);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); text-decoration: none; }
+
+  .nav-cta {
+    background: var(--green) !important;
+    color: var(--bg) !important;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 11px !important;
+    letter-spacing: 1px;
+  }
+  .nav-cta:hover { filter: brightness(1.15); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 14px 36px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+  }
+
+  .btn-primary {
+    background: var(--green);
+    color: var(--bg);
+    box-shadow: 0 0 20px rgba(51,255,51,0.15);
+  }
+  .btn-primary:hover { filter: brightness(1.15); text-decoration: none; box-shadow: 0 0 30px rgba(51,255,51,0.25); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+  }
+  .btn-ghost:hover { border-color: var(--green); text-decoration: none; background: rgba(51,255,51,0.04); }
+
+  .cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  /* ═══════════════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════════════ */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 80px 0 60px;
+    overflow: hidden;
+  }
+
+  /* Subtle grid background */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(51,255,51,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(51,255,51,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 30% 50%, black 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 50%, black 0%, transparent 70%);
+  }
+
+  .hero-pain {
+    font-size: clamp(13px, 1.8vw, 16px);
+    color: var(--dim);
+    max-width: 600px;
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+
+  .hero-pain .strike {
+    color: var(--dim-2);
+    text-decoration: line-through;
+    text-decoration-color: var(--red);
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.1;
+    margin-bottom: 24px;
+    max-width: 800px;
+  }
+
+  .hero .sub {
+    font-size: clamp(14px, 1.6vw, 17px);
+    color: var(--dim);
+    max-width: 620px;
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+  .hero .sub strong { color: var(--text); }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat { text-align: left; }
+  .hero-stat .num {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+  }
+  .hero-stat .label {
+    font-size: 10px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* Typing cursor blink on hero tagline */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    background: var(--green);
+    margin-left: 4px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* ═══════════════════════════════════════════════
+     PROBLEM
+  ═══════════════════════════════════════════════ */
+  .tool-sprawl {
+    margin-bottom: 48px;
+  }
+
+  .tool-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  .tool-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid rgba(255,51,51,0.2);
+    color: var(--dim);
+    font-size: 11px;
+    letter-spacing: 1px;
+    transition: all 0.6s;
+  }
+
+  .tool-tag .price {
+    color: var(--red);
+    margin-left: 6px;
+    font-size: 10px;
+  }
+
+  .tool-equals {
+    font-size: 24px;
+    color: var(--dim-2);
+    padding: 0 12px;
+  }
+
+  .tool-result {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    padding: 20px 0;
+    border-top: 1px solid var(--green-dim);
+  }
+
+  .tool-result-label {
+    font-size: 14px;
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .tool-result-sublabel {
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid transparent;
+    padding: 28px 24px;
+    transition: border-color 0.3s;
+  }
+  .problem-card:hover { border-color: var(--green-dim); }
+
+  .problem-card .icon {
+    font-size: 18px;
+    margin-bottom: 14px;
+    display: block;
+    color: var(--red);
+  }
+
+  .problem-card h3 {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .problem-card p {
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════════
+     SOLUTION / PILLARS
+  ═══════════════════════════════════════════════ */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    margin-top: 48px;
+  }
+
+  .pillar {
+    background: var(--surface);
+    padding: 32px 24px;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .pillar:hover { border-color: var(--green-dim); }
+
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .pillar:nth-child(1)::before { background: var(--green); }
+  .pillar:nth-child(2)::before { background: var(--cyan); }
+  .pillar:nth-child(3)::before { background: var(--amber); }
+  .pillar:nth-child(4)::before { background: var(--mint); }
+
+  .pillar-icon {
+    font-size: 20px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .pillar h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .pillar:nth-child(1) h3 { color: var(--green); }
+  .pillar:nth-child(2) h3 { color: var(--cyan); }
+  .pillar:nth-child(3) h3 { color: var(--amber); }
+  .pillar:nth-child(4) h3 { color: var(--mint); }
+
+  .pillar p {
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════════
+     FEATURE SHOWCASE
+  ═══════════════════════════════════════════════ */
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 2px;
+  }
+
+  .showcase-card {
+    background: var(--surface);
+    padding: 36px 32px;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .showcase-card:hover { border-color: var(--green-dim); }
+
+  .showcase-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+  }
+
+  .showcase-card:nth-child(1)::before { background: var(--cyan); }
+  .showcase-card:nth-child(2)::before { background: var(--green); }
+  .showcase-card:nth-child(3)::before { background: var(--amber); }
+  .showcase-card:nth-child(4)::before { background: var(--mint); }
+  .showcase-card:nth-child(5)::before { background: var(--red); }
+  .showcase-card:nth-child(6)::before { background: var(--cyan); }
+  .showcase-card:nth-child(7)::before { background: var(--green); }
+  .showcase-card:nth-child(8)::before { background: var(--amber); }
+
+  .showcase-tag {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .showcase-card:nth-child(1) .showcase-tag { color: var(--cyan); }
+  .showcase-card:nth-child(2) .showcase-tag { color: var(--green); }
+  .showcase-card:nth-child(3) .showcase-tag { color: var(--amber); }
+  .showcase-card:nth-child(4) .showcase-tag { color: var(--mint); }
+  .showcase-card:nth-child(5) .showcase-tag { color: var(--red); }
+  .showcase-card:nth-child(6) .showcase-tag { color: var(--cyan); }
+  .showcase-card:nth-child(7) .showcase-tag { color: var(--green); }
+  .showcase-card:nth-child(8) .showcase-tag { color: var(--amber); }
+
+  .showcase-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+
+  .showcase-card p {
+    color: var(--dim);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .showcase-card .detail {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--dim-2);
+    border-top: 1px solid rgba(26,140,26,0.2);
+    padding-top: 12px;
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════════════════════════════════
+     NUMBERS
+  ═══════════════════════════════════════════════ */
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+
+  .number-card {
+    background: var(--surface);
+    padding: 40px 24px;
+    text-align: center;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+  }
+  .number-card:hover { border-color: var(--green-dim); }
+
+  .number-card .num {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .number-card:nth-child(1) .num { color: var(--green); }
+  .number-card:nth-child(2) .num { color: var(--cyan); }
+  .number-card:nth-child(3) .num { color: var(--amber); }
+  .number-card:nth-child(4) .num { color: var(--mint); }
+
+  .number-card .label {
+    font-size: 11px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     HOW IT WORKS
+  ═══════════════════════════════════════════════ */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    position: relative;
+  }
+
+  .step {
+    background: var(--surface);
+    padding: 36px 28px;
+    position: relative;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+  }
+  .step:hover { border-color: var(--green-dim); }
+
+  .step-num {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--green);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .step h3 {
+    color: var(--green);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .step p {
+    color: var(--dim);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════════
+     COMPARISON TABLE
+  ═══════════════════════════════════════════════ */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .compare-table th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--dim);
+    border-bottom: 2px solid var(--green-dim);
+  }
+
+  .compare-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid rgba(26,140,26,0.15);
+    color: var(--text);
+  }
+
+  .compare-table tr:hover td { background: var(--surface); }
+
+  .compare-table .check { color: var(--green); }
+  .compare-table .price-cell { color: var(--red); font-weight: 500; }
+
+  .compare-total {
+    border-top: 2px solid var(--green-dim) !important;
+    border-bottom: none !important;
+  }
+
+  .savings-callout {
+    margin-top: 32px;
+    text-align: center;
+    padding: 28px;
+    border: 1px solid var(--green-dim);
+    background: var(--green-ghost);
+  }
+
+  .savings-callout .old-price {
+    font-size: 24px;
+    color: var(--red);
+    text-decoration: line-through;
+    font-weight: 600;
+  }
+
+  .savings-callout .arrow {
+    font-size: 24px;
+    color: var(--dim-2);
+    margin: 0 20px;
+  }
+
+  .savings-callout .new-price {
+    font-size: 32px;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .savings-callout .savings-note {
+    font-size: 12px;
+    color: var(--dim);
+    margin-top: 8px;
+  }
+
+  /* ═══════════════════════════════════════════════
+     TRUST
+  ═══════════════════════════════════════════════ */
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  .trust-card {
+    background: var(--surface);
+    padding: 28px 24px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .trust-card:hover { border-color: var(--green-dim); }
+
+  .trust-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+
+  .trust-card p {
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+
+  /* ═══════════════════════════════════════════════
+     PRICING
+  ═══════════════════════════════════════════════ */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2px;
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .pricing-card {
+    background: var(--surface);
+    padding: 40px 32px;
+    position: relative;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+  }
+  .pricing-card:hover { border-color: var(--green-dim); }
+
+  .pricing-card.featured {
+    border: 1px solid var(--green);
+    box-shadow: 0 0 30px rgba(51,255,51,0.08);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -1px;
+    left: 24px;
+    background: var(--green);
+    color: var(--bg);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+  }
+
+  .pricing-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .pricing-price {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+    margin: 16px 0;
+  }
+
+  .pricing-price span {
+    font-size: 14px;
+    color: var(--dim);
+    font-weight: 400;
+  }
+
+  .pricing-desc {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .pricing-features {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+
+  .pricing-features li {
+    font-size: 12px;
+    color: var(--dim);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(26,140,26,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pricing-features li::before {
+    content: '>';
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .pricing-btn {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.25s;
+  }
+
+  .pricing-btn-primary {
+    background: var(--green);
+    color: var(--bg);
+  }
+  .pricing-btn-primary:hover { filter: brightness(1.15); text-decoration: none; }
+
+  .pricing-btn-ghost {
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green-dim);
+  }
+  .pricing-btn-ghost:hover { border-color: var(--green); text-decoration: none; }
+
+  /* ═══════════════════════════════════════════════
+     IMAGINE (future pacing)
+  ═══════════════════════════════════════════════ */
+  .imagine-section {
+    border-top: 1px solid var(--green-dim);
+    border-bottom: 1px solid var(--green-dim);
+    padding: 80px 0;
+    position: relative;
+  }
+
+  .imagine-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(51,255,51,0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .imagine-text {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .imagine-text p {
+    font-size: clamp(15px, 2vw, 18px);
+    color: var(--dim);
+    line-height: 2;
+    margin-bottom: 16px;
+  }
+
+  .imagine-text strong { color: var(--green); }
+  .imagine-text em { color: var(--cyan); font-style: normal; }
+
+  /* ═══════════════════════════════════════════════
+     FINAL CTA
+  ═══════════════════════════════════════════════ */
+  .final-cta {
+    text-align: center;
+    padding: 120px 0;
+    position: relative;
+  }
+
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center bottom, rgba(51,255,51,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .final-cta h2 {
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+
+  .final-cta p {
+    color: var(--dim);
+    max-width: 540px;
+    margin: 0 auto 40px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--green-dim);
+    padding: 48px 0;
+  }
+
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+
+  .footer-brand {
+    font-size: 12px;
+    color: var(--green);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px rgba(51,255,51,0.3);
+    margin-bottom: 8px;
+  }
+
+  .footer-copy {
+    font-size: 11px;
+    color: var(--dim-2);
+    max-width: 360px;
+    line-height: 1.6;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .footer-links a:hover { color: var(--green); }
+
+  /* ═══════════════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .showcase-grid { grid-template-columns: 1fr; }
+    .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+    .steps { grid-template-columns: 1fr; }
+    .nav-links .hide-mobile { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .hero-stats { gap: 24px; }
+    .cta-row { flex-direction: column; }
+    .btn { text-align: center; }
+    section { padding: 64px 0; }
+    .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-inner { flex-direction: column; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::after { display: none; }
+    .glow, .glow-cyan, .glow-amber { text-shadow: none; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .cursor { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" aria-label="Thought+Form home">T+F</a>
+    <div class="nav-links">
+      <a href="#features" class="hide-mobile">Features</a>
+      <a href="#pricing" class="hide-mobile">Pricing</a>
+      <a href="features.html" class="hide-mobile">Full Specs</a>
+      <a href="#pricing" class="nav-cta">Start Free</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     HERO — Visceral hook
+═══════════════════════════════════════════════ -->
+<section class="hero" aria-label="Introduction">
+  <div class="container">
+    <p class="hero-pain">
+      You're juggling <span class="strike">Notion</span> <span class="strike">Trello</span> <span class="strike">Buffer</span> <span class="strike">Stripe</span> <span class="strike">HubSpot</span> <span class="strike">Linear</span> <span class="strike">ChatGPT</span> <span class="strike">Scrivener</span>. Your context is shattered. Your ideas die in the gaps between apps.
+    </p>
+    <h1 class="glow">One command center.<br>Everything connected.<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="sub">
+      Thought+Form is the <strong>developer command center</strong> that replaces your project manager, CRM, content scheduler, revenue tracker, writing platform, worldbuilding tool, AI assistant, and terminal — with one interconnected system that understands how all your work relates.
+    </p>
+    <div class="cta-row">
+      <a href="#pricing" class="btn btn-primary">Start Free</a>
+      <a href="#features" class="btn btn-ghost">See Features</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num glow">44+</div><div class="label">Modules</div></div>
+      <div class="hero-stat"><div class="num glow">9</div><div class="label">Writing Formats</div></div>
+      <div class="hero-stat"><div class="num glow">8</div><div class="label">Social Platforms</div></div>
+      <div class="hero-stat"><div class="num glow">0</div><div class="label">Context Switches</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     THE PROBLEM — Pain amplification
+═══════════════════════════════════════════════ -->
+<section style="background: var(--surface);" aria-label="The problem with current tools">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title glow">Your tools don't talk to each other.<br>You are the integration layer.</h2>
+      <p class="section-sub">Every hour spent context-switching is an hour your competitor spends building. You're paying for a dozen apps that each hold a fragment of your business — and none of them know the others exist.</p>
+    </div>
+
+    <div class="tool-sprawl reveal reveal-delay-1">
+      <div class="tool-list" role="list" aria-label="Tools you currently juggle">
+        <span class="tool-tag" role="listitem">Notion <span class="price">$10/mo</span></span>
+        <span class="tool-tag" role="listitem">Trello <span class="price">$10/mo</span></span>
+        <span class="tool-tag" role="listitem">Buffer <span class="price">$15/mo</span></span>
+        <span class="tool-tag" role="listitem">Hootsuite <span class="price">$99/mo</span></span>
+        <span class="tool-tag" role="listitem">Linear <span class="price">$8/mo</span></span>
+        <span class="tool-tag" role="listitem">HubSpot <span class="price">$50/mo</span></span>
+        <span class="tool-tag" role="listitem">Obsidian <span class="price">$8/mo</span></span>
+        <span class="tool-tag" role="listitem">Monday <span class="price">$9/mo</span></span>
+        <span class="tool-tag" role="listitem">ChatGPT+ <span class="price">$20/mo</span></span>
+        <span class="tool-tag" role="listitem">Scrivener <span class="price">$49</span></span>
+        <span class="tool-tag" role="listitem">Final Draft <span class="price">$250</span></span>
+        <span class="tool-tag" role="listitem">Baremetrics <span class="price">$50/mo</span></span>
+      </div>
+    </div>
+
+    <div class="problem-grid reveal reveal-delay-2">
+      <div class="problem-card">
+        <span class="icon" aria-hidden="true">///</span>
+        <h3>Context Amnesia</h3>
+        <p>Return to a project after 5 days. What changed? What decisions were made? You spend 30 minutes reconstructing context that a machine should remember for you.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon" aria-hidden="true">~//</span>
+        <h3>Decision Drift</h3>
+        <p>You decided to pivot from feature A to feature B. Two weeks later, 80% of your work is still on A. No tool tells you you've drifted from your own plan.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon" aria-hidden="true">???</span>
+        <h3>Invisible Patterns</h3>
+        <p>Your most productive sessions follow AI brainstorming and a 12-hour rest gap. You'll never know that — because no tool correlates your patterns with your outcomes.</p>
+      </div>
+      <div class="problem-card">
+        <span class="icon" aria-hidden="true">!!!</span>
+        <h3>Revenue Blindness</h3>
+        <p>You publish 50 posts. Revenue goes up. Which posts drove it? Which platform has the best ROI? You're flying blind on the only metric that matters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     THE SOLUTION — What T+F is
+═══════════════════════════════════════════════ -->
+<section aria-label="What Thought+Form is">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">The Solution</div>
+      <h2 class="section-title glow">Replace the chaos with a command center.</h2>
+      <p class="section-sub">Thought+Form doesn't just store your data — it <strong>understands the relationships between your decisions, work, content, revenue, and relationships</strong>. Then it tells you what you're missing.</p>
+    </div>
+
+    <div class="pillars reveal reveal-delay-1">
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">></span>
+        <h3>Build</h3>
+        <p>Kanban boards, terminal, git integration, CI/CD status, roadmap visualization, Claude Code delegation. Ship faster with everything in one place.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">></span>
+        <h3>Create</h3>
+        <p>Write novels, screenplays, and campaigns. Build worlds and characters. Generate images and voices. 9 writing formats with context-aware AI.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">></span>
+        <h3>Grow</h3>
+        <p>Schedule content across 8 platforms. Track revenue and deals. Manage your CRM. Build funnels. One idea becomes 8 platform-optimized posts.</p>
+      </div>
+      <div class="pillar">
+        <span class="pillar-icon" aria-hidden="true">></span>
+        <h3>Intelligence</h3>
+        <p>8 engines cross-referencing your entire data graph. Burnout detection. Confidence scoring. Decision auditing. Pattern recognition that gets smarter over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FEATURE SHOWCASE — Not a boring list
+═══════════════════════════════════════════════ -->
+<section id="features" style="background: var(--surface);" aria-label="Key features">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Features</div>
+      <h2 class="section-title glow">44 modules. Each one replaces a standalone tool.<br>Together, they're something new.</h2>
+    </div>
+
+    <div class="showcase-grid reveal reveal-delay-1">
+      <div class="showcase-card">
+        <span class="showcase-tag">Creative</span>
+        <h3>Narrative Studio</h3>
+        <p>Write novels, screenplays, stage plays, teleplays, marketing campaigns. AI reads your characters, world, plot, themes, and every previous scene — then generates prose that fits.</p>
+        <div class="detail">9 format templates / 3 AI modes (draft, continue, revise) / Guided questionnaires / Character-aware color-coded dialogue</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Build</span>
+        <h3>Kanban + Project Management</h3>
+        <p>Drag-and-drop task boards with checklists, relations, time tracking, card templates, swimlanes, and AI subtask generation. Triage queue catches cards missing priority or due dates.</p>
+        <div class="detail">Bulk operations / Filtered views / SVG roadmap timeline / PR auto-linking / Sprint tracking</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Intelligence</span>
+        <h3>AI Agent Workflows</h3>
+        <p>Build autonomous chains: analyze data, write reports, schedule posts, notify you. 5 specialized agents (General, Marketing, CRM, DevOps, Creative) that propose actions and wait for your approval.</p>
+        <div class="detail">Multi-step pipelines / Variable substitution / Filesystem access / Claude Code delegation / Step-by-step approval</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Growth</span>
+        <h3>Brand Voices + Content Factory</h3>
+        <p>Define brand voices with vocabulary, tone, and forbidden words. Write one idea. AI generates platform-optimized variants for Twitter, LinkedIn, Instagram, TikTok, YouTube, Reddit, Bluesky, and Mastodon.</p>
+        <div class="detail">One idea becomes 8 posts / RSS autoposter / Scheduling + analytics / Brand enforcement on every output</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Analysis</span>
+        <h3>Intelligence Layer</h3>
+        <p>8 cross-referencing engines that no standalone tool can replicate. Burnout detection. Confidence scoring on card completion. Context-switch cost analysis. Content-to-revenue attribution.</p>
+        <div class="detail">Decision audit / Blocking chain analysis / Relationship momentum / Productivity causality / Orphan detection</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Business</span>
+        <h3>Revenue + CRM + Funnels</h3>
+        <p>Track MRR with cohort retention and 3-month forecasts. Manage your sales pipeline with deal scoring. Build conversion funnels with source attribution. Stripe and RevenueCat sync built in.</p>
+        <div class="detail">Pipeline analytics / Auto follow-ups / CSV import/export / Competitor radar / Failed payment recovery</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Dev</span>
+        <h3>Terminal + Git + Claude Code</h3>
+        <p>Full embedded terminal with xterm.js. Git integration for repos, commits, issues, PRs. AI delegates real coding tasks to Claude Code running in your project directory with granular permissions.</p>
+        <div class="detail">Desktop only / Read-only by default / Per-agent filesystem permissions / CI/CD pipeline status / Deploy history</div>
+      </div>
+
+      <div class="showcase-card">
+        <span class="showcase-tag">Creative</span>
+        <h3>Creative Suite + Worldbuilding</h3>
+        <p>Build worlds with AI-expandable lore, geography, and culture. Create characters with image generation prompts and voice design. Plot stories with act structures and scene beats.</p>
+        <div class="detail">Interactive maps / Visual timelines / Family trees / Wiki generator / Export to HTML site</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     THE NUMBERS — Dramatic impact grid
+═══════════════════════════════════════════════ -->
+<section aria-label="Key numbers">
+  <div class="container">
+    <div class="numbers-grid reveal">
+      <div class="number-card">
+        <div class="num glow">44+</div>
+        <div class="label">Modules</div>
+      </div>
+      <div class="number-card">
+        <div class="num glow-cyan">9</div>
+        <div class="label">Writing Formats</div>
+      </div>
+      <div class="number-card">
+        <div class="num glow-amber">8</div>
+        <div class="label">Social Platforms</div>
+      </div>
+      <div class="number-card">
+        <div class="num" style="color:var(--mint); text-shadow: 0 0 6px var(--mint), 0 0 20px rgba(0,255,136,0.25);">0</div>
+        <div class="label">Context Switches</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     HOW IT WORKS — 3-step onboarding
+═══════════════════════════════════════════════ -->
+<section style="background: var(--surface);" aria-label="How it works">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Getting Started</div>
+      <h2 class="section-title glow">From zero to commanding in under 5 minutes.</h2>
+      <p class="section-sub">No onboarding hell. No 47-step setup wizard. No OAuth dance. Set a passphrase and start building.</p>
+    </div>
+
+    <div class="steps reveal reveal-delay-1">
+      <div class="step">
+        <div class="step-num" aria-hidden="true">01</div>
+        <h3>Create your first project</h3>
+        <p>Name it. Pick an archetype (SaaS, CLI, Mobile, Creative, etc.). The system pre-configures inception phases, kanban columns, and analytics baseline. You're operational in seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-num" aria-hidden="true">02</div>
+        <h3>Add your context</h3>
+        <p>Characters, brands, goals, competitors, contacts, decisions. The more context you feed it, the smarter every AI interaction becomes. Everything connects to everything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num" aria-hidden="true">03</div>
+        <h3>Let AI connect the dots</h3>
+        <p>The intelligence layer silently cross-references everything in the background. Within days, it surfaces patterns, flags drift, scores confidence, and detects burnout — without you configuring a thing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     WHAT YOU REPLACE — Anchoring + comparison
+═══════════════════════════════════════════════ -->
+<section aria-label="Tool comparison">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Comparison</div>
+      <h2 class="section-title glow">What you're currently paying for, separately.</h2>
+      <p class="section-sub">Each row is a tool you no longer need. Each check is a feature that talks to every other feature in the system.</p>
+    </div>
+
+    <div style="overflow-x: auto;" class="reveal reveal-delay-1">
+      <table class="compare-table" role="table" aria-label="Feature comparison with standalone tools">
+        <thead>
+          <tr><th scope="col">Capability</th><th scope="col">Standalone Tool</th><th scope="col">Cost</th><th scope="col">Thought+Form</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Project Management</td><td>Linear / Monday</td><td class="price-cell">$8-10/mo</td><td><span class="check">Built-in + AI subtasks</span></td></tr>
+          <tr><td>Notes + Decisions</td><td>Notion</td><td class="price-cell">$10/mo</td><td><span class="check">Built-in + decision audit</span></td></tr>
+          <tr><td>Content Scheduling</td><td>Buffer / Hootsuite</td><td class="price-cell">$15-99/mo</td><td><span class="check">Built-in + 8 platforms</span></td></tr>
+          <tr><td>CRM + Pipeline</td><td>HubSpot Starter</td><td class="price-cell">$50/mo</td><td><span class="check">Built-in + AI follow-ups</span></td></tr>
+          <tr><td>Revenue Analytics</td><td>Baremetrics</td><td class="price-cell">$50/mo</td><td><span class="check">Built-in + cohort + forecast</span></td></tr>
+          <tr><td>AI Assistant</td><td>ChatGPT Plus</td><td class="price-cell">$20/mo</td><td><span class="check">Built-in + project-aware</span></td></tr>
+          <tr><td>Time Tracking</td><td>Toggl</td><td class="price-cell">$9/mo</td><td><span class="check">Built-in + causality analysis</span></td></tr>
+          <tr><td>Writing Platform</td><td>Scrivener / Final Draft</td><td class="price-cell">$49-250 once</td><td><span class="check">Built-in + 9 AI formats</span></td></tr>
+          <tr><td>Worldbuilding</td><td>World Anvil</td><td class="price-cell">$7/mo</td><td><span class="check">Built-in + AI + voice + images</span></td></tr>
+          <tr><td>Knowledge Base</td><td>Obsidian Sync</td><td class="price-cell">$8/mo</td><td><span class="check">Built-in + snippet vault</span></td></tr>
+          <tr><td>Cross-tool Intelligence</td><td style="color:var(--amber);">Does not exist anywhere</td><td class="price-cell">--</td><td><span class="check">8 analysis engines</span></td></tr>
+          <tr><td>AI Project Manager</td><td style="color:var(--amber);">Does not exist anywhere</td><td class="price-cell">--</td><td><span class="check">5 specialized agents</span></td></tr>
+          <tr>
+            <td class="compare-total"><strong>Total</strong></td>
+            <td class="compare-total"></td>
+            <td class="compare-total"><strong style="color:var(--red);">~$250+/mo</strong></td>
+            <td class="compare-total"><strong style="color:var(--green);">$19/mo</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="savings-callout reveal reveal-delay-2">
+      <span class="old-price">$250+/mo</span>
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+      <span class="new-price glow">$19/mo</span>
+      <div class="savings-note">Everything connected. Nothing scattered. 14-day free trial.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FUTURE PACING — Imagine section
+═══════════════════════════════════════════════ -->
+<div class="imagine-section reveal" aria-label="Imagine your workflow">
+  <div class="container">
+    <div class="imagine-text">
+      <p><strong>Imagine opening one app</strong> and seeing every project, every task, every deal, every post, every character, every metric — connected.</p>
+      <p>Your AI knows your brand voice, your plot arc, your sales pipeline, and your burnout risk. It doesn't just answer questions — it <em>tells you what to do next</em>.</p>
+      <p>You stop being the integration layer. You start being the <strong>founder</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TRUST — Built by a solo founder, for solo founders
+═══════════════════════════════════════════════ -->
+<section aria-label="Trust and philosophy">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Philosophy</div>
+      <h2 class="section-title glow">Built for the rare breed who builds alone.</h2>
+      <p class="section-sub">Not for enterprise teams. Not for committees. For the solo founder, the indie hacker, the creative polymath who refuses to be limited by their tools.</p>
+    </div>
+
+    <div class="trust-grid reveal reveal-delay-1">
+      <div class="trust-card">
+        <h3>Built by a Solo Founder</h3>
+        <p>Thought+Form is built by someone who lives this problem every day. Every feature exists because it was needed, not because a product manager thought it'd look good on a slide deck.</p>
+      </div>
+      <div class="trust-card">
+        <h3>Privacy-First Architecture</h3>
+        <p>Passphrase-based authentication. API keys encrypted with AES-256-GCM derived from your passphrase. No tracking. No analytics. No selling your data. You own everything.</p>
+      </div>
+      <div class="trust-card">
+        <h3>Your Data, Your Way</h3>
+        <p>Export everything as CSV, XLSX, PDF, DOCX, or JSON — anytime. No vendor lock-in. No data hostage situations. If you leave, you take everything with you.</p>
+      </div>
+      <div class="trust-card">
+        <h3>Edge-Deployed Performance</h3>
+        <p>Cloudflare Workers + D1 at the edge. Millisecond cold starts. Desktop app with full terminal. PWA for any browser. Works on every device you own.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     PRICING
+═══════════════════════════════════════════════ -->
+<section id="pricing" style="background: var(--surface);" aria-label="Pricing">
+  <div class="container">
+    <div class="reveal" style="text-align: center; margin-bottom: 48px;">
+      <div class="section-label" style="text-align: center;">Pricing</div>
+      <h2 class="section-title glow" style="text-align: center;">Simple. Honest. No surprise fees.</h2>
+    </div>
+
+    <div class="pricing-grid reveal reveal-delay-1">
+      <div class="pricing-card">
+        <h3>Free</h3>
+        <div class="pricing-price">$0 <span>forever</span></div>
+        <p class="pricing-desc">Core workspace tools to get started. No credit card required.</p>
+        <ul class="pricing-features">
+          <li>Kanban board with drag-and-drop</li>
+          <li>Calendar with .ics import/export</li>
+          <li>Session journal + time tracking</li>
+          <li>Snippet vault</li>
+          <li>Contacts management</li>
+          <li>1 project</li>
+        </ul>
+        <a href="#" class="pricing-btn pricing-btn-ghost">Get Started</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">14-day free trial</div>
+        <h3>Pro</h3>
+        <div class="pricing-price">$19 <span>/month</span></div>
+        <p class="pricing-desc">The full command center. Every module. Every engine. Every agent.</p>
+        <ul class="pricing-features">
+          <li>All 44+ modules unlocked</li>
+          <li>8 intelligence engines</li>
+          <li>5 AI agents + approval dashboard</li>
+          <li>Narrative Studio (9 writing formats)</li>
+          <li>Content scheduling (8 platforms)</li>
+          <li>CRM, Revenue, Funnels</li>
+          <li>Creative Suite + Worldbuilding</li>
+          <li>Terminal + Git + Claude Code</li>
+          <li>Unlimited projects</li>
+          <li>BYOK option (bring your own API keys)</li>
+        </ul>
+        <a href="#" class="pricing-btn pricing-btn-primary">Start 14-Day Trial</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     FINAL CTA
+═══════════════════════════════════════════════ -->
+<section class="final-cta reveal" aria-label="Call to action">
+  <div class="container">
+    <h2 class="glow">Stop scattering your genius<br>across 12 tabs.</h2>
+    <p>44 modules. 8 intelligence engines. 5 AI agents. Every decision, every card, every post, every relationship — connected. Start building your empire from one command center.</p>
+    <div class="cta-row" style="justify-content: center;">
+      <a href="#pricing" class="btn btn-primary">Start Free</a>
+      <a href="features.html" class="btn btn-ghost">Full Feature List</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand glow">THOUGHT+FORM</div>
+        <p class="footer-copy">The developer command center for solo founders who refuse to be limited by their tools. Built with TypeScript, React, Cloudflare Workers, and Claude AI.</p>
+      </div>
+      <div class="footer-links">
+        <a href="features.html">Features</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://github.com/thoughtform/thoughtform">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ SCROLL REVEAL + NAV SCROLL ═══ -->
+<script>
+  // IntersectionObserver for scroll-reveal animations
+  (function() {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      // Fallback: show everything immediately
+      for (var i = 0; i < els.length; i++) els[i].classList.add('visible');
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function(el) { observer.observe(el); });
+  })();
+
+  // Nav scroll shadow
+  (function() {
+    var nav = document.querySelector('nav');
+    var scrolled = false;
+    window.addEventListener('scroll', function() {
+      var shouldBeScrolled = window.scrollY > 40;
+      if (shouldBeScrolled !== scrolled) {
+        scrolled = shouldBeScrolled;
+        nav.classList.toggle('scrolled', scrolled);
+      }
+    }, { passive: true });
+  })();
+</script>
+
+</body>
+</html>

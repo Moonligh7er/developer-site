@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring GPS Jamming Near Conflict Zones — Deep Seer Blog</title>
+<meta name="description" content="Learn how to monitor GPS jamming and spoofing near conflict zones using open data. Covers NOTAMs, GPSJam.org, ADS-B NIC/NACp values, and how to detect interference from commercial flight data in hotspots like Kaliningrad, the Black Sea, and the Middle East.">
+<meta name="keywords" content="GPS jamming, GPS spoofing, conflict zones, ADS-B NIC NACp, NOTAMs, GPSJam, electronic warfare, GNSS interference, Kaliningrad, Black Sea">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/monitoring-gps-jamming-conflict-zones">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monitoring GPS Jamming Near Conflict Zones">
+<meta property="og:description" content="GPS interference is electronic warfare happening in real-time. Here's how to monitor it using open data from aviation, maritime, and crowdsourced reports.">
+<meta property="og:url" content="https://deepseer.io/blog/monitoring-gps-jamming-conflict-zones">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Monitoring GPS Jamming Near Conflict Zones">
+<meta name="twitter:description" content="GPS interference is electronic warfare happening in real-time. Here's how to monitor it using open data from aviation, maritime, and crowdsourced reports.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Monitoring GPS Jamming Near Conflict Zones",
+  "description": "GPS interference is electronic warfare happening in real-time. Here's how to monitor it using open data from aviation, maritime, and crowdsourced reports.",
+  "url": "https://deepseer.io/blog/monitoring-gps-jamming-conflict-zones",
+  "datePublished": "2026-02-07",
+  "dateModified": "2026-02-07",
+  "author": {
+    "@type": "Person",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/monitoring-gps-jamming-conflict-zones"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article-header{max-width:720px;margin:0 auto;padding:60px 24px 0}
+.article-header h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#666;margin-bottom:32px;flex-wrap:wrap}
+.category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px}
+.cat-security{background:rgba(239,68,68,0.15);color:#ef4444}
+
+.article-body{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.article-body h2{font-size:22px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-0.02em}
+.article-body p{margin-bottom:16px;font-size:15px;color:#d1d5db}
+.article-body ul,.article-body ol{margin:0 0 16px 24px;font-size:15px}
+.article-body li{margin-bottom:8px}
+.article-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article-body pre{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:16px;font-size:13px;line-height:1.5}
+.article-body pre code{background:none;padding:0}
+.article-body strong{color:#fff}
+
+.cta-box{background:linear-gradient(135deg,rgba(0,204,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,204,255,0.2);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+.cta-box h3{color:#fff;font-size:18px;margin-bottom:8px}
+.cta-box p{color:#9ca3af;font-size:14px;margin-bottom:16px}
+.cta-box a.btn{display:inline-block;background:#00ccff;color:#000;font-weight:600;font-size:14px;padding:10px 24px;border-radius:8px;text-decoration:none}
+.cta-box a.btn:hover{background:#00b8e6;text-decoration:none}
+
+.related{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.related h3{color:#fff;font-size:16px;margin-bottom:16px}
+.related a{display:block;padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:14px;color:#00ccff}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article-header h1{font-size:28px}
+  .article-header{padding:40px 16px 0}
+  .article-body{padding:0 16px 60px}
+  .related{padding:0 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="article-header">
+  <h1>Monitoring GPS Jamming Near Conflict Zones</h1>
+  <div class="article-meta">
+    <span>Feb 7, 2026</span>
+    <span>&middot;</span>
+    <span>9 min read</span>
+    <span>&middot;</span>
+    <span class="category cat-security">Security</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+<p>On any given day, GPS signals are being deliberately degraded or falsified across dozens of locations worldwide. This is not hypothetical &mdash; it is ongoing electronic warfare that affects commercial aviation, maritime shipping, and civilian navigation. Since 2018, researchers have documented persistent GPS interference affecting over 50,000 commercial flights annually, with the problem accelerating sharply since 2022. The remarkable thing is that much of this interference is detectable using entirely open-source data.</p>
+
+<h2>Jamming vs. Spoofing: Two Different Threats</h2>
+
+<p><strong>GPS jamming</strong> is brute-force denial. A jammer broadcasts noise on GPS frequencies (L1 at 1575.42 MHz, L2 at 1227.60 MHz), overpowering the extremely weak satellite signals (~-130 dBm at ground level). The result is that GPS receivers within range lose their position fix entirely. The affected device knows it has lost GPS &mdash; it reports "no signal" or "position unavailable."</p>
+
+<p><strong>GPS spoofing</strong> is far more insidious. A spoofer broadcasts counterfeit GPS signals that mimic real satellites but encode false position and timing information. A spoofed receiver computes a position fix that looks valid but points to the wrong location. The receiver does not know it has been compromised &mdash; it reports a confident fix at a false position. This is what makes spoofing dangerous for aviation: an aircraft's navigation system may silently shift the perceived position by tens of kilometers without triggering any alarm.</p>
+
+<p>Both are illegal under most jurisdictions (in the U.S., under 18 U.S.C. 32 for aviation interference), but enforcement is difficult when the source is a state military operating within its own territory or near a conflict zone.</p>
+
+<h2>Detecting Interference from ADS-B Data</h2>
+
+<p>Commercial aircraft equipped with ADS-B broadcast two critical quality indicators that reveal GPS health:</p>
+
+<p><strong>NIC (Navigation Integrity Category)</strong> ranges from 0 to 11 and describes the containment radius within which the true position lies. NIC 8 means the position is accurate within 185.2 meters (0.1 nautical miles). NIC 0 means the integrity is unknown or the position cannot be verified.</p>
+
+<p><strong>NACp (Navigation Accuracy Category - Position)</strong> ranges from 0 to 11 and describes the 95th-percentile accuracy of the position. NACp 10 means the position is accurate to within 10 meters. NACp 0 means accuracy is unknown.</p>
+
+<pre><code>Normal ADS-B message (healthy GPS):
+{
+  "hex": "a1b2c3",
+  "flight": "UAL123",
+  "lat": 41.9786,
+  "lon": 28.8197,
+  "nic": 8,
+  "nac_p": 10,
+  "sil": 3
+}
+
+Degraded ADS-B message (GPS interference):
+{
+  "hex": "a1b2c3",
+  "flight": "UAL123",
+  "lat": 41.9786,
+  "lon": 28.8197,
+  "nic": 0,
+  "nac_p": 0,
+  "sil": 0
+}</code></pre>
+
+<p>When a cluster of aircraft in the same geographic area simultaneously reports NIC/NACp values dropping to 0, it is strong evidence of GPS interference affecting that airspace. Individual NIC drops can be caused by avionics issues, but correlated drops across multiple aircraft are almost certainly environmental &mdash; meaning a jammer or spoofer is active in the area.</p>
+
+<p>The <strong>SIL (Source Integrity Level)</strong> provides additional context: SIL 3 means the probability of an undetected failure is less than 10^-7 per flight hour. A drop to SIL 0 means the system cannot guarantee any integrity level.</p>
+
+<h2>NOTAMs: Official Warnings</h2>
+
+<p>Notices to Air Missions (NOTAMs) are the aviation system's official channel for communicating GPS interference. When military exercises or known interference events will affect GPS, NOTAM providers issue warnings. These are publicly accessible through FAA NOTAM Search, Eurocontrol, and various aggregation services.</p>
+
+<p>A typical GPS interference NOTAM looks like this:</p>
+
+<pre><code>!FDC 6/4521 ZLA PART 1 OF 2 NAV GPS
+(NAWCWD) (INCLUDING WAAS, GBAS, AND ADS-B)
+MAY NOT BE AVAILABLE WITHIN A 425NM RADIUS
+OF 353154N1171005W (CHINA LAKE, CA)
+FL400-FL000
+2602071600-2602072200</code></pre>
+
+<p>This tells us that GPS may be unreliable within 425 nautical miles of China Lake, California, from the surface to FL400 (40,000 feet), during a 6-hour window. The scope is remarkable &mdash; 425 NM encompasses most of the western United States, though the actual degradation zone is much smaller than the warning radius.</p>
+
+<p>U.S. military GPS testing at White Sands, China Lake, and other ranges generates regular NOTAMs. Outside U.S. territory, NOTAMs for GPS interference are less common because the interference is often adversarial, not planned.</p>
+
+<h2>GPSJam.org and Crowdsourced Monitoring</h2>
+
+<p>The GPSJam.org project, created by John Wiseman, aggregates ADS-B data from the ADS-B Exchange network and generates daily heatmaps of GPS interference worldwide. The methodology is straightforward: aircraft with NACp values of 0 or 1 are flagged as potentially affected, and their positions are aggregated into geographic tiles colored by density.</p>
+
+<p>The resulting maps reveal persistent interference hotspots. As of early 2026, the most affected regions include:</p>
+
+<ul>
+  <li><strong>Eastern Mediterranean / Middle East:</strong> The area around Cyprus, Lebanon, Israel, and Syria has experienced near-continuous GPS interference since late 2023. Commercial aircraft approaching Ben Gurion Airport routinely report NACp 0 values. The interference is attributed to Israeli military GPS denial systems activated during the ongoing conflict.</li>
+  <li><strong>Baltic region / Kaliningrad:</strong> Russia's Kaliningrad exclave has been a persistent source of GPS interference since 2018. Aircraft overflying Poland, Lithuania, Latvia, and Finland have been affected. The interference correlates with Russian military exercises and heightened geopolitical tension.</li>
+  <li><strong>Black Sea / Eastern Turkey:</strong> The area around the Turkey-Syria-Iraq border and the eastern Black Sea coast shows frequent GPS degradation, likely linked to both Russian and Turkish military electronic warfare systems.</li>
+  <li><strong>Northern Norway / Kola Peninsula:</strong> Interference from Russian military systems near Murmansk has affected air navigation in northern Scandinavia, particularly during NATO exercises.</li>
+</ul>
+
+<h2>Detecting Spoofing Specifically</h2>
+
+<p>Jamming is relatively easy to detect &mdash; the signal disappears. Spoofing is harder because the receiver reports a valid-looking position. However, several indicators can reveal spoofing:</p>
+
+<p><strong>Position jumps:</strong> If an aircraft's reported ADS-B position suddenly shifts by several kilometers between consecutive messages (updated every 0.5-2 seconds), and the shift is inconsistent with the aircraft's speed and heading, the position is likely being spoofed. In December 2023, dozens of commercial aircraft over the Middle East were spoofed to report positions near Cairo Airport while physically flying over Iraq.</p>
+
+<p><strong>Altitude inconsistency:</strong> GPS spoofing typically affects horizontal position but not barometric altitude (which is measured independently by a pressure altimeter). If an aircraft reports a GPS altitude that diverges significantly from its barometric altitude, spoofing is likely.</p>
+
+<p><strong>Geometric inconsistency:</strong> When multiple aircraft in the same area all report positions that cluster at the same false point (a common spoofing artifact), the spoofing is obvious. Real aircraft in the same airspace would be at different positions.</p>
+
+<p><strong>RAIM alerts:</strong> Aircraft equipped with Receiver Autonomous Integrity Monitoring (RAIM) can sometimes detect spoofing by comparing satellite signals against each other. RAIM alerts are not broadcast via ADS-B, but pilot reports (PIREPs) of GPS anomalies are filed with ATC and sometimes published.</p>
+
+<h2>Building a Monitoring Pipeline</h2>
+
+<p>For systematic GPS interference monitoring, you need three data streams:</p>
+
+<ol>
+  <li><strong>ADS-B data</strong> with NIC/NACp fields (from adsb.lol, ADS-B Exchange, or your own receiver). Poll every 10-15 seconds. Flag any aircraft with NACp &lt; 4 or NIC &lt; 4.</li>
+  <li><strong>NOTAM data</strong> filtered for GPS/GNSS keywords. Parse the effective dates and geographic boundaries to create a spatial layer of known interference zones.</li>
+  <li><strong>Crowdsourced reports</strong> from GPSJam.org (daily heatmaps) and maritime AIS interference reports from the U.S. Coast Guard Navigation Center.</li>
+</ol>
+
+<p>Overlay these data streams on a common geospatial display. Interference zones will emerge as clusters of degraded NIC/NACp values, often centered on military installations or conflict boundaries. Track these zones over time to build a pattern-of-life for electronic warfare activity &mdash; when does the jamming start and stop? Does it correlate with military exercises? Does it expand during crisis periods?</p>
+
+<p>This kind of monitoring has genuine operational value for airlines, shipping companies, and humanitarian organizations operating in affected regions. It also provides a real-time indicator of military escalation that often precedes kinetic operations by hours or days.</p>
+
+<div class="cta-box">
+  <h3>Try it in Deep Seer</h3>
+  <p>Deep Seer overlays live ADS-B data with NIC/NACp integrity values on the 3D globe, highlighting GPS interference zones in real-time alongside flight tracks and military aircraft positions.</p>
+  <a href="/" class="btn">Launch Deep Seer</a>
+</div>
+
+</div>
+
+<div class="related">
+  <h3>Related Articles</h3>
+  <a href="/blog/detect-gps-spoofing-flight-data">How to Detect GPS Spoofing Using Commercial Flight Data</a>
+  <a href="/blog/track-military-aircraft-real-time">How to Track Military Aircraft in Real-Time</a>
+  <a href="/blog/ais-dark-transits">Understanding AIS Dark Transits: When Ships Go Silent</a>
+  <a href="/blog/reading-the-absence">Reading the Absence: What Missing Data Tells Intelligence Analysts</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

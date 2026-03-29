@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA — Conflict Tree Visualization Preview</title>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-deep: #0a0e14;
+  --bg-surface: #111820;
+  --bg-card: #151d28;
+  --border: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --purple: #7c3aed;
+  --amber: #f59e0b;
+  --green: #22c55e;
+  --teal: #00d4aa;
+  --rose: #e11d48;
+}
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-deep); color: var(--text-primary);
+  font-size: 13px; height: 100vh; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px; background: var(--bg-surface);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.header-brand { font-size: 1rem; font-weight: 700; color: var(--rose); letter-spacing: 0.15em; }
+.header-sub { font-size: 0.7rem; color: var(--text-muted); margin-left: 10px; }
+.header-scores { display: flex; gap: 16px; align-items: center; }
+.score-red { color: var(--red); font-weight: 700; font-size: 1.1rem; }
+.score-blue { color: var(--blue); font-weight: 700; font-size: 1.1rem; }
+.score-vs { color: var(--text-muted); font-size: 0.75rem; }
+.header-status { font-size: 0.75rem; color: var(--amber); font-weight: 700; }
+.header-time { font-size: 0.85rem; color: var(--text-muted); }
+
+/* Team labels */
+.team-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 20px; background: rgba(10,14,20,0.5);
+  border-bottom: 1px solid rgba(30,41,59,0.5); flex-shrink: 0;
+}
+.team-red { color: var(--red); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em; }
+.team-blue { color: var(--blue); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.15em; }
+.phase-labels { display: flex; gap: 2px; }
+.phase-lbl {
+  font-size: 0.6rem; color: var(--text-muted); padding: 2px 8px;
+  border: 1px solid rgba(30,41,59,0.3); border-radius: 3px;
+  letter-spacing: 0.05em;
+}
+
+/* Cytoscape */
+#cy {
+  flex: 1;
+  background: var(--bg-deep);
+  background-image: radial-gradient(circle, rgba(30,41,59,0.3) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glow pulse for critical nodes */
+@keyframes nodeGlow {
+  0%, 100% { box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+  50% { box-shadow: 0 0 20px rgba(239,68,68,0.6); }
+}
+@keyframes edgeFlow {
+  to { stroke-dashoffset: -20; }
+}
+
+/* Legend */
+.legend {
+  display: flex; gap: 20px; padding: 8px 20px; background: var(--bg-surface);
+  border-top: 1px solid var(--border); justify-content: center;
+  flex-shrink: 0; flex-wrap: wrap;
+}
+.leg { display: flex; align-items: center; gap: 5px; font-size: 0.65rem; color: var(--text-muted); }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; }
+.leg-sz { border-radius: 3px; background: var(--text-muted); }
+.leg-sz.lg { width: 16px; height: 11px; }
+.leg-sz.md { width: 12px; height: 8px; }
+.leg-sz.sm { width: 8px; height: 5px; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed; z-index: 200; pointer-events: none;
+  background: rgba(17,24,32,0.96); border: 1px solid #2d3f56;
+  border-radius: 6px; padding: 10px 14px; max-width: 350px;
+  backdrop-filter: blur(12px); display: none;
+}
+.tooltip.visible { display: block; }
+.tt-time { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 3px; }
+.tt-team { font-size: 0.7rem; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.1em; }
+.tt-action { font-size: 0.78rem; color: var(--text-primary); margin-bottom: 4px; line-height: 1.5; }
+.tt-detail { font-size: 0.72rem; color: var(--text-secondary); line-height: 1.5; }
+.tt-narration { font-size: 0.72rem; color: var(--amber); font-style: italic; margin-top: 6px; padding: 6px 0 0; border-top: 1px solid rgba(30,41,59,0.5); line-height: 1.5; }
+.tt-mitre { font-size: 0.65rem; color: var(--purple); font-weight: 600; margin-top: 4px; }
+
+/* Detail panel */
+.detail {
+  position: fixed; right: 16px; top: 100px; width: 340px; z-index: 100;
+  background: rgba(17,24,32,0.97); border: 1px solid #2d3f56;
+  border-radius: 8px; padding: 18px; display: none;
+  backdrop-filter: blur(16px);
+}
+.detail.visible { display: block; }
+.detail-close {
+  position: absolute; top: 8px; right: 12px; background: none; border: none;
+  color: var(--text-muted); font-size: 1.2rem; cursor: pointer;
+}
+.detail-close:hover { color: var(--text-primary); }
+.det-team { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; margin-bottom: 2px; }
+.det-phase { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.det-time { font-size: 0.7rem; color: #475569; margin-bottom: 10px; }
+.det-action { font-size: 0.82rem; color: var(--text-primary); line-height: 1.6; margin-bottom: 8px; }
+.det-details { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px; }
+.det-mitre { font-size: 0.72rem; color: var(--purple); font-weight: 600; margin-bottom: 6px; }
+.det-winner { font-size: 0.75rem; font-weight: 700; margin-bottom: 6px; }
+.det-narration { font-size: 0.75rem; color: var(--amber); font-style: italic; line-height: 1.6; padding: 8px; border-left: 2px solid var(--amber); margin-top: 8px; }
+.det-collapsed { font-size: 0.7rem; color: var(--text-muted); font-style: italic; margin-top: 6px; }
+
+.preview-badge {
+  position: fixed; top: 8px; right: 8px; z-index: 300;
+  padding: 3px 10px; background: rgba(225,29,72,0.15); color: var(--rose);
+  font-size: 0.6rem; font-weight: 700; border-radius: 4px;
+  border: 1px solid rgba(225,29,72,0.3); letter-spacing: 0.1em;
+}
+</style>
+</head>
+<body>
+
+<div class="preview-badge">CONFLICT TREE PREVIEW</div>
+
+<div class="header">
+  <div style="display:flex;align-items:baseline">
+    <span class="header-brand">CATH MAIGE TUIRED</span>
+    <span class="header-sub">Conflict Tree</span>
+  </div>
+  <div class="header-status">RED WIN</div>
+  <div class="header-time">Duration: 07:02</div>
+  <div class="header-scores">
+    <span class="score-red">340</span>
+    <span class="score-vs">vs</span>
+    <span class="score-blue">180</span>
+  </div>
+</div>
+
+<div class="team-bar">
+  <span class="team-red">RED TEAM &darr;</span>
+  <div class="phase-labels">
+    <span class="phase-lbl">Recon</span>
+    <span class="phase-lbl">Scanning</span>
+    <span class="phase-lbl">Exploitation</span>
+    <span class="phase-lbl">Post-Exploit</span>
+    <span class="phase-lbl">Lateral</span>
+    <span class="phase-lbl">Objective</span>
+  </div>
+  <span class="team-blue">&darr; BLUE TEAM</span>
+</div>
+
+<div id="cy"></div>
+
+<div class="legend">
+  <div class="leg"><span class="leg-dot" style="background:#9b1c31;border:1px solid #ef4444;box-shadow:0 0 6px rgba(239,68,68,0.4)"></span>Ruby (Red)</div>
+  <div class="leg"><span class="leg-dot" style="background:#1a3a6b;border:1px solid #3b82f6;box-shadow:0 0 6px rgba(59,130,246,0.4)"></span>Sapphire (Blue)</div>
+  <div class="leg"><span class="leg-dot" style="background:#4a1d6b;border:1px solid #7c3aed;box-shadow:0 0 6px rgba(124,58,237,0.4)"></span>Amethyst (Hunt)</div>
+  <div class="leg"><span class="leg-dot" style="background:#7a5c1f;border:1px solid #f59e0b;box-shadow:0 0 6px rgba(245,158,11,0.4);transform:rotate(45deg)"></span>Amber (Clash)</div>
+  <div class="leg"><span class="leg-dot" style="background:#7a5c1f;border:2px solid #ef4444;box-shadow:0 0 6px rgba(239,68,68,0.5)"></span>Red Wins</div>
+  <div class="leg"><span class="leg-dot" style="background:#7a5c1f;border:2px solid #3b82f6;box-shadow:0 0 6px rgba(59,130,246,0.5)"></span>Blue Wins</div>
+  <div class="leg"><span class="leg-sz lg" style="box-shadow:0 0 8px rgba(255,255,255,0.15)"></span>Critical</div>
+  <div class="leg"><span class="leg-sz md"></span>Standard</div>
+  <div class="leg"><span class="leg-sz sm"></span>Minor</div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tt-time" id="tt-time"></div>
+  <div class="tt-team" id="tt-team"></div>
+  <div class="tt-action" id="tt-action"></div>
+  <div class="tt-detail" id="tt-detail"></div>
+  <div class="tt-mitre" id="tt-mitre"></div>
+  <div class="tt-narration" id="tt-narration"></div>
+</div>
+
+<div class="detail" id="detail">
+  <button class="detail-close" onclick="document.getElementById('detail').classList.remove('visible')">&times;</button>
+  <div class="det-team" id="det-team"></div>
+  <div class="det-phase" id="det-phase"></div>
+  <div class="det-time" id="det-time"></div>
+  <div class="det-action" id="det-action"></div>
+  <div class="det-details" id="det-details"></div>
+  <div class="det-mitre" id="det-mitre"></div>
+  <div class="det-winner" id="det-winner"></div>
+  <div class="det-narration" id="det-narration"></div>
+</div>
+
+<script>
+// ── Mock battle data ────────────────────────────────────────────────
+// Gemstone palette — deep, dark, ethereal
+const RED = '#9b1c31';       // Deep ruby
+const RED_GLOW = '#ef4444';  // Ruby glow
+const BLUE = '#1a3a6b';      // Deep sapphire
+const BLUE_GLOW = '#3b82f6'; // Sapphire glow
+const PURPLE = '#4a1d6b';    // Deep amethyst
+const PURPLE_GLOW = '#7c3aed'; // Amethyst glow
+const AMBER = '#7a5c1f';     // Deep amber
+const AMBER_GLOW = '#f59e0b'; // Amber glow
+const SURFACE = '#0d1117';   // Obsidian
+
+const nodes = [
+  // Red tree — Ruby gemstones
+  {data:{id:'r1',label:'SYN scan 10.99.0.0/24',team:'red',phase:'recon',elapsed:'00:01:14',severity:2,narration:'Red opens with standard SYN scan. 3 hosts responding.',details:'nmap -sS 10.99.0.0/24 → 3 hosts up',mitre:'T1046',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:2,width:44,height:30}},
+  {data:{id:'r2',label:'Service enumeration',team:'red',phase:'recon',elapsed:'00:02:38',severity:1,narration:'',details:'Banner grab: SSH 8.9, Apache 2.4.58',mitre:'T1046',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:2,width:34,height:24}},
+  {data:{id:'r3',label:'Nuclei scan on .10',team:'red',phase:'scanning',elapsed:'00:05:18',severity:2,narration:'Red launches Nuclei against the web server. This triggers Blue detection.',details:'nuclei -t cves/ -u http://10.99.0.10 → CVE-2024-1234 found',mitre:'T1595',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:2,width:44,height:30}},
+  {data:{id:'r4',label:'SQLMap against login.php',team:'red',phase:'scanning',elapsed:'00:06:45',severity:2,narration:'',details:'sqlmap -u login.php?user=admin --dbs → WAF detected, switching tamper',mitre:'T1190',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:2,width:44,height:30}},
+  {data:{id:'r5',label:'SSRF exploit on .10',team:'red',phase:'exploitation',elapsed:'00:07:02',severity:3,narration:'Red exploits SSRF → credential file read. This is the turning point.',details:'CVE-2024-1234 Apache mod_proxy SSRF → /etc/shadow read',mitre:'T1190',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:4,width:56,height:38}},
+  {data:{id:'r6',label:'SSH as root on .10',team:'red',phase:'post_exploit',elapsed:'00:07:45',severity:3,narration:'ROOT. Red uses cracked credentials to SSH as root.',details:'ssh root@10.99.0.10 with cracked hash → root shell obtained',mitre:'T1078',collapsed_count:0,winner:'',bgColor:RED,borderColor:RED_GLOW,borderWidth:4,width:56,height:38}},
+
+  // Blue tree — Sapphire gemstones
+  {data:{id:'b1',label:'Baseline monitoring',team:'blue',phase:'monitoring',elapsed:'00:00:30',severity:1,narration:'',details:'SENTINEL active, IDS rules loaded, monitoring baseline',mitre:'',collapsed_count:0,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:34,height:24}},
+  {data:{id:'b2',label:'3 recon actions',team:'blue',phase:'monitoring',elapsed:'00:02:00',severity:1,narration:'',details:'Routine monitoring, no alerts yet',mitre:'',collapsed_count:3,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:44,height:28}},
+  {data:{id:'b3',label:'Scan spike detected!',team:'blue',phase:'detecting',elapsed:'00:05:22',severity:2,narration:'Blue anomaly detector flags the spike — 47 requests in 3 seconds from .5.',details:'Anomaly: 47 req/3s from 10.99.0.5 → Bayesian score 0.67→0.82',mitre:'',collapsed_count:0,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:48,height:32}},
+  {data:{id:'b4',label:'Threat assessment',team:'blue',phase:'detecting',elapsed:'00:06:00',severity:2,narration:'Blue is triaging but hasn\'t correlated to specific CVE yet.',details:'Analyzing scan patterns, checking threat feeds',mitre:'',collapsed_count:0,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:42,height:28}},
+  {data:{id:'b5',label:'WAF blocks SQLi',team:'blue',phase:'responding',elapsed:'00:06:48',severity:2,narration:'Blue WAF catches initial SQLi payloads. But Red already found SSRF.',details:'ModSecurity blocks 12 SQLi payloads from .5',mitre:'',collapsed_count:0,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:44,height:30}},
+  {data:{id:'b6',label:'Containment attempt',team:'blue',phase:'containing',elapsed:'00:07:30',severity:2,narration:'Blue initiates containment but is 28 seconds too late — Red already has root.',details:'IP block on .5, credential rotation initiated',mitre:'',collapsed_count:0,winner:'',bgColor:BLUE,borderColor:BLUE_GLOW,borderWidth:2,width:48,height:30}},
+  {data:{id:'b7',label:'Threat hunting',team:'blue',phase:'hunting',elapsed:'00:08:00',severity:2,narration:'Blue goes hunting but the damage is done.',details:'Checking for lateral movement, scanning for persistence',mitre:'',collapsed_count:0,winner:'',bgColor:PURPLE,borderColor:PURPLE_GLOW,borderWidth:2,width:42,height:28}},
+
+  // Interactions — Amber gemstones, border = winner's glow color
+  {data:{id:'i1',label:'CONTACT: Scan detected',team:'interaction',phase:'scanning',elapsed:'00:05:22',severity:2,narration:'FIRST CONTACT. Red\'s Nuclei scan triggers Blue\'s anomaly detector. Blue detects but hasn\'t identified the specific vulnerability yet.',details:'Red scanning → Blue detects scan spike',mitre:'',collapsed_count:0,winner:'blue',bgColor:AMBER,borderColor:BLUE_GLOW,borderWidth:4,width:52,height:34}},
+  {data:{id:'i2',label:'SQLi vs WAF',team:'interaction',phase:'scanning',elapsed:'00:06:48',severity:2,narration:'Contested exchange. Blue WAF blocks SQLi payloads, but Red was already pivoting to SSRF. The WAF win is pyrrhic.',details:'Blue blocks SQLi but Red found SSRF independently',mitre:'',collapsed_count:0,winner:'contested',bgColor:AMBER,borderColor:AMBER_GLOW,borderWidth:4,width:52,height:34}},
+  {data:{id:'i3',label:'SSRF exploit vs Triage',team:'interaction',phase:'exploitation',elapsed:'00:07:02',severity:3,narration:'Red exploits SSRF while Blue is still triaging the scan alert. 90 seconds between detection and exploitation — Blue was too slow.',details:'Red exploits before Blue correlates. TIME ADVANTAGE: Red.',mitre:'T1190',collapsed_count:0,winner:'red',bgColor:AMBER,borderColor:RED_GLOW,borderWidth:5,width:60,height:40}},
+  {data:{id:'i4',label:'Root vs Containment',team:'interaction',phase:'post_exploit',elapsed:'00:07:45',severity:3,narration:'Red achieves root 15 seconds before Blue\'s containment kicks in. The credential rotation comes too late.',details:'Root obtained at 07:45. Containment at 08:00. 15-second gap.',mitre:'T1078',collapsed_count:0,winner:'red',bgColor:AMBER,borderColor:RED_GLOW,borderWidth:5,width:60,height:40}},
+];
+
+const edges = [
+  // Red chain
+  {data:{source:'r1',target:'r2',winner:'red'}},
+  {data:{source:'r2',target:'r3',winner:'red'}},
+  {data:{source:'r3',target:'r4',winner:'red'}},
+  {data:{source:'r4',target:'r5',winner:'red'}},
+  {data:{source:'r5',target:'r6',winner:'red'}},
+  // Blue chain
+  {data:{source:'b1',target:'b2',winner:'blue'}},
+  {data:{source:'b2',target:'b3',winner:'blue'}},
+  {data:{source:'b3',target:'b4',winner:'blue'}},
+  {data:{source:'b4',target:'b5',winner:'blue'}},
+  {data:{source:'b5',target:'b6',winner:'blue'}},
+  {data:{source:'b6',target:'b7',winner:'blue'}},
+  // Interactions — Red connects from left, Blue from right
+  {data:{source:'r3',target:'i1',winner:'blue'}},
+  {data:{source:'b3',target:'i1',winner:'blue'}},
+  {data:{source:'r4',target:'i2',winner:'contested'}},
+  {data:{source:'b5',target:'i2',winner:'contested'}},
+  {data:{source:'r5',target:'i3',winner:'red'}},
+  {data:{source:'b4',target:'i3',winner:'red'}},
+  {data:{source:'r6',target:'i4',winner:'red'}},
+  {data:{source:'b6',target:'i4',winner:'red'}},
+];
+
+// ── Color helpers ───────────────────────────────────────────────────
+function winColor(w) { return w==='red'?RED:w==='blue'?BLUE:AMBER; }
+function winGlow(w) { return w==='red'?RED_GLOW:w==='blue'?BLUE_GLOW:AMBER_GLOW; }
+
+// ── Init Cytoscape ──────────────────────────────────────────────────
+const cy = cytoscape({
+  container: document.getElementById('cy'),
+  elements: {nodes, edges},
+  style: [
+    // Gemstone nodes — deep colors with glowing borders
+    {selector:'node', style:{
+      'label':'data(label)','text-valign':'center','text-halign':'center',
+      'font-family':'JetBrains Mono, monospace','font-size':'8px',
+      'color':'#e2e8f0','text-wrap':'ellipsis','text-max-width':'data(width)',
+      'background-color':'data(bgColor)',
+      'background-opacity':0.85,
+      'border-color':'data(borderColor)',
+      'border-width':'data(borderWidth)',
+      'border-opacity':0.9,
+      'width':'data(width)','height':'data(height)',
+      'shape':'cut-rectangle',
+      'text-outline-width':1,
+      'text-outline-color':'#000000',
+      'text-outline-opacity':0.6,
+    }},
+    // Ethereal glow on all nodes
+    {selector:'node[team = "red"]', style:{
+      'overlay-color':'#ef4444','overlay-padding':5,'overlay-opacity':0.08,
+    }},
+    {selector:'node[team = "blue"]', style:{
+      'overlay-color':'#3b82f6','overlay-padding':5,'overlay-opacity':0.08,
+    }},
+    // Laser edges — glowing lines with arrow tips
+    {selector:'edge', style:{
+      'width':2,
+      'target-arrow-shape':'triangle',
+      'curve-style':'bezier',
+      'opacity':0.8,
+      'line-color':function(e){return winGlow(e.data('winner'));},
+      'target-arrow-color':function(e){return winGlow(e.data('winner'));},
+      'line-style':'dashed',
+      'line-dash-pattern':[8,5],
+      'line-dash-offset':0,
+    }},
+    {selector:'edge:selected', style:{'width':4,'opacity':1}},
+    {selector:'node:selected', style:{'border-width':5,'border-color':'#ffffff','z-index':999,'overlay-opacity':0.2}},
+    // Critical gemstones — intense glow
+    {selector:'node[severity >= 3]', style:{
+      'overlay-padding':10,'overlay-opacity':0.18,'border-width':4,
+    }},
+    // Interaction nodes — amber gemstones with winner glow border
+    {selector:'node[team = "interaction"]', style:{
+      'overlay-color':function(n){return n.data('borderColor');},'overlay-padding':12,'overlay-opacity':0.15,
+      'shape':'diamond',
+    }},
+    // Collapsed nodes
+    {selector:'node[collapsed_count > 0]', style:{'shape':'barrel','border-style':'dashed','overlay-opacity':0.04}},
+    // Amethyst for hunting
+    {selector:'node[phase = "hunting"]', style:{
+      'overlay-color':'#7c3aed','overlay-padding':6,'overlay-opacity':0.12,
+    }},
+  ],
+  layout:{name:'dagre',rankDir:'TB',nodeSep:30,rankSep:50,edgeSep:15},
+  userZoomingEnabled:true,userPanningEnabled:true,boxSelectionEnabled:false,
+});
+
+// ── Tooltip on hover ────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+cy.on('mouseover','node',function(e){
+  const d=e.target.data(), p=e.renderedPosition;
+  const teamColor = d.team==='red'?RED:d.team==='blue'?BLUE:AMBER;
+  document.getElementById('tt-time').textContent=d.elapsed||'';
+  document.getElementById('tt-team').textContent=d.team.toUpperCase()+(d.winner?' — Winner: '+d.winner.toUpperCase():'');
+  document.getElementById('tt-team').style.color=teamColor;
+  document.getElementById('tt-action').textContent=d.label||'';
+  document.getElementById('tt-detail').textContent=d.details||'';
+  document.getElementById('tt-mitre').textContent=d.mitre?'MITRE: '+d.mitre:'';
+  document.getElementById('tt-mitre').style.display=d.mitre?'block':'none';
+  const narr=document.getElementById('tt-narration');
+  narr.textContent=d.narration||'';
+  narr.style.display=d.narration?'block':'none';
+  tooltip.style.left=(p.x+20)+'px';
+  tooltip.style.top=(p.y+80)+'px';
+  tooltip.classList.add('visible');
+});
+cy.on('mouseout','node',function(){tooltip.classList.remove('visible');});
+
+// ── Detail panel on click ───────────────────────────────────────────
+const detail = document.getElementById('detail');
+cy.on('tap','node',function(e){
+  const d=e.target.data();
+  const teamColor = d.team==='red'?RED:d.team==='blue'?BLUE:AMBER;
+  document.getElementById('det-team').textContent=d.team.toUpperCase();
+  document.getElementById('det-team').style.color=teamColor;
+  document.getElementById('det-phase').textContent=d.phase||'';
+  document.getElementById('det-time').textContent=(d.elapsed||'')+' — '+(d.timestamp||'');
+  document.getElementById('det-action').textContent=d.label||'';
+  document.getElementById('det-details').textContent=d.details||'';
+  const mitre=document.getElementById('det-mitre');
+  mitre.textContent=d.mitre?'MITRE: '+d.mitre:'';
+  mitre.style.display=d.mitre?'block':'none';
+  const winner=document.getElementById('det-winner');
+  if(d.team==='interaction'&&d.winner){
+    winner.textContent='Winner: '+d.winner.toUpperCase();
+    winner.style.color=winColor(d.winner);
+    winner.style.display='block';
+  } else { winner.style.display='none'; }
+  const narr=document.getElementById('det-narration');
+  if(d.narration){ narr.textContent='"'+d.narration+'"'; narr.style.display='block'; }
+  else { narr.style.display='none'; }
+  detail.classList.add('visible');
+});
+cy.on('tap',function(e){if(e.target===cy)detail.classList.remove('visible');});
+
+// ── Laser edge animation — fast flowing dashes ─────────────────────
+let dashOffset = 0;
+setInterval(function(){
+  dashOffset = (dashOffset + 2) % 26;
+  cy.edges().forEach(function(e){ e.style('line-dash-offset', -dashOffset); });
+}, 40);
+
+// ── Gemstone pulse — ethereal breathing glow ────────────────────────
+let pulsePhase = 0;
+setInterval(function(){
+  pulsePhase = (pulsePhase + 1) % 60;
+  const t = pulsePhase / 60;
+  const breath = 0.06 + 0.14 * Math.sin(t * Math.PI * 2);
+  const intense = 0.12 + 0.18 * Math.sin(t * Math.PI * 2);
+  // Regular gems breathe gently
+  cy.nodes('[team = "red"]').forEach(function(n){
+    if(n.data('severity')<3) n.style('overlay-opacity', breath);
+  });
+  cy.nodes('[team = "blue"]').forEach(function(n){
+    if(n.data('severity')<3) n.style('overlay-opacity', breath);
+  });
+  // Critical gems pulse more intensely
+  cy.nodes('[severity >= 3]').forEach(function(n){ n.style('overlay-opacity', intense); });
+  // Interaction diamonds pulse with winner's energy
+  cy.nodes('[team = "interaction"]').forEach(function(n){ n.style('overlay-opacity', intense * 0.85); });
+  // Amethyst hunting nodes
+  cy.nodes('[phase = "hunting"]').forEach(function(n){ n.style('overlay-opacity', breath * 1.2); });
+}, 50);
+</script>
+</body>
+</html>

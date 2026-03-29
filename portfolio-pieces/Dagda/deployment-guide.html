@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA — Laptop Deployment Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@media print {
+  body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
+  .page-break { page-break-before: always; }
+  h1, h2, h3 { color: #0a0e14 !important; }
+  .step-number { background: #0a0e14 !important; color: white !important; }
+  .warning-box { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; }
+  .info-box { border-color: #3b82f6 !important; background: #eff6ff !important; color: #1e40af !important; }
+  .code-block { background: #f3f4f6 !important; color: #1a1a1a !important; border: 1px solid #d1d5db !important; }
+  a { color: #1e40af !important; }
+  .tab-bar { display: none !important; }
+  .tab-content { display: block !important; }
+  .tab-content::before { content: attr(data-tab-label); display: block; font-size: 1.2rem; font-weight: 700; color: #0a0e14; margin: 24px 0 12px; border-bottom: 2px solid #0a0e14; padding-bottom: 8px; }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: #0a0e14; color: #e2e8f0;
+  line-height: 1.8; font-size: 14px;
+  max-width: 860px; margin: 0 auto; padding: 40px 24px;
+}
+h1 { font-size: 1.8rem; color: #00d4aa; margin-bottom: 8px; letter-spacing: 0.1em; }
+h2 { font-size: 1.3rem; color: #00d4aa; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+h3 { font-size: 1rem; color: #39bae6; margin: 24px 0 12px; }
+h4 { font-size: 0.9rem; color: #c4b5fd; margin: 18px 0 10px; }
+p { margin-bottom: 12px; color: #94a3b8; }
+.subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 32px; }
+.step { margin-bottom: 24px; padding-left: 48px; position: relative; }
+.step-number {
+  position: absolute; left: 0; top: 0;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #00d4aa; color: #0a0e14;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem;
+}
+.code-block {
+  background: #111820; border: 1px solid #1e293b; border-radius: 6px;
+  padding: 14px 18px; margin: 10px 0 16px; font-size: 0.82rem;
+  overflow-x: auto; white-space: pre-wrap; color: #e2e8f0;
+}
+.code-block .prompt { color: #00d4aa; }
+.code-block .comment { color: #64748b; }
+.warning-box {
+  border-left: 4px solid #ef4444; background: rgba(239,68,68,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #fca5a5; font-size: 0.85rem;
+}
+.warning-box strong { color: #ef4444; }
+.danger-box {
+  border: 2px solid #ef4444; background: rgba(239,68,68,0.12);
+  padding: 18px 22px; margin: 20px 0; border-radius: 6px;
+  color: #fca5a5; font-size: 0.9rem;
+}
+.danger-box strong { color: #ef4444; }
+.info-box {
+  border-left: 4px solid #3b82f6; background: rgba(59,130,246,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #93c5fd; font-size: 0.85rem;
+}
+.info-box strong { color: #3b82f6; }
+.success-box {
+  border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #86efac; font-size: 0.85rem;
+}
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li { padding: 4px 0 4px 24px; position: relative; color: #94a3b8; font-size: 0.85rem; }
+.checklist li::before { content: '[ ]'; position: absolute; left: 0; color: #64748b; font-weight: 700; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
+th { text-align: left; padding: 8px 12px; background: #111820; color: #00d4aa; border: 1px solid #1e293b; }
+td { padding: 8px 12px; border: 1px solid #1e293b; color: #94a3b8; }
+a { color: #00d4aa; }
+.toc { margin: 24px 0; padding: 20px; background: #111820; border: 1px solid #1e293b; border-radius: 6px; }
+.toc a { display: block; padding: 4px 0; font-size: 0.85rem; color: #94a3b8; text-decoration: none; }
+.toc a:hover { color: #00d4aa; }
+.toc .toc-indent { padding-left: 20px; }
+.footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #1e293b; text-align: center; color: #475569; font-size: 0.75rem; }
+
+/* ── Tab System ── */
+.tab-bar {
+  display: flex; gap: 0; margin: 24px 0 0;
+  border-bottom: 2px solid #1e293b;
+}
+.tab-bar button {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem; font-weight: 500;
+  padding: 12px 24px; border: none;
+  background: transparent; color: #64748b;
+  cursor: pointer; position: relative;
+  transition: color 0.2s;
+}
+.tab-bar button:hover { color: #e2e8f0; }
+.tab-bar button.active {
+  color: #00d4aa;
+}
+.tab-bar button.active::after {
+  content: ''; position: absolute;
+  bottom: -2px; left: 0; right: 0; height: 2px;
+  background: #00d4aa;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── Inline code ── */
+code {
+  background: #111820; padding: 2px 6px; border-radius: 3px;
+  font-size: 0.85em; color: #e2e8f0;
+}
+</style>
+</head>
+<body>
+
+<h1>DAGDA</h1>
+<div class="subtitle">Laptop Deployment Guide &mdash; From Bare Metal to Operational<br>
+Defensive AI Guardian &amp; Digital Arsenal<br>
+<strong style="color:#ef4444">v2.0 &mdash; Rewritten after failed deployment. Every command verified.</strong></div>
+
+<div class="danger-box">
+<strong>CRITICAL WARNING:</strong> This guide will COMPLETELY ERASE the target laptop's drive.
+Back up all data before proceeding. This process is irreversible.<br><br>
+<strong>Lessons learned the hard way:</strong><br>
+&bull; <code>dd</code> can wipe your USB if you guess the device name wrong &mdash; ALWAYS verify with <code>lsblk</code> first<br>
+&bull; <code>apt full-upgrade</code> can cause an unbootable BusyBox loop &mdash; DO NOT run it during initial setup<br>
+&bull; The package <code>kali-linux-purple</code> does not exist &mdash; use individual tool packages instead<br>
+&bull; Standard Kali installs Xfce, not GNOME &mdash; GNOME must be added after boot
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="toc">
+<strong style="color:#00d4aa">Contents</strong>
+<a href="#prereqs">1. Prerequisites &amp; Hardware Requirements</a>
+<a href="#usb">2. Create Bootable USB</a>
+<a href="#wipe">3. Secure Wipe (Optional)</a>
+<a class="toc-indent" href="#wipe-identify">3.1 Identify Your Internal Drive (MANDATORY)</a>
+<a class="toc-indent" href="#wipe-execute">3.2 Execute the Wipe</a>
+<a href="#install-kali">4. Install Kali Linux (choose your tab below)</a>
+<a class="toc-indent" href="#tab-standard-section">Tab: Standard Kali + GNOME</a>
+<a class="toc-indent" href="#tab-purple-section">Tab: Kali Purple</a>
+<a href="#post-install">5. Post-Install Setup (choose your tab below)</a>
+<a href="#install-dagda">6. Install Dagda</a>
+<a href="#configure">7. Configure &amp; First Launch</a>
+<a href="#verify">8. Verification Checklist</a>
+<a href="#troubleshooting">9. Troubleshooting</a>
+<a href="#recovery">10. Recovery Instructions</a>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: PREREQUISITES -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="prereqs">1. Prerequisites &amp; Hardware Requirements</h2>
+
+<h3>Target Laptop</h3>
+<table>
+<tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr>
+<tr><td>CPU</td><td>x86_64, 4 cores</td><td>8+ cores (for Arena VMs)</td></tr>
+<tr><td>RAM</td><td>8 GB</td><td>16-32 GB (VMs + ML models)</td></tr>
+<tr><td>Storage</td><td>128 GB SSD</td><td>512 GB+ NVMe SSD</td></tr>
+<tr><td>Network</td><td>Ethernet + WiFi</td><td>Ethernet + WiFi + Bluetooth</td></tr>
+<tr><td>BIOS</td><td>UEFI with Secure Boot toggle</td><td>&mdash;</td></tr>
+</table>
+
+<h3>What You Need Before Starting</h3>
+<ul class="checklist">
+<li>A USB flash drive (16 GB minimum &mdash; 8 GB is too small for Purple ISO)</li>
+<li>A second computer to create the bootable USB and read this guide</li>
+<li>Internet connection (Ethernet preferred &mdash; WiFi may need firmware after boot)</li>
+<li>Rufus (Windows) for USB creation</li>
+<li>30-90 minutes of uninterrupted time</li>
+</ul>
+
+<h3>Which Tab Should You Choose?</h3>
+<table>
+<tr><th>Path</th><th>Best For</th><th>Desktop</th><th>Defensive Tools</th></tr>
+<tr><td><strong>Standard Kali + GNOME</strong></td><td>Most users. Smaller ISO. You pick what to install.</td><td>Xfce (default) &rarr; add GNOME after boot</td><td>Install individually after boot</td></tr>
+<tr><td><strong>Kali Purple</strong></td><td>Full defensive toolkit out of the box.</td><td>GNOME included in ISO</td><td>Pre-selected in installer</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: CREATE BOOTABLE USB -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="usb" class="page-break">2. Create Bootable USB</h2>
+
+<h3>2.1 Download the ISO</h3>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Download the correct ISO from the official Kali site:</p>
+<div class="code-block"><span class="comment"># Standard Kali (smaller, ~4 GB):</span>
+https://www.kali.org/get-kali/#kali-installer-images
+<span class="comment"># Select: Kali Linux 64-bit (Installer)</span>
+<span class="comment"># File: kali-linux-2024.x-installer-amd64.iso</span>
+
+<span class="comment"># Kali Purple (larger, ~6-7 GB, includes GNOME + defensive tools):</span>
+https://www.kali.org/get-kali/#kali-installer-images
+<span class="comment"># Select: Kali Purple 64-bit (Installer)</span>
+<span class="comment"># File: kali-linux-2024.x-installer-purple-amd64.iso</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Verify the download integrity (CRITICAL &mdash; do not skip):</p>
+<div class="code-block"><span class="comment"># Download the SHA256 checksum file from the same page</span>
+<span class="comment"># Then verify:</span>
+
+<span class="comment"># Windows (PowerShell):</span>
+<span class="prompt">PS&gt;</span> Get-FileHash kali-linux-*.iso -Algorithm SHA256
+
+<span class="comment"># Linux/Mac:</span>
+<span class="prompt">$</span> sha256sum kali-linux-*.iso
+
+<span class="comment"># Compare the output hash with the one on kali.org</span>
+<span class="comment"># They MUST match exactly. If they don't, re-download.</span></div>
+</div>
+
+<h3>2.2 Create Bootable USB with Rufus (Windows)</h3>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Download Rufus from <strong>https://rufus.ie</strong> (portable version is fine).</p>
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Insert the USB drive. Open Rufus. Configure <strong>every</strong> setting:</p>
+
+<div class="warning-box">
+<strong>VERIFY THE DEVICE FIELD.</strong> Rufus shows a dropdown at the top. Make sure it shows
+your USB drive (check the size &mdash; e.g., "16 GB"), NOT your internal hard drive.
+If you see your 500 GB or 1 TB drive in the device field, STOP and select the correct one.
+</div>
+
+<table>
+<tr><th>Setting</th><th>Value</th><th>Why</th></tr>
+<tr><td>Device</td><td>Your USB drive (verify by size &mdash; 16/32 GB, NOT your 500 GB internal drive)</td><td>Wrong device = wiped drive</td></tr>
+<tr><td>Boot selection</td><td>Disk or ISO image &rarr; SELECT &rarr; choose the Kali ISO</td><td>&mdash;</td></tr>
+<tr><td>Persistent partition size</td><td><strong>0</strong> (leave at zero)</td><td>We're installing to disk, not running live</td></tr>
+<tr><td>Partition scheme</td><td><strong>GPT</strong></td><td>Required for UEFI boot (all modern laptops)</td></tr>
+<tr><td>Target system</td><td><strong>UEFI (non CSM)</strong></td><td>Modern boot. CSM/Legacy is outdated.</td></tr>
+<tr><td>Volume label</td><td><strong>KALI</strong></td><td>Helps identify in BIOS boot menu</td></tr>
+<tr><td>File system</td><td><strong>FAT32</strong></td><td>Required for UEFI boot</td></tr>
+<tr><td>Cluster size</td><td><strong>Default</strong></td><td>&mdash;</td></tr>
+</table>
+
+<p><strong>Advanced format options</strong> (click "Show advanced format options" or press ALT+F):</p>
+<table>
+<tr><th>Setting</th><th>Value</th><th>Why</th></tr>
+<tr><td>Quick format</td><td><strong>Checked</strong> (default)</td><td>Full format not needed for known-good USB</td></tr>
+<tr><td>Create extended label and icon files</td><td>Checked (default)</td><td>&mdash;</td></tr>
+<tr><td>Check device for bad blocks</td><td><strong>Checked &mdash; 1 Pass</strong></td><td>Catches failing USB sticks before you trust your installer to them</td></tr>
+</table>
+
+<p><strong>UEFI settings</strong> (click the gear icon or press ALT+U in Rufus 4.x):</p>
+<table>
+<tr><th>Setting</th><th>Value</th><th>Why</th></tr>
+<tr><td>Disable UEFI TPM and Secure Boot checks</td><td><strong>Unchecked</strong> (leave off)</td><td>We disable Secure Boot in BIOS instead</td></tr>
+<tr><td>UEFI media validation</td><td><strong>Checked</strong></td><td>Verifies the USB is readable after writing &mdash; catches write errors</td></tr>
+</table>
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Click <strong>START</strong>. When prompted about ISO mode vs DD mode, choose <strong>"Write in DD Image mode"</strong>
+(more reliable for Linux ISOs). Rufus will check for bad blocks first, then write the ISO.
+Wait for completion (~10-15 minutes with bad block check).</p>
+<div class="info-box">
+<strong>If bad blocks are found:</strong> Your USB stick is failing. Use a different one.
+Do NOT trust a USB with bad blocks for an OS installer &mdash; corrupted boot media
+causes random install failures that are extremely hard to diagnose.
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: SECURE WIPE (OPTIONAL) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="wipe" class="page-break">3. Secure Wipe (Optional)</h2>
+
+<div class="info-box">
+<strong>You can skip this section.</strong> The Kali installer's encrypted LVM option will
+overwrite the drive during installation. This section is only for forensic-grade
+wiping (e.g., repurposing a laptop that previously held sensitive data).
+</div>
+
+<p>Boot from the Kali USB. Select <strong>"Live (forensic mode)"</strong> from the boot menu.</p>
+
+<h3 id="wipe-identify">3.1 Identify Your Internal Drive (MANDATORY)</h3>
+
+<div class="danger-box">
+<strong>DO NOT SKIP THIS STEP.</strong> The <code>dd</code> command in step 3.2 will permanently
+destroy whatever device you point it at. During a previous deployment, <code>dd</code>
+wiped the USB installer instead of the internal drive because the device name
+was assumed instead of verified. You MUST run the identification command below
+and confirm the correct device BEFORE running any destructive command.
+</div>
+
+<div class="step">
+<div class="step-number">1</div>
+<p><strong>MANDATORY: Run this command and read every line of output:</strong></p>
+<div class="code-block"><span class="prompt">$</span> sudo lsblk -d -o NAME,SIZE,MODEL,TRAN
+<span class="comment">#
+# Example output:
+#   NAME      SIZE MODEL                TRAN
+#   sda       14.9G SanDisk Cruzer      usb      &larr; USB STICK (small size, TRAN=usb)
+#   nvme0n1  476.9G Samsung SSD 970     nvme     &larr; INTERNAL DRIVE (large size, TRAN=nvme)
+#
+# HOW TO IDENTIFY YOUR INTERNAL DRIVE:
+# 1. Look at the SIZE column: your internal drive is the LARGE one (hundreds of GB)
+# 2. Look at the TRAN column:
+#      usb   = USB stick (DO NOT WIPE THIS)
+#      nvme  = NVMe internal SSD
+#      sata  = SATA internal SSD or HDD
+#      ata   = SATA internal (older naming)
+# 3. The USB stick is the SMALL one (8-32 GB) with "usb" in TRAN
+#
+# WRITE DOWN your internal drive name: _______________
+# (e.g., nvme0n1, sda, sdb — whatever the LARGE non-USB device is)
+#
+# IF YOU SEE ONLY ONE DEVICE: your internal drive may not be detected.
+# Do NOT proceed — check BIOS settings for AHCI/NVMe mode.
+#</span></div>
+</div>
+
+<h3 id="wipe-execute">3.2 Execute the Wipe</h3>
+
+<div class="warning-box">
+<strong>TRIPLE-CHECK:</strong> In every command below, replace <code>/dev/DEVICE</code> with the
+name you identified above (e.g., <code>/dev/nvme0n1</code>). If your USB shows as
+<code>sda</code> and your internal drive shows as <code>nvme0n1</code>, then use <code>/dev/nvme0n1</code>.
+NEVER guess. NEVER assume <code>sda</code> is the internal drive.
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Overwrite the internal drive with random data:</p>
+<div class="code-block"><span class="comment"># Replace /dev/DEVICE with YOUR internal drive name from step 1</span>
+<span class="comment"># Example: sudo dd if=/dev/urandom of=/dev/nvme0n1 bs=4M status=progress</span>
+
+<span class="prompt">$</span> sudo dd if=/dev/urandom of=/dev/<strong>DEVICE</strong> bs=4M status=progress
+
+<span class="comment"># SANITY CHECKS while it runs:</span>
+<span class="comment"># - This should take 30-120 minutes for a real drive</span>
+<span class="comment"># - You should see progress in GB (e.g., "50 GB copied")</span>
+<span class="comment"># - If it finishes in SECONDS: STOP — you wiped the USB (too small)</span>
+<span class="comment"># - If you see errors immediately: STOP — wrong device</span>
+<span class="comment"># - A 256GB+ drive takes at LEAST 15 minutes</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>For SSDs, also issue a secure erase (uses the drive's built-in erase).
+<strong>Same device name from step 1:</strong></p>
+<div class="code-block"><span class="comment"># For NVMe drives:</span>
+<span class="prompt">$</span> sudo nvme format /dev/<strong>DEVICE</strong> --ses=1
+
+<span class="comment"># For SATA drives:</span>
+<span class="prompt">$</span> sudo hdparm --user-master u --security-set-pass dagda /dev/<strong>DEVICE</strong>
+<span class="prompt">$</span> sudo hdparm --user-master u --security-erase dagda /dev/<strong>DEVICE</strong></div>
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Verify the drive is wiped:</p>
+<div class="code-block"><span class="prompt">$</span> sudo hexdump -C /dev/<strong>DEVICE</strong> | head -20
+<span class="comment"># Should show random data, NOT filesystem structures or readable text</span></div>
+</div>
+
+<div class="info-box">
+<strong>Note on SSD wear:</strong> One pass of random data is sufficient for SSDs. SSDs use
+wear leveling and TRIM, making multi-pass wiping unnecessary and harmful to drive
+longevity. The NVMe secure erase command is the definitive solution for SSDs.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: INSTALL KALI LINUX (TABBED) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="install-kali" class="page-break">4. Install Kali Linux</h2>
+
+<p>Choose your installation path. Both paths produce a working system with GNOME and security tools.
+The difference is when GNOME and tools get installed.</p>
+
+<div class="tab-bar">
+<button class="tab active" onclick="switchTab('standard')">Standard Kali + GNOME</button>
+<button class="tab" onclick="switchTab('purple')">Kali Purple</button>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- TAB: STANDARD KALI -->
+<!-- ──────────────────────────────────────────────────────────── -->
+
+<div id="tab-standard" class="tab-content active" data-tab-label="Path: Standard Kali + GNOME">
+
+<h3 id="tab-standard-section">4.1 Boot from USB</h3>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Insert the bootable USB into the target laptop.</p>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Enter BIOS/UEFI setup (usually F2, F12, DEL, or ESC during boot). Configure:</p>
+<ul class="checklist">
+<li>Disable Secure Boot (Kali's installer is signed, but kernel modules may not be)</li>
+<li>Set USB as first boot device</li>
+<li>Enable UEFI boot (disable Legacy/CSM if present)</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Save BIOS settings and reboot. The Kali installer menu should appear.</p>
+</div>
+
+<h3>4.2 Run the Installer</h3>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Select <strong>"Graphical install"</strong> from the boot menu.</p>
+<div class="info-box">
+<strong>Do NOT select "Expert install".</strong> The standard graphical installer is sufficient.
+Expert mode adds complexity without benefit for this use case.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Language, location, keyboard &mdash; choose your preferences.</p>
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+<p><strong>Firmware prompt:</strong> The installer may warn about missing WiFi firmware (e.g., iwlwifi).
+<br>If it asks to load firmware:</p>
+<ul class="checklist">
+<li>Select <strong>Yes</strong> if offered a firmware file to load</li>
+<li>If it loops back to the same prompt after selecting Yes, select <strong>No</strong> this time</li>
+<li>WiFi firmware will be installed after boot (see Post-Install section)</li>
+</ul>
+<div class="info-box">
+<strong>This is normal.</strong> Many Intel WiFi chips need firmware that isn't on the installer ISO.
+The installer works fine without WiFi &mdash; it will use Ethernet if connected, or install offline.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+<p><strong>Network configuration:</strong> If the installer says "No default route" or cannot configure the network:</p>
+<ul class="checklist">
+<li>Select <strong>Yes</strong> to continue without a network connection</li>
+<li>The installer can complete the installation from the USB alone</li>
+<li>Network will be configured after boot</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">8</div>
+<p>Hostname: <strong>dagda</strong> (or your preferred name).<br>
+Domain: leave blank.</p>
+</div>
+
+<div class="step">
+<div class="step-number">9</div>
+<p>Create user account. Use a <strong>strong password</strong> (16+ characters).
+This will be your primary login &mdash; root is disabled by default on Kali.</p>
+<div class="warning-box">
+<strong>REMEMBER THIS PASSWORD.</strong> If you forget it, you will need to boot from USB
+live mode to reset it (see <a href="#recovery">Recovery Instructions</a>).
+Write it down and store it separately from the laptop.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">10</div>
+<p>Disk partitioning &mdash; select <strong>"Guided - use entire disk and set up encrypted LVM"</strong>.</p>
+<p>When asked which disk, select your <strong>internal NVMe/SATA drive</strong> (the large one, NOT the USB).</p>
+<div class="warning-box">
+<strong>Choose encrypted LVM.</strong> This encrypts the entire drive with LUKS2 using
+AES-256-XTS (512-bit key). Without this, anyone who physically accesses the
+laptop can read the drive. Non-negotiable for a security platform.<br><br>
+<strong>Encryption specification:</strong><br>
+&bull; Algorithm: AES-256-XTS (two 256-bit AES keys = 512-bit total)<br>
+&bull; Key derivation: Argon2id (LUKS2 default, memory-hard &mdash; resists GPU brute force)<br>
+&bull; This meets FIPS 140-2 Level 1 and NATO RESTRICTED classification requirements
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">11</div>
+<p>Set the LUKS encryption passphrase. Requirements:</p>
+<ul class="checklist">
+<li>20+ characters minimum (longer = stronger against brute force)</li>
+<li>DIFFERENT from your user password</li>
+<li>Mix of uppercase, lowercase, numbers, symbols</li>
+<li>NOT a dictionary phrase, quote, or song lyric</li>
+<li>Store securely (password manager, sealed envelope in a safe &mdash; NOT on the laptop)</li>
+<li>Losing this passphrase = permanent loss of all data on the drive</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">12</div>
+<p>The installer will overwrite the drive with random data before encrypting.
+<strong>Let it finish</strong> &mdash; this prevents forensic recovery of old data. May take 30-60 minutes.</p>
+</div>
+
+<div class="step">
+<div class="step-number">13</div>
+<p>Partitioning scheme: <strong>"All files in one partition"</strong> (simplest).
+Confirm and write changes to disk.</p>
+</div>
+
+<div class="step">
+<div class="step-number">14</div>
+<p><strong>Software selection:</strong> Check everything that is offered. The standard installer
+will show options like "standard system utilities" and "Xfce desktop".</p>
+<div class="info-box">
+<strong>Note:</strong> The standard Kali installer does NOT offer a GNOME option.
+It installs Xfce by default. GNOME will be installed after boot (see Post-Install section).
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">15</div>
+<p><strong>GRUB bootloader:</strong> The installer will ask about GRUB on EFI systems:</p>
+<ul class="checklist">
+<li>"Force GRUB installation to the EFI removable media path?" &rarr; Select <strong>Yes</strong></li>
+<li>"Update NVRAM variables to automatically boot into Debian?" &rarr; Select <strong>Yes</strong></li>
+</ul>
+<div class="info-box">
+<strong>Why both Yes?</strong> Some UEFI firmware doesn't respect the standard EFI boot entry.
+The "removable media path" fallback ensures the laptop can always find GRUB.
+Updating NVRAM creates the proper boot entry.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">16</div>
+<p>Installation completes. <strong>Remove the USB drive.</strong> Reboot.</p>
+</div>
+
+<div class="step">
+<div class="step-number">17</div>
+<p>At boot, enter your <strong>LUKS passphrase</strong> (the 20+ character one, not your user password).</p>
+</div>
+
+<div class="step">
+<div class="step-number">18</div>
+<p>Log in with your <strong>user credentials</strong> (username + the password you set during install).</p>
+<div class="info-box">
+<strong>You are now in Xfce.</strong> This is expected for standard Kali. GNOME will be installed
+in the Post-Install section below.
+</div>
+</div>
+
+</div><!-- /tab-standard -->
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- TAB: KALI PURPLE -->
+<!-- ──────────────────────────────────────────────────────────── -->
+
+<div id="tab-purple" class="tab-content" data-tab-label="Path: Kali Purple">
+
+<h3 id="tab-purple-section">4.1 Boot from USB</h3>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Insert the bootable USB (with the Kali Purple ISO) into the target laptop.</p>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Enter BIOS/UEFI setup (usually F2, F12, DEL, or ESC during boot). Configure:</p>
+<ul class="checklist">
+<li>Disable Secure Boot</li>
+<li>Set USB as first boot device</li>
+<li>Enable UEFI boot (disable Legacy/CSM if present)</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Save BIOS settings and reboot. The Kali Purple installer menu should appear.</p>
+</div>
+
+<h3>4.2 Run the Installer</h3>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Select <strong>"Graphical install"</strong> from the boot menu.</p>
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Language, location, keyboard &mdash; choose your preferences.</p>
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+<p><strong>Firmware prompt:</strong> Same as standard Kali &mdash; if asked about missing WiFi firmware:</p>
+<ul class="checklist">
+<li>Select <strong>Yes</strong> if offered a firmware file to load</li>
+<li>If it loops back, select <strong>No</strong> &mdash; install firmware after boot</li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+<p><strong>Network:</strong> If "No default route" appears, select <strong>Yes</strong> to continue without network.</p>
+</div>
+
+<div class="step">
+<div class="step-number">8</div>
+<p>Hostname: <strong>dagda</strong>. Domain: leave blank.</p>
+</div>
+
+<div class="step">
+<div class="step-number">9</div>
+<p>Create user account with a strong password (16+ characters). Remember it.</p>
+</div>
+
+<div class="step">
+<div class="step-number">10</div>
+<p>Disk partitioning: <strong>"Guided - use entire disk and set up encrypted LVM"</strong>.
+Select the internal drive (the large NVMe/SATA one, NOT the USB).</p>
+</div>
+
+<div class="step">
+<div class="step-number">11</div>
+<p>Set the LUKS encryption passphrase (20+ characters, different from user password).</p>
+</div>
+
+<div class="step">
+<div class="step-number">12</div>
+<p>Let the drive overwrite complete (30-60 minutes).</p>
+</div>
+
+<div class="step">
+<div class="step-number">13</div>
+<p>"All files in one partition." Confirm and write changes.</p>
+</div>
+
+<div class="step">
+<div class="step-number">14</div>
+<p><strong>Software selection:</strong> The Kali Purple installer shows more options than standard Kali.
+Check <strong>everything</strong> offered, including:</p>
+<ul class="checklist">
+<li>Kali desktop environment (GNOME should be available/default)</li>
+<li>Kali Purple defensive tools</li>
+<li>Top 10 security tools</li>
+<li>Standard system utilities</li>
+</ul>
+<div class="success-box">
+<strong>Advantage of Kali Purple:</strong> GNOME and defensive tools are included in the installer.
+You won't need to install them separately after boot.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">15</div>
+<p><strong>GRUB bootloader:</strong></p>
+<ul class="checklist">
+<li>"Force GRUB installation to the EFI removable media path?" &rarr; <strong>Yes</strong></li>
+<li>"Update NVRAM variables?" &rarr; <strong>Yes</strong></li>
+</ul>
+</div>
+
+<div class="step">
+<div class="step-number">16</div>
+<p>Installation completes. <strong>Remove the USB.</strong> Reboot.</p>
+</div>
+
+<div class="step">
+<div class="step-number">17</div>
+<p>Enter your LUKS passphrase at boot. Log in with your user credentials.</p>
+<div class="info-box">
+<strong>You should be in GNOME.</strong> If you see Xfce instead, the Purple ISO may not have
+included GNOME. See the Post-Install section &mdash; you can install GNOME the same way
+as the Standard Kali path.
+</div>
+</div>
+
+</div><!-- /tab-purple -->
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: POST-INSTALL SETUP (TABBED) -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="post-install" class="page-break">5. Post-Install Setup</h2>
+
+<div class="warning-box">
+<strong>About <code>apt upgrade</code>:</strong> After installing GNOME, you MUST run
+<code>sudo apt -o Dpkg::Options::="--force-overwrite" upgrade -y</code> to bring
+dependent packages to compatible versions. Without this, GNOME will not start
+(black screen with blinking cursor).<br><br>
+<strong>DO NOT use <code>apt full-upgrade</code></strong> &mdash; that is a different, more aggressive
+command that replaces the kernel and can cause an unbootable BusyBox loop.
+<code>apt upgrade</code> (without "full-") is safe.
+</div>
+
+<div class="tab-bar">
+<button class="tab active" onclick="switchTab2('standard2')">Standard Kali &rarr; GNOME + Tools</button>
+<button class="tab" onclick="switchTab2('purple2')">Kali Purple</button>
+</div>
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- TAB 2: STANDARD KALI POST-INSTALL -->
+<!-- ──────────────────────────────────────────────────────────── -->
+
+<div id="tab-standard2" class="tab-content active" data-tab-label="Post-Install: Standard Kali">
+
+<h3>Step 1: Fix GPG Keys + Sources List</h3>
+
+<div class="info-box">
+<strong>Why this is needed:</strong> Fresh Kali installs often have missing or outdated GPG keys,
+and older ISOs may use the wrong component name (<code>non-free</code> instead of the current
+<code>non-free-firmware</code>). Both issues cause <code>apt update</code> to fail.
+</div>
+
+<div class="code-block"><span class="comment"># Download the current Kali archive signing key</span>
+<span class="prompt">$</span> wget -q https://archive.kali.org/archive-key.asc -O /tmp/kali-key.asc
+
+<span class="comment"># Install it to the trusted keyring directory (NOT apt-key — that is deprecated)</span>
+<span class="prompt">$</span> sudo cp /tmp/kali-key.asc /etc/apt/trusted.gpg.d/
+
+<span class="comment"># Write the correct sources.list (note: non-free-firmware, not just non-free)</span>
+<span class="prompt">$</span> echo "deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware" | sudo tee /etc/apt/sources.list
+
+<span class="comment"># Update package lists</span>
+<span class="prompt">$</span> sudo apt update</div>
+
+<div class="warning-box">
+<strong>If <code>apt update</code> shows GPG errors after this:</strong> The key file may not have downloaded
+correctly. Check your internet connection, re-run the <code>wget</code> command, and try again.
+Do NOT use <code>apt-key add</code> &mdash; it is deprecated and may not work.
+</div>
+
+<h3>Step 2: Install WiFi Firmware (if WiFi is not working)</h3>
+
+<div class="info-box">
+<strong>Check first:</strong> If WiFi already works (you can see networks), skip this step.
+This is only needed if the installer could not load the WiFi firmware.
+You need Ethernet or a working internet connection to download the package.
+</div>
+
+<div class="code-block"><span class="comment"># Install Intel WiFi firmware (most common — covers iwlwifi chipsets)</span>
+<span class="prompt">$</span> sudo apt install -y firmware-iwlwifi
+
+<span class="comment"># Load the kernel module immediately (no reboot needed)</span>
+<span class="prompt">$</span> sudo modprobe iwlwifi
+
+<span class="comment"># Verify WiFi interface appears</span>
+<span class="prompt">$</span> ip link show
+<span class="comment"># You should see a wlan0 or similar wireless interface</span>
+
+<span class="comment"># If you have a different WiFi chipset (Realtek, Broadcom, etc.):</span>
+<span class="comment"># sudo apt install -y firmware-realtek</span>
+<span class="comment"># sudo apt install -y firmware-brcm80211</span></div>
+
+<h3>Step 3: Install GNOME Desktop</h3>
+
+<div class="info-box">
+<strong>Why force-overwrite?</strong> The <code>kali-desktop-gnome</code> package sometimes has file
+conflicts with existing wallpaper packages. The <code>--force-overwrite</code> flag resolves
+this safely by letting the new package's files take priority.
+</div>
+
+<div class="code-block"><span class="comment"># Install GNOME desktop environment with force-overwrite for wallpaper conflicts</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" install -y kali-desktop-gnome
+
+<span class="comment"># When asked about display manager, select: gdm3</span>
+<span class="comment"># (GDM is the GNOME display manager — it provides the graphical login screen)</span></div>
+
+<div class="warning-box">
+<strong>The display manager prompt is important.</strong> If asked to choose between
+<code>gdm3</code> and <code>lightdm</code>, select <strong>gdm3</strong>. It is GNOME's native display manager
+and required for the GNOME login screen with the session selector gear icon.
+</div>
+
+<h3>Step 3B: Upgrade Dependent Packages (REQUIRED for GNOME to start)</h3>
+
+<div class="danger-box">
+<strong>DO NOT SKIP THIS STEP.</strong> After installing GNOME, there will be ~2000 packages
+that need upgrading to compatible versions. Without this upgrade, GNOME will NOT
+start &mdash; you will get a black screen with a blinking cursor after reboot.<br><br>
+<strong>Use <code>apt upgrade</code> (safe) &mdash; NOT <code>apt full-upgrade</code> (dangerous).</strong>
+</div>
+
+<div class="code-block"><span class="comment"># Upgrade dependent packages so GNOME can start (REQUIRED)</span>
+<span class="comment"># This uses --force-overwrite to handle any file conflicts</span>
+<span class="comment"># This is "apt upgrade" NOT "apt full-upgrade" — they are different commands</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" upgrade -y
+
+<span class="comment"># This will take 10-30 minutes depending on your internet speed</span>
+<span class="comment"># Do NOT interrupt it. Let it complete fully.</span></div>
+
+<div class="info-box">
+<strong>If it fails with error code (1):</strong> Run it again:<br>
+<code>sudo apt -o Dpkg::Options::="--force-overwrite" --fix-broken install -y</code><br>
+Then re-run the upgrade command above. Package conflicts sometimes need two passes.
+</div>
+
+<div class="code-block"><span class="comment"># Reboot to apply the new desktop</span>
+<span class="prompt">$</span> sudo reboot</div>
+
+<p>After reboot, at the login screen:</p>
+<ul class="checklist">
+<li>Click the <strong>gear icon</strong> (bottom-right or next to the Sign In button)</li>
+<li>Select <strong>"GNOME"</strong> from the session list</li>
+<li>Enter your password and log in</li>
+<li>GNOME should now be your desktop &mdash; this choice persists across reboots</li>
+</ul>
+
+<h3>Step 4: Install Security Tools</h3>
+
+<div class="code-block"><span class="comment"># Install essential security tools individually</span>
+<span class="comment"># DO NOT use kali-linux-purple — that package does not exist</span>
+<span class="comment"># DO NOT use kali-linux-everything unless you have 100+ GB free space</span>
+
+<span class="prompt">$</span> sudo apt install -y nmap wireshark suricata nikto sqlmap gobuster hydra
+
+<span class="prompt">$</span> sudo apt install -y john hashcat masscan nuclei
+
+<span class="comment"># Zeek — Kali's apt package has broken libc6 dependency</span>
+<span class="comment"># Build from source (~15 min):</span>
+<span class="prompt">$</span> sudo apt install -y cmake make gcc g++ flex bison libpcap-dev libssl-dev python3-dev swig zlib1g-dev libzmq3-dev libmaxminddb-dev nodejs
+<span class="prompt">$</span> cd /tmp && git clone --recursive --branch v8.1.1 https://github.com/zeek/zeek.git zeek-build
+<span class="prompt">$</span> cd /tmp/zeek-build && ./configure && make -j$(nproc) && sudo make install
+<span class="prompt">$</span> cd ~ && rm -rf /tmp/zeek-build
+
+<span class="comment"># Volatility — not in Kali apt repos, install via pipx</span>
+<span class="prompt">$</span> sudo apt install -y pipx && pipx install volatility3
+
+<span class="comment"># Optional: virtualization (for Arena mode VMs)</span>
+<span class="prompt">$</span> sudo apt install -y libvirt-daemon-system qemu-kvm podman
+
+<span class="comment"># Optional: audit and hardening</span>
+<span class="prompt">$</span> sudo apt install -y auditd apparmor ufw</div>
+
+<h3>Step 5: Enable Firewall</h3>
+
+<div class="code-block"><span class="comment"># Set default firewall rules and enable</span>
+<span class="prompt">$</span> sudo ufw default deny incoming
+<span class="prompt">$</span> sudo ufw default allow outgoing
+<span class="prompt">$</span> sudo ufw enable
+
+<span class="comment"># Verify firewall is active</span>
+<span class="prompt">$</span> sudo ufw status</div>
+
+<h3>Step 6: Harden SSH (optional, only if you SSH into this machine)</h3>
+
+<div class="code-block"><span class="comment"># Write hardened SSH config (uses tee instead of nano — nano keybindings</span>
+<span class="comment"># can break in some terminal emulators)</span>
+
+<span class="comment"># Back up original config first</span>
+<span class="prompt">$</span> sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bak
+
+<span class="comment"># Apply hardened settings</span>
+<span class="prompt">$</span> echo "PermitRootLogin no" | sudo tee -a /etc/ssh/sshd_config.d/dagda-hardening.conf
+<span class="prompt">$</span> echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config.d/dagda-hardening.conf
+<span class="prompt">$</span> echo "MaxAuthTries 3" | sudo tee -a /etc/ssh/sshd_config.d/dagda-hardening.conf
+<span class="prompt">$</span> echo "X11Forwarding no" | sudo tee -a /etc/ssh/sshd_config.d/dagda-hardening.conf
+
+<span class="comment"># Restart SSH to apply</span>
+<span class="prompt">$</span> sudo systemctl restart sshd</div>
+
+<h3>Step 7: Kernel Hardening</h3>
+
+<div class="code-block"><span class="comment"># Write kernel hardening parameters</span>
+<span class="prompt">$</span> sudo tee /etc/sysctl.d/99-dagda-hardening.conf &lt;&lt; 'EOF'
+# Network hardening
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_redirects = 0
+
+# Kernel hardening
+kernel.randomize_va_space = 2
+kernel.kptr_restrict = 2
+kernel.dmesg_restrict = 1
+kernel.yama.ptrace_scope = 1
+fs.suid_dumpable = 0
+EOF
+
+<span class="comment"># Apply immediately without reboot</span>
+<span class="prompt">$</span> sudo sysctl --system</div>
+
+</div><!-- /tab-standard2 -->
+
+<!-- ──────────────────────────────────────────────────────────── -->
+<!-- TAB 2: KALI PURPLE POST-INSTALL -->
+<!-- ──────────────────────────────────────────────────────────── -->
+
+<div id="tab-purple2" class="tab-content" data-tab-label="Post-Install: Kali Purple">
+
+<h3>Step 1: Fix GPG Keys + Sources List</h3>
+
+<div class="info-box">
+<strong>Even Kali Purple needs this.</strong> The GPG key fix is required regardless of which ISO you used.
+</div>
+
+<div class="code-block"><span class="comment"># Download the current Kali archive signing key</span>
+<span class="prompt">$</span> wget -q https://archive.kali.org/archive-key.asc -O /tmp/kali-key.asc
+
+<span class="comment"># Install it to the trusted keyring directory</span>
+<span class="prompt">$</span> sudo cp /tmp/kali-key.asc /etc/apt/trusted.gpg.d/
+
+<span class="comment"># Write the correct sources.list</span>
+<span class="prompt">$</span> echo "deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware" | sudo tee /etc/apt/sources.list
+
+<span class="comment"># Update package lists</span>
+<span class="prompt">$</span> sudo apt update</div>
+
+<h3>Step 2: Install WiFi Firmware (if WiFi is not working)</h3>
+
+<div class="code-block"><span class="prompt">$</span> sudo apt install -y firmware-iwlwifi
+<span class="prompt">$</span> sudo modprobe iwlwifi</div>
+
+<h3>Step 3: Verify GNOME is Active</h3>
+
+<p>Kali Purple should have installed GNOME during setup. Verify:</p>
+<div class="code-block"><span class="comment"># Check which desktop session is running</span>
+<span class="prompt">$</span> echo $XDG_CURRENT_DESKTOP
+<span class="comment"># Should show: GNOME</span>
+
+<span class="comment"># If it shows Xfce or something else, install GNOME:</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" install -y kali-desktop-gnome
+<span class="comment"># Select gdm3 when prompted</span>
+
+<span class="comment"># Then upgrade dependent packages (REQUIRED for GNOME to start)</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" upgrade -y
+<span class="comment"># This may take 10-30 minutes. Do NOT interrupt.</span>
+
+<span class="comment"># Reboot</span>
+<span class="prompt">$</span> sudo reboot</div>
+
+<h3>Step 4: Install Any Missing Tools</h3>
+
+<p>Kali Purple includes most defensive tools. Install any that are missing:</p>
+<div class="code-block"><span class="comment"># Check if key tools are installed</span>
+<span class="prompt">$</span> which nmap suricata zeek wireshark
+
+<span class="comment"># Install any that are missing (except Zeek — see below)</span>
+<span class="prompt">$</span> sudo apt install -y nmap wireshark suricata nikto sqlmap gobuster nuclei
+
+<span class="comment"># Zeek — Kali's apt package has broken libc6 dependency</span>
+<span class="comment"># Build from source (~15 min):</span>
+<span class="prompt">$</span> sudo apt install -y cmake make gcc g++ flex bison libpcap-dev libssl-dev python3-dev swig zlib1g-dev libzmq3-dev libmaxminddb-dev nodejs
+<span class="prompt">$</span> cd /tmp && git clone --recursive --branch v8.1.1 https://github.com/zeek/zeek.git zeek-build
+<span class="prompt">$</span> cd /tmp/zeek-build && ./configure && make -j$(nproc) && sudo make install
+<span class="prompt">$</span> cd ~ && rm -rf /tmp/zeek-build
+
+<span class="comment"># Volatility — install via pipx (not in Kali apt repos)</span>
+<span class="prompt">$</span> sudo apt install -y pipx && pipx install volatility3
+
+<span class="comment"># Optional: virtualization</span>
+<span class="prompt">$</span> sudo apt install -y libvirt-daemon-system qemu-kvm podman</div>
+
+<h3>Step 5: Firewall + Hardening</h3>
+
+<div class="code-block"><span class="comment"># Enable firewall</span>
+<span class="prompt">$</span> sudo apt install -y ufw
+<span class="prompt">$</span> sudo ufw default deny incoming
+<span class="prompt">$</span> sudo ufw default allow outgoing
+<span class="prompt">$</span> sudo ufw enable
+
+<span class="comment"># Kernel hardening</span>
+<span class="prompt">$</span> sudo tee /etc/sysctl.d/99-dagda-hardening.conf &lt;&lt; 'EOF'
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv6.conf.all.accept_redirects = 0
+kernel.randomize_va_space = 2
+kernel.kptr_restrict = 2
+kernel.dmesg_restrict = 1
+kernel.yama.ptrace_scope = 1
+fs.suid_dumpable = 0
+EOF
+<span class="prompt">$</span> sudo sysctl --system</div>
+
+</div><!-- /tab-purple2 -->
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 6: INSTALL DAGDA -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="install-dagda" class="page-break">6. Install Dagda</h2>
+
+<p>These steps are the same regardless of which installation path you chose above.</p>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Install system dependencies:</p>
+<div class="code-block"><span class="prompt">$</span> sudo apt install -y python3-pip python3-venv git curl wget jq</div>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Clone the repository:</p>
+<div class="code-block"><span class="prompt">$</span> cd ~
+<span class="prompt">$</span> git clone https://github.com/Moonligh7er/Dagda.git
+<span class="prompt">$</span> cd Dagda</div>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Create a Python virtual environment and install:</p>
+<div class="code-block"><span class="comment"># Create isolated Python environment</span>
+<span class="prompt">$</span> python3 -m venv .venv
+
+<span class="comment"># Activate it (you'll need to do this each time you open a new terminal)</span>
+<span class="prompt">$</span> source .venv/bin/activate
+
+<span class="comment"># Install Dagda with all optional dependencies</span>
+<span class="prompt">$</span> pip install -e ".[all]"
+
+<span class="comment"># Or install groups individually if you prefer:</span>
+<span class="comment"># pip install -e "."                  # Core only</span>
+<span class="comment"># pip install -e ".[ml]"              # ML models (scikit-learn)</span>
+<span class="comment"># pip install -e ".[browser]"         # Playwright browser automation</span>
+<span class="comment"># pip install -e ".[reporting]"       # PDF report generation</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Build the Rust security core (optional but recommended):</p>
+<div class="code-block"><span class="comment"># Install Rust if not present</span>
+<span class="prompt">$</span> curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+<span class="prompt">$</span> source ~/.cargo/env
+
+<span class="comment"># Build the native module</span>
+<span class="prompt">$</span> cd core
+<span class="prompt">$</span> cargo build --release
+<span class="prompt">$</span> pip install maturin
+<span class="prompt">$</span> maturin develop --release
+<span class="prompt">$</span> cd ..</div>
+<p>If Rust build fails, Dagda falls back to Python implementations automatically.</p>
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Install Ollama for local AI (optional, enables offline/air-gap operation):</p>
+<div class="code-block"><span class="prompt">$</span> curl -fsSL https://ollama.com/install.sh | sh
+<span class="prompt">$</span> ollama pull llama3.2:3b          <span class="comment"># Small model for HUD</span>
+<span class="prompt">$</span> ollama pull llama3.1:8b          <span class="comment"># Larger model for orchestrator</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+<p>Set Claude API key (optional, enables cloud AI):</p>
+<div class="code-block"><span class="prompt">$</span> export ANTHROPIC_API_KEY="sk-ant-..."
+
+<span class="comment"># To persist across reboots (add to .bashrc):</span>
+<span class="prompt">$</span> echo 'export ANTHROPIC_API_KEY="sk-ant-..."' >> ~/.bashrc</div>
+<div class="warning-box">
+<strong>Never put API keys in config files.</strong> Use environment variables only.
+Dagda's self-audit checks for plaintext keys in config and will flag them.
+</div>
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+<p>Run the setup wizard:</p>
+<div class="code-block"><span class="prompt">$</span> cd ~/Dagda && sudo .venv/bin/python -m dagda --setup
+
+<span class="comment"># The wizard will walk you through 9 steps:</span>
+<span class="comment"># 1. Assess your security posture</span>
+<span class="comment"># 2. Let you choose a profile (Standard/Hardened/Paranoid)</span>
+<span class="comment"># 3. Detect installed security tools (20+ checked)</span>
+<span class="comment"># 4. Offer to install missing tools</span>
+<span class="comment"># 5. Configure AI backend (Claude/Ollama)</span>
+<span class="comment"># 6. Optimize OS settings</span>
+<span class="comment"># 7. Check ML models</span>
+<span class="comment"># 8. Network configuration</span>
+<span class="comment"># 9. Show a summary</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 7: CONFIGURE & FIRST LAUNCH -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="configure" class="page-break">7. Configure &amp; First Launch</h2>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Copy and customize the configuration:</p>
+<div class="code-block"><span class="prompt">$</span> mkdir -p ~/.config/dagda
+<span class="prompt">$</span> cp ~/Dagda/config/dagda.default.toml ~/.config/dagda/dagda.toml
+<span class="prompt">$</span> chmod 600 ~/.config/dagda/dagda.toml</div>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Key configuration options to review:</p>
+<table>
+<tr><th>Setting</th><th>Default</th><th>Recommended</th></tr>
+<tr><td>default_safeguard_level</td><td>3 (BALANCED)</td><td>3 for daily use, 4 for sensitive ops</td></tr>
+<tr><td>security.audit_hash_chain</td><td>true</td><td>Always true</td></tr>
+<tr><td>security.db_encryption</td><td>true</td><td>Always true</td></tr>
+<tr><td>mesh.enabled</td><td>false</td><td>true if deploying fleet</td></tr>
+<tr><td>web.enabled</td><td>false</td><td>true if using web dashboard</td></tr>
+<tr><td>self_security.enabled</td><td>true</td><td>Always true</td></tr>
+</table>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Create the integrity baseline (so Dagda can detect its own tampering):</p>
+<div class="code-block"><span class="prompt">$</span> python -c "
+from brain.self_security import DagdaIntegrityMonitor
+m = DagdaIntegrityMonitor()
+result = m.create_baseline()
+print(f'Baseline created: {result[\"file_count\"]} files hashed')
+"</div>
+</div>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Launch Dagda:</p>
+<div class="code-block"><span class="comment"># Launch (sudo required for network monitoring, hardening, packet capture)</span>
+<span class="prompt">$</span> cd ~/Dagda && sudo .venv/bin/python -m dagda
+
+<span class="comment"># Or with verbose logging:</span>
+<span class="prompt">$</span> cd ~/Dagda && sudo .venv/bin/python -m dagda --verbose
+
+<span class="comment"># To re-run the setup wizard:</span>
+<span class="prompt">$</span> cd ~/Dagda && sudo .venv/bin/python -m dagda --setup</div>
+</div>
+
+<div class="success-box">
+Dagda starts in SENTINEL mode at Safeguard Level 3. The AI waits for your input.
+System monitoring begins automatically. The HUD provides real-time interpretation.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 8: VERIFICATION CHECKLIST -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="verify" class="page-break">8. Verification Checklist</h2>
+
+<p>Run through this checklist to confirm everything is working:</p>
+
+<h3>System</h3>
+<ul class="checklist">
+<li>LUKS encryption prompt appears at boot</li>
+<li>User login works with correct credentials</li>
+<li>GNOME desktop is active (not Xfce)</li>
+<li>WiFi works (if applicable)</li>
+<li>UFW firewall is active (<code>sudo ufw status</code>)</li>
+<li><code>apt update</code> works without GPG errors</li>
+</ul>
+
+<h3>Dagda</h3>
+<ul class="checklist">
+<li>Dagda launches without errors (<code>python -m dagda</code>)</li>
+<li>SENTINEL mode active (shown in mode indicator)</li>
+<li>Self-integrity check passes on startup (check audit log)</li>
+<li>AI responds to chat ("What is the security posture of this system?")</li>
+<li>Ctrl+Shift+P (PANIC) works &mdash; halts AI + fortress + kills comms</li>
+<li>Ctrl+Shift+K resumes AI after PANIC</li>
+<li>Ctrl+Shift+I restores comms after PANIC</li>
+<li>Mode cycling (Ctrl+M) shows: SENTINEL &rarr; TRIAGE &rarr; INVESTIGATOR &rarr; ...</li>
+<li>Network monitoring detects your own interface</li>
+<li>Threat feeds pull IoCs (<code>feed_auto_setup</code> + <code>feed_poll_all</code>)</li>
+<li>ML models loaded (check setup wizard output)</li>
+</ul>
+
+<div class="info-box">
+<strong>Ongoing maintenance:</strong><br>
+&bull; <code>sudo apt update</code> periodically to check for security updates<br>
+&bull; Install specific security patches with <code>sudo apt install --only-upgrade PACKAGE</code><br>
+&bull; <strong>Do NOT run <code>apt full-upgrade</code></strong> &mdash; install updates selectively<br>
+&bull; <code>feed_poll_all</code> to refresh threat feeds<br>
+&bull; <code>self_integrity_baseline</code> after any Dagda update<br>
+&bull; <code>self_audit</code> periodically to check configuration drift
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 9: TROUBLESHOOTING -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="troubleshooting" class="page-break">9. Troubleshooting</h2>
+
+<h3>BusyBox / initramfs Boot Loop</h3>
+<div class="warning-box">
+<strong>Cause:</strong> Usually from <code>apt full-upgrade</code> breaking the kernel or initramfs.
+</div>
+<div class="code-block"><span class="comment"># Option A: Try to fix from BusyBox prompt</span>
+<span class="prompt">(initramfs)$</span> exit
+<span class="comment"># Sometimes this triggers a recovery attempt</span>
+
+<span class="comment"># Option B: Boot from USB live mode, mount encrypted drive, fix in chroot</span>
+<span class="comment"># (See Recovery Instructions section below)</span>
+<span class="comment"># Once in chroot:</span>
+<span class="prompt">(chroot)$</span> sudo dpkg --configure -a
+<span class="prompt">(chroot)$</span> sudo apt --fix-broken install -y
+<span class="prompt">(chroot)$</span> sudo update-initramfs -u
+
+<span class="comment"># Option C: If nothing works, reinstall from USB</span>
+<span class="comment"># Your data is lost if you didn't back up</span></div>
+
+<h3>GNOME Black Screen with Blinking Cursor After Install</h3>
+<div class="warning-box">
+<strong>Cause:</strong> GNOME was installed but ~2000 dependent packages were not upgraded
+to compatible versions. GDM3 reports as "active (running)" but GNOME session
+fails to start.
+</div>
+<div class="code-block"><span class="comment"># Press Ctrl+Alt+F2 to get a text login prompt</span>
+<span class="comment"># Log in with your username and password</span>
+<span class="comment"># Then upgrade the dependent packages:</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" upgrade -y
+
+<span class="comment"># If that fails with error code (1):</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" --fix-broken install -y
+<span class="comment"># Then run the upgrade command again</span>
+
+<span class="comment"># Reboot when complete:</span>
+<span class="prompt">$</span> sudo reboot
+
+<span class="comment"># If GNOME still won't start, use Xfce temporarily:</span>
+<span class="prompt">$</span> echo "exec startxfce4" > ~/.xinitrc && startx
+<span class="comment"># Then run the upgrade from the Xfce desktop</span></div>
+
+<h3>Password Not Working After Install</h3>
+<div class="code-block"><span class="comment"># Boot from USB live mode and reset the password</span>
+<span class="comment"># (See Recovery Instructions section below for full chroot procedure)</span>
+<span class="comment"># Once in chroot:</span>
+<span class="prompt">(chroot)$</span> passwd YOUR_USERNAME
+<span class="comment"># Enter new password twice</span>
+<span class="comment"># Exit chroot, unmount, reboot</span></div>
+
+<h3>WiFi Not Showing / No Wireless Interface</h3>
+<div class="code-block"><span class="comment"># Check if any wireless interface exists</span>
+<span class="prompt">$</span> ip link show
+
+<span class="comment"># If no wlan interface, install firmware</span>
+<span class="prompt">$</span> sudo apt install -y firmware-iwlwifi
+
+<span class="comment"># Load the module</span>
+<span class="prompt">$</span> sudo modprobe iwlwifi
+
+<span class="comment"># Check again</span>
+<span class="prompt">$</span> ip link show
+
+<span class="comment"># If still nothing, check which chipset you have</span>
+<span class="prompt">$</span> lspci | grep -i network
+<span class="comment"># Then install the matching firmware package</span></div>
+
+<h3>apt update GPG Errors</h3>
+<div class="code-block"><span class="comment"># Re-download and install the signing key</span>
+<span class="prompt">$</span> wget -q https://archive.kali.org/archive-key.asc -O /tmp/kali-key.asc
+<span class="prompt">$</span> sudo cp /tmp/kali-key.asc /etc/apt/trusted.gpg.d/
+
+<span class="comment"># DO NOT use apt-key — it is deprecated</span>
+<span class="comment"># DO NOT use: sudo apt-key adv --keyserver ...</span>
+
+<span class="comment"># Fix sources.list if needed</span>
+<span class="prompt">$</span> echo "deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware" | sudo tee /etc/apt/sources.list
+
+<span class="prompt">$</span> sudo apt update</div>
+
+<h3>Package Conflicts (dpkg error code 1)</h3>
+<div class="code-block"><span class="comment"># Force overwrite conflicting files and fix broken packages</span>
+<span class="prompt">$</span> sudo apt -o Dpkg::Options::="--force-overwrite" --fix-broken install -y</div>
+
+<h3>No Internet During Install</h3>
+<div class="info-box">
+<strong>This is normal.</strong> The installer works offline from the USB. When prompted about
+network configuration failures or missing default route, select <strong>Yes</strong> to continue.
+Configure networking after boot.
+</div>
+
+<h3>nano Not Working / Garbled Input</h3>
+<div class="code-block"><span class="comment"># Some terminal emulators have keybinding conflicts with nano.</span>
+<span class="comment"># Use the echo + tee pattern instead:</span>
+
+<span class="comment"># To write a single line to a file:</span>
+<span class="prompt">$</span> echo "your content here" | sudo tee /path/to/file
+
+<span class="comment"># To append a line to a file:</span>
+<span class="prompt">$</span> echo "your content here" | sudo tee -a /path/to/file
+
+<span class="comment"># To write multiple lines:</span>
+<span class="prompt">$</span> sudo tee /path/to/file &lt;&lt; 'EOF'
+line 1
+line 2
+line 3
+EOF</div>
+
+<h3>GRUB Not Found After Install / Boots to BIOS</h3>
+<div class="code-block"><span class="comment"># Re-enter BIOS and check:</span>
+<span class="comment"># 1. UEFI boot is enabled (not Legacy/CSM)</span>
+<span class="comment"># 2. The internal drive is in the boot order</span>
+<span class="comment"># 3. Secure Boot is disabled</span>
+
+<span class="comment"># If GRUB still not found, boot from USB live mode and reinstall GRUB:</span>
+<span class="comment"># (See Recovery Instructions for chroot procedure)</span>
+<span class="prompt">(chroot)$</span> sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi --removable
+<span class="prompt">(chroot)$</span> sudo update-grub</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- SECTION 10: RECOVERY INSTRUCTIONS -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<h2 id="recovery" class="page-break">10. Recovery Instructions</h2>
+
+<p>If you cannot boot into your installed system (forgot password, BusyBox loop, broken
+packages, GRUB issues), use this procedure to fix it from a USB live boot.</p>
+
+<h3>10.1 Boot into USB Live Mode</h3>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Insert your Kali bootable USB. Boot the laptop. At the Kali boot menu, select
+<strong>"Live (forensic mode)"</strong> or <strong>"Live system"</strong>.</p>
+</div>
+
+<h3>10.2 Identify and Unlock the Encrypted Drive</h3>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Identify your internal drive (same procedure as the Secure Wipe section):</p>
+<div class="code-block"><span class="prompt">$</span> sudo lsblk -d -o NAME,SIZE,MODEL,TRAN
+<span class="comment"># Find your internal drive (large, nvme/sata — NOT usb)</span>
+<span class="comment"># Example: nvme0n1</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Find the LUKS partition and unlock it:</p>
+<div class="code-block"><span class="comment"># List partitions on your internal drive</span>
+<span class="prompt">$</span> sudo lsblk /dev/<strong>DEVICE</strong>
+<span class="comment"># Look for the largest partition (usually partition 2 or 5)</span>
+<span class="comment"># Example: nvme0n1p5 or sda5</span>
+
+<span class="comment"># Open the LUKS encrypted partition</span>
+<span class="comment"># Replace PARTITION with your actual partition (e.g., nvme0n1p5)</span>
+<span class="prompt">$</span> sudo cryptsetup luksOpen /dev/<strong>PARTITION</strong> crypt_recovery
+<span class="comment"># Enter your LUKS passphrase when prompted</span>
+
+<span class="comment"># The LVM volume group should now be visible</span>
+<span class="prompt">$</span> sudo vgchange -ay
+<span class="prompt">$</span> sudo lvs
+<span class="comment"># You should see something like: kali--vg root</span></div>
+</div>
+
+<h3>10.3 Mount and Chroot</h3>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Mount the filesystem and enter chroot:</p>
+<div class="code-block"><span class="comment"># Mount the root filesystem</span>
+<span class="prompt">$</span> sudo mount /dev/mapper/kali--vg-root /mnt
+
+<span class="comment"># Mount required virtual filesystems</span>
+<span class="prompt">$</span> sudo mount --bind /dev /mnt/dev
+<span class="prompt">$</span> sudo mount --bind /dev/pts /mnt/dev/pts
+<span class="prompt">$</span> sudo mount --bind /proc /mnt/proc
+<span class="prompt">$</span> sudo mount --bind /sys /mnt/sys
+
+<span class="comment"># Mount the EFI partition (usually partition 1)</span>
+<span class="prompt">$</span> sudo mount /dev/<strong>DEVICE</strong>p1 /mnt/boot/efi
+
+<span class="comment"># Enter the chroot</span>
+<span class="prompt">$</span> sudo chroot /mnt /bin/bash</div>
+</div>
+
+<h3>10.4 Fix the Problem</h3>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Now you are inside the installed system. Apply the fix you need:</p>
+
+<h4>Reset a forgotten password:</h4>
+<div class="code-block"><span class="prompt">(chroot)$</span> passwd YOUR_USERNAME
+<span class="comment"># Enter new password twice</span></div>
+
+<h4>Fix broken packages (BusyBox loop):</h4>
+<div class="code-block"><span class="prompt">(chroot)$</span> dpkg --configure -a
+<span class="prompt">(chroot)$</span> apt --fix-broken install -y
+<span class="prompt">(chroot)$</span> update-initramfs -u</div>
+
+<h4>Reinstall GRUB:</h4>
+<div class="code-block"><span class="prompt">(chroot)$</span> grub-install --target=x86_64-efi --efi-directory=/boot/efi --removable
+<span class="prompt">(chroot)$</span> update-grub</div>
+
+<h4>Fix GPG keys (if apt is broken):</h4>
+<div class="code-block"><span class="prompt">(chroot)$</span> wget -q https://archive.kali.org/archive-key.asc -O /tmp/kali-key.asc
+<span class="prompt">(chroot)$</span> cp /tmp/kali-key.asc /etc/apt/trusted.gpg.d/
+<span class="prompt">(chroot)$</span> echo "deb https://kali.download/kali kali-rolling main contrib non-free non-free-firmware" > /etc/apt/sources.list
+<span class="prompt">(chroot)$</span> apt update</div>
+</div>
+
+<h3>10.5 Exit and Reboot</h3>
+
+<div class="step">
+<div class="step-number">6</div>
+<p>Clean up and reboot:</p>
+<div class="code-block"><span class="comment"># Exit the chroot</span>
+<span class="prompt">(chroot)$</span> exit
+
+<span class="comment"># Unmount everything</span>
+<span class="prompt">$</span> sudo umount /mnt/boot/efi
+<span class="prompt">$</span> sudo umount /mnt/sys
+<span class="prompt">$</span> sudo umount /mnt/proc
+<span class="prompt">$</span> sudo umount /mnt/dev/pts
+<span class="prompt">$</span> sudo umount /mnt/dev
+<span class="prompt">$</span> sudo umount /mnt
+
+<span class="comment"># Close the LUKS volume</span>
+<span class="prompt">$</span> sudo vgchange -an
+<span class="prompt">$</span> sudo cryptsetup luksClose crypt_recovery
+
+<span class="comment"># Remove USB and reboot</span>
+<span class="prompt">$</span> sudo reboot</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="footer">
+DAGDA &mdash; Defensive AI Guardian &amp; Digital Arsenal<br>
+Deployment Guide v2.0 &mdash; Rewritten 2026-03-16 after failed deployment<br>
+Every command verified. Every fork in the road addressed.<br>
+Print this page to PDF (Ctrl+P &rarr; Save as PDF) for offline reference.
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- TAB SWITCHING JAVASCRIPT -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<script>
+// Tab set 1: Installation path (Standard vs Purple)
+function switchTab(tabName) {
+  // Hide all tab-content in set 1
+  document.getElementById('tab-standard').classList.remove('active');
+  document.getElementById('tab-purple').classList.remove('active');
+
+  // Show selected
+  document.getElementById('tab-' + tabName).classList.add('active');
+
+  // Update tab buttons (first tab-bar only)
+  var bars = document.querySelectorAll('.tab-bar');
+  var buttons = bars[0].querySelectorAll('.tab');
+  buttons.forEach(function(btn) { btn.classList.remove('active'); });
+  // Find the clicked button
+  buttons.forEach(function(btn) {
+    if (tabName === 'standard' && btn.textContent.includes('Standard')) btn.classList.add('active');
+    if (tabName === 'purple' && btn.textContent.includes('Purple')) btn.classList.add('active');
+  });
+}
+
+// Tab set 2: Post-install path
+function switchTab2(tabName) {
+  document.getElementById('tab-standard2').classList.remove('active');
+  document.getElementById('tab-purple2').classList.remove('active');
+
+  document.getElementById(tabName).classList.add('active');
+
+  var bars = document.querySelectorAll('.tab-bar');
+  var buttons = bars[1].querySelectorAll('.tab');
+  buttons.forEach(function(btn) { btn.classList.remove('active'); });
+  buttons.forEach(function(btn) {
+    if (tabName === 'standard2' && btn.textContent.includes('Standard')) btn.classList.add('active');
+    if (tabName === 'purple2' && btn.textContent.includes('Purple')) btn.classList.add('active');
+  });
+}
+</script>
+
+</body>
+</html>

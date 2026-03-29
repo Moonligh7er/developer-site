@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Study Break - Architecture & Infrastructure Map</title>
+<style>
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;--border:#2a2a3a;--purple:#8b5cf6;--purple-dim:#6d45c8;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--blue:#3b82f6;--cyan:#06b6d4;--orange:#f97316;--text:#e4e4ed;--text-muted:#8888a0;--text-dim:#55556a;--font-sans:Inter,-apple-system,BlinkMacSystemFont,sans-serif;--font-mono:'JetBrains Mono',Consolas,monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--purple);text-decoration:none}a:hover{text-decoration:underline}
+
+/* Layout */
+.container{max-width:1400px;margin:0 auto;padding:0 24px}
+header{padding:48px 24px 32px;text-align:center;border-bottom:1px solid var(--border)}
+header h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+header p{color:var(--text-muted);margin-top:8px;font-size:1.05rem}
+header .updated{color:var(--text-dim);font-family:var(--font-mono);font-size:0.8rem;margin-top:12px}
+
+/* Tab System */
+.tabs{display:flex;gap:0;justify-content:center;margin:32px auto 0;max-width:400px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.tab-btn{flex:1;padding:12px 24px;background:var(--surface);border:none;color:var(--text-muted);font-size:0.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.tab-btn.active{background:var(--purple);color:#fff}
+.tab-btn:hover:not(.active){background:var(--surface2)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* Sections */
+section{padding:48px 0}
+.section-label{display:inline-block;font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:8px}
+section h2{font-size:1.8rem;font-weight:700;margin-bottom:24px}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-2px);border-color:var(--purple-dim)}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.card-title{font-weight:700;font-size:1.1rem}
+.card-subtitle{font-size:0.8rem;color:var(--text-muted)}
+.card p,.card li{font-size:0.9rem;color:var(--text-muted);line-height:1.7}
+.card ul{list-style:none;margin-top:12px}
+.card ul li{padding:4px 0;display:flex;gap:8px;align-items:flex-start}
+.card ul li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--purple);margin-top:8px;flex-shrink:0}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.badge-required{background:rgba(239,68,68,.15);color:var(--red)}
+.badge-optional{background:rgba(34,197,94,.15);color:var(--green)}
+.badge-recommended{background:rgba(234,179,8,.15);color:var(--yellow)}
+
+/* Links Row */
+.links-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.link-pill{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:0.78rem;color:var(--text);transition:border-color .2s}
+.link-pill:hover{border-color:var(--purple);text-decoration:none}
+
+/* Env Var Table */
+.env-table{width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:16px}
+.env-table th{text-align:left;padding:10px 12px;background:var(--surface2);color:var(--text-muted);font-weight:600;border-bottom:1px solid var(--border);font-size:0.78rem;text-transform:uppercase;letter-spacing:.5px}
+.env-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.env-table code{font-family:var(--font-mono);font-size:0.82rem;color:var(--cyan);background:rgba(6,182,212,.08);padding:2px 6px;border-radius:4px}
+.env-table .example{color:var(--text-dim);font-family:var(--font-mono);font-size:0.78rem}
+
+/* Architecture Diagram */
+.arch-diagram{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;overflow-x:auto}
+.arch-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.arch-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 20px;text-align:center;min-width:140px;font-size:0.85rem;font-weight:600;position:relative}
+.arch-box small{display:block;font-weight:400;color:var(--text-muted);font-size:0.75rem;margin-top:2px}
+.arch-arrow{text-align:center;color:var(--text-dim);font-size:1.4rem;margin:4px 0}
+.arch-label{text-align:center;font-family:var(--font-mono);font-size:0.72rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin:20px 0 8px}
+.arch-box.primary{border-color:var(--purple);background:rgba(139,92,246,.08)}
+.arch-box.storage{border-color:var(--blue);background:rgba(59,130,246,.08)}
+.arch-box.external{border-color:var(--orange);background:rgba(249,115,22,.08)}
+.arch-box.optional{border-color:var(--green);background:rgba(34,197,94,.08)}
+
+/* Cost Table */
+.cost-table{width:100%;border-collapse:collapse;font-size:0.9rem}
+.cost-table th{text-align:left;padding:12px 16px;background:var(--surface2);color:var(--text-muted);font-weight:600;border-bottom:1px solid var(--border)}
+.cost-table td{padding:12px 16px;border-bottom:1px solid var(--border)}
+.cost-table .cost{font-family:var(--font-mono);font-weight:700;color:var(--green)}
+.cost-table .cost.warn{color:var(--yellow)}
+.cost-table .cost.high{color:var(--orange)}
+.cost-table tfoot td{font-weight:700;font-size:1rem;border-top:2px solid var(--purple)}
+.cost-table tfoot .cost{color:var(--purple);font-size:1.1rem}
+.cost-note{font-size:0.82rem;color:var(--text-dim);margin-top:12px;font-style:italic}
+
+/* DB Schema */
+.schema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.schema-group{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}
+.schema-group h4{font-size:0.95rem;margin-bottom:12px;color:var(--text)}
+.schema-group ul{list-style:none;font-size:0.82rem}
+.schema-group li{padding:3px 0;color:var(--text-muted);display:flex;gap:6px}
+.schema-group li code{color:var(--cyan);font-family:var(--font-mono);font-size:0.78rem;flex-shrink:0}
+
+/* Responsive */
+@media(max-width:768px){
+  .card-grid{grid-template-columns:1fr}
+  .arch-row{flex-direction:column;align-items:center}
+  header h1{font-size:1.8rem}
+  .tabs{max-width:100%}
+  .env-table{font-size:0.75rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Study Break Architecture Map</h1>
+  <p>Complete infrastructure, services, and cost reference for developers</p>
+  <div class="updated">Last updated: March 2026 &middot; v1.9.x</div>
+</header>
+
+<div class="container">
+
+<!-- Tab Buttons -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('plain')">Plain Language</button>
+  <button class="tab-btn" onclick="switchTab('tech')">Technical</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- PLAIN LANGUAGE TAB -->
+<!-- ============================================================ -->
+<div id="tab-plain" class="tab-content active">
+
+<section>
+  <div class="section-label">How it all fits together</div>
+  <h2>Architecture Overview</h2>
+  <p style="color:var(--text-muted);margin-bottom:24px">Study Break is a web app (also available as a phone app) that helps college students study. Here's how every piece connects:</p>
+
+  <div class="arch-diagram">
+    <div class="arch-label">Users</div>
+    <div class="arch-row">
+      <div class="arch-box primary">Web Browser<small>React app served by Vite</small></div>
+      <div class="arch-box primary">iOS App<small>Capacitor wrapper</small></div>
+      <div class="arch-box primary">Android App<small>Capacitor wrapper</small></div>
+    </div>
+    <div class="arch-arrow">&darr; HTTPS requests &darr;</div>
+    <div class="arch-label">Server</div>
+    <div class="arch-row">
+      <div class="arch-box primary" style="min-width:340px">Express.js Server (Node.js)<small>Hosted on Render.com &mdash; handles all API logic</small></div>
+    </div>
+    <div class="arch-arrow">&darr; connects to &darr;</div>
+    <div class="arch-label">Core Services (Required)</div>
+    <div class="arch-row">
+      <div class="arch-box storage">Supabase<small>Database + Auth + File Storage</small></div>
+      <div class="arch-box external">Anthropic Claude<small>AI brain (chat, flashcards, etc.)</small></div>
+      <div class="arch-box external">Stripe<small>Web payment processing</small></div>
+      <div class="arch-box external">Deepgram<small>Speech-to-text for lectures</small></div>
+    </div>
+    <div class="arch-label">Optional Services</div>
+    <div class="arch-row">
+      <div class="arch-box optional">Firebase<small>Push notifications</small></div>
+      <div class="arch-box optional">ElevenLabs / Google / Kokoro<small>Text-to-speech voices</small></div>
+      <div class="arch-box optional">Sentry<small>Error tracking</small></div>
+      <div class="arch-box optional">PostHog<small>Analytics</small></div>
+      <div class="arch-box optional">RevenueCat<small>App Store billing</small></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">What Each Service Does</div>
+  <h2>Services Explained</h2>
+  <div class="card-grid">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue)">&#9741;</div>
+        <div><div class="card-title">Supabase</div><div class="card-subtitle">Database, Login, File Storage <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>Think of Supabase as the "filing cabinet" for everything. It stores all user accounts, classes, flashcards, assignments, chat history, and uploaded documents. It also handles login/signup (creating accounts, verifying passwords, issuing login tokens). When you upload a PDF, it goes into Supabase Storage.</p>
+      <div class="links-row">
+        <a href="https://app.supabase.com" target="_blank" class="link-pill">Dashboard</a>
+        <a href="https://supabase.com/docs" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple)">&#10024;</div>
+        <div><div class="card-title">Anthropic Claude API</div><div class="card-subtitle">AI Features <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>Claude is the "brain" behind every AI feature: the tutor chat, flashcard generation, document summaries, exam prep quizzes, college advising, assignment solving, and more. We use two models: <b>Sonnet 4.6</b> (fast, for most tasks) and <b>Opus 4.6</b> (smarter, for premium users on Scholar+ plans). You pay per message based on how long the input and output are.</p>
+      <div class="links-row">
+        <a href="https://console.anthropic.com" target="_blank" class="link-pill">Console</a>
+        <a href="https://docs.anthropic.com" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(99,102,241,.15);color:#6366f1">&#128179;</div>
+        <div><div class="card-title">Stripe</div><div class="card-subtitle">Web/Desktop Payments <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>Stripe handles all subscription billing on the website: collecting credit cards, charging monthly/yearly, managing upgrades/downgrades, and sending receipts. You create "Products" and "Prices" in the Stripe dashboard, then the app uses their IDs to know what to charge. Stripe takes 2.9% + 30&cent; per transaction.</p>
+      <div class="links-row">
+        <a href="https://dashboard.stripe.com" target="_blank" class="link-pill">Dashboard</a>
+        <a href="https://docs.stripe.com" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,.15);color:var(--green)">&#127908;</div>
+        <div><div class="card-title">Deepgram</div><div class="card-subtitle">Lecture Transcription <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>When a student records a lecture, the audio is sent to Deepgram which converts speech to text. It can also identify different speakers ("diarization"). Paid users get a monthly minute allowance (Student: 60 min, Scholar: 300 min, Genius: 600 min).</p>
+      <div class="links-row">
+        <a href="https://console.deepgram.com" target="_blank" class="link-pill">Console</a>
+        <a href="https://developers.deepgram.com" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(249,115,22,.15);color:var(--orange)">&#128274;</div>
+        <div><div class="card-title">RevenueCat</div><div class="card-subtitle">App Store Billing <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>When someone subscribes through the iOS App Store or Google Play Store, Apple/Google handle the payment, and RevenueCat syncs the subscription status back to our server. It's a middleman that makes in-app purchases work without building custom receipt validation.</p>
+      <div class="links-row">
+        <a href="https://app.revenuecat.com" target="_blank" class="link-pill">Dashboard</a>
+        <a href="https://docs.revenuecat.com" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(234,179,8,.15);color:var(--yellow)">&#128276;</div>
+        <div><div class="card-title">Firebase Cloud Messaging</div><div class="card-subtitle">Push Notifications <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>Firebase sends push notifications to users' phones and browsers &mdash; things like "You have 15 overdue flashcards" or "Your Calc assignment is due tomorrow." If Firebase isn't configured, the app still works, users just won't get push alerts.</p>
+      <div class="links-row">
+        <a href="https://console.firebase.google.com" target="_blank" class="link-pill">Console</a>
+        <a href="https://firebase.google.com/docs/cloud-messaging" target="_blank" class="link-pill">Docs</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,.15);color:var(--cyan)">&#128264;</div>
+        <div><div class="card-title">Text-to-Speech (3 providers)</div><div class="card-subtitle">Read Aloud Feature <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>When a student clicks "Read Aloud" on a document or summary, the text is converted to spoken audio. We have a fallback chain: <b>Genius</b> users get ElevenLabs (best quality), <b>Scholar</b> gets Google Neural voices, <b>Student</b> gets Kokoro (open-source via DeepInfra), and <b>Free</b> users get their browser's built-in voice (no server needed).</p>
+      <div class="links-row">
+        <a href="https://elevenlabs.io" target="_blank" class="link-pill">ElevenLabs</a>
+        <a href="https://console.cloud.google.com/speech/text-to-speech" target="_blank" class="link-pill">Google TTS</a>
+        <a href="https://deepinfra.com" target="_blank" class="link-pill">DeepInfra</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(239,68,68,.15);color:var(--red)">&#128027;</div>
+        <div><div class="card-title">Sentry</div><div class="card-subtitle">Error Tracking <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>Sentry automatically catches errors (crashes, unhandled exceptions) on both the server and in users' browsers, then sends you an alert with the full stack trace and context. Extremely useful for finding bugs in production. Without it, you'd have to dig through server logs manually.</p>
+      <div class="links-row">
+        <a href="https://sentry.io" target="_blank" class="link-pill">Dashboard</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue)">&#128202;</div>
+        <div><div class="card-title">PostHog</div><div class="card-subtitle">Analytics & Feature Flags <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>PostHog tracks how users interact with the app &mdash; which pages they visit, which features they use, where they drop off. It also supports "feature flags" (turning features on/off for specific users without deploying code). Useful for understanding usage patterns and A/B testing.</p>
+      <div class="links-row">
+        <a href="https://us.posthog.com" target="_blank" class="link-pill">Dashboard</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(34,197,94,.15);color:var(--green)">&#127758;</div>
+        <div><div class="card-title">Render.com</div><div class="card-subtitle">Web Hosting <span class="badge badge-required">Required</span></div></div>
+      </div>
+      <p>Render hosts the entire application &mdash; both the server that handles API requests and the built website files. You push code to GitHub and Render automatically builds and deploys it. The Starter plan ($7/mo) keeps the server always running (no cold starts).</p>
+      <div class="links-row">
+        <a href="https://dashboard.render.com" target="_blank" class="link-pill">Dashboard</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple)">&#127916;</div>
+        <div><div class="card-title">OpenStreetMap + CARTO</div><div class="card-subtitle">Campus Map Tiles <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>The Campus Map feature shows an interactive map of the student's university. The map background images ("tiles") come from CARTO's free servers, and building data is pulled from OpenStreetMap's Overpass API. Both are free and open-source.</p>
+      <div class="links-row">
+        <a href="https://www.openstreetmap.org" target="_blank" class="link-pill">OpenStreetMap</a>
+        <a href="https://carto.com/basemaps" target="_blank" class="link-pill">CARTO</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(234,179,8,.15);color:var(--yellow)">&#127782;</div>
+        <div><div class="card-title">OpenWeatherMap</div><div class="card-subtitle">Weather Data <span class="badge badge-optional">Optional</span></div></div>
+      </div>
+      <p>Provides current weather for the student's campus, used to generate context-aware study suggestions (e.g., "It's rainy today &mdash; great day for a library session"). Falls back gracefully if not configured.</p>
+      <div class="links-row">
+        <a href="https://openweathermap.org/api" target="_blank" class="link-pill">API Portal</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Where Data Lives</div>
+  <h2>Data Storage</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(59,130,246,.15);color:var(--blue)">&#128451;</div>
+        <div><div class="card-title">PostgreSQL Database</div><div class="card-subtitle">66 tables &middot; Hosted on Supabase</div></div>
+      </div>
+      <p>Every piece of structured data &mdash; users, classes, flashcards, assignments, chat messages, quiz results, study plans, achievements, and more. Connected via Drizzle ORM (a type-safe query builder).</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(6,182,212,.15);color:var(--cyan)">&#128193;</div>
+        <div><div class="card-title">Supabase Storage</div><div class="card-subtitle">2 buckets: documents, study-sessions</div></div>
+      </div>
+      <p>Uploaded files (PDFs, images, audio) stored as objects. Images auto-optimized (resized to 2048px, converted to WebP). Legacy files served from local <code>/uploads/</code> directory as fallback.</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(139,92,246,.15);color:var(--purple)">&#128241;</div>
+        <div><div class="card-title">IndexedDB (Browser)</div><div class="card-subtitle">Offline support via Dexie.js</div></div>
+      </div>
+      <p>Flashcards, classes, and assignments cached locally in the browser for offline access. A sync queue tracks pending changes and replays them when the user reconnects.</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon" style="background:rgba(234,179,8,.15);color:var(--yellow)">&#9889;</div>
+        <div><div class="card-title">In-Memory Cache</div><div class="card-subtitle">AI responses &middot; 10K entries max &middot; 1hr TTL</div></div>
+      </div>
+      <p>Frequently-requested AI results (embeddings, summaries, tool outputs) cached in server memory to avoid re-calling Claude for identical requests. Automatically cleaned every 5 minutes.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- end plain tab -->
+
+<!-- ============================================================ -->
+<!-- TECHNICAL TAB -->
+<!-- ============================================================ -->
+<div id="tab-tech" class="tab-content">
+
+<section>
+  <div class="section-label">System Architecture</div>
+  <h2>Technical Stack</h2>
+
+  <div class="arch-diagram">
+    <div class="arch-label">Client Layer</div>
+    <div class="arch-row">
+      <div class="arch-box primary">React 18 + TypeScript<small>Vite 5 &middot; TailwindCSS &middot; shadcn/ui</small></div>
+      <div class="arch-box primary">Capacitor 8<small>iOS (Swift) &middot; Android (Kotlin)</small></div>
+      <div class="arch-box">PWA / Service Worker<small>Network-first API, cache-first assets</small></div>
+    </div>
+    <div class="arch-arrow">&darr; JWT Bearer &middot; REST API &darr;</div>
+    <div class="arch-label">Application Layer</div>
+    <div class="arch-row">
+      <div class="arch-box primary" style="min-width:480px">
+        Express 4.x + TypeScript (tsx runner, no compile step)<br>
+        <small>Helmet &middot; CORS &middot; compression &middot; CSRF &middot; express-rate-limit (200/min)<br>
+        Multer (file uploads) &middot; Zod validation (100% route coverage, ~84 routes)</small>
+      </div>
+    </div>
+    <div class="arch-arrow">&darr; Drizzle ORM (parameterized queries) &darr;</div>
+    <div class="arch-label">Data Layer</div>
+    <div class="arch-row">
+      <div class="arch-box storage">PostgreSQL 15+<small>Supabase &middot; postgres.js driver &middot; pool max 10</small></div>
+      <div class="arch-box storage">Supabase Storage<small>documents &middot; study-sessions buckets</small></div>
+      <div class="arch-box storage">Supabase Auth<small>JWT &middot; supabaseAdmin.auth.getUser()</small></div>
+    </div>
+    <div class="arch-label">External APIs</div>
+    <div class="arch-row">
+      <div class="arch-box external">Anthropic<small>claude-sonnet-4-6 (default)<br>claude-opus-4-6 (Scholar+)</small></div>
+      <div class="arch-box external">Stripe<small>stripe@20.3 &middot; webhooks</small></div>
+      <div class="arch-box external">Deepgram<small>@deepgram/sdk@4.11</small></div>
+      <div class="arch-box external">RevenueCat<small>Webhook &middot; Capacitor SDK</small></div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-box optional">Firebase Admin<small>firebase-admin@13.7</small></div>
+      <div class="arch-box optional">ElevenLabs / Google TTS / DeepInfra<small>Tier-based fallback chain</small></div>
+      <div class="arch-box optional">Sentry<small>@sentry/node + @sentry/react</small></div>
+      <div class="arch-box optional">PostHog<small>posthog-js@1.362</small></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">Environment Configuration</div>
+  <h2>Environment Variables</h2>
+  <p style="color:var(--text-muted);margin-bottom:16px">All secrets are set in the Render dashboard (not committed to git). The <code>.env</code> file is gitignored and used for local development only.</p>
+
+  <div style="overflow-x:auto">
+  <table class="env-table">
+    <thead><tr><th>Variable</th><th>Service</th><th>Required</th><th>Example Value</th></tr></thead>
+    <tbody>
+    <tr><td><code>DATABASE_URL</code></td><td>Supabase PostgreSQL</td><td><span class="badge badge-required">Required</span></td><td class="example">postgresql://postgres.xyz:password@aws-0-us-east-1.pooler.supabase.com:6543/postgres</td></tr>
+    <tr><td><code>SUPABASE_URL</code></td><td>Supabase</td><td><span class="badge badge-required">Required</span></td><td class="example">https://abcdefghij.supabase.co</td></tr>
+    <tr><td><code>SUPABASE_SERVICE_ROLE_KEY</code></td><td>Supabase Admin</td><td><span class="badge badge-required">Required</span></td><td class="example">eyJhbGciOiJIUzI1NiIs... (long JWT)</td></tr>
+    <tr><td><code>SUPABASE_ANON_KEY</code></td><td>Supabase Client</td><td><span class="badge badge-required">Required</span></td><td class="example">eyJhbGciOiJIUzI1NiIs... (long JWT)</td></tr>
+    <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic Claude</td><td><span class="badge badge-required">Required</span></td><td class="example">sk-ant-api03-xxxxxxxxxxxx</td></tr>
+    <tr><td><code>STRIPE_SECRET_KEY</code></td><td>Stripe</td><td><span class="badge badge-required">Required</span></td><td class="example">sk_live_REDACTED</td></tr>
+    <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td>Stripe Webhooks</td><td><span class="badge badge-required">Required</span></td><td class="example">whsec_xxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>STRIPE_STUDENT_PRICE_ID</code></td><td>Stripe Pricing</td><td><span class="badge badge-required">Required</span></td><td class="example">price_1Abc123DefGhi456</td></tr>
+    <tr><td><code>STRIPE_SCHOLAR_PRICE_ID</code></td><td>Stripe Pricing</td><td><span class="badge badge-required">Required</span></td><td class="example">price_1Abc123DefGhi789</td></tr>
+    <tr><td><code>STRIPE_GENIUS_PRICE_ID</code></td><td>Stripe Pricing</td><td><span class="badge badge-required">Required</span></td><td class="example">price_1Abc123DefGhi012</td></tr>
+    <tr><td><code>DEEPGRAM_API_KEY</code></td><td>Deepgram STT</td><td><span class="badge badge-required">Required</span></td><td class="example">dg-xxxxxxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>REVENUECAT_API_KEY</code></td><td>RevenueCat</td><td><span class="badge badge-required">Required</span></td><td class="example">appl_xxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>REVENUECAT_WEBHOOK_SECRET</code></td><td>RevenueCat</td><td><span class="badge badge-required">Required</span></td><td class="example">whsec_xxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>DEEPINFRA_API_KEY</code></td><td>Kokoro TTS</td><td><span class="badge badge-optional">Optional</span></td><td class="example">di_xxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>GOOGLE_TTS_API_KEY</code></td><td>Google Neural TTS</td><td><span class="badge badge-optional">Optional</span></td><td class="example">AIzaSyXXXXXXXXXXXXXXXXXXXXXXXX</td></tr>
+    <tr><td><code>ELEVENLABS_API_KEY</code></td><td>ElevenLabs TTS</td><td><span class="badge badge-optional">Optional</span></td><td class="example">REDACTED</td></tr>
+    <tr><td><code>FIREBASE_PROJECT_ID</code></td><td>Firebase Push</td><td><span class="badge badge-optional">Optional</span></td><td class="example">studybreak-12345</td></tr>
+    <tr><td><code>FIREBASE_PRIVATE_KEY</code></td><td>Firebase Push</td><td><span class="badge badge-optional">Optional</span></td><td class="example">-----BEGIN PRIVATE KEY-----\nMIIEvQ...</td></tr>
+    <tr><td><code>FIREBASE_CLIENT_EMAIL</code></td><td>Firebase Push</td><td><span class="badge badge-optional">Optional</span></td><td class="example">firebase-adminsdk-xxx@studybreak-12345.iam.gserviceaccount.com</td></tr>
+    <tr><td><code>OPENWEATHER_API_KEY</code></td><td>OpenWeatherMap</td><td><span class="badge badge-optional">Optional</span></td><td class="example">a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4</td></tr>
+    <tr><td><code>SENTRY_DSN</code></td><td>Sentry (server)</td><td><span class="badge badge-optional">Optional</span></td><td class="example">https://abc123@o456.ingest.sentry.io/789</td></tr>
+    <tr><td><code>VITE_SENTRY_DSN</code></td><td>Sentry (client)</td><td><span class="badge badge-optional">Optional</span></td><td class="example">https://abc123@o456.ingest.sentry.io/789</td></tr>
+    <tr><td><code>VITE_POSTHOG_KEY</code></td><td>PostHog</td><td><span class="badge badge-optional">Optional</span></td><td class="example">phc_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td></tr>
+    <tr><td><code>LOG_LEVEL</code></td><td>Pino Logger</td><td><span class="badge badge-optional">Optional</span></td><td class="example">info</td></tr>
+    <tr><td><code>PORT</code></td><td>Server</td><td><span class="badge badge-optional">Optional</span></td><td class="example">5000</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="cost-note">Client-side env vars use the <code>VITE_</code> prefix and are bundled into the frontend build (public). Never put secrets in VITE_ vars.</p>
+</section>
+
+<section>
+  <div class="section-label">Data Model</div>
+  <h2>Database Schema (66 Tables)</h2>
+  <div class="schema-grid">
+    <div class="schema-group">
+      <h4>Core (8)</h4>
+      <ul>
+        <li><code>users</code> Accounts, profile, subscription tier, AI usage counters</li>
+        <li><code>session</code> Express sessions (legacy, connect-pg-simple)</li>
+        <li><code>universities</code> 596 US universities with domain/logo</li>
+        <li><code>classes</code> Courses with schedule, grading, syllabus</li>
+        <li><code>clubs</code> Student organizations</li>
+        <li><code>documents</code> Uploaded files + extracted text + summaries</li>
+        <li><code>media</code> Audio/video uploads with transcripts</li>
+        <li><code>userEmails</code> Secondary emails (verification tracking)</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>Study Tools (25)</h4>
+      <ul>
+        <li><code>flashcards</code> FSRS-5 cards with Bloom's cognitive level</li>
+        <li><code>flashcardSets</code> Card collections per class/document</li>
+        <li><code>assignments</code> Homework/exams with due dates, priority</li>
+        <li><code>quizzes</code> AI-generated quiz templates</li>
+        <li><code>quizAttempts</code> Quiz performance records</li>
+        <li><code>studySessions</code> Timed study blocks with scoring</li>
+        <li><code>studyPlans</code> AI daily study schedules</li>
+        <li><code>chatMessages</code> AI tutor conversation history</li>
+        <li><code>savedChats</code> Archived conversations</li>
+        <li><code>concepts</code> Knowledge graph nodes + mastery</li>
+        <li><code>conceptFlashcards</code> Concept-to-card links</li>
+        <li><code>conceptRelationships</code> Prerequisites/connections</li>
+        <li><code>formulas</code> Extracted STEM formulas</li>
+        <li><code>annotations</code> Document highlights/notes</li>
+        <li><code>userNotes</code> Rich-text Tiptap notes</li>
+        <li><code>catchUpPlans</code> AI recovery schedules</li>
+        <li><code>classMemories</code> Per-class AI context memory</li>
+        <li><code>bloomMastery</code> Bloom's level progress tracking</li>
+        <li><code>confusionPatterns</code> Detected error patterns</li>
+        <li><code>retentionSnapshots</code> Daily retrievability snapshots</li>
+        <li><code>interdisciplinarySets</code> Cross-class practice sets</li>
+        <li><code>recordingNotes</code> AI lecture notes</li>
+        <li><code>postExamReflections</code> Post-test analysis</li>
+        <li><code>confidencePredictions</code> JOL calibration data</li>
+        <li><code>studyStrategyEvents</code> Strategy effectiveness tracking</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>Collaboration (8)</h4>
+      <ul>
+        <li><code>studyGroups</code> Group info + invite codes</li>
+        <li><code>studyGroupMembers</code> Membership + roles</li>
+        <li><code>studyGroupMessages</code> Real-time group chat</li>
+        <li><code>studyGroupSessions</code> Group meetings/recordings</li>
+        <li><code>sessionSharedFiles</code> Files shared in sessions</li>
+        <li><code>recordings</code> Audio with transcripts</li>
+        <li><code>transcripts</code> Speaker-diarized text</li>
+        <li><code>pushTokens</code> Device push notification tokens</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>College Advising (3)</h4>
+      <ul>
+        <li><code>collegeAdvisingSessions</code> AI counseling sessions</li>
+        <li><code>essayDrafts</code> Application essay drafts</li>
+        <li><code>degreeRequirements</code> Degree planning + satisfaction</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>Community & Sharing (4)</h4>
+      <ul>
+        <li><code>publishedSets</code> Shared flashcard sets + votes</li>
+        <li><code>publishedSetVotes</code> Upvote/downvote records</li>
+        <li><code>sharedFlashcardSets</code> University marketplace</li>
+        <li><code>examQuestions</code> Community exam bank</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>Educator & LTI (7)</h4>
+      <ul>
+        <li><code>educatorClasses</code> Teacher-created classes</li>
+        <li><code>classEnrollments</code> Student enrollment + LTI</li>
+        <li><code>distributedContent</code> Shared materials</li>
+        <li><code>ltiPlatforms</code> LMS configurations</li>
+        <li><code>ltiKeyPairs</code> RSA signing keys</li>
+        <li><code>ltiNonces</code> Login flow nonces</li>
+        <li><code>ltiLineItems</code> Grade passback items</li>
+      </ul>
+    </div>
+    <div class="schema-group">
+      <h4>Other (11)</h4>
+      <ul>
+        <li><code>achievements</code> Badges and milestones</li>
+        <li><code>streakFreezes</code> Monthly freeze usage</li>
+        <li><code>studySpots</code> Study location bookmarks</li>
+        <li><code>campusOsmBuildings</code> OSM building data (per-user)</li>
+        <li><code>campusLocations</code> Custom map pins</li>
+        <li><code>referrals</code> Referral program tracking</li>
+        <li><code>analyticsArchives</code> Dashboard snapshots</li>
+        <li><code>featureEvents</code> Feature usage analytics</li>
+        <li><code>solverHistory</code> Assignment solver results</li>
+        <li><code>notificationPreferences</code> Alert settings + quiet hours</li>
+        <li><code>studySpots</code> Campus study spot ratings</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">AI Model Routing</div>
+  <h2>Model Selection by Feature</h2>
+  <div style="overflow-x:auto">
+  <table class="env-table">
+    <thead><tr><th>Feature</th><th>Free / Student</th><th>Scholar / Genius</th><th>Service File</th></tr></thead>
+    <tbody>
+    <tr><td>AI Tutor Chat</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-sonnet-4-6</code></td><td>aiTutor.ts</td></tr>
+    <tr><td>Document Analysis & Summaries</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>documentProcessor.ts</td></tr>
+    <tr><td>Flashcard / Quiz Generation</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-sonnet-4-6</code></td><td>aiTutor.ts</td></tr>
+    <tr><td>Assignment Solver</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>assignmentSolverService.ts</td></tr>
+    <tr><td>College Advising</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>collegeAdvisor.ts</td></tr>
+    <tr><td>Exam Prep</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>predictiveAnalytics.ts</td></tr>
+    <tr><td>Catch-Up Plans</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>catchUpService.ts</td></tr>
+    <tr><td>Formula Extraction</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>formulaService.ts</td></tr>
+    <tr><td>Concept Extraction</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>conceptService.ts</td></tr>
+    <tr><td>Transcription Notes</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-opus-4-6</code></td><td>transcriptionService.ts</td></tr>
+    <tr><td>Error Pattern Analysis</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-sonnet-4-6</code></td><td>errorAnalysis.ts</td></tr>
+    <tr><td>Campus Location Matching</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-sonnet-4-6</code></td><td>campusLocationMatcher.ts</td></tr>
+    <tr><td>Smart Reminders</td><td><code>claude-sonnet-4-6</code></td><td><code>claude-sonnet-4-6</code></td><td>smartReminders.ts</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="cost-note">Model routing is handled by <code>getModelForFeature(tier, feature)</code> in <code>server/services/aiManager.ts</code>. Opus features: catch-up, exam-prep, document-analysis, college-advising, assignment-solver.</p>
+</section>
+
+</div><!-- end tech tab -->
+
+<!-- ============================================================ -->
+<!-- COST SECTION (visible in both tabs) -->
+<!-- ============================================================ -->
+<section>
+  <div class="section-label">Financials</div>
+  <h2>Monthly Maintenance Cost</h2>
+  <p style="color:var(--text-muted);margin-bottom:20px">Estimated costs at ~500 monthly active users. Costs scale with usage. All prices in USD.</p>
+
+  <div style="overflow-x:auto">
+  <table class="cost-table">
+    <thead><tr><th>Service</th><th>Plan / Tier</th><th>What You're Paying For</th><th>Monthly</th><th>Yearly</th></tr></thead>
+    <tbody>
+    <tr><td><b>Render.com</b></td><td>Starter</td><td>Server hosting (always-on, no cold starts)</td><td class="cost">$7</td><td class="cost">$84</td></tr>
+    <tr><td><b>Supabase</b></td><td>Pro</td><td>Database (8GB), Auth, Storage (100GB), Realtime</td><td class="cost">$25</td><td class="cost">$300</td></tr>
+    <tr><td><b>Anthropic Claude</b></td><td>Pay-as-you-go</td><td>~$3/1M input tokens (Sonnet), ~$15/1M (Opus)</td><td class="cost warn">$80&ndash;250</td><td class="cost warn">$960&ndash;3,000</td></tr>
+    <tr><td><b>Stripe</b></td><td>Standard</td><td>2.9% + 30&cent; per transaction (no monthly fee)</td><td class="cost">$0*</td><td class="cost">$0*</td></tr>
+    <tr><td><b>RevenueCat</b></td><td>Free / Starter</td><td>Free up to $2.5K MTR, then $0 + app store fees</td><td class="cost">$0</td><td class="cost">$0</td></tr>
+    <tr><td><b>Deepgram</b></td><td>Pay-as-you-go</td><td>~$0.0043/min (Nova-2). ~200 hrs/mo at 500 users</td><td class="cost">$50</td><td class="cost">$600</td></tr>
+    <tr><td><b>DeepInfra (Kokoro TTS)</b></td><td>Pay-as-you-go</td><td>~$0.01/1M chars. Very cheap</td><td class="cost">$5</td><td class="cost">$60</td></tr>
+    <tr><td><b>Google Cloud TTS</b></td><td>Pay-as-you-go</td><td>$4&ndash;16/1M chars (Neural2 voices)</td><td class="cost">$15</td><td class="cost">$180</td></tr>
+    <tr><td><b>ElevenLabs</b></td><td>Starter</td><td>30K chars/mo included, then usage-based</td><td class="cost">$5</td><td class="cost">$60</td></tr>
+    <tr><td><b>Firebase</b></td><td>Spark (Free)</td><td>Push notifications (500K/mo free)</td><td class="cost">$0</td><td class="cost">$0</td></tr>
+    <tr><td><b>Sentry</b></td><td>Team</td><td>Error tracking (50K events/mo)</td><td class="cost">$29</td><td class="cost">$312</td></tr>
+    <tr><td><b>PostHog</b></td><td>Free / Cloud</td><td>1M events/mo free, then usage-based</td><td class="cost">$0</td><td class="cost">$0</td></tr>
+    <tr><td><b>OpenWeatherMap</b></td><td>Free</td><td>60 calls/min, 1M calls/mo</td><td class="cost">$0</td><td class="cost">$0</td></tr>
+    <tr><td><b>Domain (studybreak.app)</b></td><td>&mdash;</td><td>Domain registration + renewal</td><td class="cost">$3</td><td class="cost">$35</td></tr>
+    <tr><td><b>Apple Developer</b></td><td>Annual</td><td>iOS App Store listing</td><td class="cost">$8</td><td class="cost">$99</td></tr>
+    <tr><td><b>Google Play Developer</b></td><td>One-time</td><td>Android listing ($25 one-time, amortized)</td><td class="cost">$2</td><td class="cost">$25</td></tr>
+    </tbody>
+    <tfoot>
+    <tr><td colspan="3"><b>Total (estimated at 500 MAU)</b></td><td class="cost">$229&ndash;399</td><td class="cost">$2,715&ndash;4,755</td></tr>
+    </tfoot>
+  </table>
+  </div>
+
+  <p class="cost-note">* Stripe has no monthly fee &mdash; costs are per-transaction and come out of subscription revenue (not an operating expense).</p>
+  <p class="cost-note">The largest variable cost is <b>Anthropic Claude</b>. At 500 users averaging 10 AI requests/day, expect ~$80&ndash;250/mo depending on Opus usage. At 5,000 users, expect ~$800&ndash;2,500/mo. The AI cache reduces redundant calls by ~30%.</p>
+  <p class="cost-note">Optional services (Sentry, ElevenLabs, Google TTS) can be dropped to reduce costs by ~$50/mo. The app degrades gracefully without them.</p>
+
+  <div style="margin-top:32px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px">
+    <h4 style="margin-bottom:8px">Revenue vs Cost at Scale</h4>
+    <p style="font-size:0.88rem;color:var(--text-muted)">
+      At 500 users with 10% paid conversion (50 paid users, avg $10/mo) = <b>$500/mo revenue</b> vs <b>~$300/mo cost</b> = <span style="color:var(--green);font-weight:700">profitable at ~50 subscribers</span>.<br>
+      At 5,000 users with 10% conversion (500 paid) = <b>$5,000/mo revenue</b> vs <b>~$1,500/mo cost</b> = <span style="color:var(--green);font-weight:700">strong margin at scale</span>.
+    </p>
+  </div>
+</section>
+
+<footer style="padding:40px 0;text-align:center;border-top:1px solid var(--border);color:var(--text-dim);font-size:0.82rem">
+  Study Break Architecture Map &middot; Generated March 2026 &middot; <a href="https://github.com/Moonligh7er/study-break" target="_blank">GitHub</a>
+</footer>
+
+</div><!-- end container -->
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

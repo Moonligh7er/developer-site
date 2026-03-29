@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Environmental Justice 101: Who Bears the Pollution Burden — Deep Seer Blog</title>
+<meta name="description" content="Low-income communities and communities of color are disproportionately exposed to pollution. Learn how to use EJScreen, SVI, and open data to see environmental injustice for yourself.">
+<meta name="keywords" content="environmental justice, EJScreen, pollution burden, Social Vulnerability Index, Cancer Alley, Flint Michigan, EPA, disproportionate impact, environmental racism">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/environmental-justice-101">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Environmental Justice 101: Who Bears the Pollution Burden">
+<meta property="og:description" content="Low-income communities and communities of color are disproportionately exposed to pollution. Here's how to see it in the data.">
+<meta property="og:url" content="https://deepseer.io/blog/environmental-justice-101">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Environmental Justice 101: Who Bears the Pollution Burden">
+<meta name="twitter:description" content="How to use open data to see which communities bear the greatest pollution burden.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Environmental Justice 101: Who Bears the Pollution Burden",
+  "description": "Low-income communities and communities of color are disproportionately exposed to pollution. Learn how to use EJScreen, SVI, and open data to see environmental injustice for yourself.",
+  "url": "https://deepseer.io/blog/environmental-justice-101",
+  "datePublished": "2026-03-07",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(236,72,153,0.15);color:#ec4899}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 8px}
+.article p{font-size:15px;line-height:1.75;margin-bottom:16px;color:#c9cdd3}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;line-height:1.75;color:#c9cdd3}
+.article li{margin-bottom:6px}
+.article strong{color:#fff}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.05);border-radius:0 8px 8px 0;font-size:14px;color:#9ca3af}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Civic Research</span>
+  <h1>Environmental Justice 101: Who Bears the Pollution Burden</h1>
+  <div class="meta">Mar 7, 2026 &middot; 13 min read &middot; Deep Seer Team</div>
+
+  <p>In St. James Parish, Louisiana — a stretch of the Mississippi River corridor between Baton Rouge and New Orleans known as Cancer Alley — residents live within a mile of petrochemical plants, plastics factories, and grain elevators that emit millions of pounds of toxic chemicals annually. The census tract surrounding the Denka Performance Elastomer plant has a cancer risk from air toxics that is 50 times the national average, according to EPA's National Air Toxics Assessment. The population of St. James Parish is 49% Black. The plants were not built in these communities by accident.</p>
+
+  <h2>What Environmental Justice Means</h2>
+  <p>The EPA defines environmental justice as "the fair treatment and meaningful involvement of all people regardless of race, color, national origin, or income with respect to the development, implementation, and enforcement of environmental laws, regulations, and policies." Fair treatment means that no group of people should bear a disproportionate share of the negative environmental consequences resulting from industrial, governmental, and commercial operations or policies.</p>
+  <p>The concept emerged from a specific historical moment. In 1982, residents of Warren County, North Carolina — a predominantly Black rural community — organized protests against the state's decision to site a PCB (polychlorinated biphenyl) landfill in their community. The protest failed to stop the landfill, but it catalyzed a movement. In 1983, the U.S. General Accounting Office published a study finding that three out of four hazardous waste landfills in the Southeast were located in majority-minority communities. In 1987, the United Church of Christ's Commission for Racial Justice published "Toxic Wastes and Race," documenting that race was the strongest predictor of where hazardous waste facilities were sited — stronger than income, property values, or land use.</p>
+
+  <h2>The Numbers: Disproportionate Impact</h2>
+  <p>Decades of research have confirmed and quantified the disparity:</p>
+  <ul>
+    <li>Black Americans are exposed to <strong>1.54 times</strong> more particulate matter (PM2.5) from industrial sources than the overall population, according to a 2019 study published in the Proceedings of the National Academy of Sciences.</li>
+    <li>Hispanic Americans breathe air with <strong>1.2 times</strong> more nitrogen dioxide (a traffic-related pollutant) than non-Hispanic whites.</li>
+    <li>People of color are <strong>1.28 times</strong> more likely to live in counties with health-hazardous air quality, according to the American Lung Association.</li>
+    <li>Communities with Superfund sites have a median household income <strong>$4,000-$8,000 lower</strong> than the national average and a poverty rate 20% higher.</li>
+    <li>In the 48 contiguous states, <strong>56% of people living near hazardous waste facilities</strong> are people of color, according to a 2007 update to the original UCC study.</li>
+  </ul>
+  <p>These are not marginal differences. They are systematic, persistent, and measurable in public data.</p>
+
+  <h2>EJScreen: The EPA's Environmental Justice Tool</h2>
+  <p>EJScreen (<strong>ejscreen.epa.gov</strong>) is the EPA's environmental justice mapping and screening tool. It combines environmental indicators with demographic data at the census block group level — the finest geographic resolution available in census data, typically covering 600-3,000 people.</p>
+  <p>EJScreen provides 13 environmental indicators:</p>
+  <ul>
+    <li><strong>Particulate Matter 2.5 (PM2.5)</strong> — annual average concentration of fine particulate matter</li>
+    <li><strong>Ozone</strong> — summer seasonal average of daily maximum 8-hour ozone concentration</li>
+    <li><strong>Diesel Particulate Matter</strong> — concentration from diesel engines (trucks, generators, construction equipment)</li>
+    <li><strong>Air Toxics Cancer Risk</strong> — lifetime cancer risk from inhaled air toxics, based on the National Air Toxics Assessment</li>
+    <li><strong>Air Toxics Respiratory Hazard Index</strong> — non-cancer respiratory health risk from air toxics</li>
+    <li><strong>Toxic Releases to Air</strong> — pounds of toxic chemicals released to air from TRI-reporting facilities within the area</li>
+    <li><strong>Traffic Proximity</strong> — count of vehicles per day on major roads within 500 meters</li>
+    <li><strong>Lead Paint</strong> — percentage of housing built before 1960 (a proxy for lead paint risk)</li>
+    <li><strong>Superfund Proximity</strong> — count and distance of NPL (National Priorities List) Superfund sites</li>
+    <li><strong>RMP Facility Proximity</strong> — count and distance of Risk Management Plan facilities (those storing large quantities of hazardous chemicals)</li>
+    <li><strong>Hazardous Waste Proximity</strong> — count and distance of TSDF (treatment, storage, and disposal facilities) for hazardous waste</li>
+    <li><strong>Underground Storage Tanks</strong> — count and distance of leaking underground storage tanks</li>
+    <li><strong>Wastewater Discharge</strong> — RSEI-modeled toxic concentrations from permitted dischargers</li>
+  </ul>
+  <p>Each indicator is combined with demographic factors — percent minority, percent low-income, percent linguistically isolated, percent less than high school education, percent under 5, percent over 64 — to produce EJ index scores. A high EJ index means the area has both high environmental burden and high demographic vulnerability.</p>
+
+  <h2>How to Check EJ Scores for Any Location</h2>
+  <ol>
+    <li>Go to <strong>ejscreen.epa.gov</strong> and click "Launch EJScreen."</li>
+    <li>Navigate to your location of interest using the search bar (address, city, or zip code) or by zooming on the map.</li>
+    <li>Click on the map to generate a report for that location. You can choose a buffer radius (1 mile, 3 miles, etc.) to define the analysis area.</li>
+    <li>The report shows every environmental and demographic indicator for that area, expressed as both a raw value and a national/state percentile. A 90th percentile score for PM2.5 means the area has worse air quality than 90% of block groups nationwide.</li>
+    <li>Compare multiple locations. The power of EJScreen is comparative — the absolute numbers matter less than how one community's burden compares to others.</li>
+  </ol>
+  <p>Deep Seer integrates EJScreen data alongside Toxic Release Inventory (TRI) facility data, air quality readings from OpenAQ and AirNow, and health outcome data from CDC WONDER, allowing users to overlay environmental justice indicators directly on the 3D globe alongside real-time environmental monitoring.</p>
+
+  <h2>Social Vulnerability Index (SVI)</h2>
+  <p>The CDC's Social Vulnerability Index complements EJScreen by focusing on the social factors that affect a community's ability to prepare for, respond to, and recover from health hazards. SVI ranks every census tract on four themes:</p>
+  <ul>
+    <li><strong>Socioeconomic Status</strong> — poverty, unemployment, housing cost burden, no high school diploma, no health insurance</li>
+    <li><strong>Household Characteristics and Disability</strong> — aged 65+, aged 17 and younger, civilian with a disability, single-parent households, English language proficiency</li>
+    <li><strong>Racial and Ethnic Minority Status</strong> — all persons except white non-Hispanic</li>
+    <li><strong>Housing Type and Transportation</strong> — multi-unit structures, mobile homes, crowding, no vehicle, group quarters</li>
+  </ul>
+  <p>A census tract in the 90th percentile for SVI is more vulnerable than 90% of tracts nationwide. When high SVI overlaps with high EJScreen scores, you have identified a community that is both heavily polluted and least equipped to cope with the health consequences.</p>
+
+  <h2>Case Studies</h2>
+
+  <h3>Cancer Alley, Louisiana</h3>
+  <p>The 85-mile stretch between Baton Rouge and New Orleans contains over 200 petrochemical plants and refineries. EJScreen data shows that census block groups along this corridor consistently score in the 95th-99th percentile nationally for air toxics cancer risk, toxic releases to air, and RMP facility proximity. The demographics are stark: many of the most burdened block groups are 80-95% Black, with poverty rates exceeding 30%.</p>
+  <p>In 2023, the EPA's Office of Inspector General found that the agency had failed to perform timely Title VI investigations — the mechanism by which communities can challenge discriminatory facility siting under the Civil Rights Act. Some complaints had been pending for over 20 years without resolution. Meanwhile, new facilities continued to receive permits. Formosa Plastics proposed a $9.4 billion complex in St. James Parish; it was challenged in court and its permits were temporarily suspended, but the legal battle continues.</p>
+
+  <h3>Flint, Michigan</h3>
+  <p>Flint is a majority-Black city with a poverty rate over 40%. When state-appointed emergency managers switched the city's water source in 2014 to save money, they did not apply corrosion control treatment. Lead leached from aging pipes into drinking water at levels exceeding 100 ppb in some homes — nearly seven times the EPA action level. An estimated 6,000-12,000 children were exposed to elevated lead levels.</p>
+  <p>The EJScreen profile for Flint shows 95th+ percentile scores for lead paint exposure and demographic vulnerability, but the water contamination was not captured by EJScreen because the tool does not track drinking water quality — it focuses on ambient environmental conditions. This gap highlights why multiple data sources are necessary. The Water Quality Portal, USGS monitoring data, and utility-level CCR reports fill the gaps that EJScreen leaves.</p>
+
+  <h3>South Side of Chicago</h3>
+  <p>Chicago's Southeast Side neighborhoods — including South Deering, East Side, and Hegewisch — sit adjacent to some of the highest concentrations of industrial facilities in the Midwest. The area hosts petroleum coke storage, scrap metal processors, and legacy steel sites. EJScreen shows 90th+ percentile scores for PM2.5, diesel particulate matter, and hazardous waste proximity. The population is predominantly Latino and Black, with median household incomes well below the city average. Community organizations have fought for decades against proposals to add new waste processing and storage facilities to the area.</p>
+
+  <h2>Connecting Pollution to Health Outcomes</h2>
+  <p>The health consequences of environmental injustice are measurable. CDC WONDER data shows that age-adjusted mortality rates for chronic lower respiratory diseases, cancer, and cardiovascular disease are consistently higher in counties with high pollution burdens. Research published in the New England Journal of Medicine has demonstrated a dose-response relationship between PM2.5 exposure and mortality — even at levels below the EPA's current air quality standards.</p>
+  <p>The connection is not just respiratory. Lead exposure in children is linked to reduced IQ, attention disorders, and behavioral problems. PFAS exposure is associated with thyroid disease, immune dysfunction, and certain cancers. Proximity to Superfund sites has been associated with increased rates of congenital anomalies and low birth weight. These health impacts compound across generations — a child born into a community with high pollution, high poverty, and inadequate healthcare access faces compounding disadvantages that no individual choice can overcome.</p>
+
+  <h2>What Can Be Done</h2>
+  <p>Environmental justice is not merely an academic concept. It has policy implications and actionable pathways:</p>
+  <ul>
+    <li><strong>Use the data to participate in permitting.</strong> When a new facility applies for an air or water permit, the permitting process includes a public comment period. EJScreen data, TRI data, and health statistics can support comments arguing that the community is already overburdened.</li>
+    <li><strong>File Title VI complaints.</strong> Under Title VI of the Civil Rights Act, communities can file complaints with the EPA's External Civil Rights Compliance Office alleging that a permitting decision had discriminatory effects. The process is slow but legally significant.</li>
+    <li><strong>Support cumulative impact assessment.</strong> Several states (New Jersey, California, Connecticut) have passed or proposed laws requiring regulators to consider cumulative environmental burden — not just the impact of a single new facility, but the total burden including all existing sources — when making permitting decisions.</li>
+    <li><strong>Make the invisible visible.</strong> The most powerful thing you can do with tools like EJScreen, the TRI database, and platforms like Deep Seer is to make the pollution burden visible to people who do not live in it. Maps, data visualizations, and stories put human faces on statistical percentiles.</li>
+  </ul>
+
+  <p>Environmental injustice persists not because the data is hidden but because the people who bear the burden often lack the political power to change their circumstances. The data is freely available. The patterns are clear in every dataset that combines environmental and demographic information. The question is not whether the disparities exist — the question is what we do about them now that we can see them.</p>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

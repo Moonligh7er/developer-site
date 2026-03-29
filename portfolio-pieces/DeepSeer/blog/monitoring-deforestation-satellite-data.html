@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoring Deforestation From Your Desk With Satellite Data — Deep Seer Blog</title>
+<meta name="description" content="Global Forest Watch GLAD alerts detect tree cover loss within days using Landsat imagery. Learn how to monitor any forest on Earth for illegal logging and land clearing.">
+<meta name="keywords" content="deforestation monitoring, satellite data, GLAD alerts, Global Forest Watch, Landsat, Sentinel-2, NDVI, forest loss, remote sensing">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/monitoring-deforestation-satellite-data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Monitoring Deforestation From Your Desk With Satellite Data">
+<meta property="og:description" content="Global Forest Watch GLAD alerts detect tree cover loss within days. Here's how to monitor any forest on Earth for illegal logging and land clearing.">
+<meta property="og:url" content="https://deepseer.io/blog/monitoring-deforestation-satellite-data">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Monitoring Deforestation From Your Desk With Satellite Data">
+<meta name="twitter:description" content="GLAD alerts detect tree cover loss within days. Here's how to monitor any forest on Earth.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Monitoring Deforestation From Your Desk With Satellite Data",
+  "description": "Global Forest Watch GLAD alerts detect tree cover loss within days using Landsat imagery. Learn how to monitor any forest on Earth.",
+  "url": "https://deepseer.io/blog/monitoring-deforestation-satellite-data",
+  "datePublished": "2026-02-21",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(34,197,94,0.15);color:#22c55e}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.15;margin-bottom:16px}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 8px}
+.article p{font-size:15px;line-height:1.75;margin-bottom:16px;color:#c9cdd3}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;line-height:1.75;color:#c9cdd3}
+.article li{margin-bottom:6px}
+.article strong{color:#fff}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.05);border-radius:0 8px 8px 0;font-size:14px;color:#9ca3af}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Environment</span>
+  <h1>Monitoring Deforestation From Your Desk With Satellite Data</h1>
+  <div class="meta">Feb 21, 2026 &middot; 10 min read &middot; Deep Seer Team</div>
+
+  <p>Between 2001 and 2023, the world lost approximately 437 million hectares of tree cover — an area roughly the size of the European Union. Much of this loss happened in remote tropical forests where there are no journalists, no police, and no witnesses except the satellites passing overhead every few days. Those satellites, and the alert systems built on their data, have fundamentally changed who can monitor deforestation and how fast they can detect it.</p>
+
+  <h2>How GLAD Alerts Work</h2>
+  <p>The Global Land Analysis and Discovery (GLAD) lab at the University of Maryland produces the most widely used deforestation alert system in the world. GLAD alerts are generated from Landsat satellite imagery at 30-meter resolution — meaning each pixel covers a 30m x 30m patch of ground, roughly the footprint of a basketball court.</p>
+  <p>The system works by comparing new Landsat observations against a baseline model of what each pixel should look like when its tree cover is intact. When a pixel shows a spectral signature consistent with tree cover loss — lower near-infrared reflectance, higher shortwave infrared — the system flags it as a potential alert. Each alert is assigned a confidence level: <strong>nominal</strong> (likely loss but could be seasonal variation or cloud shadow) or <strong>high confidence</strong> (multiple observations confirm loss).</p>
+  <p>Landsat 8 and Landsat 9 together provide a revisit time of about 8 days for any point on Earth. In practice, cloud cover in tropical regions means usable observations may come every 2-4 weeks. When an alert fires, it typically represents tree loss that occurred within the previous 1-3 weeks — fast enough to catch illegal logging operations that are still active.</p>
+
+  <h2>Global Forest Watch: The Interface Layer</h2>
+  <p>Global Forest Watch (GFW), operated by the World Resources Institute, takes raw GLAD alert data and makes it accessible through a web platform. On GFW, you can draw a bounding box around any forest area on Earth and see recent tree cover loss alerts overlaid on satellite imagery.</p>
+  <p>The platform provides several data layers beyond GLAD alerts:</p>
+  <ul>
+    <li><strong>Hansen tree cover loss</strong> — annual tree cover loss data from 2001 to present, providing historical context</li>
+    <li><strong>GLAD-S2 alerts</strong> — a newer alert system using Sentinel-2 imagery at 10-meter resolution, offering finer detail than the original Landsat-based alerts</li>
+    <li><strong>RADD alerts</strong> — Radar Alerts for Detecting Deforestation, using Sentinel-1 SAR data that can see through clouds, particularly valuable in perpetually cloudy regions like the Congo Basin</li>
+    <li><strong>Primary forest extent</strong> — shows which forests are undisturbed primary forest versus secondary regrowth or plantations</li>
+    <li><strong>Protected areas and indigenous territories</strong> — overlay that immediately shows whether deforestation is happening inside legally protected zones</li>
+  </ul>
+
+  <h2>Sentinel-2 for Verification</h2>
+  <p>When a GLAD alert fires, the next step is visual verification. ESA's Sentinel-2 satellites provide freely available multispectral imagery at 10-meter resolution with a 5-day revisit time. The Copernicus Browser (formerly EO Browser) lets anyone access Sentinel-2 imagery without an account.</p>
+  <p>For deforestation verification, the most useful band combinations are:</p>
+  <ul>
+    <li><strong>True color (B4/B3/B2)</strong> — shows what the human eye would see. Cleared land appears brown or red (exposed soil) against green forest.</li>
+    <li><strong>False color infrared (B8/B4/B3)</strong> — healthy vegetation appears bright red. Cleared areas appear cyan or brown, making forest boundaries sharply visible.</li>
+    <li><strong>NDVI (Normalized Difference Vegetation Index)</strong> — calculated as (B8 - B4) / (B8 + B4). Healthy forest canopy produces NDVI values of 0.6-0.9. Bare soil or cleared land drops below 0.2. A time series showing NDVI collapse from 0.8 to 0.1 at a location is unambiguous evidence of tree removal.</li>
+  </ul>
+
+  <h2>What Deforestation Looks Like From Space</h2>
+  <h3>Amazon Basin, Brazil</h3>
+  <p>The Brazilian Amazon loses roughly 10,000 square kilometers of forest per year. The pattern is distinctive: deforestation follows a "fishbone" pattern radiating outward from roads. Illegal clearings often appear as geometric rectangles cut into otherwise continuous canopy — nature does not produce straight lines. In Mato Grosso and Para states, the progression is visible year over year: road, then narrow clearings along the road, then expanding agricultural plots, then full conversion to soy or cattle pasture.</p>
+
+  <h3>Congo Basin, Central and West Africa</h3>
+  <p>The Congo Basin holds the world's second-largest tropical rainforest. Deforestation here is driven more by smallholder agriculture and charcoal production than industrial clearing. The pattern is different from the Amazon — smaller, irregular clearings expanding gradually from villages rather than large geometric blocks. Cloud cover is persistent, making SAR-based RADD alerts particularly important for monitoring this region.</p>
+
+  <h3>Indonesia (Borneo and Sumatra)</h3>
+  <p>Indonesian deforestation is heavily driven by palm oil plantation expansion. The visual signature is unmistakable: primary forest is replaced by orderly rows of oil palm trees planted in grid patterns. On Sentinel-2 imagery, mature oil palm plantations appear as a uniform, slightly different shade of green compared to the heterogeneous canopy of natural forest. The transition zone — where forest meets plantation — often shows active burning, visible as hotspots in VIIRS thermal anomaly data.</p>
+
+  <h2>Setting Up Monitoring for a Specific Area</h2>
+  <p>To monitor a specific forest area, follow these steps:</p>
+  <ol>
+    <li><strong>Define your area of interest.</strong> On Global Forest Watch, navigate to the forest you want to monitor. You can search by country, protected area name, or simply zoom to the location on the map. Draw a custom area using the polygon tool, or select a predefined boundary like a protected area or indigenous territory.</li>
+    <li><strong>Subscribe to alerts.</strong> GFW offers email subscriptions that notify you when new GLAD alerts are detected within your area of interest. Alerts are delivered weekly with a summary of the number of new alerts and their locations.</li>
+    <li><strong>Set up a baseline.</strong> Before you start monitoring, download the existing tree cover loss data for your area to understand the historical rate. A sudden spike above the historical baseline is the signal that something has changed.</li>
+    <li><strong>Cross-reference with context layers.</strong> When alerts fire, check them against logging concession boundaries, mining permits, protected area boundaries, and road networks. Deforestation inside a protected area is almost always illegal. Deforestation along a new road suggests planned agricultural expansion.</li>
+    <li><strong>Archive evidence.</strong> When you identify suspected illegal clearing, capture dated satellite imagery and alert data. Platforms like Deep Seer allow you to timestamp and preserve geospatial evidence with cryptographic hashing, creating a chain of custody that can support legal proceedings or regulatory complaints.</li>
+  </ol>
+
+  <h2>Limitations and Gotchas</h2>
+  <p>Satellite-based deforestation monitoring is powerful but not perfect. Cloud cover is the primary limitation — in the wet tropics, weeks can pass without a clear Landsat observation. GLAD alerts can also produce false positives from cloud shadows, seasonal flooding, or agricultural harvest on land that was already cleared. Always verify alerts with higher-resolution imagery before drawing conclusions.</p>
+  <p>The 30-meter resolution of GLAD alerts means small-scale selective logging — where individual trees are removed without clearing the canopy — often goes undetected. Sentinel-2's 10-meter resolution helps, but truly selective logging may only be visible in very high resolution commercial imagery from Planet (3m) or Maxar (30cm).</p>
+  <p>Despite these limitations, the combination of GLAD alerts, Sentinel-2 verification, and NDVI time series gives any person with an internet connection the ability to detect and document forest destruction that would have been invisible to anyone outside the region just fifteen years ago. The satellites are watching. The question is whether anyone is looking at what they see.</p>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

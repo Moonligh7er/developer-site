@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Following Campaign Finance Money Flows — Deep Seer Blog</title>
+<meta name="description" content="Learn how to trace campaign finance money flows using FEC data. Understand individual vs PAC contributions, donor-to-candidate-to-policy chains, dark money vehicles, disclosure timelines, and patterns that suggest undue influence.">
+<meta name="keywords" content="campaign finance, FEC data, PAC contributions, dark money, political donations, money in politics, campaign finance tracking, donor analysis">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/following-campaign-finance-money-flows">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Following Campaign Finance Money Flows">
+<meta property="og:description" content="FEC data is public but dense. Here's how to trace donations from individuals and PACs to candidates, and spot patterns between money and policy outcomes.">
+<meta property="og:url" content="https://deepseer.io/blog/following-campaign-finance-money-flows">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Following Campaign Finance Money Flows">
+<meta name="twitter:description" content="FEC data is public but dense. Here's how to trace donations from individuals and PACs to candidates, and spot patterns between money and policy outcomes.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Following Campaign Finance Money Flows",
+  "description": "FEC data is public but dense. Here's how to trace donations from individuals and PACs to candidates, and spot patterns between money and policy outcomes.",
+  "url": "https://deepseer.io/blog/following-campaign-finance-money-flows",
+  "datePublished": "2026-01-31",
+  "dateModified": "2026-01-31",
+  "author": {
+    "@type": "Person",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/following-campaign-finance-money-flows"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article-header{max-width:720px;margin:0 auto;padding:60px 24px 0}
+.article-header h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#666;margin-bottom:32px;flex-wrap:wrap}
+.category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px}
+.cat-accountability{background:rgba(245,158,11,0.15);color:#f59e0b}
+
+.article-body{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.article-body h2{font-size:22px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-0.02em}
+.article-body p{margin-bottom:16px;font-size:15px;color:#d1d5db}
+.article-body ul,.article-body ol{margin:0 0 16px 24px;font-size:15px}
+.article-body li{margin-bottom:8px}
+.article-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article-body pre{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:16px;font-size:13px;line-height:1.5}
+.article-body pre code{background:none;padding:0}
+.article-body strong{color:#fff}
+
+.cta-box{background:linear-gradient(135deg,rgba(0,204,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,204,255,0.2);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+.cta-box h3{color:#fff;font-size:18px;margin-bottom:8px}
+.cta-box p{color:#9ca3af;font-size:14px;margin-bottom:16px}
+.cta-box a.btn{display:inline-block;background:#00ccff;color:#000;font-weight:600;font-size:14px;padding:10px 24px;border-radius:8px;text-decoration:none}
+.cta-box a.btn:hover{background:#00b8e6;text-decoration:none}
+
+.related{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.related h3{color:#fff;font-size:16px;margin-bottom:16px}
+.related a{display:block;padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:14px;color:#00ccff}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article-header h1{font-size:28px}
+  .article-header{padding:40px 16px 0}
+  .article-body{padding:0 16px 60px}
+  .related{padding:0 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="article-header">
+  <h1>Following Campaign Finance Money Flows</h1>
+  <div class="article-meta">
+    <span>Jan 31, 2026</span>
+    <span>&middot;</span>
+    <span>11 min read</span>
+    <span>&middot;</span>
+    <span class="category cat-accountability">Accountability</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+<p>In the 2024 U.S. election cycle, candidates, parties, and outside groups spent over $15.4 billion. Every dollar of that spending is, in theory, public record &mdash; tracked by the Federal Election Commission through mandatory disclosure filings. In practice, following the money requires understanding a complex system of contribution types, committee structures, and disclosure loopholes that obscure who is funding whom. This guide breaks down how to navigate FEC data and trace money from donor to candidate to policy outcome.</p>
+
+<h2>The FEC Data Structure</h2>
+
+<p>The FEC maintains a comprehensive public database accessible through its API at <code>api.open.fec.gov</code>. The data is organized around three core entities:</p>
+
+<p><strong>Committees</strong> are the legal vehicles that receive and spend money. Every candidate has a principal campaign committee. Political Action Committees (PACs) are separate entities that can raise money from individuals and distribute it to candidates. Super PACs (officially "independent expenditure-only committees") can raise unlimited amounts but cannot coordinate with campaigns.</p>
+
+<p><strong>Receipts</strong> are the incoming money. The FEC tracks every contribution above $200, including the donor's name, address, employer, occupation, and the amount and date of each contribution. Below $200, campaigns report aggregate totals but not individual donor details, creating a significant information gap &mdash; roughly 30-40% of individual contributions by dollar amount fall below the itemization threshold.</p>
+
+<p><strong>Disbursements</strong> are the outgoing money &mdash; what campaigns and committees spend. This includes payments to vendors, media buys, travel, salaries, and transfers to other committees. Disbursement data reveals a campaign's operational priorities and vendor relationships.</p>
+
+<pre><code># Query individual contributions to a specific candidate
+GET https://api.open.fec.gov/v1/schedules/schedule_a/
+    ?committee_id=C00703975
+    &api_key=YOUR_KEY
+    &sort=-contribution_receipt_amount
+    &per_page=20
+
+# Key fields in response:
+{
+  "contributor_name": "SMITH, JOHN",
+  "contributor_employer": "ACME INDUSTRIES",
+  "contributor_occupation": "CEO",
+  "contribution_receipt_amount": 3300,
+  "contribution_receipt_date": "2025-06-15",
+  "contributor_city": "HOUSTON",
+  "contributor_state": "TX"
+}</code></pre>
+
+<h2>Individual Contributions vs. PAC Money</h2>
+
+<p>Federal law caps individual contributions to a candidate at $3,300 per election ($6,600 for primary plus general). These limits seem low until you realize that a single wealthy individual can also give $41,300 per year to a national party committee, $106,500 to a party's convention/building/legal accounts, and unlimited amounts to Super PACs. A family of four with sufficient means can legally direct over $1 million per cycle through various channels, all supporting the same political agenda.</p>
+
+<p>PAC contributions follow different rules. A connected PAC (operated by a corporation, union, or trade association) can give $5,000 per candidate per election. This sounds modest, but a corporation like Lockheed Martin does not have one PAC &mdash; it has a single PAC whose members (employees and their families) have collectively contributed. What matters is not any single PAC contribution but the aggregate: which industry sectors are funding which members of Congress, and do those members sit on committees that regulate those industries?</p>
+
+<p>The FEC API makes this traceable. By querying Schedule A (receipts) for a committee, filtering by contributor employer or occupation, and aggregating, you can build an industry profile for any candidate. A senator on the Banking Committee who receives 40% of their PAC money from the financial services sector is a data point worth examining.</p>
+
+<h2>Dark Money: Where the Trail Goes Cold</h2>
+
+<p>The most significant gap in campaign finance transparency involves 501(c)(4) "social welfare" organizations and 501(c)(6) trade associations. These entities can spend money on "issue advocacy" that is functionally identical to campaign advertising without disclosing their donors. When a 501(c)(4) transfers money to a Super PAC, the Super PAC must disclose the transfer but not the original source of the funds.</p>
+
+<p>This creates a laundering mechanism. A corporation or individual who wants to influence an election anonymously can donate to a 501(c)(4), which then either runs ads directly or transfers funds to a Super PAC. The FEC filing will show "Americans for Prosperity" or "Crossroads GPS" as the contributor, not the underlying donor. In the 2024 cycle, approximately $660 million in dark money entered the political system through these channels, according to OpenSecrets estimates.</p>
+
+<p>Tracing dark money requires looking beyond FEC data. IRS Form 990 filings (available via ProPublica's Nonprofit Explorer) sometimes reveal major donors to 501(c)(4)s, though with a 1-2 year delay. State-level disclosure requirements vary &mdash; some states require donor disclosure for organizations that spend on state races even if they are federally tax-exempt. And occasionally, investigative reporting or court proceedings force disclosure that the legal framework does not.</p>
+
+<h2>Disclosure Timelines and Strategic Filing</h2>
+
+<p>FEC filings follow a specific calendar that campaigns can exploit. Quarterly reports cover January-March, April-June, July-September, and October-December. Pre-election reports are due 12 days before an election, covering activity through 20 days before the election. Post-election reports cover the remaining period.</p>
+
+<p>The gap between the pre-election report cutoff and election day is strategically significant. Contributions received in the final 20 days before an election will not appear in public filings until after voters have already cast their ballots. This is a known exploit &mdash; campaigns and PACs often time their most controversial fundraising activities to fall within this disclosure gap.</p>
+
+<p>48-hour reports partially address this: contributions of $1,000 or more received within 20 days of an election must be reported within 48 hours. But these are less detailed and harder to analyze in bulk than quarterly filings.</p>
+
+<h2>Tracing Money to Policy Outcomes</h2>
+
+<p>The analytical payoff comes from linking financial data to legislative behavior. This requires combining multiple datasets:</p>
+
+<ol>
+  <li><strong>FEC data</strong> tells you who funded the member.</li>
+  <li><strong>Committee assignments</strong> (from congress.gov or ProPublica Congress API) tell you what policy areas the member controls.</li>
+  <li><strong>Roll call votes</strong> (from the Senate and House clerk) tell you how the member voted on specific legislation.</li>
+  <li><strong>Lobbying disclosures</strong> (from the Senate LDA database) tell you which organizations lobbied on those bills and how much they spent.</li>
+</ol>
+
+<p>When you can show that a specific industry funded a member who sits on the committee that oversees that industry, and that member voted in the industry's interest on a bill that the industry actively lobbied for, you have a chain worth investigating. This does not prove corruption &mdash; members may genuinely agree with their donors' policy positions &mdash; but it establishes the relationship for public scrutiny.</p>
+
+<p>A concrete example: in 2023, when the Senate Banking Committee considered cryptocurrency regulation, researchers at MapLight found that committee members who voted to ease regulations had received, on average, 3.4 times more money from crypto industry PACs and executives than members who voted to tighten them. The pattern does not prove quid pro quo, but the correlation was statistically significant and newsworthy.</p>
+
+<h2>Tools and Techniques for Researchers</h2>
+
+<p>The FEC API is powerful but can be slow for large queries. For bulk analysis, download the FEC's bulk data files from <code>fec.gov/data/browse-data/</code> &mdash; these include complete contribution and expenditure records in pipe-delimited format, updated nightly. The compressed files for a single cycle can exceed 4 GB.</p>
+
+<p>OpenSecrets (opensecrets.org) provides pre-processed FEC data with industry classifications, making it easier to aggregate contributions by sector. Their bulk data is available for academic and journalistic use upon request.</p>
+
+<p>For visualization, mapping donor geography reveals concentration patterns. When 60% of a congressional candidate's large-dollar donors come from outside the district, that is a meaningful signal about whose interests the candidate is aligned with.</p>
+
+<p>Track bundlers &mdash; individuals who aggregate contributions from their networks and deliver them to campaigns as a package. While bundling itself is legal and partially disclosed for registered lobbyists, it represents a concentration of influence that raw contribution data does not capture. The Obama and Romney campaigns both published voluntary bundler lists; this practice has not been consistently continued.</p>
+
+<div class="cta-box">
+  <h3>Try it in Deep Seer</h3>
+  <p>Deep Seer integrates FEC contribution data with congressional voting records and lobbying disclosures, letting you trace money flows from donors through PACs to legislative outcomes on an interactive timeline.</p>
+  <a href="/" class="btn">Launch Deep Seer</a>
+</div>
+
+</div>
+
+<div class="related">
+  <h3>Related Articles</h3>
+  <a href="/blog/congress-member-stock-trades">How to Find Out What Your Congress Member Is Trading</a>
+  <a href="/blog/lobbying-regulatory-outcomes">The Relationship Between Lobbying Spend and Regulatory Outcomes</a>
+  <a href="/blog/how-to-file-foia-request">How to File a FOIA Request and Actually Get Results</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

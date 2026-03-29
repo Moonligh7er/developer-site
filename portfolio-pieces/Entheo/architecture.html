@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entheo Architecture Map</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0A0A0F; color: #E8E4F0; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6; }
+a { color: #00D4C8; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; color: #00D4C8; letter-spacing: 0.1em; margin-bottom: 8px; }
+h2 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #C9A227; margin: 36px 0 16px; letter-spacing: 0.05em; border-bottom: 1px solid #2A2A3A; padding-bottom: 8px; }
+h3 { font-size: 14px; font-weight: 500; color: #A8A4B4; letter-spacing: 0.08em; margin: 20px 0 10px; text-transform: uppercase; }
+
+.subtitle { font-size: 12px; color: #6A6678; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 32px; }
+
+/* Tabs */
+.tab-bar { display: flex; gap: 0; margin-bottom: 28px; border-bottom: 1px solid #2A2A3A; }
+.tab-btn { background: none; border: none; color: #6A6678; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 200ms; }
+.tab-btn:hover { color: #A8A4B4; }
+.tab-btn.active { color: #00D4C8; border-bottom-color: #00D4C8; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.card { background: #1E1E2A; border: 1px solid #2A2A3A; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.card-title { font-size: 15px; font-weight: 500; color: #E8E4F0; }
+.badge { font-size: 10px; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; }
+.badge-required { background: rgba(255,77,106,0.15); color: #FF4D6A; }
+.badge-optional { background: rgba(0,212,200,0.1); color: #00D4C8; }
+.badge-deployment { background: rgba(91,0,212,0.15); color: #9B6DFF; }
+.badge-internal { background: rgba(201,162,39,0.15); color: #C9A227; }
+.badge-free { background: rgba(0,212,200,0.1); color: #00D4C8; }
+.badge-paid { background: rgba(255,77,106,0.15); color: #FF4D6A; }
+
+.card p { color: #A8A4B4; margin-bottom: 8px; }
+.card .tech-detail { color: #6A6678; font-size: 11px; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th { text-align: left; font-size: 10px; color: #6A6678; letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 12px; border-bottom: 1px solid #2A2A3A; }
+td { padding: 8px 12px; border-bottom: 1px solid #1A1A25; color: #A8A4B4; font-size: 12px; }
+tr:hover td { background: rgba(0,212,200,0.03); }
+.mono { font-family: 'JetBrains Mono', monospace; color: #C9A227; font-size: 11px; }
+
+/* Architecture diagram */
+.arch-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0; }
+@media (max-width: 800px) { .arch-grid { grid-template-columns: 1fr; } }
+.arch-box { background: #12121A; border: 1px solid #2A2A3A; border-radius: 10px; padding: 16px; text-align: center; }
+.arch-box h4 { font-size: 13px; color: #00D4C8; margin-bottom: 6px; font-weight: 400; }
+.arch-box p { font-size: 11px; color: #6A6678; }
+.arch-connector { text-align: center; color: #2A2A3A; font-size: 18px; padding: 4px 0; }
+
+/* Cost section */
+.cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+@media (max-width: 600px) { .cost-grid { grid-template-columns: 1fr; } }
+.cost-card { background: #12121A; border: 1px solid #2A2A3A; border-radius: 10px; padding: 20px; text-align: center; }
+.cost-card .cost-value { font-size: 32px; font-weight: 300; color: #00D4C8; }
+.cost-card .cost-label { font-size: 10px; color: #6A6678; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px; }
+.cost-card .cost-note { font-size: 11px; color: #6A6678; margin-top: 8px; }
+
+.env-example { background: #12121A; border: 1px solid #2A2A3A; border-radius: 8px; padding: 14px 18px; font-size: 11px; color: #A8A4B4; overflow-x: auto; white-space: pre; margin: 10px 0; line-height: 1.8; }
+.env-comment { color: #6A6678; }
+.env-key { color: #C9A227; }
+.env-val { color: #00D4C8; }
+
+.link-list { list-style: none; padding: 0; }
+.link-list li { padding: 6px 0; border-bottom: 1px solid #1A1A25; }
+.link-list li:last-child { border: none; }
+.link-list .link-label { color: #6A6678; font-size: 11px; display: block; }
+
+.section-note { background: rgba(201,162,39,0.08); border: 1px solid rgba(201,162,39,0.15); border-radius: 8px; padding: 12px 16px; font-size: 11px; color: #A8A4B4; margin: 12px 0; }
+
+.flow-step { display: flex; align-items: flex-start; gap: 12px; padding: 8px 0; }
+.flow-num { width: 24px; height: 24px; border-radius: 50%; background: #1A1A25; border: 1px solid #2A2A3A; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #00D4C8; flex-shrink: 0; }
+.flow-text { color: #A8A4B4; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>ENTHEO</h1>
+<p class="subtitle">Architecture & Infrastructure Map</p>
+
+<!-- Tab bar -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('plain')">Plain Language</button>
+  <button class="tab-btn" onclick="switchTab('technical')">Technical</button>
+</div>
+
+<!-- ======================== PLAIN LANGUAGE TAB ======================== -->
+<div id="tab-plain" class="tab-content active">
+
+<h2>How This App Is Built</h2>
+<p style="color:#A8A4B4; margin-bottom:20px;">Entheo is split into three pieces that work together: a website, a server (the "brain"), and a mobile app. Here's what each part does and what outside services they talk to.</p>
+
+<div class="arch-grid">
+  <div class="arch-box">
+    <h4>Website</h4>
+    <p>What users see in their browser. Built with Next.js and hosted on Vercel. Can be installed as a phone app (PWA).</p>
+    <p style="margin-top:8px;"><a href="https://vercel.com" target="_blank">Vercel Dashboard &rarr;</a></p>
+  </div>
+  <div class="arch-box">
+    <h4>Server</h4>
+    <p>The backend brain. Handles logins, saves data, talks to AI, sends emails. Runs in a Docker container on Railway.</p>
+    <p style="margin-top:8px;"><a href="https://railway.app" target="_blank">Railway Dashboard &rarr;</a></p>
+  </div>
+  <div class="arch-box">
+    <h4>Mobile App</h4>
+    <p>iOS & Android app built with Expo (React Native). Same features as the website, plus push notifications and native feel.</p>
+    <p style="margin-top:8px;"><a href="https://expo.dev" target="_blank">Expo Dashboard &rarr;</a></p>
+  </div>
+</div>
+
+<h2>Outside Services (What You Pay For)</h2>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">PostgreSQL Database</span>
+    <span class="badge badge-required">Required</span>
+  </div>
+  <p>This is where ALL user data lives &mdash; accounts, journal entries, mood analyses, sessions, everything. It's a traditional database provided automatically by Railway when you add their PostgreSQL plugin. Railway handles backups, scaling, and uptime.</p>
+  <p class="tech-detail">Managed by: <a href="https://railway.app" target="_blank">Railway</a> &middot; Free tier available, paid for production</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Claude AI (Anthropic)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>The AI that reads journal entries and figures out your mood, analyzes dreams through a Jungian lens, generates personalized writing prompts, spots patterns over time, builds a psychological profile, and powers the integration companion chat. Without it, the app still works &mdash; you just don't get AI features.</p>
+  <p>Three different Claude models are used depending on the task: a fast cheap one (Haiku) for simple scoring, a balanced one (Sonnet) for creative writing and chat, and the most powerful one (Opus) for deep pattern analysis (Premium users only).</p>
+  <p class="tech-detail">Managed at: <a href="https://console.anthropic.com" target="_blank">Anthropic Console</a> &middot; Pay per use (~$0.25-3.00/1M tokens depending on model)</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">OpenWeatherMap</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Gets the current weather and 12-hour forecast based on the user's location. This is attached to journal entries so you can correlate your mood with weather patterns. Also powers weather-locked daily quests. Without it, weather features are simply hidden.</p>
+  <p class="tech-detail">Managed at: <a href="https://home.openweathermap.org/api_keys" target="_blank">OpenWeatherMap Dashboard</a> &middot; Free tier: 1,000 calls/day</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Stripe (Web Payments)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Handles subscription payments on the website. Users click "Subscribe," get redirected to a Stripe checkout page, pay, and come back with an active subscription. Stripe also provides a portal where users can manage their plan, update payment info, or cancel.</p>
+  <p class="tech-detail">Managed at: <a href="https://dashboard.stripe.com" target="_blank">Stripe Dashboard</a> &middot; 2.9% + $0.30 per transaction</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">RevenueCat (Mobile Payments)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Handles in-app purchases on iOS and Android. It sits between the app and Apple/Google's payment systems, making subscriptions work the same way on both platforms. When a user subscribes on mobile, RevenueCat tells our server to upgrade their account.</p>
+  <p class="tech-detail">Managed at: <a href="https://app.revenuecat.com" target="_blank">RevenueCat Dashboard</a> &middot; Free up to $2,500/mo revenue, then 1%</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Email (SMTP)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Sends transactional emails: account verification, password resets, and weekly digest summaries. Without an email provider configured, these messages just print to the server console (useful for development). Recommended provider: Resend.</p>
+  <p class="tech-detail">Managed at: <a href="https://resend.com" target="_blank">Resend Dashboard</a> &middot; Free: 100 emails/day</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Sentry (Error Tracking)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Catches crashes and errors in real-time across both the website and server. When something breaks, Sentry captures the error with full context (what the user was doing, the stack trace, etc.) and can notify you via email or Slack.</p>
+  <p class="tech-detail">Managed at: <a href="https://sentry.io" target="_blank">Sentry Dashboard</a> &middot; Free: 5K errors/mo</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">S3 / R2 (File Storage)</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Cloud storage for large files &mdash; specifically ceremony audio recordings. Without it, audio is stored as text inside the database (works but doesn't scale). When configured, audio files are uploaded to a cloud bucket instead, and only a reference link is stored in the database.</p>
+  <p class="tech-detail">Managed at: <a href="https://console.aws.amazon.com/s3/" target="_blank">AWS S3</a> or <a href="https://dash.cloudflare.com" target="_blank">Cloudflare R2</a> &middot; R2: Free up to 10GB</p>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span class="card-title">Plausible Analytics</span>
+    <span class="badge badge-optional">Optional</span>
+  </div>
+  <p>Privacy-friendly website analytics. Unlike Google Analytics, it doesn't use cookies and doesn't track individual users. Shows you page views, referrers, and general traffic patterns without any privacy concerns.</p>
+  <p class="tech-detail">Managed at: <a href="https://plausible.io" target="_blank">Plausible Dashboard</a> &middot; Starts at $9/mo</p>
+</div>
+
+<h2>How Data Is Protected</h2>
+<div class="card">
+  <p><strong>Passwords</strong> are scrambled using bcrypt (one-way hash &mdash; even we can't read them).</p>
+  <p><strong>Journal entries, dreams, and drafts</strong> are encrypted before being stored in the database using AES-256-GCM (military-grade encryption). Each entry has its own random key derived from a master secret. Even if someone stole the database, they couldn't read the content without the master key.</p>
+  <p><strong>Login sessions</strong> use two tokens: a short-lived one (15 minutes) for normal requests and a longer one (7 days) for staying logged in. Both are stored as httpOnly cookies that JavaScript can't read &mdash; protecting against XSS attacks.</p>
+  <p><strong>Two-factor authentication</strong> is available via authenticator apps (Google Authenticator, Authy, etc.).</p>
+</div>
+
+<h2>Monthly Cost Estimate</h2>
+
+<div class="cost-grid">
+  <div class="cost-card">
+    <div class="cost-value">$27</div>
+    <div class="cost-label">Per Month (Minimum)</div>
+    <div class="cost-note">Railway Hobby ($5) + DB ($5) + Vercel Pro ($20) &mdash; handles ~1,000 users. AI costs are pay-per-use on top.</div>
+  </div>
+  <div class="cost-card">
+    <div class="cost-value">$324</div>
+    <div class="cost-label">Per Year (Minimum)</div>
+    <div class="cost-note">Same services, paid monthly. Some offer annual discounts.</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Service</th><th>Free Tier</th><th>Paid Tier</th><th>When You Need Paid</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Railway (Server)</td><td>Trial credit</td><td>$5/mo + usage</td><td>Production deployment</td></tr>
+    <tr><td>Railway (PostgreSQL)</td><td>Included in trial</td><td>~$5-10/mo</td><td>Production data persistence</td></tr>
+    <tr><td>Vercel (Website)</td><td>Hobby (free)</td><td>$20/mo Pro</td><td>Custom domain, team features</td></tr>
+    <tr><td>Anthropic Claude</td><td>None</td><td>~$5-50/mo</td><td>Any AI features (scales with usage)</td></tr>
+    <tr><td>OpenWeatherMap</td><td>1,000 calls/day</td><td>Varies</td><td>Rarely &mdash; free tier is generous</td></tr>
+    <tr><td>Stripe</td><td>No monthly fee</td><td>2.9% + $0.30/txn</td><td>When you have paying users</td></tr>
+    <tr><td>RevenueCat</td><td>Up to $2.5K/mo rev</td><td>1% of revenue</td><td>When mobile revenue exceeds $2.5K</td></tr>
+    <tr><td>Sentry</td><td>5K errors/mo</td><td>$26/mo</td><td>High traffic or need alerting</td></tr>
+    <tr><td>Email (Resend)</td><td>100/day</td><td>$20/mo</td><td>More than 100 users signing up daily</td></tr>
+    <tr><td>S3 / Cloudflare R2</td><td>10GB (R2)</td><td>$0.015/GB/mo</td><td>When audio storage exceeds 10GB</td></tr>
+    <tr><td>Plausible</td><td>None</td><td>$9/mo</td><td>If you want analytics</td></tr>
+    <tr><td>Apple Developer</td><td>None</td><td>$99/year</td><td>iOS App Store submission</td></tr>
+    <tr><td>Google Play Developer</td><td>None</td><td>$25 one-time</td><td>Android Play Store submission</td></tr>
+  </tbody>
+</table>
+
+<div class="section-note">
+  <strong>Scaling note:</strong> The biggest variable cost is Anthropic Claude API usage. Each journal entry analysis costs ~$0.001 (Haiku) to ~$0.01 (Sonnet). At 1,000 daily active users averaging 1 entry/day, expect ~$30-50/mo in AI costs. Premium users using Opus for insights add ~$0.03-0.10 per insights generation.
+</div>
+
+</div>
+
+<!-- ======================== TECHNICAL TAB ======================== -->
+<div id="tab-technical" class="tab-content">
+
+<h2>System Architecture</h2>
+
+<div class="arch-grid">
+  <div class="arch-box">
+    <h4>apps/web</h4>
+    <p>Next.js 14 (App Router)<br>Vercel Edge Runtime<br>PWA + Service Worker<br>Three.js 3D Spiral</p>
+  </div>
+  <div class="arch-box">
+    <h4>apps/server</h4>
+    <p>Express 4.21 + TypeScript<br>Prisma 6.2 ORM<br>Docker (node:20-slim)<br>Railway (healthcheck + auto-restart)</p>
+  </div>
+  <div class="arch-box">
+    <h4>apps/mobile</h4>
+    <p>Expo 52 (React Native)<br>Expo Router (file-based)<br>expo-secure-store (tokens)<br>EAS Build + Submit</p>
+  </div>
+</div>
+<div class="arch-grid">
+  <div class="arch-box">
+    <h4>packages/shared</h4>
+    <p>Types, constants, utils<br>Shared across all apps</p>
+  </div>
+  <div class="arch-box">
+    <h4>packages/ui</h4>
+    <p>Design tokens, theme<br>UI primitives</p>
+  </div>
+  <div class="arch-box">
+    <h4>packages/spiral</h4>
+    <p>@react-three/fiber<br>3D mood visualization</p>
+  </div>
+</div>
+
+<h2>Database Schema (PostgreSQL 16)</h2>
+<p style="color:#6A6678; margin-bottom:12px;">20 models via Prisma ORM &middot; AES-256-GCM at-rest encryption on content fields</p>
+
+<table>
+  <thead><tr><th>Model</th><th>Fields</th><th>Indexed On</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">User</td><td>23</td><td>id (PK), email (unique)</td><td>Auth, profile, aiProfile (JSON), medications[], subscriptionTier</td></tr>
+    <tr><td class="mono">RefreshToken</td><td>7</td><td>hashedToken (unique), userId, family</td><td>Rotating refresh token pattern with family-based reuse detection</td></tr>
+    <tr><td class="mono">JournalEntry</td><td>10</td><td>userId + createdAt</td><td>content encrypted (AES-256-GCM), soft delete via deletedAt</td></tr>
+    <tr><td class="mono">MoodAnalysis</td><td>8</td><td>userId + createdAt, journalEntryId (unique)</td><td>AI-generated: moodScore [-1,1], intensity [1,10], themes[], summary</td></tr>
+    <tr><td class="mono">DreamEntry</td><td>11</td><td>userId + createdAt</td><td>content encrypted, AI populates symbols[], themes[], emotionalTone</td></tr>
+    <tr><td class="mono">Session</td><td>23</td><td>userId + createdAt</td><td>Psychedelic session: timeline, body sensations (JSON), ceremonyNotes (JSON)</td></tr>
+    <tr><td class="mono">IntegrationEntry</td><td>9</td><td>sessionId, userId + createdAt</td><td>Post-session journal: insights[], challenges[], practices[], reciprocalActions String[]</td></tr>
+    <tr><td class="mono">MicrodoseLog</td><td>16</td><td>userId + takenAt</td><td>Dose tracking: protocol (Stamets/Fadiman/Custom), subjective ratings</td></tr>
+    <tr><td class="mono">ChatMessage</td><td>7</td><td>userId + createdAt</td><td>AI companion chat history, optional sessionId context</td></tr>
+    <tr><td class="mono">SharedReport</td><td>10</td><td>token (unique)</td><td>Practitioner sharing with expiring tokens, configurable data sections</td></tr>
+    <tr><td class="mono">Streak</td><td>6</td><td>userId (unique)</td><td>currentStreak, longestStreak, lastActiveAt &mdash; transaction-protected</td></tr>
+    <tr><td class="mono">Quest / UserQuest</td><td>8 / 7</td><td>userId</td><td>Gamification: weather-locked daily challenges, XP rewards</td></tr>
+    <tr><td class="mono">Ritual / RitualCompletion</td><td>7 / 7</td><td>userId, completedAt</td><td>Custom multi-step rituals (journal, breathwork, meditation, etc.)</td></tr>
+    <tr><td class="mono">JournalDraft</td><td>7</td><td>userId (unique per type)</td><td>Encrypted auto-save drafts (journal, dream, integration)</td></tr>
+    <tr><td class="mono">LexiconEntry / Guide</td><td>7 / 7</td><td>&mdash;</td><td>Static educational content, seeded</td></tr>
+    <tr><td class="mono">KnowledgeBridges</td><td>&mdash;</td><td>&mdash;</td><td>Not a DB model &mdash; constants file in packages/shared (<code>knowledge-bridges.ts</code>). 14 mapped parallels across 9 categories linking indigenous practices to Western parallels.</td></tr>
+    <tr><td class="mono">CommunityHeatmap</td><td>5</td><td>&mdash;</td><td>Aggregated anonymous activity data</td></tr>
+    <tr><td class="mono">NewsletterSubscriber</td><td>3</td><td>email (unique)</td><td>&mdash;</td></tr>
+  </tbody>
+</table>
+
+<h2>AI Integration (Anthropic Claude API)</h2>
+
+<table>
+  <thead><tr><th>Function</th><th>Model</th><th>Max Tokens</th><th>Input Context</th><th>Output</th><th>Persisted</th></tr></thead>
+  <tbody>
+    <tr><td>analyzeMood()</td><td class="mono">claude-haiku-4-5</td><td>300</td><td>Journal text + AI profile (themes, growth areas, medications, integration state)</td><td>moodScore, intensity, themes[], summary</td><td>MoodAnalysis table</td></tr>
+    <tr><td>analyzeMoodStreaming()</td><td class="mono">claude-sonnet-4-6</td><td>300</td><td>Same as above</td><td>Same (streamed via SSE)</td><td>MoodAnalysis table</td></tr>
+    <tr><td>analyzeDream()</td><td class="mono">claude-haiku-4-5</td><td>500</td><td>Dream text + personal symbols, recurring themes, recent dream themes, days since session</td><td>symbols[], themes[], emotionalTone, interpretation</td><td>DreamEntry fields</td></tr>
+    <tr><td>generateJournalPrompts()</td><td class="mono">claude-sonnet-4-6</td><td>400</td><td>Protocol day, moon phase, recent themes, integration state, growth areas, communication style, dream symbols</td><td>3 prompt strings</td><td>Cached 6h only</td></tr>
+    <tr><td>generateInsights()</td><td class="mono">sonnet / opus*</td><td>600</td><td>30d of: moods, microdose logs, dreams, sessions, integration entries, body patterns</td><td>3-5 insight strings</td><td>Cached 24h only</td></tr>
+    <tr><td>updateAIProfile()</td><td class="mono">claude-sonnet-4-6</td><td>1000</td><td>90d of: moods, dreams, sessions, integration. Builds on existing profile.</td><td>Structured JSON profile</td><td>User.aiProfile (refreshed every 7d)</td></tr>
+    <tr><td>Chat companion</td><td class="mono">sonnet / opus*</td><td>800</td><td>AI profile, recent moods, body patterns, session context, last 20 messages</td><td>Free-text reply</td><td>ChatMessage table</td></tr>
+    <tr><td>Entheo Patterns</td><td class="mono">claude-sonnet-4-6</td><td>1500</td><td>Anonymous aggregates across 10 data domains (mood&times;substance, mood&times;moon, dream themes, body regions, integration practices, session outcomes, etc.) with k-anonymity (min 10 users/cohort)</td><td>Cross-domain pattern synthesis tagged as validating-indigenous, validating-Western, or novel</td><td>Cached</td></tr>
+  </tbody>
+</table>
+<p style="color:#6A6678; font-size:11px; margin-top:4px;">* Opus for Premium tier, Sonnet for Plus tier</p>
+
+<h2>Authentication Flow</h2>
+
+<table>
+  <thead><tr><th>Component</th><th>Implementation</th><th>Details</th></tr></thead>
+  <tbody>
+    <tr><td>Password hashing</td><td class="mono">bcryptjs (12 rounds)</td><td>One-way hash, stored in User.passwordHash</td></tr>
+    <tr><td>Access token</td><td class="mono">JWT HS256, 15min TTL</td><td>Signed with JWT_SECRET, httpOnly cookie + Authorization header</td></tr>
+    <tr><td>Refresh token</td><td class="mono">JWT HS256, 7d TTL</td><td>SHA-256 hashed in DB, family-based rotation with reuse detection</td></tr>
+    <tr><td>2FA</td><td class="mono">TOTP RFC 6238 (SHA1, 6-digit, 30s)</td><td>Via otpauth library, stored in User.twoFactorSecret</td></tr>
+    <tr><td>Account lockout</td><td class="mono">5 failed attempts &rarr; 15min lock</td><td>User.failedLoginAttempts + User.lockedUntil</td></tr>
+    <tr><td>CSRF</td><td class="mono">Origin check + X-Requested-With header</td><td>Rejects missing origin in production</td></tr>
+    <tr><td>Edge auth (web)</td><td class="mono">Next.js middleware.ts</td><td>Checks entheo_session cookie, redirects to /login if missing</td></tr>
+    <tr><td>Change password</td><td class="mono">POST /auth/change-password</td><td>Validates current password via bcrypt, hashes new (12 rounds), revokes all refresh tokens, audits action</td></tr>
+    <tr><td>Change email</td><td class="mono">PUT /user/email</td><td>Validates password, checks duplicate emails, updates record, sets emailVerified=false pending re-verification</td></tr>
+    <tr><td>Subscription gate</td><td class="mono">requireSubscription() middleware</td><td>Checks subscriptionTier + subscriptionExpiresAt on User; returns 403 with requiredTier if below minimum</td></tr>
+  </tbody>
+</table>
+
+<h2>Encryption</h2>
+
+<table>
+  <thead><tr><th>Data</th><th>Algorithm</th><th>Key Derivation</th><th>Format</th></tr></thead>
+  <tbody>
+    <tr><td>Journal/dream/draft content</td><td class="mono">AES-256-GCM</td><td>PBKDF2 (SHA-256, 100K iterations, 32B salt)</td><td class="mono">salt:iv:authTag:ciphertext (hex)</td></tr>
+    <tr><td>Passwords</td><td class="mono">bcrypt (12 rounds)</td><td>Built-in salt</td><td>bcrypt hash string</td></tr>
+    <tr><td>Refresh tokens (DB)</td><td class="mono">SHA-256</td><td>Direct hash</td><td>Hex digest</td></tr>
+    <tr><td>Email verify/reset tokens</td><td class="mono">SHA-256</td><td>Direct hash</td><td>Hex digest (32 random bytes)</td></tr>
+  </tbody>
+</table>
+
+<h2>Environment Variables</h2>
+
+<div class="env-example"><span class="env-comment"># === REQUIRED IN PRODUCTION ===</span>
+<span class="env-key">DATABASE_URL</span>=<span class="env-val">"postgresql://user:pass@host:5432/entheo"</span>
+<span class="env-key">JWT_SECRET</span>=<span class="env-val">"a1b2c3...64-char-hex-string"</span>
+<span class="env-key">JWT_REFRESH_SECRET</span>=<span class="env-val">"d4e5f6...different-64-char-hex"</span>
+<span class="env-key">ENCRYPTION_KEY</span>=<span class="env-val">"g7h8i9...another-different-64-char-hex"</span>
+<span class="env-key">NODE_ENV</span>=<span class="env-val">"production"</span>
+<span class="env-key">CORS_ORIGIN</span>=<span class="env-val">"https://entheo.vercel.app"</span>
+<span class="env-key">FRONTEND_URL</span>=<span class="env-val">"https://entheo.vercel.app"</span>
+
+<span class="env-comment"># === OPTIONAL (features degrade gracefully) ===</span>
+<span class="env-key">ANTHROPIC_API_KEY</span>=<span class="env-val">"sk-ant-api03-..."</span>
+<span class="env-key">OPENWEATHER_API_KEY</span>=<span class="env-val">"abc123def456..."</span>
+<span class="env-key">SENTRY_DSN</span>=<span class="env-val">"https://abc@o123.ingest.sentry.io/456"</span>
+<span class="env-key">STRIPE_SECRET_KEY</span>=<span class="env-val">"sk_live_..."</span>
+<span class="env-key">STRIPE_WEBHOOK_SECRET</span>=<span class="env-val">"whsec_..."</span>
+<span class="env-key">S3_BUCKET</span>=<span class="env-val">"entheo-audio"</span>
+<span class="env-key">S3_REGION</span>=<span class="env-val">"us-east-1"</span>
+<span class="env-key">SMTP_HOST</span>=<span class="env-val">"smtp.resend.com"</span>
+<span class="env-key">SMTP_USER</span>=<span class="env-val">"resend"</span>
+<span class="env-key">SMTP_PASS</span>=<span class="env-val">"re_abc123..."</span>
+<span class="env-key">REVENUECAT_API_KEY</span>=<span class="env-val">"appl_abc123..."</span></div>
+
+<h2>Security Headers</h2>
+
+<table>
+  <thead><tr><th>Header</th><th>Value</th><th>Set By</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">Content-Security-Policy</td><td style="font-size:11px;">default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' plausible.io; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' plausible.io {API}; frame-ancestors 'none'</td><td>Server + Web</td></tr>
+    <tr><td class="mono">Strict-Transport-Security</td><td>max-age=31536000; includeSubDomains</td><td>Server (prod only)</td></tr>
+    <tr><td class="mono">X-Frame-Options</td><td>DENY (server) / SAMEORIGIN (web)</td><td>Both</td></tr>
+    <tr><td class="mono">X-Content-Type-Options</td><td>nosniff</td><td>Both</td></tr>
+    <tr><td class="mono">Referrer-Policy</td><td>strict-origin-when-cross-origin</td><td>Both</td></tr>
+    <tr><td class="mono">Permissions-Policy</td><td>camera=(), microphone=(self), geolocation=(self)</td><td>Both</td></tr>
+  </tbody>
+</table>
+
+<h2>Rate Limiting</h2>
+
+<table>
+  <thead><tr><th>Endpoint</th><th>Window</th><th>Max Requests</th><th>Key</th></tr></thead>
+  <tbody>
+    <tr><td class="mono">/api/v1/auth/*</td><td>15 min</td><td>20</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/mood/*</td><td>60s</td><td>10</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/chat/*</td><td>60s</td><td>10</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/microdose/*</td><td>60s</td><td>20</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/sessions/*</td><td>60s</td><td>20</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/ceremony/*</td><td>60s</td><td>30</td><td>IP</td></tr>
+    <tr><td class="mono">/api/v1/* (all others)</td><td>60s</td><td>100</td><td>IP</td></tr>
+  </tbody>
+</table>
+
+<h2>CI/CD Pipeline</h2>
+<p style="color:#6A6678; margin-bottom:12px;">GitHub Actions &middot; Triggers: push to master/main, PRs to master/main</p>
+<div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>lint-and-typecheck</strong> &mdash; tsc --noEmit for server + web (ubuntu, Node 20)</div></div>
+<div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>test-server</strong> &mdash; PostgreSQL 16 service container, prisma migrate deploy, vitest run (auth, journal, session integration tests)</div></div>
+<div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>build-web</strong> &mdash; turbo run build --filter=@entheo/web</div></div>
+
+<h2>Monthly Cost Breakdown (Technical)</h2>
+
+<table>
+  <thead><tr><th>Service</th><th>Free Tier Limit</th><th>Est. Cost @ 1K DAU</th><th>Est. Cost @ 10K DAU</th></tr></thead>
+  <tbody>
+    <tr><td>Railway (Server + DB)</td><td>Trial credit</td><td>$10-15/mo</td><td>$30-50/mo</td></tr>
+    <tr><td>Vercel (Web)</td><td>Hobby (personal)</td><td>$20/mo (Pro)</td><td>$20/mo (Pro)</td></tr>
+    <tr><td>Anthropic API</td><td>None</td><td>$30-50/mo</td><td>$200-500/mo</td></tr>
+    <tr><td>OpenWeatherMap</td><td>1K calls/day</td><td>$0 (within free)</td><td>$0-40/mo</td></tr>
+    <tr><td>Sentry</td><td>5K errors/mo</td><td>$0 (within free)</td><td>$26/mo</td></tr>
+    <tr><td>Email (Resend)</td><td>100/day</td><td>$0 (within free)</td><td>$20/mo</td></tr>
+    <tr><td>S3/R2 Storage</td><td>10GB (R2)</td><td>$0 (within free)</td><td>$5-15/mo</td></tr>
+    <tr><td>Plausible</td><td>None</td><td>$9/mo</td><td>$19/mo</td></tr>
+    <tr><td><strong>TOTAL</strong></td><td>&mdash;</td><td><strong>$69-94/mo</strong></td><td><strong>$320-690/mo</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="section-note">
+  <strong>Cost drivers:</strong> Anthropic API usage scales linearly with active users. Haiku (mood/dream analysis) costs ~$0.25/1M input tokens + $1.25/1M output tokens. Sonnet (prompts/chat) costs ~$3/1M input + $15/1M output. Opus (Premium insights) costs ~$15/1M input + $75/1M output. Average journal analysis: ~500 input tokens + ~200 output tokens.
+</div>
+
+<h2>Key Links</h2>
+<ul class="link-list">
+  <li><a href="https://railway.app">Railway (Server + DB hosting)</a><span class="link-label">Server deployment, PostgreSQL, env vars, logs</span></li>
+  <li><a href="https://vercel.com">Vercel (Web hosting)</a><span class="link-label">Next.js deployment, custom domain, edge functions</span></li>
+  <li><a href="https://expo.dev">Expo (Mobile builds)</a><span class="link-label">EAS Build, EAS Submit, OTA updates</span></li>
+  <li><a href="https://console.anthropic.com">Anthropic Console</a><span class="link-label">API keys, usage dashboard, rate limits</span></li>
+  <li><a href="https://home.openweathermap.org/api_keys">OpenWeatherMap</a><span class="link-label">API key management, call limits</span></li>
+  <li><a href="https://dashboard.stripe.com">Stripe</a><span class="link-label">Payments, subscriptions, webhooks, customer portal</span></li>
+  <li><a href="https://app.revenuecat.com">RevenueCat</a><span class="link-label">Mobile in-app purchases, entitlements</span></li>
+  <li><a href="https://sentry.io">Sentry</a><span class="link-label">Error tracking, performance monitoring, alerts</span></li>
+  <li><a href="https://resend.com">Resend</a><span class="link-label">Transactional email (recommended SMTP provider)</span></li>
+  <li><a href="https://plausible.io">Plausible</a><span class="link-label">Privacy-first web analytics</span></li>
+  <li><a href="https://console.aws.amazon.com/s3/">AWS S3</a> / <a href="https://dash.cloudflare.com">Cloudflare R2</a><span class="link-label">Object storage for audio files</span></li>
+  <li><a href="https://developer.apple.com">Apple Developer</a><span class="link-label">iOS App Store submission ($99/yr)</span></li>
+  <li><a href="https://play.google.com/console">Google Play Console</a><span class="link-label">Android Play Store submission ($25 one-time)</span></li>
+  <li><a href="https://github.com">GitHub</a><span class="link-label">Source code, CI/CD via Actions</span></li>
+</ul>
+
+</div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector('[onclick="switchTab(\'' + tab + '\')"]').classList.add('active');
+}
+</script>
+</body>
+</html>

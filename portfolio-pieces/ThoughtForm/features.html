@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thought+Form — 50 Features for Solo Founders | Full Feature List</title>
+<meta name="description" content="Every feature of Thought+Form: 50 interconnected modules for solo founders. Kanban, AI workflows, narrative studio, revenue intelligence, developer tools, and more.">
+<meta name="keywords" content="thought+form features, project management, AI writing, narrative studio, kanban board, CRM, revenue tracking, content scheduling, developer tools, solo founder">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://thoughtform.app/features">
+<meta property="og:title" content="Thought+Form — 50 Features for Solo Founders">
+<meta property="og:description" content="Kanban, AI agents, narrative studio, CRM, revenue tracking, content factory, terminal, git, and 40+ more modules — all interconnected.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thoughtform.app/features">
+<meta property="og:image" content="https://thoughtform.app/og-image.png">
+<meta property="og:site_name" content="Thought+Form">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Thought+Form — 50 Features for Solo Founders">
+<meta name="twitter:description" content="Kanban, AI agents, narrative studio, CRM, revenue tracking, content factory, terminal, git — all interconnected in one command center.">
+<meta name="twitter:image" content="https://thoughtform.app/og-image.png">
+<meta name="theme-color" content="#33FF33">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Thought+Form Features",
+  "description": "Complete list of 50 features in the Thought+Form developer command center.",
+  "url": "https://thoughtform.app/features",
+  "isPartOf": { "@type": "WebSite", "name": "Thought+Form", "url": "https://thoughtform.app" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://thoughtform.app/" },
+      { "@type": "ListItem", "position": 2, "name": "Features", "item": "https://thoughtform.app/features" }
+    ]
+  }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0E0A;
+    --surface: #0D1F0D;
+    --green: #33FF33;
+    --green-dim: #1A8C1A;
+    --cyan: #00FFFF;
+    --amber: #FFB000;
+    --red: #FF3333;
+    --mint: #00FF88;
+    --text: #E0E0E0;
+    --dim: #8A8A8A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  }
+
+  .glow { text-shadow: 0 0 4px var(--green), 0 0 12px rgba(51,255,51,0.3); }
+  .glow-cyan { text-shadow: 0 0 4px var(--cyan), 0 0 12px rgba(0,255,255,0.3); }
+
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,10,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--green-dim);
+    padding: 14px 0;
+  }
+
+  .nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .nav-links a { color: var(--dim); }
+  .nav-links a:hover { color: var(--green); text-decoration: none; }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 40px;
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .hero .sub {
+    font-size: 14px;
+    color: var(--dim);
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat .num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .hero-stat .label {
+    font-size: 10px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ── CATEGORY FILTER ── */
+  .filter-bar {
+    position: sticky;
+    top: 48px;
+    z-index: 90;
+    background: rgba(10,14,10,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--green-dim);
+    padding: 12px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-bar .container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .filter-btn {
+    background: transparent;
+    border: 1px solid var(--green-dim);
+    color: var(--dim);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .filter-btn.active {
+    background: var(--green);
+    color: var(--bg);
+    border-color: var(--green);
+    font-weight: 600;
+  }
+
+  /* ── FEATURE SECTIONS ── */
+  .features-section {
+    padding: 60px 0 0;
+  }
+
+  .category-block {
+    margin-bottom: 60px;
+  }
+
+  .category-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--green-dim);
+  }
+
+  .category-heading .cat-icon {
+    font-size: 18px;
+  }
+
+  .category-heading h2 {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .category-heading .cat-count {
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 1px;
+  }
+
+  .cat-core .category-heading h2 { color: var(--green); }
+  .cat-creative .category-heading h2 { color: var(--cyan); }
+  .cat-intelligence .category-heading h2 { color: var(--amber); }
+  .cat-empire .category-heading h2 { color: var(--mint); }
+  .cat-developer .category-heading h2 { color: var(--red); }
+  .cat-system .category-heading h2 { color: var(--dim); }
+
+  /* ── FEATURE CARDS ── */
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid transparent;
+    padding: 20px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+  }
+
+  .cat-core .feature-card::before { background: var(--green); }
+  .cat-creative .feature-card::before { background: var(--cyan); }
+  .cat-intelligence .feature-card::before { background: var(--amber); }
+  .cat-empire .feature-card::before { background: var(--mint); }
+  .cat-developer .feature-card::before { background: var(--red); }
+  .cat-system .feature-card::before { background: var(--dim); }
+
+  .feature-card:hover {
+    border-color: var(--green-dim);
+    transform: translateY(-1px);
+  }
+
+  .feature-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .feature-card-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .feature-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+  }
+
+  .feature-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .feature-badge {
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .badge-core { color: var(--green); border-color: var(--green-dim); }
+  .badge-creative { color: var(--cyan); border-color: rgba(0,255,255,0.3); }
+  .badge-intelligence { color: var(--amber); border-color: rgba(255,176,0,0.3); }
+  .badge-empire { color: var(--mint); border-color: rgba(0,255,136,0.3); }
+  .badge-developer { color: var(--red); border-color: rgba(255,51,51,0.3); }
+  .badge-system { color: var(--dim); border-color: rgba(138,138,138,0.3); }
+
+  .feature-desc {
+    color: var(--dim);
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 10px;
+    padding-left: 38px;
+  }
+
+  .feature-expand-btn {
+    background: none;
+    border: none;
+    color: var(--green-dim);
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .feature-expand-btn:hover { color: var(--green); }
+  .feature-expand-btn.open { transform: rotate(45deg); color: var(--green); }
+
+  .feature-tech {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    padding-left: 38px;
+    background: rgba(10,14,10,0.6);
+    border-left: 2px solid var(--green-dim);
+    margin-left: 38px;
+  }
+
+  .feature-tech.visible { display: block; }
+
+  .feature-tech-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--green-dim);
+    margin-bottom: 6px;
+  }
+
+  .feature-tech-body {
+    font-size: 10px;
+    color: var(--dim);
+    line-height: 1.6;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .feature-tech-body code {
+    color: var(--cyan);
+    font-size: 10px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--green-dim);
+    padding: 40px 0;
+    text-align: center;
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 40px;
+  }
+
+  footer .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  footer .footer-links a {
+    color: var(--dim);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  footer .footer-links a:hover { color: var(--green); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .feature-cards {
+      grid-template-columns: 1fr;
+    }
+    .hero-stats { gap: 24px; }
+    .filter-bar .container { padding-right: 24px; }
+    .feature-desc { padding-left: 0; }
+    .feature-tech { padding-left: 12px; margin-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::after { display: none; }
+    .feature-card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="container">
+    <a href="landing.html" class="nav-brand glow">Thought+Form</a>
+    <div class="nav-links">
+      <a href="landing.html">Home</a>
+      <a href="features.html" style="color: var(--green);">Features</a>
+      <a href="store-listings.html">Download</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-badge">Complete Feature Reference</div>
+    <h1 class="glow">Every Module.<br>Every Capability.</h1>
+    <p class="sub">50 interconnected features across 6 categories. Built for the solo founder who refuses to compromise. Browse every capability Thought+Form puts at your fingertips.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num glow">50</div><div class="label">Features</div></div>
+      <div class="hero-stat"><div class="num glow">6</div><div class="label">Categories</div></div>
+      <div class="hero-stat"><div class="num glow">1</div><div class="label">Interface</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ── FILTER BAR ── -->
+<div class="filter-bar">
+  <div class="container">
+    <button class="filter-btn active" data-filter="all">All (50)</button>
+    <button class="filter-btn" data-filter="core">Core Workspace (8)</button>
+    <button class="filter-btn" data-filter="creative">Creative Suite (5)</button>
+    <button class="filter-btn" data-filter="intelligence">Intelligence (13)</button>
+    <button class="filter-btn" data-filter="empire">Empire Builder (11)</button>
+    <button class="filter-btn" data-filter="developer">Developer Tools (5)</button>
+    <button class="filter-btn" data-filter="system">System (8)</button>
+  </div>
+</div>
+
+<!-- ── FEATURES ── -->
+<main class="features-section">
+<div class="container">
+
+<!-- ══════════════════════════════════════ CORE WORKSPACE ══════════════════════════════════════ -->
+<div class="category-block cat-core" data-category="core">
+  <div class="category-heading">
+    <span class="cat-icon">&#9632;</span>
+    <h2>Core Workspace</h2>
+    <span class="cat-count">8 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- Dashboard -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9635;</span>
+          <span class="feature-name">Dashboard</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Your home screen. See project KPIs, recent activity feed, and launch quick actions -- all at a glance. Everything you need to start your session in one place.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Polls <code>/api/dashboard/stats</code> for aggregated metrics. Real-time updates via Server-Sent Events (SSE). Card counts, velocity, deadline proximity, and streak tracking surfaced in a single payload.</div>
+      </div>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9638;</span>
+          <span class="feature-name">Kanban Board</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Full drag-and-drop task board with cards, columns, checklists, comments, attachments, card relations, and time tracking. Set WIP limits per column. Multiple card types and priority levels.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Powered by <code>dnd-kit</code> for drag-and-drop. Supports card types (task, bug, feature, note) and priorities (critical, high, medium, low). WIP limits enforced per column. Optimistic locking via <code>version</code> column prevents concurrent edit conflicts. Relations modeled as <code>card_relations</code> table with typed edges (blocks, relates_to, parent_of).</div>
+      </div>
+    </div>
+
+    <!-- Inception Framework -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9733;</span>
+          <span class="feature-name">Inception Framework</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Guided project scaffolding that walks you through defining scope, goals, audience, and milestones. AI suggests next steps and fills in gaps you might miss.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Multi-phase checklist system stored in D1. Each phase (Define, Plan, Build, Launch) has configurable checklist items. AI suggestions powered by Claude API with project context injection. Completion state persisted per-project.</div>
+      </div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128197;</span>
+          <span class="feature-name">Calendar</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Schedule events, deadlines, and milestones. Import/export iCal files. Supports recurring events with full recurrence rules. Sync with Google Calendar.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Full RFC 5545 (iCalendar) support. RRULE parsing for complex recurrence patterns (daily, weekly, monthly, yearly with intervals and exceptions). Google Calendar sync via OAuth. Events stored in D1 with timezone-aware timestamps.</div>
+      </div>
+    </div>
+
+    <!-- Session Journal -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128214;</span>
+          <span class="feature-name">Session Journal</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Your work diary. Log what you did each session with mood and energy tracking, tags, and free-form notes. Search across all entries instantly.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Full-text search via SQLite <code>FTS5</code> with <code>session_fts</code> index. Mood/energy stored as integers (1-5). Tags stored as JSON array. Entries linked to project via foreign key. Supports date-range filtering and tag-based aggregation.</div>
+      </div>
+    </div>
+
+    <!-- Snippet Vault -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128196;</span>
+          <span class="feature-name">Snippet Vault</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Store and organize code snippets, text blocks, and templates with syntax highlighting and tags. Instant full-text search across all snippets.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">FTS5-powered search via <code>snippet_fts</code> index. Syntax highlighting via language detection. Soft-delete support (tombstone pattern) for safe recovery. Tags stored as JSON array. Copy-to-clipboard integration.</div>
+      </div>
+    </div>
+
+    <!-- Clipboard Commands -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9000;</span>
+          <span class="feature-name">Clipboard Commands</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Custom shortcut buttons that instantly copy text or generate AI content to your clipboard. Static text or AI-powered dynamic generation.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Two modes: static (predefined text) or AI-generated via <code>/api/ai/quick</code>. Each command stores a name, mode, and content/prompt. Clipboard API integration for one-click copy. Commands are per-project and orderable.</div>
+      </div>
+    </div>
+
+    <!-- Contacts & CRM -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128101;</span>
+          <span class="feature-name">Contacts & CRM</span>
+        </div>
+        <span class="feature-badge badge-core">Core</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Contact management with a deal pipeline. Track contacts through stages from lead to won. Log activities, notes, and interactions. Full-text search across all contacts.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">FTS5 search across contact fields. Deal stages: <code>lead &rarr; qualified &rarr; proposal &rarr; negotiation &rarr; won &rarr; lost</code>. Activity logging via <code>contact_activities</code> table (call, email, meeting, note). Contacts linked to projects, searchable by company, role, or tag.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ CREATIVE SUITE ══════════════════════════════════════ -->
+<div class="category-block cat-creative" data-category="creative">
+  <div class="category-heading">
+    <span class="cat-icon">&#9830;</span>
+    <h2>Creative Suite</h2>
+    <span class="cat-count">5 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- Narrative Studio -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128209;</span>
+          <span class="feature-name">Narrative Studio</span>
+        </div>
+        <span class="feature-badge badge-creative">Creative</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">AI-assisted writing environment supporting 9 formats: novel, screenplay, short story, marketing campaign, blog series, product docs, pitch deck, whitepaper, and newsletter. Hierarchical sections, context boxes for plot/setting/themes/tone, character color-coding, guided questionnaires, and AI generation (draft, continue, revise).</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Tables: <code>narrative_projects</code>, <code>narrative_sections</code> (tree structure via parent_id), <code>narrative_context</code> (keyed boxes), <code>narrative_character_config</code> (color assignments), <code>narrative_questionnaires</code>. Full context assembly for Claude: sections + context boxes + character profiles concatenated as system prompt. AI modes: draft (generate from outline), continue (append), revise (rewrite selection).</div>
+      </div>
+    </div>
+
+    <!-- Worlds -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127758;</span>
+          <span class="feature-name">Worlds</span>
+        </div>
+        <span class="feature-badge badge-creative">Creative</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Build fictional universes or brand worlds with structured sections: description, rules, geography, history, culture. AI expands any section on demand. Generate a complete wiki from your world data.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>worlds</code> table with JSON sections. Claude API generates section expansions using full world context. Wiki generation outputs structured HTML with cross-linked sections, exportable as a standalone page.</div>
+      </div>
+    </div>
+
+    <!-- Creative Stories -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127916;</span>
+          <span class="feature-name">Creative Stories</span>
+        </div>
+        <span class="feature-badge badge-creative">Creative</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Outline stories with acts, beats, and themes. AI generates full outlines from a premise, enhances synopses, and expands individual scene beats into detailed sequences.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>creative_stories</code> with acts as a JSON array. Each act contains ordered beats with type, summary, and expanded content. Claude API powers three generation modes: outline generation (premise &rarr; full structure), synopsis enhancement, and scene beat expansion.</div>
+      </div>
+    </div>
+
+    <!-- Characters -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128100;</span>
+          <span class="feature-name">Characters</span>
+        </div>
+        <span class="feature-badge badge-creative">Creative</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Deep character profiles: appearance, personality, backstory, motivations, relationships, and voice notes. AI portrait generation and voice design for bringing characters to life.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>creative_characters</code>. AI portrait generation via Stability AI (SDXL) or OpenAI (DALL-E). Voice synthesis via ElevenLabs API for character voice design. Each character links to projects and can be referenced in Narrative Studio context.</div>
+      </div>
+    </div>
+
+    <!-- Sound Design -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127925;</span>
+          <span class="feature-name">Sound Design</span>
+        </div>
+        <span class="feature-badge badge-creative">Creative</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Manage audio assets organized by mood and category. Preview and play audio files directly in the browser. Tag and search your sound library.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Audio files stored in R2 object storage. Mood-based categorization (tense, calm, energetic, melancholy, etc.). Browser-native <code>Audio</code> API for playback. Metadata (duration, format, tags) indexed for search.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ INTELLIGENCE LAYER ══════════════════════════════════════ -->
+<div class="category-block cat-intelligence" data-category="intelligence">
+  <div class="category-heading">
+    <span class="cat-icon">&#9670;</span>
+    <h2>Intelligence Layer</h2>
+    <span class="cat-count">13 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- AI Quick Ask -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9889;</span>
+          <span class="feature-name">AI Quick Ask</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Direct chat with Claude. Ask questions, brainstorm ideas, get feedback -- with full conversation history preserved. Your AI co-founder, always on call.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Claude API proxied through Cloudflare Worker. Conversations stored in <code>ai_conversations</code> and <code>ai_messages</code> tables. FTS5 search across all message content. Supports system prompt customization and temperature control.</div>
+      </div>
+    </div>
+
+    <!-- AI Agent Workflows -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9881;</span>
+          <span class="feature-name">AI Agent Workflows</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Build multi-step autonomous workflows. Chain together AI prompts, data queries, entity writes, conditionals, and notifications. Trigger manually, on schedule, or via webhook.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Step types: <code>ai_prompt</code>, <code>query_data</code>, <code>write_entity</code>, <code>conditional</code>, <code>notify</code>. Trigger modes: manual, scheduled (cron), webhook. Execution tracked in <code>agents</code> and <code>agent_runs</code> tables. Step executor processes sequentially with context passing between steps.</div>
+      </div>
+    </div>
+
+    <!-- AI Buttons -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9654;</span>
+          <span class="feature-name">AI Buttons</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Create custom AI commands with tailored system and user prompts. Output to a panel, create a card, or save as a snippet. Set cost caps to control usage.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>ai_buttons</code> with fields: name, system_prompt, user_prompt, output_mode (<code>panel</code> | <code>card</code> | <code>snippet</code>), cost_cap. Each invocation runs through the Claude API proxy with the configured prompts. Cost tracking per invocation against the cap.</div>
+      </div>
+    </div>
+
+    <!-- Name Research -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128300;</span>
+          <span class="feature-name">Name Research</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">AI-powered naming for products, companies, or features. Checks domain availability and trademark conflicts. Scores each candidate on memorability, relevance, and availability.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>name_research</code> with FTS5 search. AI generates candidates via Claude with scoring criteria. Domain checking via DNS lookup. Trademark search integration. Each name scored across multiple dimensions with an aggregate score.</div>
+      </div>
+    </div>
+
+    <!-- Decisions Log & Impact Ledger -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9878;</span>
+          <span class="feature-name">Decisions Log & Impact Ledger</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Track every important decision with options, pros/cons, and outcomes. The Impact Ledger traces decisions forward to completed cards, showing the real-world effect of each choice.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>decisions</code> table with JSON options array (each with pros/cons). <code>entity_links</code> table connects decisions to cards, enabling impact tracing. Outcome tracking allows marking decisions as validated or revisited.</div>
+      </div>
+    </div>
+
+    <!-- Project DNA -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#129516;</span>
+          <span class="feature-name">Project DNA</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">AI-generated personality profile for each project. Health scoring across 5 dimensions reveals blind spots and strengths. Understand your project at a deeper level.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Health scores cached in <code>project_health_cache</code> across 5 dimensions: momentum, scope clarity, technical debt, team energy, and market fit. Claude analyzes project data (cards, journal entries, decisions) to generate scores and narrative insights. Refreshed on demand or periodically.</div>
+      </div>
+    </div>
+
+    <!-- Temporal Patterns -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9200;</span>
+          <span class="feature-name">Temporal Patterns</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Detects your productivity cycles, burnout risk, and velocity changes over time. Auto-respond triggers alert you when patterns shift. Know when to push and when to rest.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>temporal_patterns</code>. Analyzes session journal timestamps, card completion rates, and energy levels to detect cycles. Burnout risk calculated from declining velocity + low energy streaks. Auto-respond via <code>/api/patterns/auto-respond</code> triggers configurable actions (notifications, journal prompts).</div>
+      </div>
+    </div>
+
+    <!-- Confidence Scoring -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128200;</span>
+          <span class="feature-name">Confidence Scoring</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Per-card on-time probability predictions. See at a glance which tasks are likely to ship on schedule and which need attention.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Calculated via <code>/api/intelligence/confidence</code>. Uses historical completion data mapped by card type to predict on-time probability. Factors: type accuracy mapping, time-in-column, dependency chain depth, and assignee velocity.</div>
+      </div>
+    </div>
+
+    <!-- Context Switch Meter -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128256;</span>
+          <span class="feature-name">Context Switch Meter</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Measures the cost of switching between projects. Recommends optimal batch sizes to minimize thrashing and maximize deep work.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Analyzed via <code>/api/intelligence/context-switching</code>. Tracks project transitions from session journal data. Calculates switch cost (time lost per transition) and recommends optimal batch sizes based on historical patterns.</div>
+      </div>
+    </div>
+
+    <!-- Narrative Timeline -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128218;</span>
+          <span class="feature-name">Narrative Timeline</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Your project's story told chronologically. Auto-generated events create a timeline you can browse like chapters. See the narrative arc of your work.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Events stored in <code>narrative_events</code>. Auto-generated from significant actions (milestones hit, decisions made, features shipped). Weekly chapter grouping creates a readable narrative. Events can be manually annotated.</div>
+      </div>
+    </div>
+
+    <!-- Relationship Graph -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128279;</span>
+          <span class="feature-name">Relationship Graph</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Visualize connections between all entities -- cards, decisions, contacts, stories, characters. See how everything in your project is interconnected.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Built from <code>card_relations</code> and <code>entity_links</code> tables. Renders as a force-directed graph. Nodes represent entities (cards, decisions, contacts), edges represent typed relationships. Filterable by entity type and relationship type.</div>
+      </div>
+    </div>
+
+    <!-- Snapshots -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128247;</span>
+          <span class="feature-name">Snapshots</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Capture point-in-time project state. Compare any two snapshots to see exactly what changed -- cards added, moved, completed, or removed.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Full project state serialized as JSON snapshot. Diff engine compares two snapshots and outputs structured change lists (added, removed, modified entities). Useful for sprint reviews and retrospectives.</div>
+      </div>
+    </div>
+
+    <!-- Approval Workflows -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9989;</span>
+          <span class="feature-name">Approval Workflows</span>
+        </div>
+        <span class="feature-badge badge-intelligence">Intelligence</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Gate important actions behind approval steps. Approve, reject, modify, or rollback. Keeps a full audit trail of every decision.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stored in <code>approvals</code> table with states: pending, approved, rejected, rolled_back. Each approval links to the triggering entity and action. Supports modification (approve with changes). Full audit trail with timestamps and reasons.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ EMPIRE BUILDER ══════════════════════════════════════ -->
+<div class="category-block cat-empire" data-category="empire">
+  <div class="category-heading">
+    <span class="cat-icon">&#9813;</span>
+    <h2>Empire Builder</h2>
+    <span class="cat-count">11 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- Revenue Intelligence -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128176;</span>
+          <span class="feature-name">Revenue Intelligence</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Track MRR, ARR, churn, and LTV across all your products. Pull data from Stripe, Gumroad, and Patreon. Portfolio-level aggregation shows your total empire health.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Revenue events stored in <code>revenue_events</code> table. Multi-source ingestion via Stripe webhooks, Gumroad API, Patreon API. Metrics calculated: MRR, ARR, churn rate, LTV, net revenue retention. Portfolio aggregation sums across all products for empire-level dashboards.</div>
+      </div>
+    </div>
+
+    <!-- Brand Voices & Content Factory -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128227;</span>
+          <span class="feature-name">Brand Voices & Content Factory</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Define brand profiles with voice DNA (tone, vocabulary, style). Turn one idea into 8 platform-specific content variants, all in your brand voice. One seed, infinite reach.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Brand profiles in <code>brands</code> table with voice DNA fields (tone, vocabulary, banned words, style rules). Content seeds in <code>content_seeds</code>. Platform formatting rules define constraints per platform (char limits, hashtag rules, media requirements). Claude generates variants using brand voice as system prompt.</div>
+      </div>
+    </div>
+
+    <!-- Content Hub -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128240;</span>
+          <span class="feature-name">Content Hub</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Manage posts through their full lifecycle: draft, scheduled, published. Use templates for consistent formatting. Maintain an asset library for images and media.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Posts in <code>posts</code> table with status enum (draft, scheduled, published, archived). Templates in <code>content_templates</code> with variable interpolation. Assets stored in R2 via <code>assets</code> table. FTS5 search across post content. Scheduled publishing via Cloudflare Worker cron triggers.</div>
+      </div>
+    </div>
+
+    <!-- Social Dashboard -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127760;</span>
+          <span class="feature-name">Social Dashboard</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Multi-platform account management for Twitter, LinkedIn, Facebook, Instagram, Product Hunt, and Patreon. Unified analytics across all platforms.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Accounts in <code>social_accounts</code> with OAuth tokens per platform. Analytics in <code>social_analytics</code> tracking followers, engagement rate, impressions, and clicks. Platform-specific API integrations. Unified dashboard aggregates metrics across all connected accounts.</div>
+      </div>
+    </div>
+
+    <!-- Audience Funnels -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9660;</span>
+          <span class="feature-name">Audience Funnels</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Build conversion funnels with stage tracking and source attribution. See where your audience comes from and where they drop off.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Funnels defined in <code>funnels</code> table with ordered stages. Events tracked in <code>funnel_events</code> with timestamp, source, and metadata. Conversion rates calculated between stages. Source attribution tracks which channels drive the most conversions.</div>
+      </div>
+    </div>
+
+    <!-- Product Forge -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128296;</span>
+          <span class="feature-name">Product Forge</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Idea-to-launch pipeline. Score ideas across 5 dimensions, run validation checklists, and track progress from concept to shipped product.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Ideas in <code>product_ideas</code> with 5-dimension scoring matrix (market size, feasibility, uniqueness, revenue potential, passion). Validation checklists track customer interviews, prototype feedback, pricing tests. Pipeline stages from idea through validation, build, beta, and launch.</div>
+      </div>
+    </div>
+
+    <!-- Competitive Radar -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128225;</span>
+          <span class="feature-name">Competitive Radar</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Track competitor profiles with feature comparison matrices. Spot gaps in the market and identify where you have an advantage.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Competitors stored in <code>competitors</code> table with structured profiles. Feature matrix via <code>/api/competitors/matrix</code> generates comparison grids. Gap detection highlights features competitors have that you lack (and vice versa). Notes and update history tracked per competitor.</div>
+      </div>
+    </div>
+
+    <!-- Portfolio Synergy -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128260;</span>
+          <span class="feature-name">Portfolio Synergy</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Cross-product analysis that detects shared infrastructure, cross-sell opportunities, and resource imbalances across your entire portfolio.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Synergy detection algorithms analyze: shared tech stacks (infra reuse), overlapping audiences (cross-sell), and resource allocation imbalances (time/money skew). Generates recommendations for consolidation and optimization across all projects.</div>
+      </div>
+    </div>
+
+    <!-- Portfolio Site Builder -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127912;</span>
+          <span class="feature-name">Portfolio Site Builder</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Visual site builder to showcase all your products. Pick a theme, preview live, and deploy. Your public-facing portfolio, built from your project data.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Config-driven HTML generation from project metadata. Theme system with customizable colors, layouts, and sections. Live preview in-app. One-click deploy to Cloudflare Pages or custom domain. Pulls product descriptions, screenshots, and links from project data.</div>
+      </div>
+    </div>
+
+    <!-- Ritual Engine -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128336;</span>
+          <span class="feature-name">Ritual Engine</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Scheduled reviews at every cadence: daily standup, weekly review, monthly retro, quarterly strategy. AI generates rich reports from your actual data.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Rituals defined in <code>rituals</code> table with cadence (daily, weekly, monthly, quarterly). Execution tracked in <code>ritual_runs</code>. Data-enriched prompts pull cards completed, journal entries, decisions made, and revenue changes for the period. Claude generates actionable review reports.</div>
+      </div>
+    </div>
+
+    <!-- Automation Rules -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9889;</span>
+          <span class="feature-name">Automation Rules</span>
+        </div>
+        <span class="feature-badge badge-empire">Empire</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Event-driven if-this-then-that rules. When something happens in your project, automatically trigger actions -- move cards, send notifications, create entries.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Pipelines in <code>automation_pipelines</code> with trigger/action pairs. Triggers: entity events (card moved, created, completed), time-based, threshold-based. Actions: move card, create card, send notification, update field, run AI prompt. Supports chaining multiple actions per trigger.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ DEVELOPER TOOLS ══════════════════════════════════════ -->
+<div class="category-block cat-developer" data-category="developer">
+  <div class="category-heading">
+    <span class="cat-icon">&#9002;</span>
+    <h2>Developer Tools</h2>
+    <span class="cat-count">5 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- GitHub Integration -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128025;</span>
+          <span class="feature-name">GitHub Integration</span>
+        </div>
+        <span class="feature-badge badge-developer">Developer</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Browse repos, commits, pull requests, and issues without leaving Thought+Form. Your code and your project management in one place.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">GitHub REST API integration authenticated via Personal Access Token (PAT). Fetches repos, commit history, PR status, and issues. Links GitHub issues to Kanban cards for traceability. Webhook support for real-time PR/issue updates.</div>
+      </div>
+    </div>
+
+    <!-- DevOps Monitor -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128640;</span>
+          <span class="feature-name">DevOps Monitor</span>
+        </div>
+        <span class="feature-badge badge-developer">Developer</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Track deployments across GitHub Actions, Cloudflare, and Render. See deploy status at a glance. One-click rollback when things go wrong.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Deploy records stored in <code>deploy_records</code> with status (pending, success, failed, rolled_back), provider, commit SHA, and timestamps. Integrates with GitHub Actions API, Cloudflare API, and Render API. Rollback triggers redeployment of the previous successful build.</div>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9618;</span>
+          <span class="feature-name">Terminal</span>
+        </div>
+        <span class="feature-badge badge-developer">Developer</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Full embedded terminal right in the app. Run commands, scripts, and tools without switching windows. Desktop only.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Powered by <code>xterm.js</code> frontend + <code>node-pty</code> backend via Fastify sidecar WebSocket. Full PTY emulation with resize support. Persistent sessions across tab switches. Desktop-only feature (requires local sidecar process).</div>
+      </div>
+    </div>
+
+    <!-- AI Filesystem Access -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128193;</span>
+          <span class="feature-name">AI Filesystem Access</span>
+        </div>
+        <span class="feature-badge badge-developer">Developer</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Let AI read and write files in authorized project folders. Sensitive files are automatically blocked. Safe, scoped filesystem access for AI workflows.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Sidecar validates all paths via <code>realpath</code> to prevent directory traversal. Authorized folders configured per-project. Sensitive file patterns blocked (<code>.env</code>, credentials, keys). 1MB file size cap per read/write operation. Full audit logging of all AI filesystem operations.</div>
+      </div>
+    </div>
+
+    <!-- Claude Code Delegation -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#129302;</span>
+          <span class="feature-name">Claude Code Delegation</span>
+        </div>
+        <span class="feature-badge badge-developer">Developer</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Delegate coding tasks to Claude Code CLI directly from the app. Read-only by default for safety. Let AI implement features, fix bugs, and write tests.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Invokes <code>claude -p</code> in headless mode via sidecar. Read-only filesystem access by default (user must explicitly grant write). 5-minute execution timeout. Output streamed back to the app in real-time. Supports passing project context and specific task instructions.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ SYSTEM ══════════════════════════════════════ -->
+<div class="category-block cat-system" data-category="system">
+  <div class="category-heading">
+    <span class="cat-icon">&#9881;</span>
+    <h2>System</h2>
+    <span class="cat-count">8 features</span>
+  </div>
+  <div class="feature-cards">
+
+    <!-- Global Search -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128269;</span>
+          <span class="feature-name">Global Search</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Search across everything with Ctrl+Shift+F. Cards, journal entries, snippets, contacts, decisions, AI conversations -- all searchable from one bar.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Unions multiple FTS5 tables (cards, sessions, snippets, contacts, AI messages, decisions) into a single search result set. Ranked by relevance with entity type indicators. Keyboard shortcut: <code>Ctrl+Shift+F</code>.</div>
+      </div>
+    </div>
+
+    <!-- Quick Switcher -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#9889;</span>
+          <span class="feature-name">Quick Switcher</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Command palette with fuzzy matching. Hit Ctrl+K to jump to any project, page, or action instantly. Navigate at the speed of thought.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Zustand-powered state with keyboard navigation (arrow keys, enter, escape). Fuzzy matching algorithm scores results by character proximity. Indexes projects, pages, recent items, and commands. Keyboard shortcut: <code>Ctrl+K</code>.</div>
+      </div>
+    </div>
+
+    <!-- Offline Sync -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128268;</span>
+          <span class="feature-name">Offline Sync</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Keep working when you lose connection. Changes queue locally and sync automatically when you reconnect. No data lost, no interruptions.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Offline mutations queued in IndexedDB with timestamps. Service worker intercepts failed network requests and queues them. On reconnect, queued mutations replay in order against the cloud API. Conflict resolution uses last-write-wins with server timestamp authority.</div>
+      </div>
+    </div>
+
+    <!-- Backup & Export -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128190;</span>
+          <span class="feature-name">Backup & Export</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Full data export and import. Download everything as JSON. Restore from backup at any time. Your data is always yours.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Export serializes all project data to JSON. Backups stored in R2 object storage with versioning. Import validates schema integrity before restoring. Supports selective restore (specific projects or entity types).</div>
+      </div>
+    </div>
+
+    <!-- RSS Autoposter -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128225;</span>
+          <span class="feature-name">RSS Autoposter</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Subscribe to RSS/Atom feeds and automatically create draft content posts from new items. Stay on top of industry news and turn it into content.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">RSS/Atom feed parser with scheduled polling. SSRF protection validates feed URLs against private IP ranges. New items create draft posts in Content Hub with source attribution. Configurable filters (keyword match, author, category).</div>
+      </div>
+    </div>
+
+    <!-- Billing -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128179;</span>
+          <span class="feature-name">Billing</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Free tier with generous limits. Pro at $19/month with 14-day free trial. Stripe-powered payments. Bring your own API key (BYOK) for AI features on any tier.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Stripe integration with webhook handlers for subscription lifecycle (created, updated, cancelled, payment_failed). Pro gate middleware checks subscription status on protected endpoints. BYOK mode allows users to provide their own Claude API key, bypassing metered AI usage. 14-day trial with full Pro access.</div>
+      </div>
+    </div>
+
+    <!-- Themes -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#127912;</span>
+          <span class="feature-name">Themes</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Three visual themes: CRT (phosphor green scanlines), Dark (clean and modern), and Void (minimal). Accessibility mode strips all CRT effects for reduced motion.</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">CSS custom properties swapped per theme. CRT theme adds scanline overlay, glow effects, and phosphor green palette. Dark theme uses neutral grays. Void theme is ultra-minimal. Accessibility mode respects <code>prefers-reduced-motion</code> and disables all animations, scanlines, and glow effects.</div>
+      </div>
+    </div>
+
+    <!-- PWA -->
+    <div class="feature-card">
+      <div class="feature-card-header" onclick="toggleTech(this)">
+        <div class="feature-card-left">
+          <span class="feature-icon">&#128241;</span>
+          <span class="feature-name">Progressive Web App</span>
+        </div>
+        <span class="feature-badge badge-system">System</span>
+        <button class="feature-expand-btn">+</button>
+      </div>
+      <p class="feature-desc">Install Thought+Form as a native-feeling app on any device. Service worker enables offline caching. Same React codebase, reduced feature set (no terminal/git).</p>
+      <div class="feature-tech">
+        <div class="feature-tech-label">// Technical Details</div>
+        <div class="feature-tech-body">Service worker with cache-first strategy for static assets and network-first for API calls. Web App Manifest enables install prompt on supported browsers. Shares the React codebase with the desktop app but excludes sidecar-dependent features (terminal, git, filesystem, Claude Code delegation).</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="landing.html">Home</a>
+      <a href="features.html">Features</a>
+      <a href="store-listings.html">Download</a>
+      <a href="terms.html">Terms</a>
+      <a href="privacy.html">Privacy</a>
+    </div>
+    <p>Thought+Form &mdash; the command center for solo founders.</p>
+  </div>
+</footer>
+
+<script>
+  // Toggle technical details
+  function toggleTech(header) {
+    const card = header.closest('.feature-card');
+    const tech = card.querySelector('.feature-tech');
+    const btn = card.querySelector('.feature-expand-btn');
+    tech.classList.toggle('visible');
+    btn.classList.toggle('open');
+  }
+
+  // Category filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.category-block').forEach(block => {
+        if (filter === 'all' || block.dataset.category === filter) {
+          block.style.display = '';
+        } else {
+          block.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Expand all / collapse all on double-click of category heading
+  document.querySelectorAll('.category-heading').forEach(heading => {
+    heading.addEventListener('dblclick', () => {
+      const block = heading.closest('.category-block');
+      const techs = block.querySelectorAll('.feature-tech');
+      const btns = block.querySelectorAll('.feature-expand-btn');
+      const anyOpen = [...techs].some(t => t.classList.contains('visible'));
+      techs.forEach(t => anyOpen ? t.classList.remove('visible') : t.classList.add('visible'));
+      btns.forEach(b => anyOpen ? b.classList.remove('open') : b.classList.add('open'));
+    });
+  });
+</script>
+
+</body>
+</html>

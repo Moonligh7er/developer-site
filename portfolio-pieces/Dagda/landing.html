@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA — AI-Powered Cybersecurity Command Platform</title>
+<meta name="description" content="640 security tools. 9 operational modes. One AI that understands them all. Dagda is the cybersecurity command platform that watches, hunts, traps, and fights.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Variables ──────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0e14;
+  --bg-surface: #111820;
+  --bg-card: #151d28;
+  --bg-card-hover: #1a2435;
+  --border: #1e293b;
+  --border-hover: #2d3f56;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-teal: #00d4aa;
+  --accent-blue: #39bae6;
+  --accent-purple: #7c3aed;
+  --accent-fuchsia: #d946ef;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --orange: #f97316;
+  --red: #ef4444;
+  --rose: #f43f5e;
+  --glow-teal: 0 0 40px rgba(0, 212, 170, 0.12);
+  --glow-purple: 0 0 40px rgba(124, 58, 237, 0.12);
+  --radius: 8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 14px;
+  overflow-x: hidden;
+}
+
+a { color: var(--accent-teal); text-decoration: none; transition: color 0.2s; }
+a:hover { color: #33e8be; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+/* ── Scroll Reveal ──────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Navbar ─────────────────────────────────────────────────────── */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 24px; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background 0.3s, border-color 0.3s, backdrop-filter 0.3s;
+  border-bottom: 1px solid transparent;
+}
+.navbar.scrolled {
+  background: rgba(10, 14, 20, 0.92);
+  backdrop-filter: blur(16px);
+  border-bottom-color: var(--border);
+}
+.nav-brand { display: flex; align-items: baseline; gap: 10px; }
+.nav-logo {
+  font-size: 1.15rem; font-weight: 700; color: var(--accent-teal);
+  letter-spacing: 0.2em;
+}
+.nav-tagline { font-size: 0.65rem; color: var(--text-muted); display: none; }
+@media (min-width: 768px) { .nav-tagline { display: inline; } }
+.nav-links { display: flex; gap: 24px; list-style: none; }
+.nav-links a {
+  font-size: 0.75rem; color: var(--text-secondary); letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--accent-teal); }
+
+.nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.nav-hamburger span {
+  display: block; width: 20px; height: 2px; background: var(--text-secondary);
+  margin: 4px 0; transition: transform 0.3s, opacity 0.3s;
+}
+
+@media (max-width: 768px) {
+  .nav-hamburger { display: block; }
+  .nav-links {
+    position: fixed; top: 56px; right: 0; bottom: 0;
+    flex-direction: column; background: rgba(10, 14, 20, 0.97);
+    padding: 32px; gap: 20px; width: 220px;
+    transform: translateX(100%); transition: transform 0.3s;
+    backdrop-filter: blur(16px); border-left: 1px solid var(--border);
+  }
+  .nav-links.open { transform: translateX(0); }
+  .nav-links a { font-size: 0.85rem; }
+}
+
+/* ── Hero ───────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 80px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; right: -30%;
+  width: 800px; height: 800px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,212,170,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -40%; left: -20%;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  align-items: center; position: relative; z-index: 1;
+}
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+.hero-eyebrow {
+  font-size: 0.75rem; color: var(--accent-teal); margin-bottom: 16px;
+  letter-spacing: 0.1em;
+}
+.hero h1 {
+  font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 700;
+  line-height: 1.3; margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-teal) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 32px;
+  max-width: 520px; line-height: 1.8;
+}
+.hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; background: var(--accent-teal); color: var(--bg-deep);
+  font-family: inherit; font-size: 0.85rem; font-weight: 700;
+  border: none; border-radius: var(--radius); cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.05em;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 212, 170, 0.25);
+}
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; background: transparent;
+  color: var(--text-secondary); font-family: inherit;
+  font-size: 0.85rem; font-weight: 500;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  letter-spacing: 0.05em;
+}
+.btn-outline:hover { border-color: var(--accent-teal); color: var(--accent-teal); }
+.hero-trust {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  font-size: 0.7rem; color: var(--text-muted);
+}
+.hero-trust span {
+  padding: 4px 10px; border: 1px solid var(--border);
+  border-radius: 4px; white-space: nowrap;
+}
+
+/* Terminal */
+.terminal-window {
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--glow-teal);
+}
+.terminal-titlebar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px; background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.terminal-dot.red { background: #ef4444; }
+.terminal-dot.yellow { background: #f59e0b; }
+.terminal-dot.green { background: #22c55e; }
+.terminal-title {
+  font-size: 0.7rem; color: var(--text-muted); margin-left: 8px;
+}
+.terminal-body {
+  padding: 16px; min-height: 240px; font-size: 0.78rem;
+  line-height: 1.9; position: relative;
+}
+.terminal-body .line { white-space: pre-wrap; word-break: break-all; }
+.terminal-body .prompt { color: var(--accent-teal); }
+.terminal-body .comment { color: var(--text-muted); }
+.terminal-body .info { color: var(--accent-blue); }
+.terminal-body .success { color: var(--green); }
+.terminal-body .warning { color: var(--amber); }
+.terminal-body .alert { color: var(--orange); }
+.terminal-body .error { color: var(--red); }
+.terminal-body .fuchsia { color: var(--accent-fuchsia); }
+.terminal-cursor {
+  display: inline-block; width: 8px; height: 16px;
+  background: var(--accent-teal); animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ── Stats Bar ──────────────────────────────────────────────────── */
+.stats-bar {
+  padding: 48px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+.stats-grid {
+  display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+}
+.stat-item { text-align: center; }
+.stat-number {
+  font-size: 2rem; font-weight: 700; color: var(--accent-teal);
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ── Section Headings ───────────────────────────────────────────── */
+.section { padding: 100px 0; }
+.section-label {
+  font-size: 0.7rem; color: var(--accent-teal); letter-spacing: 0.15em;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(1.3rem, 3vw, 1.9rem); font-weight: 700;
+  margin-bottom: 16px; line-height: 1.3;
+}
+.section-subtitle {
+  font-size: 0.85rem; color: var(--text-secondary);
+  max-width: 640px; margin-bottom: 48px; line-height: 1.8;
+}
+
+/* ── Problem Cards ──────────────────────────────────────────────── */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  border-color: var(--border-hover); transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+.card-icon {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; font-size: 1.2rem; font-weight: 700;
+}
+.card-icon.red { background: rgba(239, 68, 68, 0.12); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.2); }
+.card-icon.amber { background: rgba(245, 158, 11, 0.12); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.2); }
+.card-icon.purple { background: rgba(124, 58, 237, 0.12); color: var(--accent-purple); border: 1px solid rgba(124, 58, 237, 0.2); }
+.card-icon.teal { background: rgba(0, 212, 170, 0.12); color: var(--accent-teal); border: 1px solid rgba(0, 212, 170, 0.2); }
+.card-icon.blue { background: rgba(57, 186, 230, 0.12); color: var(--accent-blue); border: 1px solid rgba(57, 186, 230, 0.2); }
+.card-icon.fuchsia { background: rgba(217, 70, 239, 0.12); color: var(--accent-fuchsia); border: 1px solid rgba(217, 70, 239, 0.2); }
+.card-icon.green { background: rgba(34, 197, 94, 0.12); color: var(--green); border: 1px solid rgba(34, 197, 94, 0.2); }
+.card h3 {
+  font-size: 1rem; font-weight: 700; margin-bottom: 12px;
+}
+.card p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.8; }
+.closing-line {
+  margin-top: 40px; text-align: center;
+  font-size: 0.85rem; color: var(--text-muted);
+  font-style: italic; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+
+/* ── Pillars ────────────────────────────────────────────────────── */
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+.pillar {
+  padding: 28px; border-left: 3px solid var(--border);
+  transition: border-color 0.3s;
+}
+.pillar:hover { border-left-color: var(--accent-teal); }
+.pillar h3 {
+  font-size: 0.95rem; font-weight: 700; margin-bottom: 10px;
+  color: var(--accent-teal);
+}
+.pillar p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.8; }
+
+/* ── Mode Tabs ──────────────────────────────────────────────────── */
+.mode-tabs {
+  display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 32px;
+  border-bottom: 1px solid var(--border); padding-bottom: 0;
+}
+.mode-tab {
+  padding: 10px 16px; font-family: inherit; font-size: 0.75rem;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.08em; font-weight: 500;
+}
+.mode-tab:hover { color: var(--text-secondary); }
+.mode-tab.active {
+  color: var(--accent-teal); border-bottom-color: var(--accent-teal);
+  font-weight: 700;
+}
+.mode-content { display: none; }
+.mode-content.active { display: block; }
+.mode-panel {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  align-items: start;
+}
+@media (max-width: 768px) { .mode-panel { grid-template-columns: 1fr; } }
+.mode-description h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.mode-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 4px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+.mode-badge.green { background: rgba(34,197,94,0.15); color: var(--green); }
+.mode-badge.blue { background: rgba(57,186,230,0.15); color: var(--accent-blue); }
+.mode-badge.purple { background: rgba(124,58,237,0.15); color: var(--accent-purple); }
+.mode-badge.amber { background: rgba(245,158,11,0.15); color: var(--amber); }
+.mode-badge.red { background: rgba(239,68,68,0.15); color: var(--red); }
+.mode-badge.fuchsia { background: rgba(217,70,239,0.15); color: var(--accent-fuchsia); }
+.mode-badge.teal { background: rgba(0,212,170,0.15); color: var(--accent-teal); }
+.mode-features {
+  list-style: none; margin-top: 16px;
+}
+.mode-features li {
+  font-size: 0.78rem; color: var(--text-secondary);
+  padding: 4px 0; padding-left: 16px; position: relative;
+}
+.mode-features li::before {
+  content: '>'; position: absolute; left: 0;
+  color: var(--accent-teal); font-weight: 700;
+}
+.mode-terminal { font-size: 0.72rem; }
+.mode-terminal .terminal-body { min-height: 180px; }
+
+/* ── Safeguard Gauge ────────────────────────────────────────────── */
+.safeguard-viz {
+  max-width: 700px; margin: 0 auto 48px;
+}
+.safeguard-level {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 20px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 8px; transition: all 0.3s;
+  background: var(--bg-card);
+}
+.safeguard-level:hover { border-color: var(--border-hover); }
+.safeguard-level.active { border-color: var(--accent-teal); }
+.safeguard-num {
+  font-size: 1.4rem; font-weight: 700; min-width: 32px;
+  text-align: center;
+}
+.safeguard-name {
+  font-size: 0.85rem; font-weight: 700; min-width: 100px;
+  letter-spacing: 0.08em;
+}
+.safeguard-bar-wrap { flex: 1; height: 8px; background: var(--bg-deep); border-radius: 4px; overflow: hidden; }
+.safeguard-bar {
+  height: 100%; border-radius: 4px; transition: width 0.6s ease-out;
+}
+.safeguard-details {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out;
+  padding: 0 20px;
+}
+.safeguard-level.active .safeguard-details { max-height: 200px; }
+.safeguard-details-inner {
+  padding: 12px 0 4px 148px;
+  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.8;
+}
+@media (max-width: 600px) { .safeguard-details-inner { padding-left: 0; } }
+
+.guardrails {
+  max-width: 700px; margin: 0 auto;
+  padding: 32px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.guardrails h3 {
+  font-size: 0.95rem; font-weight: 700; margin-bottom: 20px;
+  color: var(--red);
+}
+.guardrails ol {
+  list-style: none; counter-reset: guardrail;
+}
+.guardrails li {
+  counter-increment: guardrail;
+  font-size: 0.78rem; color: var(--text-secondary);
+  padding: 6px 0; padding-left: 32px; position: relative;
+}
+.guardrails li::before {
+  content: counter(guardrail); position: absolute; left: 0;
+  font-weight: 700; color: var(--red); font-size: 0.75rem;
+  width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+  background: rgba(239, 68, 68, 0.1); border-radius: 4px;
+}
+.pull-quote {
+  margin-top: 32px; padding: 24px 28px;
+  border-left: 3px solid var(--accent-teal);
+  background: var(--bg-card);
+  font-size: 0.82rem; color: var(--text-secondary);
+  line-height: 1.8; max-width: 700px; margin-left: auto; margin-right: auto;
+}
+
+/* ── Architecture Columns ───────────────────────────────────────── */
+.arch-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.arch-col {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 28px;
+}
+.arch-col h3 {
+  font-size: 0.95rem; font-weight: 700; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.arch-col p {
+  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.8;
+  margin-bottom: 16px;
+}
+.arch-list {
+  list-style: none;
+}
+.arch-list li {
+  font-size: 0.75rem; color: var(--text-muted);
+  padding: 4px 0; padding-left: 14px; position: relative;
+}
+.arch-list li::before {
+  content: ''; position: absolute; left: 0; top: 11px;
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.arch-list.rust li::before { background: var(--orange); }
+.arch-list.brain li::before { background: var(--accent-fuchsia); }
+.arch-list.integrations li::before { background: var(--accent-blue); }
+
+/* ── Timeline ───────────────────────────────────────────────────── */
+.timeline {
+  position: relative; max-width: 700px; margin: 0 auto;
+  padding-left: 40px;
+}
+.timeline::before {
+  content: ''; position: absolute; left: 14px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.timeline-step {
+  position: relative; margin-bottom: 40px;
+}
+.timeline-step::before {
+  content: ''; position: absolute; left: -33px; top: 4px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--accent-teal); border: 3px solid var(--bg-deep);
+}
+.timeline-step h3 {
+  font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;
+}
+.timeline-step p {
+  font-size: 0.78rem; color: var(--text-secondary); line-height: 1.8;
+}
+.timeline-code {
+  margin-top: 12px; background: var(--bg-surface);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 14px 18px; font-size: 0.75rem; line-height: 1.9;
+  overflow-x: auto;
+}
+.timeline-code .prompt { color: var(--accent-teal); }
+.timeline-code .comment { color: var(--text-muted); }
+.timeline-code .info { color: var(--accent-blue); }
+.timeline-code .success { color: var(--green); }
+
+/* ── Vs Blocks ──────────────────────────────────────────────────── */
+.vs-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.vs-block {
+  padding: 28px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.vs-block h3 {
+  font-size: 0.9rem; font-weight: 700; margin-bottom: 12px;
+  color: var(--accent-teal);
+}
+.vs-block p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.8; }
+
+/* ── Trust Grid ─────────────────────────────────────────────────── */
+.trust-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.trust-item {
+  padding: 28px; text-align: center;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-card);
+}
+.trust-item h3 {
+  font-size: 0.9rem; font-weight: 700; margin-bottom: 8px;
+}
+.trust-item p { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.7; }
+.trust-icon {
+  font-size: 1.5rem; margin-bottom: 12px; display: block;
+}
+
+/* ── Pricing ────────────────────────────────────────────────────── */
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px; max-width: 800px; margin: 0 auto;
+}
+.price-card {
+  padding: 36px; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  position: relative;
+}
+.price-card.featured {
+  border-color: var(--accent-teal);
+  box-shadow: var(--glow-teal);
+}
+.price-card .price-badge {
+  position: absolute; top: -12px; right: 24px;
+  padding: 4px 14px; font-size: 0.65rem; font-weight: 700;
+  background: var(--accent-teal); color: var(--bg-deep);
+  border-radius: 4px; letter-spacing: 0.1em;
+}
+.price-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.price-card .price {
+  font-size: 1.6rem; font-weight: 700; color: var(--accent-teal);
+  margin-bottom: 20px;
+}
+.price-card .price span { font-size: 0.8rem; color: var(--text-muted); }
+.price-features {
+  list-style: none;
+}
+.price-features li {
+  font-size: 0.78rem; color: var(--text-secondary);
+  padding: 6px 0; padding-left: 20px; position: relative;
+}
+.price-features li::before {
+  content: '+'; position: absolute; left: 0;
+  color: var(--accent-teal); font-weight: 700;
+}
+
+/* ── Final CTA ──────────────────────────────────────────────────── */
+.final-cta {
+  padding: 100px 0; text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-surface) 100%);
+  border-top: 1px solid var(--border);
+}
+.final-cta::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.final-cta h2 {
+  font-size: clamp(1.3rem, 3vw, 2rem); font-weight: 700;
+  margin-bottom: 12px; position: relative;
+}
+.final-cta .sub {
+  font-size: 0.9rem; color: var(--text-muted); margin-bottom: 36px;
+  position: relative;
+}
+.final-cta .cta-buttons {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  position: relative;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────── */
+.footer {
+  padding: 40px 0; border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer-brand { font-size: 0.9rem; font-weight: 700; color: var(--accent-teal); letter-spacing: 0.2em; margin-bottom: 8px; }
+.footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
+.footer-links a { font-size: 0.75rem; color: var(--text-muted); }
+.footer-links a:hover { color: var(--accent-teal); }
+.footer-copy { font-size: 0.7rem; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand">
+    <span class="nav-logo">DAGDA</span>
+    <span class="nav-tagline">Defensive AI Guardian & Digital Arsenal</span>
+  </div>
+  <button class="nav-hamburger" id="nav-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#modes">Modes</a></li>
+    <li><a href="#safeguards">Safeguards</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#workflow">Workflow</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-eyebrow">&gt; DAGDA v1.0 // KALI LINUX PURPLE</div>
+        <h1>Your AI Doesn't Just Monitor Your Network. It Defends It.</h1>
+        <p class="hero-sub">
+          640 security tools. 9 operational modes. One AI that understands them all.
+          Dagda is the cybersecurity command platform that watches, hunts, traps, and
+          fights &mdash; with safeguards that cannot be overridden.
+        </p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="document.getElementById('workflow').scrollIntoView({behavior:'smooth'})">Deploy Dagda</button>
+          <button class="btn-outline" onclick="document.getElementById('architecture').scrollIntoView({behavior:'smooth'})">Architecture Docs</button>
+        </div>
+        <div class="hero-trust">
+          <span>AGPL-3.0 Core</span>
+          <span>1488 Tests</span>
+          <span>Rust Security Core</span>
+          <span>Air-Gap Ready</span>
+        </div>
+      </div>
+      <div class="terminal-window">
+        <div class="terminal-titlebar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">dagda &mdash; sentinel</span>
+        </div>
+        <div class="terminal-body" id="hero-terminal"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS BAR ═══ -->
+<section class="stats-bar">
+  <div class="container">
+    <div class="stats-grid reveal" id="stats-section">
+      <div class="stat-item">
+        <div class="stat-number" data-target="640">0</div>
+        <div class="stat-label">Tools</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="55">0</div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="1488">0</div>
+        <div class="stat-label">Tests</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="9">0</div>
+        <div class="stat-label">Modes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="5">0</div>
+        <div class="stat-label">Safeguard Levels</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE PROBLEM ═══ -->
+<section class="section" id="problem">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; The Problem</div>
+      <h2 class="section-title">Security Teams Are Drowning</h2>
+    </div>
+    <div class="cards-grid">
+      <div class="card reveal">
+        <div class="card-icon red">//</div>
+        <h3>Tool Sprawl</h3>
+        <p>The average security team juggles 25&ndash;50 separate tools. Different CLIs,
+           different output formats, no shared context. Your nmap scan doesn't know about
+           your Suricata alerts. Your forensics don't inform your hardening. Every context
+           switch is a gap an attacker can exploit.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon amber">!!</div>
+        <h3>Alert Fatigue</h3>
+        <p>90% of alerts are noise. Without cross-source correlation, every anomaly looks
+           the same. You're context-switching between dashboards, losing the thread of actual
+           attacks while chasing false positives. The real breach hides in the flood.</p>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon purple">?</div>
+        <h3>The Expertise Gap</h3>
+        <p>Senior analysts are expensive and scarce. Junior analysts need months of mentoring.
+           Offensive skills atrophy without practice environments. Knowledge walks out the door
+           with every resignation. Your team's ceiling is your most experienced member.</p>
+      </div>
+    </div>
+    <p class="closing-line reveal">"You don't need more tools. You need one platform that makes every tool intelligent."</p>
+  </div>
+</section>
+
+<!-- ═══ THE SOLUTION ═══ -->
+<section class="section" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; The Solution</div>
+      <h2 class="section-title">Meet Dagda: Power Wielded With Wisdom</h2>
+      <p class="section-subtitle">
+        Named for the Irish god who carried a club that could kill with one end and heal
+        with the other. Dagda doesn't just detect threats &mdash; it understands, correlates,
+        responds, and teaches.
+      </p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <h3>AI That Acts</h3>
+        <p>Claude API primary, Ollama offline fallback. Not a chatbot &mdash; an autonomous agent
+           with 640 tools, a knowledge graph, Bayesian threat networks, and temporal correlation.
+           Distributed Crow agents extend its reach across your fleet. It doesn't just alert you. It defends you.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>Offense + Defense</h3>
+        <p>Bug bounty hunting, purple team training, honeypot operations, and automated incident
+           response &mdash; all behind a safeguard system that makes misuse structurally impossible.
+           The same platform for red, blue, and purple.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>Air-Gap Ready</h3>
+        <p>Ollama local LLM fallback means Dagda works in SCIF environments, classified networks,
+           and air-gapped labs. No cloud dependency. No telemetry. Your data never leaves your machine.</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>Learn While You Work</h3>
+        <p>Educational layer with 8 attack anatomies, 5 guided investigation workflows, and an Arena
+           mode that turns real detected attacks into training scenarios. Your team gets better every day
+           without leaving the platform.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MODE SHOWCASE ═══ -->
+<section class="section" id="modes">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Operational Modes</div>
+      <h2 class="section-title">Eight Modes. One Platform.</h2>
+      <p class="section-subtitle">
+        Each mode unlocks a different capability set with its own safeguard requirements.
+        Switch modes to match your mission. The AI adapts its tool suggestions, risk tolerance,
+        and operational posture accordingly.
+      </p>
+    </div>
+    <div class="reveal">
+      <div class="mode-tabs" id="mode-tabs">
+        <button class="mode-tab active" data-mode="sentinel">SENTINEL</button>
+        <button class="mode-tab" data-mode="triage">TRIAGE</button>
+        <button class="mode-tab" data-mode="investigator">INVESTIGATOR</button>
+        <button class="mode-tab" data-mode="deception">DECEPTION</button>
+        <button class="mode-tab" data-mode="incidentcmd">INCIDENT CMD</button>
+        <button class="mode-tab" data-mode="bughunter">BUG HUNTER</button>
+        <button class="mode-tab" data-mode="arena">ARENA</button>
+        <button class="mode-tab" data-mode="ghost">GHOST</button>
+      </div>
+
+      <!-- SENTINEL -->
+      <div class="mode-content active" id="mode-sentinel">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge green">ALWAYS ACTIVE</span>
+            <h3>The Ever-Watchful Guardian</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Monitors CPU, memory, disk, network, and processes in real time. Detects brute force
+              attacks, ARP spoofing, rogue DHCP, port scans, and DNS anomalies. Responds autonomously
+              &mdash; blocks IPs, kills suspicious processes, quarantines files &mdash; then explains
+              exactly why it acted.
+            </p>
+            <ul class="mode-features">
+              <li>Real-time system + network monitoring</li>
+              <li>8 passive threat detectors</li>
+              <li>Autonomous self-defense engine</li>
+              <li>Bayesian threat assessment</li>
+              <li>IDS/IPS integration (Suricata)</li>
+              <li>File integrity monitoring</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">sentinel</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">$</span> dagda --mode sentinel</div>
+              <div class="line"><span class="info">[SENTINEL]</span> Monitoring active...</div>
+              <div class="line"><span class="info">[21:04:12]</span> <span class="warning">ARP anomaly: gateway MAC changed</span></div>
+              <div class="line"><span class="info">[21:04:12]</span> Bayesian: MITM probability <span class="error">0.87</span></div>
+              <div class="line"><span class="info">[21:04:13]</span> <span class="success">AUTO-DEFENSE: ARP correction sent</span></div>
+              <div class="line"><span class="info">[21:04:13]</span> <span class="success">Attacker MAC blocked</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRIAGE -->
+      <div class="mode-content" id="mode-triage">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge amber">LEVEL 4+</span>
+            <h3>The First Responder</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              SOC Level 1 workflow. Assess alerts quickly, determine severity, escalate or close.
+              Speed and accuracy matter most &mdash; don't investigate deeply here. Escalate to
+              INVESTIGATOR for analysis or INCIDENT COMMANDER for response.
+            </p>
+            <ul class="mode-features">
+              <li>Alert queue assessment</li>
+              <li>Quick threat scoring</li>
+              <li>Security posture checks</li>
+              <li>Event correlation</li>
+              <li>Escalation recommendations</li>
+              <li>Log analysis</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">triage</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">[TRIAGE]</span> 12 alerts pending review</div>
+              <div class="line"><span class="warning">[ALERT #7]</span> <span class="warning">Brute force: 847 failed SSH logins</span></div>
+              <div class="line"><span class="info">[AI]</span> Threat score: <span class="error">7.8/10</span> — active attack</div>
+              <div class="line"><span class="info">[AI]</span> Recommend: escalate to INCIDENT CMD</div>
+              <div class="line"><span class="info">[ALERT #8]</span> DNS query spike (benign update)</div>
+              <div class="line"><span class="success">[AI]</span> Threat score: 1.2/10 — close as FP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVESTIGATOR -->
+      <div class="mode-content" id="mode-investigator">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge blue">LEVEL 3+</span>
+            <h3>Passive Intelligence & Forensics</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              OSINT, disk and memory forensics, evidence chain of custody, threat intel correlation.
+              Every artifact is hash-verified, every finding cross-referenced through the Knowledge Graph.
+              Passive by default &mdash; observe without disturbing.
+            </p>
+            <ul class="mode-features">
+              <li>DNS/WHOIS/Certificate Transparency</li>
+              <li>Disk, memory, browser forensics</li>
+              <li>Evidence chain of custody</li>
+              <li>STIX/TAXII 2.1 threat feeds</li>
+              <li>Active Directory LDAP enumeration</li>
+              <li>Cloud security posture analysis</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">investigator</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">&gt;</span> "Investigate the suspicious domain"</div>
+              <div class="line"><span class="info">[AI]</span> Running: dns_lookup + whois + ct_search</div>
+              <div class="line"><span class="info">[AI]</span> Domain registered 3 days ago</div>
+              <div class="line"><span class="warning">[AI]</span> <span class="warning">Cert issued by Let's Encrypt, 2 SANs</span></div>
+              <div class="line"><span class="info">[AI]</span> Cross-referencing KG... <span class="success">match found</span></div>
+              <div class="line"><span class="info">[AI]</span> Linked to prior alert: C2 beacon pattern</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DECEPTION -->
+      <div class="mode-content" id="mode-deception">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge purple">LEVEL 3+</span>
+            <h3>The Trap Layer</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Deploy honeypots, canary tokens, fake credentials, breadcrumbs, and decoy files.
+              Track and profile attackers in real time. Extract TTPs, credentials, and payloads.
+              Disruption actions (sinkhole, tarpit) require the counter-intel toggle.
+            </p>
+            <ul class="mode-features">
+              <li>7 honeypot types in isolated containers</li>
+              <li>Canary tokens + fake credentials</li>
+              <li>Breadcrumbs + decoy files</li>
+              <li>Attacker tracking + profiling</li>
+              <li>MITRE ATT&CK TTP extraction</li>
+              <li>Disruption: sinkhole, tarpit, redirect (gated)</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">deception</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">&gt;</span> "Deploy honeypot + canary tokens"</div>
+              <div class="line"><span class="info">[AI]</span> Deploying: SSH honeypot + 3 canary creds</div>
+              <div class="line"><span class="success">[DECEPTION]</span> Container hpot-ssh-01 running</div>
+              <div class="line"><span class="warning">[02:14:33]</span> <span class="warning">Login attempt: root/admin123</span></div>
+              <div class="line"><span class="warning">[02:14:35]</span> <span class="warning">Canary cred accessed! Tracking attacker...</span></div>
+              <div class="line"><span class="info">[AI]</span> Profile: T1059.004, T1105 | Risk: HIGH</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BUG HUNTER -->
+      <div class="mode-content" id="mode-bughunter">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge amber">LEVEL 2 REQUIRED</span>
+            <h3>Scope-Locked Vulnerability Research</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Every packet checked against your target whitelist. Nuclei scanning, SQLi/XSS/LFI/SSTI
+              testing, API security (GraphQL, JWT, OAuth), and web crawling &mdash; all with responsible
+              disclosure workflows built in. DNS resolution verified to prevent scope escape.
+            </p>
+            <ul class="mode-features">
+              <li>Scope-locked targeting (whitelist only)</li>
+              <li>Nuclei + custom vulnerability scanning</li>
+              <li>SQLi, XSS, LFI, SSTI testing</li>
+              <li>API security: GraphQL, JWT, OAuth, REST</li>
+              <li>WAF detection + 8 bypass techniques</li>
+              <li>Professional pentest reporting</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">bug-hunter</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">$</span> dagda --mode bug-hunter --scope targets.txt</div>
+              <div class="line"><span class="info">[BUG HUNTER]</span> Scope loaded: 3 targets</div>
+              <div class="line"><span class="prompt">&gt;</span> "Test the web app for injection flaws"</div>
+              <div class="line"><span class="info">[AI]</span> Running: nuclei_scan + sqli_test + xss_test</div>
+              <div class="line"><span class="error">[AI]</span> <span class="error">Found: 2 SQLi (HIGH), 1 XSS (MEDIUM)</span></div>
+              <div class="line"><span class="success">[AI]</span> Generating disclosure report...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ARENA -->
+      <div class="mode-content" id="mode-arena">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge red">LEVEL 1 REQUIRED</span>
+            <h3>Purple Team Training Platform</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Full offensive capabilities in network-isolated VMs. 5 pre-built multi-VM scenarios.
+              PvP (red vs blue) and PvT (player vs target) game modes with scoring, leaderboards,
+              and AI coaching. Real attacks detected by Sentinel auto-generate new training scenarios.
+            </p>
+            <ul class="mode-features">
+              <li>5 scenarios: Corporate, Cloud K8s, IoT, Healthcare, Financial</li>
+              <li>VM lab management (create, snapshot, restore)</li>
+              <li>PvP and PvT game modes</li>
+              <li>Multi-dimensional scoring + leaderboards</li>
+              <li>AI replay analysis + coaching</li>
+              <li>Enforced network isolation</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">arena</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">[ARENA]</span> Loading: Corporate Network scenario</div>
+              <div class="line"><span class="info">[ARENA]</span> 4 VMs ready. Network isolated: verified</div>
+              <div class="line"><span class="info">[ARENA]</span> Mode: PvT | Timer: 60:00</div>
+              <div class="line"><span class="prompt">&gt;</span> "Start with network reconnaissance"</div>
+              <div class="line"><span class="info">[AI]</span> Running: nmap SYN scan on 10.10.0.0/24</div>
+              <div class="line"><span class="success">[SCORE]</span> Objective 1/5 complete (+150pts)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INCIDENT COMMANDER -->
+      <div class="mode-content" id="mode-incidentcmd">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge" style="background:rgba(244,63,94,0.15);color:var(--rose)">LEVEL 3 REQUIRED</span>
+            <h3>Leading the Response</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Full incident response lifecycle. Case management, evidence collection,
+              containment actions, timeline reconstruction, and response playbook execution.
+              Coordinate from detection through remediation.
+            </p>
+            <ul class="mode-features">
+              <li>IR case management + evidence collection</li>
+              <li>Response playbook execution</li>
+              <li>Containment actions</li>
+              <li>Timeline reconstruction</li>
+              <li>Threat assessment scoring (0-10)</li>
+              <li>Post-incident learning</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">incident-cmd</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">[IR]</span> Incident #2024-0847 opened</div>
+              <div class="line"><span class="info">[AI]</span> Collecting artifacts from 3 hosts...</div>
+              <div class="line"><span class="info">[AI]</span> Timeline: initial access 14:22 UTC</div>
+              <div class="line"><span class="warning">[AI]</span> <span class="warning">Lateral movement detected: SMB/PsExec</span></div>
+              <div class="line"><span class="info">[AI]</span> Executing playbook: contain_lateral</div>
+              <div class="line"><span class="success">[IR]</span> Threat score: <span class="error">7.2/10</span> | Contained</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GHOST -->
+      <div class="mode-content" id="mode-ghost">
+        <div class="mode-panel">
+          <div class="mode-description">
+            <span class="mode-badge fuchsia">GHOST Button</span>
+            <h3>Invisible Investigation</h3>
+            <p style="font-size:0.82rem;color:var(--text-secondary);line-height:1.8;margin-bottom:16px;">
+              Absolute undetectability. Anti-detection layer with timing jitter, SOCKS5 routing,
+              user-agent rotation, and DoH rotation. Cryptographic evidence vault with SHA-256
+              Merkle trees and Bitcoin timestamp anchoring. Secure session cleanup with multi-pass
+              overwrite.
+            </p>
+            <ul class="mode-features">
+              <li>Whitelist-only tool access</li>
+              <li>Merkle tree evidence integrity</li>
+              <li>Bitcoin blockchain timestamping</li>
+              <li>Ed25519 digital signatures</li>
+              <li>Anti-detection (timing jitter, SOCKS5, DoH)</li>
+              <li>Secure multi-pass session cleanup</li>
+            </ul>
+          </div>
+          <div class="terminal-window mode-terminal">
+            <div class="terminal-titlebar">
+              <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
+              <span class="terminal-title">ghost</span>
+            </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">$</span> dagda --stealth-investigate</div>
+              <div class="line"><span class="comment">Type INVESTIGATE to confirm:</span> INVESTIGATE</div>
+              <div class="line"><span class="fuchsia">[GHOST]</span> Anti-detection layer active</div>
+              <div class="line"><span class="fuchsia">[GHOST]</span> Evidence vault initialized</div>
+              <div class="line"><span class="fuchsia">[GHOST]</span> Merkle root: a3f8c2e9...</div>
+              <div class="line"><span class="success">[GHOST]</span> Artifacts enrolled. Vault sealed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SAFEGUARD SYSTEM ═══ -->
+<section class="section" id="safeguards" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Safety Architecture</div>
+      <h2 class="section-title">Safety Isn't a Feature. It's the Architecture.</h2>
+      <p class="section-subtitle">
+        Five safeguard levels control what the AI can do. Raising safety is instant and unrestricted.
+        Lowering it requires deliberate, auditable escalation. The AI cannot override its own constraints.
+      </p>
+    </div>
+
+    <div class="safeguard-viz reveal">
+      <div class="safeguard-level active" data-level="5" onclick="toggleSafeguard(this)">
+        <div class="safeguard-num" style="color:var(--green)">5</div>
+        <div class="safeguard-name" style="color:var(--green)">FORTRESS</div>
+        <div class="safeguard-bar-wrap">
+          <div class="safeguard-bar" style="width:100%;background:var(--green)"></div>
+        </div>
+        <div class="safeguard-details">
+          <div class="safeguard-details-inner">
+            All actions require explicit approval. 2FA (TOTP) required to leave this level.
+            For active attacks and sensitive data handling. Click PANIC button or Ctrl+Shift+5 to activate instantly.
+          </div>
+        </div>
+      </div>
+      <div class="safeguard-level" data-level="4" onclick="toggleSafeguard(this)">
+        <div class="safeguard-num" style="color:#4ade80">4</div>
+        <div class="safeguard-name" style="color:#4ade80">VIGILANT</div>
+        <div class="safeguard-bar-wrap">
+          <div class="safeguard-bar" style="width:80%;background:#4ade80"></div>
+        </div>
+        <div class="safeguard-details">
+          <div class="safeguard-details-inner">
+            Autonomous defense active. Passive reconnaissance only. No offensive tools.
+            Ideal for day-to-day monitoring and investigation work.
+          </div>
+        </div>
+      </div>
+      <div class="safeguard-level" data-level="3" onclick="toggleSafeguard(this)">
+        <div class="safeguard-num" style="color:var(--amber)">3</div>
+        <div class="safeguard-name" style="color:var(--amber)">BALANCED</div>
+        <div class="safeguard-bar-wrap">
+          <div class="safeguard-bar" style="width:60%;background:var(--amber)"></div>
+        </div>
+        <div class="safeguard-details">
+          <div class="safeguard-details-inner">
+            Default level. Safe operations run autonomously. Offensive tools locked.
+            Dangerous operations require confirmation. Right for most users, most of the time.
+          </div>
+        </div>
+      </div>
+      <div class="safeguard-level" data-level="2" onclick="toggleSafeguard(this)">
+        <div class="safeguard-num" style="color:var(--orange)">2</div>
+        <div class="safeguard-name" style="color:var(--orange)">UNLOCKED</div>
+        <div class="safeguard-bar-wrap">
+          <div class="safeguard-bar" style="width:40%;background:var(--orange)"></div>
+        </div>
+        <div class="safeguard-details">
+          <div class="safeguard-details-inner">
+            Bug Hunter mode available. Scope-locked offensive tools enabled.
+            Per-engagement confirmation required. For authorized penetration testing.
+          </div>
+        </div>
+      </div>
+      <div class="safeguard-level" data-level="1" onclick="toggleSafeguard(this)">
+        <div class="safeguard-num" style="color:var(--red)">1</div>
+        <div class="safeguard-name" style="color:var(--red)">ARENA</div>
+        <div class="safeguard-bar-wrap">
+          <div class="safeguard-bar" style="width:20%;background:var(--red)"></div>
+        </div>
+        <div class="safeguard-details">
+          <div class="safeguard-details-inner">
+            Full purple team capabilities. VM-only targeting enforced. Network isolation verified
+            before activation. For CTF practice, training exercises, and purple team drills.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="guardrails reveal">
+      <h3>8 Unbreakable Guardrails</h3>
+      <ol>
+        <li>No data exfiltration to unauthorized destinations</li>
+        <li>No audit log tampering (hash-chained, append-only)</li>
+        <li>No self-modification of core safety code</li>
+        <li>No out-of-scope targeting (DNS verified)</li>
+        <li>No unlogged execution (every action recorded)</li>
+        <li>No fabricated capabilities (honest about limitations)</li>
+        <li>No stealth persistence (no hidden processes)</li>
+        <li>Always explain autonomous reasoning (transparency)</li>
+      </ol>
+    </div>
+
+    <div class="pull-quote reveal">
+      "Raising safety is instant and unrestricted. Lowering it requires deliberate, auditable
+      escalation. FORTRESS requires 2FA to leave. The AI cannot override its own constraints &mdash; ever.
+      These aren't policies. They're structural guarantees enforced in Rust."
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ARCHITECTURE ═══ -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Under the Hood</div>
+      <h2 class="section-title">Built for Operators Who Read Source Code</h2>
+      <p class="section-subtitle">
+        Not a wrapper around an LLM. A full cognitive security architecture with a Rust-enforced
+        permission boundary, intelligence fusion engines, and a deep integration ecosystem.
+      </p>
+    </div>
+    <div class="arch-grid">
+      <div class="arch-col reveal">
+        <h3><span style="color:var(--orange)">_</span> Rust Core</h3>
+        <p>Permission gate, sandbox engine, audit logger, and crypto module &mdash; all in Rust via
+           PyO3. Memory-safe, zero-cost abstractions, tamper-resistant. Python fallbacks for
+           cross-platform development.</p>
+        <ul class="arch-list rust">
+          <li>Ed25519 signatures + verification</li>
+          <li>AES-256-GCM data encryption</li>
+          <li>Argon2id key derivation</li>
+          <li>seccomp-bpf syscall filtering</li>
+          <li>Linux namespace isolation</li>
+          <li>Hash-chained audit trail</li>
+          <li>Key zeroization (no residual memory)</li>
+        </ul>
+      </div>
+      <div class="arch-col reveal">
+        <h3><span style="color:var(--accent-fuchsia)">_</span> AI Brain</h3>
+        <p>Not a chatbot wrapper. A full cognitive architecture with persistent memory,
+           probabilistic reasoning, and cross-module intelligence fusion across 13 bridges.</p>
+        <ul class="arch-list brain">
+          <li>Knowledge Graph (SQLite, 20+ entity types)</li>
+          <li>Bayesian Threat Network (7 scenarios, 15 observables)</li>
+          <li>Temporal Correlation Engine (4 pattern detectors)</li>
+          <li>Behavioral Fingerprinting (J-S divergence)</li>
+          <li>Attack Narrative Engine (auto-generated stories)</li>
+          <li>MITRE ATT&CK (~200 techniques, heatmaps)</li>
+          <li>Sigma 2.0 + STIX 2.1 evaluation</li>
+          <li>Attack prediction + adversarial reasoning</li>
+          <li>14 security frameworks (D3FEND, CAPEC, CIS, NIST...)</li>
+          <li>Morrigan fleet command (distributed Crows)</li>
+        </ul>
+      </div>
+      <div class="arch-col reveal">
+        <h3><span style="color:var(--accent-blue)">_</span> Integration Ecosystem</h3>
+        <p>Speaks every protocol. Integrates with the tools your team already uses.
+           Each integration follows the same pattern: detect, health-check, run, parse, ingest.</p>
+        <ul class="arch-list integrations">
+          <li>Ghidra (headless reverse engineering)</li>
+          <li>Zeek + Suricata (network IDS)</li>
+          <li>Volatility 3 (memory forensics)</li>
+          <li>Burp Suite + Nuclei (web scanning)</li>
+          <li>CAPE Sandbox (malware detonation)</li>
+          <li>Playwright (SPA automation)</li>
+          <li>mitmproxy (HTTP interception)</li>
+          <li>STIX/TAXII, CACAO, SIEM (CEF/ECS)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WORKFLOW ═══ -->
+<section class="section" id="workflow" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Getting Started</div>
+      <h2 class="section-title">From Install to Defended in 15 Minutes</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-step reveal">
+        <h3>1. Install</h3>
+        <div class="timeline-code">
+          <div class="line"><span class="prompt">$</span> git clone https://github.com/dagda-security/dagda</div>
+          <div class="line"><span class="prompt">$</span> cd dagda && make install</div>
+        </div>
+      </div>
+      <div class="timeline-step reveal">
+        <h3>2. Setup Wizard</h3>
+        <p>9-step guided configuration: security assessment, profile selection
+           (Minimal / Standard / Hardened / Paranoid), tool detection for 20 security tools,
+           auto-install missing dependencies, OS optimization, ML model setup.</p>
+        <div class="timeline-code">
+          <div class="line"><span class="prompt">$</span> dagda --setup</div>
+          <div class="line"><span class="info">[WIZARD]</span> Step 1/9: Security Assessment...</div>
+          <div class="line"><span class="info">[WIZARD]</span> Step 5/9: Found 14/20 tools installed</div>
+          <div class="line"><span class="success">[WIZARD]</span> Configuration complete.</div>
+        </div>
+      </div>
+      <div class="timeline-step reveal">
+        <h3>3. First Launch</h3>
+        <p>Sentinel mode activates automatically. Your system is now being monitored.
+           The AI HUD provides real-time interpretations in a bottom panel.</p>
+        <div class="timeline-code">
+          <div class="line"><span class="prompt">$</span> dagda</div>
+          <div class="line"><span class="success">[SENTINEL]</span> Monitoring active</div>
+          <div class="line"><span class="info">[HUD]</span> AI interpretation engine ready</div>
+          <div class="line"><span class="info">[HUD]</span> Security posture: <span class="success">72/100</span></div>
+        </div>
+      </div>
+      <div class="timeline-step reveal">
+        <h3>4. Talk to It</h3>
+        <p>Natural language interaction. Ask questions, request scans, investigate threats.
+           The AI selects the right tools, correlates findings, and builds a persistent knowledge graph.</p>
+        <div class="timeline-code">
+          <div class="line"><span class="prompt">&gt;</span> "What's the security posture of this system?"</div>
+          <div class="line"><span class="info">[AI]</span> Running hardening assessment... 30+ CIS checks</div>
+          <div class="line"><span class="info">[AI]</span> Security Score: <span class="warning">72/100 (Grade C)</span></div>
+          <div class="line"><span class="warning">[AI]</span> Issues: SSH root login, ASLR disabled</div>
+          <div class="line"><span class="info">[AI]</span> Shall I apply hardening fixes?</div>
+        </div>
+      </div>
+      <div class="timeline-step reveal">
+        <h3>5. Expand</h3>
+        <p>Add honeypots. Set up bug hunting scope. Train your team in the Arena.
+           Deploy the web dashboard for your SOC. Every feature unlocks deliberately
+           through the safeguard system &mdash; never by accident.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DIFFERENTIATION ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Why Dagda</div>
+      <h2 class="section-title">What Makes This Different</h2>
+    </div>
+    <div class="vs-grid">
+      <div class="vs-block reveal">
+        <h3>vs. Individual Tools</h3>
+        <p>nmap, Burp, Suricata, Zeek &mdash; they're each great at one thing. Dagda orchestrates
+           all of them through a single AI that maintains context across every tool, correlates
+           findings automatically through a knowledge graph, and builds a persistent model of your
+           environment that gets smarter with every scan.</p>
+      </div>
+      <div class="vs-block reveal">
+        <h3>vs. SIEM Platforms</h3>
+        <p>SIEMs collect and search. Dagda thinks. It runs Bayesian threat assessment, temporal
+           correlation, behavioral fingerprinting &mdash; and then acts. It deploys honeypots, hardens
+           systems, and responds to incidents. SIEMs show you dashboards. Dagda defends you.</p>
+      </div>
+      <div class="vs-block reveal">
+        <h3>vs. AI Security Chatbots</h3>
+        <p>They wrap an LLM around a few API calls. Dagda has 640 tools, a Rust-enforced permission
+           gate, scope-locked targeting, hash-chained audit logs, and 8 unbreakable guardrails.
+           This isn't AI for security theater. This is AI for professionals who understand the stakes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUST SIGNALS ═══ -->
+<section class="section" style="background: var(--bg-surface);">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Trust</div>
+      <h2 class="section-title">Engineered for Trust</h2>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item reveal">
+        <span class="trust-icon" style="color:var(--green)">{&nbsp;}</span>
+        <h3>Open Source Core</h3>
+        <p>AGPL-3.0. Read every line. Audit every decision. Fork it, modify it, contribute to it.
+           The core is free forever.</p>
+      </div>
+      <div class="trust-item reveal">
+        <span class="trust-icon" style="color:var(--accent-teal)">1488</span>
+        <h3>Test Coverage</h3>
+        <p>1488 Python tests + 33 Rust tests. CI/CD with GitHub Actions. We test the safety systems
+           as hard as the features.</p>
+      </div>
+      <div class="trust-item reveal">
+        <span class="trust-icon" style="color:var(--accent-purple)">&empty;</span>
+        <h3>No Telemetry</h3>
+        <p>Zero data collection. No analytics. No phone-home. Air-gap compatible with Ollama
+           local LLM. Your data never leaves your machine.</p>
+      </div>
+      <div class="trust-item reveal">
+        <span class="trust-icon" style="color:var(--amber)">&check;</span>
+        <h3>Reproducible Builds</h3>
+        <p>Signed releases, threshold signatures, never auto-update. You verify before you deploy.
+           No surprises.</p>
+      </div>
+      <div class="trust-item reveal">
+        <span class="trust-icon" style="color:var(--accent-blue)">&#9741;</span>
+        <h3>Self-Securing</h3>
+        <p>Dagda monitors its own integrity. SHA-256 baseline verification of all source files on startup,
+           CycloneDX SBOM of its own dependencies, a 10-point self-hardening audit, AST-based SAST scanner
+           (16 rules), and secret scanner (19 regex patterns for credential detection). If critical files
+           are tampered with, Dagda halts before loading.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ═══ -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">&gt; Pricing</div>
+      <h2 class="section-title">Start Free. Scale When Ready.</h2>
+      <p class="section-subtitle">
+        The Community Edition is genuinely complete &mdash; not a crippled trial. Every tool,
+        every mode, every safeguard. Enterprise adds multi-user collaboration and support.
+      </p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card featured reveal">
+        <div class="price-badge">MOST POPULAR</div>
+        <h3>Community Edition</h3>
+        <div class="price">Free <span>/ AGPL-3.0</span></div>
+        <ul class="price-features">
+          <li>All 640 tools across 55+ categories</li>
+          <li>All 9 operational modes</li>
+          <li>Full 5-tier safeguard system</li>
+          <li>TUI + Web Dashboard</li>
+          <li>Claude API + Ollama (bring your key)</li>
+          <li>Knowledge Graph + Bayesian Engine</li>
+          <li>Plugin system with signing</li>
+          <li>Malware Lab + CAPE integration</li>
+          <li>Single-user deployment</li>
+          <li>Community support</li>
+        </ul>
+      </div>
+      <div class="price-card reveal">
+        <h3>Enterprise Edition</h3>
+        <div class="price">Contact Us <span>/ Commercial</span></div>
+        <ul class="price-features">
+          <li>Everything in Community</li>
+          <li>Multi-user mesh (WireGuard + mTLS)</li>
+          <li>RBAC (Admin, Operator, Analyst, Viewer)</li>
+          <li>Intelligence sync across nodes</li>
+          <li>Custom plugin signing keys</li>
+          <li>Deployment templates (Docker, systemd)</li>
+          <li>Priority support + SLA</li>
+          <li>Consulting + training available</li>
+          <li>Custom integration development</li>
+          <li>Dedicated Slack channel</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINAL CTA ═══ -->
+<section class="final-cta">
+  <div class="container">
+    <h2 class="reveal">Your Network Is Being Probed Right Now.</h2>
+    <p class="sub reveal">The only question is whether you know about it.</p>
+    <div class="cta-buttons reveal">
+      <button class="btn-primary" onclick="document.getElementById('workflow').scrollIntoView({behavior:'smooth'})">Deploy Dagda</button>
+      <button class="btn-outline">Star on GitHub</button>
+      <button class="btn-outline">Read the Docs</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-brand">DAGDA</div>
+    <div class="footer-links">
+      <a href="#">GitHub</a>
+      <a href="#">Documentation</a>
+      <a href="#">Architecture Spec</a>
+      <a href="#">Changelog</a>
+      <a href="#">AGPL-3.0 License</a>
+    </div>
+    <p class="footer-copy">
+      Built with Python, Rust, and the conviction that security tools should be safe.
+      <br>Dagda &mdash; Defensive AI Guardian & Digital Arsenal. Named for the god
+      who wielded power with wisdom.
+    </p>
+  </div>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ── Navbar scroll ──────────────────────────────────────────────────
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ── Mobile nav toggle ──────────────────────────────────────────────
+document.getElementById('nav-toggle').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+document.querySelectorAll('#nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('nav-links').classList.remove('open');
+  });
+});
+
+// ── Scroll reveal ──────────────────────────────────────────────────
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ── Stat counters ──────────────────────────────────────────────────
+let statsCounted = false;
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !statsCounted) {
+      statsCounted = true;
+      document.querySelectorAll('.stat-number').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 2000;
+        const start = performance.now();
+        const animate = (now) => {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // easeOutQuad
+          const eased = 1 - (1 - progress) * (1 - progress);
+          el.textContent = Math.floor(eased * target);
+          if (progress < 1) requestAnimationFrame(animate);
+          else el.textContent = target;
+        };
+        requestAnimationFrame(animate);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+const statsSection = document.getElementById('stats-section');
+if (statsSection) statsObserver.observe(statsSection);
+
+// ── Mode tabs ──────────────────────────────────────────────────────
+document.querySelectorAll('.mode-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    // Deactivate all tabs and content
+    document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.mode-content').forEach(c => c.classList.remove('active'));
+    // Activate clicked tab and its content
+    tab.classList.add('active');
+    const modeId = 'mode-' + tab.dataset.mode;
+    const content = document.getElementById(modeId);
+    if (content) content.classList.add('active');
+  });
+});
+
+// ── Safeguard toggle ───────────────────────────────────────────────
+function toggleSafeguard(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.safeguard-level').forEach(l => l.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+// ── Hero terminal typing effect ────────────────────────────────────
+const scenarios = [
+  [
+    { text: '$ dagda --mode sentinel', cls: 'prompt' },
+    { text: '[SENTINEL] Monitoring active...', cls: 'info' },
+    { text: '[21:04:12] ARP anomaly detected: gateway MAC changed', cls: 'warning' },
+    { text: '[21:04:12] Bayesian threat: MITM probability 0.87', cls: 'alert' },
+    { text: '[21:04:13] AUTO-DEFENSE: Gratuitous ARP correction sent', cls: 'success' },
+    { text: '[21:04:13] AUTO-DEFENSE: Gateway ARP entry pinned', cls: 'success' },
+    { text: '[21:04:14] Threat neutralized. Attacker MAC blocked.', cls: 'success' },
+  ],
+  [
+    { text: '$ dagda --mode bug-hunter --scope targets.txt', cls: 'prompt' },
+    { text: '[BUG HUNTER] Scope loaded: 3 targets', cls: 'info' },
+    { text: '> "Scan the web application for injection vulns"', cls: '' },
+    { text: '[AI] Running: nuclei_scan + sqli_test + xss_test', cls: 'info' },
+    { text: '[AI] Found: 2 SQLi (HIGH), 1 XSS (MEDIUM)', cls: 'error' },
+    { text: '[AI] WAF detected: Cloudflare. Adapting payloads...', cls: 'warning' },
+    { text: '[AI] Generating responsible disclosure report...', cls: 'success' },
+  ],
+  [
+    { text: '$ dagda --stealth-investigate', cls: 'prompt' },
+    { text: 'Type INVESTIGATE to confirm: INVESTIGATE', cls: 'comment' },
+    { text: '[GHOST] Anti-detection layer active', cls: 'fuchsia' },
+    { text: '[GHOST] Evidence vault initialized', cls: 'fuchsia' },
+    { text: '[GHOST] Merkle tree root: a3f8c2e9...', cls: 'fuchsia' },
+    { text: '[GHOST] Timing jitter: enabled (50-200ms)', cls: 'fuchsia' },
+    { text: '> Collecting artifacts... vault-enrolled', cls: 'success' },
+  ]
+];
+
+const heroTerminal = document.getElementById('hero-terminal');
+let currentScenario = 0;
+let currentLine = 0;
+let currentChar = 0;
+let lineEl = null;
+let typingTimeout = null;
+
+function clearTerminal() {
+  heroTerminal.innerHTML = '';
+  currentLine = 0;
+  currentChar = 0;
+  lineEl = null;
+}
+
+function typeNextChar() {
+  const scenario = scenarios[currentScenario];
+  if (currentLine >= scenario.length) {
+    // Pause, then move to next scenario
+    typingTimeout = setTimeout(() => {
+      currentScenario = (currentScenario + 1) % scenarios.length;
+      clearTerminal();
+      typeNextChar();
+    }, 3500);
+    return;
+  }
+
+  const line = scenario[currentLine];
+  if (currentChar === 0) {
+    lineEl = document.createElement('div');
+    lineEl.className = 'line';
+    heroTerminal.appendChild(lineEl);
+  }
+
+  if (currentChar < line.text.length) {
+    // Build the line character by character
+    const span = document.createElement('span');
+    span.className = line.cls;
+    span.textContent = line.text.substring(0, currentChar + 1);
+    lineEl.innerHTML = '';
+    lineEl.appendChild(span);
+
+    // Add cursor
+    const cursor = document.createElement('span');
+    cursor.className = 'terminal-cursor';
+    lineEl.appendChild(cursor);
+
+    currentChar++;
+    typingTimeout = setTimeout(typeNextChar, 18 + Math.random() * 25);
+  } else {
+    // Remove cursor from completed line
+    const cursor = lineEl.querySelector('.terminal-cursor');
+    if (cursor) cursor.remove();
+    currentLine++;
+    currentChar = 0;
+    typingTimeout = setTimeout(typeNextChar, 400);
+  }
+}
+
+// Start typing after a short delay
+setTimeout(typeNextChar, 800);
+</script>
+
+</body>
+</html>

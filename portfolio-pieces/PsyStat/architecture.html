@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PsyStat Nexus - Architecture & Services Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0B0F1A;--surface:#111827;--surface2:#1E293B;--border:#334155;--text:#F8FAFC;--text2:#94A3B8;--accent:#6366F1;--accent2:#818CF8;--green:#22C55E;--yellow:#EAB308;--red:#EF4444;--cyan:#06B6D4;--orange:#F97316}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+header{text-align:center;padding:60px 0 40px;border-bottom:1px solid var(--border)}
+header h1{font-size:2.2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--text2);margin-top:8px;font-size:1.05rem}
+.toggle-bar{display:flex;justify-content:center;margin:32px 0;gap:0}
+.toggle-btn{padding:10px 28px;font-family:'Inter',sans-serif;font-size:.95rem;font-weight:600;border:1px solid var(--border);background:var(--surface);color:var(--text2);cursor:pointer;transition:.2s}
+.toggle-btn:first-child{border-radius:8px 0 0 8px}
+.toggle-btn:last-child{border-radius:0 8px 8px 0}
+.toggle-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+section{margin-bottom:48px}
+h2{font-size:1.5rem;font-weight:700;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+h2 .num{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;background:var(--accent);border-radius:8px;font-size:.85rem;font-weight:700;flex-shrink:0}
+h3{font-size:1.1rem;font-weight:600;margin:16px 0 8px;color:var(--accent2)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.75rem;font-weight:600;margin-left:8px}
+.tag-req{background:rgba(34,197,94,.15);color:var(--green)}
+.tag-opt{background:rgba(234,179,8,.15);color:var(--yellow)}
+.tag-plan{background:rgba(99,102,241,.15);color:var(--accent2)}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin-bottom:8px}
+th{text-align:left;padding:10px 12px;background:var(--surface2);color:var(--text2);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid rgba(51,65,85,.5)}
+tr:hover td{background:rgba(99,102,241,.05)}
+code,.mono{font-family:'JetBrains Mono',monospace;font-size:.85rem;background:rgba(99,102,241,.1);padding:2px 6px;border-radius:4px}
+pre{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.7;color:var(--text2)}
+.plain{display:block}.tech{display:none}
+body.tech-mode .plain{display:none}body.tech-mode .tech{display:block}
+
+/* Architecture Diagram */
+.arch-diagram{display:flex;flex-direction:column;align-items:center;gap:0;padding:24px 0}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.arch-box{padding:12px 20px;border-radius:10px;font-weight:600;font-size:.9rem;text-align:center;border:2px solid;min-width:140px;position:relative}
+.arch-box.device{background:rgba(6,182,212,.1);border-color:var(--cyan);color:var(--cyan)}
+.arch-box.frontend{background:rgba(99,102,241,.1);border-color:var(--accent);color:var(--accent2);font-size:1rem;padding:16px 32px}
+.arch-box.backend{background:rgba(249,115,22,.1);border-color:var(--orange);color:var(--orange)}
+.arch-box.db{background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)}
+.arch-box.ai{background:rgba(168,85,247,.1);border-color:#A855F7;color:#C084FC}
+.arch-box small{display:block;font-weight:400;font-size:.75rem;opacity:.8;margin-top:2px}
+.arch-line{width:3px;height:28px;background:var(--border);margin:0 auto}
+.arch-line-h{height:3px;width:40px;background:var(--border)}
+.arch-split{display:flex;align-items:flex-start;gap:40px;justify-content:center}
+.arch-col{display:flex;flex-direction:column;align-items:center;gap:0}
+
+/* Service cards */
+.svc-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.svc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;flex-shrink:0}
+.svc-links{display:flex;gap:16px;font-size:.85rem;margin:8px 0}
+.svc-env{margin-top:10px}
+.svc-env code{display:block;margin:3px 0;background:var(--surface2);padding:4px 10px;border-radius:4px;font-size:.8rem}
+.svc-cost{margin-top:8px;font-size:.9rem;color:var(--text2)}
+.svc-cost strong{color:var(--green)}
+
+/* DB diagram */
+.db-table{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.db-table-name{background:var(--accent);color:#fff;padding:8px 14px;font-weight:700;font-size:.9rem}
+.db-cols{padding:8px 14px;background:var(--surface);font-size:.82rem}
+.db-cols div{padding:3px 0;border-bottom:1px solid rgba(51,65,85,.3);display:flex;justify-content:space-between}
+.db-cols div:last-child{border:none}
+.db-type{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:.78rem}
+.db-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+
+/* Endpoint groups */
+.ep-group{margin-bottom:12px}
+.ep-group summary{cursor:pointer;font-weight:600;color:var(--accent2);padding:8px 0;font-size:.95rem}
+.ep-group summary:hover{color:var(--text)}
+.ep-row{display:flex;gap:10px;padding:4px 0;font-size:.85rem;align-items:baseline}
+.ep-method{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:4px;min-width:48px;text-align:center}
+.ep-post{background:rgba(99,102,241,.2);color:var(--accent2)}
+.ep-get{background:rgba(34,197,94,.2);color:var(--green)}
+.ep-delete{background:rgba(239,68,68,.2);color:var(--red)}
+
+footer{text-align:center;padding:40px 0;border-top:1px solid var(--border);color:var(--text2);font-size:.9rem}
+footer a{margin:0 12px}
+@media(max-width:640px){
+  header h1{font-size:1.5rem}
+  .card-grid,.db-grid{grid-template-columns:1fr}
+  .arch-split{flex-direction:column;gap:16px}
+  table{font-size:.78rem}
+  th,td{padding:6px 8px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>PsyStat Nexus &mdash; Architecture &amp; Services Map</h1>
+  <p>Complete technical reference for developers and maintainers</p>
+</header>
+
+<div class="toggle-bar">
+  <button class="toggle-btn active" onclick="setMode('plain')">Plain Language</button>
+  <button class="toggle-btn" onclick="setMode('tech')">Technical</button>
+</div>
+
+<!-- ─── SECTION 1: ARCHITECTURE DIAGRAM ──────────────────────────── -->
+<section>
+<h2><span class="num">1</span> Architecture Diagram</h2>
+<div class="plain">
+  <p style="color:var(--text2);margin-bottom:16px">How the pieces of PsyStat connect: users access the app from any device, the app talks to two backend services (Supabase for user accounts and data, Railway for running statistics and AI).</p>
+</div>
+<div class="tech">
+  <p style="color:var(--text2);margin-bottom:16px">Three-tier architecture: Expo/React Native universal client communicates via REST to a FastAPI backend on Railway and directly to Supabase (auth, Postgres, storage). The backend calls the Anthropic API for AI features. JWT tokens from Supabase authenticate all protected requests.</p>
+</div>
+
+<div class="arch-diagram">
+  <div class="arch-row">
+    <div class="arch-box device">iOS<small>App Store</small></div>
+    <div class="arch-box device">Android<small>Google Play</small></div>
+    <div class="arch-box device">Web<small>Vercel / Browser</small></div>
+  </div>
+  <div class="arch-line"></div>
+  <div class="arch-box frontend">Expo / React Native<small>psystat-app/ &mdash; TypeScript, Expo Router, 80+ components</small></div>
+  <div class="arch-line"></div>
+  <div class="arch-split">
+    <div class="arch-col">
+      <div class="arch-box db">Supabase<small>Auth + PostgreSQL + Storage</small></div>
+      <div style="color:var(--text2);font-size:.8rem;text-align:center;margin-top:6px">JWT tokens, 7 tables, RLS</div>
+    </div>
+    <div class="arch-col">
+      <div class="arch-box backend">Railway Backend<small>FastAPI / Python 3.12</small></div>
+      <div class="arch-line"></div>
+      <div class="arch-box ai">Anthropic API<small>Claude Sonnet + Opus</small></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ─── SECTION 2: SERVICES & ACCOUNTS ───────────────────────────── -->
+<section>
+<h2><span class="num">2</span> Services &amp; Accounts</h2>
+
+<div class="card-grid">
+
+<!-- Supabase -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(34,197,94,.15);color:var(--green)">S</div>
+    <div><strong>Supabase</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Handles user sign-up/login, stores all user data (analyses, notes, projects), and enforces per-user data isolation so nobody can see another user's work.</p></div>
+  <div class="tech"><p>PostgreSQL 15 via Supabase-hosted instance. Auth uses email/password with JWT (HS256). Row-level security on all 7 tables. Client SDK communicates directly from frontend; backend uses service-role key for admin operations.</p></div>
+  <div class="svc-links">
+    <a href="https://supabase.com" target="_blank">Website</a>
+    <a href="https://app.supabase.com" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>EXPO_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co</code>
+    <code>EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbG...</code>
+    <code>SUPABASE_SECRET_KEY=eyJhbG... <span style="color:var(--yellow)">(Railway only)</span></code>
+    <code>SUPABASE_JWT_SECRET=your-jwt-secret <span style="color:var(--yellow)">(Railway only)</span></code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Free</strong> up to 500MB &bull; $25/mo Pro plan</div>
+</div>
+
+<!-- Railway -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(249,115,22,.15);color:var(--orange)">R</div>
+    <div><strong>Railway</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Runs the Python backend that performs all statistical calculations (t-tests, ANOVA, regressions, etc.) and routes AI requests to Claude. This is where the heavy math happens.</p></div>
+  <div class="tech"><p>FastAPI + Uvicorn on Railway. 77 routers, 240+ endpoints. Dependencies: scipy, statsmodels, pandas, numpy, scikit-learn, networkx, lifelines, anthropic SDK. SQLite-backed rate limiting (60 req/min auth, 20 unauth). NumpySafeResponse serializer for numpy types.</p></div>
+  <div class="svc-links">
+    <a href="https://railway.app" target="_blank">Website</a>
+    <a href="https://railway.app/dashboard" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>ANTHROPIC_API_KEY=sk-ant-api03-...</code>
+    <code>SUPABASE_URL=https://xxxxx.supabase.co</code>
+    <code>SUPABASE_SECRET_KEY=eyJhbG...</code>
+    <code>SUPABASE_JWT_SECRET=your-jwt-secret</code>
+    <code>ALLOWED_ORIGINS=https://psystat-nexus.vercel.app</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>$5-20/mo</strong> usage-based</div>
+</div>
+
+<!-- Vercel -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(248,250,252,.1);color:var(--text)">V</div>
+    <div><strong>Vercel</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Hosts the web version of the app (what users see at psystat-nexus.vercel.app) plus the marketing pages (landing, features, privacy, terms).</p></div>
+  <div class="tech"><p>Static hosting for Expo web export (metro bundler, static output) and standalone HTML pages (landing.html, features.html, etc.). Auto-deploys from git. Edge network CDN.</p></div>
+  <div class="svc-links">
+    <a href="https://vercel.com" target="_blank">Website</a>
+    <a href="https://vercel.com/dashboard" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>EXPO_PUBLIC_API_URL=https://your-railway-url.up.railway.app</code>
+    <code>EXPO_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co</code>
+    <code>EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbG...</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Free</strong> (Hobby) &bull; $20/mo Pro</div>
+</div>
+
+<!-- Anthropic -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(168,85,247,.15);color:#C084FC">A</div>
+    <div><strong>Anthropic (Claude API)</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Powers the AI assistant (chat, analysis interpretation, IRB generation, literature gap analysis, reviewer response drafting, education content, and ethnographic coding help).</p></div>
+  <div class="tech"><p>Claude API via anthropic Python SDK (v0.42.0). Models: claude-sonnet-4-20250514 (default), claude-opus-4-20250514 (Scholar tier). Backend proxies all AI calls; frontend never contacts Anthropic directly. Tier-based rate limits enforced server-side.</p></div>
+  <div class="svc-links">
+    <a href="https://anthropic.com" target="_blank">Website</a>
+    <a href="https://console.anthropic.com" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>ANTHROPIC_API_KEY=sk-ant-api03-... <span style="color:var(--yellow)">(Railway only)</span></code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Pay-per-use</strong> &mdash; ~$0.036/Sonnet msg, ~$0.23/Opus msg</div>
+</div>
+
+<!-- Expo / EAS -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(99,102,241,.15);color:var(--accent2)">E</div>
+    <div><strong>Expo / EAS</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Build service that compiles the app into iOS and Android binaries you can submit to the App Store and Google Play, without needing a Mac for iOS builds.</p></div>
+  <div class="tech"><p>Expo SDK 55, EAS Build with 3 profiles: development (simulator), preview (internal APK), production (auto-increment, app-bundle for Android, latest image for iOS). EAS Submit configured for both stores. eas.json defines build/submit config.</p></div>
+  <div class="svc-links">
+    <a href="https://expo.dev" target="_blank">Website</a>
+    <a href="https://expo.dev/accounts" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>Config: eas.json (checked into repo)</code>
+    <code>EAS secrets via: eas secret:create</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Free</strong> (30 builds/mo) &bull; $99/mo (unlimited)</div>
+</div>
+
+<!-- Apple Developer -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(248,250,252,.1);color:var(--text)">&#63743;</div>
+    <div><strong>Apple Developer</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Required membership to publish the app on the iOS App Store. Needed for signing certificates and App Store Connect access.</p></div>
+  <div class="tech"><p>Apple Developer Program membership. Bundle ID: com.psystat.nexus. App Store Connect for TestFlight, review submission, IAP setup. Privacy Nutrition Labels required. ATT prompt configured in app.json infoPlist.</p></div>
+  <div class="svc-links">
+    <a href="https://developer.apple.com" target="_blank">Developer Portal</a>
+    <a href="https://appstoreconnect.apple.com" target="_blank">App Store Connect</a>
+  </div>
+  <div class="svc-env">
+    <code>EAS submit config: appleId, ascAppId, appleTeamId</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>$99/year</strong></div>
+</div>
+
+<!-- Google Play -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(34,197,94,.15);color:var(--green)">GP</div>
+    <div><strong>Google Play Console</strong><span class="tag tag-req">Required</span></div>
+  </div>
+  <div class="plain"><p>Required to publish the app on the Google Play Store for Android devices. One-time registration fee.</p></div>
+  <div class="tech"><p>Play Console for app listing, content rating (IARC), data safety form, release management. Package: com.psystat.nexus. Uses Play App Signing (default with EAS). Service account key (google-services.json) for automated submissions.</p></div>
+  <div class="svc-links">
+    <a href="https://play.google.com/console" target="_blank">Play Console</a>
+  </div>
+  <div class="svc-env">
+    <code>google-services.json (for EAS submit)</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>$25 one-time</strong></div>
+</div>
+
+<!-- RevenueCat -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(234,179,8,.15);color:var(--yellow)">RC</div>
+    <div><strong>RevenueCat</strong><span class="tag tag-plan">Planned</span></div>
+  </div>
+  <div class="plain"><p>Will manage in-app subscriptions across iOS and Android so you don't have to build purchase validation yourself. Handles receipt verification, entitlements, and analytics.</p></div>
+  <div class="tech"><p>SDK: react-native-purchases. Replaces current AsyncStorage-based tier tracking in subscription.ts. Entitlements: pro (Researcher $9.99/mo), premium (Scholar $24.99/mo). Will handle Apple/Google receipt validation, webhook-based tier sync.</p></div>
+  <div class="svc-links">
+    <a href="https://revenuecat.com" target="_blank">Website</a>
+    <a href="https://app.revenuecat.com" target="_blank">Dashboard</a>
+  </div>
+  <div class="svc-env">
+    <code>REVENUECAT_API_KEY=appl_... (app config)</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Free</strong> under $2.5K MTR &bull; 1% of revenue after</div>
+</div>
+
+<!-- AdMob -->
+<div class="card">
+  <div class="svc-header">
+    <div class="svc-icon" style="background:rgba(234,179,8,.15);color:var(--yellow)">Ad</div>
+    <div><strong>Google AdMob / AdSense</strong><span class="tag tag-plan">Planned</span></div>
+  </div>
+  <div class="plain"><p>Will display ads to free-tier users as a revenue source. AdMob for mobile apps, AdSense for the web version. Paid users see no ads.</p></div>
+  <div class="tech"><p>AdMob for React Native (react-native-google-mobile-ads), AdSense script tag for web. ATT prompt required on iOS before tracking. Banner ads on dashboard and module screens for free tier (showAds flag in subscription.ts).</p></div>
+  <div class="svc-links">
+    <a href="https://admob.google.com" target="_blank">AdMob</a>
+    <a href="https://adsense.google.com" target="_blank">AdSense</a>
+  </div>
+  <div class="svc-env">
+    <code>ADMOB_APP_ID=ca-app-pub-xxxxx~yyyyy</code>
+    <code>ADMOB_BANNER_ID=ca-app-pub-xxxxx/yyyyy</code>
+  </div>
+  <div class="svc-cost">Cost: <strong>Revenue source</strong>, not a cost</div>
+</div>
+
+</div><!-- card-grid -->
+</section>
+
+<!-- ─── SECTION 3: DATABASE SCHEMA ───────────────────────────────── -->
+<section>
+<h2><span class="num">3</span> Database Schema</h2>
+<div class="plain"><p style="color:var(--text2);margin-bottom:16px">Supabase stores 7 tables. Every table is locked down so each user can only see and edit their own data. All tables use auto-generated UUIDs and timestamps.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:16px">PostgreSQL 15 on Supabase. All tables have RLS enabled with policy <code>auth.uid() = user_id</code>. Tables with <code>updated_at</code> have a trigger function (<code>update_updated_at()</code>) that auto-updates on row modification. Foreign keys reference <code>auth.users</code>.</p></div>
+
+<div class="db-grid">
+
+<div class="db-table">
+  <div class="db-table-name">analyses</div>
+  <div class="db-cols">
+    <div><span>id</span><span class="db-type">uuid PK</span></div>
+    <div><span>user_id</span><span class="db-type">uuid FK &rarr; auth.users</span></div>
+    <div><span>module</span><span class="db-type">text</span></div>
+    <div><span>test_type</span><span class="db-type">text</span></div>
+    <div><span>inputs</span><span class="db-type">jsonb</span></div>
+    <div><span>results</span><span class="db-type">jsonb</span></div>
+    <div><span>notes</span><span class="db-type">text</span></div>
+    <div><span>created_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">field_notes</div>
+  <div class="db-cols">
+    <div><span>id</span><span class="db-type">uuid PK</span></div>
+    <div><span>user_id</span><span class="db-type">uuid FK &rarr; auth.users</span></div>
+    <div><span>title</span><span class="db-type">text</span></div>
+    <div><span>content</span><span class="db-type">text</span></div>
+    <div><span>codes</span><span class="db-type">text[]</span></div>
+    <div><span>location</span><span class="db-type">text</span></div>
+    <div><span>created_at</span><span class="db-type">timestamptz</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">conversations</div>
+  <div class="db-cols">
+    <div><span>id</span><span class="db-type">uuid PK</span></div>
+    <div><span>user_id</span><span class="db-type">uuid FK &rarr; auth.users</span></div>
+    <div><span>name</span><span class="db-type">text</span></div>
+    <div><span>messages</span><span class="db-type">jsonb</span></div>
+    <div><span>created_at</span><span class="db-type">timestamptz</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">projects</div>
+  <div class="db-cols">
+    <div><span>id</span><span class="db-type">uuid PK</span></div>
+    <div><span>user_id</span><span class="db-type">uuid FK &rarr; auth.users</span></div>
+    <div><span>name</span><span class="db-type">text</span></div>
+    <div><span>description</span><span class="db-type">text</span></div>
+    <div><span>module</span><span class="db-type">text</span></div>
+    <div><span>tags</span><span class="db-type">text[]</span></div>
+    <div><span>data</span><span class="db-type">jsonb</span></div>
+    <div><span>created_at</span><span class="db-type">timestamptz</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">user_preferences</div>
+  <div class="db-cols">
+    <div><span>user_id</span><span class="db-type">uuid PK FK &rarr; auth.users</span></div>
+    <div><span>theme</span><span class="db-type">text</span></div>
+    <div><span>favorites</span><span class="db-type">text[]</span></div>
+    <div><span>settings</span><span class="db-type">jsonb</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">annotations</div>
+  <div class="db-cols">
+    <div><span>id</span><span class="db-type">uuid PK</span></div>
+    <div><span>user_id</span><span class="db-type">uuid FK &rarr; auth.users</span></div>
+    <div><span>target_id</span><span class="db-type">text</span></div>
+    <div><span>content</span><span class="db-type">text</span></div>
+    <div><span>color</span><span class="db-type">text</span></div>
+    <div><span>created_at</span><span class="db-type">timestamptz</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+<div class="db-table">
+  <div class="db-table-name">result_graph</div>
+  <div class="db-cols">
+    <div><span>user_id</span><span class="db-type">uuid PK FK &rarr; auth.users</span></div>
+    <div><span>nodes</span><span class="db-type">jsonb</span></div>
+    <div><span>edges</span><span class="db-type">jsonb</span></div>
+    <div><span>updated_at</span><span class="db-type">timestamptz</span></div>
+  </div>
+</div>
+
+</div><!-- db-grid -->
+
+<div style="margin-top:16px">
+<div class="plain"><p style="color:var(--text2)"><strong>Relationships:</strong> Every table connects to Supabase's built-in <code>auth.users</code> table through a <code>user_id</code> column. The <code>annotations</code> table can point to any analysis via its <code>target_id</code>. The <code>result_graph</code> stores a network of how analyses relate to each other.</p></div>
+<div class="tech"><p style="color:var(--text2)"><strong>Relationships:</strong> All FK references point to <code>auth.users(id)</code>. <code>annotations.target_id</code> is a soft reference (text, not FK) to any entity UUID. <code>result_graph</code> stores a full adjacency list (nodes + edges as JSONB arrays) per user. Indexes on <code>user_id</code>, <code>module</code>, and <code>target_id</code> columns.</p></div>
+</div>
+</section>
+
+<!-- ─── SECTION 4: API ENDPOINTS ─────────────────────────────────── -->
+<section>
+<h2><span class="num">4</span> API Endpoints</h2>
+<div class="plain"><p style="color:var(--text2);margin-bottom:16px">The backend has 77 router groups with 240+ endpoints. All statistical computations, AI features, and data operations go through these. Most accept POST requests with JSON data.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:16px">FastAPI app with 77 registered routers. Default response class: NumpySafeResponse. Auth: JWT middleware with public, optional-auth, and protected path tiers. Rate limiting: 60 req/min (auth), 20 req/min (unauth). Max body: 10 MB, max array: 100K items, max nesting: 10.</p></div>
+
+<div class="card" style="max-height:600px;overflow-y:auto">
+
+<details class="ep-group" open>
+  <summary>Core Statistics</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/stats/*</code> &mdash; t-test, paired t-test, ANOVA, chi-square, correlation, regression, Mann-Whitney, Wilcoxon, Kruskal-Wallis, Friedman</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/nonparametric/*</code> &mdash; Non-parametric tests</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/extended-stats/*</code> &mdash; Extended statistical methods</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/advanced/*</code> &mdash; Advanced stats (mixed models, etc.)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/advanced-anova/*</code> &mdash; Factorial, repeated measures, ANCOVA, MANOVA</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/effect-size/*</code> &mdash; Cohen's d, eta-squared, odds ratio</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/equivalence/*</code> &mdash; TOST equivalence testing</div>
+</details>
+
+<details class="ep-group">
+  <summary>Psychometrics &amp; Measurement</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/psychometrics/*</code> &mdash; Reliability (alpha, omega), factor analysis, CFA, IRT</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/irt/*</code> &mdash; Advanced IRT (2PL, 3PL, DIF, item info)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/invariance/*</code> &mdash; Measurement invariance testing</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/network-psychometrics/*</code> &mdash; Network models of psychometric data</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/dcm/*</code> &mdash; Diagnostic classification models</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/generalizability/*</code> &mdash; Generalizability theory (G-studies, D-studies)</div>
+</details>
+
+<details class="ep-group">
+  <summary>Structural &amp; Latent Variable Models</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/sem/*</code> &mdash; Structural equation modeling</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/multilevel-sem/*</code> &mdash; Multilevel SEM</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/hlm/*</code> &mdash; Hierarchical linear modeling</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/mediation/*</code> &mdash; Mediation &amp; moderation analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/latent-class/*</code> &mdash; Latent class / profile analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/lta/*</code> &mdash; Latent transition analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/mtmm/*</code> &mdash; Multitrait-multimethod matrices</div>
+</details>
+
+<details class="ep-group">
+  <summary>Bayesian &amp; Causal</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/bayesian/*</code> &mdash; Bayes factor, MCMC, priors</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/bayesian-advanced/*</code> &mdash; Advanced Bayesian methods</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/causal/*</code> &mdash; DAGs, IV, RDD, diff-in-diff, g-computation</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/propensity-score/*</code> &mdash; Propensity score matching</div>
+</details>
+
+<details class="ep-group">
+  <summary>Domain-Specific</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/genomic/*</code> &mdash; Genomic statistics</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/medical/*</code> &mdash; Survival, ROC, Bland-Altman, NNT</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/social-graph/*</code> &mdash; Network analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/cognitive/*</code> &mdash; Cognitive lab analyses</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/criminology/*</code> &mdash; Criminology statistics</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/biometrics/*</code> &mdash; Biometric data analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/sociology/*</code> &mdash; Sociological methods</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/political-science/*</code> &mdash; Political science methods</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ethnography/*</code> &mdash; Ethnographic coding &amp; analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/signal-detection/*</code> &mdash; Signal detection theory (SDT)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ergm/*</code> &mdash; Exponential random graph models</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/spatial/*</code> &mdash; Spatial statistics</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ema/*</code> &mdash; Ecological momentary assessment / ESM</div>
+</details>
+
+<details class="ep-group">
+  <summary>Advanced Methods</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/meta-analysis/*</code> &mdash; Fixed/random effects, publication bias</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/power/*</code> &mdash; Power analysis &amp; sample size</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/time-series/*</code> &mdash; ARIMA, VAR, changepoint</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/text-analysis/*</code> &mdash; Sentiment, topic modeling, readability</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ml/*</code> &mdash; Classification, clustering, PCA, t-SNE</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/correspondence/*</code> &mdash; Correspondence analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/conjoint/*</code> &mdash; Conjoint analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/q-methodology/*</code> &mdash; Q-methodology</div>
+</details>
+
+<details class="ep-group">
+  <summary>Novel Methods</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/novel/cca/*</code> &mdash; Canonical correlation analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/novel/complexity/*</code> &mdash; Model complexity navigator</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/novel/dialectical/*</code> &mdash; Dialectical inference</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/novel/spf/*</code> &mdash; Scale-persistent features</div>
+</details>
+
+<details class="ep-group">
+  <summary>Research Intelligence</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/reviewer2/*</code> &mdash; Adversarial reviewer (rigor grading A-F)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/triangulation/*</code> &mdash; Method triangulation (3 methods, convergence check)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/assumption-gate/*</code> &mdash; Auto-check assumptions before analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/interpretation-confidence/*</code> &mdash; PPV / positive predictive value</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/what-would-it-take/*</code> &mdash; Post-hoc sensitivity (required N, fragility)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/contradiction/*</code> &mdash; Cross-analysis contradiction detector</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/sensitivity-decisions/*</code> &mdash; Analytic decision sensitivity</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/multiverse/*</code> &mdash; Multiverse analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/diagnostics/*</code> &mdash; Model diagnostics</div>
+</details>
+
+<details class="ep-group">
+  <summary>Data &amp; Pipeline</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/data/*</code> &mdash; Data cleaning &amp; transformation</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/import/*</code> &mdash; Import CSV, Excel, SPSS, Stata</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/assumptions/*</code> &mdash; Normality, homogeneity, linearity checks</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/mice/*</code> &mdash; Multiple imputation (MICE)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/missingness/*</code> &mdash; Missingness diagnostics</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/pipeline/*</code> &mdash; Multi-step analysis pipeline builder</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/simulator/*</code> &mdash; Synthetic data generation</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/recommend/*</code> &mdash; Smart method recommendation</div>
+</details>
+
+<details class="ep-group">
+  <summary>AI &amp; Reporting</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ai/chat</code> &mdash; AI chat (Claude Sonnet/Opus)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/ai/interpret</code> &mdash; Statistical result interpretation</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/apa/*</code> &mdash; APA-formatted output</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/reports/*</code> &mdash; Full report generation</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/dual-report/*</code> &mdash; Dual perspective reports</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/export/*</code> &mdash; PDF, CSV, LaTeX export</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/nl-pipeline/*</code> &mdash; Natural language query to analysis</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/preregistration/*</code> &mdash; Pre-registration generation</div>
+</details>
+
+<details class="ep-group">
+  <summary>Research Planning &amp; Journals</summary>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/study-planner/*</code> &mdash; Study design wizard</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/narrative/*</code> &mdash; Research narrative (auth required)</div>
+  <div class="ep-row"><span class="ep-method ep-post">POST</span> <code>/api/journal/*</code> &mdash; Analysis journal (auth required)</div>
+</details>
+
+<details class="ep-group">
+  <summary>Account &amp; System</summary>
+  <div class="ep-row"><span class="ep-method ep-get">GET</span> <code>/health</code> &mdash; Health check</div>
+  <div class="ep-row"><span class="ep-method ep-delete">DELETE</span> <code>/api/account</code> &mdash; Delete account &amp; all data (auth required)</div>
+</details>
+
+</div><!-- card -->
+</section>
+
+<!-- ─── SECTION 5: ENVIRONMENT VARIABLES ─────────────────────────── -->
+<section>
+<h2><span class="num">5</span> Environment Variable Reference</h2>
+<div class="plain"><p style="color:var(--text2);margin-bottom:16px">These are the configuration values each service needs. Never commit real keys to git. Set them in each platform's dashboard or secrets manager.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:16px">All env vars by deployment target. EXPO_PUBLIC_ prefix exposes vars to the React Native bundle at build time. Railway vars set in project dashboard. EAS secrets set via <code>eas secret:create</code>.</p></div>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr><th>Variable</th><th>Where</th><th>Service</th><th>Example Value</th><th>Required</th></tr>
+</thead>
+<tbody>
+<tr><td><code>EXPO_PUBLIC_SUPABASE_URL</code></td><td>Vercel, .env, EAS</td><td>Supabase</td><td><code>https://abcdef.supabase.co</code></td><td>Yes</td></tr>
+<tr><td><code>EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code></td><td>Vercel, .env, EAS</td><td>Supabase</td><td><code>eyJhbGciOiJIUzI1NiIs...</code></td><td>Yes</td></tr>
+<tr><td><code>EXPO_PUBLIC_API_URL</code></td><td>Vercel, .env, EAS</td><td>Railway</td><td><code>https://psystat-api.up.railway.app</code></td><td>Yes</td></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>Railway</td><td>Anthropic</td><td><code>sk-ant-api03-xxxxx...</code></td><td>Yes</td></tr>
+<tr><td><code>SUPABASE_URL</code></td><td>Railway</td><td>Supabase</td><td><code>https://abcdef.supabase.co</code></td><td>Yes</td></tr>
+<tr><td><code>SUPABASE_SECRET_KEY</code></td><td>Railway</td><td>Supabase</td><td><code>eyJhbGciOiJIUzI1NiIs...</code></td><td>Yes</td></tr>
+<tr><td><code>SUPABASE_JWT_SECRET</code></td><td>Railway</td><td>Supabase</td><td><code>your-super-secret-jwt...</code></td><td>Yes</td></tr>
+<tr><td><code>ALLOWED_ORIGINS</code></td><td>Railway</td><td>CORS</td><td><code>https://psystat-nexus.vercel.app,https://localhost:8081</code></td><td>No (has defaults)</td></tr>
+<tr><td><code>ENFORCE_HTTPS</code></td><td>Railway</td><td>Security</td><td><code>1</code></td><td>No</td></tr>
+<tr><td><code>RATE_LIMIT_DB</code></td><td>Railway</td><td>Rate Limiter</td><td><code>/tmp/psystat_rate_limits.db</code></td><td>No (has default)</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<!-- ─── SECTION 6: FILE STRUCTURE ────────────────────────────────── -->
+<section>
+<h2><span class="num">6</span> File Structure</h2>
+<div class="plain"><p style="color:var(--text2);margin-bottom:16px">How the project is organized on disk. The app code and backend are in separate directories, with marketing pages at the root level.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:16px">Monorepo structure. Frontend is an Expo managed workflow project. Backend is a standalone FastAPI app deployed to Railway. Static HTML pages are deployed to Vercel alongside the Expo web build.</p></div>
+
+<pre>
+psystat/
+├── psystat-app/                 # React Native + Expo frontend
+│   ├── app/                     # Expo Router file-based routing
+│   │   ├── (tabs)/              # Tab layout (dashboard, modules, ai, settings)
+│   │   └── modules/             # Dynamic module routes [id].tsx
+│   ├── components/              # 80+ UI components
+│   │   ├── ui/                  # Shared: Card, ModuleCard, Button, etc.
+│   │   └── modules/             # Module-specific content components
+│   ├── constants/               # Colors, Typography, Modules config, Curriculum
+│   ├── hooks/                   # useTheme, useColorScheme
+│   ├── services/                # api.ts, subscription.ts, storage, exports
+│   ├── lib/                     # supabase.ts client
+│   ├── assets/                  # Icons, splash screens, fonts
+│   ├── app.json                 # Expo config (bundle ID, plugins, web PWA)
+│   ├── eas.json                 # EAS Build profiles (dev, preview, production)
+│   └── package.json             # Dependencies (Expo 55, React 19, RN 0.83)
+│
+├── backend/                     # Python FastAPI backend
+│   ├── app/
+│   │   ├── main.py              # App entry, middleware, 77 router registrations
+│   │   ├── auth.py              # JWT verification, auth middleware
+│   │   └── routers/             # 77 router modules, 240+ endpoints
+│   └── requirements.txt         # scipy, statsmodels, pandas, anthropic, etc.
+│
+├── landing.html                 # Marketing landing page
+├── features.html                # Features catalog (240+ methods)
+├── architecture.html            # This file
+├── terms.html                   # Terms of Service
+├── privacy.html                 # Privacy Policy
+├── APP-STORE-CHECKLIST.md       # Submission checklist for iOS + Android
+├── supabase-setup.sql           # Database schema (7 tables + RLS + triggers)
+├── robots.txt                   # SEO
+└── sitemap.xml                  # SEO
+</pre>
+</section>
+
+<!-- ─── SECTION 7: COST ESTIMATES ────────────────────────────────── -->
+<section>
+<h2><span class="num">7</span> Monthly Cost Estimate</h2>
+<div class="plain"><p style="color:var(--text2);margin-bottom:16px">What you can expect to pay at different scales. The app can launch on mostly free tiers and scale costs gradually as users grow.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:16px">Infrastructure cost projections by user scale. Anthropic API cost assumes avg 15 Sonnet messages/active user/month. Railway scales with compute. Supabase Pro needed around 500+ active users for DB size and connection limits.</p></div>
+
+<h3>Infrastructure Costs</h3>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr><th>Service</th><th>Free Tier</th><th>100 Users</th><th>1,000 Users</th><th>10,000 Users</th></tr>
+</thead>
+<tbody>
+<tr><td>Supabase</td><td>$0</td><td>$0</td><td>$25</td><td>$75</td></tr>
+<tr><td>Railway</td><td>$0 (trial)</td><td>$5</td><td>$15</td><td>$60</td></tr>
+<tr><td>Vercel</td><td>$0</td><td>$0</td><td>$0</td><td>$20</td></tr>
+<tr><td>Anthropic API</td><td>Pay-per-use</td><td>$15</td><td>$150</td><td>$1,200</td></tr>
+<tr><td>EAS Builds</td><td>$0</td><td>$0</td><td>$99</td><td>$99</td></tr>
+<tr><td>Apple Developer</td><td>$8.25/mo</td><td>$8.25</td><td>$8.25</td><td>$8.25</td></tr>
+<tr><td>Google Play</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td></tr>
+<tr><td>RevenueCat</td><td>$0</td><td>$0</td><td>$0</td><td>~1% rev</td></tr>
+<tr style="font-weight:700;border-top:2px solid var(--accent)">
+  <td>Monthly Total</td><td>~$8</td><td>~$28</td><td>~$297</td><td>~$1,462+</td></tr>
+<tr style="color:var(--text2)">
+  <td>Annual Total</td><td>~$100</td><td>~$340</td><td>~$3,570</td><td>~$17,550+</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3 style="margin-top:24px">Revenue Projections</h3>
+<div class="plain"><p style="color:var(--text2);margin-bottom:12px">Estimated revenue based on typical SaaS conversion rates for academic/research tools. Free users generate ad revenue; paid users generate subscription revenue.</p></div>
+<div class="tech"><p style="color:var(--text2);margin-bottom:12px">Assumptions: 70% free, 20% Researcher ($9.99/mo), 10% Scholar ($24.99/mo). Ad revenue ~$0.50/free user/mo (eCPM-based). Apple/Google take 15-30% of subscription revenue (using 20% avg for small business program). RevenueCat 1% after $2.5K MTR.</p></div>
+
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr><th>Users</th><th>Free (70%)</th><th>Researcher (20%)</th><th>Scholar (10%)</th><th>Gross Revenue</th><th>Monthly Cost</th><th>Net / mo</th></tr>
+</thead>
+<tbody>
+<tr><td>100</td><td>70 &times; $0.50</td><td>20 &times; $9.99</td><td>10 &times; $24.99</td><td><strong>$485</strong></td><td>$28</td><td style="color:var(--green)">+$457</td></tr>
+<tr><td>1,000</td><td>700 &times; $0.50</td><td>200 &times; $9.99</td><td>100 &times; $24.99</td><td><strong>$4,847</strong></td><td>$297</td><td style="color:var(--green)">+$4,550</td></tr>
+<tr><td>10,000</td><td>7,000 &times; $0.50</td><td>2,000 &times; $9.99</td><td>1,000 &times; $24.99</td><td><strong>$48,470</strong></td><td>$1,462</td><td style="color:var(--green)">+$47,008</td></tr>
+</tbody>
+</table>
+</div>
+<p style="color:var(--text2);font-size:.85rem;margin-top:8px">* Gross revenue before Apple/Google 15-30% commission on subscriptions. Net after platform fees would be roughly 75-80% of subscription portion.</p>
+</section>
+
+</div><!-- container -->
+
+<footer>
+  <div class="container">
+    <a href="landing.html">Landing Page</a>
+    <a href="features.html">Features</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <br><br>
+    Last updated: March 2026
+  </div>
+</footer>
+
+<script>
+function setMode(mode) {
+  const btns = document.querySelectorAll('.toggle-btn');
+  if (mode === 'tech') {
+    document.body.classList.add('tech-mode');
+    btns[0].classList.remove('active');
+    btns[1].classList.add('active');
+  } else {
+    document.body.classList.remove('tech-mode');
+    btns[0].classList.add('active');
+    btns[1].classList.remove('active');
+  }
+}
+</script>
+</body>
+</html>

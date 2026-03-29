@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thought+Form — Architecture & Services Map</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #0A0E0A; --surface: #0D1F0D; --green: #33FF33; --green-dim: #1A8C1A; --cyan: #00FFFF; --amber: #FFB000; --red: #FF3333; --text: #E0E0E0; --dim: #8A8A8A; --border: #1a2a1a; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* Nav */
+nav { border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 0; background: var(--bg); z-index: 100; }
+nav .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+.logo { color: var(--green); font-weight: 700; font-size: 14px; text-shadow: 0 0 4px var(--green); }
+.nav-links { display: flex; gap: 16px; font-size: 11px; }
+.nav-links a { color: var(--dim); }
+
+/* Hero */
+.hero { padding: 48px 0 32px; border-bottom: 1px solid var(--border); }
+.hero h1 { font-size: 24px; color: var(--green); margin-bottom: 6px; text-shadow: 0 0 6px var(--green); }
+.hero p { color: var(--dim); font-size: 12px; }
+
+/* Tabs */
+.tabs { display: flex; border-bottom: 1px solid var(--border); margin: 24px 0 0; }
+.tab { padding: 10px 20px; font-size: 12px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--dim); background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+.tab.active { color: var(--green); border-bottom-color: var(--green); }
+.tab-content { display: none; padding: 24px 0; }
+.tab-content.active { display: block; }
+
+/* Cards */
+.service-card { border: 1px solid var(--border); margin-bottom: 16px; background: var(--surface); }
+.service-header { padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.service-header:hover { background: rgba(51,255,51,0.02); }
+.service-icon { width: 36px; height: 36px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.service-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.service-role { font-size: 11px; color: var(--dim); }
+.service-cost { font-size: 11px; padding: 2px 8px; border-radius: 2px; margin-left: auto; flex-shrink: 0; }
+.cost-free { background: rgba(51,255,51,0.1); color: var(--green); }
+.cost-paid { background: rgba(255,176,0,0.1); color: var(--amber); }
+.cost-conditional { background: rgba(0,255,255,0.1); color: var(--cyan); }
+.service-body { padding: 0 16px 16px; display: none; border-top: 1px solid var(--border); margin-top: 0; padding-top: 16px; }
+.service-card.open .service-body { display: block; }
+.detail-grid { display: grid; grid-template-columns: 140px 1fr; gap: 6px 16px; font-size: 12px; }
+.detail-label { color: var(--dim); }
+.detail-value { color: var(--text); word-break: break-all; }
+.detail-value code { background: rgba(51,255,51,0.06); padding: 1px 4px; font-size: 11px; color: var(--green); }
+.secret-badge { display: inline-block; font-size: 10px; padding: 1px 6px; background: rgba(255,51,51,0.1); color: var(--red); border-radius: 2px; margin-left: 4px; }
+.env-badge { display: inline-block; font-size: 10px; padding: 1px 6px; background: rgba(0,255,255,0.1); color: var(--cyan); border-radius: 2px; margin-left: 4px; }
+
+/* Section headers */
+.section-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.section-title:first-of-type { margin-top: 0; }
+
+/* Cost table */
+.cost-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 16px 0; }
+.cost-table th { text-align: left; padding: 8px 12px; color: var(--cyan); border-bottom: 1px solid var(--border); font-weight: 600; }
+.cost-table td { padding: 8px 12px; border-bottom: 1px solid rgba(26,42,26,0.5); }
+.cost-table tr:hover td { background: rgba(51,255,51,0.02); }
+.cost-total { font-weight: 700; color: var(--green); }
+.cost-note { font-size: 11px; color: var(--dim); margin-top: 8px; }
+
+/* Architecture diagram */
+.arch-diagram { padding: 24px; border: 1px solid var(--border); background: var(--surface); margin: 16px 0; font-size: 11px; overflow-x: auto; }
+.arch-row { display: flex; gap: 12px; margin: 8px 0; align-items: stretch; flex-wrap: wrap; }
+.arch-box { border: 1px solid var(--border); padding: 10px 14px; min-width: 120px; text-align: center; }
+.arch-box.primary { border-color: var(--green); color: var(--green); }
+.arch-box.secondary { border-color: var(--cyan); color: var(--cyan); }
+.arch-box.external { border-color: var(--amber); color: var(--amber); }
+.arch-box.storage { border-color: #8b5cf6; color: #8b5cf6; }
+.arch-label { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.arch-arrow { color: var(--dim); display: flex; align-items: center; font-size: 16px; }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; font-size: 11px; color: var(--dim); margin-top: 48px; }
+
+@media (max-width: 640px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .arch-row { flex-direction: column; }
+  .arch-arrow { transform: rotate(90deg); justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <span class="logo">T+F Architecture Map</span>
+  <div class="nav-links">
+    <a href="#infrastructure">Infrastructure</a>
+    <a href="#services">Services</a>
+    <a href="#secrets">Secrets</a>
+    <a href="#costs">Costs</a>
+  </div>
+</div></nav>
+
+<div class="container">
+<div class="hero">
+  <h1>Architecture & Services Map</h1>
+  <p>Every external dependency, API, storage system, account, and cost — for the entire Thought+Form platform.</p>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('plain')">Plain Language</button>
+  <button class="tab" onclick="switchTab('technical')">Technical</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PLAIN LANGUAGE TAB
+═══════════════════════════════════════════════ -->
+<div id="tab-plain" class="tab-content active">
+
+<div class="section-title">How the App is Built</div>
+<p style="margin-bottom:16px;">Thought+Form is built as a <strong>monorepo</strong> — one repository containing multiple packages that work together. The frontend (what you see) is a React web app. The backend (where data lives) runs on Cloudflare's servers. Desktop and mobile versions wrap the same web app in native shells.</p>
+
+<!-- Architecture Diagram -->
+<div class="arch-diagram">
+  <div class="arch-label">Architecture Overview</div>
+  <div class="arch-row">
+    <div class="arch-box primary">React Frontend<br><span style="font-size:10px;color:var(--dim)">What you see & interact with</span></div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box primary">Cloudflare Workers<br><span style="font-size:10px;color:var(--dim)">The "brain" — processes requests</span></div>
+    <div class="arch-arrow">&rarr;</div>
+    <div class="arch-box storage">D1 Database<br><span style="font-size:10px;color:var(--dim)">Where all your data lives</span></div>
+  </div>
+  <div class="arch-row" style="margin-top:12px;">
+    <div class="arch-box secondary">Electron Shell<br><span style="font-size:10px;color:var(--dim)">Desktop app wrapper</span></div>
+    <div class="arch-box secondary">Capacitor Shell<br><span style="font-size:10px;color:var(--dim)">Mobile app wrapper</span></div>
+    <div class="arch-box secondary">PWA<br><span style="font-size:10px;color:var(--dim)">Browser install</span></div>
+    <div class="arch-box secondary">Sidecar Server<br><span style="font-size:10px;color:var(--dim)">Local terminal/git/files</span></div>
+  </div>
+  <div class="arch-row" style="margin-top:12px;">
+    <div class="arch-box external">Claude AI<br><span style="font-size:10px;color:var(--dim)">Intelligence engine</span></div>
+    <div class="arch-box external">Stripe<br><span style="font-size:10px;color:var(--dim)">Payments</span></div>
+    <div class="arch-box external">GitHub<br><span style="font-size:10px;color:var(--dim)">Code repos</span></div>
+    <div class="arch-box external">Social APIs<br><span style="font-size:10px;color:var(--dim)">Twitter, LinkedIn, etc.</span></div>
+    <div class="arch-box storage">R2 Storage<br><span style="font-size:10px;color:var(--dim)">Backups & files</span></div>
+  </div>
+</div>
+
+<div class="section-title" id="infrastructure">Infrastructure — Where Things Run</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(255,176,0,0.1);">☁</div>
+    <div><div class="service-name">Cloudflare Workers</div><div class="service-role">Runs all the backend code — like a server, but you don't manage hardware</div></div>
+    <span class="service-cost cost-paid">~$5/mo base</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">Think of this as the "brain" of the app. When you click a button, the frontend sends a request to Cloudflare Workers, which processes it and returns data. It's serverless — you don't rent a computer, you just pay for the requests you use.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Account needed</span><span class="detail-value">Yes — <a href="https://dash.cloudflare.com/sign-up" target="_blank">Cloudflare account</a></span>
+      <span class="detail-label">Setup</span><span class="detail-value">Run <code>bash packages/cloud/setup.sh</code> to provision everything</span>
+      <span class="detail-label">Deploy</span><span class="detail-value"><code>wrangler deploy</code> from packages/cloud/</span>
+      <span class="detail-label">Dashboard</span><span class="detail-value"><a href="https://dash.cloudflare.com/" target="_blank">dash.cloudflare.com</a></span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(139,92,246,0.1);">◆</div>
+    <div><div class="service-name">Cloudflare D1 (Database)</div><div class="service-role">Stores all your data — projects, cards, contacts, stories, everything</div></div>
+    <span class="service-cost cost-paid">~$0.75/M reads</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">D1 is a SQLite database that lives on Cloudflare's network. Every project, card, contact, narrative, decision, and setting is stored here. It's fast because it runs close to wherever you are in the world.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Created by</span><span class="detail-value"><code>wrangler d1 create thought-form-db</code></span>
+      <span class="detail-label">Config</span><span class="detail-value">Database ID in <code>wrangler.toml</code> line 16</span>
+      <span class="detail-label">Migrations</span><span class="detail-value">19 migration files in <code>packages/cloud/migrations/</code></span>
+      <span class="detail-label">Tables</span><span class="detail-value">40+ tables (users, projects, cards, posts, decisions, narratives, etc.)</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(139,92,246,0.1);">▤</div>
+    <div><div class="service-name">Cloudflare R2 (File Storage)</div><div class="service-role">Stores backups and file attachments — like a cloud hard drive</div></div>
+    <span class="service-cost cost-paid">~$0.015/GB</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">R2 stores larger files that don't fit in a database — full backups of your data, card attachments, uploaded assets. It's similar to Amazon S3 but cheaper because Cloudflare doesn't charge for downloading files.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Created by</span><span class="detail-value"><code>wrangler r2 bucket create thought-form-backups</code></span>
+      <span class="detail-label">Bucket name</span><span class="detail-value"><code>thought-form-backups</code></span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title" id="services">External Services — What Powers Each Feature</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(51,255,51,0.1);">◈</div>
+    <div><div class="service-name">Anthropic Claude API</div><div class="service-role">Powers ALL AI features — writing, analysis, agents, content generation</div></div>
+    <span class="service-cost cost-paid">~$2-6/user/mo</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">Claude is the AI that powers every intelligent feature in the app: writing assistance, content generation, decision simulation, pattern analysis, agent workflows, and more. Users can either bring their own API key (BYOK — they pay Anthropic directly) or use the managed mode ($19/mo Pro includes 2M tokens).</p>
+    <div class="detail-grid">
+      <span class="detail-label">Account</span><span class="detail-value"><a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></span>
+      <span class="detail-label">Models used</span><span class="detail-value">Haiku 4.5 (simple tasks, ~$1/M tokens), Sonnet 4.6 (complex, ~$3/M)</span>
+      <span class="detail-label">Endpoint</span><span class="detail-value"><code>https://api.anthropic.com/v1/messages</code></span>
+      <span class="detail-label">Managed key</span><span class="detail-value"><code>MANAGED_CLAUDE_KEY</code> <span class="secret-badge">secret</span></span>
+      <span class="detail-label">User key</span><span class="detail-value"><code>claude_api_key</code> (encrypted in D1 with AES-256-GCM)</span>
+      <span class="detail-label">Token limit</span><span class="detail-value">2M/month for managed users, enforced per-call</span>
+      <span class="detail-label">Overage</span><span class="detail-value">$0.50 per additional 1M tokens (opt-in)</span>
+      <span class="detail-label">Features</span><span class="detail-value">AI Quick Ask, Narrative Studio generation, agents, content seeds, character polish, project DNA, contradictions, decision simulation, style DNA — 58 agent tools total</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(139,92,246,0.1);">$</div>
+    <div><div class="service-name">Stripe</div><div class="service-role">Handles payments for Pro subscriptions</div></div>
+    <span class="service-cost cost-conditional">2.9% + $0.30/txn</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">Stripe processes credit card payments for the Pro plan ($19/month). It handles checkout, subscription management, cancellations, and failed payment recovery. Users can manage their subscription through the Stripe Customer Portal.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Account</span><span class="detail-value"><a href="https://dashboard.stripe.com/" target="_blank">dashboard.stripe.com</a></span>
+      <span class="detail-label">Endpoints</span><span class="detail-value"><code>/v1/checkout/sessions</code>, <code>/v1/billing_portal/sessions</code></span>
+      <span class="detail-label">Secret key</span><span class="detail-value"><code>STRIPE_SECRET_KEY</code> <span class="secret-badge">secret</span></span>
+      <span class="detail-label">Webhook secret</span><span class="detail-value"><code>STRIPE_WEBHOOK_SECRET</code> <span class="secret-badge">secret</span></span>
+      <span class="detail-label">Price ID</span><span class="detail-value"><code>STRIPE_PRICE_ID</code> <span class="secret-badge">secret</span></span>
+      <span class="detail-label">Example key</span><span class="detail-value"><code>sk_live_51ABC...</code> (starts with sk_live_ or sk_test_)</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(51,255,51,0.1);">⌥</div>
+    <div><div class="service-name">GitHub API</div><div class="service-role">Shows your repos, commits, PRs, and issues inside the app</div></div>
+    <span class="service-cost cost-free">Free</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">Connects to your GitHub account via a Personal Access Token. You can see repos, recent commits, pull requests, and issues without leaving the app. PRs can be linked to kanban cards.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Account</span><span class="detail-value"><a href="https://github.com/settings/tokens" target="_blank">GitHub Personal Access Token</a></span>
+      <span class="detail-label">Endpoint</span><span class="detail-value"><code>https://api.github.com/</code></span>
+      <span class="detail-label">User key</span><span class="detail-value"><code>github_token</code> (encrypted in D1)</span>
+      <span class="detail-label">Features</span><span class="detail-value">Repo listing, commit history, PR tracking, issue import, CI/CD status</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(0,255,255,0.1);">◬</div>
+    <div><div class="service-name">Social Platform APIs</div><div class="service-role">Publish content to Twitter, LinkedIn, Facebook, Instagram, Product Hunt, Patreon</div></div>
+    <span class="service-cost cost-conditional">Varies</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">Each social platform has its own API that lets the app publish posts on your behalf. You connect your accounts via OAuth (you log in and authorize the app). Some platforms charge for API access (Twitter: $100/mo for Essential tier).</p>
+    <div class="detail-grid">
+      <span class="detail-label">Twitter/X</span><span class="detail-value"><a href="https://developer.twitter.com/" target="_blank">developer.twitter.com</a> — $100/mo Essential tier</span>
+      <span class="detail-label">LinkedIn</span><span class="detail-value"><a href="https://www.linkedin.com/developers/" target="_blank">linkedin.com/developers</a> — Free</span>
+      <span class="detail-label">Facebook/IG</span><span class="detail-value"><a href="https://developers.facebook.com/" target="_blank">developers.facebook.com</a> — Free</span>
+      <span class="detail-label">Product Hunt</span><span class="detail-value"><a href="https://api.producthunt.com/v2/docs" target="_blank">producthunt.com API</a> — Free</span>
+      <span class="detail-label">Patreon</span><span class="detail-value"><a href="https://docs.patreon.com/" target="_blank">docs.patreon.com</a> — Free</span>
+      <span class="detail-label">Auth</span><span class="detail-value">OAuth tokens stored encrypted in D1</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(255,176,0,0.1);">▥</div>
+    <div><div class="service-name">Google Calendar API</div><div class="service-role">Syncs calendar events between the app and Google Calendar</div></div>
+    <span class="service-cost cost-free">Free</span>
+  </div>
+  <div class="service-body">
+    <div class="detail-grid">
+      <span class="detail-label">Account</span><span class="detail-value"><a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a> (OAuth credentials)</span>
+      <span class="detail-label">Endpoint</span><span class="detail-value"><code>https://oauth2.googleapis.com/token</code></span>
+      <span class="detail-label">User keys</span><span class="detail-value"><code>google_client_id</code>, <code>google_client_secret</code>, tokens (encrypted in D1)</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(139,92,246,0.1);">🎨</div>
+    <div><div class="service-name">Image & Voice Generation</div><div class="service-role">Stability AI (SDXL), OpenAI (DALL-E 3), ElevenLabs — for character creation</div></div>
+    <span class="service-cost cost-conditional">User pays</span>
+  </div>
+  <div class="service-body">
+    <p style="margin-bottom:12px;">These are optional — used for generating character portraits and voices. The user provides their own API keys. Costs are billed directly to the user's account with each provider.</p>
+    <div class="detail-grid">
+      <span class="detail-label">Stability AI</span><span class="detail-value"><a href="https://platform.stability.ai/" target="_blank">platform.stability.ai</a> — ~$0.03-0.10/image</span>
+      <span class="detail-label">OpenAI DALL-E</span><span class="detail-value"><a href="https://platform.openai.com/" target="_blank">platform.openai.com</a> — ~$0.08/image</span>
+      <span class="detail-label">ElevenLabs</span><span class="detail-value"><a href="https://elevenlabs.io/" target="_blank">elevenlabs.io</a> — ~$0.03/1K chars</span>
+      <span class="detail-label">User keys</span><span class="detail-value"><code>stability_api_key</code>, <code>openai_api_key</code>, <code>elevenlabs_api_key</code> (all encrypted in D1)</span>
+    </div>
+  </div>
+</div>
+
+<div class="service-card" onclick="this.classList.toggle('open')">
+  <div class="service-header">
+    <div class="service-icon" style="background:rgba(51,255,51,0.1);">A</div>
+    <div><div class="service-name">Google Fonts & AdSense</div><div class="service-role">Typography (IBM Plex Mono) and optional ads for free tier</div></div>
+    <span class="service-cost cost-free">Free</span>
+  </div>
+  <div class="service-body">
+    <div class="detail-grid">
+      <span class="detail-label">Fonts</span><span class="detail-value"><code>fonts.googleapis.com</code> — IBM Plex Mono (400-700)</span>
+      <span class="detail-label">AdSense</span><span class="detail-value">Optional. <code>VITE_ADSENSE_CLIENT</code> + <code>VITE_ADSENSE_SLOT</code> env vars. Falls back to upgrade prompt if not set.</span>
+      <span class="detail-label">ads.txt</span><span class="detail-value">In project root — needs publisher ID replaced</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title" id="secrets">Secrets & Credentials</div>
+<p style="margin-bottom:16px;">These are sensitive values that must be set before deploying. <strong>Never commit real keys to git.</strong></p>
+
+<table class="cost-table">
+  <thead><tr><th>Secret</th><th>Service</th><th>Required</th><th>Set Via</th></tr></thead>
+  <tbody>
+    <tr><td><code>JWT_SECRET</code></td><td>Internal (auth)</td><td>Yes</td><td><code>wrangler secret put JWT_SECRET</code></td></tr>
+    <tr><td><code>ALLOWED_ORIGINS</code></td><td>CORS</td><td>Yes</td><td><code>wrangler secret put ALLOWED_ORIGINS</code></td></tr>
+    <tr><td><code>STRIPE_SECRET_KEY</code></td><td>Stripe</td><td>If billing</td><td><code>wrangler secret put STRIPE_SECRET_KEY</code></td></tr>
+    <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td>Stripe</td><td>If billing</td><td><code>wrangler secret put STRIPE_WEBHOOK_SECRET</code></td></tr>
+    <tr><td><code>STRIPE_PRICE_ID</code></td><td>Stripe</td><td>If billing</td><td><code>wrangler secret put STRIPE_PRICE_ID</code></td></tr>
+    <tr><td><code>MANAGED_CLAUDE_KEY</code></td><td>Anthropic</td><td>If managed AI</td><td><code>wrangler secret put MANAGED_CLAUDE_KEY</code></td></tr>
+    <tr><td><code>ERROR_WEBHOOK_URL</code></td><td>Discord/Slack</td><td>No</td><td><code>wrangler secret put ERROR_WEBHOOK_URL</code></td></tr>
+  </tbody>
+</table>
+<p class="cost-note">User-provided API keys (Claude BYOK, GitHub token, social OAuth, image/voice APIs) are entered in the Settings UI and stored AES-256-GCM encrypted in D1. They never leave the server.</p>
+
+<div class="section-title" id="costs">Monthly & Annual Cost Estimates</div>
+<p style="margin-bottom:16px;">Costs assume a single solo-founder user with moderate usage. Scales with usage.</p>
+
+<table class="cost-table">
+  <thead><tr><th>Service</th><th>What For</th><th>Monthly</th><th>Annual</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Cloudflare Workers Paid</td><td>Backend compute</td><td>$5.00</td><td>$60.00</td><td>Includes 10M requests/mo</td></tr>
+    <tr><td>Cloudflare D1</td><td>Database</td><td>$0.50</td><td>$6.00</td><td>Included in Workers Paid; overage at $0.75/M reads</td></tr>
+    <tr><td>Cloudflare R2</td><td>File storage</td><td>$0.15</td><td>$1.80</td><td>~10GB stored at $0.015/GB</td></tr>
+    <tr><td>Anthropic Claude (managed)</td><td>AI for Pro users</td><td>$2-6</td><td>$24-72</td><td>Per active Pro user; 2M tokens included</td></tr>
+    <tr><td>Stripe fees</td><td>Payment processing</td><td>$0.85</td><td>$10.20</td><td>Per $19 subscription (2.9% + $0.30)</td></tr>
+    <tr><td>Apple Developer</td><td>iOS distribution</td><td>$8.25</td><td>$99.00</td><td>Required for App Store</td></tr>
+    <tr><td>Google Play</td><td>Android distribution</td><td>—</td><td>$25.00</td><td>One-time fee</td></tr>
+    <tr><td>Domain name</td><td>thoughtform.app</td><td>$1.50</td><td>$18.00</td><td>Typical .app domain</td></tr>
+    <tr><td>Code signing (Windows)</td><td>Installer trust</td><td>$20-40</td><td>$200-500</td><td>EV/OV cert from DigiCert/Sectigo</td></tr>
+    <tr><td>Google Fonts</td><td>Typography</td><td>$0</td><td>$0</td><td>Free</td></tr>
+    <tr><td>GitHub</td><td>Code hosting + releases</td><td>$0</td><td>$0</td><td>Free for public repos</td></tr>
+    <tr style="border-top:2px solid var(--green);">
+      <td class="cost-total" colspan="2">TOTAL (minimum viable)</td>
+      <td class="cost-total">~$18/mo</td>
+      <td class="cost-total">~$220/yr</td>
+      <td style="color:var(--dim)">Without code signing or mobile stores</td>
+    </tr>
+    <tr>
+      <td class="cost-total" colspan="2">TOTAL (full deployment)</td>
+      <td class="cost-total">~$38-65/mo</td>
+      <td class="cost-total">~$440-780/yr</td>
+      <td style="color:var(--dim)">With stores + signing + 1 Pro user</td>
+    </tr>
+  </tbody>
+</table>
+<p class="cost-note">Revenue per Pro user: $19/mo. Break-even at 2-4 Pro subscribers. User-paid services (image gen, voice, social API tiers) are NOT included — those are the user's cost.</p>
+
+<div class="section-title">Revenue Model</div>
+<table class="cost-table">
+  <thead><tr><th>Tier</th><th>Price</th><th>What's Included</th></tr></thead>
+  <tbody>
+    <tr><td>Free</td><td>$0</td><td>Core workspace (Kanban, Calendar, Journal, Snippets, Contacts). Ads shown. BYOK AI only.</td></tr>
+    <tr><td>Trial</td><td>$0 / 14 days</td><td>Full Pro access. One-time per user. 3-day grace period.</td></tr>
+    <tr><td>Pro</td><td>$19/month</td><td>All 50+ modules, 58 AI agent tools, 2M managed tokens/mo, no ads. Overage: $0.50/1M extra tokens.</td></tr>
+  </tbody>
+</table>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     TECHNICAL TAB
+═══════════════════════════════════════════════ -->
+<div id="tab-technical" class="tab-content">
+
+<div class="section-title">Stack Overview</div>
+<div class="detail-grid" style="margin-bottom:24px;">
+  <span class="detail-label">Monorepo</span><span class="detail-value">Turborepo + npm workspaces</span>
+  <span class="detail-label">Language</span><span class="detail-value">TypeScript 5.7 (strict mode)</span>
+  <span class="detail-label">Node</span><span class="detail-value">&ge;20</span>
+  <span class="detail-label">Frontend</span><span class="detail-value">React 19 + Vite + Tailwind CSS 4.1 + Zustand + React Router 7 + Framer Motion</span>
+  <span class="detail-label">Backend</span><span class="detail-value">Cloudflare Workers + custom Router (URLPattern) + D1 (SQLite) + R2</span>
+  <span class="detail-label">Desktop</span><span class="detail-value">Electron 35.7.5 + electron-builder 26.8.1 + Fastify sidecar (terminal, git, fs, Claude Code)</span>
+  <span class="detail-label">Mobile</span><span class="detail-value">Capacitor 8.2.0 (Android + iOS)</span>
+  <span class="detail-label">PWA</span><span class="detail-value">vite-plugin-pwa + Workbox (StaleWhileRevalidate for API, precache for static)</span>
+  <span class="detail-label">Terminal</span><span class="detail-value">xterm.js + node-pty (via sidecar WebSocket)</span>
+  <span class="detail-label">DnD</span><span class="detail-value">@dnd-kit/core + sortable + utilities</span>
+  <span class="detail-label">AI</span><span class="detail-value">Anthropic Messages API v2023-06-01 with prompt caching (cache_control: ephemeral)</span>
+  <span class="detail-label">Auth</span><span class="detail-value">Passphrase → PBKDF2 hash + JWT (HS256) + httpOnly cookies (PWA) / Bearer header (desktop)</span>
+  <span class="detail-label">Encryption</span><span class="detail-value">AES-256-GCM for stored secrets, derived from JWT_SECRET via PBKDF2</span>
+  <span class="detail-label">Packages</span><span class="detail-value"><code>shared</code> (types), <code>client</code> (React), <code>cloud</code> (Workers), <code>sidecar</code> (Fastify), <code>electron</code>, <code>tauri</code></span>
+</div>
+
+<div class="section-title">Cloudflare Bindings (wrangler.toml)</div>
+<div class="detail-grid" style="margin-bottom:24px;">
+  <span class="detail-label">D1 binding</span><span class="detail-value"><code>DB</code> → database <code>thought-form-db</code></span>
+  <span class="detail-label">R2 binding</span><span class="detail-value"><code>BACKUPS</code> → bucket <code>thought-form-backups</code></span>
+  <span class="detail-label">DO: RealtimeHub</span><span class="detail-value"><code>REALTIME_HUB</code> — WebSocket real-time sync (scaffolded, not fully implemented)</span>
+  <span class="detail-label">DO: Scheduler</span><span class="detail-value"><code>SCHEDULER</code> — cron-based automation triggers (scaffolded, not fully implemented)</span>
+  <span class="detail-label">Compat date</span><span class="detail-value">2025-03-01</span>
+  <span class="detail-label">Dev port</span><span class="detail-value">8787</span>
+</div>
+
+<div class="section-title">Env Interface (index.ts)</div>
+<pre style="background:var(--surface);padding:16px;border:1px solid var(--border);font-size:11px;overflow-x:auto;color:var(--green);">export interface Env {
+  DB: D1Database;
+  BACKUPS: R2Bucket;
+  REALTIME_HUB: DurableObjectNamespace;
+  SCHEDULER: DurableObjectNamespace;
+  JWT_SECRET: string;              // REQUIRED — 64+ char random string
+  ENVIRONMENT: string;             // "development" | "production"
+  ALLOWED_ORIGINS?: string;        // REQUIRED — comma-separated URLs
+  ERROR_WEBHOOK_URL?: string;      // Optional — Discord/Slack webhook
+  MANAGED_CLAUDE_KEY?: string;     // Optional — app's Anthropic key for managed mode
+  STRIPE_SECRET_KEY?: string;      // Conditional — Stripe API key
+  STRIPE_PRICE_ID?: string;        // Conditional — Stripe product price ID
+  STRIPE_WEBHOOK_SECRET?: string;  // Conditional — Stripe webhook signing secret
+}</pre>
+
+<div class="section-title">API Endpoints by Domain</div>
+<div class="detail-grid" style="margin-bottom:24px;">
+  <span class="detail-label">Auth</span><span class="detail-value">/api/auth/* (setup, login, refresh, recover, logout)</span>
+  <span class="detail-label">Projects</span><span class="detail-value">/api/projects/*, /api/dashboard/stats</span>
+  <span class="detail-label">Cards</span><span class="detail-value">/api/cards/* (CRUD, move, bulk, checklists, comments, relations, attachments)</span>
+  <span class="detail-label">AI</span><span class="detail-value">/api/ai/* (ask, buttons, conversations, history, usage, budget, secrets)</span>
+  <span class="detail-label">AI Integration</span><span class="detail-value">/api/ai/agent/* (plan, execute, approve, continue) — 58 tools</span>
+  <span class="detail-label">Intelligence</span><span class="detail-value">/api/intelligence/* (resurrection, continuity, ambient, contradictions, work-routing, cognitive-load, content-recycling, predictions, attribution-chain, style-dna, simulate-decision, knowledge-graph, plus 8 original engines)</span>
+  <span class="detail-label">Narrative</span><span class="detail-value">/api/narrative/* (projects, sections, context, characters, questionnaires, generate, export-post, detect-characters)</span>
+  <span class="detail-label">Creative</span><span class="detail-value">/api/worlds/*, /api/creative/stories/*, /api/creative/characters/*</span>
+  <span class="detail-label">Content</span><span class="detail-value">/api/posts/*, /api/content-seeds/*, /api/social/*, /api/rss/*</span>
+  <span class="detail-label">CRM</span><span class="detail-value">/api/contacts/*, /api/deals/*, /api/activities/*</span>
+  <span class="detail-label">Business</span><span class="detail-value">/api/revenue/*, /api/funnels/*, /api/competitors/*, /api/brands/*</span>
+  <span class="detail-label">Automation</span><span class="detail-value">/api/automation/* (pipelines, drips, recycle-rules) + event bus</span>
+  <span class="detail-label">Billing</span><span class="detail-value">/api/billing/* (status, checkout, manage, ai-mode, overage, webhook)</span>
+  <span class="detail-label">System</span><span class="detail-value">/api/search, /api/backup/*, /api/export/*, /api/notifications, /api/activity, /api/calendar/*</span>
+</div>
+
+<div class="section-title">Database Schema (19 Migrations)</div>
+<div class="detail-grid" style="margin-bottom:24px;">
+  <span class="detail-label">v1</span><span class="detail-value">Core: users, projects, columns, cards, relations, inception, sessions, snippets</span>
+  <span class="detail-label">v2-v9</span><span class="detail-value">Calendar, contacts, CRM deals, notifications, buttons, content, social, search FTS5</span>
+  <span class="detail-label">v10</span><span class="detail-value">Automation pipelines + runs, AI integrations, CI/CD</span>
+  <span class="detail-label">v11</span><span class="detail-value">Intelligence: narrative events, decisions, context snapshots, temporal patterns, entity links</span>
+  <span class="detail-label">v12</span><span class="detail-value">Recovery codes (auth)</span>
+  <span class="detail-label">v13</span><span class="detail-value">Empire layer: brands, products, content seeds, funnels, competitors, revenue</span>
+  <span class="detail-label">v14</span><span class="detail-value">Creative suite: worlds, stories, characters</span>
+  <span class="detail-label">v15</span><span class="detail-value">Agent system: agent memory, agents, runs</span>
+  <span class="detail-label">v16</span><span class="detail-value">Authorized folders (filesystem security)</span>
+  <span class="detail-label">v17</span><span class="detail-value">Billing: plan, stripe IDs, ai_mode, managed tokens, trial</span>
+  <span class="detail-label">v18</span><span class="detail-value">RSS feeds</span>
+  <span class="detail-label">v19</span><span class="detail-value">Overage billing (overage_enabled column)</span>
+  <span class="detail-label">0017 (SQL)</span><span class="detail-value">Narrative Studio: narrative_projects, narrative_sections, narrative_context, narrative_character_config, narrative_questionnaires</span>
+</div>
+
+<div class="section-title">Automation Event Bus</div>
+<p style="margin-bottom:12px;">Events emitted by route handlers → <code>dispatchEvent()</code> → matches active pipelines by trigger_config.type → executes matching pipelines.</p>
+<div class="detail-grid" style="margin-bottom:24px;">
+  <span class="detail-label">card_created</span><span class="detail-value">POST /api/cards</span>
+  <span class="detail-label">card_moved</span><span class="detail-value">POST /api/cards/:id/move</span>
+  <span class="detail-label">post_published</span><span class="detail-value">POST /api/social/publish/:id</span>
+  <span class="detail-label">session_ended</span><span class="detail-value">PATCH /api/sessions/:id (when ended_at set)</span>
+  <span class="detail-label">deal_stage_changed</span><span class="detail-value">PATCH /api/deals/:id (when stage changes)</span>
+  <span class="detail-label">revenue_event</span><span class="detail-value">POST /api/revenue/events</span>
+  <span class="detail-label">cognitive_overload</span><span class="detail-value">Ambient intelligence check</span>
+  <span class="detail-label">contradiction_detected</span><span class="detail-value">Contradiction radar scan</span>
+  <span class="detail-label">content_recyclable</span><span class="detail-value">Content recycling intelligence</span>
+</div>
+
+<div class="section-title">Cost Breakdown (Technical)</div>
+<table class="cost-table">
+  <thead><tr><th>Resource</th><th>Unit Cost</th><th>Est. Monthly Usage</th><th>Monthly Cost</th></tr></thead>
+  <tbody>
+    <tr><td>Workers Paid plan</td><td>$5/mo base</td><td>—</td><td>$5.00</td></tr>
+    <tr><td>Workers requests (overage)</td><td>$0.15/M after 10M</td><td>~2M requests</td><td>$0.00</td></tr>
+    <tr><td>D1 reads</td><td>$0.001/M after 25B included</td><td>~5M reads</td><td>$0.00</td></tr>
+    <tr><td>D1 writes</td><td>$1/M after 50M included</td><td>~500K writes</td><td>$0.00</td></tr>
+    <tr><td>D1 storage</td><td>$0.75/GB after 5GB</td><td>~500MB</td><td>$0.00</td></tr>
+    <tr><td>R2 storage</td><td>$0.015/GB/mo</td><td>~10GB</td><td>$0.15</td></tr>
+    <tr><td>R2 operations</td><td>$4.50/M Class A, $0.36/M Class B</td><td>~10K ops</td><td>$0.05</td></tr>
+    <tr><td>Claude Haiku (managed)</td><td>$1/M tokens</td><td>~500K tokens</td><td>$0.50</td></tr>
+    <tr><td>Claude Sonnet (managed)</td><td>$3/M tokens</td><td>~1.5M tokens</td><td>$4.50</td></tr>
+    <tr><td>Prompt cache savings</td><td>-90% on cached tokens</td><td>~60% cache hit rate</td><td>-$2.00</td></tr>
+    <tr><td>Stripe fee per Pro sub</td><td>2.9% + $0.30</td><td>1 subscription</td><td>$0.85</td></tr>
+    <tr style="border-top:2px solid var(--green);">
+      <td class="cost-total" colspan="3">Per-user marginal cost (managed AI)</td>
+      <td class="cost-total">~$3-5</td>
+    </tr>
+    <tr>
+      <td class="cost-total" colspan="3">Fixed infrastructure cost</td>
+      <td class="cost-total">~$5.20</td>
+    </tr>
+  </tbody>
+</table>
+<p class="cost-note">Break-even: 1 Pro subscriber covers infrastructure. 2+ subscribers = profit. BYOK users cost $0 in AI (they pay Anthropic directly).</p>
+
+</div>
+</div>
+
+<footer>
+  Thought+Form Architecture Map &middot; Internal Reference &middot; Not for public distribution
+</footer>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector('.tab[onclick*="' + tab + '"]').classList.add('active');
+}
+</script>
+</body>
+</html>

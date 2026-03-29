@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — The Archive</title>
+<meta name="description" content="83 research tools across 12 categories: sacred text library, knowledge graph, AI chat with 4 reasoning modes, evidence chains, structural analysis, scientific rigor, emotional intelligence, and more.">
+<meta property="og:title" content="Features — The Archive">
+<meta property="og:description" content="Every tool in The Archive. Read, explore, analyze, and research across 22 sacred texts and 14 traditions.">
+<meta property="og:image" content="https://thearchive.app/og-image.png">
+<meta property="og:url" content="https://thearchive.app/features">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--bg-deep:#110a1f;
+  --fg:#e8deff;--fg-muted:rgba(232,222,255,0.6);--fg-subtle:rgba(232,222,255,0.35);
+  --accent:#8b5cf6;--accent-bright:#a855f7;--accent-dim:rgba(124,58,237,0.15);--accent-faint:rgba(124,58,237,0.06);
+  --border:rgba(124,58,237,0.1);--border-hover:rgba(124,58,237,0.25);
+  --glow-subtle:0 0 30px rgba(107,33,168,0.12);--glow-medium:0 0 50px rgba(107,33,168,0.2);--glow-strong:0 0 80px rgba(124,58,237,0.3);
+  --card-bg:rgba(124,58,237,0.03);--card-bg-hover:rgba(124,58,237,0.06);
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --font-h:'Space Grotesk',sans-serif;--font-b:'Inter',sans-serif;--font-s:'Cormorant Garamond',serif;--font-m:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-b);font-size:16px;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(124,58,237,0.3)}
+a{color:var(--accent-bright);text-decoration:none;transition:all .3s var(--ease)}a:hover{color:#c084fc}
+img{max-width:100%;display:block}
+
+/* ── BG ── */
+.bg-gradient{position:fixed;inset:0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 50%,#0d0618 100%);z-index:-3}
+.bg-glow{position:fixed;top:-400px;left:50%;transform:translateX(-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);pointer-events:none;z-index:-2}
+.bg-stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.star{position:absolute;width:1px;height:1px;background:rgba(232,222,255,0.4);border-radius:50%;animation:twinkle var(--dur,4s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:.8}}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 28px;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);background:rgba(10,10,15,0.7);border-bottom:1px solid var(--border);transition:all .4s var(--ease)}
+.nav-logo{font-family:var(--font-h);font-size:.85rem;font-weight:500;letter-spacing:.12em;color:var(--fg)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-link{font-family:var(--font-m);font-size:.7rem;letter-spacing:.06em;color:var(--fg-muted);text-transform:uppercase}.nav-link:hover{color:var(--accent-bright)}
+.nav-link.active{color:var(--accent-bright)}
+.nav-cta{font-family:var(--font-m);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--fg);padding:8px 20px;border:1px solid var(--border-hover);border-radius:6px;transition:all .4s var(--ease)}.nav-cta:hover{border-color:var(--accent);box-shadow:var(--glow-subtle);color:var(--fg)}
+
+/* ── CONTAINERS ── */
+.ctn{max-width:1100px;margin:0 auto;padding:0 28px}
+.ctn-n{max-width:760px;margin:0 auto;padding:0 28px}
+.ctn-w{max-width:1300px;margin:0 auto;padding:0 28px}
+
+/* ── TYPE ── */
+.label{font-family:var(--font-m);font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
+.title{font-family:var(--font-h);font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;margin-bottom:20px}
+.subtitle{font-family:var(--font-s);font-style:italic;font-size:1.15rem;color:var(--fg-muted);max-width:600px;line-height:1.6}
+.subtitle.c{margin:0 auto}
+.sacred{font-family:var(--font-s);font-style:italic}
+.mono{font-family:var(--font-m);font-size:.75rem;letter-spacing:.05em;text-transform:uppercase}
+.tc{text-align:center}
+
+/* ── BUTTONS ── */
+.btn-p{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--accent);padding:14px 32px;border-radius:8px;border:none;cursor:pointer;transition:all .4s var(--ease);box-shadow:var(--glow-subtle)}.btn-p:hover{background:var(--accent-bright);transform:translateY(-2px);box-shadow:var(--glow-medium);color:#fff}
+.btn-s{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--fg);background:transparent;padding:14px 32px;border-radius:8px;border:1px solid var(--border-hover);cursor:pointer;transition:all .4s var(--ease)}.btn-s:hover{border-color:var(--accent);box-shadow:var(--glow-subtle);color:var(--fg);transform:translateY(-1px)}
+.btn-g{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent-bright);background:none;border:none;cursor:pointer;padding:8px 0;transition:all .3s ease}.btn-g:hover{color:#c084fc}
+
+/* ── SECTIONS ── */
+.sec{padding:120px 0;position:relative}
+.sec-sm{padding:80px 0}
+.divider{width:60px;height:1px;background:linear-gradient(to right,transparent,var(--accent),transparent);margin:0 auto 120px}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:120px 28px 80px;position:relative}
+.hero-ey{font-family:var(--font-m);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:32px;opacity:0;animation:fadeUp 1s var(--ease) .2s forwards}
+.hero-t{font-family:var(--font-h);font-size:clamp(2.5rem,6vw,5rem);font-weight:300;line-height:1.1;margin-bottom:28px;max-width:900px;opacity:0;animation:fadeUp 1s var(--ease) .4s forwards}
+.hero-t em{font-style:normal;background:linear-gradient(135deg,var(--accent-bright),#c084fc,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-family:var(--font-s);font-style:italic;font-size:clamp(1.1rem,2.5vw,1.45rem);color:var(--fg-muted);margin-bottom:48px;max-width:680px;line-height:1.6;opacity:0;animation:fadeUp 1s var(--ease) .6s forwards}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s var(--ease) 1.2s forwards}
+.hero-scroll span{font-family:var(--font-m);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--fg-subtle)}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CATEGORY NAV ── */
+.cat-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;padding:0 28px;margin-bottom:40px;opacity:0;animation:fadeUp 1s var(--ease) .8s forwards}
+.cat-chip{font-family:var(--font-m);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-subtle);padding:8px 16px;border:1px solid var(--border);border-radius:20px;transition:all .3s var(--ease)}.cat-chip:hover,.cat-chip.active{border-color:var(--accent);color:var(--accent-bright);box-shadow:var(--glow-subtle)}
+
+/* ── CATEGORY SECTIONS ── */
+.cat-header{margin-bottom:48px}
+.cat-title{font-family:var(--font-h);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:300;margin-bottom:12px}
+.cat-desc{font-family:var(--font-s);font-style:italic;font-size:1.1rem;color:var(--fg-muted);max-width:600px;line-height:1.5}
+.cat-narrative{font-size:.92rem;color:var(--fg-muted);line-height:1.8;max-width:700px;margin-bottom:40px}
+
+/* ── SHOWCASE (alternating) ── */
+.showcase{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-bottom:80px}
+.showcase.rev{direction:rtl}.showcase.rev>*{direction:ltr}
+.show-label{font-family:var(--font-m);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.show-title{font-family:var(--font-h);font-size:1.6rem;font-weight:400;margin-bottom:14px;line-height:1.25}
+.show-text{font-size:.9rem;color:var(--fg-muted);line-height:1.8;margin-bottom:12px}
+.show-highlights{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:16px}
+.show-highlights li{font-size:.8rem;color:var(--fg-muted);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.show-highlights li::before{content:'+';color:var(--accent);font-weight:600;flex-shrink:0}
+.show-visual{border:1px solid var(--border);border-radius:16px;background:var(--card-bg);padding:40px;min-height:320px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;transition:all .5s var(--ease)}
+.show-visual:hover{border-color:var(--border-hover);box-shadow:var(--glow-medium)}
+.show-visual::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%)}
+
+/* ── FEATURE CARDS ── */
+.f-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
+.f-grid-2{grid-template-columns:repeat(2,1fr)}
+.f-grid-4{grid-template-columns:repeat(4,1fr)}
+.f-card{padding:28px;border:1px solid var(--border);border-radius:12px;background:var(--card-bg);transition:all .4s var(--ease);position:relative}
+.f-card:hover{border-color:var(--border-hover);transform:translateY(-3px);box-shadow:var(--glow-subtle);background:var(--card-bg-hover)}
+.f-icon{font-size:1.3rem;margin-bottom:14px;display:block}
+.f-title{font-family:var(--font-h);font-size:.95rem;font-weight:500;margin-bottom:10px}
+.f-text{font-size:.82rem;color:var(--fg-muted);line-height:1.65}
+.f-tag{position:absolute;top:14px;right:14px;font-family:var(--font-m);font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding:3px 8px;border:1px solid var(--accent-dim);border-radius:4px}
+.f-link{font-family:var(--font-m);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-bright);margin-top:12px;display:inline-block}
+
+/* ── INLINE VISUAL MOCKS ── */
+.mock-reader{width:100%;display:flex;flex-direction:column;gap:12px}
+.mock-verse{position:relative;padding:12px 16px 12px 20px;border-radius:8px;font-family:var(--font-s);font-size:.88rem;color:var(--fg-muted);line-height:1.7;border-left:3px solid transparent}
+.mock-verse.highlighted{background:rgba(124,58,237,0.04);border-left-color:var(--accent)}
+.mock-verse .v-num{font-family:var(--font-m);font-size:.5rem;color:var(--fg-subtle);position:absolute;left:-2px;top:14px}
+.mock-entity{border-bottom:1px dashed var(--accent);cursor:default}
+.mock-annotation{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-family:var(--font-m);font-size:.5rem;color:var(--accent);padding:2px 6px;border:1px solid var(--accent-dim);border-radius:3px}
+
+.mock-graph{width:100%;height:100%;position:relative;min-height:240px}
+.g-node{position:absolute;width:var(--s,10px);height:var(--s,10px);border-radius:50%;background:var(--c,var(--accent));box-shadow:0 0 12px var(--c,var(--accent));animation:gfloat var(--d,6s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+.g-label{position:absolute;font-family:var(--font-m);font-size:.5rem;color:var(--fg-muted);white-space:nowrap;transform:translate(-50%,-50%);letter-spacing:.04em}
+@keyframes gfloat{0%,100%{transform:translate(0,0)}33%{transform:translate(3px,-4px)}66%{transform:translate(-2px,3px)}}
+
+.mock-chat{width:100%;display:flex;flex-direction:column;gap:12px}
+.m-bubble{padding:14px 18px;border-radius:12px;font-size:.78rem;line-height:1.6;max-width:92%}
+.m-bubble.user{align-self:flex-end;background:var(--accent-dim);border:1px solid var(--border-hover);color:var(--fg)}
+.m-bubble.ai{align-self:flex-start;background:var(--card-bg);border:1px solid var(--border);color:var(--fg-muted)}
+.m-conf{display:inline-flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:.55rem;color:var(--accent);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.m-mode{font-family:var(--font-m);font-size:.5rem;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+
+.mock-evidence{width:100%;display:flex;flex-direction:column;gap:6px}
+.ev-step{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-size:.72rem;color:var(--fg-muted);background:var(--card-bg)}
+.ev-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;border:1px solid}
+.ev-icon.cl{background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.3);color:#a78bfa}
+.ev-icon.sr{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:#4ade80}
+.ev-icon.ct{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.2);color:#fbbf24}
+.ev-icon.vd{background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.3);color:#a78bfa}
+.ev-conn{width:1px;height:6px;background:var(--border-hover);margin-left:25px}
+
+.mock-map{width:100%;height:100%;min-height:240px;position:relative;background:radial-gradient(ellipse at center,rgba(124,58,237,0.04) 0%,transparent 80%);border-radius:8px}
+.map-dot{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--c,var(--accent));box-shadow:0 0 8px var(--c,var(--accent))}
+.map-label{position:absolute;font-family:var(--font-m);font-size:.45rem;color:var(--fg-subtle);letter-spacing:.04em;white-space:nowrap}
+.map-route{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+
+.mock-timeline{width:100%;position:relative;padding:20px 0}
+.tl-axis{width:100%;height:1px;background:var(--border-hover);position:relative;margin:30px 0}
+.tl-mark{position:absolute;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c,var(--accent));box-shadow:0 0 8px var(--c,var(--accent));transform:translateX(-50%)}
+.tl-label{position:absolute;top:14px;font-family:var(--font-m);font-size:.45rem;color:var(--fg-subtle);white-space:nowrap;transform:translateX(-50%)}
+.tl-date{position:absolute;bottom:12px;font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);white-space:nowrap;transform:translateX(-50%)}
+.tl-range{display:flex;justify-content:space-between;font-family:var(--font-m);font-size:.5rem;color:var(--fg-subtle)}
+
+/* ── QUOTE ── */
+.quote{text-align:center;padding:100px 0;position:relative}
+.q-mark{font-family:var(--font-s);font-size:5rem;color:var(--accent-dim);line-height:1;margin-bottom:-16px}
+.q-text{font-family:var(--font-s);font-style:italic;font-size:clamp(1.1rem,2.5vw,1.5rem);color:var(--fg-muted);max-width:650px;margin:0 auto 20px;line-height:1.6}
+.q-attr{font-family:var(--font-m);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle)}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin:60px 0}
+.stat{display:flex;flex-direction:column;align-items:center;padding:32px 16px;background:var(--bg)}
+.stat-n{font-family:var(--font-h);font-size:2.2rem;font-weight:300;line-height:1;margin-bottom:6px}
+.stat-l{font-family:var(--font-m);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle)}
+
+/* ── CTA ── */
+.cta{text-align:center;padding:140px 0 100px;position:relative}
+.cta::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);pointer-events:none}
+.cta-t{font-family:var(--font-h);font-size:clamp(2rem,4vw,3rem);font-weight:300;margin-bottom:16px;position:relative}
+.cta-sub{font-family:var(--font-s);font-style:italic;font-size:1.15rem;color:var(--fg-muted);margin-bottom:40px;position:relative}
+.cta-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* ── FOOTER ── */
+.footer{padding:60px 28px 40px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);max-width:1300px;margin:0 auto}
+.footer-b{font-family:var(--font-m);font-size:.65rem;letter-spacing:.1em;color:var(--fg-subtle)}
+.footer-links{display:flex;gap:24px}
+.footer-l{font-family:var(--font-m);font-size:.65rem;letter-spacing:.05em;color:var(--fg-subtle);text-transform:uppercase}.footer-l:hover{color:var(--accent-bright)}
+.footer-tag{font-family:var(--font-s);font-style:italic;font-size:.85rem;color:var(--fg-subtle)}
+
+/* ── SCROLL REVEAL ── */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.vis{opacity:1;transform:translateY(0)}
+.rv-1{transition-delay:.1s}.rv-2{transition-delay:.2s}.rv-3{transition-delay:.3s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:968px){
+  .showcase{grid-template-columns:1fr;gap:40px}.showcase.rev{direction:ltr}
+  .f-grid{grid-template-columns:repeat(2,1fr)}
+  .f-grid-4{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .nav-links{display:none}
+  .f-grid,.f-grid-2,.f-grid-4{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .footer{flex-direction:column;gap:20px;text-align:center}
+  .sec{padding:80px 0}
+  .hero{padding:100px 20px 60px}
+  .cat-nav{gap:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-gradient"></div>
+<div class="bg-glow"></div>
+<div class="bg-stars" id="stars"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">THE ARCHIVE</a>
+  <div class="nav-links">
+    <a href="/sales.html" class="nav-link">Home</a>
+    <a href="/features.html" class="nav-link active">Features</a>
+    <a href="/pricing" class="nav-link">Pricing</a>
+    <a href="/sign-up" class="nav-cta">Start Free</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-ey">83 Tools &middot; 12 Categories &middot; 0 Busywork</div>
+  <h1 class="hero-t">
+    Instruments for questions<br>
+    that didn't have <em>tools</em> before
+  </h1>
+  <p class="hero-sub">
+    We built every research instrument we wished existed when we first asked:
+    why do civilizations that never met tell the same stories?
+    Here's what's inside.
+  </p>
+
+  <!-- Category quick-nav -->
+  <nav class="cat-nav">
+    <a href="#reading" class="cat-chip">Read & Study</a>
+    <a href="#discovery" class="cat-chip">Discover & Explore</a>
+    <a href="#analysis" class="cat-chip">Analyze & Research</a>
+    <a href="#structural" class="cat-chip">Scholarly Frameworks</a>
+    <a href="#scientific" class="cat-chip">Scientific Rigor</a>
+    <a href="#evolution" class="cat-chip">Structural Evolution</a>
+    <a href="#cyclical" class="cat-chip">Cyclical Patterns</a>
+    <a href="#emotional" class="cat-chip">Emotional Intelligence</a>
+    <a href="#learning" class="cat-chip">Learn & Grow</a>
+    <a href="#geographic" class="cat-chip">Geographic Intelligence</a>
+    <a href="#intelligence" class="cat-chip">Intelligence & Memory</a>
+    <a href="#platform" class="cat-chip">Platform & Access</a>
+  </nav>
+
+  <div class="hero-scroll">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     01. READ & STUDY
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="reading">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">01 &mdash; Read & Study</div>
+      <h2 class="cat-title">A library built for revelation, not just reading</h2>
+      <p class="cat-desc">
+        22 sacred texts from 14 traditions. Not scanned PDFs. Not copy-pasted web pages.
+        Structured, searchable, entity-tagged, and cross-referenced down to the verse.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Most sacred text platforms give you one tradition and call it a day.
+      We give you the Bible <em>and</em> the Quran <em>and</em> the Book of Enoch
+      <em>and</em> the Epic of Gilgamesh <em>and</em> 18 more &mdash; all searchable
+      simultaneously, with every deity, concept, and place automatically highlighted
+      and linked to its node in the knowledge graph. Switch translations mid-sentence.
+      Annotate passages and tag them for your research. Turn on source layers to see
+      the Bible's J, E, P, and D sources color-coded in real time. Have any passage
+      read aloud in natural AI-generated voices. Flag suspicious translations and see
+      27 passages where translators made choices that changed meaning. This is what
+      reading sacred texts should feel like in 2026.
+    </p>
+
+    <!-- Showcase: Sacred Text Library + Reader -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Sacred Text Library</div>
+        <h3 class="show-title">22 texts. Every verse searchable. Every entity linked.</h3>
+        <p class="show-text">
+          Full-text corpus spanning Christianity, Islam, Judaism, Hermeticism, Gnosticism,
+          Mesopotamian, Egyptian, Hindu, Buddhist, Taoist, Norse, Zoroastrian, Mesoamerican,
+          and Greek traditions. Multiple translations per work. Sub-second fulltext search
+          across the entire corpus.
+        </p>
+        <ul class="show-highlights">
+          <li>22 texts spanning 14 traditions</li>
+          <li>Multiple translations per work (KJV, Douay-Rheims, etc.)</li>
+          <li>Chapter/verse navigation with fulltext search</li>
+          <li>All public domain &mdash; no copyright restrictions</li>
+        </ul>
+        <a href="/library" class="btn-g">Browse the Library &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div class="mock-reader">
+          <div class="mock-verse"><span class="v-num">1</span>In the beginning <span class="mock-entity">God</span> created the heaven and the earth.</div>
+          <div class="mock-verse highlighted"><span class="v-num">2</span>And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of <span class="mock-entity">God</span> moved upon the face of the waters.<span class="mock-annotation">Note</span></div>
+          <div class="mock-verse"><span class="v-num">3</span>And <span class="mock-entity">God</span> said, Let there be light: and there was light.</div>
+          <div class="mock-verse"><span class="v-num">4</span>And <span class="mock-entity">God</span> saw the light, that it was good: and <span class="mock-entity">God</span> divided the light from the darkness.</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <span style="font-family:var(--font-m);font-size:.5rem;padding:3px 8px;border:1px solid var(--accent-dim);border-radius:3px;color:var(--accent)">KJV</span>
+            <span style="font-family:var(--font-m);font-size:.5rem;padding:3px 8px;border:1px solid var(--border);border-radius:3px;color:var(--fg-subtle)">D-R</span>
+            <span style="font-family:var(--font-m);font-size:.5rem;padding:3px 8px;border:1px solid var(--border);border-radius:3px;color:var(--fg-subtle)">&#x25B6; TTS</span>
+            <span style="font-family:var(--font-m);font-size:.5rem;padding:3px 8px;border:1px solid rgba(251,191,36,.2);border-radius:3px;color:#fbbf24">J Source</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature cards for remaining Read & Study features -->
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x27D0;</span>
+        <h3 class="f-title">Translation Comparison</h3>
+        <p class="f-text">Side-by-side parallel display with synchronized scrolling. AI classifies divergences into five categories: theological, linguistic, cultural, scribal, and interpretive. Like having a linguistics professor narrate every discrepancy.</p>
+        <a href="/compare" class="f-link">Compare &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25EF;</span>
+        <h3 class="f-title">Focus Mode</h3>
+        <p class="f-text">Distraction-free reading: hides all chrome, centers text in a 680px column, switches to serif typography, and tints the background by tradition. Designed to feel like a physical book, not a website.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25C6;</span>
+        <h3 class="f-title">Entity Highlighting</h3>
+        <p class="f-text">Tradition-colored underlines on every detected deity, concept, place, and figure. Hover for type info. Click to jump to the knowledge graph. The text becomes a navigable map of connections.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25B6;</span>
+        <h3 class="f-title">Text-to-Speech</h3>
+        <p class="f-text">Three-tier voice system: browser voices (free), OpenAI natural voices (Sonnet), ElevenLabs HD (Opus). Sacred texts were meant to be heard aloud. Now they can be, with voices that do them justice.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x270E;</span>
+        <h3 class="f-title">Annotation System</h3>
+        <p class="f-text">Select-to-annotate in the reader. Attach notes and tags to any passage. Annotations link to research projects and are exportable. Like writing in margins, but searchable and permanent.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25A4;</span>
+        <h3 class="f-title">Temporal Stratigraphy</h3>
+        <p class="f-text">Toggle source-critical layers: see the Bible's J, E, P, and D sources color-coded, the Quran's Meccan and Medinan periods, the Book of Enoch's five sections. X-ray vision into a text's composition history.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x26A0;</span>
+        <h3 class="f-title">Translation Transparency</h3>
+        <p class="f-text">27 flagged passages where translator choices significantly altered meaning. "Virgin" vs. "young woman" in Isaiah 7:14. "Hell" vs. "Sheol" vs. "Gehenna." Every flag links to the original language, alternative readings, and scholarly commentary on what was lost.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     02. DISCOVER & EXPLORE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="discovery">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">02 &mdash; Discover & Explore</div>
+      <h2 class="cat-title">Navigate the invisible web between traditions</h2>
+      <p class="cat-desc">
+        Interactive visualization tools that make cross-tradition connections
+        visible, explorable, and verifiable.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Religions don't exist in isolation. They share trade routes, borrow vocabulary,
+      retell each other's stories, and independently arrive at identical structures.
+      But these connections are buried in specialized academic literature that most people
+      will never read. We surfaced them all &mdash; as an interactive, filterable, queryable
+      knowledge graph you can explore in real time. Then we built pattern integrity scoring
+      to separate the genuine signals from the noise, anomaly detection to find what's
+      <em>missing</em>, and semantic diff to measure exactly how two traditions diverge.
+    </p>
+
+    <!-- Showcase: Knowledge Graph -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Knowledge Graph Explorer</div>
+        <h3 class="show-title">50,000+ entities. Every connection visible.</h3>
+        <p class="show-text">
+          Force-directed WebGL graph via Sigma.js + Graphology. Nodes are deities,
+          concepts, places, figures. Edges are shared motifs, narrative functions,
+          etymological roots, and documented contacts. Path-finding via Dijkstra's
+          algorithm finds the shortest route between any two entities &mdash; even across
+          traditions.
+        </p>
+        <ul class="show-highlights">
+          <li>WebGL rendering handles 50K+ nodes at 60fps</li>
+          <li>Cross-tradition correlation detection (shared motifs, functions, stages)</li>
+          <li>Path-finding between any two entities</li>
+          <li>Filter by tradition, entity type, theme, confidence</li>
+          <li>Tier-gated depth: 1 hop (free), 4 (Sonnet), unlimited (Opus)</li>
+        </ul>
+        <a href="/explore" class="btn-g">Explore the Graph &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div class="mock-graph">
+          <div class="g-node" style="--s:16px;--c:#7C3AED;top:20%;left:35%;--d:7s"></div>
+          <div class="g-node" style="--s:12px;--c:#6366F1;top:50%;left:60%;--d:5.5s;--dl:.4s"></div>
+          <div class="g-node" style="--s:14px;--c:#9333EA;top:65%;left:30%;--d:6s;--dl:.8s"></div>
+          <div class="g-node" style="--s:10px;--c:#A855F7;top:30%;left:70%;--d:8s;--dl:.2s"></div>
+          <div class="g-node" style="--s:18px;--c:#8B5CF6;top:55%;left:50%;--d:5s;--dl:1s"></div>
+          <div class="g-node" style="--s:8px;--c:#D8B4FE;top:75%;left:55%;--d:6.5s;--dl:.6s"></div>
+          <div class="g-node" style="--s:11px;--c:#818CF8;top:35%;left:45%;--d:7s;--dl:.3s"></div>
+          <div class="g-node" style="--s:9px;--c:#6D28D9;top:45%;left:25%;--d:5s;--dl:1.2s"></div>
+          <span class="g-label" style="top:17%;left:35%">Inanna</span>
+          <span class="g-label" style="top:47%;left:62%">Osiris</span>
+          <span class="g-label" style="top:62%;left:30%">Yahweh</span>
+          <span class="g-label" style="top:27%;left:72%">Marduk</span>
+          <span class="g-label" style="top:53%;left:52%">Isis</span>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+            <line x1="35%" y1="20%" x2="60%" y2="50%" stroke="rgba(139,92,246,.12)" stroke-width="1"/>
+            <line x1="35%" y1="20%" x2="45%" y2="35%" stroke="rgba(139,92,246,.1)" stroke-width="1"/>
+            <line x1="60%" y1="50%" x2="50%" y2="55%" stroke="rgba(139,92,246,.12)" stroke-width="1"/>
+            <line x1="30%" y1="65%" x2="50%" y2="55%" stroke="rgba(139,92,246,.08)" stroke-width="1"/>
+            <line x1="70%" y1="30%" x2="50%" y2="55%" stroke="rgba(139,92,246,.1)" stroke-width="1"/>
+            <line x1="50%" y1="55%" x2="55%" y2="75%" stroke="rgba(139,92,246,.08)" stroke-width="1"/>
+            <line x1="45%" y1="35%" x2="25%" y2="45%" stroke="rgba(139,92,246,.06)" stroke-width="1"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Showcase: AI Graph Analysis -->
+    <div class="showcase rev rv">
+      <div>
+        <div class="show-label">AI-Powered Graph Analysis</div>
+        <h3 class="show-title">One click. Six parallel queries. Full analysis.</h3>
+        <p class="show-text">
+          Click any entity and the AI examines its entire neighborhood: relationships,
+          shared motifs, shared narrative functions, shared Campbell stages, and
+          cross-tradition bridges. Context is assembled from six parallel Neo4j queries
+          and sent to Claude with a specialized comparative religion prompt.
+          Sonnet for quick analysis. Opus with extended thinking for deep dives.
+        </p>
+        <ul class="show-highlights">
+          <li>6 parallel context queries per analysis</li>
+          <li>Markdown output with context statistics</li>
+          <li>Tier-based model: Sonnet or Opus with visible reasoning</li>
+        </ul>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;text-align:center">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em;margin-bottom:16px">ANALYZING: INANNA</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:20px">
+            <span style="font-family:var(--font-m);font-size:.45rem;padding:3px 8px;border:1px solid rgba(34,197,94,.2);border-radius:3px;color:#4ade80">Relationships: 47</span>
+            <span style="font-family:var(--font-m);font-size:.45rem;padding:3px 8px;border:1px solid rgba(139,92,246,.2);border-radius:3px;color:#a78bfa">Motifs: 12</span>
+            <span style="font-family:var(--font-m);font-size:.45rem;padding:3px 8px;border:1px solid rgba(99,102,241,.2);border-radius:3px;color:#818cf8">Functions: 8</span>
+            <span style="font-family:var(--font-m);font-size:.45rem;padding:3px 8px;border:1px solid rgba(168,85,247,.2);border-radius:3px;color:#c084fc">Bridges: 5</span>
+          </div>
+          <div style="text-align:left;font-size:.75rem;color:var(--fg-muted);line-height:1.7;padding:16px;border:1px solid var(--border);border-radius:8px;background:var(--card-bg)">
+            <strong style="color:var(--fg)">Inanna</strong> (Sumerian, c. 3500 BCE) is the earliest well-documented deity of love, war, and political power. Her <em>Descent to the Underworld</em> established the death-and-return motif that propagated through Ishtar, Persephone, and Osiris traditions...
+            <div class="m-conf" style="margin-top:10px">
+              <span style="width:5px;height:5px;background:#8b5cf6;border-radius:50%;display:inline-block"></span>
+              Claude Opus &middot; Extended thinking &middot; 47 relationships analyzed
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x25C9;</span>
+        <h3 class="f-title">Multi-Scale Lens</h3>
+        <p class="f-text">Google Maps for ideas. Five zoom levels: Word &rarr; Passage &rarr; Narrative &rarr; Tradition &rarr; Universal. Trace "logos" from a single word to a cross-cultural pattern in one continuous zoom. Deep-linkable.</p>
+        <a href="/lens" class="f-link">Open Lens &rarr;</a>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25C9;</span>
+        <h3 class="f-title">Interactive Map</h3>
+        <p class="f-text">Dark-themed world map with 14 tradition origins, 10 ancient trade routes, and 20 documented contact events. Time slider from 3000 BCE to 2000 CE. Contact probability scoring between any two traditions at any point in history.</p>
+        <a href="/map" class="f-link">Open Map &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x229E;</span>
+        <h3 class="f-title">Timeline</h3>
+        <p class="f-text">Every sacred text plotted chronologically with influence arrows showing documented transmission relationships. Tradition color-coding and filtering. Click any text to read it or see it in the graph.</p>
+        <a href="/timeline" class="f-link">View Timeline &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2315;</span>
+        <h3 class="f-title">Advanced Search</h3>
+        <p class="f-text">Compositional query builder: combine themes, traditions, date ranges, entity types, Thompson motifs, transmission mechanisms, and confidence thresholds. "Every flood myth from Mesopotamian and Hebrew traditions before 500 BCE with strong scholarly support." Done.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2318;</span>
+        <h3 class="f-title">Command Palette</h3>
+        <p class="f-text">Cmd+K from anywhere. Fuzzy search across every page, entity, and work. Keyboard-native navigation. Type "Inanna" and you're there in under a second.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25CE;</span>
+        <h3 class="f-title">Practice Comparison</h3>
+        <p class="f-text">Religions aren't just texts &mdash; they're embodied practices. Compare meditation techniques, ritual structures, pilgrimage patterns, and festival calendars across traditions. Circular year diagram reveals solstice/equinox alignments.</p>
+        <a href="/practices" class="f-link">Compare Practices &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2261;</span>
+        <h3 class="f-title">Pattern Integrity Scoring</h3>
+        <p class="f-text">When we find a pattern, we actively try to break it. Which traditions don't have it? What confounders exist? Every pattern gets a verdict: Strong Universal, Regional Pattern, Possible Coincidence, or Likely Transmission. This is what separates scholarship from speculation.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2194;</span>
+        <h3 class="f-title">Semantic Diff</h3>
+        <p class="f-text">Pick two traditions, two texts, or two passages. Get a structured comparison: shared elements, unique elements, structural parallels, and divergence score. Not vague "these are similar" &mdash; precise, dimension-by-dimension measurement of how two things differ.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2237;</span>
+        <h3 class="f-title">Narrative Arc Detection</h3>
+        <p class="f-text">8 sacred texts analyzed for story structure: rising action, climax, resolution, emotional beats. Overlay two arcs to see where they converge and diverge. The Descent of Inanna and the Passion of Christ follow the same structural skeleton.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2205;</span>
+        <h3 class="f-title">Anomaly Detection</h3>
+        <p class="f-text">15 documented absences: patterns you'd expect to find but don't. Why does Judaism lack a developed afterlife until late? Why no flood myth in sub-Saharan Africa? Missing data is data. The silences in the corpus are as informative as the signals.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x29C9;</span>
+        <h3 class="f-title">Cross-Modal Discovery</h3>
+        <p class="f-text">Start from any entry point &mdash; a passage, an entity, a map location, a motif, a timeline position &mdash; and discover connections across every other mode. The system links all data layers so you never hit a dead end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Quote break -->
+<section class="quote rv">
+  <div class="ctn-n">
+    <div class="q-mark">&ldquo;</div>
+    <p class="q-text">
+      Myths are public dreams; dreams are private myths.
+    </p>
+    <p class="q-attr">Joseph Campbell</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     03. ANALYZE & RESEARCH
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="analysis">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">03 &mdash; Analyze & Research</div>
+      <h2 class="cat-title">AI that shows its work and challenges its own conclusions</h2>
+      <p class="cat-desc">
+        Every claim traced to its source. Every connection scored for confidence.
+        Every conclusion accompanied by counter-evidence.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      There are two ways to use AI for research: you can ask ChatGPT a question
+      and get a confident-sounding paragraph with no sources, or you can use
+      The Archive and get a structured argument with inline citations, paragraph-level
+      confidence scores, counter-evidence, and a six-dimension confidence radar you can
+      expand and inspect. We built a falsifiability engine that generates testable predictions,
+      a calibration dashboard that tracks whether the AI's confidence matches reality,
+      debate simulation that argues both sides, and reproducible analysis with SHA-256
+      hashed snapshots so your conclusions are auditable. We chose accountability over
+      convenience.
+    </p>
+
+    <!-- Showcase: AI Chat -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">AI Chat &mdash; 4 Reasoning Modes</div>
+        <h3 class="show-title">Choose how your research partner thinks</h3>
+        <p class="show-text">
+          <strong>Authoritative</strong> &mdash; direct expert analysis with integrated counter-evidence.<br>
+          <strong>Transparent</strong> &mdash; full reasoning chain with 6-dimension confidence breakdowns.<br>
+          <strong>Dialectical</strong> &mdash; thesis-antithesis-synthesis for every topic.<br>
+          <strong>Socratic</strong> &mdash; guided discovery through probing questions.<br><br>
+          Every response includes real citations, not opinions. Streaming via SSE.
+          Sonnet for everyday research. Opus with extended thinking for deep analysis.
+        </p>
+        <a href="/chat" class="btn-g">Open Chat &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div class="mock-chat">
+          <div class="m-mode">&#x25C8; Dialectical Mode</div>
+          <div class="m-bubble user">Was Zoroastrianism the source of Jewish dualism?</div>
+          <div class="m-bubble ai">
+            <strong>Thesis:</strong> Persian influence is well-documented. The angel/demon hierarchy,
+            bodily resurrection, and cosmic dualism appear in Judaism only after the Babylonian exile
+            (539 BCE), precisely when Persian contact was maximal.<br><br>
+            <strong>Antithesis:</strong> However, seeds of dualism exist in pre-exilic texts.
+            The "sons of God" in Genesis 6 and the adversarial figure in Job predate Persian contact.
+            Barr (1985) argues internal development is sufficient.<br><br>
+            <strong>Synthesis:</strong> Persian contact likely amplified and systematized existing tendencies
+            rather than introducing them <em>de novo</em>...
+            <div class="m-conf">
+              <span style="width:5px;height:5px;background:#8b5cf6;border-radius:50%;display:inline-block"></span>
+              74% confidence &middot; 4 sources &middot; 3 counter-arguments
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Showcase: Evidence Chains -->
+    <div class="showcase rev rv">
+      <div>
+        <div class="show-label">Evidence Chains &mdash; 6-Dimension Confidence</div>
+        <h3 class="show-title">Eight sections of receipts for every claim</h3>
+        <p class="show-text">
+          Expand any AI claim to see: (1) the claim, (2) source passages with exact
+          chapter/verse, (3) entity cross-references, (4) graph context, (5) thematic
+          patterns, (6) scholarly citations by name and year, (7) counter-evidence,
+          and (8) a six-dimension confidence radar scoring textual, temporal, linguistic,
+          scholarly, archaeological, and geographic evidence.
+        </p>
+        <ul class="show-highlights">
+          <li>Source passages with exact work/chapter/verse</li>
+          <li>Scholarly citations by name and year</li>
+          <li>Counter-evidence for every connection</li>
+          <li>6-dimension confidence radar visualization</li>
+        </ul>
+      </div>
+      <div class="show-visual">
+        <div class="mock-evidence">
+          <div class="ev-step"><div class="ev-icon cl">C</div><span>Flood narratives show literary dependence, not independent invention</span></div>
+          <div class="ev-conn"></div>
+          <div class="ev-step"><div class="ev-icon sr">S</div><span><em>Atrahasis Epic</em> III.i &middot; <em>Genesis</em> 6:13&ndash;22 &middot; <em>Gilgamesh</em> XI.19&ndash;31</span></div>
+          <div class="ev-conn"></div>
+          <div class="ev-step"><div class="ev-icon sr">S</div><span>Tigay (1982): "The dependence of Genesis on Gilgamesh is beyond reasonable doubt"</span></div>
+          <div class="ev-conn"></div>
+          <div class="ev-step"><div class="ev-icon ct">!</div><span>Counter: Dundes (1988) argues flood myths are environmentally determined, not transmitted</span></div>
+          <div class="ev-conn"></div>
+          <div class="ev-step"><div class="ev-icon vd">&#x2713;</div><span>Verdict: <strong>Likely Transmission</strong> (0.84) &mdash; bird-release sequence is diagnostic</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature cards -->
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x25C6;</span>
+        <h3 class="f-title">Research Workspace</h3>
+        <p class="f-text">Project-based organization: save entities, passages, conversations, annotations, and graph snapshots. Synthesis document with auto-save. Export with Chicago-formatted bibliography. 3 free / 50 Sonnet / unlimited Opus.</p>
+        <a href="/research" class="f-link">Research &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x270E;</span>
+        <h3 class="f-title">Research Journal</h3>
+        <p class="f-text">Private journal with markdown, linked passages and entities, and tags. Quick-add from the reader or chat. Export in Chicago, APA, BibTeX, or Markdown. Your insights accumulate into something publishable.</p>
+        <a href="/journal" class="f-link">Journal &rarr;</a>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2B07;</span>
+        <h3 class="f-title">Export & Citation Engine</h3>
+        <p class="f-text">Chicago, APA, BibTeX, Markdown. Full metadata for all 22 works (42 translations). Auto-generated bibliographies. One-click download. Works from both Research projects and Journal entries.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25C7;</span>
+        <h3 class="f-title">Hypothesis Engine</h3>
+        <p class="f-text">Type a claim. The engine runs 7 parallel Neo4j queries: supporting evidence, counter-evidence, alternative explanations, scholarly positions, temporal and geographic plausibility, and graph statistics. SVG radar chart. Plain-English verdict with 7-dimension scoring.</p>
+        <a href="/hypothesis" class="f-link">Test a Hypothesis &rarr;</a>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2262;</span>
+        <h3 class="f-title">Falsifiability Engine</h3>
+        <p class="f-text">Every hypothesis generates testable predictions. "If Zoroastrian influence caused Jewish angelology, we should find no angel hierarchy before 539 BCE." The system then checks the corpus against each prediction. If a theory can't be falsified, it's not science &mdash; it's storytelling.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25CE;</span>
+        <h3 class="f-title">Calibration Dashboard</h3>
+        <p class="f-text">Brier scoring for AI confidence calibration. When the AI says "74% confidence," is it right 74% of the time? Track accuracy over time with calibration curves. Overconfidence and underconfidence alerts. Keeps the AI honest and you informed.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2B21;</span>
+        <h3 class="f-title">Argument Mapper</h3>
+        <p class="f-text">Drag-and-drop visual argument builder. Four node types: Claim, Evidence, Counter-Evidence, Inference. Connected by typed arrows. Auto-calculates argument strength. Weak-link detection flags sub-40% confidence connections.</p>
+        <a href="/argument" class="f-link">Build an Argument &rarr;</a>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25C8;</span>
+        <h3 class="f-title">Epistemic Dashboard</h3>
+        <p class="f-text">7-dimension radial confidence analysis for any graph relationship. Expandable evidence for each dimension: passages, timelines, etymology chains, scholarly opinions. Transforms "these are connected" from a vague claim into an inspectable assessment.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2699;</span>
+        <h3 class="f-title">Synthesis Engine</h3>
+        <p class="f-text">AI-powered evidence synthesis across multiple sources. Feed it three conflicting scholarly positions and it produces a structured synthesis: points of agreement, genuine disagreements, and open questions. Prevents cherry-picking by forcing confrontation with contrary evidence.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2702;</span>
+        <h3 class="f-title">Question Decomposition</h3>
+        <p class="f-text">Big questions break into smaller ones. "Did Christianity borrow from Egyptian religion?" becomes 5 sub-questions, each independently testable. Track progress on each sub-question. Reassemble into a structured answer when all pieces are investigated.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2694;</span>
+        <h3 class="f-title">Debate Simulation</h3>
+        <p class="f-text">3-round Pro vs. Con AI debate on any thesis. Round 1: opening arguments. Round 2: rebuttals and counter-evidence. Round 3: closing synthesis. Both sides cite real sources. You judge the winner. Forces exposure to the strongest version of opposing arguments.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x21C4;</span>
+        <h3 class="f-title">Mind Change Tracking</h3>
+        <p class="f-text">Log when evidence changes your position. "I used to think X, now I think Y because of Z." Tracks intellectual honesty over time. Reviewable timeline of how your understanding evolved. Scholars change their minds &mdash; the best ones document why.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F4DA;</span>
+        <h3 class="f-title">Living Bibliography</h3>
+        <p class="f-text">Auto-generated, always-current bibliography for every research project. Every source the AI cited, every passage you bookmarked, every scholar mentioned &mdash; collected, deduplicated, and formatted. Grows as you research. Export when you publish.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F512;</span>
+        <h3 class="f-title">Reproducible Analysis</h3>
+        <p class="f-text">Every AI analysis gets a SHA-256 hash: input data, model version, prompt, and output. Share the hash and anyone can verify they get the same result. Peer review for AI-assisted research. Because "the AI told me" isn't a citation &mdash; but a reproducible analysis is.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Quote break -->
+<section class="quote rv">
+  <div class="ctn-n">
+    <div class="q-mark">&ldquo;</div>
+    <p class="q-text">
+      The cave you fear to enter holds the treasure you seek.
+    </p>
+    <p class="q-attr">Joseph Campbell</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     04. STRUCTURAL & SCHOLARLY FRAMEWORKS
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="structural">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">04 &mdash; Structural & Scholarly Frameworks</div>
+      <h2 class="cat-title">Standing on the shoulders of giants</h2>
+      <p class="cat-desc">
+        Three established academic frameworks. 100 curated scholarly positions.
+        The accumulated insight of a century of comparative mythology,
+        digitized and made queryable.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      In the 1930s, Stith Thompson cataloged every recurring story element across world
+      folklore. In 1949, Joseph Campbell mapped the universal "Hero's Journey."
+      Vladimir Propp identified 31 functions that folktales follow worldwide.
+      We've taken these frameworks &mdash; along with 100 positions from Eliade, Frazer,
+      Burkert, Dumezil, Pagels, Boyer, and 40+ more scholars &mdash; and mapped them
+      directly to passages across all 22 texts. Added 152 etymology entries tracing
+      words across language families, 50 Levi-Straussian binary oppositions, and
+      15 cosmological schemas. The result: a searchable, cross-referenceable structural
+      backbone for the entire corpus.
+    </p>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">A</span>
+        <h3 class="f-title">Thompson Motif Index</h3>
+        <p class="f-text">211 curated entries from the canonical Motif-Index of Folk-Literature, organized into 11 categories. Mapped to passages across all traditions. Per-tradition frequency counts enable structural comparison &mdash; which motifs are universal and which are regional.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x21BB;</span>
+        <h3 class="f-title">Propp & Campbell Analysis</h3>
+        <p class="f-text">31 Propp narrative functions (Absentation &rarr; Wedding) and 17 Campbell monomyth stages (Call to Adventure &rarr; Freedom to Live), tagged to passages. Side-by-side structural grid shows which stories follow the same blueprint.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F4D6;</span>
+        <h3 class="f-title">100 Scholarly Positions</h3>
+        <p class="f-text">Curated arguments from 50+ scholars with support/opposition tracking. Key quotes from primary works. Automatically injected into AI responses &mdash; because "scholars say" isn't good enough without names, dates, and citations.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x10900;</span>
+        <h3 class="f-title">Etymology Chains</h3>
+        <p class="f-text">152 entries in 31 chains. El &rarr; Elohim &rarr; Allah. *dyew &rarr; Zeus &rarr; Jupiter &rarr; Deus. Proto-forms and language family tracking. The words themselves are evidence &mdash; concrete, testable, independent of interpretation.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2295;</span>
+        <h3 class="f-title">Binary Oppositions</h3>
+        <p class="f-text">50 Levi-Straussian dualities across 8 categories: light/dark, order/chaos, sacred/profane. Mapped to passages with pole detection. Reveals shared deep structure beneath surface mythology &mdash; cultures that never met, building stories from the same oppositions.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2609;</span>
+        <h3 class="f-title">Cosmological Schemas</h3>
+        <p class="f-text">15 tradition-specific worldviews as structured data: Norse Nine Worlds, Hindu 14 Lokas, Buddhist 31 Planes, Kabbalistic Four Worlds, and more. Levels, inhabitants, creation sequences, and cyclical vs. linear eschatology. Direct comparison of how cultures imagined the shape of existence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     05. SCIENTIFIC RIGOR
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="scientific">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">05 &mdash; Scientific Rigor</div>
+      <h2 class="cat-title">Where myth meets mechanism</h2>
+      <p class="cat-desc">
+        Bayesian reasoning, cognitive science, environmental determinism,
+        fractal pattern detection, and scholarly debate visualization.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Why do unrelated cultures invent the same stories? There are exactly two explanations:
+      either they learned from each other (transmission), or human brains are wired to produce
+      the same ideas independently (cognitive universals). Both are testable hypotheses.
+      We built tools for each &mdash; plus instruments that probe the physical environment
+      (geography, astronomy, climate), the mathematical structure (fractals, self-similarity),
+      and the documentary provenance (source criticism with epistemic weighting from 23 scholars)
+      of mythological systems. Bayesian confidence propagation ensures that uncertainty compounds
+      correctly through chains of inference.
+    </p>
+
+    <!-- Showcase: Bayesian + Source Criticism -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Bayesian Confidence Propagation</div>
+        <h3 class="show-title">Uncertainty that compounds honestly</h3>
+        <p class="show-text">
+          When Claim A (75% confident) supports Claim B (80% confident), the combined
+          confidence isn't 80% &mdash; it's lower, because the supporting evidence is itself
+          uncertain. Our Bayesian propagation engine handles this correctly through every
+          chain of inference, so you never mistake stacked weak evidence for one strong proof.
+        </p>
+        <ul class="show-highlights">
+          <li>Propagation through multi-step evidence chains</li>
+          <li>Prior/posterior visualization for each update</li>
+          <li>Sensitivity analysis: which evidence matters most</li>
+        </ul>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em;margin-bottom:4px">BAYESIAN CHAIN: FLOOD DEPENDENCE</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:60px;text-align:right">Prior</div>
+            <div style="flex:1;height:10px;border-radius:3px;background:var(--border);overflow:hidden"><div style="width:50%;height:100%;background:var(--accent-dim);border-radius:3px"></div></div>
+            <span style="font-family:var(--font-m);font-size:.45rem;color:var(--fg-subtle)">0.50</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:60px;text-align:right">+ Textual</div>
+            <div style="flex:1;height:10px;border-radius:3px;background:var(--border);overflow:hidden"><div style="width:72%;height:100%;background:rgba(34,197,94,.3);border-radius:3px"></div></div>
+            <span style="font-family:var(--font-m);font-size:.45rem;color:#4ade80">0.72</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:60px;text-align:right">+ Temporal</div>
+            <div style="flex:1;height:10px;border-radius:3px;background:var(--border);overflow:hidden"><div style="width:81%;height:100%;background:rgba(34,197,94,.4);border-radius:3px"></div></div>
+            <span style="font-family:var(--font-m);font-size:.45rem;color:#4ade80">0.81</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:60px;text-align:right">+ Counter</div>
+            <div style="flex:1;height:10px;border-radius:3px;background:var(--border);overflow:hidden"><div style="width:76%;height:100%;background:rgba(251,191,36,.3);border-radius:3px"></div></div>
+            <span style="font-family:var(--font-m);font-size:.45rem;color:#fbbf24">0.76</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:60px;text-align:right">Posterior</div>
+            <div style="flex:1;height:10px;border-radius:3px;background:var(--border);overflow:hidden"><div style="width:84%;height:100%;background:var(--accent);border-radius:3px"></div></div>
+            <span style="font-family:var(--font-m);font-size:.45rem;color:var(--accent-bright)">0.84</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x1F4DC;</span>
+        <h3 class="f-title">Source Criticism</h3>
+        <p class="f-text">23 scholars with epistemic weighting: primary source access, peer-reviewed publications, field excavation experience, language fluency. Not all opinions are equal. A scholar who reads cuneiform and excavated Nineveh outweighs one who read a Wikipedia summary.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x27F9;</span>
+        <h3 class="f-title">12 Transmission Mechanisms</h3>
+        <p class="f-text">Trade, conquest, missionary activity, intermarriage, scribal borrowing, liturgical contact, diplomatic exchange, literary imitation, oral tradition, migration, pilgrimage, shared ancestor. Each mechanism has different evidence signatures and different plausibility constraints.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x23F3;</span>
+        <h3 class="f-title">Temporal Reasoning</h3>
+        <p class="f-text">Anachronism detection with 37 work dates. "You can't cite Persian influence on a pre-exilic text." Automatic flagging when proposed connections violate chronology. Date range overlap scoring shows which traditions could have influenced which.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2648;</span>
+        <h3 class="f-title">Precession Wheel</h3>
+        <p class="f-text">Bull worship during the Age of Taurus. Ram sacrifice during Aries. Fish symbolism during Pisces. SVG circular diagram mapping 7 zodiacal ages against religious symbolism across the 26,000-year cycle. Coincidence or cosmic clock? The data is here.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F9E0;</span>
+        <h3 class="f-title">Cognitive Universal Explainer</h3>
+        <p class="f-text">11 mechanisms from the Cognitive Science of Religion: HADD (agent detection), MCI (minimally counterintuitive concepts), mortality salience, teleological reasoning, ritual invariance, and more. When parallel myths aren't transmitted &mdash; they're generated by the same neural architecture.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F30D;</span>
+        <h3 class="f-title">Environmental Correlations</h3>
+        <p class="f-text">9 environmental zones mapped to mythological themes. River valleys produce flood myths and dying-rising gods. Deserts produce monotheism and apocalypticism. Mountains produce sky gods. Your landscape shapes your theology. Scholarly citations for every correlation.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25CE;</span>
+        <h3 class="f-title">Fractal Pattern Detection</h3>
+        <p class="f-text">Self-similar patterns at three scales: micro (passage), meso (narrative arc), macro (tradition-wide). Descent-and-return appears in a single Inanna passage, the entire Hero's Journey, and resurrection theology as a whole. Mediating symbol detection via Levi-Strauss.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2696;</span>
+        <h3 class="f-title">Scholarly Debate Maps</h3>
+        <p class="f-text">Tree-layout debate visualization: which scholars support whom, which oppose. Bayesian confidence timeline shows how consensus evolved over decades. School clustering. Consensus scoring with direction tracking: forming, stable, or dissolving.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     06. STRUCTURAL EVOLUTION
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="evolution">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">06 &mdash; Structural Evolution</div>
+      <h2 class="cat-title">Trajectories, not snapshots</h2>
+      <p class="cat-desc">
+        Track how entities, motifs, and narratives transform as they travel
+        across traditions and centuries.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      A deity isn't a fixed thing. Inanna became Ishtar became Astarte became Aphrodite
+      became Venus. At each step, attributes were gained, lost, modified, split, or merged.
+      A flood story started as 7 lines in Sumerian and became an elaborate theological
+      narrative in Hebrew. The Archive doesn't just catalog connections &mdash; it tracks
+      how things <em>change</em> as they move. We built evolution chains, syncretism event
+      trackers, motif drift analysis, concept phylogenetics, and narrative complexity scoring
+      to measure transformation quantitatively.
+    </p>
+
+    <!-- Showcase: Evolution Chains -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Evolution Chains</div>
+        <h3 class="show-title">Watch a deity transform across 3,000 years</h3>
+        <p class="show-text">
+          5 documented deity transformation chains with per-step attribute tracking.
+          Horizontal SVG with tradition-colored nodes. At each transition, see exactly
+          what survived, what was lost, and what was invented. Love goddess. War goddess.
+          Beauty goddess. The same deity, refracted through five cultures.
+        </p>
+        <ul class="show-highlights">
+          <li>Inanna &rarr; Ishtar &rarr; Astarte &rarr; Aphrodite &rarr; Venus</li>
+          <li>Ra &rarr; Aten and 3 more chains</li>
+          <li>Per-step attribute gain/loss tracking</li>
+          <li>Tradition-colored SVG visualization</li>
+        </ul>
+        <a href="/evolution" class="btn-g">View Evolution &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;display:flex;flex-direction:column;gap:16px;align-items:center">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em">DEITY EVOLUTION CHAIN</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:36px;height:36px;border-radius:50%;border:2px solid #7C3AED;display:flex;align-items:center;justify-content:center;font-size:.6rem">&#x2640;</div>
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-muted)">Inanna</span>
+              <span style="font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Sumerian</span>
+            </div>
+            <span style="color:var(--accent);font-size:.7rem">&rarr;</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:36px;height:36px;border-radius:50%;border:2px solid #9333EA;display:flex;align-items:center;justify-content:center;font-size:.6rem">&#x2605;</div>
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-muted)">Ishtar</span>
+              <span style="font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Akkadian</span>
+            </div>
+            <span style="color:var(--accent);font-size:.7rem">&rarr;</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:36px;height:36px;border-radius:50%;border:2px solid #6366F1;display:flex;align-items:center;justify-content:center;font-size:.6rem">&#x263E;</div>
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-muted)">Astarte</span>
+              <span style="font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Canaanite</span>
+            </div>
+            <span style="color:var(--accent);font-size:.7rem">&rarr;</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:36px;height:36px;border-radius:50%;border:2px solid #818CF8;display:flex;align-items:center;justify-content:center;font-size:.6rem">&#x2764;</div>
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-muted)">Aphrodite</span>
+              <span style="font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Greek</span>
+            </div>
+            <span style="color:var(--accent);font-size:.7rem">&rarr;</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+              <div style="width:36px;height:36px;border-radius:50%;border:2px solid #D8B4FE;display:flex;align-items:center;justify-content:center;font-size:.6rem">&#x2606;</div>
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-muted)">Venus</span>
+              <span style="font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Roman</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <span style="font-family:var(--font-m);font-size:.4rem;padding:3px 8px;border:1px solid rgba(34,197,94,.2);border-radius:3px;color:#4ade80">+war</span>
+            <span style="font-family:var(--font-m);font-size:.4rem;padding:3px 8px;border:1px solid rgba(239,68,68,.2);border-radius:3px;color:#f87171">-underworld</span>
+            <span style="font-family:var(--font-m);font-size:.4rem;padding:3px 8px;border:1px solid rgba(34,197,94,.2);border-radius:3px;color:#4ade80">+beauty</span>
+            <span style="font-family:var(--font-m);font-size:.4rem;padding:3px 8px;border:1px solid rgba(239,68,68,.2);border-radius:3px;color:#f87171">-political</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x2295;</span>
+        <h3 class="f-title">Syncretism Events</h3>
+        <p class="f-text">When two gods merge: Serapis (Osiris + Apis), Harihara (Vishnu + Shiva), Sulis Minerva (Celtic + Roman). 3 documented events with per-source attribute contribution tracking. Political, theological, and cultural mechanisms documented.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x219D;</span>
+        <h3 class="f-title">Motif Drift Analysis</h3>
+        <p class="f-text">A simple Sumerian flood became an elaborate Biblical narrative became a detailed Quranic account. Select any motif, watch it get simpler or more complex across cultures and centuries. Trend detection classifies drift as increasing, decreasing, stable, or oscillating.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2E19;</span>
+        <h3 class="f-title">Concept Phylogenetics</h3>
+        <p class="f-text">Family trees for ideas. Interactive SVG cladograms: the flood story branching from proto-Semitic into Utnapishtim, Noah, Nuh, Deucalion, and Manu. Branch merges for syncretism. Extinction markers for dead traditions. Pan, zoom, click for details.</p>
+        <a href="/evolution?tab=phylogenetics" class="f-link">View Trees &rarr;</a>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25C8;</span>
+        <h3 class="f-title">Narrative Complexity Scoring</h3>
+        <p class="f-text">Composite complexity index (0&ndash;100) across 5 dimensions: motif count, Propp functions, Campbell stages, characters, structural depth. Does narrative complexity increase or decrease during transmission? Now you can measure it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Quote break -->
+<section class="quote rv">
+  <div class="ctn-n">
+    <div class="q-mark">&ldquo;</div>
+    <p class="q-text">
+      We are not human beings having a spiritual experience; we are
+      spiritual beings having a human experience.
+    </p>
+    <p class="q-attr">Pierre Teilhard de Chardin</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     07. CYCLICAL & TEMPORAL PATTERNS
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="cyclical">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">07 &mdash; Cyclical & Temporal Patterns</div>
+      <h2 class="cat-title">History doesn't repeat, but it rhymes &mdash; and we can measure it</h2>
+      <p class="cat-desc">
+        Astronomical, mythological, historical, and cultural cycles &mdash;
+        detected, visualized, and overlaid on a shared timeline.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      The Hindus believed in cosmic ages lasting millions of years. The Greeks imagined
+      a Great Year. The Aztecs counted five world-suns. Modern historians like Spengler and
+      Toynbee proposed their own cycles of rise and decline. And beneath it all, real
+      astronomical cycles &mdash; the 26,000-year precession of the equinoxes, the Sothic cycle,
+      Venus's 8-year rhythm &mdash; provided the observational data that ancient sky-watchers
+      encoded into myth. We brought all 18 frameworks together on a single timeline.
+    </p>
+
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Multi-Framework Overlay</div>
+        <h3 class="show-title">Stack cycles. Find convergences. Question everything.</h3>
+        <p class="show-text">
+          SVG overlay rendering multiple cycle frameworks on a shared timeline.
+          Color-coded phase bands with labeled transitions. Resonance detection
+          identifies years where 3+ independent frameworks converge in the same
+          phase type. Is it meaningful? Is it coincidence? The tool lets you decide.
+        </p>
+        <ul class="show-highlights">
+          <li>18 frameworks across 5 domains (astronomical, mythological, historical, cultural, narrative)</li>
+          <li>Resonance line detection at convergence points</li>
+          <li>Historical corroboration notes</li>
+          <li>Configurable year range: 3000 BCE &ndash; 2100 CE</li>
+        </ul>
+        <a href="/cycles" class="btn-g">Explore Cycles &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;display:flex;flex-direction:column;gap:16px">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em;margin-bottom:4px">CYCLE OVERLAY &mdash; 500 BCE TO 500 CE</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:70px;text-align:right">Precessional</span>
+              <div style="flex:1;height:12px;border-radius:3px;background:linear-gradient(to right,rgba(139,92,246,.2),rgba(139,92,246,.15));position:relative">
+                <span style="position:absolute;left:4px;top:1px;font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Age of Aries</span>
+                <span style="position:absolute;right:4px;top:1px;font-family:var(--font-m);font-size:.35rem;color:var(--accent)">&#x2192; Pisces</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:70px;text-align:right">Hindu Yuga</span>
+              <div style="flex:1;height:12px;border-radius:3px;background:linear-gradient(to right,rgba(168,85,247,.15),rgba(168,85,247,.25));position:relative">
+                <span style="position:absolute;left:4px;top:1px;font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Dvapara Yuga &#x2192; Kali Yuga</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:70px;text-align:right">Spengler</span>
+              <div style="flex:1;height:12px;border-radius:3px;background:linear-gradient(to right,rgba(99,102,241,.1),rgba(99,102,241,.2),rgba(99,102,241,.1));position:relative">
+                <span style="position:absolute;left:4px;top:1px;font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Magian culture: spring &rarr; summer</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle);width:70px;text-align:right">Axial Age</span>
+              <div style="flex:1;height:12px;border-radius:3px;background:linear-gradient(to right,rgba(251,191,36,.15),rgba(251,191,36,.08));position:relative">
+                <span style="position:absolute;left:4px;top:1px;font-family:var(--font-m);font-size:.35rem;color:var(--fg-subtle)">Jaspers: 800&ndash;200 BCE</span>
+              </div>
+            </div>
+          </div>
+          <div style="position:relative;height:20px;border-left:1px dashed rgba(251,191,36,.4);margin-left:40%">
+            <span style="position:absolute;top:2px;left:6px;font-family:var(--font-m);font-size:.4rem;color:rgba(251,191,36,.7)">&#x2605; Resonance: ~0 CE &mdash; 3 frameworks converge</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x1F4C5;</span>
+        <h3 class="f-title">Cycle Frameworks Catalogue</h3>
+        <p class="f-text">18 frameworks catalogued across 5 domains: astronomical (precession, Sothic, Venus), mythological (Yugas, Five Suns, Great Year), historical (Spengler, Toynbee, Axial Age), cultural (Kondratiev waves), and narrative (rise-fall-rebirth). Each with structured metadata, period lengths, and source references.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x223F;</span>
+        <h3 class="f-title">Temporal Frequency Analysis</h3>
+        <p class="f-text">Pick a theme &mdash; flood mythology, dying-and-rising gods, creation accounts. See a density-over-time chart. Autocorrelation detects recurring periodicity. Do flood myths spike every few centuries? Find out with data.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x263D;</span>
+        <h3 class="f-title">Astronomical Correlations</h3>
+        <p class="f-text">15 documented connections: Sirius/Sopdet &harr; Osiris death-resurrection, Venus 8-year cycle &harr; Inanna's descent, precession &harr; zodiacal age symbolism. Rated by evidence strength. The sky wasn't just backdrop &mdash; it was scripture.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     08. EMOTIONAL & NARRATIVE INTELLIGENCE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="emotional">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">08 &mdash; Emotional & Narrative Intelligence</div>
+      <h2 class="cat-title">The data doesn't just inform &mdash; it moves</h2>
+      <p class="cat-desc">
+        Sacred texts aren't just information. They're designed to produce
+        specific emotional and transformative effects. We measure those too.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      A text that only informs is a report. A sacred text transforms.
+      The Book of Job doesn't just describe suffering &mdash; it makes you feel the
+      vertigo of a universe that doesn't explain itself. The Bhagavad Gita doesn't
+      just argue for duty &mdash; it recreates the paralysis of moral crisis. We built
+      tools that detect narrative arcs across 8 texts, map emotional resonance
+      across 40+ passages, and add a "Why Should I Care?" layer to 20+ findings
+      so the scholarship connects to lived experience.
+    </p>
+
+    <!-- Showcase: Narrative Arc Detection -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Narrative Arc Detection</div>
+        <h3 class="show-title">Overlay two stories. Watch the structure converge.</h3>
+        <p class="show-text">
+          8 sacred texts analyzed for story structure: rising action, climax, resolution,
+          emotional beats. Select any two and overlay their arcs to see where they
+          converge and diverge. The Descent of Inanna and the Passion of Christ follow
+          the same structural skeleton. Is that transmission or archetype? The overlay
+          helps you decide.
+        </p>
+        <ul class="show-highlights">
+          <li>8 texts with full arc analysis</li>
+          <li>Dual-overlay comparison mode</li>
+          <li>Structural convergence scoring</li>
+          <li>Linked to Campbell/Propp frameworks</li>
+        </ul>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em">ARC OVERLAY: INANNA'S DESCENT vs PASSION NARRATIVE</div>
+          <svg viewBox="0 0 300 120" style="width:100%;height:auto">
+            <!-- Grid -->
+            <line x1="20" y1="100" x2="280" y2="100" stroke="rgba(124,58,237,0.1)" stroke-width="0.5"/>
+            <line x1="20" y1="60" x2="280" y2="60" stroke="rgba(124,58,237,0.05)" stroke-width="0.5"/>
+            <line x1="20" y1="20" x2="280" y2="20" stroke="rgba(124,58,237,0.05)" stroke-width="0.5"/>
+            <!-- Inanna arc -->
+            <polyline points="30,90 70,70 110,40 150,15 180,35 220,65 260,85" fill="none" stroke="#7C3AED" stroke-width="1.5" opacity="0.7"/>
+            <!-- Christ arc -->
+            <polyline points="30,85 70,65 110,45 150,20 180,40 220,70 260,88" fill="none" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.7"/>
+            <!-- Labels -->
+            <text x="150" y="10" font-family="JetBrains Mono" font-size="4" fill="rgba(232,222,255,0.35)" text-anchor="middle">CLIMAX</text>
+            <text x="30" y="110" font-family="JetBrains Mono" font-size="3.5" fill="rgba(232,222,255,0.35)">DEPARTURE</text>
+            <text x="260" y="110" font-family="JetBrains Mono" font-size="3.5" fill="rgba(232,222,255,0.35)" text-anchor="end">RETURN</text>
+          </svg>
+          <div style="display:flex;gap:16px;justify-content:center">
+            <span style="display:flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)"><span style="width:12px;height:2px;background:#7C3AED;display:inline-block"></span> Inanna</span>
+            <span style="display:flex;align-items:center;gap:4px;font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)"><span style="width:12px;height:2px;background:#c084fc;display:inline-block;border-top:1px dashed #c084fc"></span> Christ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x2665;</span>
+        <h3 class="f-title">Emotional Resonance Mapping</h3>
+        <p class="f-text">40+ passages mapped across 8 emotions: awe, terror, grief, ecstasy, longing, serenity, rage, and wonder. Heatmap visualization shows emotional clustering. The Book of Job peaks in terror and awe; the Psalms oscillate between grief and ecstasy. Your emotional response isn't random &mdash; it's engineered by the text.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2728;</span>
+        <h3 class="f-title">Significance Layer</h3>
+        <p class="f-text">"Why Should I Care?" for 20+ findings. Every dry academic connection gets a human-readable explanation of why it matters. "The flood myth parallel isn't just literary trivia &mdash; it suggests a shared Bronze Age memory that shaped three civilizations' relationship with divine authority." Data with soul.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Quote break -->
+<section class="quote rv">
+  <div class="ctn-n">
+    <div class="q-mark">&ldquo;</div>
+    <p class="q-text">
+      People don't want to be informed. They want to feel informed.
+      The best research tools do both.
+    </p>
+    <p class="q-attr">The Archive Design Principle</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     09. LEARN & GROW
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="learning">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">09 &mdash; Learn & Grow</div>
+      <h2 class="cat-title">An interface that meets you where you are</h2>
+      <p class="cat-desc">
+        Guided pathways for beginners. Progressive complexity for regulars.
+        Full power for experts. Nobody gets overwhelmed.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Comparative religion is intimidating. The terminology alone &mdash; theophany,
+      henotheism, apophatic theology &mdash; can stop a curious beginner cold.
+      We built an entire learning layer: 10 guided paths that combine reading,
+      comparison, graph exploration, and AI discussion into structured journeys.
+      12 "Teach Me Like I'm Five" explainers for the hardest concepts. 5 argument
+      reconstruction exercises. Adaptive difficulty across 5 levels. 21 common
+      misconception corrections. 16 methodology coaching examples with worked
+      solutions. And 8 phenomenological practice guides from vipassana to lectio divina.
+      Nobody should need a PhD to explore their curiosity.
+    </p>
+
+    <!-- Showcase: Guided Learning Paths -->
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Guided Learning Paths</div>
+        <h3 class="show-title">Don't know where to start? We do.</h3>
+        <p class="show-text">
+          10 curated journeys combining 5 activity types: reading, comparison,
+          graph exploration, reflection, and AI discussion. "The Flood Across Cultures."
+          "The Hero's Journey." "Science Meets Myth." Beginner to advanced.
+          Progress saved automatically. AI-generated contextual commentary at each step.
+        </p>
+        <ul class="show-highlights">
+          <li>10 paths from beginner to advanced</li>
+          <li>5 activity types per path</li>
+          <li>Auto-saved progress with resume</li>
+          <li>AI contextual commentary at each step</li>
+        </ul>
+        <a href="/learn" class="btn-g">Start Learning &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px">
+          <div style="font-family:var(--font-m);font-size:.5rem;color:var(--accent);letter-spacing:.1em;margin-bottom:4px">LEARNING PATHS</div>
+          <div style="padding:12px 16px;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-family:var(--font-h);font-size:.8rem;margin-bottom:2px">The Flood Across Cultures</div>
+              <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)">BEGINNER &middot; 8 STEPS &middot; ~45 MIN</div>
+            </div>
+            <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:60%;height:100%;background:var(--accent);border-radius:2px"></div></div>
+          </div>
+          <div style="padding:12px 16px;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-family:var(--font-h);font-size:.8rem;margin-bottom:2px">The Hero's Journey</div>
+              <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)">INTERMEDIATE &middot; 12 STEPS &middot; ~90 MIN</div>
+            </div>
+            <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:25%;height:100%;background:var(--accent);border-radius:2px"></div></div>
+          </div>
+          <div style="padding:12px 16px;border:1px solid var(--border);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-family:var(--font-h);font-size:.8rem;margin-bottom:2px">Science Meets Myth</div>
+              <div style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)">ADVANCED &middot; 15 STEPS &middot; ~2 HRS</div>
+            </div>
+            <div style="width:60px;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:0%;height:100%;background:var(--accent);border-radius:2px"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="f-grid rv">
+      <div class="f-card">
+        <span class="f-icon">&#x1F476;</span>
+        <h3 class="f-title">Beginner Explainers</h3>
+        <p class="f-text">12 "Teach Me Like I'm Five" guides for concepts like henotheism, documentary hypothesis, Levi-Straussian structuralism, and the Axial Age. Written in plain language with analogies. Because the barrier to entry for this field shouldn't be a graduate seminar.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2696;</span>
+        <h3 class="f-title">Argument Reconstruction</h3>
+        <p class="f-text">5 exercises where you reconstruct a scholarly argument step by step: identify the claim, locate the evidence, spot the assumptions, evaluate the counter-evidence. Guided practice in the actual skills comparative religion requires.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2195;</span>
+        <h3 class="f-title">Adaptive Difficulty</h3>
+        <p class="f-text">5 comprehension levels: Curious, Informed, Studious, Scholarly, Expert. The system adjusts vocabulary, explanation depth, citation density, and assumed background knowledge. Same content, appropriate framing. Grows with you.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2717;</span>
+        <h3 class="f-title">Misconception Detection</h3>
+        <p class="f-text">21 common misconceptions corrected: "Horus and Jesus have the same story." "The Bible was written by one person." "All religions teach the same thing." Each correction includes what's actually true, why the misconception persists, and real sources to verify.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F3AF;</span>
+        <h3 class="f-title">Methodology Coaching</h3>
+        <p class="f-text">16 common research errors with worked examples: cherry-picking, confirmation bias, etymological fallacy, argument from silence. Each includes a bad example, what went wrong, and a corrected version. Learn to think like a scholar, not just read like one.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F9D8;</span>
+        <h3 class="f-title">Phenomenological Guides</h3>
+        <p class="f-text">8 practice guides: vipassana, hesychasm, dhikr, zazen, lectio divina, japa, kabbalistic meditation, taoist sitting. Historical context, technique description, scholarly analysis, and cross-practice comparison. Understanding religion from the inside, not just the outside.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x25D0;</span>
+        <h3 class="f-title">Progressive Disclosure</h3>
+        <p class="f-text">The interface starts simple and grows with you. Advanced controls appear gradually as your engagement increases. Per-section visit tracking. Manual override to unlock everything immediately. Beginners see clarity. Experts see power. Same app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     10. GEOGRAPHIC INTELLIGENCE
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="geographic">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">10 &mdash; Geographic Intelligence</div>
+      <h2 class="cat-title">Ideas don't teleport. They travel.</h2>
+      <p class="cat-desc">
+        Spatial analysis of how beliefs moved through the ancient world &mdash;
+        along trade routes, through port cities, and across mountain passes.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Before you claim influence, prove opportunity. Two traditions can't have
+      influenced each other unless there was a plausible pathway for contact.
+      We mapped 10 major trade routes with latitude/longitude waypoints, documented
+      20 cultural contact events, and built a 4-factor contact probability scoring
+      system that evaluates whether two traditions could have met at any given point
+      in history. Geography is evidence.
+    </p>
+
+    <div class="showcase rv">
+      <div>
+        <div class="show-label">Trade Route Mapping & Contact Probability</div>
+        <h3 class="show-title">Was it even possible for these ideas to meet?</h3>
+        <p class="show-text">
+          10 major trade routes: Silk Road, Incense Route, Indian Ocean maritime trade,
+          Amber Road, and more. 20 documented cultural contacts as timestamped markers.
+          Time-filtered visibility shows which routes were active when.
+        </p>
+        <p class="show-text">
+          Pick any two traditions and any year. The system computes a 4-factor contact
+          probability: geographic distance (Haversine), shared trade routes, documented
+          contacts, and linguistic overlap via shared etymology chains.
+        </p>
+        <ul class="show-highlights">
+          <li>10 historical routes with temporal bounds</li>
+          <li>20 documented cultural contact events</li>
+          <li>4-factor contact probability scoring</li>
+          <li>Time slider: 3000 BCE &ndash; 2000 CE</li>
+        </ul>
+        <a href="/map" class="btn-g">Open Map &rarr;</a>
+      </div>
+      <div class="show-visual">
+        <div class="mock-map">
+          <div class="map-dot" style="--c:#7C3AED;top:35%;left:55%"></div>
+          <div class="map-dot" style="--c:#6366F1;top:38%;left:60%"></div>
+          <div class="map-dot" style="--c:#9333EA;top:40%;left:52%"></div>
+          <div class="map-dot" style="--c:#A855F7;top:30%;left:48%"></div>
+          <div class="map-dot" style="--c:#D8B4FE;top:42%;left:35%"></div>
+          <div class="map-dot" style="--c:#818CF8;top:35%;left:75%"></div>
+          <div class="map-dot" style="--c:#6D28D9;top:32%;left:40%"></div>
+          <div class="map-label" style="top:32%;left:55%">Mesopotamia</div>
+          <div class="map-label" style="top:36%;left:62%">Persia</div>
+          <div class="map-label" style="top:38%;left:50%">Egypt</div>
+          <div class="map-label" style="top:27%;left:47%">Greece</div>
+          <div class="map-label" style="top:33%;left:77%">India</div>
+          <svg class="map-route">
+            <polyline points="180,105 210,100 260,110 310,105 360,110" fill="none" stroke="rgba(139,92,246,.15)" stroke-width="1" stroke-dasharray="4,4"/>
+            <polyline points="150,130 180,125 200,120 230,115" fill="none" stroke="rgba(168,85,247,.1)" stroke-width="1" stroke-dasharray="4,4"/>
+          </svg>
+          <div style="position:absolute;bottom:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)">3000 BCE</span>
+            <div style="flex:1;height:2px;background:linear-gradient(to right,var(--accent-dim),var(--accent),var(--accent-dim));margin:0 8px;border-radius:1px;position:relative">
+              <div style="position:absolute;top:-3px;left:60%;width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 8px var(--accent)"></div>
+            </div>
+            <span style="font-family:var(--font-m);font-size:.4rem;color:var(--fg-subtle)">2000 CE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     11. INTELLIGENCE & MEMORY
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec" id="intelligence">
+  <div class="ctn">
+    <div class="cat-header rv">
+      <div class="label">11 &mdash; Intelligence & Memory</div>
+      <h2 class="cat-title">A research partner that remembers everything</h2>
+      <p class="cat-desc">
+        The system learns your interests, captures your insights,
+        tracks your intellectual growth, and surfaces connections you'd miss.
+      </p>
+    </div>
+
+    <p class="cat-narrative rv">
+      Most tools forget you the moment you close the tab. The Archive remembers.
+      It builds a research profile from your interactions &mdash; what topics you
+      return to, what evidence standards you prefer, what gaps remain in your
+      understanding. It captures "aha" moments automatically. It scores your
+      research impact as you grow from observer to thought leader. And it
+      generates new research questions from gaps and contradictions in the knowledge
+      graph itself, so you always have somewhere meaningful to look next.
+    </p>
+
+    <div class="f-grid f-grid-2 rv">
+      <div class="f-card">
+        <span class="f-icon">&#x1F464;</span>
+        <h3 class="f-title">User Research Profile</h3>
+        <p class="f-text">AI learns your interests, knowledge gaps, and evidence preferences over time. Frequently explore Mesopotamian mythology? The system starts surfacing Sumerian connections proactively. Prefer archaeological evidence over literary analysis? Citations shift accordingly. The more you use it, the smarter it gets about you.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F4A1;</span>
+        <h3 class="f-title">Insight Moment Capture</h3>
+        <p class="f-text">Automatic "aha" detection when you make a novel connection, bookmark a surprising finding, or change your position on a topic. Each insight is timestamped, contextualized, and linked to the evidence that triggered it. Your intellectual breakthroughs, preserved and reviewable.</p>
+        <span class="f-tag">Novel</span>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x1F4C8;</span>
+        <h3 class="f-title">Research Impact Scoring</h3>
+        <p class="f-text">Track your growth from observer to thought leader. Engagement depth, citation quality, argument sophistication, cross-tradition breadth, and intellectual honesty (measured by mind-change frequency) combine into a research impact score. Not a game &mdash; a mirror.</p>
+      </div>
+      <div class="f-card">
+        <span class="f-icon">&#x2728;</span>
+        <h3 class="f-title">Graph Insights</h3>
+        <p class="f-text">System-generated research questions derived from gaps and contradictions in the knowledge graph. "These two entities share 4 motifs but have no documented connection &mdash; investigate?" "This scholarly debate has no recent contributions &mdash; has consensus formed?" The graph itself becomes your research advisor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     12. PLATFORM & ACCESS + STATS
+     ══════════════════════════════════════════════════════════════ -->
+<section class="sec-sm" id="platform">
+  <div class="ctn">
+    <div class="cat-header rv tc">
+      <div class="label">12 &mdash; Platform & Access</div>
+      <h2 class="cat-title">Available everywhere. Secure by default. Private by design.</h2>
+      <p class="cat-desc" style="margin:0 auto">
+        Three subscription tiers, progressive web app, app store distribution,
+        and a commitment to privacy that means your research stays yours.
+      </p>
+    </div>
+
+    <div class="f-grid" style="grid-template-columns:repeat(5,1fr);margin-top:36px" id="platform-grid">
+      <div class="f-card rv" style="padding:20px">
+        <h3 class="f-title" style="font-size:.85rem;margin-bottom:6px">Progressive Web App</h3>
+        <p class="f-text" style="font-size:.75rem">Install from any browser. Works offline. Automatic updates. No app store required.</p>
+      </div>
+      <div class="f-card rv" style="padding:20px">
+        <h3 class="f-title" style="font-size:.85rem;margin-bottom:6px">App Stores</h3>
+        <p class="f-text" style="font-size:.75rem">Google Play &amp; Apple App Store. Native haptics and push notifications.</p>
+      </div>
+      <div class="f-card rv" style="padding:20px">
+        <h3 class="f-title" style="font-size:.85rem;margin-bottom:6px">Three-Tier Subscription</h3>
+        <p class="f-text" style="font-size:.75rem">Free (browse &amp; read), Sonnet ($14.99/mo, AI chat), Opus ($39.99/mo, deep analysis + API).</p>
+      </div>
+      <div class="f-card rv" style="padding:20px">
+        <h3 class="f-title" style="font-size:.85rem;margin-bottom:6px">Privacy & Security</h3>
+        <p class="f-text" style="font-size:.75rem">HTTPS/TLS. GDPR compliant. Data export &amp; deletion. AI data never used for training.</p>
+      </div>
+      <div class="f-card rv" style="padding:20px">
+        <h3 class="f-title" style="font-size:.85rem;margin-bottom:6px">Peer Review Layer</h3>
+        <p class="f-text" style="font-size:.75rem">Share analyses with reproducible hashes. Community verification of AI-assisted findings.</p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats rv">
+      <div class="stat"><span class="stat-n">22</span><span class="stat-l">Sacred Texts</span></div>
+      <div class="stat"><span class="stat-n">14</span><span class="stat-l">Traditions</span></div>
+      <div class="stat"><span class="stat-n">83</span><span class="stat-l">Research Tools</span></div>
+      <div class="stat"><span class="stat-n">211</span><span class="stat-l">Mapped Motifs</span></div>
+      <div class="stat"><span class="stat-n">152</span><span class="stat-l">Etymology Entries</span></div>
+      <div class="stat"><span class="stat-n">100</span><span class="stat-l">Scholarly Positions</span></div>
+      <div class="stat"><span class="stat-n">18</span><span class="stat-l">Cycle Frameworks</span></div>
+      <div class="stat"><span class="stat-n">50K+</span><span class="stat-l">Graph Nodes</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CTA
+     ══════════════════════════════════════════════════════════════ -->
+<section class="cta">
+  <div class="ctn-n rv">
+    <div class="label tc">Begin</div>
+    <h2 class="cta-t">83 instruments. One question.<br><em style="font-style:normal;color:var(--accent-bright)">What will you discover?</em></h2>
+    <p class="cta-sub">Free tier includes the full library, knowledge graph, timeline, map, and guided learning paths.</p>
+    <div class="cta-actions">
+      <a href="/explore" class="btn-p">Explore the Graph</a>
+      <a href="/sign-up" class="btn-s">Create Free Account</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="footer-b">THE ARCHIVE &mdash; v0.5.9</span>
+  <div class="footer-links">
+    <a href="/" class="footer-l">Home</a>
+    <a href="/features.html" class="footer-l">Features</a>
+    <a href="/pricing" class="footer-l">Pricing</a>
+    <a href="/privacy" class="footer-l">Privacy</a>
+    <a href="/terms" class="footer-l">Terms</a>
+  </div>
+  <span class="footer-tag">Truth is stranger than fiction.</span>
+</footer>
+
+<!-- SCRIPTS -->
+<script>
+(function(){
+  var c=document.getElementById('stars'),n=70;
+  for(var i=0;i<n;i++){var s=document.createElement('div');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.setProperty('--dur',(3+Math.random()*5)+'s');s.style.setProperty('--delay',(Math.random()*5)+'s');if(Math.random()>.7){s.style.width='2px';s.style.height='2px'}c.appendChild(s)}
+})();
+(function(){
+  var o=new IntersectionObserver(function(e){e.forEach(function(en){if(en.isIntersecting)en.target.classList.add('vis')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv').forEach(function(el){o.observe(el)});
+})();
+(function(){
+  var nav=document.querySelector('.nav');
+  window.addEventListener('scroll',function(){nav.style.background=window.scrollY>100?'rgba(10,10,15,0.92)':'rgba(10,10,15,0.7)';nav.style.borderBottomColor=window.scrollY>100?'rgba(124,58,237,0.15)':'rgba(124,58,237,0.1)'});
+})();
+// Active category chip on scroll
+(function(){
+  var chips=document.querySelectorAll('.cat-chip');
+  var sections=[];
+  chips.forEach(function(c){var id=c.getAttribute('href').replace('#','');var el=document.getElementById(id);if(el)sections.push({id:id,el:el,chip:c})});
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){chips.forEach(function(c){c.classList.remove('active')});var match=sections.find(function(s){return s.el===e.target});if(match)match.chip.classList.add('active')}})},{threshold:0,rootMargin:'-30% 0px -60% 0px'});
+  sections.forEach(function(s){io.observe(s.el)});
+})();
+// Responsive platform grid
+(function(){
+  var g=document.getElementById('platform-grid');
+  function fix(){if(window.innerWidth<=968)g.style.gridTemplateColumns='repeat(2,1fr)';else if(window.innerWidth<=640)g.style.gridTemplateColumns='1fr';else g.style.gridTemplateColumns='repeat(5,1fr)'}
+  fix();window.addEventListener('resize',fix);
+})();
+</script>
+</body>
+</html>

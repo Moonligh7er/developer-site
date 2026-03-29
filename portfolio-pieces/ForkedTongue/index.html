@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forked Tongue — Learn Korean, Japanese, Spanish & More with AI Friends</title>
+<meta name="description" content="Learn Korean online, learn Japanese with AI, practice Spanish conversation — Forked Tongue is the AI language learning app where you chat with friends who speak Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese, and English. Free voice chat, cultural immersion, 3D brain visualization.">
+<link rel="canonical" href="https://forkedtongue.app/">
+<meta property="og:title" content="Forked Tongue — Learn Languages with AI Friends">
+<meta property="og:description" content="Learn Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese, or English through real conversation with AI friends. Free voice chat, cultural immersion, no textbooks.">
+<meta property="og:url" content="https://forkedtongue.app/">
+<meta property="og:image" content="https://forkedtongue.app/og-image.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Forked Tongue">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Forked Tongue — Learn Languages with AI Friends">
+<meta name="twitter:description" content="Learn Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese, or English through real conversation with AI friends.">
+<meta name="twitter:image" content="https://forkedtongue.app/og-image.png">
+<!-- Hreflang tags -->
+<link rel="alternate" hreflang="en" href="https://forkedtongue.app/">
+<link rel="alternate" hreflang="ko" href="https://forkedtongue.app/ko/">
+<link rel="alternate" hreflang="ja" href="https://forkedtongue.app/ja/">
+<link rel="alternate" hreflang="es" href="https://forkedtongue.app/es/">
+<link rel="alternate" hreflang="pt" href="https://forkedtongue.app/pt/">
+<link rel="alternate" hreflang="zh" href="https://forkedtongue.app/zh/">
+<link rel="alternate" hreflang="x-default" href="https://forkedtongue.app/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<!-- Structured Data: SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Forked Tongue",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "iOS, Android, Web",
+  "url": "https://forkedtongue.app",
+  "description": "AI-powered language learning through conversation with native-speaker characters. Learn Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese, or English.",
+  "offers": [
+    { "@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free" },
+    { "@type": "Offer", "price": "14.99", "priceCurrency": "USD", "name": "Plus" },
+    { "@type": "Offer", "price": "49.99", "priceCurrency": "USD", "name": "Premium" }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "0"
+  }
+}
+</script>
+<!-- Structured Data: FAQPage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Forked Tongue?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Forked Tongue is an AI-powered language learning app where you learn by having real conversations with AI friends who speak Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese, or English. It includes voice chat, cultural scenarios, and a 3D brain visualization of your progress."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I learn Korean for free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Forked Tongue offers 30 free messages per day with AI characters who are native Korean speakers. Voice chat is included at no cost."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is Forked Tongue different from Duolingo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Instead of vocabulary drills and gamified quizzes, Forked Tongue gives you AI friends with real personalities. You learn through natural conversation, voice chat, and cultural immersion — not flashcards."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What languages does Forked Tongue support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Forked Tongue supports Korean, Japanese, Spanish, Portuguese, Mandarin Chinese, Cantonese, American English, and British English — with 16 AI characters across 8 languages."
+      }
+    }
+  ]
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#111118;
+  --bg3:#1a1a24;
+  --purple:#6d5dfc;
+  --blue:#38bdf8;
+  --text:#e8e6f0;
+  --text-muted:#9994b8;
+  --text-dim:#5e587a;
+  --radius:12px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+}
+.container{max-width:1120px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1}
+a{color:var(--purple);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- FADE-IN ---- */
+.fade-in{opacity:0;transform:translateY(32px);transition:opacity 0.8s ease,transform 0.8s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ---- HERO ---- */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;position:relative;overflow:hidden;padding:2rem 1.5rem;
+}
+.hero-title{
+  font-size:clamp(3rem,8vw,6.5rem);font-weight:800;letter-spacing:-0.03em;line-height:1;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:1.5rem;
+}
+.hero-tagline{font-size:clamp(1.2rem,2.5vw,1.75rem);font-weight:600;margin-bottom:0.75rem}
+.hero-sub{font-size:clamp(0.95rem,1.5vw,1.15rem);color:var(--text-muted);max-width:560px;margin-bottom:2.5rem}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center}
+.btn-primary{
+  display:inline-block;padding:0.85rem 2.2rem;border-radius:50px;font-weight:600;font-size:1rem;
+  background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;
+  transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(109,93,252,0.35);text-decoration:none}
+.btn-ghost{
+  display:inline-block;padding:0.85rem 2.2rem;border-radius:50px;font-weight:600;font-size:1rem;
+  background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.15);cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;text-decoration:none;
+}
+.btn-ghost:hover{border-color:var(--purple);background:rgba(109,93,252,0.08);text-decoration:none}
+
+/* ---- FLOATING PILLS ---- */
+.pills{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pill{
+  position:absolute;padding:0.4rem 1rem;border-radius:50px;font-size:0.85rem;font-weight:500;
+  background:rgba(109,93,252,0.08);border:1px solid rgba(109,93,252,0.15);color:var(--text-muted);
+  animation:float 18s ease-in-out infinite;white-space:nowrap;
+}
+.pill:nth-child(1){top:12%;left:8%;animation-delay:0s;animation-duration:20s}
+.pill:nth-child(2){top:22%;right:10%;animation-delay:-3s;animation-duration:17s}
+.pill:nth-child(3){bottom:28%;left:5%;animation-delay:-6s;animation-duration:22s}
+.pill:nth-child(4){bottom:18%;right:7%;animation-delay:-9s;animation-duration:19s}
+.pill:nth-child(5){top:35%;left:15%;animation-delay:-4s;animation-duration:21s}
+.pill:nth-child(6){top:45%;right:12%;animation-delay:-7s;animation-duration:16s}
+@keyframes float{
+  0%,100%{transform:translate(0,0) rotate(0deg)}
+  25%{transform:translate(12px,-18px) rotate(2deg)}
+  50%{transform:translate(-8px,14px) rotate(-1deg)}
+  75%{transform:translate(16px,8px) rotate(1.5deg)}
+}
+
+/* ---- SECTIONS ---- */
+section{padding:6rem 0}
+.section-label{
+  font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;
+  color:var(--purple);margin-bottom:1rem;
+}
+.section-heading{
+  font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-0.02em;
+  line-height:1.15;margin-bottom:1.5rem;max-width:700px;
+}
+.section-sub{font-size:1.05rem;color:var(--text-muted);max-width:640px;line-height:1.7;margin-bottom:2.5rem}
+
+/* ---- PROBLEM ---- */
+.pain-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;margin-top:2rem}
+.pain-card{
+  background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);
+  padding:2rem;transition:border-color 0.3s;
+}
+.pain-card:hover{border-color:rgba(109,93,252,0.3)}
+.pain-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.pain-text{color:var(--text-muted);font-size:0.95rem;line-height:1.7}
+
+/* ---- CHARACTERS ---- */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem}
+.char-card{
+  background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);
+  padding:1.5rem;text-align:center;transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s;
+  cursor:default;
+}
+.char-card:hover{
+  transform:translateY(-4px);border-color:rgba(109,93,252,0.4);
+  box-shadow:0 0 30px rgba(109,93,252,0.12);
+}
+.char-flag{font-size:2.5rem;margin-bottom:0.75rem;display:block}
+.char-names{font-weight:600;font-size:1.05rem;margin-bottom:0.25rem}
+.char-city{color:var(--text-muted);font-size:0.85rem}
+.char-note{margin-top:2.5rem;color:var(--text-muted);font-size:0.95rem;line-height:1.7;max-width:640px}
+
+/* ---- HOW IT WORKS ---- */
+.steps{display:grid;gap:3.5rem;margin-top:2rem}
+.step{display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start}
+.step-num{
+  font-size:3.5rem;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  min-width:60px;
+}
+.step-title{font-size:1.25rem;font-weight:700;margin-bottom:0.5rem}
+.step-desc{color:var(--text-muted);font-size:0.95rem;line-height:1.7}
+
+/* neural network viz */
+.neural-viz{
+  margin-top:1.5rem;height:120px;position:relative;
+}
+.node{
+  position:absolute;width:12px;height:12px;border-radius:50%;
+  background:var(--purple);box-shadow:0 0 12px rgba(109,93,252,0.5);
+  animation:pulse 2.5s ease-in-out infinite;
+}
+.node:nth-child(1){top:20%;left:10%;animation-delay:0s}
+.node:nth-child(2){top:60%;left:25%;animation-delay:0.4s}
+.node:nth-child(3){top:10%;left:40%;animation-delay:0.8s;background:var(--blue);box-shadow:0 0 12px rgba(56,189,248,0.5)}
+.node:nth-child(4){top:50%;left:55%;animation-delay:1.2s}
+.node:nth-child(5){top:25%;left:70%;animation-delay:0.2s;background:var(--blue);box-shadow:0 0 12px rgba(56,189,248,0.5)}
+.node:nth-child(6){top:70%;left:80%;animation-delay:0.6s}
+.node:nth-child(7){top:40%;left:90%;animation-delay:1s;background:var(--blue);box-shadow:0 0 12px rgba(56,189,248,0.5)}
+@keyframes pulse{0%,100%{opacity:0.4;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+.neural-line{
+  position:absolute;height:1px;background:linear-gradient(90deg,rgba(109,93,252,0.3),rgba(56,189,248,0.3));
+  transform-origin:left center;
+}
+
+/* ---- SURREAL ---- */
+.surreal{
+  background:linear-gradient(135deg,rgba(109,93,252,0.12),rgba(56,189,248,0.06));
+  border-top:1px solid rgba(109,93,252,0.15);border-bottom:1px solid rgba(109,93,252,0.15);
+}
+.surreal blockquote{
+  font-size:1.15rem;font-style:italic;color:var(--text);
+  border-left:3px solid var(--purple);padding-left:1.25rem;margin:2rem 0;line-height:1.7;
+}
+.surreal cite{color:var(--text-dim);font-size:0.9rem;font-style:normal}
+
+/* ---- VOICE ---- */
+.waveform{display:flex;align-items:center;gap:4px;height:60px;justify-content:center;margin:2rem 0}
+.wave-bar{
+  width:4px;border-radius:4px;
+  background:linear-gradient(180deg,var(--purple),var(--blue));
+  animation:wave 1.2s ease-in-out infinite;
+}
+.wave-bar:nth-child(1){height:20%;animation-delay:0s}
+.wave-bar:nth-child(2){height:45%;animation-delay:0.1s}
+.wave-bar:nth-child(3){height:70%;animation-delay:0.2s}
+.wave-bar:nth-child(4){height:90%;animation-delay:0.3s}
+.wave-bar:nth-child(5){height:60%;animation-delay:0.15s}
+.wave-bar:nth-child(6){height:100%;animation-delay:0.25s}
+.wave-bar:nth-child(7){height:75%;animation-delay:0.35s}
+.wave-bar:nth-child(8){height:50%;animation-delay:0.05s}
+.wave-bar:nth-child(9){height:85%;animation-delay:0.2s}
+.wave-bar:nth-child(10){height:40%;animation-delay:0.3s}
+.wave-bar:nth-child(11){height:65%;animation-delay:0.1s}
+.wave-bar:nth-child(12){height:30%;animation-delay:0.25s}
+.wave-bar:nth-child(13){height:55%;animation-delay:0.15s}
+.wave-bar:nth-child(14){height:80%;animation-delay:0.35s}
+.wave-bar:nth-child(15){height:25%;animation-delay:0.05s}
+@keyframes wave{
+  0%,100%{transform:scaleY(1)}
+  50%{transform:scaleY(0.35)}
+}
+
+/* ---- DUAL LANGUAGE ---- */
+.affil-pairs{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-top:2rem;
+}
+.affil-card{
+  background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);
+  padding:1.25rem;text-align:center;
+}
+.affil-flags{font-size:1.8rem;margin-bottom:0.5rem}
+.affil-label{font-size:0.9rem;color:var(--text-muted)}
+
+/* ---- PRICING ---- */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.pricing-card{
+  background:var(--bg2);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);
+  padding:2rem;transition:transform 0.25s,box-shadow 0.25s;position:relative;
+}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.3)}
+.pricing-card.featured{border-color:var(--purple)}
+.pricing-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;
+  font-size:0.75rem;font-weight:700;padding:0.3rem 1rem;border-radius:50px;
+  text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;
+}
+.pricing-name{font-size:1.3rem;font-weight:700;margin-bottom:0.5rem}
+.pricing-price{font-size:2.2rem;font-weight:800;margin-bottom:1.25rem}
+.pricing-price span{font-size:0.9rem;font-weight:400;color:var(--text-muted)}
+.pricing-features{list-style:none;padding:0;margin:0}
+.pricing-features li{
+  padding:0.4rem 0;font-size:0.9rem;color:var(--text-muted);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.pricing-features li::before{content:"\2713 ";color:var(--purple);font-weight:700;margin-right:0.3rem}
+.pricing-features li:last-child{border-bottom:none}
+
+/* ---- TRUST ---- */
+.trust-list{list-style:none;padding:0;margin:0;display:grid;gap:1rem;max-width:640px}
+.trust-list li{
+  display:flex;gap:0.75rem;align-items:start;font-size:0.95rem;color:var(--text-muted);line-height:1.7;
+}
+.trust-icon{font-size:1.2rem;flex-shrink:0;margin-top:0.15rem}
+
+/* ---- FINAL CTA ---- */
+.final-cta{text-align:center;padding:6rem 1.5rem}
+.final-cta .section-heading{margin:0 auto 1.5rem}
+.final-small{color:var(--text-dim);font-size:0.85rem;margin-top:1.5rem}
+.final-avail{color:var(--text-muted);font-size:0.95rem;margin-top:1rem}
+
+/* ---- FOOTER ---- */
+footer{
+  border-top:1px solid rgba(255,255,255,0.06);padding:2.5rem 1.5rem;
+  text-align:center;color:var(--text-dim);font-size:0.85rem;
+}
+.footer-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.footer-links a{color:var(--text-muted);font-size:0.85rem}
+.footer-links a:hover{color:var(--purple)}
+.footer-made{margin-top:0.75rem;font-size:0.8rem}
+
+/* ---- RESPONSIVE ---- */
+@media(max-width:640px){
+  section{padding:4rem 0}
+  .step{grid-template-columns:1fr}
+  .step-num{font-size:2.5rem;min-width:auto}
+  .pricing-grid{grid-template-columns:1fr}
+  .char-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="pills">
+    <span class="pill">한국어</span>
+    <span class="pill">日本語</span>
+    <span class="pill">Espanol</span>
+    <span class="pill">Portugues</span>
+    <span class="pill">普通话</span>
+    <span class="pill">廣東話</span>
+  </div>
+  <h1 class="hero-title">Forked Tongue</h1>
+  <p class="hero-tagline">Your friend in every language.</p>
+  <p class="hero-sub">Not a teacher. Not a chatbot. A friend who happens to speak the language you want to learn.</p>
+  <div class="hero-ctas">
+    <a href="#pricing" class="btn-primary">Start Learning &mdash; Free</a>
+    <a href="#how" class="btn-ghost">See How It Works</a>
+  </div>
+</section>
+
+<!-- ========== PROBLEM ========== -->
+<section>
+  <div class="container fade-in">
+    <p class="section-label">The problem</p>
+    <h2 class="section-heading">Language apps teach you words. We give you a friend.</h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <span class="pain-icon">&#x1F371;</span>
+        <p class="pain-text">Duolingo taught you "the cat is on the table." Cool. Now order ramen in Shinjuku.</p>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">&#x1F636;</span>
+        <p class="pain-text">You've studied for months but freeze when a real person talks to you.</p>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">&#x1F91D;</span>
+        <p class="pain-text">Language isn't vocabulary lists. It's relationships, jokes, and shared moments.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CHARACTERS ========== -->
+<section>
+  <div class="container fade-in">
+    <p class="section-label">Meet your friend</p>
+    <h2 class="section-heading">Pick a language. Meet someone.</h2>
+    <div class="char-grid">
+      <div class="char-card">
+        <span class="char-flag">&#x1F1F0;&#x1F1F7;</span>
+        <p class="char-names">Joon &amp; Soeun</p>
+        <p class="char-city">Seoul</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1EF;&#x1F1F5;</span>
+        <p class="char-names">Ren &amp; Hina</p>
+        <p class="char-city">Tokyo</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1F2;&#x1F1FD;</span>
+        <p class="char-names">Diego &amp; Valentina</p>
+        <p class="char-city">Mexico City</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1E7;&#x1F1F7;</span>
+        <p class="char-names">Caio &amp; Larissa</p>
+        <p class="char-city">Sao Paulo</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1E8;&#x1F1F3;</span>
+        <p class="char-names">Haoran &amp; Yuxin</p>
+        <p class="char-city">Beijing</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1ED;&#x1F1F0;</span>
+        <p class="char-names">Ho-yan &amp; Wing-lam</p>
+        <p class="char-city">Hong Kong</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1FA;&#x1F1F8;</span>
+        <p class="char-names">Marcus &amp; Jasmine</p>
+        <p class="char-city">New York</p>
+      </div>
+      <div class="char-card">
+        <span class="char-flag">&#x1F1EC;&#x1F1E7;</span>
+        <p class="char-names">Callum &amp; Priya</p>
+        <p class="char-city">London</p>
+      </div>
+    </div>
+    <p class="char-note">They make mistakes in English &mdash; on purpose. The same mistakes a real Korean, Japanese, or Spanish speaker would make. When you catch them, you earn points.</p>
+  </div>
+</section>
+
+<!-- ========== HOW IT WORKS ========== -->
+<section id="how">
+  <div class="container fade-in">
+    <p class="section-label">How it works</p>
+    <h2 class="section-heading">Four steps. No placement test.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <p class="step-title">They text you first.</p>
+          <p class="step-desc">Pick a language. Someone texts you. In their language. No placement test, no setup. You figure it out together.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <p class="step-title">You talk like friends.</p>
+          <p class="step-desc">About food, movies, your day, that weird thing you saw. They respond like a real person &mdash; with opinions, jokes, and cultural context you won't find in a textbook.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <p class="step-title">Your brain lights up.</p>
+          <p class="step-desc">A 3D neural network maps everything you learn. Watch it grow. Watch weak areas glow red. Watch mastery spread like electricity through your mind.</p>
+          <div class="neural-viz">
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+            <div class="node"></div>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <p class="step-title">It goes beyond the screen.</p>
+          <p class="step-desc">Earn points and redeem for real travel discounts. Community-recommended spots worldwide. Photo sharing with your buddy. Cultural scenarios that drop you into real situations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SURREAL ========== -->
+<section class="surreal">
+  <div class="container fade-in">
+    <p class="section-label">The unexpected</p>
+    <h2 class="section-heading">Sometimes they just... sing.</h2>
+    <p class="section-sub">Your buddy might break into a K-pop song mid-conversation. Or translate a menu with way too much enthusiasm. Or teach you a proverb that sounds absolutely unhinged when translated literally.</p>
+    <blockquote>
+      "The Korean proverb says: Even a monkey can fall from a tree."
+      <br><cite>&mdash; Joon, Seoul</cite>
+    </blockquote>
+    <p class="section-sub" style="margin-top:2rem">These moments are random. Unexpected. And they're the reason you'll remember that word six months from now.</p>
+  </div>
+</section>
+
+<!-- ========== VOICE ========== -->
+<section>
+  <div class="container fade-in" style="text-align:center">
+    <p class="section-label">Voice</p>
+    <h2 class="section-heading" style="margin-left:auto;margin-right:auto">Speak. Listen. Feel it.</h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">Voice runs on your device. Free. Private. No internet needed.</p>
+    <div class="waveform">
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    </div>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">Tap the mic and talk. Your buddy understands Korean, Japanese, Mandarin, Cantonese, Spanish, Portuguese, and English.</p>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">Premium users get ultra-realistic ElevenLabs voices &mdash; so real you forget you're talking to AI.</p>
+  </div>
+</section>
+
+<!-- ========== DUAL LANGUAGE ========== -->
+<section>
+  <div class="container fade-in">
+    <p class="section-label">Dual learning</p>
+    <h2 class="section-heading">Why learn one when you can learn two?</h2>
+    <p class="section-sub">Your buddies know each other. Joon (Seoul) and Ren (Tokyo) are friends. Put them in a conversation together and watch Korean and Japanese bounce off each other &mdash; while you learn both.</p>
+    <p class="section-sub">Some languages are easier to learn together because they're similar. Others because they're beautifully different.</p>
+    <div class="affil-pairs">
+      <div class="affil-card">
+        <div class="affil-flags">&#x1F1F0;&#x1F1F7; &#x1F91D; &#x1F1EF;&#x1F1F5;</div>
+        <p class="affil-label">Korean &amp; Japanese</p>
+      </div>
+      <div class="affil-card">
+        <div class="affil-flags">&#x1F1F2;&#x1F1FD; &#x1F91D; &#x1F1E7;&#x1F1F7;</div>
+        <p class="affil-label">Spanish &amp; Portuguese</p>
+      </div>
+      <div class="affil-card">
+        <div class="affil-flags">&#x1F1E8;&#x1F1F3; &#x1F91D; &#x1F1ED;&#x1F1F0;</div>
+        <p class="affil-label">Mandarin &amp; Cantonese</p>
+      </div>
+      <div class="affil-card">
+        <div class="affil-flags">&#x1F1FA;&#x1F1F8; &#x1F91D; &#x1F1EC;&#x1F1E7;</div>
+        <p class="affil-label">American &amp; British English</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRICING ========== -->
+<section id="pricing">
+  <div class="container fade-in">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-heading">Start free. Upgrade when you're hooked.</h2>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <p class="pricing-name">Free</p>
+        <p class="pricing-price">$0 <span>/ forever</span></p>
+        <ul class="pricing-features">
+          <li>20 messages per day</li>
+          <li>Basic on-device voice</li>
+          <li>1 scenario per day</li>
+          <li>All 16 characters</li>
+          <li>Bilingual ads</li>
+        </ul>
+      </div>
+      <div class="pricing-card featured">
+        <span class="pricing-badge">Most Popular</span>
+        <p class="pricing-name">Plus</p>
+        <p class="pricing-price">$14.99 <span>/ month</span></p>
+        <ul class="pricing-features">
+          <li>100 messages per day</li>
+          <li>15 min voice per day</li>
+          <li>Brain visualization</li>
+          <li>Cross-character chat</li>
+          <li>Photo sharing</li>
+          <li>5 scenarios per day</li>
+          <li>No ads</li>
+        </ul>
+      </div>
+      <div class="pricing-card">
+        <span class="pricing-badge" style="background:linear-gradient(135deg,#e040fb,var(--purple))">For the obsessed</span>
+        <p class="pricing-name">Premium</p>
+        <p class="pricing-price">$49.99 <span>/ month</span></p>
+        <ul class="pricing-features">
+          <li>500 messages per day</li>
+          <li>Unlimited scenarios</li>
+          <li>20 min ElevenLabs voice per day</li>
+          <li>Everything in Plus</li>
+        </ul>
+      </div>
+    </div>
+    <p style="color:var(--text-dim);font-size:0.85rem;margin-top:1.5rem">All plans include all 16 characters across 8 languages.</p>
+  </div>
+</section>
+
+<!-- ========== TRUST ========== -->
+<section>
+  <div class="container fade-in">
+    <p class="section-label">Trust &amp; safety</p>
+    <h2 class="section-heading">Built with care.</h2>
+    <ul class="trust-list">
+      <li><span class="trust-icon">&#x1F6E1;</span>Your buddy is pure-natured &mdash; they won't engage with harmful content</li>
+      <li><span class="trust-icon">&#x1F50A;</span>Voice processing runs on your device &mdash; your words stay private</li>
+      <li><span class="trust-icon">&#x1F5D1;</span>Delete your account and all data goes with it</li>
+      <li><span class="trust-icon">&#x1F476;</span>COPPA compliant &mdash; age verification before signup</li>
+    </ul>
+    <p style="margin-top:2rem">
+      <a href="privacy.html">Privacy Policy</a> &nbsp;&middot;&nbsp;
+      <a href="terms.html">Terms of Service</a>
+    </p>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final-cta">
+  <div class="container fade-in">
+    <h2 class="section-heading" style="text-align:center">Ready to meet your friend?</h2>
+    <a href="#pricing" class="btn-primary" style="font-size:1.15rem;padding:1rem 2.8rem">Start Learning &mdash; Free</a>
+    <p class="final-avail">Available on iOS, Android, and Web</p>
+    <p class="final-small">No credit card required. No placement test. Just conversation.</p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-links">
+    <a href="#how">Features</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="/blog">Blog</a>
+  </div>
+  <div class="footer-links" style="margin-top:0.5rem">
+    <a href="/learn/korean">Learn Korean</a>
+    <a href="/learn/japanese">Learn Japanese</a>
+    <a href="/learn/spanish">Learn Spanish</a>
+    <a href="/learn/portuguese">Learn Portuguese</a>
+    <a href="/learn/mandarin">Learn Mandarin</a>
+    <a href="/learn/cantonese">Learn Cantonese</a>
+    <a href="/learn/english">Learn English</a>
+  </div>
+  <p>&copy; 2026 Forked Tongue. All rights reserved.</p>
+  <p class="footer-made">Made with AI, designed for humans.</p>
+</footer>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.fade-in');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('visible'); });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.12});
+  els.forEach(function(el){obs.observe(el);});
+})();
+</script>
+</body>
+</html>

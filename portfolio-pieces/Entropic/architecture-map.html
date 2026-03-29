@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture Map — Entropic Tarot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0c0c14;--surface:#13131f;--surface2:#1a1a2e;--border:rgba(255,255,255,0.07);--purple:#7c3aed;--purple-l:#a78bfa;--blue:#3b82f6;--gold:#f0c040;--green:#10b981;--red:#ef4444;--orange:#f59e0b;--text:#f0f0f0;--text2:#a1a1aa;--text3:#6b7280}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased}
+.header{text-align:center;padding:48px 20px 32px;border-bottom:1px solid var(--border)}
+.header h1{font-size:1.6rem;font-weight:700;margin-bottom:4px;background:linear-gradient(135deg,var(--purple-l),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{color:var(--text3);font-size:.82rem}
+.container{max-width:1000px;margin:0 auto;padding:0 20px}
+
+/* Tabs */
+.tabs{display:flex;justify-content:center;gap:0;padding:24px 0 0;position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border)}
+.tab-btn{padding:12px 32px;font-size:13px;font-weight:600;letter-spacing:.03em;border:none;background:none;color:var(--text3);cursor:pointer;position:relative;transition:color .3s}
+.tab-btn:hover{color:var(--text2)}
+.tab-btn.active{color:var(--text)}
+.tab-btn::after{content:'';position:absolute;bottom:-1px;left:0;width:100%;height:2px;background:transparent;transition:background .3s}
+.tab-btn.active::after{background:var(--purple)}
+.tab-content{display:none;padding:32px 0 80px}
+.tab-content.active{display:block}
+
+/* Sections */
+.section{margin-bottom:40px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.section-header h2{font-size:1.05rem;font-weight:700}
+.badge{font-size:.68rem;padding:3px 10px;border-radius:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.badge.active{background:rgba(16,185,129,0.12);color:var(--green);border:1px solid rgba(16,185,129,0.2)}
+.badge.unused{background:rgba(245,158,11,0.12);color:var(--orange);border:1px solid rgba(245,158,11,0.2)}
+.badge.required{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+.badge.free{background:rgba(59,130,246,0.12);color:var(--blue);border:1px solid rgba(59,130,246,0.2)}
+
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:12px;transition:border-color .3s}
+.card:hover{border-color:rgba(124,58,237,0.3)}
+.card h3{font-size:.92rem;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card p{font-size:.85rem;color:var(--text2);margin-bottom:8px}
+.card .detail{font-size:.8rem;color:var(--text3);line-height:1.6}
+
+/* Key-value rows */
+.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 16px;margin:12px 0;font-size:.82rem}
+.kv dt{color:var(--text3);font-weight:500}
+.kv dd{color:var(--text2)}
+.kv dd a{color:var(--blue)}
+.kv dd code{background:rgba(124,58,237,0.1);color:var(--purple-l);padding:1px 6px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.78rem}
+
+/* Cost table */
+table{width:100%;border-collapse:collapse;margin:12px 0;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:.84rem}
+th{background:var(--surface2);color:var(--text3);font-weight:600;font-size:.76rem;text-transform:uppercase;letter-spacing:.04em}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--text);font-weight:500}
+.cost-total{font-weight:700;color:var(--gold)}
+
+/* Flow diagram */
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0;font-size:.8rem}
+.flow-node{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text2);font-weight:500}
+.flow-node.highlight{border-color:rgba(124,58,237,0.4);color:var(--purple-l)}
+.flow-arrow{color:var(--text3);font-size:.7rem}
+
+/* Env var block */
+.env-block{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text2);line-height:2;overflow-x:auto;margin:12px 0}
+.env-block .comment{color:var(--text3)}
+.env-block .key{color:var(--gold)}
+.env-block .val{color:var(--green)}
+
+@media(max-width:768px){.kv{grid-template-columns:1fr}.tabs{gap:0}.tab-btn{padding:10px 16px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h1>Entropic Tarot — Architecture Map</h1>
+<p>Complete system architecture, external services, accounts, and maintenance costs</p>
+</div>
+
+<div class="container">
+
+<!-- Tabs -->
+<div class="tabs">
+<button class="tab-btn active" onclick="switchTab('plain')">Plain Language</button>
+<button class="tab-btn" onclick="switchTab('technical')">Technical Details</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- PLAIN LANGUAGE TAB -->
+<!-- ============================================================ -->
+<div class="tab-content active" id="tab-plain">
+
+<div class="section">
+<div class="section-header">
+<h2>How the App Is Built</h2>
+</div>
+<div class="card">
+<p>Entropic Tarot is a web application that also runs as a mobile app on iPhone and Android. It's built with one codebase that works everywhere — your web browser, the App Store, and Google Play.</p>
+<p>The app runs almost entirely on the user's device. The only time it talks to an external server is when the user requests an AI interpretation of their reading. Everything else — card shuffling, entropy collection, card images, esoteric data, saved readings — happens locally.</p>
+</div>
+</div>
+
+<!-- HOSTING -->
+<div class="section">
+<div class="section-header">
+<h2>Hosting</h2>
+<span class="badge active">Active</span>
+<span class="badge required">Required</span>
+</div>
+<div class="card">
+<h3>Railway — Where the App Lives</h3>
+<p>Railway is the cloud service that runs the app's server and serves the website. Think of it like renting a computer in the cloud that's always on and accessible to anyone with the URL.</p>
+<dl class="kv">
+<dt>What it does</dt><dd>Runs the web server, serves all pages and files, handles AI interpretation requests</dd>
+<dt>URL</dt><dd><a href="https://entropic-tarot-production.up.railway.app" target="_blank">entropic-tarot-production.up.railway.app</a></dd>
+<dt>Dashboard</dt><dd><a href="https://railway.app/dashboard" target="_blank">railway.app/dashboard</a></dd>
+<dt>Account</dt><dd>Login with GitHub (Moonligh7er)</dd>
+<dt>Deploys from</dt><dd>Automatically when you push to GitHub</dd>
+<dt>Cost</dt><dd>~$5-10/month at low traffic, scales with usage</dd>
+</dl>
+</div>
+</div>
+
+<!-- CODE REPOSITORY -->
+<div class="section">
+<div class="section-header">
+<h2>Code Repository</h2>
+<span class="badge active">Active</span>
+<span class="badge required">Required</span>
+</div>
+<div class="card">
+<h3>GitHub — Where the Code Lives</h3>
+<p>All the app's source code is stored in a private GitHub repository. When you push changes to GitHub, Railway automatically rebuilds and redeploys the app.</p>
+<dl class="kv">
+<dt>What it does</dt><dd>Stores all source code, tracks changes, triggers deployments</dd>
+<dt>Repository</dt><dd><a href="https://github.com/Moonligh7er/entropic-tarot" target="_blank">github.com/Moonligh7er/entropic-tarot</a> (private)</dd>
+<dt>Account</dt><dd>Moonligh7er</dd>
+<dt>Cost</dt><dd>Free (private repos included)</dd>
+</dl>
+</div>
+</div>
+
+<!-- AI SERVICE -->
+<div class="section">
+<div class="section-header">
+<h2>AI Interpretation</h2>
+<span class="badge active">Active</span>
+<span class="badge required">Required for AI feature</span>
+</div>
+<div class="card">
+<h3>Anthropic Claude API — The AI Reader</h3>
+<p>When a user presses "Interpret My Reading," the app sends their card data to Anthropic's Claude AI, which writes a personalized interpretation. The AI sees the cards, their positions, Qabalah correspondences, and current planetary positions — but never any personal information about the user.</p>
+<dl class="kv">
+<dt>What it does</dt><dd>Generates narrative tarot interpretations from card spreads</dd>
+<dt>Model used</dt><dd>Claude Sonnet 4.6 (fast, high quality, cost-effective)</dd>
+<dt>Console</dt><dd><a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></dd>
+<dt>API key format</dt><dd><code>sk-ant-api03-...</code></dd>
+<dt>Rate limit</dt><dd>5 interpretations per user per day</dd>
+<dt>Cost per use</dt><dd>~$0.005-0.02 per interpretation depending on spread size</dd>
+<dt>Monthly cost</dt><dd>$5-50 depending on user volume</dd>
+</dl>
+</div>
+</div>
+
+<!-- MOBILE STORES -->
+<div class="section">
+<div class="section-header">
+<h2>Mobile App Distribution</h2>
+<span class="badge active">Active</span>
+</div>
+<div class="card">
+<h3>Apple App Store</h3>
+<p>The iOS version of the app, built using Capacitor which wraps the web app in a native shell.</p>
+<dl class="kv">
+<dt>What it does</dt><dd>Distributes the app to iPhone and iPad users</dd>
+<dt>Console</dt><dd><a href="https://appstoreconnect.apple.com" target="_blank">appstoreconnect.apple.com</a></dd>
+<dt>Bundle ID</dt><dd><code>com.entropictarot.app</code></dd>
+<dt>Cost</dt><dd>$99/year (Apple Developer Program)</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Google Play Store</h3>
+<p>The Android version of the app, also built using Capacitor.</p>
+<dl class="kv">
+<dt>What it does</dt><dd>Distributes the app to Android users</dd>
+<dt>Console</dt><dd><a href="https://play.google.com/console" target="_blank">play.google.com/console</a></dd>
+<dt>Package</dt><dd><code>com.entropictarot.app</code></dd>
+<dt>Cost</dt><dd>$25 one-time registration fee</dd>
+</dl>
+</div>
+</div>
+
+<!-- DATA STORAGE -->
+<div class="section">
+<div class="section-header">
+<h2>Data Storage</h2>
+</div>
+<div class="card">
+<h3>Browser localStorage — User's Saved Readings</h3>
+<p>All saved readings, audio preferences, and onboarding state are stored in the user's browser on their own device. Nothing is sent to a server. If the user clears their browser data, their readings are gone.</p>
+<dl class="kv">
+<dt>What's stored</dt><dd>Saved readings (cards, positions, AI interpretations), audio mute preference, onboarding completion flag</dd>
+<dt>Where</dt><dd>User's browser, on their device only</dd>
+<dt>Cost</dt><dd>Free (built into every browser)</dd>
+<dt>Limitations</dt><dd>~5-10MB per domain; no sync between devices</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Neon PostgreSQL Database <span class="badge unused">Not Currently Used</span></h3>
+<p>A cloud database is configured in the code but not active. It was set up for future user accounts and reading sync. Currently no data flows to it.</p>
+<dl class="kv">
+<dt>Dashboard</dt><dd><a href="https://console.neon.tech" target="_blank">console.neon.tech</a></dd>
+<dt>Status</dt><dd>Schema exists but no routes use it</dd>
+<dt>Cost</dt><dd>Free tier available (0.5GB storage)</dd>
+</dl>
+</div>
+</div>
+
+<!-- MONETIZATION -->
+<div class="section">
+<div class="section-header">
+<h2>Monetization</h2>
+<span class="badge active">Active</span>
+</div>
+<div class="card">
+<h3>Ko-fi — Tip Jar</h3>
+<p>A donation link in the app footer. Users can voluntarily support the project.</p>
+<dl class="kv">
+<dt>Page</dt><dd><a href="https://ko-fi.com/entropictarot" target="_blank">ko-fi.com/entropictarot</a></dd>
+<dt>Cost</dt><dd>Free (Ko-fi takes 0% on donations, 5% on shop sales)</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Bookshop.org Affiliate</h3>
+<p>Book recommendation links on the Resources page. When someone buys a book through your link, you earn a commission.</p>
+<dl class="kv">
+<dt>Affiliate ID</dt><dd><code>122491</code></dd>
+<dt>Dashboard</dt><dd><a href="https://bookshop.org/affiliates/dashboard" target="_blank">bookshop.org/affiliates/dashboard</a></dd>
+<dt>Commission</dt><dd>~10% of qualifying purchases</dd>
+<dt>Cost</dt><dd>Free</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Amazon Associates</h3>
+<p>Book and deck recommendation links on the Resources page.</p>
+<dl class="kv">
+<dt>Associate Tag</dt><dd><code>moonligh7er-20</code></dd>
+<dt>Dashboard</dt><dd><a href="https://affiliate-program.amazon.com" target="_blank">affiliate-program.amazon.com</a></dd>
+<dt>Commission</dt><dd>1-5% depending on product category</dd>
+<dt>Cost</dt><dd>Free</dd>
+</dl>
+</div>
+</div>
+
+<!-- EXTERNAL FONTS -->
+<div class="section">
+<div class="section-header">
+<h2>External Resources</h2>
+<span class="badge free">Free</span>
+</div>
+<div class="card">
+<h3>Google Fonts</h3>
+<p>The app uses Cinzel (for mystical headings) and Inter (for body text) fonts loaded from Google's free font service. Blog and static HTML pages load fonts directly; the main app references them via CSS.</p>
+<dl class="kv">
+<dt>Fonts used</dt><dd>Cinzel (serif), Inter (sans-serif), Cormorant Garamond (blog)</dd>
+<dt>Cost</dt><dd>Free</dd>
+</dl>
+</div>
+</div>
+
+<!-- ENV VARS -->
+<div class="section">
+<div class="section-header">
+<h2>Environment Variables</h2>
+</div>
+<div class="card">
+<p>These are secret settings stored on Railway (not in the code). They configure the app's behavior.</p>
+<div class="env-block">
+<span class="comment"># Required — AI interpretation won't work without this</span><br>
+<span class="key">ANTHROPIC_API_KEY</span>=<span class="val">sk-ant-api03-example-key-here</span><br><br>
+<span class="comment"># Optional — defaults to claude-sonnet-4-6-20250514</span><br>
+<span class="key">ANTHROPIC_MODEL</span>=<span class="val">claude-sonnet-4-6-20250514</span><br><br>
+<span class="comment"># Optional — defaults to 4200</span><br>
+<span class="key">PORT</span>=<span class="val">4200</span>
+</div>
+</div>
+</div>
+
+<!-- COST BREAKDOWN -->
+<div class="section">
+<div class="section-header">
+<h2>Monthly &amp; Annual Costs</h2>
+</div>
+
+<table>
+<thead>
+<tr><th>Service</th><th>Monthly Cost</th><th>Annual Cost</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td>Railway Hosting</td><td>$5-10</td><td>$60-120</td><td>Scales with traffic; $5 credit/mo on Hobby plan</td></tr>
+<tr><td>Anthropic Claude API</td><td>$5-50</td><td>$60-600</td><td>~$0.01/interpretation avg; 5/day/user limit caps exposure</td></tr>
+<tr><td>Apple Developer Program</td><td>$8.25</td><td>$99</td><td>Required for App Store distribution</td></tr>
+<tr><td>Google Play (one-time)</td><td>—</td><td>$25 (first year only)</td><td>One-time registration, no annual fee</td></tr>
+<tr><td>Domain (if purchased)</td><td>$1-2</td><td>$12-20</td><td>Optional — currently using Railway subdomain</td></tr>
+<tr><td>GitHub</td><td>$0</td><td>$0</td><td>Free for private repos</td></tr>
+<tr><td>Google Fonts</td><td>$0</td><td>$0</td><td>Free</td></tr>
+<tr><td>Ko-fi</td><td>$0</td><td>$0</td><td>Free (platform takes 0% on donations)</td></tr>
+<tr><td>Bookshop.org / Amazon</td><td>$0</td><td>$0</td><td>Free (earn commissions)</td></tr>
+<tr>
+<td class="cost-total">TOTAL (Low Traffic)</td>
+<td class="cost-total">~$20-30/mo</td>
+<td class="cost-total">~$240-360/yr</td>
+<td>50-100 users, minimal AI usage</td>
+</tr>
+<tr>
+<td class="cost-total">TOTAL (Medium Traffic)</td>
+<td class="cost-total">~$50-80/mo</td>
+<td class="cost-total">~$600-960/yr</td>
+<td>500+ users, regular AI usage</td>
+</tr>
+<tr>
+<td class="cost-total">TOTAL (High Traffic)</td>
+<td class="cost-total">~$100-200/mo</td>
+<td class="cost-total">~$1,200-2,400/yr</td>
+<td>5,000+ users, heavy AI usage</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div><!-- /tab-plain -->
+
+<!-- ============================================================ -->
+<!-- TECHNICAL TAB -->
+<!-- ============================================================ -->
+<div class="tab-content" id="tab-technical">
+
+<div class="section">
+<div class="section-header">
+<h2>System Architecture Overview</h2>
+</div>
+<div class="card">
+<h3>Request Flow</h3>
+<div class="flow">
+<span class="flow-node">User Browser / Capacitor WebView</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Railway (Express.js)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">Anthropic API (Claude)</span>
+</div>
+<div class="flow">
+<span class="flow-node">Vite Build</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">dist/public/</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">express.static()</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">Client SPA + Static HTML</span>
+</div>
+<div class="flow">
+<span class="flow-node">GitHub Push</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Railway CI/CD</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">npm install &rarr; vite build &rarr; esbuild &rarr; node dist/index.js</span>
+</div>
+</div>
+</div>
+
+<!-- TECH STACK -->
+<div class="section">
+<div class="section-header">
+<h2>Technology Stack</h2>
+</div>
+<div class="card">
+<h3>Frontend</h3>
+<dl class="kv">
+<dt>Framework</dt><dd>React 18.3 + TypeScript</dd>
+<dt>Bundler</dt><dd>Vite 5.4</dd>
+<dt>Styling</dt><dd>Tailwind CSS 3.4 + custom CSS utilities</dd>
+<dt>Router</dt><dd>Wouter (lightweight, ~1.5KB)</dd>
+<dt>State</dt><dd>React Context (ReadingFlowProvider, AudioProvider)</dd>
+<dt>Data Fetching</dt><dd>TanStack React Query 5.60</dd>
+<dt>Icons</dt><dd>Lucide React</dd>
+<dt>Components</dt><dd>Radix UI primitives + shadcn/ui</dd>
+<dt>Animations</dt><dd>CSS keyframes + custom spring curves (framer-motion installed but minimal)</dd>
+<dt>Image Export</dt><dd>html2canvas 1.4.1</dd>
+<dt>Astronomy</dt><dd>astronomy-engine 2.1.19 (client-side orbital mechanics)</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Backend</h3>
+<dl class="kv">
+<dt>Runtime</dt><dd>Node.js (Express 4.21)</dd>
+<dt>Server Build</dt><dd>esbuild 0.25 (ESM output)</dd>
+<dt>Dev Server</dt><dd>tsx 4.19 + Vite middleware</dd>
+<dt>AI SDK</dt><dd>@anthropic-ai/sdk 0.80.0</dd>
+<dt>Validation</dt><dd>Zod schema validation on all API inputs</dd>
+<dt>Rate Limiting</dt><dd>Custom in-memory Map (per-IP daily, 24h window, 30min cleanup)</dd>
+<dt>Security</dt><dd>HSTS, CSP, X-Frame-Options DENY, X-Content-Type-Options nosniff, trust proxy</dd>
+<dt>SSE Streaming</dt><dd>Manual text/event-stream with 60s timeout + client disconnect handling</dd>
+</dl>
+</div>
+<div class="card">
+<h3>Mobile (Capacitor 8.0)</h3>
+<dl class="kv">
+<dt>iOS</dt><dd>WKWebView, contentInset: automatic, preferredContentMode: mobile</dd>
+<dt>Android</dt><dd>Android WebView, HTTPS scheme enforced, allowMixedContent: false</dd>
+<dt>Plugins</dt><dd>@capacitor/share, @capacitor/filesystem, @capacitor/haptics</dd>
+<dt>Build</dt><dd><code>npm run build:mobile</code> &rarr; <code>npx cap open android|ios</code></dd>
+</dl>
+</div>
+</div>
+
+<!-- API ENDPOINT -->
+<div class="section">
+<div class="section-header">
+<h2>API Endpoints</h2>
+</div>
+<div class="card">
+<h3><code>POST /api/interpret</code> <span class="badge active">Active</span></h3>
+<p>Streams an AI-generated tarot interpretation via Server-Sent Events.</p>
+<dl class="kv">
+<dt>Auth</dt><dd>None (rate-limited by IP + User-Agent fingerprint)</dd>
+<dt>Rate Limit</dt><dd>5 requests / 24 hours / IP</dd>
+<dt>Request Body</dt><dd>Zod-validated: <code>{ spreadType, deckName?, cards[], planetaryPositions?, timestamp }</code></dd>
+<dt>Max Body</dt><dd>10KB (express.json limit)</dd>
+<dt>Max Prompt</dt><dd>50,000 characters</dd>
+<dt>Response</dt><dd>SSE stream: <code>data: {"text":"..."}\n\n</code> ... <code>data: [DONE]\n\n</code></dd>
+<dt>Timeout</dt><dd>60 seconds</dd>
+<dt>Model</dt><dd><code>process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6-20250514'</code></dd>
+<dt>Max Tokens</dt><dd>2,000</dd>
+<dt>Error Format</dt><dd><code>data: {"error":"safe message"}\n\n</code> (never exposes raw API errors)</dd>
+</dl>
+</div>
+<div class="card">
+<h3><code>GET /api/interpret/status</code> <span class="badge active">Active</span></h3>
+<p>Returns remaining daily interpretation count for the requesting IP.</p>
+<dl class="kv">
+<dt>Response</dt><dd><code>{ remaining: number, dailyLimit: 5, resetsIn: ms }</code></dd>
+</dl>
+</div>
+</div>
+
+<!-- CRYPTOGRAPHIC PIPELINE -->
+<div class="section">
+<div class="section-header">
+<h2>Cryptographic Pipeline (Client-Side)</h2>
+</div>
+<div class="card">
+<div class="flow">
+<span class="flow-node">Microphone (200ms)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">SHA-256</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Entropy Pool</span>
+</div>
+<div class="flow">
+<span class="flow-node">Camera (300ms)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">SHA-256</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Entropy Pool</span>
+</div>
+<div class="flow">
+<span class="flow-node">Touch (on interaction)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">SHA-256</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Entropy Pool</span>
+</div>
+<div class="flow" style="margin-top:16px">
+<span class="flow-node highlight">Entropy Pool</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">+ crypto.getRandomValues(32)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">HMAC-DRBG (NIST SP 800-90A)</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node highlight">Fisher-Yates + Rejection Sampling</span>
+<span class="flow-arrow">&rarr;</span>
+<span class="flow-node">78-card shuffled deck</span>
+</div>
+<dl class="kv" style="margin-top:16px">
+<dt>Entropy Mixer</dt><dd><code>client/src/lib/entropy-mixer.ts</code></dd>
+<dt>Crypto RNG</dt><dd><code>client/src/lib/crypto-rng.ts</code></dd>
+<dt>Shuffle</dt><dd><code>client/src/lib/tarot-deck.ts</code> → <code>cryptoFisherYatesShuffle()</code></dd>
+<dt>Hook</dt><dd><code>client/src/hooks/use-entropy-collector.tsx</code></dd>
+</dl>
+</div>
+</div>
+
+<!-- FILE STRUCTURE -->
+<div class="section">
+<div class="section-header">
+<h2>Key File Locations</h2>
+</div>
+<div class="card">
+<dl class="kv">
+<dt>Entry HTML</dt><dd><code>client/index.html</code></dd>
+<dt>React Root</dt><dd><code>client/src/main.tsx</code> &rarr; <code>client/src/App.tsx</code></dd>
+<dt>Pages</dt><dd><code>client/src/pages/{entropy,deck-selection,spread-selection,shuffle,reading,saved-readings,features}.tsx</code></dd>
+<dt>Components</dt><dd><code>client/src/components/</code> (25+ components)</dd>
+<dt>Contexts</dt><dd><code>client/src/contexts/{reading-flow-context,audio-context}.tsx</code></dd>
+<dt>Libraries</dt><dd><code>client/src/lib/{tarot-deck,crypto-rng,entropy-mixer,astrology,qabalah-correspondences,haptics,audio-engine,sounds,share-reading,build-interpretation-context}.ts</code></dd>
+<dt>Server</dt><dd><code>server/{index,routes,vite}.ts</code></dd>
+<dt>Static HTML</dt><dd><code>client/public/{privacy,terms,features,about,contact,resources,landing}.html</code></dd>
+<dt>Blog</dt><dd><code>client/public/blog/{index + 10 articles}.html</code></dd>
+<dt>Card Images</dt><dd><code>client/public/cards/{smith-waite-1909,marseille-conver-1760,sola-busca-1491}/</code></dd>
+<dt>Audio</dt><dd><code>client/public/audio/{ambient/*.mp3, sfx/*.wav}</code></dd>
+<dt>Icons</dt><dd><code>client/public/icons/</code> (17 PNGs + SVG)</dd>
+<dt>Splash</dt><dd><code>client/public/splash/</code> (6 Apple splash screens)</dd>
+<dt>PWA</dt><dd><code>client/public/{manifest.json, sw.js, robots.txt, sitemap.xml}</code></dd>
+<dt>iOS</dt><dd><code>ios/App/</code> (Xcode project)</dd>
+<dt>Android</dt><dd><code>android/app/</code> (Gradle project)</dd>
+<dt>Config</dt><dd><code>package.json, tsconfig.json, vite.config.ts, capacitor.config.ts, tailwind.config.ts, postcss.config.js</code></dd>
+</dl>
+</div>
+</div>
+
+<!-- ENV VARS -->
+<div class="section">
+<div class="section-header">
+<h2>Environment Variables</h2>
+</div>
+<div class="card">
+<div class="env-block">
+<span class="comment"># ── Required ──</span><br>
+<span class="key">ANTHROPIC_API_KEY</span>=<span class="val">sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</span><br>
+<span class="comment"># Source: console.anthropic.com → API Keys</span><br>
+<span class="comment"># Used by: server/routes.ts → Anthropic SDK constructor</span><br>
+<span class="comment"># Validated: must start with 'sk-'</span><br><br>
+<span class="comment"># ── Optional ──</span><br>
+<span class="key">ANTHROPIC_MODEL</span>=<span class="val">claude-sonnet-4-6-20250514</span><br>
+<span class="comment"># Default: claude-sonnet-4-6-20250514</span><br>
+<span class="comment"># Alternatives: claude-haiku-4-5-20251001 (cheaper), claude-opus-4-6 (premium)</span><br><br>
+<span class="key">PORT</span>=<span class="val">4200</span><br>
+<span class="comment"># Default: 4200 (Railway sets this automatically)</span><br><br>
+<span class="key">DATABASE_URL</span>=<span class="val">postgresql://user:pass@host/db?sslmode=require</span><br>
+<span class="comment"># Status: NOT CURRENTLY USED (future: user accounts)</span><br>
+<span class="comment"># Source: console.neon.tech → Connection Details</span>
+</div>
+</div>
+</div>
+
+<!-- SECURITY -->
+<div class="section">
+<div class="section-header">
+<h2>Security Headers</h2>
+</div>
+<div class="card">
+<p>Set in <code>server/index.ts</code> as Express middleware on every response:</p>
+<div class="env-block">
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload<br>
+X-Content-Type-Options: nosniff<br>
+X-Frame-Options: DENY<br>
+X-XSS-Protection: 0<br>
+Referrer-Policy: strict-origin-when-cross-origin<br>
+Permissions-Policy: camera=(self), microphone=(self), geolocation=()<br>
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; media-src 'self'; frame-ancestors 'none'
+</div>
+</div>
+</div>
+
+<!-- COST TABLE -->
+<div class="section">
+<div class="section-header">
+<h2>Maintenance Costs</h2>
+</div>
+<table>
+<thead>
+<tr><th>Service</th><th>Monthly</th><th>Annual</th><th>Pricing Model</th><th>Dashboard</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Railway Hosting</td><td>$5-10</td><td>$60-120</td>
+<td>Usage-based (CPU/RAM/bandwidth). Hobby: $5/mo included credit</td>
+<td><a href="https://railway.app/dashboard" target="_blank">Dashboard</a></td>
+</tr>
+<tr>
+<td>Anthropic API</td><td>$5-50</td><td>$60-600</td>
+<td>Per-token: Sonnet $3/M input, $15/M output. ~1-3K tokens/interpretation</td>
+<td><a href="https://console.anthropic.com/settings/billing" target="_blank">Billing</a></td>
+</tr>
+<tr>
+<td>Apple Developer</td><td>$8.25</td><td>$99</td>
+<td>Annual subscription, required for App Store</td>
+<td><a href="https://developer.apple.com/account" target="_blank">Account</a></td>
+</tr>
+<tr>
+<td>Google Play</td><td>—</td><td>$25 (once)</td>
+<td>One-time registration fee</td>
+<td><a href="https://play.google.com/console" target="_blank">Console</a></td>
+</tr>
+<tr>
+<td>Domain Name</td><td>$1-2</td><td>$12-20</td>
+<td>Optional (currently using Railway subdomain)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>GitHub</td><td>$0</td><td>$0</td>
+<td>Free tier (unlimited private repos)</td>
+<td><a href="https://github.com/Moonligh7er/entropic-tarot" target="_blank">Repo</a></td>
+</tr>
+<tr>
+<td>Ko-fi / Affiliates</td><td>$0</td><td>$0</td>
+<td>Free (revenue sources, not costs)</td>
+<td>—</td>
+</tr>
+<tr>
+<td class="cost-total">TOTAL (Low)</td>
+<td class="cost-total">~$20/mo</td>
+<td class="cost-total">~$256/yr</td>
+<td colspan="2">50-100 monthly users</td>
+</tr>
+<tr>
+<td class="cost-total">TOTAL (Medium)</td>
+<td class="cost-total">~$65/mo</td>
+<td class="cost-total">~$800/yr</td>
+<td colspan="2">500-1,000 monthly users</td>
+</tr>
+<tr>
+<td class="cost-total">TOTAL (High)</td>
+<td class="cost-total">~$150/mo</td>
+<td class="cost-total">~$1,900/yr</td>
+<td colspan="2">5,000+ monthly users</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- UNUSED -->
+<div class="section">
+<div class="section-header">
+<h2>Installed But Unused</h2>
+<span class="badge unused">Not Active</span>
+</div>
+<div class="card">
+<p>These dependencies are installed in package.json but have no active code paths. They exist for future features (user accounts, reading sync).</p>
+<dl class="kv">
+<dt>Neon DB</dt><dd><code>@neondatabase/serverless</code> — PostgreSQL client (no queries executed)</dd>
+<dt>Drizzle ORM</dt><dd><code>drizzle-orm</code> + <code>drizzle-kit</code> — Schema/migrations (schema gitignored)</dd>
+<dt>Passport</dt><dd><code>passport</code> + <code>passport-local</code> — Authentication (no strategies registered)</dd>
+<dt>Sessions</dt><dd><code>express-session</code> + <code>connect-pg-simple</code> + <code>memorystore</code> — Session management (not initialized)</dd>
+</dl>
+</div>
+</div>
+
+</div><!-- /tab-technical -->
+
+</div><!-- /container -->
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.tab-btn:${tab === 'plain' ? 'first-child' : 'last-child'}`).classList.add('active');
+  document.getElementById(`tab-${tab}`).classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA — Feature Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-primary: #0a0e14;
+    --bg-secondary: #111820;
+    --bg-tertiary: #1a2332;
+    --bg-card: #141b25;
+    --border: #1e293b;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-blue: #3b82f6;
+    --accent-green: #10b981;
+    --accent-teal: #00d4aa;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .app-layout {
+    display: flex;
+    height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 1.25rem 1rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-header h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-teal);
+    letter-spacing: 0.15em;
+  }
+
+  .sidebar-header .subtitle {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .sidebar-header .stats {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .sidebar-header .stats strong {
+    color: var(--accent-green);
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 0.4rem 0.75rem 0.4rem 0.85rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-link:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+  }
+
+  /* Main */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem 2.5rem;
+  }
+
+  .main-inner {
+    max-width: 860px;
+  }
+
+  .page-title {
+    font-size: 1rem;
+    color: var(--accent-teal);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+  }
+
+  /* Categories */
+  .category {
+    margin-bottom: 2rem;
+  }
+
+  .category-header {
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid;
+    margin-bottom: 0.75rem;
+  }
+
+  .feat-count {
+    font-weight: 400;
+    opacity: 0.5;
+    font-size: 0.75rem;
+  }
+
+  /* Features */
+  .feature {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 4px;
+  }
+
+  .feature:hover {
+    border-color: #2d3a4d;
+  }
+
+  .feature-name {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 3px;
+  }
+
+  .feature-desc {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { padding: 1rem; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-primary); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>DAGDA</h1>
+      <div class="subtitle">Feature Reference</div>
+      <div class="stats">
+        <strong>29</strong> categories &middot;
+        <strong>181</strong> features &middot;
+        <strong>640</strong> tools
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+<a href="#core-system" class="nav-link" style="border-left-color:#00d4aa">Core System</a>
+<a href="#ai-safeguards" class="nav-link" style="border-left-color:#10b981">AI Safeguards</a>
+<a href="#ai-backend" class="nav-link" style="border-left-color:#a855f7">AI Backend</a>
+<a href="#defensive-tools" class="nav-link" style="border-left-color:#3b82f6">Defensive Tools</a>
+<a href="#monitoring-and-defense" class="nav-link" style="border-left-color:#f59e0b">Monitoring &amp; Defense</a>
+<a href="#network-defense" class="nav-link" style="border-left-color:#0ea5e9">Network Defense</a>
+<a href="#investigation-tools" class="nav-link" style="border-left-color:#22c55e">Investigation Tools</a>
+<a href="#intelligence-layer" class="nav-link" style="border-left-color:#14b8a6">Intelligence Layer</a>
+<a href="#tui-interface" class="nav-link" style="border-left-color:#06b6d4">TUI Interface</a>
+<a href="#security-architecture" class="nav-link" style="border-left-color:#ef4444">Security Architecture</a>
+<a href="#deception-mode" class="nav-link" style="border-left-color:#a855f7">Deception Mode</a>
+<a href="#warrior-mode-bug-hunter" class="nav-link" style="border-left-color:#dc2626">Warrior Mode (Bug Hunter)</a>
+<a href="#warrior-mode-arena" class="nav-link" style="border-left-color:#8b5cf6">Warrior Mode (Arena)</a>
+<a href="#incident-commander-mode" class="nav-link" style="border-left-color:#f43f5e">Incident Commander Mode</a>
+<a href="#foundation-event-bus-and-knowledge-graph" class="nav-link" style="border-left-color:#0ea5e9">Foundation (Event Bus &amp; Knowledge Graph)</a>
+<a href="#intelligence-layer-36-tools" class="nav-link" style="border-left-color:#10b981">Intelligence Layer (36 tools)</a>
+<a href="#ux-and-safety" class="nav-link" style="border-left-color:#f59e0b">UX &amp; Safety</a>
+<a href="#stealth-investigation-mode" class="nav-link" style="border-left-color:#22d3ee">Stealth Investigation Mode</a>
+<a href="#analytical-engines" class="nav-link" style="border-left-color:#7c3aed">Analytical Engines</a>
+<a href="#cognitive-ui" class="nav-link" style="border-left-color:#06b6d4">Cognitive UI</a>
+<a href="#self-awareness-and-education" class="nav-link" style="border-left-color:#f59e0b">Self-Awareness &amp; Education</a>
+<a href="#web-dashboard-phase-11a" class="nav-link" style="border-left-color:#38bdf8">Web Dashboard (Phase 11A)</a>
+<a href="#rust-core-acceleration-phase-11c" class="nav-link" style="border-left-color:#f97316">Rust Core Acceleration (Phase 11C)</a>
+<a href="#plugin-system-phase-11d" class="nav-link" style="border-left-color:#a78bfa">Plugin System (Phase 11D)</a>
+<a href="#automated-threat-response-phase-11e" class="nav-link" style="border-left-color:#ef4444">Automated Threat Response (Phase 11E)</a>
+<a href="#mesh-networking-phase-11b" class="nav-link" style="border-left-color:#34d399">Mesh Networking (Phase 11B)</a>
+<a href="#engineering-hygiene" class="nav-link" style="border-left-color:#3b82f6">Engineering Hygiene</a>
+<a href="#self-security" class="nav-link" style="border-left-color:#ef4444">Self-Security</a>
+<a href="#morrigan-fleet-command" class="nav-link" style="border-left-color:#7c3aed">Morrigan Fleet Command</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="main-inner">
+      <div class="page-title">DAGDA Feature Reference</div>
+      <div class="page-subtitle">Defensive AI Guardian &amp; Digital Arsenal &mdash; 29 categories, 181 features, 640 tools</div>
+
+<section id="core-system" class="category">
+  <h2 class="category-header" style="color:#00d4aa;border-bottom-color:#00d4aa">Core System <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">5-Tier Safeguard System</h3>
+    <p class="feature-desc">FORTRESS (5) &gt; VIGILANT (4) &gt; BALANCED (3) &gt; UNLOCKED (2) &gt; ARENA (1). Higher = more restrictive. Controls what the AI can do autonomously. Raise freely; lowering requires confirmation phrases. FORTRESS requires 2FA (TOTP) to leave.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">9 Operating Modes</h3>
+    <p class="feature-desc">SENTINEL (monitoring/defense/hardening) &gt; TRIAGE (alert assessment) &gt; INVESTIGATOR (OSINT/forensics) &gt; STEALTH INVESTIGATOR (covert evidence) &gt; DECEPTION (honeypots/canary tokens/counter-intel) &gt; INCIDENT COMMANDER (IR case management) &gt; BUG HUNTER (vuln research) &gt; ARENA (purple team) &gt; SELF-DEFENSE (IR/hardening/counter-intel). Each mode unlocks at specific safeguard levels.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Hash-Chained Audit Log</h3>
+    <p class="feature-desc">Every action is logged in an append-only, SHA-256 hash-chained JSON Lines file. Each entry links to the previous via cryptographic hash. Any tampering breaks the chain and is detectable on startup.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Permission Gate</h3>
+    <p class="feature-desc">Capability-based access control. Every tool call is checked against current mode, safeguard level, target scope, rate limits, and confirmation requirements before execution.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Unbreakable Guardrails</h3>
+    <p class="feature-desc">8 hard-coded rules that cannot be overridden: no data exfiltration, no audit tampering, no self-modification, no out-of-scope targeting, no unlogged execution, no fake capabilities, no stealth persistence, always explain autonomous reasoning.</p>
+  </div>
+</section>
+
+<section id="ai-safeguards" class="category">
+  <h2 class="category-header" style="color:#10b981;border-bottom-color:#10b981">AI Safeguards <span class="feat-count">(14)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Philosophy: Safety by Design</h3>
+    <p class="feature-desc">Dagda is built on the principle that powerful security tools demand equally powerful safety constraints. Every capability has a corresponding control. Offensive features are locked by default and require deliberate, auditable escalation to unlock. The AI cannot override its own restrictions, cannot suppress logging, and cannot operate outside defined scope — ever. Dagda proves that a security tool can be both potent and responsible.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">5-Tier Safeguard Hierarchy</h3>
+    <p class="feature-desc">Five levels from FORTRESS (5, maximum restriction) to ARENA (1, full offensive in isolated VMs). Default is BALANCED (3): safe operations run autonomously, offensive tools are locked. Raising the safeguard level is always instant and unrestricted. Lowering requires typed confirmation phrases proportional to the risk — the more you unlock, the more deliberately you must act. FORTRESS requires TOTP 2FA to leave, preventing social engineering attacks against the operator.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">8 Unbreakable Guardrails</h3>
+    <p class="feature-desc">Hard-coded rules enforced at the permission gate level, not in the AI prompt. These cannot be overridden by any user, mode, or safeguard level: (1) No data exfiltration — tools cannot send data to unauthorized destinations. (2) No audit tampering — the hash-chained log is append-only and cryptographically verified. (3) No self-modification — the AI cannot alter its own code, config, or constraints. (4) No out-of-scope targeting — offensive tools only work against user-defined scope whitelist. (5) No unlogged execution — every tool call is recorded before it runs. (6) No fake capabilities — the AI cannot claim tools or permissions it doesn&#x27;t have. (7) No stealth persistence — the AI cannot install backdoors, scheduled tasks, or hidden processes. (8) Always explain autonomous reasoning — when acting without explicit instruction, the AI must log its reasoning chain.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Permission Gate (Pre-Execution Enforcement)</h3>
+    <p class="feature-desc">Every tool invocation passes through a capability-based permission gate before execution. The gate checks: (a) Is the tool allowed in the current operating mode? (b) Does the current safeguard level meet or exceed the tool&#x27;s minimum? (c) Is the target within the authorized scope whitelist? (d) Has the per-tool rate limit been exceeded? (e) Does this tool require user confirmation, and has it been granted? (f) Is the AI operating autonomously, and is autonomous execution allowed for this tool? Any check failure blocks execution and logs the denial. The gate is implemented in Rust (with Python fallback) for tamper resistance.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Hash-Chained Audit Trail</h3>
+    <p class="feature-desc">Every action, tool call, permission decision, and mode change is logged to an append-only JSON Lines file where each entry contains a SHA-256 hash of the previous entry. This creates a cryptographic chain — if any entry is modified, deleted, or reordered, the chain breaks and the tampering is detected on the next startup integrity check. The audit log cannot be disabled, paused, or redirected. Even audit log reads are logged.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Scope-Locked Offensive Operations</h3>
+    <p class="feature-desc">All offensive and reconnaissance tools are scope-locked: they can only target IP addresses, domains, and network ranges explicitly whitelisted by the user. Scope is defined before entering BUG HUNTER or ARENA mode and enforced by the permission gate at execution time — not by the AI&#x27;s judgment. Attempting to target anything outside scope is blocked, logged, and triggers an alert. This prevents accidental or adversarial misuse against unauthorized systems.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Confirmation Escalation</h3>
+    <p class="feature-desc">Dangerous operations require explicit user confirmation even when the AI is operating autonomously. Confirmation requirements are tiered: (1) Low-risk defensive tools run without prompting. (2) Medium-risk tools (active scanning, network changes) require a single confirmation. (3) High-risk tools (exploit execution, system modification) require confirmation with a typed phrase. (4) Safeguard de-escalation requires progressively stronger confirmation — from a simple &#x27;yes&#x27; down to TOTP codes. The AI cannot auto-confirm on the user&#x27;s behalf.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Mode Isolation</h3>
+    <p class="feature-desc">Each operating mode (SENTINEL, TRIAGE, INVESTIGATOR, STEALTH INVESTIGATOR, DECEPTION, INCIDENT COMMANDER, BUG HUNTER, ARENA, SELF-DEFENSE) has a strictly defined tool allowlist. Tools registered for one mode are invisible and uncallable from another. This means a monitoring session cannot accidentally invoke offensive tools, and an offensive session cannot access evidence vault tools. Mode transitions are logged and require appropriate safeguard levels.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Autonomous Action Transparency</h3>
+    <p class="feature-desc">When the AI takes action without explicit user instruction (e.g., automated threat response, self-defense), it must: (a) Log the reasoning chain that led to the decision. (b) Record the specific threat indicators that triggered the response. (c) Note which playbook or escalation chain was followed. (d) Make all autonomous actions visible in the TUI defense feed and audit log. The user can review, reverse, or adjust any autonomous action after the fact.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Rate Limiting &amp; Anti-Runaway</h3>
+    <p class="feature-desc">Per-tool rate limits with configurable per-minute caps prevent the AI from executing runaway automation loops. If a tool is called too frequently, subsequent calls are blocked until the window resets. This prevents resource exhaustion, accidental DDoS against targets, and infinite retry loops. Rate limit violations are logged and surfaced as warnings.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Kill Switch (Ctrl+Shift+K)</h3>
+    <p class="feature-desc">Instant emergency stop accessible from any screen. Terminates all running tool executions, cancels pending autonomous actions, and raises the safeguard level to FORTRESS. The kill switch cannot be disabled, intercepted, or delayed by any tool, plugin, or AI action. It is the operator&#x27;s absolute override.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Destructive Command Block List</h3>
+    <p class="feature-desc">50+ regex patterns blocking dangerous shell commands before they reach the OS. Covers recursive deletion (rm -rf /), disk wiping (dd of=/dev/sda), fork bombs, iptables flush, chmod 777 /, mkfs on live partitions, and other catastrophic operations. Applied at the shell_execute layer regardless of mode, safeguard level, or AI reasoning. Cannot be disabled or overridden.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Red Team Execute Parameter</h3>
+    <p class="feature-desc">AI-initiated command execution with mandatory human approval. When the orchestrator determines a shell command is needed (e.g., during bug hunting or incident response), the command is presented to the operator for explicit approval before execution. The operator sees the exact command, its classification, and risk level. No command runs without a human pressing &quot;approve.&quot; All approved and denied commands are logged to the audit trail.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Acknowledgment: Anthropic&#x27;s Leadership in AI Safety</h3>
+    <p class="feature-desc">Dagda&#x27;s safeguard architecture draws direct inspiration from Anthropic&#x27;s pioneering work on AI safety. Anthropic has consistently demonstrated that building the most capable AI and building the safest AI are not competing goals — they are the same goal. Their commitment to Constitutional AI, interpretability research, and responsible scaling policies has set the standard for the entire industry. Claude&#x27;s own refusal to assist with genuinely harmful actions, its transparency about uncertainty, and its respect for human oversight are qualities we&#x27;ve embedded into Dagda&#x27;s DNA. We believe that security tools — especially AI-powered ones — have a heightened responsibility to get safety right. Anthropic showed us what &#x27;right&#x27; looks like. Thank you for proving that ethics and capability aren&#x27;t a tradeoff — they&#x27;re a multiplier.</p>
+  </div>
+</section>
+
+<section id="ai-backend" class="category">
+  <h2 class="category-header" style="color:#a855f7;border-bottom-color:#a855f7">AI Backend <span class="feat-count">(3)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Hybrid Claude + Ollama</h3>
+    <p class="feature-desc">Primary: Claude API (best reasoning). Fallback: Ollama local LLM (offline/air-gapped). Auto-selects based on availability, or force local with --force-local flag.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Tool Calling</h3>
+    <p class="feature-desc">Both backends support structured tool calling. The AI can invoke registered defensive tools, with all calls passing through the permission gate and logged to the audit trail.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Dynamic System Prompts</h3>
+    <p class="feature-desc">System prompts are rebuilt on every message incorporating current mode instructions and safeguard level constraints, ensuring the AI always knows its operational boundaries.</p>
+  </div>
+</section>
+
+<section id="defensive-tools" class="category">
+  <h2 class="category-header" style="color:#3b82f6;border-bottom-color:#3b82f6">Defensive Tools <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">System Info</h3>
+    <p class="feature-desc">Comprehensive system snapshot: OS, CPU (cores/MHz/usage), memory, swap, disk partitions, network interfaces, logged-in users, boot time, process count.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Process Monitor</h3>
+    <p class="feature-desc">List and filter running processes. Detect suspicious spawns from /tmp, /dev/shm, or /var/tmp. Flag deleted executables, high resource usage, and name/exe mismatches.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Network Monitor</h3>
+    <p class="feature-desc">Track active connections (TCP/UDP), listening ports with owning processes, and per-interface I/O stats (bytes, packets, errors, drops).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Log Analyzer</h3>
+    <p class="feature-desc">Parse system logs for security events: failed/successful logins, sudo usage, SSH events, firewall blocks, service changes, privilege escalation, suspicious commands. Configurable time windows and custom regex.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Hardening Assessment</h3>
+    <p class="feature-desc">30+ CIS-aligned security checks: file permissions on sensitive files, SSH config (root login, password auth, X11), kernel params (ASLR, SYN cookies, IP forwarding), user accounts (UID 0, empty passwords), dangerous services (telnet, rsh, FTP). Returns findings with remediation advice.</p>
+  </div>
+</section>
+
+<section id="monitoring-and-defense" class="category">
+  <h2 class="category-header" style="color:#f59e0b;border-bottom-color:#f59e0b">Monitoring &amp; Defense <span class="feat-count">(7)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Real-Time Monitor Engine</h3>
+    <p class="feature-desc">Background async engine checking CPU, memory, disk, network, and processes every 5 seconds. Configurable thresholds for warnings and critical alerts. Feeds live data to the system monitor dashboard.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Anomaly Detection</h3>
+    <p class="feature-desc">Detects: CPU/memory/disk spikes above thresholds, high process spawn rates (&gt;50/min), new listening ports, resource exhaustion patterns.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Brute Force Detection</h3>
+    <p class="feature-desc">Tracks failed login attempts in a configurable sliding window (default: 5 failures in 60 seconds). Emits critical alert on threshold breach.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">File Integrity Monitoring</h3>
+    <p class="feature-desc">AIDE-style monitoring of critical system files (/etc/passwd, /etc/shadow, /etc/sudoers, /etc/ssh/sshd_config, etc.). Detects content changes, permission modifications, and ownership changes via SHA-256 checksums.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Self-Defense Engine</h3>
+    <p class="feature-desc">Autonomous threat response: block IPs (nftables/iptables), kill suspicious processes, quarantine files. All actions are logged, reversible (with undo commands), and respect hard constraints (never kill systemd/sshd/init).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">IDS/IPS Integration</h3>
+    <p class="feature-desc">Suricata EVE JSON log parser with real-time alert monitoring. MITRE ATT&amp;CK technique mapping. Rule reload support. Generic IDS fallback for non-Suricata systems.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Container Security</h3>
+    <p class="feature-desc">Docker/Podman runtime auditing and Dockerfile static analysis. List running containers with security metadata. Deep-inspect containers for misconfigs (privileged, host network, capabilities, mounts). Batch audit all running containers. Dockerfile static analysis checks: USER root, no HEALTHCHECK, ADD vs COPY, curl|bash, :latest tags, secrets in ENV/ARG, --no-check-certificate. Container network exposure audit (port bindings, host-network). Environment variable and label scanning for embedded secrets. Full baseline report generation. Auto-detects docker vs podman runtime.</p>
+  </div>
+</section>
+
+<section id="network-defense" class="category">
+  <h2 class="category-header" style="color:#0ea5e9;border-bottom-color:#0ea5e9">Network Defense <span class="feat-count">(6)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Network Scanner Engine</h3>
+    <p class="feature-desc">Two-tier scanning: fast passive cycle (10s, reads ARP table + mDNS/SSDP) and deep active cycle (5min, scapy ARP scan + nmap fingerprinting). Root/CAP_NET_RAW auto-detection: full mode (passive + deep scans), passive-only mode (ARP table + psutil), or unavailable. Background scapy AsyncSniffer in promiscuous mode with BPF filter for ARP/DHCP/DNS/mDNS/SSDP.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Trusted Network Profiles</h3>
+    <p class="feature-desc">SQLite-backed trusted network profiles. Networks identified by SHA-256(SSID + BSSID + gateway_MAC). Save networks as trusted — scanner only activates for known networks, never public WiFi. Per-network device inventory persisted across sessions. Protection levels: minimal, standard, paranoid.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">8 Passive Threat Detectors</h3>
+    <p class="feature-desc">ARP spoofing (gateway MAC mismatch), rogue DHCP (unauthorized DHCP server), port scanning (&gt;15 ports/60s), DNS spoofing (unexpected resolver), new device alerts, anomalous traffic (&gt;3x rolling average), MAC changes (known IP with different MAC), deauth attacks (&gt;10 deauth frames/5s). MITRE ATT&amp;CK mapped.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Non-Intrusive Defense Actions</h3>
+    <p class="feature-desc">Gratuitous ARP correction (broadcast correct gateway binding), ARP cache pinning (static gateway entry), MAC-level blocking (nftables/ebtables bridge rules). All Layer 2/3 — no agents or config changes on other devices. Full cleanup on engine stop.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Network Map Widget</h3>
+    <p class="feature-desc">Live TUI display of network topology: device list with trust indicators (T=trusted, ?=unknown, !=suspicious, X=blocked, G=gateway), device count, threat status, scanner engine state. Toggle with Ctrl+Shift+N.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">30 Network Defense Tools</h3>
+    <p class="feature-desc">6 scanner tools (scan, list devices, device detail/history, topology), 8 network profile tools (trust/untrust networks, trust/untrust devices, protection levels), 6 threat tools (list/detail/stats, ARP/gateway/DNS integrity checks), 8 defense tools (block/unblock devices, ARP protection, engine lifecycle), 2 intel tools (attack surface, risk summary).</p>
+  </div>
+</section>
+
+<section id="investigation-tools" class="category">
+  <h2 class="category-header" style="color:#22c55e;border-bottom-color:#22c55e">Investigation Tools <span class="feat-count">(8)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">OSINT Suite</h3>
+    <p class="feature-desc">Passive intelligence gathering: DNS lookups (A/AAAA/MX/NS/TXT/CNAME via DNS-over-HTTPS), WHOIS queries, IP geolocation and ASN info, passive subdomain enumeration via Certificate Transparency (crt.sh), HTTP security header analysis, and email domain validation. All techniques are passive — no active probing.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Forensic Analysis</h3>
+    <p class="feature-desc">Read-only file forensics: multi-algorithm hashing (MD5/SHA-1/SHA-256), detailed file metadata with magic number detection, printable string extraction from binaries (ASCII + UTF-16), hex dump viewer, filesystem timeline analysis, and YARA rule scanning (requires yara-python).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Evidence Chain of Custody</h3>
+    <p class="feature-desc">Full evidence management with SQLite-backed case database. Create investigation cases, collect evidence with automatic SHA-256 hashing, verify evidence integrity at any time, maintain timestamped chain-of-custody logs, add investigator notes, and export case reports in JSON or text format.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Threat Intelligence</h3>
+    <p class="feature-desc">IoC checking against free threat feeds: MalwareBazaar for file hash reputation, AbuseIPDB for IP reputation (optional key), IP geolocation via ip-api.com, MITRE ATT&amp;CK technique lookup (local database of 40+ techniques), and STIX 2.1 bundle parsing. Graceful degradation when optional API keys are not configured.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Cross-Source Correlation</h3>
+    <p class="feature-desc">Ties together OSINT, forensics, and intel findings. Correlates indicators across all evidence in a case, builds chronological investigation timelines, discovers connections between indicators (shared infrastructure, common IoCs), and generates consolidated IoC lists for sharing.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Active Directory LDAP Enumeration</h3>
+    <p class="feature-desc">Read-only LDAP enumeration and security auditing of Active Directory domains. Enumerate users and groups with attributes, find Kerberoasting candidates (SPNs), detect accounts with unconstrained/constrained delegation privileges, extract domain password policies, identify admin accounts (Domain Admins, Enterprise Admins, Administrators), and export results as BloodHound JSON. Optional ldap3 dependency with graceful fallback. All discovered entities added to Knowledge Graph.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Cloud Security Analysis</h3>
+    <p class="feature-desc">Passive cloud security posture analysis (AWS/GCP/Azure) with no cloud SDKs. Detect cloud provider via IMDS metadata endpoints. Probe for exposed metadata (instance IDs, IAM roles). Scan directories for hardcoded credentials (AWS keys, GCP service accounts, Azure secrets, GitHub tokens). Analyze IAM policies for dangerous permissions (wildcards, missing conditions). Audit Terraform/CloudFormation for S3 public exposure, overly permissive security groups, unencrypted resources, publicly accessible databases. Generate comprehensive cloud security reports with risk scoring (0-100 scale).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Supply Chain Security</h3>
+    <p class="feature-desc">Software dependency analysis and supply chain risk assessment. Generate CycloneDX SBOMs from installed packages or requirements files. Scan packages against the OSV batch API for known CVEs. Check outdated versions via PyPI JSON API. Verify package hashes against PyPI release checksums for tamper detection. Audit lockfiles for version pinning, hash-pinning, and conflicts. Combined dep_audit for vuln + outdated + license checks. Overall supply chain risk scoring (vuln count, outdated ratio, maintainer health).</p>
+  </div>
+</section>
+
+<section id="intelligence-layer" class="category">
+  <h2 class="category-header" style="color:#14b8a6;border-bottom-color:#14b8a6">Intelligence Layer <span class="feat-count">(8)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Hypothesis-Driven Investigation</h3>
+    <p class="feature-desc">Structured hypothesis management for investigations. Create hypotheses with Bayesian prior confidence, link as parent/child trees, attach supporting and contradicting evidence. Test hypotheses against the knowledge graph (entity queries), IoC correlation (cross-store search across incidents and attackers), or pattern matching (MITRE technique entities). Bayesian confidence updates chain likelihood ratios through all evidence to compute posterior probabilities. Tree view shows all hypotheses with confidence scores, evidence counts, and status. Auto-suggest generates new hypotheses from MITRE technique chain analysis (follow-on and predecessor techniques), knowledge graph entity relationships, and uninvestigated entity coverage gaps.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Attack Surface Mapping</h3>
+    <p class="feature-desc">Enumerate all listening services via psutil with internet-facing vs internal classification. 25+ well-known port metadata entries with service names, risk notes, and hardening advice. Entities (host, port, service) automatically added to the knowledge graph. Analyze attack paths between any two KG entities via shortest-path with per-hop MITRE technique mapping, vulnerability lookup, and feasibility scoring. Compute 0-100 exposure scores from internet-facing services, known vulnerabilities, attack path count, and high-risk service types. Generate ranked reduction recommendations with specific shell commands for binding restrictions, firewall rules, service hardening, and disabling unnecessary services. Cross-references hardening assessment findings.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Explainable Autonomous Decisions</h3>
+    <p class="feature-desc">Full transparency for every autonomous and human-approved action. View the reasoning chain for any decision — trigger, context, options considered, chosen action, and justification. Browse decision history with time-windowed queries and summary statistics (autonomous vs human, action type breakdown, review status). Provide human feedback (approved/rejected/neutral) on past decisions for learning and audit. Internal record_decision() helper integrates with the orchestrator&#x27;s tool execution path.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Security Posture Scoring</h3>
+    <p class="feature-desc">Composite 0-100 security posture score from six weighted dimensions: hardening compliance (25%), vulnerability exposure (20%), incident load (20%), config drift (15%), network exposure (10%), and patch freshness (10%). Letter grades A-F. Historical trend analysis with min/max/avg statistics. Drift detection against saved baselines with per-dimension comparison and severity classification (stable/degraded/improved). Snapshot baselines for regression tracking after hardening campaigns.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Contextual Risk Framing</h3>
+    <p class="feature-desc">Asset-centric risk scoring using Risk = (Threat x Vulnerability x Asset_Value) / Countermeasures, normalized 0-10. Threat scores from active incidents and tracked attackers. Vulnerability scores from surface scans and attack paths. Countermeasure scores from applied hardening, active deceptions, and detection rules. Prioritized risk register across all assets. Compliance mapping to CIS, NIST 800-53, PCI-DSS v4.0, HIPAA, and SOC2 with pre-seeded control mappings and live status refresh from hardening checks. Asset registry with criticality levels (critical/high/medium/low/informational) affecting risk weighting.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Learning From Incidents</h3>
+    <p class="feature-desc">Extract structured lessons from closed incidents: detection gaps, response delays, tool gaps, process improvements, and positive findings. MITRE ATT&amp;CK technique extraction from incident text via keyword heuristics. Compute detection and response latencies. Find past incidents by indicator overlap across events, evidence, and honeypot attacks. Analyze historical playbook effectiveness with success/failure rates and average durations. Propose new detection rules (pattern, threshold, correlation, behavioral) from incident analysis — stored inactive for human review before activation.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Adaptive Playbooks</h3>
+    <p class="feature-desc">AI-composed custom playbooks from an objective and optional incident context. Rule-based step composition for containment, eradication, recovery, investigation, hardening, and full lifecycle workflows. Each step has a tool call, arguments, description, and on_failure policy (skip/abort/retry). Human adaptation of pending playbooks via feedback — modify, remove, or reclassify steps. Sequential execution with per-step results, failure handling, and automatic retry. Template library with success rates, failure counts, and average duration tracking. New templates auto-created from successful runs for future reuse.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Intelligence Event Subscribers</h3>
+    <p class="feature-desc">Reactive event bus subscribers wiring intelligence tools into the pipeline: posture auto-recalculation on hardening/incident changes, auto-extract lessons on incident closure, hypothesis suggestions on new evidence, attack surface rescans on network changes, indicator pattern matching on new IoC observations, playbook effectiveness tracking on completion, and detection rule evaluation against monitor/IDS alerts with effectiveness scoring.</p>
+  </div>
+</section>
+
+<section id="tui-interface" class="category">
+  <h2 class="category-header" style="color:#06b6d4;border-bottom-color:#06b6d4">TUI Interface <span class="feat-count">(10)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Split-Pane Layout</h3>
+    <p class="feature-desc">Left panel (60%): AI chat with the Dagda assistant. Right panel (40%): tabbed panels for tool output, alerts, defense actions, and feature reference.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Live System Dashboard</h3>
+    <p class="feature-desc">Real-time CPU, memory, and disk usage bars with color thresholds (green &lt;70%, amber 70-90%, red &gt;=90%). Network connection and process counts.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Alert Feed</h3>
+    <p class="feature-desc">Scrolling feed of system events with severity-based coloring: info (gray), warning (amber), error (red), critical (bold red on dark background).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Defense Feed</h3>
+    <p class="feature-desc">Real-time display of autonomous self-defense actions with success/failure indicators, justification text, error details, and reversible undo commands.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Kill Switch (Ctrl+Shift+K)</h3>
+    <p class="feature-desc">Instantly halt all AI operations and autonomous self-defense. Toggle on/off. Visual indicator in status bar when halted.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">PANIC Button (Ctrl+Shift+P)</h3>
+    <p class="feature-desc">Emergency system panic: immediately kills all running tool processes, cancels pending autonomous actions, raises safeguard to FORTRESS, and logs a critical audit event. Distinct from Kill Switch — PANIC is a one-shot irreversible escalation designed for active compromise scenarios.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Security Posture Dashboard</h3>
+    <p class="feature-desc">Compact sidebar widget showing real-time security posture: composite 0-100 score with color coding (green/yellow/orange/red) and letter grade (A-F), threat level (LOW/MODERATE/ELEVATED/HIGH/CRITICAL), active incident count, blocked IP count, and stealth status. Auto-updates via reactive state.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">FORTRESS Mode (Ctrl+Shift+5)</h3>
+    <p class="feature-desc">Emergency lockdown: raises safeguard to Level 5. All actions require manual approval. 2FA (TOTP) required to de-escalate.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Mode Cycling (Ctrl+M)</h3>
+    <p class="feature-desc">Cycle through available operating modes. Higher modes (BUG HUNTER, ARENA) are gated by safeguard level and only appear when unlocked.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Unified Event Feed</h3>
+    <p class="feature-desc">Merges all event bus events into a single color-coded scrolling stream. Severity coloring (critical=red, error=orange, warning=yellow, info=gray) and distinct source colors (monitor=cyan, ids=blue, defense=red, honeypot=green). Timestamps in HH:MM:SS. Auto-trims to 500 events. Wire to the event bus with a single subscribe_to_bus() call.</p>
+  </div>
+</section>
+
+<section id="security-architecture" class="category">
+  <h2 class="category-header" style="color:#ef4444;border-bottom-color:#ef4444">Security Architecture <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Rust Core + Python Fallbacks</h3>
+    <p class="feature-desc">Security-critical components (audit logger, permission gate) have Rust implementations via PyO3. Equivalent Python fallbacks auto-detected at runtime for cross-platform development.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Scope-Locked Targeting</h3>
+    <p class="feature-desc">Offensive tools can only target systems within a user-defined scope whitelist. Scope is enforced by the permission gate before tool execution.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Rate Limiting</h3>
+    <p class="feature-desc">Per-tool rate limits with configurable per-minute caps. Prevents runaway automation and resource exhaustion from aggressive tool use.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Confirmation Requirements</h3>
+    <p class="feature-desc">Dangerous operations require explicit user confirmation even when autonomous mode is enabled. Lowering safeguard levels requires typed confirmation phrases.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">2FA (TOTP)</h3>
+    <p class="feature-desc">Time-based one-time passwords required to leave FORTRESS mode. Prevents accidental or social-engineered de-escalation of safety constraints.</p>
+  </div>
+</section>
+
+<section id="deception-mode" class="category">
+  <h2 class="category-header" style="color:#a855f7;border-bottom-color:#a855f7">Deception Mode <span class="feat-count">(4)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Honeypot Deployment</h3>
+    <p class="feature-desc">Deploy SSH, HTTP, SMB, and FTP honeypots with three interaction levels: Low (banner only, log attempts), Medium (accept weak creds, fake responses), High (full shell/filesystem, capture everything). Each honeypot runs in an isolated rootless Podman container with resource limits. Simulated mode available for development/testing without containers.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Attack Monitoring</h3>
+    <p class="feature-desc">Real-time tracking of attacker activity: connection events, authentication attempts, commands executed, files uploaded, and exploit attempts. SQLite-backed session and event database. Credential capture with frequency analysis. Aggregate statistics per honeypot with event type breakdown.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Attacker Analysis</h3>
+    <p class="feature-desc">MITRE ATT&amp;CK technique mapping from observed attacker behavior. Session analysis with risk scoring (low/medium/high/critical). Attacker profiling across all honeypots — timing patterns, techniques used, honeypots targeted. Attack timelines with hourly bucketing for pattern detection.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Intelligence Extraction</h3>
+    <p class="feature-desc">Extract IoCs from honeypot data: attacker IPs, captured credentials, URLs, commands, user agents, file hashes. Generate threat intelligence reports (JSON or text). Check attacker IPs against reputation feeds. Export findings to investigation cases (Phase 3 evidence system integration).</p>
+  </div>
+</section>
+
+<section id="warrior-mode-bug-hunter" class="category">
+  <h2 class="category-header" style="color:#dc2626;border-bottom-color:#dc2626">Warrior Mode (Bug Hunter) <span class="feat-count">(7)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Scope Management</h3>
+    <p class="feature-desc">Define and enforce target whitelists for authorized engagements. CIDR-aware scope checking (IP ranges, wildcard domains, URLs). SQLite-backed scope persistence with full audit trail of scope changes. Every offensive tool validates targets against the active scope before execution.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Reconnaissance</h3>
+    <p class="feature-desc">Scope-locked network reconnaissance: port scanning (nmap or pure-Python connect-scan fallback), service and version detection, host discovery in CIDR ranges, DNS enumeration (A/AAAA/MX/NS/TXT/CNAME/SOA), and service banner grabbing. All targets checked against whitelist.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Vulnerability Scanning</h3>
+    <p class="feature-desc">Nuclei-powered vulnerability scanning with severity filtering. SSL/TLS configuration analysis (certificate details, protocol support, cipher suites). Web technology fingerprinting (servers, frameworks, CMS, JS libraries). CVE database search via NIST NVD API. Directory and file discovery (gobuster or built-in httpx brute force).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Web Application Testing</h3>
+    <p class="feature-desc">HTTP method testing (detect dangerous TRACE/PUT/DELETE). Security header audit with grading (CSP, HSTS, X-Frame-Options, etc.). Parameter fuzzing with anomaly detection. SQL injection testing with safe error-based payloads. Reflected XSS testing with harmless probe tags. All tests use non-destructive detection techniques.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">API Security Testing</h3>
+    <p class="feature-desc">12-tool advanced API testing suite: GraphQL introspection, injection, and depth-limit testing. JWT analysis — decode tokens, test alg:none bypass, RS256-to-HS256 algorithm confusion, and weak-secret brute-force. OAuth redirect_uri bypass, PKCE enforcement, and state/CSRF validation. REST verb tampering and rate-limit detection. All tests use non-destructive detection techniques.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Exploit Research</h3>
+    <p class="feature-desc">Search public exploit databases (Exploit-DB, NVD references) by keyword, CVE ID, or product name. Retrieve exploit metadata and details. Research only — no exploit code execution. No scope required for information lookups.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Findings &amp; Reporting</h3>
+    <p class="feature-desc">SQLite-backed vulnerability findings database with severity classification (critical/high/medium/low/info), CVSS scoring, and CVE linking. Professional pentest report generation (JSON or text format) with executive summary, methodology, and recommendations. Responsible disclosure timeline tracking. Export findings as JSON, CSV, or Markdown.</p>
+  </div>
+</section>
+
+<section id="warrior-mode-arena" class="category">
+  <h2 class="category-header" style="color:#8b5cf6;border-bottom-color:#8b5cf6">Warrior Mode (Arena) <span class="feat-count">(6)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">VM Lab</h3>
+    <p class="feature-desc">Create, start, stop, snapshot, restore, and destroy isolated VMs for training scenarios. LibvirtRuntime (virsh) on Linux, SimulatedRuntime for development. Arena-bridged network with no route to host or internet.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Training Scenarios</h3>
+    <p class="feature-desc">Five built-in multi-VM scenarios: Corporate Network (AD/web/mail/DB), Cloud Kubernetes, IoT Smart Building, Healthcare System (HL7/EHR/PACS), Financial Trading Platform (SWIFT/FIX). Each with objectives, flags, and network topology. Deploy, reset, or tear down with one command.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Game Engine (PvP / PvT)</h3>
+    <p class="feature-desc">Player vs Threat: solo training — attack VMs while Dagda defends with Sentinel tools. Player vs Player: red vs blue on shared infrastructure with Dagda as referee. Timed sessions with flag-based scoring.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Scoring &amp; Leaderboards</h3>
+    <p class="feature-desc">Multi-dimensional scoring: objective completion (flags), stealth (fewer alerts), speed (time multiplier), defense quality (uptime/blocks for blue team). Per-session scoreboards, per-player breakdowns, historical leaderboards, and achievement milestones.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Replay &amp; AI Coaching</h3>
+    <p class="feature-desc">Every session event logged with monotonic sequence numbers. Replay timelines with time-window filtering. AI-generated session summaries and coaching tips (what went well, what to improve). Export replays as JSON or Markdown. Auto-generated scenario walkthroughs.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Isolation Engine</h3>
+    <p class="feature-desc">Enforced VM network containment: isolated libvirt bridge (no forwarding), per-session iptables firewall chains, VM network verification via virsh dumpxml, pre-flight checks before deployment, partial-deployment rollback, firewall cleanup on teardown. Linux platform gate blocks Arena on non-Linux. Permission gate blocks write tools until isolation is verified.</p>
+  </div>
+</section>
+
+<section id="incident-commander-mode" class="category">
+  <h2 class="category-header" style="color:#f43f5e;border-bottom-color:#f43f5e">Incident Commander Mode <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Incident Response (Tier 1)</h3>
+    <p class="feature-desc">Full IR case management: create and track incidents through containment, eradication, recovery, and closure. Collect evidence with SHA-256 hashing. Build incident timelines from events, evidence, and playbook runs. Execute automated IR playbooks (containment, eradication, recovery, full lifecycle). Export reports as JSON or formatted text.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Hardening Enforcement (Tier 2)</h3>
+    <p class="feature-desc">Apply hardening fixes identified by assessments — SSH config (root login, password auth), kernel parameters (IP forwarding, SYN cookies), filesystem permissions (sticky bits). Every change backs up the original and records an undo command. Batch application with snapshot groups for rollback. Verify fixes are still in effect after changes.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Counter-Intelligence (Tier 3)</h3>
+    <p class="feature-desc">Track and profile attackers with risk scoring and MITRE ATT&amp;CK kill chain mapping. Deploy targeted deception assets (fake credentials, breadcrumbs, canary tokens, honey files, decoy services). Disrupt attacks with active countermeasures (C2 sinkholing, tarpitting, traffic redirection, throttling, lateral movement blocking). Offensive actions gated by a separate CI toggle.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Threat Assessment</h3>
+    <p class="feature-desc">Compute 0-10 threat scores from open incidents, tracked attackers, IDS alerts, and system indicators. Auto-suggest counter-intel activation when threat level is critical. Recommend safeguard level escalation or de-escalation based on posture. Historical trend analysis.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Counter-Intel Safety Toggle</h3>
+    <p class="feature-desc">Offensive CI actions (deception, disruption) require a separate runtime toggle — default OFF every session. Even at Level 1 with full autonomy, offensive actions are blocked unless explicitly enabled with an exact acknowledgment phrase. Read-only CI (tracking, profiling) works without it.</p>
+  </div>
+</section>
+
+<section id="foundation-event-bus-and-knowledge-graph" class="category">
+  <h2 class="category-header" style="color:#0ea5e9;border-bottom-color:#0ea5e9">Foundation (Event Bus &amp; Knowledge Graph) <span class="feat-count">(3)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Reactive Event Pipeline</h3>
+    <p class="feature-desc">Pub/sub event bus with prefix matching, async/sync publish, 500-event history with replay.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Knowledge Graph</h3>
+    <p class="feature-desc">SQLite-backed entity-relationship graph with BFS traversal, 15 entity types, shortest path finding.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Intelligence Fusion</h3>
+    <p class="feature-desc">11 cross-module bridges: monitor→incidents, honeypot→KG, IDS→threat, investigation→hardening, hardening→posture, incidents→KG, CI→KG, network threats→KG+reassessment, network devices→KG, bayesian alerts→KG+incidents, temporal correlations→KG, behavioral anomalies→KG, defense feedback→KG.</p>
+  </div>
+</section>
+
+<section id="intelligence-layer-36-tools" class="category">
+  <h2 class="category-header" style="color:#10b981;border-bottom-color:#10b981">Intelligence Layer (36 tools) <span class="feat-count">(10)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Hypothesis-Driven Investigation</h3>
+    <p class="feature-desc">Create, test, evaluate hypotheses with Bayesian confidence updates (5 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Attack Surface Mapping</h3>
+    <p class="feature-desc">Enumerate exposed services, analyze attack paths via KG, exposure scoring (4 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Explainable Decisions</h3>
+    <p class="feature-desc">Log reasoning chains, review history, provide human feedback (3 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Security Posture Scoring</h3>
+    <p class="feature-desc">0-100 composite score across 6 dimensions, drift detection, baselines (4 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Contextual Risk Framing</h3>
+    <p class="feature-desc">Risk = (Threat × Vuln × Asset_Value) / Countermeasures, compliance mapping to CIS/NIST/PCI-DSS/HIPAA/SOC2 (4 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Learning From Incidents</h3>
+    <p class="feature-desc">Extract lessons, pattern match across stores, improve detection rules (4 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Adaptive Playbooks</h3>
+    <p class="feature-desc">AI-composed playbooks from available tools, learning loop from successful runs (4 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SIEM Integration</h3>
+    <p class="feature-desc">Forward Dagda events to external SIEM systems via syslog (UDP/TCP), webhook (Splunk HEC auto-detection), or file. CEF and ECS-compatible JSON formatters. Event type and severity filtering, failed-message buffer with retry drain, per-output stats (8 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">STIX/TAXII 2.1</h3>
+    <p class="feature-desc">Threat intelligence feed management. TAXII 2.1 client with incremental polling. STIX object storage (SQLite). Pattern evaluation against KG (ipv4-addr, domain-name, file hashes, AND/OR operators). STIX bundle export for intelligence sharing. Fusion bridges for IOC cross-correlation (10 tools).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">CACAO 2.0 Playbooks</h3>
+    <p class="feature-desc">Import/export ResponsePlaybook DAGs to OASIS CACAO 2.0 JSON format for sharing with industry tools (Splunk, XSOAR). Validate, execute, auto-generate from incidents. Redact IPs, domains, file paths for safe sharing (7 tools).</p>
+  </div>
+</section>
+
+<section id="ux-and-safety" class="category">
+  <h2 class="category-header" style="color:#f59e0b;border-bottom-color:#f59e0b">UX &amp; Safety <span class="feat-count">(8)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Setup Wizard</h3>
+    <p class="feature-desc">5-step guided security configuration with profile selection (Minimal/Standard/Hardened/Paranoid).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Stealth Mode</h3>
+    <p class="feature-desc">Hides network footprint, blocks offensive tools, forces SENTINEL mode (Ctrl+Shift+S).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Wireless Signal Kill</h3>
+    <p class="feature-desc">Disable WiFi + Bluetooth radios via rfkill (Ctrl+Shift+W).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Total Communications Kill</h3>
+    <p class="feature-desc">Isolate system from all networks, requires typed ISOLATE confirmation (Ctrl+Shift+I).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Config Persistence</h3>
+    <p class="feature-desc">Save/load TOML configuration with save_config().</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Posture Dashboard</h3>
+    <p class="feature-desc">Real-time security score, threat level, active incidents display.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Unified Event Feed</h3>
+    <p class="feature-desc">Color-coded stream of all system events.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Tool Activity Panel</h3>
+    <p class="feature-desc">Real-time tool execution visualization toggled with Ctrl+Shift+T. Shows active tools with pulsing status indicators, a scrolling completion log with execution duration and result summaries, and chain tracking that links sequential tool invocations into coherent operation groups. Color-coded by tool category.</p>
+  </div>
+</section>
+
+<section id="stealth-investigation-mode" class="category">
+  <h2 class="category-header" style="color:#22d3ee;border-bottom-color:#22d3ee">Stealth Investigation Mode <span class="feat-count">(10)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">GHOST Mode (Ctrl+Shift+J)</h3>
+    <p class="feature-desc">Compound mode: absolute undetectability + maximum passive intelligence gathering. Whitelist-only tool access (everything not explicitly allowed is HARD BLOCKED). No overrides. No exceptions.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Cryptographic Evidence Vault</h3>
+    <p class="feature-desc">SHA-256 Merkle tree + hash chain for tamper-proof evidence integrity. Host binding captures machine-id, MACs, IPs, hostname, kernel, uptime at collection time. Ties evidence to a specific physical machine.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Evidence Vault Tools (5 tools)</h3>
+    <p class="feature-desc">vault_status, vault_verify, vault_sign_bundle, vault_export, vault_anchor_timestamp. Manage the cryptographic evidence vault from the AI orchestrator.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Timestamp Anchoring</h3>
+    <p class="feature-desc">OpenTimestamps (Bitcoin blockchain) for decentralized proof-of-time. RFC 3161 TSA fallback (FreeTSA.org). Local time fallback marked as unanchored.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Ed25519 Digital Signatures</h3>
+    <p class="feature-desc">Sign evidence bundles with Ed25519 keys. Auto-generates key pair if none exists. Export includes detached signature + public key.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Anti-Detection Layer</h3>
+    <p class="feature-desc">Timing jitter (500-3000ms random), SOCKS5 proxy routing, sticky per-domain user-agent rotation, DoH provider rotation (Google/Cloudflare/Quad9), DNS leak prevention.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Secure Session Cleanup</h3>
+    <p class="feature-desc">Multi-pass overwrite with os.urandom() before file deletion. DNS cache flush. Event bus session purge. Connection pool cleanup. Crash recovery with stale session detection.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Evidence Auto-Enrollment</h3>
+    <p class="feature-desc">Evidence collected via collect_evidence() is automatically enrolled in the active Evidence Vault during stealth investigation.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Export Bundle</h3>
+    <p class="feature-desc">Self-contained verifiable package with manifest, Merkle proofs, timestamps, Ed25519 signature, public key, and standalone verify.py.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Entry/Exit Confirmation Screens</h3>
+    <p class="feature-desc">Entry requires typing &#x27;INVESTIGATE&#x27;. Exit is multi-step: export decision, &#x27;DISCARD EVIDENCE&#x27; if skipping, &#x27;EXIT INVESTIGATION&#x27; to confirm cleanup.</p>
+  </div>
+</section>
+
+<section id="analytical-engines" class="category">
+  <h2 class="category-header" style="color:#7c3aed;border-bottom-color:#7c3aed">Analytical Engines <span class="feat-count">(3)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Bayesian Threat Network</h3>
+    <p class="feature-desc">7 attack scenarios (MITM, recon, credential harvest, lateral movement, data exfiltration, DoS, rogue infrastructure) updated by 8 observable types via Bayes&#x27; rule. Context-aware priors (trusted_home, trusted_work, untrusted). Exponential decay toward priors with configurable half-life (default 300s). Publishes bayesian.assessment (info) and bayesian.alert (critical when posterior &gt; 0.7). Feeds directly from threat detector.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Temporal Correlation Engine</h3>
+    <p class="feature-desc">Detects attack patterns across time that independent event processing misses. 4 pattern detectors: sequence matching (5 built-in attack chain rules), periodicity detection (coefficient of variation &lt; 0.3), aggregate accumulation (low-and-slow below individual thresholds), and cross-module linking (events from 2+ modules sharing an indicator). Subscribes to all events via event bus. Feeds detected patterns into Bayesian network with boosted likelihood ratios.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Behavioral Fingerprinting</h3>
+    <p class="feature-desc">Per-device behavioral profiles using exponential moving averages: communication partners, protocol distribution, DNS query rate/diversity, traffic volume, active hours, port access patterns. Jensen-Shannon divergence for anomaly detection. Impersonation detection via Jaccard similarity (&lt; 0.2) + KL divergence (&gt; 5.0). SQLite persistence. Baseline established after 20 observations (~3.3 min at 10s cycle).</p>
+  </div>
+</section>
+
+<section id="cognitive-ui" class="category">
+  <h2 class="category-header" style="color:#06b6d4;border-bottom-color:#06b6d4">Cognitive UI <span class="feat-count">(3)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Situation Awareness Display</h3>
+    <p class="feature-desc">Replaces flat device list with topology-aware progressive disclosure. 3 view modes: compact (1-line summary), standard (~20-line topology radar with gateway, device branches, trust indicators, threat markers, Bayesian score bar, posture grade), detailed (scrollable per-device drill-down). Cycle views with Ctrl+Shift+V.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Threat Timeline</h3>
+    <p class="feature-desc">Horizontal ASCII timeline showing events across time with zoom. 6 zoom levels: 1m, 5m, 15m, 1h, 4h, 24h. Source symbols: N=network, I=ids, H=honeypot, D=defense, B=brain, T=temporal, V=verified, R=narrative, A=arena, F=integrity, M=monitor. Severity coloring. Ctrl+] zoom in, Ctrl+[ zoom out.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Attack Narrative Engine</h3>
+    <p class="feature-desc">Template-based natural language generation from event sequences — ~30 pre-defined sentence templates per event type. Composes coherent attack stories with actors, timeline, impact assessment, defense summary, and recommendations. Auto-generates on temporal correlation detection. Export as plaintext or markdown.</p>
+  </div>
+</section>
+
+<section id="self-awareness-and-education" class="category">
+  <h2 class="category-header" style="color:#f59e0b;border-bottom-color:#f59e0b">Self-Awareness &amp; Education <span class="feat-count">(4)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Defense Feedback Loop</h3>
+    <p class="feature-desc">Closes the act → verify → learn loop. Tracks whether defense actions actually worked via post-action verification (ARP correction, MAC block, ARP pin). Detects attacker adaptation post-defense. User feedback tracking with suppression rule learning after repeated dismissals. Counterfactual shadow state (what-if without Dagda). Effectiveness metrics per action type.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Self-Awareness Engine</h3>
+    <p class="feature-desc">System understands its own capabilities and limitations. 8 capability checks (scapy, root, nftables, ebtables, nmap, psutil, rfkill, platform). 12+ blind spots covering known evasion techniques per detector. 7 end-to-end subsystem diagnostics (event bus, KG, tool registry, config, ARP, scapy, SQLite).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Educational Layer</h3>
+    <p class="feature-desc">Deep technical attack anatomy per threat type: mechanical explanation, protocol weakness exploited, historical context, MITRE ATT&amp;CK mapping, defense explanation, countermeasure limitations, further reading (RFCs, papers). 8 complete attack anatomies. 5 guided investigation workflows (4-6 steps each) with tool suggestions and expected outcomes.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Live Scenario Generator</h3>
+    <p class="feature-desc">When real attacks are detected, automatically generates Arena training scenarios that replicate them. Captures attack signatures (threat types, attacker profile, sequence, network context). Maps to VM configurations, attack steps, flags with DAGDA{} format, and learning objectives. Generated scenarios integrate into Arena&#x27;s scenario registry.</p>
+  </div>
+</section>
+
+<section id="web-dashboard-phase-11a" class="category">
+  <h2 class="category-header" style="color:#38bdf8;border-bottom-color:#38bdf8">Web Dashboard (Phase 11A) <span class="feat-count">(7)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">EngineHub &amp; Service Layer</h3>
+    <p class="feature-desc">Central EngineHub dataclass holds all 30+ initialized engines as named fields — replaces the fragile 24-element return tuple from init_dagda(). Both TUI and Web access engines exclusively through this single reference. 7 thin service facades (ChatService, MonitoringService, StateService, ToolsService, NetworkService, IntelligenceService, EventsService) wrap engine methods for both interfaces. Services instantiate with hub reference and access engines as properties — no circular dependencies.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">FastAPI Backend</h3>
+    <p class="feature-desc">RESTful API with 8 route groups: auth (login, token refresh), state (mode/safeguard/stealth read+write), chat (message send, history), tools (list with category filter, tool info, execute), monitoring (system snapshot, alerts, IDS status, start/stop), network (devices, threats, topology, defense status), intelligence (posture, KG stats/entities/subgraph), events (history with filters, stats). FastAPI dependency injection via get_hub(), get_jwt_secret(), get_current_user(). CORS restricted to configurable origins (default https://localhost:8443). Svelte static build served from web/frontend/build.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">JWT Authentication</h3>
+    <p class="feature-desc">Bcrypt password hashing via passlib CryptContext. HS256 JWT tokens with short-lived access (15-min default) and long-lived refresh (7-day default). Token claims include sub (username), role, exp, and type (access/refresh). HTTPBearer security scheme — every request validated. Auth bypass when require_auth=False for local-only use. JWT secret auto-generated (32-byte URLsafe token) if not configured.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Self-Signed TLS</h3>
+    <p class="feature-desc">Auto-generates Ed25519 self-signed certificate on first launch via the cryptography library. Certificate details: CN=hostname, O=Dagda, 365-day validity, SANs for hostname + localhost + 127.0.0.1. PEM-encoded, PKCS8 key format. Stored in ~/.local/share/dagda/tls/. Idempotent — skips generation if cert files already exist. Custom cert/key paths configurable.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Real-Time Event Stream</h3>
+    <p class="feature-desc">WebSocket endpoint at /ws/events streams all EventBus events in real-time. Authentication: client sends JSON {token: ...} within 10 seconds or gets disconnected (code 4001). Events buffered in async Queue (maxsize=500) — drops oldest if full to prevent memory bloat. Keepalive ping sent every 30 seconds of silence. Event JSON includes event_id, event_type, ISO timestamp, source, severity, and data payload. Auto-unsubscribes on client disconnect.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Svelte Frontend</h3>
+    <p class="feature-desc">SvelteKit 2 SPA with dark theme. 9 routes: dashboard (state/metrics/alerts grid), chat (AI orchestrator conversation), tools (browse/search/execute all 640 tools with category filter, parameter inputs, live JSON results), monitoring (system metrics + IDS), alerts (alert history), network (devices + threats + topology), events (full event history with type/time filters), intelligence (KG entity browser with search + subgraph), settings (mode selection, safeguard level, stealth toggle), login (credential form). Svelte stores for auth state, operational state, system snapshot, alerts, and WebSocket connection. 5-second polling for state + metrics complements WebSocket for events. Auto-refresh on 401 via token refresh endpoint. Static build served by FastAPI on same port.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Launch Modes</h3>
+    <p class="feature-desc">Three launch modes via --mode flag: &#x27;tui&#x27; (default, TUI only), &#x27;web&#x27; (FastAPI + Uvicorn on port 8443), &#x27;both&#x27; (web server in daemon thread + TUI in main thread). Single port, single process. Default bind address 127.0.0.1 — never 0.0.0.0 in production. Full 20-step initialization sequence shared across all modes: audit, gate, orchestrator, tools, event bus, monitor, defense, IDS, KG, fusion, stealth, network, analytics, crypto, sandbox, plugins, ATRE, mesh.</p>
+  </div>
+</section>
+
+<section id="rust-core-acceleration-phase-11c" class="category">
+  <h2 class="category-header" style="color:#f97316;border-bottom-color:#f97316">Rust Core Acceleration (Phase 11C) <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">CryptoEngine</h3>
+    <p class="feature-desc">Full cryptographic suite in Rust via PyO3: Ed25519 keypair generation (ed25519-dalek, OsRng CSPRNG), Ed25519 signing (64-byte signatures) and stateless verification, AES-256-GCM authenticated encryption (12-byte nonce prepended to ciphertext), Argon2id key derivation (m=64MB, t=3, p=4 — OWASP recommended), SHA-256 hashing, and cryptographically secure random byte generation. All key material (signing key, verifying key, AES key) zeroized on drop via the zeroize crate — prevents key recovery from memory. Python fallback uses cryptography library (AESGCM, Ed25519), argon2-cffi, and hashlib with best-effort bytearray zeroization in __del__. Identical API for seamless substitution.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SandboxEngine</h3>
+    <p class="feature-desc">Process isolation via fork() + unshare() with CLONE_NEWUTS (hostname) and CLONE_NEWNET (network namespace, optional based on network_access flag). Seccomp-bpf filtering applied per-tool via SyscallFilter profiles. Resource limits via cgroups v2: memory.max, cpu.max, pids.max — written to /sys/fs/cgroup/dagda/sandbox_{id}/. Configurable parameters: max_memory_mb (default 512), max_cpu_percent (50), max_pids (32), max_duration_secs (300), filesystem_read/write paths. Execution: fork child, redirect stdout/stderr to pipes, poll with 10ms granularity, enforce timeout via SIGKILL. Returns SandboxResult with exit_code, stdout, stderr, timed_out, resource_exceeded. Linux only — is_available() returns false elsewhere. Python fallback uses subprocess.run() with resource.setrlimit() (RLIMIT_AS, RLIMIT_NPROC) on Linux; is_available() honestly returns False (no real isolation).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SyscallFilter &amp; Registry</h3>
+    <p class="feature-desc">Per-tool syscall whitelisting with 7 profiles. Minimal: 20 essential syscalls (read, write, close, mmap, etc.). FileReadOnly: Minimal + open/stat/getdents/lseek/readlink. FileReadWrite: FileReadOnly + unlink/rename/mkdir/chmod/fsync. NetworkClient: Minimal + socket/connect/sendto/recvfrom/poll/epoll. NetworkServer: NetworkClient + bind/listen/accept. ProcessSpawn: Minimal + FileReadOnly + fork/clone/execve/wait/pipe. Full: all syscalls (trusted tools only). SyscallRegistry maps 12 tool categories to profiles: system and defensive/monitor -&gt; FileReadOnly, investigation/osint -&gt; NetworkClient, honeypot -&gt; ProcessSpawn, arena -&gt; Full, plugin -&gt; Minimal. Custom syscalls addable per-filter. Stubs used when Rust unavailable — no-op but same API.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">IPC Layer</h3>
+    <p class="feature-desc">Length-prefixed JSON over Unix domain socket at /tmp/dagda-ipc.sock for high-performance Rust-to-Python communication on hot paths. 4-byte big-endian length prefix + JSON payload, max 10MB per message. Request format: {id, method, params}. Response format: {id, result, error}. Non-blocking accept loop with 50ms sleep. Graceful shutdown via atomic running flag. Currently supports ping and crypto.hash_sha256 methods. Python fallback routes method calls directly to Python functions (no socket) — is_connected() always True.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Rust/Python Bridge</h3>
+    <p class="feature-desc">Unified import layer in brain/native.py. Try/except pattern: attempts to import from dagda_core (compiled Rust PyO3 module), falls back to Python implementations on ImportError. All exports (CryptoEngine, SandboxEngine, SyscallFilter, SyscallRegistry, IpcServer, IpcClient, AuditLogger, PermissionGate) have identical APIs regardless of backend. is_rust_available() and get_backend_name() for runtime introspection. Python stubs are honest about capabilities — SandboxEngine.is_available() returns False, SyscallFilter methods are no-ops. Enables cross-platform development (Windows/macOS) while deploying with full Rust security on Linux.</p>
+  </div>
+</section>
+
+<section id="plugin-system-phase-11d" class="category">
+  <h2 class="category-header" style="color:#a78bfa;border-bottom-color:#a78bfa">Plugin System (Phase 11D) <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">TOML Manifest &amp; Lifecycle</h3>
+    <p class="feature-desc">Plugins defined by dagda-plugin.toml manifest specifying: plugin ID, name, version, min Dagda version, description, author, entry point (module:function). 5-state lifecycle: DISCOVERED (found on disk) -&gt; VALIDATED (signature checked, permissions OK) -&gt; ENABLED (API initialized, tools registered) -&gt; DISABLED (was enabled, now inactive) -&gt; ERROR (failed validation or runtime). PluginLoader scans configured plugin_dirs recursively for manifests. startup() auto-discovers, validates, and enables trusted plugins in sequence.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Plugin Signing &amp; Trust</h3>
+    <p class="feature-desc">Deterministic SHA-256 digest computed from all plugin files: sorted by relative path for reproducibility, each file&#x27;s path and contents hashed, __pycache__/.git excluded. Ed25519 signature (64 bytes, base64-encoded) stored in manifest [signature] section alongside the public key. Verification recomputes digest and validates against signature using CryptoEngine (Rust or Python). Trust determined by public key membership in configured trusted_keys list. Untrusted plugins rejected unless allow_untrusted=True in config.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Plugin Sandbox</h3>
+    <p class="feature-desc">3 isolation levels selected by trust status. IN_PROCESS: trusted plugins run in same Python process with PluginAPI restrictions only — minimal overhead. SUBPROCESS: untrusted plugins on non-Linux run in child process with timeout (default 300s) and resource.setrlimit() (RLIMIT_AS, RLIMIT_NPROC). RUST_SANDBOX: untrusted plugins on Linux run in full Rust SandboxEngine with namespace isolation (UTS, network), seccomp-bpf syscall filtering (Minimal profile by default), cgroups v2 resource limits (max_memory_mb, max_pids), and filesystem path restrictions. Selection is automatic: Rust sandbox preferred when available, subprocess as fallback.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Plugin API (Restricted Facade)</h3>
+    <p class="feature-desc">Plugins never get direct access to Dagda internals — PluginAPI enforces per-plugin permissions declared in the manifest. Event bus: subscribe/publish restricted to declared prefixes via prefix matching (PermissionError on violation). Knowledge graph: gated by permission level — &#x27;none&#x27; blocks all, &#x27;read&#x27; allows kg_find_entities(), &#x27;write&#x27; adds kg_add_entity(). Scoped tool registration: plugins can register tools that appear in the tool registry. cleanup() on disable unsubscribes all event handles. Permissions dataclass includes: modes, min_safeguard, network_access, filesystem_read/write paths, event_bus_subscribe/publish prefixes, knowledge_graph level, max_memory_mb.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">7 Plugin Management Tools</h3>
+    <p class="feature-desc">plugin_list (all modes, Level 5): list all plugins with status, trust, and counts. plugin_info (all modes, Level 5): detailed plugin info including permissions, state, directory, isolation level. plugin_verify (all modes, Level 5): verify signature integrity and trust status. plugin_enable (SENTINEL, Level 3, requires confirmation): activate a validated plugin. plugin_disable (SENTINEL, Level 3, requires confirmation): deactivate an enabled plugin. plugin_install (SENTINEL, Level 3, requires confirmation): copy plugin from source directory into first plugin_dir. plugin_uninstall (SENTINEL, Level 3, requires confirmation): disable and delete plugin directory.</p>
+  </div>
+</section>
+
+<section id="automated-threat-response-phase-11e" class="category">
+  <h2 class="category-header" style="color:#ef4444;border-bottom-color:#ef4444">Automated Threat Response (Phase 11E) <span class="feat-count">(6)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">AutoResponseEngine</h3>
+    <p class="feature-desc">Subscribes to three event streams: bayesian.alert (posterior probability &gt; 0.7 threshold), temporal.correlation.* (confidence &gt; 0.8 threshold), and behavioral.anomaly.* (unconditional trigger). On trigger: checks if escalation chain exists for (scenario, indicator) pair — escalates existing or creates new. Configurable thresholds updatable at runtime. Global pause/resume for manual override. Dependencies: EventBus, SelfDefenseEngine, DefenseFeedbackLoop, PermissionGate, safeguard level callback.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Escalation Chains</h3>
+    <p class="feature-desc">5-level progressive response: OBSERVE(1, monitor and log) -&gt; ALERT(2, raise alerts) -&gt; CONTAIN(3, isolate affected systems) -&gt; BLOCK(4, block attacker) -&gt; ISOLATE(5, complete network isolation). Max level capped by safeguard: FORTRESS=OBSERVE only, VIGILANT=CONTAIN, BALANCED=BLOCK, UNLOCKED/ARENA=ISOLATE. Each chain tracks: scenario_type, indicator, current level, actions taken with undo commands, playbook reference, current DAG node. Escalation criteria: posterior increase, ineffective action, attacker adaptation, persistence timeout (default 120s).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Rate Limiting</h3>
+    <p class="feature-desc">Token bucket rate limiter prevents runaway automation. max_actions_per_minute: 10 (sliding 1-minute window). max_escalations_per_hour: 5 (sliding 1-hour window). max_concurrent_chains: 3 (prevents resource exhaustion). Cooldown periods: 60 seconds after BLOCK, 300 seconds (5 min) after ISOLATE. Separate can_act() and can_escalate() checks with deque-based timestamp tracking.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Response Playbooks</h3>
+    <p class="feature-desc">7 DAG-based playbooks with conditional branching. Each PlaybookNode has: tool_name, arguments, on_success (next node), on_failure (branch node), escalation_on_failure flag, description. MITM: observe -&gt; arp_correct -&gt; verify -&gt; pin_arp (failure: block_attacker -&gt; verify_block -&gt; alert_isolate). Recon: log_scan -&gt; rate_limit -&gt; monitor_persistence. Credential Harvest: detect -&gt; lock_accounts -&gt; block_source -&gt; notify_users. DoS: classify -&gt; rate_limit (aggressive) -&gt; monitor_effectiveness. Data Exfiltration: detect -&gt; block_outbound -&gt; quarantine_process -&gt; preserve_evidence. Lateral Movement: detect -&gt; isolate_source -&gt; scan_targets -&gt; lock_compromised. Rogue Infrastructure: identify -&gt; block_rogue -&gt; alert_admin.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Effectiveness Learning &amp; Rollback</h3>
+    <p class="feature-desc">Before selecting a playbook, queries DefenseFeedbackLoop.get_effectiveness() for historical success rates. Score = feedback_success_rate * 0.7 + template_success_rate * 0.3. Prefers playbooks with higher historical success for each scenario type. Per-scenario metrics tracked: total chains, completed chains, escalated-to-block counts. Rollback walks the action log in reverse order (newest first), executing stored undo_command for each reversible action. Not all actions are reversible — critical ones marked with escalation_on_failure=True instead.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">ATRE TUI Panel &amp; Tools</h3>
+    <p class="feature-desc">TUI panel (Ctrl+Shift+R toggle): displays engine state (PAUSED/ACTIVE), active/total/completed chain counts, per-chain detail with color-coded escalation levels (OBSERVE=blue, ALERT=yellow, CONTAIN=orange, BLOCK=red, ISOLATE=bold red), scenario type, indicator, and chain ID. 3-second refresh. 10 management tools: auto_response_status (read engine state), pause/resume (global control), cancel (mark chain completed), rollback (undo actions, requires confirmation), history (recent chains), escalation_detail (full chain with actions), effectiveness (per-scenario stats), config_thresholds (view/update trigger thresholds), test (dry-run — traces playbook path without executing). Decisions logged to SQLite (decision_records, playbook_templates, adaptive_runs tables).</p>
+  </div>
+</section>
+
+<section id="mesh-networking-phase-11b" class="category">
+  <h2 class="category-header" style="color:#34d399;border-bottom-color:#34d399">Mesh Networking (Phase 11B) <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">RBAC (Role-Based Access Control)</h3>
+    <p class="feature-desc">4 roles with distinct permission sets. Admin: full control including user management, plugin management, mesh management, safeguard floor 1. Operator: operational control (mode/safeguard changes, tool execution), no user/plugin/mesh management, safeguard floor 2. Analyst: tool execution and viewing, no safeguard changes, safeguard floor 3. Viewer: read-only access, safeguard floor 5. SQLite user store with bcrypt password hashing. FastAPI RBAC middleware via require_permission() and require_role() dependencies — HTTP 403 on violation. Extends PermissionGate with check_for_session() for per-user safeguard enforcement.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Session Management</h3>
+    <p class="feature-desc">Per-user sessions with independent mode and safeguard context — enables multiple operators with different operational states simultaneously. 32-byte URL-safe session tokens. Configurable max sessions per user (default 5) with oldest-session eviction. Idle timeout (default 60 minutes) with automatic cleanup on access. Each session tracks: username, role, created_at, last_activity, current mode, current safeguard level, IP address. has_permission() method checks ROLE_PERMISSIONS for the session&#x27;s role.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Node Identity &amp; Peer Discovery</h3>
+    <p class="feature-desc">Ed25519 keypair management via CryptoEngine. NodeIdentity dataclass: node_name, public_key (bytes), private_key (bytes), node_id (SHA-256 of public key, first 16 hex chars — deterministic, peer-verifiable). sign()/verify() methods for peer authentication. Keys persisted as PEM-like files (node.pub, node.key with chmod 600). generate_identity() and load_identity() factory functions. mDNS discovery via zeroconf: advertises _dagda-mesh._tcp.local. service with node_id, node_name, version properties. ServiceBrowser listens for peers, filters self, fires on_peer_found callback. Local IP detected by connecting to 8.8.8.8:80 (no data sent).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Peer Management &amp; gRPC Communication</h3>
+    <p class="feature-desc">PeerManager tracks peers through 6 states: DISCOVERED -&gt; CONNECTING -&gt; CONNECTED -&gt; AUTHENTICATED -&gt; UNREACHABLE -&gt; BANNED. PeerInfo includes: node_id, node_name, public_key, address, state, last_seen, ping latency, version, capabilities, missed pings. Configurable max_peers (default 50), ping_interval (30s), max_missed_pings (3 before UNREACHABLE). gRPC server with ThreadPoolExecutor (4 workers) handles: Ping (updates peer health), ShareIoCs (adds to KG with mesh.{node_id} source), RelayEvent (publishes to local event bus with mesh prefix). gRPC client provides typed methods: ping(), share_iocs(), relay_event() with 10-second timeout. JSON serialization over gRPC for flexibility (no .proto compilation required).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Intelligence Sync &amp; Event Relay</h3>
+    <p class="feature-desc">Three synchronization mechanisms. KG Sync: replicates entities between peers based on timestamp — get_entities_since() collects local changes, receive_entities() merges with mesh.{source_node} provenance tag. Threat Intel Sync: shares IoCs (IPs, domains, files, vulnerabilities) from KG; receiving side caps confidence at 0.8 to avoid blind trust of peer data; tracks shared_iocs set to prevent duplicate sharing. Event Relay: subscribes to 6 event prefixes (monitor.alert, defense.*, bayesian.alert, temporal.correlation, behavioral.anomaly, auto_response.*) and forwards to all connected peers. Loop prevention: events with source starting with &#x27;mesh.&#x27; are never re-relayed. Enables ATRE chains on peer nodes to trigger from relayed events.</p>
+  </div>
+</section>
+
+<section id="engineering-hygiene" class="category">
+  <h2 class="category-header" style="color:#3b82f6;border-bottom-color:#3b82f6">Engineering Hygiene <span class="feat-count">(7)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Structured Logging (dagda/logging_config.py)</h3>
+    <p class="feature-desc">Centralized logging infrastructure with rotating file handler (10MB, 5 backups), stderr handler (WARNING+), --verbose CLI flag for DEBUG output. Module-level loggers added to 14 key files across brain/ and tools/. Replaces zero-logging baseline.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Exception Site Remediation (46 sites, 12 files)</h3>
+    <p class="feature-desc">Replaced 46 silent `except Exception: pass` blocks with appropriate log calls. Uses _log.debug() for optional cross-module bridges (fusion, event subscribers) and _log.warning() for operations where failure degrades output quality (posture scoring, defense feedback, behavioral fingerprinting, Bayesian threat network).</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Async Bug Fixes (posture, risk, anti_detection)</h3>
+    <p class="feature-desc">Fixed coroutine pre-creation bug in posture.py and risk.py — replaced pool.submit(asyncio.run, hardening_check()) with direct await. Replaced deprecated asyncio.get_event_loop() with asyncio.get_running_loop() in anti_detection.py.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Input Validation (9 critical tools)</h3>
+    <p class="feature-desc">Added validate_target() guards to 9 network-touching tool functions: vuln_scan, tech_fingerprint, http_methods, header_audit, param_fuzz, sqli_test, xss_test, dns_lookup, whois_lookup. Rejects empty, CRLF, null bytes, &gt;2048 chars.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Shared Tool Utilities (tools/utils.py)</h3>
+    <p class="feature-desc">Centralized utility module eliminating code duplication across tool modules. ensure_https() normalizes URLs with scheme prefix. SECURITY_HEADERS canonical tuple (10 headers) replaces 3 independent copies. validate_target() enforces non-empty, no CRLF, no null bytes, max 2048 chars.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SQLite Store Base Class (tools/stores/base.py)</h3>
+    <p class="feature-desc">BaseSQLiteStore provides canonical SQLite connection semantics: WAL journal mode for concurrent reads, sqlite3.Row factory, context manager connections with auto-commit, parent directory creation, and :memory: support for testing. Existing stores (active_defense, reporting) upgraded with WAL pragma.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Tool Parameter Introspection</h3>
+    <p class="feature-desc">brain/tool_registry.py _extract_parameters() auto-generates JSON-Schema-compatible parameter definitions from function type annotations. Unwraps Optional[X] and X | None unions, maps Python types to JSON Schema types (str→string, int→integer, float→number, bool→boolean, list→array, dict→object). Every @dagda_tool now carries a parameters field for AI tool-use.</p>
+  </div>
+</section>
+
+<section id="self-security" class="category">
+  <h2 class="category-header" style="color:#ef4444;border-bottom-color:#ef4444">Self-Security <span class="feat-count">(6)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Self-Integrity Monitoring</h3>
+    <p class="feature-desc">SHA-256 baseline of all Dagda source files, computed at install time and verified on every startup. Detects tampering of critical files (brain/, tools/, config, permission gate) with immediate alert on mismatch. Ed25519 signature support for baseline manifests — ensures the baseline itself hasn&#x27;t been modified. Differential reporting shows exactly which files changed, when, and how.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SBOM Generation</h3>
+    <p class="feature-desc">CycloneDX 1.4 Software Bill of Materials of Dagda&#x27;s own Python dependencies. On-demand generation from installed packages with version pinning and license metadata. OSV vulnerability scanning against the generated SBOM — checks all dependencies for known CVEs. PyPI hash verification ensures installed packages match upstream release checksums, detecting supply chain tampering.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Self-Hardening Audit</h3>
+    <p class="feature-desc">10 security checks against Dagda&#x27;s own deployment: config file permissions (no world-readable), safe defaults enforcement (safeguard level, stealth state), cryptographic key safety (Ed25519/AES key file permissions and ownership), audit log integrity (hash chain verification), network exposure (listening ports, bind addresses), log rotation (file sizes, rotation policy), plugin trust (unsigned plugin detection), API authentication state, TLS certificate validity, and data directory permissions. Returns pass/warn/fail per check with remediation guidance.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">On-Demand Tools (6 tools)</h3>
+    <p class="feature-desc">self_integrity_check: verify current source files against stored baseline. self_integrity_baseline: compute and store a fresh SHA-256 baseline of all source files. self_audit: run the 10-point self-hardening audit. self_sbom_generate: produce CycloneDX 1.4 SBOM of installed dependencies. self_sbom_vuln_scan: scan generated SBOM against OSV for known vulnerabilities. self_security_report: comprehensive self-security assessment combining integrity, hardening, and SBOM results into a single report with overall risk score.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">SAST Scanner</h3>
+    <p class="feature-desc">AST-based Python static application security testing using stdlib ast module (no external dependencies). 16 detection rules across 6 categories: injection (eval, exec, os.system, subprocess shell=True, SQL f-string), deserialization (pickle, yaml.load, marshal), crypto (weak hashing MD5/SHA1, insecure random, hardcoded secrets), dangerous calls (__import__, compile, globals, dynamic setattr), configuration (debug=True, verify=False, 0.0.0.0 binding). Known-exception set downgrades severity for legitimate uses in Dagda&#x27;s own code. scan_file(), scan_directory(), scan_project() with summary statistics.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Secret Scanner</h3>
+    <p class="feature-desc">Comprehensive credential and secret detection engine for source code. 19 regex patterns across 6 secret types (api_key, private_key, token, password, connection_string, generic_secret). Detects Anthropic/AWS/GitHub/Slack/Google/Stripe/Twilio/SendGrid API keys, RSA/EC/OpenSSH/PGP private keys, JWT/Bearer tokens, password assignments, database URLs with credentials, and generic high-entropy secrets. Shannon entropy analysis filters false positives (threshold &gt; 4.0). Automatic redaction. Smart exclusions for binary, config, doc, and test files.</p>
+  </div>
+</section>
+
+<section id="morrigan-fleet-command" class="category">
+  <h2 class="category-header" style="color:#7c3aed;border-bottom-color:#7c3aed">Morrigan Fleet Command <span class="feat-count">(5)</span></h2>
+  <div class="feature">
+    <h3 class="feature-name">Fleet Commander (Roost)</h3>
+    <p class="feature-desc">Central command node for distributed Crow agent management. The Roost maintains the authoritative registry of all enrolled Crows, monitors flock health via heartbeat aggregation, dispatches tasks to individual Crows or groups, and tracks murmuration (coordinated operation) progress. Enrollment and dismissal with Ed25519 identity verification. Flock-wide status dashboard with per-Crow health, capability, and task metrics.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Crow Agents</h3>
+    <p class="feature-desc">Lightweight headless SENTINEL-mode agents deployed to endpoints across the fleet. Each Crow runs a minimal Dagda runtime with monitoring, defense, and reporting capabilities. Heartbeat protocol with configurable interval reports system health, active threats, and resource usage back to the Roost. Task execution engine accepts and runs dispatched operations (scans, artifact collection, hardening) within capability gates. Crows operate independently during Roost disconnection and sync on reconnect.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Murmurations</h3>
+    <p class="feature-desc">Coordinated multi-Crow operations named after the synchronized flight patterns of starlings. 6 murmuration types: distributed scanning (parallel port/vuln scans across fleet segments), fleet-wide defense (synchronized IP blocks, ARP protection, firewall rules), artifact collection (gather forensic evidence from multiple endpoints simultaneously), deception deployment (coordinated honeypot/canary placement across the network), fleet hardening (rolling hardening enforcement with health verification), and IOC broadcast (push indicators to all Crows for immediate detection). Progress tracking with per-Crow status and aggregate completion metrics.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">Fleet Dashboard</h3>
+    <p class="feature-desc">TUI panel toggled with Ctrl+Shift+M showing real-time Crow status grid (online/offline/degraded), fleet health aggregate metrics, active murmuration progress bars, and task dispatch history. Companion Svelte web component provides the same views with interactive Crow selection, geographic/logical topology visualization, and murmuration control (launch, pause, cancel). Both interfaces update via WebSocket event stream.</p>
+  </div>
+  <div class="feature">
+    <h3 class="feature-name">12 Fleet Tools</h3>
+    <p class="feature-desc">flock_status: overview of all enrolled Crows with health and capability summary. crow_enroll: register a new Crow agent with identity verification. crow_dismiss: remove a Crow from the fleet with cleanup. crow_details: deep inspection of a specific Crow (health, tasks, history). murmuration_scan: launch distributed scanning across selected Crows. murmuration_monitor: coordinated monitoring operation. murmuration_defend: fleet-wide synchronized defense action. murmuration_collect: parallel artifact collection from multiple endpoints. murmuration_deploy: coordinated deception asset deployment. murmuration_harden: rolling fleet hardening with verification. broadcast_ioc: push IOCs to all Crows for immediate detection. fleet_report: generate comprehensive fleet security posture report.</p>
+  </div>
+</section>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

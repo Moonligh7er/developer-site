@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Break — The Last Study App You'll Ever Download</title>
+<meta name="description" content="65+ features that replace Quizlet, Anki, Notion, and Google Calendar — powered by AI that actually reads your course materials.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Exo+2:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D0A14;--surface:#15111F;--border:#2A2338;
+  --purple:#8B5CF6;--purple-bright:#A855F7;--purple-dim:rgba(139,92,246,0.15);
+  --text:#FFFFFF;--text-muted:#A3A3A3;--text-dim:#6B7280;
+  --green:#22C55E;--red:#EF4444;--amber:#F59E0B;
+  --font-display:'Orbitron',sans-serif;--font-body:'Exo 2',sans-serif;--font-mono:'Share Tech Mono',monospace;
+}
+html{scroll-behavior:smooth;background:var(--bg);color:var(--text)}
+body{font-family:var(--font-body);line-height:1.6;overflow-x:hidden;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Animations */
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes floating{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(139,92,246,0.3),0 4px 30px rgba(0,0,0,0.3)}50%{box-shadow:0 0 40px rgba(139,92,246,0.5),0 0 60px rgba(168,85,247,0.2),0 4px 30px rgba(0,0,0,0.3)}}
+@keyframes orb-float-1{0%{transform:translate(0,0) scale(1)}33%{transform:translate(60px,-80px) scale(1.1)}66%{transform:translate(-40px,40px) scale(0.9)}100%{transform:translate(0,0) scale(1)}}
+@keyframes orb-float-2{0%{transform:translate(0,0) scale(1)}33%{transform:translate(-50px,60px) scale(0.9)}66%{transform:translate(40px,-30px) scale(1.1)}100%{transform:translate(0,0) scale(1)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.stagger-1{transition-delay:0.1s}.stagger-2{transition-delay:0.2s}.stagger-3{transition-delay:0.3s}
+.stagger-4{transition-delay:0.4s}.stagger-5{transition-delay:0.5s}.stagger-6{transition-delay:0.6s}
+
+.holographic{
+  background:linear-gradient(135deg,#8B5CF6,#A855F7,#C084FC,#8B5CF6);
+  background-size:300% 300%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;animation:shimmer 4s ease infinite;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .fade-in{opacity:1;transform:none;transition:none}
+  .holographic{animation:none}
+  .floating{animation:none!important}
+  .hero-orb{animation:none!important}
+  .pulse-card{animation:none!important}
+}
+
+/* ── Navbar ── */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(13,10,20,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(139,92,246,0.15);transition:background 0.3s}
+.navbar.scrolled{background:rgba(13,10,20,0.92)}
+.navbar-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1200px;margin:0 auto}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--purple),var(--purple-bright));
+  border-radius:12px;display:flex;align-items:center;justify-content:center}
+.nav-logo-text{font-family:var(--font-display);font-weight:700;font-size:1.2rem}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:0.9rem;color:var(--text-muted);transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:linear-gradient(135deg,var(--purple),var(--purple-bright));color:#fff;
+  padding:10px 24px;border-radius:8px;font-family:var(--font-body);font-weight:600;font-size:0.9rem;
+  border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(139,92,246,0.4)}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text-muted);border-radius:2px;transition:0.3s}
+.mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;
+  background:rgba(13,10,20,0.97);border-bottom:1px solid var(--border);padding:16px 24px}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;padding:12px 0;color:var(--text-muted);font-family:var(--font-mono);font-size:0.95rem}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
+
+/* ── Hero ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:120px 24px 80px}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(120px);pointer-events:none}
+.hero-orb-1{width:500px;height:500px;background:rgba(139,92,246,0.15);top:-100px;right:-100px;animation:orb-float-1 20s ease-in-out infinite}
+.hero-orb-2{width:400px;height:400px;background:rgba(168,85,247,0.1);bottom:-50px;left:-100px;animation:orb-float-2 25s ease-in-out infinite}
+.hero-content{text-align:center;max-width:850px;position:relative;z-index:1}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.2rem,5.5vw,4rem);font-weight:900;
+  line-height:1.15;margin-bottom:24px}
+.hero-sub{font-size:clamp(1.05rem,2.2vw,1.3rem);color:var(--text-muted);margin-bottom:40px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.7}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--purple-bright));color:#fff;
+  padding:16px 36px;border-radius:10px;font-size:1.1rem;font-weight:600;border:none;cursor:pointer;
+  position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;font-family:var(--font-body)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(139,92,246,0.5)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text);
+  padding:16px 36px;border-radius:10px;font-size:1.1rem;font-weight:500;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;font-family:var(--font-body)}
+.btn-ghost:hover{border-color:var(--purple);background:rgba(139,92,246,0.08)}
+.hero-trust{color:var(--text-dim);font-family:var(--font-mono);font-size:0.85rem;margin-bottom:48px}
+.hero-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat-value{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--purple-bright)}
+.hero-stat-label{font-family:var(--font-mono);font-size:0.8rem;color:var(--text-dim);margin-top:4px}
+
+/* ── Pain Points ── */
+.pain{padding:100px 24px;position:relative}
+.section-label{font-family:var(--font-mono);font-size:0.85rem;color:var(--purple);text-transform:uppercase;letter-spacing:3px;margin-bottom:12px;text-align:center}
+.section-title{font-family:var(--font-display);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;text-align:center;margin-bottom:16px}
+.section-sub{color:var(--text-muted);text-align:center;max-width:600px;margin:0 auto 56px;font-size:1.05rem}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1000px;margin:0 auto}
+.pain-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;
+  position:relative;overflow:hidden;transition:transform 0.2s}
+.pain-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--red),transparent)}
+.pain-card:hover{transform:translateY(-4px)}
+.pain-icon{font-size:2rem;margin-bottom:16px}
+.pain-card h3{font-family:var(--font-display);font-size:1.05rem;font-weight:600;margin-bottom:12px}
+.pain-card p{color:var(--text-muted);font-size:0.95rem;line-height:1.65}
+
+@media(max-width:768px){.pain-grid{grid-template-columns:1fr}}
+
+/* ── Solution ── */
+.solution{padding:100px 24px;text-align:center}
+.solution-mockup{max-width:800px;margin:0 auto 48px;background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;box-shadow:0 0 60px rgba(139,92,246,0.1)}
+.mockup-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.3)}
+.mockup-dot{width:10px;height:10px;border-radius:50%}
+.mockup-dot.r{background:#EF4444}.mockup-dot.y{background:#F59E0B}.mockup-dot.g{background:#22C55E}
+.mockup-body{display:flex;min-height:280px}
+.mockup-sidebar{width:200px;border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:8px}
+.mockup-nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;font-size:0.8rem;color:var(--text-muted);font-family:var(--font-mono)}
+.mockup-nav-item.active{background:rgba(139,92,246,0.15);color:var(--purple-bright)}
+.mockup-nav-dot{width:8px;height:8px;border-radius:50%;background:var(--border)}
+.mockup-nav-item.active .mockup-nav-dot{background:var(--purple)}
+.mockup-main{flex:1;padding:24px;display:flex;flex-direction:column;gap:16px}
+.mockup-card{background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.15);border-radius:10px;padding:16px}
+.mockup-card-title{font-family:var(--font-display);font-size:0.7rem;color:var(--purple-bright);margin-bottom:6px}
+.mockup-card-bar{height:6px;border-radius:3px;background:rgba(139,92,246,0.2)}
+.mockup-card-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--purple-bright))}
+.mockup-chat{display:flex;gap:8px;align-items:flex-start}
+.mockup-chat-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-bright));flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.mockup-chat-bubble{background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:10px;padding:10px 14px;font-size:0.75rem;color:var(--text-muted);font-family:var(--font-mono);max-width:300px}
+
+@media(max-width:768px){.mockup-sidebar{display:none}.mockup-body{min-height:200px}}
+
+.replaces-bar{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:0.9rem;color:var(--text-muted);margin-top:8px}
+.replaces-item{padding:8px 16px;border:1px solid var(--border);border-radius:8px;background:var(--surface)}
+.replaces-plus{color:var(--text-dim);font-size:1.2rem}
+.replaces-equals{color:var(--purple-bright);font-size:1.4rem;font-weight:700}
+.replaces-sb{padding:8px 20px;border:1px solid var(--purple);border-radius:8px;
+  background:rgba(139,92,246,0.1);color:var(--purple-bright);font-weight:600}
+
+/* ── Feature Deep-Dives ── */
+.features-deep{padding:80px 24px}
+.feature-row{display:flex;align-items:center;gap:64px;max-width:1050px;margin:0 auto 80px}
+.feature-row:nth-child(even){flex-direction:row-reverse}
+.feature-text{flex:1}
+.feature-visual{flex:1;display:flex;justify-content:center}
+.feature-badge{display:inline-block;font-family:var(--font-mono);font-size:0.75rem;color:var(--purple);
+  text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;
+  background:rgba(139,92,246,0.1);padding:4px 12px;border-radius:20px;border:1px solid rgba(139,92,246,0.2)}
+.feature-row h3{font-family:var(--font-display);font-size:clamp(1.3rem,2.5vw,1.7rem);font-weight:700;margin-bottom:16px;line-height:1.3}
+.feature-row ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.feature-row li{display:flex;gap:10px;color:var(--text-muted);font-size:0.95rem;line-height:1.55}
+.feature-row li::before{content:'';flex-shrink:0;width:20px;height:20px;margin-top:2px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322C55E' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") no-repeat center/contain}
+.feature-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:16px 20px;display:inline-flex;align-items:center;gap:10px}
+.feature-stat-icon{color:var(--purple-bright);font-size:1.2rem}
+.feature-stat-text{font-family:var(--font-mono);font-size:0.85rem;color:var(--text-muted)}
+.feature-stat strong{color:var(--text);font-family:var(--font-display);font-size:0.95rem}
+
+.feature-vis-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  padding:28px;width:100%;max-width:380px;box-shadow:0 0 30px rgba(139,92,246,0.08)}
+
+@media(max-width:768px){
+  .feature-row,.feature-row:nth-child(even){flex-direction:column;gap:32px}
+  .feature-visual{width:100%}
+}
+
+/* ── Feature Grid ── */
+.feature-grid-section{padding:80px 24px;background:rgba(139,92,246,0.02)}
+.fg-categories{max-width:1000px;margin:0 auto}
+.fg-category{margin-bottom:40px}
+.fg-category:last-child{margin-bottom:0}
+.fg-cat-label{font-family:var(--font-mono);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;
+  color:var(--purple);margin-bottom:16px;padding-left:2px}
+.fg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fg-categories.collapsed .fg-category.fg-hidden{display:none}
+.fg-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;
+  transition:border-color 0.2s,transform 0.2s}
+.fg-card:hover{border-color:rgba(139,92,246,0.3);transform:translateY(-2px)}
+.fg-card-icon{font-size:1.5rem;margin-bottom:8px}
+.fg-card h4{font-family:var(--font-display);font-size:0.8rem;font-weight:600;margin-bottom:6px}
+.fg-card p{color:var(--text-muted);font-size:0.82rem;line-height:1.5}
+.fg-toggle{display:block;margin:32px auto 0;background:transparent;border:1px solid var(--border);
+  color:var(--text-muted);padding:12px 28px;border-radius:8px;cursor:pointer;font-family:var(--font-mono);
+  font-size:0.9rem;transition:border-color 0.2s,color 0.2s}
+.fg-toggle:hover{border-color:var(--purple);color:var(--text)}
+
+@media(max-width:900px){.fg-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:550px){.fg-grid{grid-template-columns:1fr}}
+
+/* ── Comparison Table ── */
+.comparison{padding:100px 24px}
+.table-wrap{overflow-x:auto;max-width:1000px;margin:0 auto;border-radius:16px;border:1px solid var(--border);background:var(--surface)}
+.comp-table{width:100%;border-collapse:collapse;font-size:0.9rem}
+.comp-table th,.comp-table td{padding:16px 20px;text-align:center;border-bottom:1px solid var(--border)}
+.comp-table th{font-family:var(--font-display);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
+.comp-table th:first-child,.comp-table td:first-child{text-align:left;font-weight:500}
+.comp-table .col-sb{background:rgba(139,92,246,0.08)}
+.comp-table th.col-sb{color:var(--purple-bright)}
+.comp-table tr:last-child td{border-bottom:none}
+.check{color:var(--green);font-weight:700;font-size:1.1rem}
+.cross{color:var(--text-dim);font-size:1.1rem}
+.comp-label{color:var(--green);font-family:var(--font-mono);font-size:0.8rem;font-weight:600}
+.comp-label.old{color:var(--text-dim)}
+.comp-label.mid{color:var(--amber)}
+
+/* ── How It Works ── */
+.how{padding:100px 24px}
+.steps{display:flex;gap:32px;max-width:1000px;margin:0 auto;position:relative}
+.steps::before{content:'';position:absolute;top:40px;left:80px;right:80px;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--purple-bright),var(--purple));opacity:0.3}
+.step{flex:1;text-align:center;position:relative;z-index:1}
+.step-num{width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--purple-bright));
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  font-family:var(--font-display);font-weight:700;font-size:1.3rem;
+  box-shadow:0 0 25px rgba(139,92,246,0.3)}
+.step-time{font-family:var(--font-mono);font-size:0.75rem;color:var(--purple);
+  background:rgba(139,92,246,0.1);padding:3px 10px;border-radius:12px;display:inline-block;margin-bottom:12px}
+.step h3{font-family:var(--font-display);font-size:1rem;font-weight:600;margin-bottom:8px}
+.step p{color:var(--text-muted);font-size:0.9rem;line-height:1.6}
+
+@media(max-width:768px){
+  .steps{flex-direction:column;gap:40px}
+  .steps::before{display:none}
+}
+
+/* ── Pricing ── */
+.pricing{padding:100px 24px}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1100px;margin:0 auto;align-items:start}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px 24px;
+  position:relative;transition:transform 0.2s}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.popular{border-color:var(--purple);transform:scale(1.04);z-index:2;
+  animation:pulse-glow 3s ease-in-out infinite}
+.price-card.popular:hover{transform:scale(1.06)}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--purple),var(--purple-bright));
+  color:#fff;font-family:var(--font-mono);font-size:0.7rem;font-weight:600;
+  padding:4px 16px;border-radius:20px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
+.price-name{font-family:var(--font-display);font-size:1.1rem;font-weight:600;margin-bottom:4px}
+.price-amount{font-family:var(--font-display);font-size:2.2rem;font-weight:900;margin:12px 0}
+.price-amount span{font-size:0.9rem;font-weight:400;color:var(--text-muted)}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin:24px 0 28px;min-height:200px}
+.price-features li{display:flex;align-items:flex-start;gap:8px;font-size:0.85rem;color:var(--text-muted);line-height:1.4}
+.price-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.price-cta{display:block;width:100%;text-align:center;padding:14px;border-radius:10px;
+  font-weight:600;font-size:0.95rem;cursor:pointer;transition:0.2s;border:none;font-family:var(--font-body)}
+.price-card.popular .price-cta{background:linear-gradient(135deg,var(--purple),var(--purple-bright));color:#fff}
+.price-card.popular .price-cta:hover{box-shadow:0 4px 20px rgba(139,92,246,0.4)}
+.price-card:not(.popular) .price-cta{background:transparent;border:1px solid var(--border);color:var(--text)}
+.price-card:not(.popular) .price-cta:hover{border-color:var(--purple);color:var(--purple-bright)}
+.pricing-note{text-align:center;color:var(--text-dim);font-family:var(--font-mono);font-size:0.82rem;margin-top:32px}
+
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:550px){.pricing-grid{grid-template-columns:1fr}.price-card.popular{transform:none}.price-card.popular:hover{transform:translateY(-4px)}}
+
+/* ── Origin ── */
+.origin{padding:100px 24px;text-align:center}
+.origin-text{max-width:650px;margin:0 auto 40px;color:var(--text-muted);font-size:1.05rem;line-height:1.75}
+.trust-badges{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.trust-badge{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:14px 20px;font-family:var(--font-mono);font-size:0.8rem;color:var(--text-muted);
+  display:flex;align-items:center;gap:8px}
+.trust-badge-icon{color:var(--green)}
+
+/* ── FAQ ── */
+.faq{padding:100px 24px;background:rgba(139,92,246,0.02)}
+.faq-list{max-width:750px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;
+  cursor:pointer;font-weight:600;font-size:1rem;gap:16px;transition:color 0.2s;width:100%;background:none;border:none;color:var(--text);text-align:left;font-family:var(--font-body)}
+.faq-q:hover{color:var(--purple-bright)}
+.faq-chevron{flex-shrink:0;transition:transform 0.3s;color:var(--text-dim);font-size:1.2rem}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s ease}
+.faq-item.open .faq-a{max-height:400px}
+.faq-a-inner{padding:0 24px 20px;color:var(--text-muted);font-size:0.95rem;line-height:1.7}
+
+/* ── Final CTA ── */
+.final-cta{padding:120px 24px;text-align:center;position:relative;overflow:hidden}
+.final-cta-orb{position:absolute;width:600px;height:600px;border-radius:50%;
+  background:rgba(139,92,246,0.12);filter:blur(120px);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.final-cta .container{position:relative;z-index:1}
+.final-cta h2{font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;margin-bottom:20px}
+.final-cta p{color:var(--text-muted);font-size:1.1rem;max-width:600px;margin:0 auto 36px;line-height:1.7}
+.final-cta .btn-primary{font-size:1.2rem;padding:18px 48px}
+.final-trust{color:var(--text-dim);font-family:var(--font-mono);font-size:0.82rem;margin-top:20px}
+
+/* ── Footer ── */
+.footer{border-top:1px solid var(--border);padding:40px 24px;text-align:center}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px}
+.footer-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--purple),var(--purple-bright));
+  border-radius:8px;display:flex;align-items:center;justify-content:center}
+.footer-logo-text{font-family:var(--font-display);font-weight:600;font-size:1rem}
+.footer-copy{color:var(--text-dim);font-family:var(--font-mono);font-size:0.8rem}
+.footer-powered{color:var(--text-dim);font-family:var(--font-mono);font-size:0.75rem;margin-top:6px}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Study Break",
+  "url": "https://studybreak.app",
+  "logo": "https://studybreak.app/icons/icon-512x512.png",
+  "description": "Education technology company building AI-powered study tools that replace Quizlet, Anki, Notion, and Google Calendar for college students.",
+  "sameAs": []
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Study Break",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "description": "65+ features that replace Quizlet, Anki, Notion, and Google Calendar — powered by AI that actually reads your course materials.",
+  "url": "https://studybreak.app",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Free",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Core study tools — classes, flashcards, assignments, calendar, campus map, offline support, and community library access."
+    },
+    {
+      "@type": "Offer",
+      "name": "Student",
+      "price": "6.00",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "AI tutor with 15 daily messages, FSRS-5 flashcards, speech-to-text, and more."
+    },
+    {
+      "@type": "Offer",
+      "name": "Scholar",
+      "price": "14.00",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "30 AI messages/day, Opus-powered features, voice mode, exam prep, and advanced analytics."
+    },
+    {
+      "@type": "Offer",
+      "name": "Genius",
+      "price": "29.00",
+      "priceCurrency": "USD",
+      "billingIncrement": "P1M",
+      "description": "80 AI messages/day, ElevenLabs TTS, unlimited STT, priority support, and every feature unlocked."
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is Study Break really free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The free tier includes classes, flashcards, assignments, calendar, campus map, offline support, and community library access. No credit card required, no time limit. AI features are available on paid tiers starting at $6/month — but the core study tools are free forever."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is the AI different from ChatGPT?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ChatGPT answers from general knowledge. Study Break's AI reads YOUR uploaded course documents — syllabi, lecture notes, textbooks. It answers with context from your actual classes and remembers your struggles across conversations. It's the difference between asking a stranger and asking your personal tutor who's been in every lecture with you."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's FSRS-5 and why should I care?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FSRS-5 is a state-of-the-art spaced repetition algorithm, optimized from millions of real study sessions. Anki recently adopted FSRS too (great move), but Study Break goes further: Bloom's Taxonomy classification, 5 review formats (standard, reversed, cloze, free recall, multiple choice), and AI-generated cards from your actual course documents. It's FSRS plus an entire study ecosystem."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I import my Quizlet or Anki flashcards?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Import from CSV, Anki text exports, or paste directly from Quizlet. Your cards are automatically upgraded to FSRS-5 scheduling. You can also export any set as CSV for backup. Zero lock-in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work offline?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Full offline support with IndexedDB local storage and background sync. Study on the subway, in the library with bad Wi-Fi, or anywhere. When you reconnect, everything syncs automatically. Your flashcard reviews, notes, and progress are all preserved."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your data is encrypted, stored in Supabase PostgreSQL, and never shared with third parties. We use JWT-based authentication via Supabase Auth, rate limiting, CSRF protection, and file ownership verification. Your study data stays yours — period."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do professors/educators use this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Educator Mode lets professors create classes, distribute materials, and view aggregate student analytics. Full LTI 1.3 integration with Canvas, Blackboard, and Moodle means students can launch Study Break directly from their LMS. It works for individual students and entire classrooms."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://studybreak.app/"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+      </div>
+      <span class="nav-logo-text">Study Break</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="https://studybreak.app/login" class="nav-cta">Get Started Free</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://studybreak.app/login">Get Started Free</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <h1 class="holographic">The Last Study App You'll Ever Download.</h1>
+    <p class="hero-sub">65+ features that replace Quizlet, Anki, Notion, and Google Calendar — powered by AI that actually reads <em>your</em> course materials.</p>
+    <div class="hero-btns">
+      <a href="https://studybreak.app/login" class="btn-primary">Start Studying Free</a>
+      <a href="#features" class="btn-ghost">See Features</a>
+    </div>
+    <p class="hero-trust">Free forever. No credit card. Works on any device.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-value">55+</div><div class="hero-stat-label">Features</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">FSRS-5</div><div class="hero-stat-label">Algorithm</div></div>
+      <div class="hero-stat"><div class="hero-stat-value">100%</div><div class="hero-stat-label">Offline Ready</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Pain Points -->
+<section class="pain">
+  <div class="container">
+    <div class="section-label fade-in">Sound familiar?</div>
+    <h2 class="section-title fade-in">Your Study Life Shouldn't Look Like This</h2>
+    <div class="pain-grid">
+      <div class="pain-card fade-in stagger-1">
+        <div class="pain-icon">🗂️</div>
+        <h3>7 Tabs, 4 Apps, Zero Focus</h3>
+        <p>Quizlet for flashcards. Notion for notes. Canvas for grades. Google Calendar for deadlines. You spend more time switching between apps than actually studying.</p>
+      </div>
+      <div class="pain-card fade-in stagger-2">
+        <div class="pain-icon">📖</div>
+        <h3>Studying Hard, Not Smart</h3>
+        <p>You re-read the same notes five times. You highlight everything. You feel prepared… until the exam proves otherwise. Sound familiar?</p>
+      </div>
+      <div class="pain-card fade-in stagger-3">
+        <div class="pain-icon">⏰</div>
+        <h3>The 2 AM Panic</h3>
+        <p>You forgot about the assignment due tomorrow. No idea what the late policy is. No clue what your grade looks like. Just stress and a cold cup of coffee.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Solution -->
+<section class="solution" id="features">
+  <div class="container">
+    <div class="section-label fade-in">The fix</div>
+    <h2 class="section-title holographic fade-in">One App. Every Tool. Zero Excuses.</h2>
+    <p class="section-sub fade-in">Study Break replaces your entire study stack with AI that actually understands your courses.</p>
+    <div class="solution-mockup fade-in">
+      <div class="mockup-bar">
+        <div class="mockup-dot r"></div><div class="mockup-dot y"></div><div class="mockup-dot g"></div>
+        <span style="margin-left:auto;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-dim)">study-break</span>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-sidebar">
+          <div class="mockup-nav-item active"><div class="mockup-nav-dot"></div>Dashboard</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>AI Tutor</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>Flashcards</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>Calendar</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>Documents</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>Analytics</div>
+          <div class="mockup-nav-item"><div class="mockup-nav-dot"></div>Campus Map</div>
+        </div>
+        <div class="mockup-main">
+          <div style="display:flex;gap:12px">
+            <div class="mockup-card" style="flex:1">
+              <div class="mockup-card-title">Study Streak</div>
+              <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--purple-bright);margin:4px 0">12 days</div>
+              <div class="mockup-card-bar"><div class="mockup-card-bar-fill" style="width:75%"></div></div>
+            </div>
+            <div class="mockup-card" style="flex:1">
+              <div class="mockup-card-title">Cards Due</div>
+              <div style="font-family:var(--font-display);font-size:1.6rem;font-weight:700;color:var(--green);margin:4px 0">24</div>
+              <div class="mockup-card-bar"><div class="mockup-card-bar-fill" style="width:40%;background:linear-gradient(90deg,var(--green),#4ADE80)"></div></div>
+            </div>
+          </div>
+          <div class="mockup-chat">
+            <div class="mockup-chat-avatar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="20" rx="2"/><path d="m2 12 5.1 4.3a2 2 0 0 0 2.7-.1L22 4"/></svg>
+            </div>
+            <div class="mockup-chat-bubble">Based on your Organic Chemistry notes, the key difference between SN1 and SN2 is the rate-determining step...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="replaces-bar fade-in">
+      <span class="replaces-item">Quizlet</span>
+      <span class="replaces-plus">+</span>
+      <span class="replaces-item">Anki</span>
+      <span class="replaces-plus">+</span>
+      <span class="replaces-item">Notion</span>
+      <span class="replaces-plus">+</span>
+      <span class="replaces-item">Calendar</span>
+      <span class="replaces-plus">+</span>
+      <span class="replaces-item">Discord</span>
+      <span class="replaces-equals">=</span>
+      <span class="replaces-sb">Study Break</span>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Deep-Dives -->
+<section class="features-deep">
+  <div class="container">
+    <div class="section-label fade-in">Why students switch</div>
+    <h2 class="section-title fade-in" style="margin-bottom:64px">Features That Actually Change How You Study</h2>
+
+    <!-- Feature 1: AI Tutor -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">AI & Learning</div>
+        <h3>An AI Tutor That's Read All Your Course Materials</h3>
+        <ul>
+          <li>Upload any PDF, syllabus, or lecture notes — the AI indexes everything</li>
+          <li>Ask questions and get answers sourced from YOUR documents, not Wikipedia</li>
+          <li>Per-class memory remembers what you struggle with across conversations</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🧠</span>
+          <div class="feature-stat-text"><strong>5 tutor modes</strong> — Socratic, Adaptive, Summary, General, Teach-Back</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-bright));display:flex;align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="3"/></svg>
+            </div>
+            <div><div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright)">AI Tutor</div><div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">Organic Chemistry</div></div>
+          </div>
+          <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);border-radius:8px;padding:12px;margin-bottom:10px;font-size:0.8rem;color:var(--text-muted)">
+            <span style="color:var(--text);font-weight:500">You:</span> What's the difference between E1 and E2 elimination?
+          </div>
+          <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:12px;font-size:0.8rem;color:var(--text-muted)">
+            <span style="color:var(--green);font-weight:500">AI:</span> Based on your Ch. 7 notes, E1 is a two-step process with carbocation intermediate, while E2 is concerted...
+            <div style="margin-top:8px;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">📄 Source: Lecture_7_Elimination.pdf</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 2: FSRS-5 -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Study Science</div>
+        <h3>The World's Most Advanced Flashcard Algorithm</h3>
+        <ul>
+          <li>FSRS-5 algorithm — Anki added FSRS too, but we pair it with 5 review formats and Bloom's Taxonomy</li>
+          <li>5 review formats: standard, reversed, cloze deletion, free recall, multiple choice</li>
+          <li>Every card auto-classified by Bloom's Taxonomy — master basics to unlock advanced</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🎯</span>
+          <div class="feature-stat-text"><strong>90% target recall</strong> — mathematically optimized retention</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:12px">Flashcard Review</div>
+          <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.15);border-radius:10px;padding:20px;text-align:center;margin-bottom:16px">
+            <div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:6px;font-family:var(--font-mono)">Organic Chemistry</div>
+            <div style="font-size:1rem;font-weight:600;margin-bottom:4px">What is a nucleophile?</div>
+            <div style="font-size:0.75rem;color:var(--text-dim)">Bloom's: Understand</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;text-align:center;padding:10px 0;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:8px;font-size:0.75rem;color:#EF4444;font-weight:600">Again<br><span style="font-size:0.65rem;font-weight:400;color:var(--text-dim)">1d</span></div>
+            <div style="flex:1;text-align:center;padding:10px 0;background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.2);border-radius:8px;font-size:0.75rem;color:#F97316;font-weight:600">Hard<br><span style="font-size:0.65rem;font-weight:400;color:var(--text-dim)">3d</span></div>
+            <div style="flex:1;text-align:center;padding:10px 0;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:8px;font-size:0.75rem;color:#22C55E;font-weight:600">Good<br><span style="font-size:0.65rem;font-weight:400;color:var(--text-dim)">7d</span></div>
+            <div style="flex:1;text-align:center;padding:10px 0;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px;font-size:0.75rem;color:#3B82F6;font-weight:600">Easy<br><span style="font-size:0.65rem;font-weight:400;color:var(--text-dim)">21d</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 3: Knowledge Decay Map -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Insights</div>
+        <h3>See Exactly What You're Forgetting — Before the Exam</h3>
+        <ul>
+          <li>Live treemap shows every concept colored by memory strength — green to red</li>
+          <li>Click any concept to see your personal forgetting curve with your exact position on it</li>
+          <li>Prerequisite detection alerts you when foundation knowledge has weakened</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🔬</span>
+          <div class="feature-stat-text"><strong>Cross-semester decay</strong> — tracks knowledge across all your classes</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:14px">Knowledge Decay Map</div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:6px;height:140px">
+            <div style="background:rgba(34,197,94,0.2);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:8px;font-size:0.65rem;color:var(--green);grid-row:span 2"><strong>Chem Bonds</strong><br>94%</div>
+            <div style="background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);border-radius:8px;padding:8px;font-size:0.65rem;color:var(--amber)"><strong>Entropy</strong><br>52%</div>
+            <div style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:8px;font-size:0.65rem;color:var(--red)"><strong>Integrals</strong><br>31%</div>
+            <div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:8px;font-size:0.65rem;color:var(--green)"><strong>Rhetoric</strong><br>87%</div>
+            <div style="background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);border-radius:8px;padding:8px;font-size:0.65rem;color:var(--amber)"><strong>Bayesian</strong><br>45%</div>
+          </div>
+          <div style="margin-top:10px;font-family:var(--font-mono);font-size:0.65rem;color:var(--red)">⚠ Foundation Alert: Integrals decaying — needed for Physics II</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 4: Emergency Catch-Up -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Rescue</div>
+        <h3>Behind on Assignments? We've Got a Plan.</h3>
+        <ul>
+          <li>AI reads your syllabus and parses late policies — calculates exact grade impact</li>
+          <li>Generates a prioritized day-by-day recovery schedule in seconds</li>
+          <li>Tells you exactly what's worth submitting late and what to skip entirely</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🚨</span>
+          <div class="feature-stat-text"><strong>No competitor has this</strong> — only possible because everything is integrated</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:14px">Emergency Catch-Up Plan</div>
+          <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim);margin-bottom:12px">Missed: Mar 3–7 · 3 classes</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="color:var(--red);font-weight:700">!</span>
+              <span style="flex:1">Essay Draft — English 201</span>
+              <span style="color:var(--red);font-family:var(--font-mono);font-size:0.65rem">-15% penalty</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="color:var(--amber);font-weight:700">!</span>
+              <span style="flex:1">Problem Set 4 — Calc II</span>
+              <span style="color:var(--amber);font-family:var(--font-mono);font-size:0.65rem">-10% penalty</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="color:var(--green)">✓</span>
+              <span style="flex:1;color:var(--text-dim)">Lab Report — salvageable</span>
+              <span style="color:var(--green);font-family:var(--font-mono);font-size:0.65rem">no penalty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 5: Campus Map + Calendar -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Navigation</div>
+        <h3>Your Entire Campus and Schedule, Connected</h3>
+        <ul>
+          <li>Campus map auto-populated from OpenStreetMap — every building with real polygon outlines</li>
+          <li>Walking routes with a leave-time calculator so you're never late to class</li>
+          <li>Smart calendar with workload collision detection — warns when 3+ deadlines overlap</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🗺️</span>
+          <div class="feature-stat-text"><strong>Zero API costs</strong> — built entirely on open-source infrastructure</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card" style="background:linear-gradient(180deg,var(--surface) 0%,#0D1117 100%)">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:14px">Campus Map</div>
+          <div style="position:relative;height:160px;border-radius:8px;overflow:hidden;background:#0D1117;border:1px solid var(--border)">
+            <div style="position:absolute;top:20px;left:15px;width:60px;height:40px;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.4);border-radius:3px;transform:rotate(-5deg)"></div>
+            <div style="position:absolute;top:50px;left:90px;width:45px;height:55px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:3px"></div>
+            <div style="position:absolute;top:30px;right:40px;width:70px;height:35px;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.3);border-radius:3px;transform:rotate(3deg)"></div>
+            <div style="position:absolute;bottom:30px;left:50px;width:80px;height:30px;background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);border-radius:3px"></div>
+            <div style="position:absolute;bottom:20px;right:30px;width:12px;height:12px;background:var(--purple);border-radius:50%;box-shadow:0 0 10px rgba(139,92,246,0.6)"></div>
+            <svg style="position:absolute;bottom:25px;right:36px" width="80" height="60" fill="none"><path d="M0 55 Q20 30 40 35 Q60 40 74 5" stroke="rgba(139,92,246,0.5)" stroke-width="2" stroke-dasharray="4 4"/></svg>
+          </div>
+          <div style="margin-top:10px;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">📍 Science Hall → Library · 4 min walk · Leave by 9:56 AM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 6: Cross-Class Connections -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Unique</div>
+        <h3>Discover Connections Your Professors Don't Teach</h3>
+        <ul>
+          <li>AI finds interdisciplinary links between your classes automatically</li>
+          <li>See how concepts from Biology connect to your Psychology course</li>
+          <li>A feature no competitor has — because no competitor thinks across classes</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🔗</span>
+          <div class="feature-stat-text"><strong>Deeper understanding</strong> — concepts stick when connected</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:16px">Interdisciplinary Connections</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="flex:1;text-align:center;padding:12px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px">
+              <div style="font-size:0.7rem;font-weight:600;color:#3B82F6">Biology</div>
+              <div style="font-size:0.65rem;color:var(--text-dim);margin-top:4px">Neural Pathways</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+              <svg width="40" height="24" fill="none"><path d="M0 12h40" stroke="var(--purple)" stroke-width="2" stroke-dasharray="4 3"/><path d="M32 6l8 6-8 6" stroke="var(--purple)" stroke-width="2" fill="none"/></svg>
+              <span style="font-family:var(--font-mono);font-size:0.55rem;color:var(--purple)">HIGH</span>
+            </div>
+            <div style="flex:1;text-align:center;padding:12px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:8px">
+              <div style="font-size:0.7rem;font-weight:600;color:var(--purple-bright)">Psychology</div>
+              <div style="font-size:0.65rem;color:var(--text-dim);margin-top:4px">Cognitive Load</div>
+            </div>
+          </div>
+          <div style="margin-top:14px;font-size:0.75rem;color:var(--text-muted);line-height:1.5;padding:10px;background:rgba(139,92,246,0.05);border-radius:6px">
+            💡 Both classes study how information is processed — one at the cellular level, the other at the behavioral level.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 7: Interdisciplinary Practice -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Unique</div>
+        <h3>Study Two Classes at Once — In the Context of Each Other</h3>
+        <ul>
+          <li>Select two or more classes and the AI finds real conceptual bridges between them — not random mixing, genuine interdisciplinary insight</li>
+          <li>Generates cross-class flashcards and quiz questions that test how ideas from one subject illuminate the other</li>
+          <li>Strength-rated connections (high/medium/low) so you focus on the deepest links first</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">💡</span>
+          <div class="feature-stat-text"><strong>No competitor has this</strong> — only possible when all your classes live in one place</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:14px">Interdisciplinary Practice</div>
+          <div style="display:flex;gap:8px;margin-bottom:12px">
+            <div style="flex:1;padding:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;font-weight:600;color:#3B82F6">Statistics</div>
+              <div style="font-size:0.6rem;color:var(--text-dim);margin-top:2px">Regression</div>
+            </div>
+            <div style="display:flex;align-items:center;font-size:1rem;color:var(--purple)">⇄</div>
+            <div style="flex:1;padding:8px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:8px;text-align:center">
+              <div style="font-size:0.7rem;font-weight:600;color:var(--green)">Economics</div>
+              <div style="font-size:0.6rem;color:var(--text-dim);margin-top:2px">Supply & Demand</div>
+            </div>
+          </div>
+          <div style="background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.12);border-radius:8px;padding:10px;margin-bottom:10px">
+            <div style="font-size:0.7rem;font-weight:600;margin-bottom:6px">Generated Question:</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.5">"How would you use linear regression to model the relationship between price changes and quantity demanded?"</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <div style="flex:1;text-align:center;padding:6px;background:rgba(139,92,246,0.08);border-radius:6px;font-family:var(--font-mono);font-size:0.6rem;color:var(--purple-bright)">Strength: HIGH</div>
+            <div style="flex:1;text-align:center;padding:6px;background:rgba(139,92,246,0.08);border-radius:6px;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim)">3 connections found</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Feature 8: Mixed Flashcards -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Cognitive Science</div>
+        <h3>Mixed Flashcards — A Cognitive Science Lab in Your Pocket</h3>
+        <ul>
+          <li>Cross-class flashcard queue that deliberately mixes subjects — proven to boost retention 10–40% over blocked study</li>
+          <li>Judgment of Learning prompts before each card train you to know what you actually know</li>
+          <li>Speed-running detection warns you when you're flipping too fast to actually learn</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">🔬</span>
+          <div class="feature-stat-text"><strong>5 cognitive layers</strong> — interleaving, JOL, pacing, elaboration, prerequisite gaps</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright);margin-bottom:14px">Mixed Flashcards</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="width:8px;height:8px;border-radius:50%;background:#3B82F6;flex-shrink:0"></span>
+              <span style="flex:1">Organic Chemistry</span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--green)">✓ Good</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(168,85,247,0.08);border:1px solid rgba(168,85,247,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--purple-bright);flex-shrink:0"></span>
+              <span style="flex:1;color:var(--amber)">⚡ Topic Switch — Psychology</span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim)">reviewing...</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);border-radius:6px;font-size:0.75rem">
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+              <span style="flex:1">Calculus II</span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--green)">✓ Easy</span>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:8px 10px;background:rgba(139,92,246,0.06);border-radius:6px;font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim)">
+            <span>JOL Accuracy: <span style="color:var(--green)">78%</span></span>
+            <span>Session Depth: <span style="color:var(--purple-bright)">A-</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature 9: Smart Calendar -->
+    <div class="feature-row fade-in">
+      <div class="feature-text">
+        <div class="feature-badge">Organization</div>
+        <h3>Your Professor Forgot the Calendar. We Didn't.</h3>
+        <ul>
+          <li>Professors assign work in emails, PDFs, and passing comments — then never update the LMS calendar</li>
+          <li>Add assignments once and see every deadline across every class in one unified view</li>
+          <li>AI-powered workload collision alerts warn you when three midterms land in the same week</li>
+        </ul>
+        <div class="feature-stat">
+          <span class="feature-stat-icon">📅</span>
+          <div class="feature-stat-text"><strong>Zero surprises</strong> — every deadline visible, color-coded by class</div>
+        </div>
+      </div>
+      <div class="feature-visual">
+        <div class="feature-vis-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--purple-bright)">Smart Calendar</div>
+            <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim)">March 2026</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(239,68,68,0.08);border-left:3px solid #EF4444;border-radius:4px;font-size:0.75rem">
+              <span style="flex:1"><span style="font-weight:600;color:var(--text)">Essay Draft</span> <span style="color:var(--text-dim)">— English 201</span></span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:#EF4444">Tomorrow</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(251,191,36,0.08);border-left:3px solid #FBBF24;border-radius:4px;font-size:0.75rem">
+              <span style="flex:1"><span style="font-weight:600;color:var(--text)">Problem Set 5</span> <span style="color:var(--text-dim)">— Calculus II</span></span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--amber)">3 days</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(59,130,246,0.08);border-left:3px solid #3B82F6;border-radius:4px;font-size:0.75rem">
+              <span style="flex:1"><span style="font-weight:600;color:var(--text)">Lab Report</span> <span style="color:var(--text-dim)">— Biology 110</span></span>
+              <span style="font-family:var(--font-mono);font-size:0.6rem;color:#3B82F6">5 days</span>
+            </div>
+          </div>
+          <div style="padding:8px 10px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.15);border-radius:6px;font-size:0.7rem;color:var(--text-muted);display:flex;align-items:center;gap:6px">
+            <span style="color:#EF4444;font-size:0.85rem">⚠</span>
+            <span><strong style="color:#EF4444">Collision detected:</strong> 3 deadlines within 48 hours next week</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Feature Grid -->
+<section class="feature-grid-section" id="feature-grid">
+  <div class="container">
+    <div class="section-label fade-in">And that's just the start</div>
+    <h2 class="section-title fade-in" style="margin-bottom:48px">65+ More Reasons to Switch</h2>
+    <div class="fg-categories collapsed" id="featureGrid">
+
+      <!-- AI & Learning -->
+      <div class="fg-category">
+        <div class="fg-cat-label">AI & Learning</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">📝</div><h4>Exam Prep</h4><p>AI-generated mixed quizzes with prerequisite gap detection and confidence tracking</p></div>
+          <div class="fg-card"><div class="fg-card-icon">✏️</div><h4>Problem Solver</h4><p>AI solves problems step-by-step with source attribution and "Check My Work" mode</p></div>
+          <div class="fg-card"><div class="fg-card-icon">💬</div><h4>Per-Class AI Memory</h4><p>The AI remembers your struggles, preferences, and progress across conversations</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎤</div><h4>Voice Mode</h4><p>Hands-free tutoring — speak questions, hear AI answers, conversation loops automatically</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔊</div><h4>Read Aloud</h4><p>Text-to-speech on any document, summary, or AI response with tier-based voice quality</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎓</div><h4>College Advising</h4><p>AI recommends reach/target/safety schools based on your actual GPA and profile</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📉</div><h4>Error Pattern Analysis</h4><p>AI detects when you confuse similar concepts and offers targeted remediation</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🏅</div><h4>Bloom's Mastery Gates</h4><p>Unlock higher cognitive levels as you master foundations — Remember → Create</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📋</div><h4>AI Study Plan</h4><p>AI-generated day-by-day study plans from your deadlines</p></div>
+          <div class="fg-card"><div class="fg-card-icon">💡</div><h4>Proactive Insights</h4><p>AI-powered alerts for accuracy drops, exam proximity, and forgotten concepts</p></div>
+        </div>
+      </div>
+
+      <!-- Study Tools -->
+      <div class="fg-category fg-hidden">
+        <div class="fg-cat-label">Study Tools</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">🎙️</div><h4>Lecture Recorder</h4><p>Record audio, get AI transcripts with speaker ID, and auto-generated notes</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📄</div><h4>Smart Documents</h4><p>Upload PDFs — AI extracts summaries, flashcards, key dates, and formulas automatically</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📑</div><h4>Syllabus Auto-Parse</h4><p>Drop in a PDF — auto-populates classes, grading scheme, deadlines, and late policies</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📐</div><h4>STEM Formula Bank</h4><p>Auto-extracted formulas from your documents with LaTeX notation and variable descriptions</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📥</div><h4>Import & Export</h4><p>Import from CSV, Anki, or Quizlet paste. Export any set for backup or sharing</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📚</div><h4>Community Library</h4><p>Browse, upvote, and clone flashcard sets shared by other students</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🛡️</div><h4>Streak Freeze</h4><p>Protect your study streak on off days</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📊</div><h4>Post-Exam Reflection</h4><p>Track predicted vs actual grades to improve study strategy</p></div>
+        </div>
+      </div>
+
+      <!-- Insights & Progress -->
+      <div class="fg-category fg-hidden">
+        <div class="fg-cat-label">Insights & Progress</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">📊</div><h4>Grade Predictions</h4><p>AI forecasts your letter grade per class using your actual study behavior data</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎯</div><h4>Exam Readiness Score</h4><p>Per-class readiness (0-100) with strengths, weaknesses, and study hour estimates</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📈</div><h4>Analytics Dashboard</h4><p>Study streaks, time heatmaps, accuracy trends, and optimal study time recommendations</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🧠</div><h4>Metacognition Tracking</h4><p>JOL calibration accuracy, confidence prediction postmortems, and learning effectiveness</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📊</div><h4>Session Quality Monitor</h4><p>Speed-running warnings, 25-min break nudges, and depth scores (A+ to D)</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🏆</div><h4>25+ Achievements</h4><p>Bronze through Platinum badges for streaks, mastery, study time, and learning science</p></div>
+        </div>
+      </div>
+
+      <!-- Organization -->
+      <div class="fg-category fg-hidden">
+        <div class="fg-cat-label">Organization</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">🗓️</div><h4>Smart Calendar</h4><p>Monthly/weekly views with class filtering, assignment tracking, and AI-extracted dates</p></div>
+          <div class="fg-card"><div class="fg-card-icon">⚡</div><h4>Workload Forecast</h4><p>3-week density chart with collision detection when deadlines pile up</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔔</div><h4>Smart Notifications</h4><p>Push alerts for overdue cards, upcoming deadlines, streaks at risk, and weekly progress</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🧮</div><h4>GPA & Grade Calculator</h4><p>Credit-weighted GPA, weighted grade components, and exportable reports</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎓</div><h4>Degree Planning</h4><p>Track credits, requirements, and cumulative GPA with AI transcript parsing</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🌐</div><h4>Event Importer</h4><p>Paste any URL and AI extracts events, deadlines, and dates — review and add to your calendar in one click</p></div>
+          <div class="fg-card"><div class="fg-card-icon">⏱️</div><h4>Study/Break Timer</h4><p>25/5 work-break cycles with long breaks every 4 rounds — integrates with study sessions and the floating panel</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🕸️</div><h4>Interactive Concept Map</h4><p>Visual graph of concepts colored by mastery with prerequisite, related, and synonym connections — drag, zoom, filter by class</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎵</div><h4>Ambient Sounds</h4><p>White, pink, brown noise plus synthesized rain, cafe, and campfire — all generated in-browser, zero downloads</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📖</div><h4>Study Guide Generator</h4><p>AI-generated comprehensive study guides from your class documents — key concepts, review questions, common pitfalls, and study tips</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📅</div><h4>Calendar Export</h4><p>Export assignments as .ics — import into Google Calendar, Apple Calendar, Outlook, or any iCal-compatible app</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📝</div><h4>Notes Editor</h4><p>Rich text note-taking with headings, lists, code blocks, links — auto-saves, attaches to classes, pin favorites</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🖼️</div><h4>Media Library</h4><p>Upload and organize images, audio, and video files linked to your classes</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📥</div><h4>LMS Import</h4><p>Import classes and assignments directly from Canvas LMS or any iCal calendar feed — no manual data entry</p></div>
+        </div>
+      </div>
+
+      <!-- Social & Campus -->
+      <div class="fg-category fg-hidden">
+        <div class="fg-cat-label">Social & Campus</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">👥</div><h4>Study Groups</h4><p>Real-time chat, file sharing, AI session summaries, and group recordings</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📍</div><h4>Study Spots</h4><p>Discover and rate study locations by noise level, Wi-Fi, and outlet availability</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📚</div><h4>Shared Flashcard Marketplace</h4><p>Share & import flashcard sets by course, professor, and university</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📝</div><h4>Exam Question Bank</h4><p>Community-sourced exam questions with practice quiz mode</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎁</div><h4>Referral Program</h4><p>Invite friends, earn free months</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🏫</div><h4>University Integration</h4><p>Select your university to connect with classmates and access course-specific shared content</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📤</div><h4>Share & QR Codes</h4><p>Share classes and study group invites via native share, clipboard copy, or scannable QR code</p></div>
+        </div>
+      </div>
+
+      <!-- Platform -->
+      <div class="fg-category fg-hidden">
+        <div class="fg-cat-label">Platform</div>
+        <div class="fg-grid">
+          <div class="fg-card"><div class="fg-card-icon">📱</div><h4>Offline Support</h4><p>Full IndexedDB storage with background sync — study anywhere, even without Wi-Fi</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🌐</div><h4>PWA + Native Apps</h4><p>Install from browser, download on iOS/Android — one account, all platforms</p></div>
+          <div class="fg-card"><div class="fg-card-icon">👨‍🏫</div><h4>Educator Mode</h4><p>Professors create classes, distribute materials, and view aggregate student analytics</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔗</div><h4>LTI Integration</h4><p>Launch directly from Canvas, Blackboard, or Moodle with full LMS sync</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎨</div><h4>5 Themes</h4><p>Light, Dark, Alien (sci-fi), Void (true-black cyber), and High Contrast (WCAG AA) with customizable glow colors</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔐</div><h4>Enterprise Security</h4><p>Supabase Auth, rate limiting, CSRF protection, file ownership verification, WCAG 2.1 AA</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔍</div><h4>Global Search</h4><p>Cmd+K to find anything — full-text search across documents, notes, and flashcards with class filters</p></div>
+          <div class="fg-card"><div class="fg-card-icon">📦</div><h4>Data Export (GDPR)</h4><p>Download a complete copy of all your data as JSON — classes, docs, notes, flashcards, sessions, everything</p></div>
+          <div class="fg-card"><div class="fg-card-icon">↩️</div><h4>Undo / Redo</h4><p>Multi-level undo with Ctrl+Z / Ctrl+Shift+Z and 5-second undo toasts on deletes</p></div>
+          <div class="fg-card"><div class="fg-card-icon">⌨️</div><h4>Keyboard Shortcuts</h4><p>Power-user keyboard shortcuts — press ? for a full list. Navigate, search, and undo without touching the mouse</p></div>
+          <div class="fg-card"><div class="fg-card-icon">💬</div><h4>Feedback Widget</h4><p>Submit feedback directly from the app with sentiment rating — help shape the future of Study Break</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🔔</div><h4>Notification Center</h4><p>All notifications in one place with mark-as-read, mark-all-read, and real-time badge updates</p></div>
+          <div class="fg-card"><div class="fg-card-icon">🎉</div><h4>Celebrations</h4><p>Confetti bursts on milestones — completing reviews, scoring 80%+, hitting streak goals at 7, 14, 30, 60, 100 days</p></div>
+        </div>
+      </div>
+
+    </div>
+    <button class="fg-toggle" id="fgToggle">Show All 65+ Features ↓</button>
+  </div>
+</section>
+
+<!-- Comparison Table -->
+<section class="comparison">
+  <div class="container">
+    <div class="section-label fade-in">The numbers don't lie</div>
+    <h2 class="section-title fade-in" style="margin-bottom:48px">How Study Break Compares</h2>
+    <div class="table-wrap fade-in">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Feature</th>
+            <th class="col-sb">Study Break</th>
+            <th>Quizlet</th>
+            <th>Anki</th>
+            <th>Notion</th>
+            <th>Canvas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Spaced Repetition</td><td class="col-sb"><span class="comp-label">FSRS-5 (2024)</span></td><td><span class="comp-label mid">Basic</span></td><td><span class="comp-label mid">FSRS (2025)</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>AI Tutor</td><td class="col-sb"><span class="comp-label">Your Documents</span></td><td><span class="comp-label mid">Generic</span></td><td><span class="cross">✕</span></td><td><span class="comp-label mid">Your Workspace</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Flashcard Formats</td><td class="col-sb"><span class="comp-label">5 formats</span></td><td><span class="comp-label mid">2</span></td><td><span class="comp-label mid">3</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Calendar</td><td class="col-sb"><span class="check">✓</span> Smart</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="comp-label mid">Manual</span></td><td><span class="comp-label mid">Manual</span></td></tr>
+          <tr><td>Campus Map</td><td class="col-sb"><span class="check">✓</span> + Routing</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Grade Predictions</td><td class="col-sb"><span class="check">✓</span> AI-powered</td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Offline Support</td><td class="col-sb"><span class="comp-label">Full + Sync</span></td><td><span class="comp-label mid">Partial</span></td><td><span class="check">✓</span></td><td><span class="comp-label mid">Limited</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Catch-Up Planner</td><td class="col-sb"><span class="comp-label">AI-powered</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td><td><span class="cross">✕</span></td></tr>
+          <tr><td>Price</td><td class="col-sb"><span class="comp-label">Free – $29/mo</span></td><td><span class="comp-label old">$7.99/mo</span></td><td><span class="comp-label">Free</span></td><td><span class="comp-label old">$10/mo</span></td><td><span class="comp-label mid">Included</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how">
+  <div class="container">
+    <div class="section-label fade-in">Dead simple</div>
+    <h2 class="section-title fade-in" style="margin-bottom:56px">Get Started in 3 Steps</h2>
+    <div class="steps fade-in">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-time">30 seconds</div>
+        <h3>Upload Your Syllabus</h3>
+        <p>Drop in a PDF. We auto-populate your classes, calendar, grading scheme, and every deadline.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-time">2 minutes</div>
+        <h3>Study with AI</h3>
+        <p>Ask questions, generate flashcards, get practice quizzes — all from your actual course materials.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-time">ongoing</div>
+        <h3>Watch Your Grades Climb</h3>
+        <p>FSRS-5 tells you exactly what to review. The Knowledge Decay Map shows your progress. Exams become predictable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-label fade-in">Simple pricing</div>
+    <h2 class="section-title fade-in">Pick Your Study Power</h2>
+    <p class="section-sub fade-in">Start free. Upgrade when AI becomes essential (it will).</p>
+    <div class="pricing-grid">
+      <div class="price-card fade-in stagger-1">
+        <div class="price-name">Free</div>
+        <div class="price-amount">$0<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Classes, flashcards, assignments</li>
+          <li>5 AI messages/day</li>
+          <li>Smart calendar with deadlines</li>
+          <li>Campus map with OSM buildings</li>
+          <li>Full offline support</li>
+          <li>Community library access</li>
+        </ul>
+        <a href="https://studybreak.app/login" class="price-cta">Get Started Free</a>
+      </div>
+      <div class="price-card fade-in stagger-2">
+        <div class="price-name">Student</div>
+        <div class="price-amount">$6<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Everything in Free, plus:</li>
+          <li>15 AI messages/day (200/mo)</li>
+          <li>Google Neural text-to-speech</li>
+          <li>60 min/mo lecture transcription</li>
+          <li>AI grade predictions</li>
+          <li>Smart study reminders</li>
+        </ul>
+        <a href="https://studybreak.app/login" class="price-cta">Start Student Plan</a>
+      </div>
+      <div class="price-card popular fade-in stagger-3">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-name">Scholar</div>
+        <div class="price-amount">$14<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Everything in Student, plus:</li>
+          <li>30 AI messages/day (500/mo)</li>
+          <li>Google + Kokoro TTS</li>
+          <li>300 min/mo transcription</li>
+          <li>Claude Opus AI for deep analysis</li>
+          <li>Emergency Catch-Up planner</li>
+          <li>2 college advising sessions/mo</li>
+        </ul>
+        <a href="https://studybreak.app/login" class="price-cta">Start Scholar Plan</a>
+      </div>
+      <div class="price-card fade-in stagger-4">
+        <div class="price-name">Genius</div>
+        <div class="price-amount">$29<span>/mo</span></div>
+        <ul class="price-features">
+          <li>Everything in Scholar, plus:</li>
+          <li>80 AI messages/day (1,500/mo)</li>
+          <li>ElevenLabs TTS (studio quality)</li>
+          <li>Unlimited transcription</li>
+          <li>Problem Solver</li>
+          <li>5 college advising sessions/mo</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="https://studybreak.app/login" class="price-cta">Start Genius Plan</a>
+      </div>
+    </div>
+    <p class="pricing-note">Cancel anytime. No contracts. All plans include core features. Save 2 months with annual billing.</p>
+  </div>
+</section>
+
+<!-- Origin Story -->
+<section class="origin">
+  <div class="container">
+    <div class="section-label fade-in">Our story</div>
+    <h2 class="section-title holographic fade-in">Built for Students, by Students</h2>
+    <p class="origin-text fade-in">
+      Study Break was built by a college student who was tired of juggling six different apps just to study.
+      What started as a personal project became a 55+ feature platform with state-of-the-art algorithms,
+      AI tutoring, and features no competitor has even thought of. Every feature exists because a real student needed it.
+    </p>
+    <div class="trust-badges fade-in">
+      <div class="trust-badge"><span class="trust-badge-icon">✓</span> 206+ Automated Tests</div>
+      <div class="trust-badge"><span class="trust-badge-icon">✓</span> WCAG 2.1 AA Accessible</div>
+      <div class="trust-badge"><span class="trust-badge-icon">✓</span> HTTPS Encrypted</div>
+      <div class="trust-badge"><span class="trust-badge-icon">✓</span> FSRS-5 Algorithm</div>
+      <div class="trust-badge"><span class="trust-badge-icon">✓</span> Powered by Claude AI</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-label fade-in">Got questions?</div>
+    <h2 class="section-title fade-in" style="margin-bottom:48px">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <div class="faq-item fade-in">
+        <button class="faq-q">Is Study Break really free? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. The free tier includes classes, flashcards, assignments, calendar, campus map, offline support, and community library access. No credit card required, no time limit. AI features are available on paid tiers starting at $6/month — but the core study tools are free forever.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">How is the AI different from ChatGPT? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">ChatGPT answers from general knowledge. Study Break's AI reads YOUR uploaded course documents — syllabi, lecture notes, textbooks. It answers with context from your actual classes and remembers your struggles across conversations. It's the difference between asking a stranger and asking your personal tutor who's been in every lecture with you.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">What's FSRS-5 and why should I care? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">FSRS-5 is a state-of-the-art spaced repetition algorithm, optimized from millions of real study sessions. Anki recently adopted FSRS too (great move), but Study Break goes further: Bloom's Taxonomy classification, 5 review formats (standard, reversed, cloze, free recall, multiple choice), and AI-generated cards from your actual course documents. It's FSRS plus an entire study ecosystem.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">Can I import my Quizlet or Anki flashcards? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Import from CSV, Anki text exports, or paste directly from Quizlet. Your cards are automatically upgraded to FSRS-5 scheduling. You can also export any set as CSV for backup. Zero lock-in.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">Does it work offline? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Full offline support with IndexedDB local storage and background sync. Study on the subway, in the library with bad Wi-Fi, or anywhere. When you reconnect, everything syncs automatically. Your flashcard reviews, notes, and progress are all preserved.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">Is my data safe? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Your data is encrypted, stored in Supabase PostgreSQL, and never shared with third parties. We use JWT-based authentication via Supabase Auth, rate limiting, CSRF protection, and file ownership verification. Your study data stays yours — period.</div></div>
+      </div>
+      <div class="faq-item fade-in">
+        <button class="faq-q">Do professors/educators use this? <span class="faq-chevron">▾</span></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes. Educator Mode lets professors create classes, distribute materials, and view aggregate student analytics. Full LTI 1.3 integration with Canvas, Blackboard, and Moodle means students can launch Study Break directly from their LMS. It works for individual students and entire classrooms.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="final-cta-orb"></div>
+  <div class="container">
+    <h2 class="holographic fade-in">Your Next Exam Is Coming.<br>Are You Ready?</h2>
+    <p class="fade-in">Every hour you spend switching between apps is an hour you could spend actually learning. Study Break gives you everything in one place — and it starts free.</p>
+    <a href="https://studybreak.app/login" class="btn-primary fade-in">Start Studying Free</a>
+    <p class="final-trust fade-in">No credit card. No commitment. Just better grades.</p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-logo">
+    <div class="footer-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 3 6 3s6-1.9 6-3v-5"/></svg>
+    </div>
+    <span class="footer-logo-text">Study Break</span>
+  </div>
+  <p class="footer-copy">&copy; 2024–2026 Study Break. Built for students, by students.</p>
+  <p class="footer-powered">Powered by Anthropic Claude AI</p>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Mobile menu toggle
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+});
+
+// Scroll-triggered fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Feature grid expand/collapse
+const fgToggle = document.getElementById('fgToggle');
+const featureGrid = document.getElementById('featureGrid');
+fgToggle.addEventListener('click', () => {
+  const collapsed = featureGrid.classList.toggle('collapsed');
+  fgToggle.textContent = collapsed ? 'Show All 65+ Features ↓' : 'Show Less ↑';
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — PsyStat Nexus</title>
+<meta name="description" content="Privacy Policy for PsyStat Nexus. Learn how we collect, use, and protect your research data. GDPR and CCPA compliant.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://psystat-nexus.vercel.app/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacy Policy — PsyStat Nexus">
+<meta property="og:description" content="How PsyStat Nexus handles your data. GDPR and CCPA compliant.">
+<meta property="og:url" content="https://psystat-nexus.vercel.app/privacy.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Privacy Policy — PsyStat Nexus">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0B0F1A;
+    --surface: #131926;
+    --elevated: #1A2236;
+    --border: #1E293B;
+    --text: #F1F5F9;
+    --text2: #94A3B8;
+    --text3: #64748B;
+    --primary: #6366F1;
+    --primary-glow: rgba(99,102,241,.25);
+    --cyan: #06B6D4;
+  }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.75;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ::selection { background: var(--primary); color: #fff; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 0;
+    background: rgba(11,15,26,.85); backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,.04);
+  }
+  nav .inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  nav .logo {
+    font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em;
+    display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none;
+  }
+  nav .logo:hover { text-decoration: none; }
+  nav .logo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #6366F1, #06B6D4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .9rem; color: #fff;
+  }
+  nav .links { display: flex; gap: 24px; align-items: center; }
+  nav .links a { color: var(--text2); font-size: .875rem; font-weight: 500; transition: color .2s; }
+  nav .links a:hover { color: var(--text); text-decoration: none; }
+
+  /* Content */
+  .page { max-width: 860px; margin: 0 auto; padding: 120px 24px 80px; }
+  .page-title {
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.03em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #818CF8, #6366F1, #06B6D4);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .page-subtitle { color: var(--text2); font-size: 1.05rem; margin-bottom: 48px; }
+
+  /* TOC */
+  .toc {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px 32px; margin-bottom: 48px;
+  }
+  .toc h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: var(--cyan); font-size: .925rem; }
+
+  /* Sections */
+  .section { margin-bottom: 48px; }
+  .section h2 {
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 16px;
+    color: var(--text); border-top: 1px solid var(--border); padding-top: 24px;
+  }
+  .section h3 { font-size: 1.1rem; font-weight: 600; margin: 20px 0 10px; color: #818CF8; }
+  .section p { color: var(--text2); margin-bottom: 14px; }
+  .section ul, .section ol { color: var(--text2); padding-left: 24px; margin-bottom: 14px; }
+  .section li { margin-bottom: 6px; }
+  .section strong { color: var(--text); font-weight: 600; }
+
+  /* Data table */
+  .data-table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; }
+  .data-table th, .data-table td {
+    padding: 12px 16px; text-align: left; border: 1px solid var(--border); font-size: .925rem;
+  }
+  .data-table th { background: var(--elevated); color: var(--text); font-weight: 600; }
+  .data-table td { color: var(--text2); }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border); padding: 32px 24px; text-align: center;
+    color: var(--text3); font-size: .85rem;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 100px 16px 60px; }
+    .toc { padding: 20px 20px; }
+    nav .links { gap: 16px; }
+    .data-table { font-size: .85rem; }
+    .data-table th, .data-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="inner">
+    <a href="landing.html" class="logo">
+      <div class="logo-icon">P</div>
+      PsyStat Nexus
+    </a>
+    <div class="links">
+      <a href="landing.html">Home</a>
+      <a href="terms.html">Terms</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <h1 class="page-title">Privacy Policy</h1>
+  <p class="page-subtitle">Effective Date: March 1, 2026 &middot; Last Updated: March 2026</p>
+
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#data-collect">What Data We Collect</a></li>
+      <li><a href="#data-use">How We Use Your Data</a></li>
+      <li><a href="#third-party">Third-Party Services</a></li>
+      <li><a href="#data-retention">Data Retention</a></li>
+      <li><a href="#account-deletion">Account Deletion</a></li>
+      <li><a href="#data-security">Data Security</a></li>
+      <li><a href="#children">Children's Privacy</a></li>
+      <li><a href="#international">International Data Transfers</a></li>
+      <li><a href="#gdpr">Your Rights Under GDPR (EU Users)</a></li>
+      <li><a href="#ccpa">Your Rights Under CCPA (California Users)</a></li>
+      <li><a href="#cookies">Cookies and Tracking</a></li>
+      <li><a href="#changes">Changes to This Policy</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ol>
+  </div>
+
+  <!-- 1 -->
+  <div class="section" id="introduction">
+    <h2>1. Introduction</h2>
+    <p>PsyStat Nexus ("we," "us," or "our") is committed to protecting the privacy of our users. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application, web application, and related services (collectively, the "Service").</p>
+    <p>By using the Service, you consent to the data practices described in this Privacy Policy. If you do not agree with the practices described herein, please do not use the Service. This Privacy Policy should be read in conjunction with our <a href="terms.html">Terms of Service</a>.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="section" id="data-collect">
+    <h2>2. What Data We Collect</h2>
+
+    <h3>2.1 Account Data</h3>
+    <p>When you create an account, we collect:</p>
+    <ul>
+      <li><strong>Email address</strong> — used for authentication, account recovery, and essential communications.</li>
+      <li><strong>Password</strong> — stored as a cryptographic hash; we never store plaintext passwords.</li>
+      <li><strong>ORCID identifier</strong> (optional) — if you choose to link your ORCID for researcher identification.</li>
+      <li><strong>Institutional affiliation</strong> (optional) — university or organization name you may provide.</li>
+      <li><strong>Display name</strong> (optional) — a name or alias used within the application.</li>
+    </ul>
+    <p>Account data is stored in our Supabase database with row-level security policies ensuring that users can only access their own records.</p>
+
+    <h3>2.2 Analysis Data</h3>
+    <p>When you use the statistical analysis features, we store:</p>
+    <ul>
+      <li><strong>Statistical inputs</strong> — datasets, variable configurations, test parameters, and analysis settings you provide.</li>
+      <li><strong>Results</strong> — computed statistical outputs, effect sizes, confidence intervals, p-values, and generated tables/figures.</li>
+      <li><strong>Notes and annotations</strong> — any notes, labels, or interpretations you attach to your analyses.</li>
+      <li><strong>Saved projects</strong> — collections of analyses organized into research projects.</li>
+    </ul>
+    <p>Analysis data is stored in Supabase and is accessible only to you. We do not access, review, or use your analysis data for any purpose other than providing the Service, unless required by law.</p>
+
+    <h3>2.3 Usage Data</h3>
+    <p>We collect anonymized and aggregated usage information, including:</p>
+    <ul>
+      <li><strong>Module usage</strong> — which modules you open and how frequently (e.g., Stats Studio, Psychometrics, Bayesian Lab).</li>
+      <li><strong>Analysis counts</strong> — the number and types of analyses performed.</li>
+      <li><strong>Feature interactions</strong> — which features you use most, navigation patterns, and session duration.</li>
+      <li><strong>Error and crash reports</strong> — technical data to help us diagnose and fix problems.</li>
+    </ul>
+    <p>Some usage data may be stored locally on your device via AsyncStorage and periodically synced to Supabase for backup and cross-device continuity.</p>
+
+    <h3>2.4 AI Conversation Data</h3>
+    <p>When you use the AI Assistant feature:</p>
+    <ul>
+      <li><strong>Messages you send</strong> are transmitted to the Anthropic Claude API for processing.</li>
+      <li><strong>AI responses</strong> are generated by Anthropic's servers and returned to you.</li>
+      <li><strong>Conversation history</strong> is stored in your Supabase account so you can review past interactions.</li>
+    </ul>
+    <p>We may include contextual information about your current analysis (such as variable names, test types, and summary statistics) in AI prompts to provide relevant assistance. <strong>Raw datasets are not sent to the AI by default</strong> unless you explicitly include them in your message.</p>
+    <p>Please refer to <a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">Anthropic's Privacy Policy</a> for information on how they handle data sent to the Claude API.</p>
+
+    <h3>2.5 Device Information</h3>
+    <p>We may collect basic device information, including:</p>
+    <ul>
+      <li>Device type and model (e.g., iPhone 15, Samsung Galaxy S24).</li>
+      <li>Operating system and version.</li>
+      <li>App version number.</li>
+      <li>Screen resolution and locale/language settings.</li>
+      <li>Unique device identifiers (for analytics and crash reporting only).</li>
+    </ul>
+
+    <h3>2.6 Summary of Data Collection</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Data Category</th>
+          <th>Examples</th>
+          <th>Storage Location</th>
+          <th>Required?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Account Data</td>
+          <td>Email, ORCID, institution</td>
+          <td>Supabase</td>
+          <td>Email required; others optional</td>
+        </tr>
+        <tr>
+          <td>Analysis Data</td>
+          <td>Inputs, results, notes</td>
+          <td>Supabase</td>
+          <td>Created through use</td>
+        </tr>
+        <tr>
+          <td>Usage Data</td>
+          <td>Module opens, analysis counts</td>
+          <td>AsyncStorage / Supabase</td>
+          <td>Automatic</td>
+        </tr>
+        <tr>
+          <td>AI Conversations</td>
+          <td>Messages, AI responses</td>
+          <td>Supabase / Anthropic</td>
+          <td>Created through use</td>
+        </tr>
+        <tr>
+          <td>Device Info</td>
+          <td>Device type, OS, app version</td>
+          <td>Analytics service</td>
+          <td>Automatic</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3 -->
+  <div class="section" id="data-use">
+    <h2>3. How We Use Your Data</h2>
+    <p>We use the information we collect for the following purposes:</p>
+
+    <h3>3.1 Providing the Service</h3>
+    <ul>
+      <li>To authenticate your identity and maintain your account.</li>
+      <li>To process and store your statistical analyses and results.</li>
+      <li>To sync your data across devices.</li>
+      <li>To provide AI-powered interpretations and recommendations.</li>
+    </ul>
+
+    <h3>3.2 Personalizing Your Experience</h3>
+    <ul>
+      <li>To customize the AI Assistant's responses based on your research context and usage history.</li>
+      <li>To suggest relevant modules, methods, or features based on your usage patterns.</li>
+      <li>To remember your preferences, settings, and recently used analyses.</li>
+    </ul>
+
+    <h3>3.3 Improving the Service</h3>
+    <ul>
+      <li>To analyze aggregated, anonymized usage data to understand how the Service is used and identify areas for improvement.</li>
+      <li>To diagnose and fix bugs, crashes, and performance issues.</li>
+      <li>To develop new features and improve existing statistical methods.</li>
+    </ul>
+
+    <h3>3.4 Advertising (Free Tier Only)</h3>
+    <p>If you are on the Free tier, we display ads through Google AdMob (mobile) and Google AdSense (web). These advertising services may use:</p>
+    <ul>
+      <li><strong>Device identifiers</strong> and <strong>general location data</strong> (not precise GPS) to serve relevant ads.</li>
+      <li><strong>Ad interaction data</strong> (impressions, clicks) to measure ad performance.</li>
+      <li><strong>Interest-based targeting</strong> using data collected by Google's advertising network according to their policies.</li>
+    </ul>
+    <p><strong>We do not share your analysis data, AI conversations, or research content with advertisers.</strong> Paid subscribers (Researcher and Scholar tiers) do not see ads and their data is not used for advertising purposes.</p>
+    <p>You can opt out of personalized ads through your device settings (iOS: Settings &gt; Privacy &gt; Apple Advertising; Android: Settings &gt; Google &gt; Ads).</p>
+
+    <h3>3.5 Communications</h3>
+    <ul>
+      <li>To send essential service notifications (security alerts, billing confirmations, Terms updates).</li>
+      <li>To send optional product updates and feature announcements (you can unsubscribe at any time).</li>
+    </ul>
+  </div>
+
+  <!-- 4 -->
+  <div class="section" id="third-party">
+    <h2>4. Third-Party Services</h2>
+    <p>We use the following third-party services to operate PsyStat Nexus. Each has its own privacy policy governing how they handle data:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Purpose</th>
+          <th>Data Shared</th>
+          <th>Privacy Policy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>Database, authentication, file storage, real-time sync</td>
+          <td>Account data, analysis data, AI conversation history</td>
+          <td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Anthropic (Claude API)</strong></td>
+          <td>AI-powered statistical interpretation and assistance</td>
+          <td>AI conversation messages, contextual analysis metadata</td>
+          <td><a href="https://www.anthropic.com/privacy" target="_blank" rel="noopener">anthropic.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Google AdMob / AdSense</strong></td>
+          <td>Advertising for Free tier users</td>
+          <td>Device identifiers, ad interaction data</td>
+          <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td><strong>RevenueCat</strong></td>
+          <td>Subscription and payment management</td>
+          <td>Purchase history, subscription status, anonymous user ID</td>
+          <td><a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">revenuecat.com/privacy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Vercel</strong></td>
+          <td>Web application hosting</td>
+          <td>IP address, request metadata (standard web server logs)</td>
+          <td><a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">vercel.com/legal/privacy-policy</a></td>
+        </tr>
+        <tr>
+          <td><strong>Railway</strong></td>
+          <td>Backend API and computation hosting</td>
+          <td>Analysis requests, statistical computation data (processed server-side)</td>
+          <td><a href="https://railway.app/legal/privacy" target="_blank" rel="noopener">railway.app/legal/privacy</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>We carefully select third-party providers that maintain high standards of data protection. However, we are not responsible for the privacy practices of third-party services, and we encourage you to review their privacy policies.</p>
+  </div>
+
+  <!-- 5 -->
+  <div class="section" id="data-retention">
+    <h2>5. Data Retention</h2>
+    <p>We retain your data for as long as your account is active or as needed to provide the Service to you. Specifically:</p>
+    <ul>
+      <li><strong>Account data</strong> — retained until you delete your account.</li>
+      <li><strong>Analysis data</strong> — retained until you delete individual analyses or your entire account.</li>
+      <li><strong>AI conversation history</strong> — retained until you clear your conversation history or delete your account.</li>
+      <li><strong>Usage data</strong> — aggregated and anonymized usage data may be retained indefinitely for analytics purposes, even after account deletion, as it cannot be linked back to you.</li>
+      <li><strong>Billing records</strong> — retained for a minimum of 7 years as required by tax and accounting regulations.</li>
+    </ul>
+    <p>When you request account deletion, all personally identifiable data is permanently removed from our active systems within 30 days. Backup systems may retain encrypted copies for up to 90 days before automatic purging.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="section" id="account-deletion">
+    <h2>6. Account Deletion</h2>
+    <p>You can delete your account and all associated data at any time through the following methods:</p>
+    <ul>
+      <li><strong>In-App:</strong> Navigate to Settings &gt; Account &gt; Delete Account. You will be asked to confirm your decision. This action is irreversible.</li>
+      <li><strong>By Email:</strong> Send a request to <a href="mailto:privacy@psystat-nexus.com">privacy@psystat-nexus.com</a> from the email address associated with your account.</li>
+    </ul>
+    <p>Upon account deletion, the following data is permanently removed:</p>
+    <ul>
+      <li>Your account profile and credentials.</li>
+      <li>All saved analyses, results, datasets, and notes.</li>
+      <li>All AI conversation history.</li>
+      <li>All usage data linked to your account.</li>
+      <li>All subscription information (active subscriptions will be canceled).</li>
+    </ul>
+    <p>We will process deletion requests within 30 days and send a confirmation email upon completion.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="section" id="data-security">
+    <h2>7. Data Security</h2>
+    <p>We implement industry-standard security measures to protect your data:</p>
+    <ul>
+      <li><strong>Encryption in transit</strong> — all data transmitted between your device and our servers is encrypted using TLS 1.2 or higher.</li>
+      <li><strong>Encryption at rest</strong> — data stored in Supabase is encrypted at rest using AES-256.</li>
+      <li><strong>Authentication security</strong> — passwords are hashed using bcrypt. We support and encourage the use of strong passwords.</li>
+      <li><strong>Row-level security</strong> — Supabase row-level security policies ensure that users can only access their own data.</li>
+      <li><strong>Secure token storage</strong> — authentication tokens are stored using Expo SecureStore (mobile) or secure HTTP-only cookies (web).</li>
+      <li><strong>Regular security reviews</strong> — we periodically review our security practices and update them as needed.</li>
+    </ul>
+    <p>While we strive to use commercially acceptable means to protect your data, no method of electronic transmission or storage is 100% secure, and we cannot guarantee absolute security.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section" id="children">
+    <h2>8. Children's Privacy</h2>
+    <p><strong>PsyStat Nexus is not intended for use by children under the age of 13.</strong> We do not knowingly collect personal information from children under 13. If you are a parent or guardian and you believe your child under 13 has provided us with personal information, please contact us at <a href="mailto:privacy@psystat-nexus.com">privacy@psystat-nexus.com</a>.</p>
+    <p>If we become aware that we have collected personal information from a child under 13 without verification of parental consent, we will take steps to remove that information from our servers within 30 days.</p>
+    <p>Users between the ages of 13 and 18 may use the Service with the consent and supervision of a parent or legal guardian, in accordance with our <a href="terms.html">Terms of Service</a>.</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section" id="international">
+    <h2>9. International Data Transfers</h2>
+    <p>PsyStat Nexus operates globally, and your data may be processed and stored in countries other than your own, including the United States. By using the Service, you consent to the transfer of your information to countries that may have different data protection laws than your country of residence.</p>
+    <p>We take appropriate safeguards to ensure that your data is treated securely and in accordance with this Privacy Policy, regardless of where it is processed. These safeguards include:</p>
+    <ul>
+      <li>Using service providers that comply with recognized data protection frameworks.</li>
+      <li>Implementing Standard Contractual Clauses (SCCs) where required for transfers from the European Economic Area (EEA).</li>
+      <li>Ensuring all third-party processors maintain adequate security measures.</li>
+    </ul>
+  </div>
+
+  <!-- 10 -->
+  <div class="section" id="gdpr">
+    <h2>10. Your Rights Under GDPR (EU Users)</h2>
+    <p>If you are located in the European Economic Area (EEA), you have the following rights under the General Data Protection Regulation (GDPR):</p>
+    <ul>
+      <li><strong>Right of Access</strong> — you have the right to request a copy of the personal data we hold about you.</li>
+      <li><strong>Right to Rectification</strong> — you have the right to request correction of inaccurate or incomplete personal data.</li>
+      <li><strong>Right to Erasure</strong> — you have the right to request deletion of your personal data (see <a href="#account-deletion">Account Deletion</a>).</li>
+      <li><strong>Right to Restriction of Processing</strong> — you have the right to request that we limit how we use your data.</li>
+      <li><strong>Right to Data Portability</strong> — you have the right to receive your personal data in a structured, commonly used, machine-readable format.</li>
+      <li><strong>Right to Object</strong> — you have the right to object to our processing of your personal data, including for direct marketing purposes.</li>
+      <li><strong>Right to Withdraw Consent</strong> — where processing is based on consent, you have the right to withdraw consent at any time.</li>
+      <li><strong>Right to Lodge a Complaint</strong> — you have the right to lodge a complaint with a supervisory authority in your EU member state.</li>
+    </ul>
+    <p>Our legal bases for processing personal data under GDPR include:</p>
+    <ul>
+      <li><strong>Contract performance</strong> — processing necessary to provide the Service you requested.</li>
+      <li><strong>Legitimate interests</strong> — processing for service improvement and security, where our interests do not override your rights.</li>
+      <li><strong>Consent</strong> — processing based on your explicit consent (e.g., marketing communications, personalized ads).</li>
+      <li><strong>Legal obligation</strong> — processing required to comply with applicable laws.</li>
+    </ul>
+    <p>To exercise any of these rights, please contact us at <a href="mailto:privacy@psystat-nexus.com">privacy@psystat-nexus.com</a>. We will respond within 30 days.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="section" id="ccpa">
+    <h2>11. Your Rights Under CCPA (California Users)</h2>
+    <p>If you are a California resident, you have the following rights under the California Consumer Privacy Act (CCPA) and the California Privacy Rights Act (CPRA):</p>
+    <ul>
+      <li><strong>Right to Know</strong> — you have the right to request information about the categories and specific pieces of personal information we have collected about you, the purposes for collection, and the categories of third parties with whom we share your data.</li>
+      <li><strong>Right to Delete</strong> — you have the right to request deletion of your personal information, subject to certain exceptions.</li>
+      <li><strong>Right to Opt-Out of Sale</strong> — you have the right to opt out of the "sale" of your personal information. <strong>We do not sell your personal information.</strong></li>
+      <li><strong>Right to Non-Discrimination</strong> — we will not discriminate against you for exercising your CCPA rights.</li>
+      <li><strong>Right to Correct</strong> — you have the right to request correction of inaccurate personal information.</li>
+      <li><strong>Right to Limit Use of Sensitive Personal Information</strong> — you have the right to limit the use and disclosure of sensitive personal information.</li>
+    </ul>
+    <p><strong>Categories of personal information we collect:</strong> identifiers (email, ORCID), internet or other electronic network activity information (usage data), and professional or employment-related information (institutional affiliation).</p>
+    <p><strong>We do not sell personal information</strong> as defined under the CCPA/CPRA. For Free tier users, advertising data shared with Google AdMob/AdSense may constitute "sharing" under the CPRA; you can opt out via your device's ad settings.</p>
+    <p>To exercise your CCPA rights, contact us at <a href="mailto:privacy@psystat-nexus.com">privacy@psystat-nexus.com</a> or use the in-app account deletion feature. We will verify your identity before processing requests and respond within 45 days.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="section" id="cookies">
+    <h2>12. Cookies and Tracking</h2>
+    <p>The PsyStat Nexus web application may use the following tracking technologies:</p>
+    <ul>
+      <li><strong>Essential cookies</strong> — required for authentication and session management. These cannot be disabled.</li>
+      <li><strong>Analytics cookies</strong> — used to understand how the Service is used. These are anonymized and can be disabled in your browser settings.</li>
+      <li><strong>Advertising cookies</strong> (Free tier only) — used by Google AdSense to serve relevant ads. These can be managed through your browser's cookie settings or Google's ad settings.</li>
+    </ul>
+    <p>The mobile application uses AsyncStorage for local data persistence and does not use cookies. Advertising identifiers on mobile are managed through your device's operating system settings.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="section" id="changes">
+    <h2>13. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we make material changes, we will:</p>
+    <ul>
+      <li>Update the "Last Updated" date at the top of this page.</li>
+      <li>Notify you via email and/or an in-app notification at least 30 days before the changes take effect.</li>
+      <li>Provide a summary of the material changes.</li>
+    </ul>
+    <p>Your continued use of the Service after the effective date of the revised Privacy Policy constitutes your acceptance of the changes. We encourage you to review this page periodically for the latest information on our privacy practices.</p>
+  </div>
+
+  <!-- 14 -->
+  <div class="section" id="contact">
+    <h2>14. Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:</p>
+    <p>
+      <strong>PsyStat Nexus — Privacy Team</strong><br>
+      Email: <a href="mailto:privacy@psystat-nexus.com">privacy@psystat-nexus.com</a><br>
+      General Support: <a href="mailto:support@psystat-nexus.com">support@psystat-nexus.com</a>
+    </p>
+    <p>For GDPR-related inquiries, you may also contact our Data Protection Officer at the email address above with the subject line "DPO Request."</p>
+    <p>We will make reasonable efforts to respond to all privacy-related inquiries within 30 days.</p>
+  </div>
+
+</main>
+
+<footer>
+  <p>&copy; 2026 PsyStat Nexus. All rights reserved. &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="landing.html">Home</a></p>
+</footer>
+
+</body>
+</html>

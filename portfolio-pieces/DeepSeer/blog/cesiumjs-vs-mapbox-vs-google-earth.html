@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine — Deep Seer Blog</title>
+<meta name="description" content="A practitioner's comparison of CesiumJS, Mapbox GL JS, and Google Earth — rendering, data layers, licensing, performance, and real-world trade-offs for building geospatial applications.">
+<meta name="keywords" content="CesiumJS, Mapbox, Google Earth, 3D globe, geospatial, WebGL, mapping engine, comparison, GIS">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/cesiumjs-vs-mapbox-vs-google-earth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine">
+<meta property="og:description" content="A practitioner's comparison of the three major web globe engines — rendering, data layers, licensing, performance, and real-world trade-offs.">
+<meta property="og:url" content="https://deepseer.io/blog/cesiumjs-vs-mapbox-vs-google-earth">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine">
+<meta name="twitter:description" content="A practitioner's comparison of the three major web globe engines for geospatial applications.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine",
+  "description": "A practitioner's comparison of CesiumJS, Mapbox GL JS, and Google Earth — rendering, data layers, licensing, performance, and real-world trade-offs.",
+  "datePublished": "2026-03-21",
+  "dateModified": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team",
+    "url": "https://deepseer.io"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/cesiumjs-vs-mapbox-vs-google-earth",
+  "image": "https://deepseer.io/icons/og-image.png"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(0,204,255,0.15);color:#00ccff}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px;line-height:1.15}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 10px}
+.article p{margin-bottom:16px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article li{margin-bottom:6px}
+.article code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.04);color:#9ca3af;font-size:14px;border-radius:0 8px 8px 0}
+.article table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px}
+.article th{text-align:left;padding:10px 12px;border-bottom:2px solid rgba(255,255,255,0.1);color:#fff;font-weight:600}
+.article td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.05);color:#b0b6c0}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Technical</span>
+  <h1>CesiumJS vs Mapbox vs Google Earth: Choosing a 3D Globe Engine</h1>
+  <div class="meta">Mar 21, 2026 &middot; 14 min read &middot; Deep Seer Team</div>
+
+  <p>If you're building a geospatial application that needs to display data on a globe or map in the browser, you have three serious options: CesiumJS, Mapbox GL JS, and the Google Maps/Earth platform. Each represents a fundamentally different philosophy about how to render the planet in a web browser, and choosing wrong will cost you months of refactoring. We've built Deep Seer on CesiumJS and want to share an honest comparison — including the things CesiumJS doesn't do well.</p>
+
+  <h2>The Fundamental Split: True 3D vs. 2.5D</h2>
+
+  <p>The most important distinction is geometric. CesiumJS and Google Earth render a true 3D ellipsoidal globe — the WGS84 ellipsoid with proper geodetic coordinates, where you can orbit, tilt, and view the planet from any angle including edge-on at the horizon. Objects exist in true 3D space with correct altitude, and the curvature of the Earth affects visibility, occlusion, and distance calculations.</p>
+
+  <p>Mapbox GL JS renders a 2.5D projected map. It uses the Mercator projection (or globe projection in recent versions) and supports pitch/tilt, giving a 3D appearance. But it is fundamentally a map — a flat surface with extrusion. Mapbox added a "globe" view in v2.9, and it visually resembles a globe, but the underlying geometry is projected, which means altitude representation, 3D object placement, and terrain interaction work differently than in a true 3D engine.</p>
+
+  <p>This distinction matters enormously depending on your use case. If you need to visualize satellite orbits at 400km altitude, model radar coverage cones, or show the Earth from a space perspective, you need a true 3D engine. If you need fast, beautiful street-level maps with custom styling and client-side vector rendering, Mapbox is probably the better choice.</p>
+
+  <h2>Rendering Pipeline</h2>
+
+  <p><strong>CesiumJS</strong> uses a custom WebGL rendering pipeline built from scratch for geospatial data. It renders terrain using quantized mesh tiles, imagery from WMS/WMTS/TMS providers, and 3D content using the 3D Tiles specification (which Cesium created and is now an OGC standard). The rendering pipeline handles globe-specific concerns: horizon culling, depth buffer precision at planetary scale (logarithmic depth buffers), atmospheric scattering, and dynamic lighting based on sun position. It's powerful but the learning curve is steep — you're working much closer to the rendering engine than with other options.</p>
+
+  <p><strong>Mapbox GL JS</strong> uses a vector-first rendering pipeline. Map data arrives as vector tiles (Mapbox Vector Tiles / MVT format), and the client renders them using WebGL with style specifications defined in JSON. This architecture is what makes Mapbox's custom styling so powerful — everything from road colors to label placement is controlled client-side. The pipeline is optimized for 2D map rendering with tilt, and it handles this exceptionally well. Terrain is supported via DEM rasters, and 3D buildings are rendered as extrusions.</p>
+
+  <p><strong>Google Earth</strong> (specifically the Google Maps JavaScript API with WebGL and the Google Earth Engine for analysis) uses Google's proprietary rendering pipeline. Google's photorealistic 3D Tiles provide photogrammetry-quality 3D cityscapes — no other platform matches Google's visual fidelity for urban areas. The rendering is largely server-driven: heavy tile preprocessing happens on Google's infrastructure, and the client renders pre-built mesh tiles. This gives excellent visual results but limits customization.</p>
+
+  <h2>Data Layer Support</h2>
+
+  <table>
+    <tr><th>Format</th><th>CesiumJS</th><th>Mapbox</th><th>Google</th></tr>
+    <tr><td>GeoJSON</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+    <tr><td>KML/KMZ</td><td>Yes (built-in)</td><td>No (external lib)</td><td>Yes</td></tr>
+    <tr><td>WMS/WMTS</td><td>Yes (first-class)</td><td>Raster source</td><td>Limited</td></tr>
+    <tr><td>3D Tiles</td><td>Yes (created it)</td><td>No</td><td>Yes (photorealistic)</td></tr>
+    <tr><td>Vector Tiles</td><td>Limited</td><td>Yes (core)</td><td>Yes</td></tr>
+    <tr><td>CZML</td><td>Yes (native)</td><td>No</td><td>No</td></tr>
+    <tr><td>glTF/GLB</td><td>Yes</td><td>Yes (v2+)</td><td>Yes</td></tr>
+    <tr><td>Terrain Mesh</td><td>Quantized mesh</td><td>DEM raster</td><td>Proprietary</td></tr>
+    <tr><td>Point Clouds</td><td>Yes (3D Tiles)</td><td>No</td><td>Limited</td></tr>
+  </table>
+
+  <p>CesiumJS has the broadest format support for traditional GIS data (WMS, WMTS, KML), which matters if you're integrating with government or scientific data sources that publish in these formats. Mapbox excels at vector tiles and custom-styled data. Google excels at photorealistic visualization but has the most constrained data ingestion pipeline.</p>
+
+  <h2>Licensing and Cost</h2>
+
+  <p>This is where the decision gets political.</p>
+
+  <p><strong>CesiumJS</strong> is open-source under the Apache 2.0 license. You can self-host everything. The Cesium Ion platform provides hosted terrain, imagery, and 3D tiling services with a free tier (75,000 asset requests/month) and paid tiers beyond that. Critically, you are not required to use Cesium Ion — you can supply your own terrain and imagery providers. The engine itself is free with no usage limits.</p>
+
+  <p><strong>Mapbox GL JS</strong> changed its license from BSD to a proprietary license starting with v2.0. You must use Mapbox-hosted tiles and a Mapbox access token. The free tier provides 50,000 map loads per month for web, with charges beyond that. MapLibre GL JS is the community fork that maintains the pre-v2 open-source BSD license, but it diverges from Mapbox in features. If open-source licensing matters to your project, you're choosing between CesiumJS and MapLibre, not CesiumJS and Mapbox.</p>
+
+  <p><strong>Google Maps Platform</strong> uses a proprietary license with pay-as-you-go pricing. The free tier provides $200/month in credit (roughly 28,000 dynamic map loads). Beyond that, you pay per load. Google's terms of service also include restrictions on how you can use and cache the data, which can be relevant for applications that need to operate offline or in air-gapped environments.</p>
+
+  <h2>Performance</h2>
+
+  <p>Raw rendering performance varies by workload. For typical map-style rendering — vector tiles, labels, polygons — Mapbox is the fastest. Its rendering pipeline is optimized for this exact use case, and it shows. Smooth 60fps panning and zooming on modest hardware.</p>
+
+  <p>For large-scale 3D scenes — thousands of entities, terrain with imagery overlay, 3D models — CesiumJS handles scale that Mapbox cannot. CesiumJS's PointPrimitiveCollection can render 100,000+ points efficiently using WebGL instancing. Its 3D Tiles streaming engine handles terabyte-scale datasets by loading and unloading tiles based on view frustum and screen-space error. However, CesiumJS's baseline memory footprint is larger (the library itself is approximately 3MB gzipped), and initial load time is longer.</p>
+
+  <p>Google Earth offers excellent visual performance for photorealistic content because most of the heavy lifting happens server-side. The client receives pre-built mesh tiles optimized for rendering. But custom data layer performance depends on Google's rendering pipeline, and you have less control over optimization.</p>
+
+  <h2>Real-Time Data Overlays</h2>
+
+  <p>This is where CesiumJS pulls ahead for OSINT and intelligence applications. CesiumJS was designed for time-dynamic data — its native CZML format represents entities that move through space and time, and the viewer includes a built-in timeline widget and clock system. Updating the position of 5,000 aircraft or 8,000 satellites every second is a supported use case, not an edge case.</p>
+
+  <p>Mapbox can update GeoJSON sources dynamically, but the update mechanism involves replacing the entire source data or using feature state updates. For thousands of entities updating every second, this becomes a bottleneck. Mapbox is optimized for data that changes occasionally (user interactions, filter changes), not data that changes every frame.</p>
+
+  <p>Google Earth has limited support for real-time data in the web platform. The Google Earth Engine is powerful for analytical workflows but not designed for live data streaming visualization.</p>
+
+  <h2>When to Use Which</h2>
+
+  <p><strong>Choose CesiumJS when:</strong> You need a true 3D globe, orbital/airspace visualization, time-dynamic data, WMS/WMTS data source support, open-source licensing, or self-hosting capability. Accept: steeper learning curve, larger bundle size, less polished default styling.</p>
+
+  <p><strong>Choose Mapbox when:</strong> You need beautiful 2D maps with custom styling, street-level navigation, client-side vector rendering, or the best out-of-the-box cartographic design. Accept: proprietary license (v2+), 2.5D limitations, weaker support for true 3D and time-dynamic data.</p>
+
+  <p><strong>Choose Google Earth when:</strong> You need photorealistic 3D cityscapes, integration with Google's data ecosystem, or the broadest consumer familiarity. Accept: highest cost at scale, most restrictive terms, least customization, dependency on Google's platform continuity.</p>
+
+  <h2>Why We Chose CesiumJS</h2>
+
+  <p>Deep Seer is an OSINT intelligence platform that visualizes satellites, aircraft, ships, and ground-level data simultaneously on a global scale. We need true 3D for orbital mechanics. We need time-dynamic rendering for real-time tracking. We need WMS support for NEXRAD radar and government data services. We need to self-host for environments where data cannot leave a customer's network.</p>
+
+  <p>CesiumJS was the only option that met all of these requirements. The learning curve was significant — CesiumJS's documentation is thorough but assumes GIS domain knowledge, and the gap between the Entity API (easy, slow) and the Primitive API (fast, complex) trips up every new developer. But once you understand the rendering model, CesiumJS gives you a level of control over geospatial visualization that no other web platform matches.</p>
+
+  <p>The open-source license sealed the decision. For a platform that handles sensitive intelligence data, depending on a third party's proprietary rendering engine and tile hosting is a risk we didn't want to accept.</p>
+
+  <blockquote>There is no "best" globe engine — only the right one for your constraints. Define your requirements around 3D fidelity, data format support, licensing, and real-time update frequency, and the choice usually makes itself.</blockquote>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

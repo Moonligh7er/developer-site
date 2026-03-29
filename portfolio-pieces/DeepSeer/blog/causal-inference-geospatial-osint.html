@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Causal Inference Methods for Geospatial OSINT Data — Deep Seer Blog</title>
+<meta name="description" content="Move beyond correlation to establish causation in intelligence analysis. Granger causality, difference-in-differences, regression discontinuity, and synthetic control methods applied to OSINT data.">
+<meta name="keywords" content="causal inference, OSINT, Granger causality, difference-in-differences, regression discontinuity, synthetic control, geospatial intelligence, statistical methods">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/causal-inference-geospatial-osint">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Causal Inference Methods for Geospatial OSINT Data">
+<meta property="og:description" content="Move beyond correlation to establish causation. Four statistical methods applied to intelligence data with real OSINT examples.">
+<meta property="og:url" content="https://deepseer.io/blog/causal-inference-geospatial-osint">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Causal Inference Methods for Geospatial OSINT Data">
+<meta name="twitter:description" content="Move beyond correlation to establish causation with four statistical methods applied to intelligence data.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Causal Inference Methods for Geospatial OSINT Data",
+  "description": "Move beyond correlation to establish causation in intelligence analysis. Granger causality, difference-in-differences, regression discontinuity, and synthetic control methods applied to OSINT data.",
+  "datePublished": "2026-03-28",
+  "dateModified": "2026-03-28",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team",
+    "url": "https://deepseer.io"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/causal-inference-geospatial-osint",
+  "image": "https://deepseer.io/icons/og-image.png"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(0,204,255,0.15);color:#00ccff}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px;line-height:1.15}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 10px}
+.article p{margin-bottom:16px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article li{margin-bottom:6px}
+.article code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.04);color:#9ca3af;font-size:14px;border-radius:0 8px 8px 0}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Technical</span>
+  <h1>Causal Inference Methods for Geospatial OSINT Data</h1>
+  <div class="meta">Mar 28, 2026 &middot; 12 min read &middot; Deep Seer Team</div>
+
+  <p>An analyst discovers that counties with more EPA-registered polluting facilities have higher rates of childhood asthma. A journalist finds that congressional districts whose representatives received energy industry donations are more likely to have weakened environmental regulations. A researcher notices that regions where fishing enforcement patrols decreased saw an increase in illegal trawling activity.</p>
+
+  <p>Each of these is a correlation. None of them, as stated, is a causal claim. The gap between "X is associated with Y" and "X causes Y" is where intelligence analysis either becomes rigorous or collapses into confirmation bias. This article covers four statistical methods for bridging that gap, each with real OSINT applications and the assumptions you need to check before trusting the results.</p>
+
+  <h2>Why Correlation Fails in Intelligence Analysis</h2>
+
+  <p>Correlation is easy to find in geospatial data because most variables are correlated with geography itself. Wealthy areas have lower pollution, better health outcomes, more police, less crime, better schools, and more Whole Foods locations. Finding that any two of these variables are correlated tells you almost nothing about causation — they're all driven by the underlying spatial distribution of wealth.</p>
+
+  <p>This is the problem of confounding: a third variable (wealth, population density, climate, governance quality) drives both the supposed cause and the supposed effect. Without addressing confounders, every analysis is suspect. The four methods below each address confounding in a different way.</p>
+
+  <h2>Method 1: Granger Causality</h2>
+
+  <h3>The Idea</h3>
+
+  <p>Granger causality doesn't prove true causation — it tests whether one time series helps predict another. If past values of X improve predictions of Y beyond what past values of Y alone provide, then X "Granger-causes" Y. The key insight is temporal: causes precede effects. If changes in X consistently precede changes in Y, the causal direction is at least constrained.</p>
+
+  <h3>OSINT Application: Does Pollution Predict Health Outcomes?</h3>
+
+  <p>Consider a county where an industrial facility increases toxic releases over a two-year period. Monthly air quality measurements (from EPA monitoring stations or PurpleAir sensors) provide the X time series. Emergency room admissions for respiratory conditions (from public health datasets) provide the Y time series. A Granger causality test with lags of 1-6 months asks: do elevated pollution readings in month T predict elevated ER admissions in months T+1 through T+6, beyond what the ER admission history alone would predict?</p>
+
+  <p>In Deep Seer, we use this approach in our TemporalRegressionEngine to assess whether changes in environmental conditions — pollution spikes, water quality degradation, permit violations — predict downstream health outcomes in nearby populations.</p>
+
+  <h3>When It Fails</h3>
+
+  <p>Granger causality assumes stationarity (the statistical properties of the time series don't change over time) and that no omitted variable drives both series. If both pollution and health outcomes are trending upward due to population growth, the test may find a spurious Granger-causal relationship. Always test for stationarity first (ADF test) and difference the series if needed.</p>
+
+  <h2>Method 2: Difference-in-Differences</h2>
+
+  <h3>The Idea</h3>
+
+  <p>Difference-in-differences (DiD) is the workhorse of policy evaluation. It compares the change in an outcome between a treatment group and a control group before and after an intervention. The "first difference" is the change over time. The "second difference" subtracts the control group's change from the treatment group's change, isolating the effect of the intervention from any background trend affecting both groups.</p>
+
+  <h3>OSINT Application: Did a Regulation Change Behavior?</h3>
+
+  <p>Suppose a state tightens emissions regulations for chemical plants. The treatment group is facilities in that state; the control group is comparable facilities in neighboring states that didn't change their regulations. Measure toxic releases (from EPA TRI data) before and after the regulation change for both groups. The DiD estimate tells you how much the regulation reduced emissions beyond whatever trend was already happening industry-wide.</p>
+
+  <p>This method is directly implemented in Deep Seer's RegulatoryDeltaEngine, which tracks regulatory changes from Regulations.gov and correlates them with measurable outcomes in our environmental and compliance datasets. When a rule change occurs, the system automatically identifies treatment and control groups and estimates the causal effect.</p>
+
+  <h3>When It Fails</h3>
+
+  <p>DiD requires the "parallel trends" assumption: absent the intervention, the treatment and control groups would have followed the same trajectory. If the state that tightened regulations was already on a downward emissions trend (perhaps due to plant closures), DiD will overestimate the regulation's effect. Always plot pre-treatment trends for both groups and verify they're parallel. If they're not, the estimate is biased.</p>
+
+  <h2>Method 3: Regression Discontinuity</h2>
+
+  <h3>The Idea</h3>
+
+  <p>Regression discontinuity (RD) exploits situations where treatment is assigned based on a threshold. If a variable crosses a cutoff, something changes — a regulation kicks in, a classification changes, a resource is allocated. By comparing observations just above and just below the threshold, you get a quasi-experimental estimate of the treatment effect, because observations near the cutoff are essentially randomly assigned to treatment or control.</p>
+
+  <h3>OSINT Application: Threshold Effects in Environmental Regulation</h3>
+
+  <p>EPA regulations often trigger at specific thresholds. Facilities that release more than a certain tonnage of a chemical must report to the Toxics Release Inventory. Facilities above a certain hazard score receive more frequent inspections. Cities above population thresholds qualify for different environmental monitoring requirements.</p>
+
+  <p>An RD design compares facilities just above and just below these thresholds. Do facilities that barely trigger TRI reporting requirements show different behavior than facilities just below the threshold? If reporting requirements have a causal effect on behavior (the "spotlight effect"), you'll see a discontinuous jump in outcomes right at the cutoff.</p>
+
+  <p>This is what Deep Seer's CounterfactualEngine explores: given a threshold-based intervention, what is the observable difference on either side of the threshold, and is it statistically distinguishable from the background variation?</p>
+
+  <h3>When It Fails</h3>
+
+  <p>RD requires that entities cannot precisely manipulate their position relative to the threshold. If facilities can strategically report emissions just below the TRI threshold to avoid scrutiny, the observations near the cutoff are no longer quasi-random — they're self-selected. Check for "bunching" just below the threshold, which indicates manipulation. Also, RD estimates are local — they apply only to entities near the threshold, not to the general population.</p>
+
+  <h2>Method 4: Synthetic Control</h2>
+
+  <h3>The Idea</h3>
+
+  <p>Synthetic control constructs a counterfactual: what would have happened to the treated unit if the intervention hadn't occurred? It does this by building a weighted combination of untreated units that closely matches the treated unit's pre-intervention trajectory. The post-intervention divergence between the treated unit and its synthetic control estimates the causal effect.</p>
+
+  <h3>OSINT Application: Conflict and Displacement</h3>
+
+  <p>When armed conflict begins in a region, population displacement follows. But how much displacement is caused by the conflict versus other factors (economic conditions, seasonal migration, drought)? A synthetic control approach constructs a "synthetic version" of the affected region using a weighted combination of similar regions that didn't experience conflict. The weights are chosen so that the synthetic control matches the affected region's pre-conflict demographics, economic indicators, and migration patterns.</p>
+
+  <p>After conflict onset, the gap between the actual region's population/economic indicators and the synthetic control's trajectory estimates the causal impact of the conflict. This approach has been used by researchers studying the economic impact of the Syrian civil war, the displacement effects of the Rohingya crisis, and the economic consequences of the Russia-Ukraine conflict on neighboring countries.</p>
+
+  <p>Deep Seer implements this in its CounterfactualEngine, which allows analysts to select a region and event, and the system automatically constructs a synthetic control from comparable regions to estimate what would have happened in the absence of the event.</p>
+
+  <h3>When It Fails</h3>
+
+  <p>Synthetic control requires a good pre-intervention fit — the synthetic version must closely track the treated unit before the event. If no combination of control units can reproduce the pre-intervention trajectory, the method doesn't work. It also requires that control units are genuinely unaffected by the intervention. If conflict in one region causes economic spillovers to neighboring regions used as controls, the estimated effect is biased downward.</p>
+
+  <h2>Putting It Together: A Framework for OSINT Causal Analysis</h2>
+
+  <p>No single method works for every question. The choice depends on your data structure:</p>
+
+  <ul>
+    <li><strong>Time series data, no clear intervention:</strong> Start with Granger causality. Does X predict Y over time?</li>
+    <li><strong>Clear intervention date, treatment and control groups available:</strong> Use difference-in-differences. What changed after the intervention, relative to the control?</li>
+    <li><strong>Treatment assigned by a threshold:</strong> Use regression discontinuity. What happens at the cutoff?</li>
+    <li><strong>Single treated unit, multiple potential controls:</strong> Use synthetic control. What would have happened without the intervention?</li>
+  </ul>
+
+  <p>In every case, the method requires assumptions that must be tested, not assumed. Parallel trends must be verified, not asserted. Stationarity must be tested, not hoped for. Threshold manipulation must be checked, not ignored. The strength of causal inference is that it makes these assumptions explicit, so they can be scrutinized and challenged.</p>
+
+  <p>Intelligence analysis has historically relied on narrative reasoning — "this happened, then that happened, therefore this caused that." Causal inference methods don't replace narrative reasoning, but they discipline it. They force the analyst to specify the counterfactual (what would have happened otherwise?), identify the confounders (what else could explain this?), and quantify the uncertainty (how confident are we?).</p>
+
+  <blockquote>The difference between "these two things happen in the same place" and "this thing causes that thing" is not a matter of confidence — it's a matter of method. Correlation is a starting point. Causal inference is the work that follows.</blockquote>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

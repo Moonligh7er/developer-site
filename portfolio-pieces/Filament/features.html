@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filament — Complete Features Guide</title>
+<meta name="description" content="Every feature in Filament: 9 categories, 47 tools for persuasion strategy, campaign operations, intelligence analysis, OSINT, adversarial simulation, and more.">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--bg2:#11111a;--bg3:#1a1a2e;
+  --cyan:#00f5d4;--purple:#7b68ee;--white:#f0f0f0;--gray:#8888aa;--dim:#555570;
+  --glow-cyan:0 0 30px rgba(0,245,212,.25);
+  --glow-purple:0 0 30px rgba(123,104,238,.25);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;line-height:1.7;overflow-x:hidden}
+a{color:var(--cyan);text-decoration:none;transition:color .2s}
+a:hover{color:var(--purple)}
+::selection{background:rgba(0,245,212,.2);color:var(--white)}
+
+/* ── Layout ── */
+.container{max-width:900px;margin:0 auto;padding:0 24px}
+
+/* ── Hero ── */
+.hero{position:relative;text-align:center;padding:80px 24px 40px;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:
+  radial-gradient(ellipse 80% 60% at 50% 40%,rgba(123,104,238,.1) 0%,transparent 70%),
+  radial-gradient(ellipse 60% 50% at 30% 60%,rgba(0,245,212,.06) 0%,transparent 60%);
+  animation:heroPulse 8s ease-in-out infinite alternate;z-index:0}
+@keyframes heroPulse{0%{opacity:.7;transform:scale(1)}100%{opacity:1;transform:scale(1.04)}}
+.hero-content{position:relative;z-index:1}
+.hero h1{font-size:clamp(1.8rem,4.5vw,3rem);font-weight:800;line-height:1.15;margin-bottom:12px}
+.grad-text{background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{color:var(--gray);font-size:clamp(.95rem,1.8vw,1.15rem);max-width:600px;margin:0 auto}
+
+/* ── Summary Bar ── */
+.summary-bar{display:flex;align-items:center;justify-content:center;gap:0;margin:32px auto;max-width:320px;padding:18px 0;background:var(--bg3);border-radius:16px;border:1px solid rgba(255,255,255,.08)}
+.summary-item{text-align:center;padding:0 32px}
+.summary-number{color:var(--cyan);font-size:1.6rem;font-weight:700;line-height:1}
+.summary-label{color:var(--gray);font-size:.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+.summary-divider{width:1px;height:32px;background:rgba(255,255,255,.08)}
+
+/* ── Table of Contents ── */
+.toc{margin:0 auto 48px;max-width:700px;padding:28px 32px;background:var(--bg2);border-radius:16px;border:1px solid rgba(255,255,255,.06)}
+.toc h2{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--purple);margin-bottom:16px;font-weight:600}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 24px}
+.toc-link{display:flex;align-items:center;gap:8px;padding:6px 0;color:var(--gray);font-size:.9rem;transition:color .2s}
+.toc-link:hover{color:var(--white)}
+.toc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.toc-count{color:var(--dim);font-size:.75rem;margin-left:auto;white-space:nowrap}
+
+/* ── Category ── */
+.category{margin-bottom:48px}
+.category-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-top:24px}
+.category-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.category-title{font-size:1.15rem;font-weight:700;letter-spacing:.3px}
+.category-count{font-size:.7rem;color:var(--dim);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-left:auto}
+
+/* ── Features Card ── */
+.features-card{background:var(--bg3);border-radius:16px;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.feature-row{padding:18px 20px;display:flex;gap:14px}
+.feature-row+.feature-row{border-top:1px solid rgba(255,255,255,.05)}
+.feature-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:.95rem}
+.feature-body{flex:1;min-width:0}
+.feature-name{font-size:.95rem;font-weight:600;color:var(--white);margin-bottom:4px}
+.feature-plain{color:var(--gray);font-size:.88rem;line-height:1.55}
+
+/* ── Technical Details (collapsible) ── */
+.tech-toggle{display:flex;align-items:center;gap:6px;margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:8px;cursor:pointer;border:none;color:var(--gray);font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-family:inherit;width:100%;text-align:left;transition:background .2s}
+.tech-toggle:hover{background:rgba(255,255,255,.06)}
+.tech-arrow{display:inline-block;transition:transform .25s ease;font-size:.65rem}
+.tech-toggle.open .tech-arrow{transform:rotate(90deg)}
+.tech-content{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .3s ease;opacity:0}
+.tech-content.open{opacity:1}
+.tech-text{color:var(--dim);font-size:.8rem;line-height:1.6;padding:8px 12px 4px}
+
+/* ── Footer ── */
+footer{border-top:1px solid rgba(255,255,255,.06);padding:48px 24px;text-align:center;color:var(--dim);font-size:.85rem;margin-top:40px}
+footer a{color:var(--gray);margin:0 12px;transition:color .2s}
+footer a:hover{color:var(--cyan)}
+.footer-links{margin-bottom:16px;display:flex;justify-content:center;flex-wrap:wrap;gap:8px 24px}
+.footer-copy{font-size:.78rem;color:var(--dim)}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .hero{padding:60px 16px 28px}
+  .toc{padding:20px;margin-left:16px;margin-right:16px}
+  .toc-grid{grid-template-columns:1fr}
+  .container{padding:0 16px}
+  .feature-row{padding:14px 14px}
+  .summary-item{padding:0 24px}
+  .category-header{flex-wrap:wrap}
+  .category-count{margin-left:50px;margin-top:-4px;width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-content">
+    <h1><span class="grad-text">Complete Features Guide</span></h1>
+    <p>Everything Filament can do &mdash; every tool, every analysis engine, every simulation.</p>
+  </div>
+</div>
+
+<!-- ── Summary Bar ── -->
+<div class="container">
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-number">9</div>
+      <div class="summary-label">Categories</div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="summary-number">47</div>
+      <div class="summary-label">Features</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Table of Contents ── -->
+<div class="container">
+  <div class="toc">
+    <h2>Navigation</h2>
+    <div class="toc-grid">
+      <a href="#individual-persuasion-tools" class="toc-link"><span class="toc-dot" style="background:#00f5d4"></span>Individual Persuasion Tools<span class="toc-count">5</span></a>
+      <a href="#campaign-operations" class="toc-link"><span class="toc-dot" style="background:#7b68ee"></span>Campaign Operations<span class="toc-count">6</span></a>
+      <a href="#intelligence-analysis" class="toc-link"><span class="toc-dot" style="background:#4169e1"></span>Intelligence &amp; Analysis<span class="toc-count">5</span></a>
+      <a href="#osint-monitoring" class="toc-link"><span class="toc-dot" style="background:#f59e0b"></span>OSINT &amp; Monitoring<span class="toc-count">5</span></a>
+      <a href="#adversarial-simulation" class="toc-link"><span class="toc-dot" style="background:#ef4444"></span>Adversarial Simulation<span class="toc-count">2</span></a>
+      <a href="#specialized-tools" class="toc-link"><span class="toc-dot" style="background:#ff6b9d"></span>Specialized Tools<span class="toc-count">11</span></a>
+      <a href="#analytics-statistics" class="toc-link"><span class="toc-dot" style="background:#10b981"></span>Analytics &amp; Statistics<span class="toc-count">3</span></a>
+      <a href="#security-privacy" class="toc-link"><span class="toc-dot" style="background:#06b6d4"></span>Security &amp; Privacy<span class="toc-count">4</span></a>
+      <a href="#platform-features" class="toc-link"><span class="toc-dot" style="background:#8b5cf6"></span>Platform Features<span class="toc-count">7</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- CATEGORIES -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+
+<div class="container">
+
+<!-- ── 1. Individual Persuasion Tools ── -->
+<div class="category" id="individual-persuasion-tools">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(0,245,212,.09);box-shadow:0 0 18px rgba(0,245,212,.15)">&#128161;</div>
+    <div class="category-title" style="color:#00f5d4">Individual Persuasion Tools</div>
+    <div class="category-count">5 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(0,245,212,.07)"><span style="color:#00f5d4">&#9889;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Strategy Generator</div>
+        <div class="feature-plain">Describe any situation and get a custom persuasion strategy with specific techniques, ethical considerations, and predicted responses.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">AI-generated multi-section analysis using Claude claude-sonnet-4-20250514 with structured JSON output. 18 persuasion categories, streaming SSE responses.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(0,245,212,.07)"><span style="color:#00f5d4">&#128172;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">AI Roleplay Practice</div>
+        <div class="feature-plain">Practice persuasive conversations with an AI that responds realistically and scores your performance on clarity, empathy, assertiveness, and effectiveness.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-turn conversational AI with per-message scoring (0-10 per dimension), session state management, final grade aggregation.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(0,245,212,.07)"><span style="color:#00f5d4">&#128737;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Defense Analysis</div>
+        <div class="feature-plain">Paste any text and find out exactly what persuasion techniques are being used on you, how manipulative they are, and how to respond.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Technique identification with severity classification, counter-argument generation, boundary script templates.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(0,245,212,.07)"><span style="color:#00f5d4">&#128200;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Persuasion Analyzer</div>
+        <div class="feature-plain">Deep analysis of any text, URL, or uploaded document. Gets a manipulation risk score and breaks down every technique being used.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-input (text/URL/document upload via multer), SSRF-protected URL fetching, magic byte file validation, multi-section analysis with risk scoring 0-100.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(0,245,212,.07)"><span style="color:#00f5d4">&#128218;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Tactics Library</div>
+        <div class="feature-plain">An encyclopedia of 271 persuasion techniques across 10 categories &mdash; what they are, how they work, real examples, ethical guidelines, and how to defend against each one.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Static dataset of 271 TacticEntry objects across psychological, social, linguistic, emotional, political, marketing, digital, interpersonal, institutional, and logical categories.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 2. Campaign Operations ── -->
+<div class="category" id="campaign-operations">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(123,104,238,.09);box-shadow:0 0 18px rgba(123,104,238,.15)">&#128227;</div>
+    <div class="category-title" style="color:#7b68ee">Campaign Operations</div>
+    <div class="category-count">6 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#128295;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Campaign Builder</div>
+        <div class="feature-plain">Plan complete multi-phase influence campaigns with objectives, timelines, audience targeting, messaging, and channel deployment.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">CRUD with AI-powered plan generation, multi-section campaign workspace (audience, narrative, channels, phases, frameworks, impact).</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#128101;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Audience Profiling Engine</div>
+        <div class="feature-plain">Build deep psychological profiles of any target audience &mdash; their values, beliefs, fears, media habits, cognitive biases, and how to reach them.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Psychographic segmentation with vulnerability mapping, audience sub-segmentation, Bayesian updating of persuasion probability estimates.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#128196;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Narrative Design Studio</div>
+        <div class="feature-plain">Create overarching story frameworks with core themes, supporting narratives, talking points, and messaging that cascades from high-level to specific.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Messaging tree generation, counter-narrative anticipation, emotional arc mapping.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#128268;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Multi-Channel Strategy</div>
+        <div class="feature-plain">Plan how to deploy your message across social media, traditional media, interpersonal channels, and institutions &mdash; with timing and coordination.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Channel-specific content cadence planning, amplification strategy, cross-channel coordination.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#9638;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">PSYOP Frameworks</div>
+        <div class="feature-plain">Apply military-grade analytical frameworks (SCAME, TAA, MOE/MOP, Influence Continuum) to any campaign for rigorous assessment.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Source-Content-Audience-Media-Effects analysis, Target Audience Analysis with accessibility/susceptibility matrix, Measures of Effectiveness/Performance tracking.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(123,104,238,.07)"><span style="color:#7b68ee">&#128200;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Impact Modeling</div>
+        <div class="feature-plain">Predict how far your campaign will reach, how likely it is to persuade, and what could go wrong &mdash; backed by real statistical simulation.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Monte Carlo simulation with configurable parameters, Bayesian inference, linear regression, confidence intervals, risk factor analysis.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 3. Intelligence & Analysis ── -->
+<div class="category" id="intelligence-analysis">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(65,105,225,.09);box-shadow:0 0 18px rgba(65,105,225,.15)">&#128065;</div>
+    <div class="category-title" style="color:#4169e1">Intelligence &amp; Analysis</div>
+    <div class="category-count">5 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(65,105,225,.07)"><span style="color:#4169e1">&#128269;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Propaganda Pattern Recognition</div>
+        <div class="feature-plain">Analyze content to detect not just individual tricks, but full campaign patterns &mdash; astroturfing, manufactured consensus, coordinated disinformation.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Campaign-level pattern detection with sophistication assessment (amateur through state-level), actor identification, deployment pattern analysis.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(65,105,225,.07)"><span style="color:#4169e1">&#128506;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Information Environment Mapping</div>
+        <div class="feature-plain">Map the entire narrative landscape around any topic &mdash; who's saying what, how people feel about it, what's trending, and where the opportunities are.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Narrative prevalence mapping, actor influence assessment, sentiment breakdown, trend trajectory analysis.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(65,105,225,.07)"><span style="color:#4169e1">&#128737;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Counter-Campaign Designer</div>
+        <div class="feature-plain">Design a full defensive campaign to counter propaganda or manipulation &mdash; with inoculation strategies, rebuttals, and alternative narratives.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Threat analysis, multi-phase counter-strategy with prebunking/debunking/redirect/inoculate approaches.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(65,105,225,.07)"><span style="color:#4169e1">&#8644;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">A/B Message Testing</div>
+        <div class="feature-plain">Compare two versions of a message side by side to see which one is more persuasive, clear, and effective for your target audience.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Variant scoring across 5 dimensions (persuasiveness, clarity, emotional impact, credibility, CTA strength), audience-specific analysis.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(65,105,225,.07)"><span style="color:#4169e1">&#128279;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Influence Network Mapping</div>
+        <div class="feature-plain">Map who influences whom on any topic &mdash; identify key players, their relationships, and which clusters of influence exist.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Real graph algorithms: PageRank, Brandes betweenness centrality, Louvain community detection, clustering coefficient computation.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 4. OSINT & Monitoring ── -->
+<div class="category" id="osint-monitoring">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(245,158,11,.09);box-shadow:0 0 18px rgba(245,158,11,.15)">&#128225;</div>
+    <div class="category-title" style="color:#f59e0b">OSINT &amp; Monitoring</div>
+    <div class="category-count">5 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(245,158,11,.07)"><span style="color:#f59e0b">&#127760;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">OSINT Collection</div>
+        <div class="feature-plain">Gather real intelligence from news sources, Reddit, RSS feeds, and websites. Search for any topic and collect what the world is saying.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-source ingestion: GNews API, Reddit JSON API, RSS XML parsing, web scraping with SSRF protection.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(245,158,11,.07)"><span style="color:#f59e0b">&#128221;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">NLP Analysis Workbench</div>
+        <div class="feature-plain">Analyze any text with real natural language processing &mdash; sentiment analysis, entity extraction, keyword detection, language identification, and readability scoring.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Rule-based AFINN lexicon sentiment with negation handling, TF-IDF keyword extraction, named entity recognition, Flesch-Kincaid readability, multi-language detection.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(245,158,11,.07)"><span style="color:#f59e0b">&#128147;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Live Monitoring</div>
+        <div class="feature-plain">Set up automatic monitors that continuously watch for mentions, sentiment changes, or emerging narratives around topics you care about.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Scheduled OSINT collection via cron scheduler, alert condition evaluation, WebSocket real-time push notifications.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(245,158,11,.07)"><span style="color:#f59e0b">&#9888;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Deception Detection</div>
+        <div class="feature-plain">Analyze content for signs of inauthenticity &mdash; bot-like posting patterns, coordinated campaigns, fabricated statistics, and writing style anomalies.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Stylometric fingerprinting, temporal entropy bot scoring, n-gram coordination detection, Benford's Law chi-squared test.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(245,158,11,.07)"><span style="color:#f59e0b">&#128270;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Entity Resolution</div>
+        <div class="feature-plain">Cross-reference information about people, organizations, and events from multiple sources to build comprehensive profiles.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Jaro-Winkler string similarity, Fellegi-Sunter probabilistic record linkage, Union-Find clustering, geospatial DBSCAN.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 5. Adversarial Simulation ── -->
+<div class="category" id="adversarial-simulation">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(239,68,68,.09);box-shadow:0 0 18px rgba(239,68,68,.15)">&#127918;</div>
+    <div class="category-title" style="color:#ef4444">Adversarial Simulation</div>
+    <div class="category-count">2 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(239,68,68,.07)"><span style="color:#ef4444">&#128128;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Wargaming Engine</div>
+        <div class="feature-plain">Simulate influence campaigns in an adversarial environment. You play the blue team, AI plays the red team. Test your strategies against realistic opposition.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Round-by-round adversarial simulation with scoring, escalation tracking, NLP sentiment analysis per round, change-point detection for escalation patterns.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(239,68,68,.07)"><span style="color:#ef4444">&#128268;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Scenario Planner</div>
+        <div class="feature-plain">Run 'what if' analysis on your strategies. Change variables and see how different scenarios play out with probability estimates.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Variable-based branching with probability assessment, decision tree generation, cascade effect analysis.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 6. Specialized Tools ── -->
+<div class="category" id="specialized-tools">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(255,107,157,.09);box-shadow:0 0 18px rgba(255,107,157,.15)">&#128296;</div>
+    <div class="category-title" style="color:#ff6b9d">Specialized Tools</div>
+    <div class="category-count">11 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#9998;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Content Draft Generator</div>
+        <div class="feature-plain">Generate actual ready-to-use content &mdash; tweets, emails, speeches, press releases, blog posts &mdash; tailored for any audience and tone.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-channel content generation with platform-specific formatting, batch mode for all channels simultaneously.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#127988;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Political Campaign Suite</div>
+        <div class="feature-plain">Full toolkit for political campaigns: voter targeting, opposition research, debate preparation, policy framing, and coalition building.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Psychographic voter segmentation, vulnerability analysis with ethical boundaries, debate Q&amp;A with pivot techniques, Lakoff moral foundations mapping.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#9947;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Marketing Funnel Designer</div>
+        <div class="feature-plain">Design complete marketing funnels from awareness to advocacy &mdash; with messaging, channels, and conversion triggers for each stage.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">8-stage funnel (awareness to advocacy) with per-stage messaging, CTAs, objection handling, and metrics.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#9888;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Crisis Communications</div>
+        <div class="feature-plain">Generate crisis response playbooks: what to say in the first hour, how to handle media, internal communications, and reputation recovery.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Golden hour action plans, stakeholder mapping, holding statements, Q&amp;A preparation, recovery narrative design.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#9995;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Negotiation Workbench</div>
+        <div class="feature-plain">Plan any negotiation with a complete strategy: your best alternative, the zone of possible agreement, what to concede and when, and how to anchor.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">BATNA/ZOPA analysis, concession sequencing with value-to-each-party scoring, leverage mapping, tactical phase planning.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#10084;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Relationship Dynamics Analyzer</div>
+        <div class="feature-plain">Understand the hidden power dynamics in any relationship &mdash; detect manipulation patterns, map influence, and get actionable advice.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Power dynamic assessment, manipulation cycle detection (idealize-devalue-discard, intermittent reinforcement), attachment style analysis.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#128101;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Group Dynamics Planner</div>
+        <div class="feature-plain">Plan how to navigate group decisions: map who has power, identify potential allies, prevent groupthink, and build coalitions.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Participant influence mapping, alliance detection, groupthink risk assessment, meeting facilitation strategy.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#128172;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Conversation Architect</div>
+        <div class="feature-plain">Plan difficult conversations in advance with branching scripts, emotional checkpoints, de-escalation options, and fallback positions.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Decision tree conversation planning with if/then branching, emotional regulation checkpoints, boundary enforcement scripts.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#9764;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Intervention Planner</div>
+        <div class="feature-plain">Plan interventions for people trapped in manipulation &mdash; cult involvement, abusive relationships, or exploitative situations &mdash; with safety-first approach.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Readiness staging (Prochaska model), team role assignment, phased intervention scripts, safety planning with emergency protocols.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#10004;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Source Credibility Profiler</div>
+        <div class="feature-plain">Assess any information source's reliability, bias, funding, track record, and conflicts of interest.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-dimensional credibility scoring: political/commercial/ideological bias, historical accuracy, funding transparency analysis.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(255,107,157,.07)"><span style="color:#ff6b9d">&#128202;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Trend Detection</div>
+        <div class="feature-plain">Analyze multiple pieces of content together to detect coordinated campaigns, shared language patterns, and whether messaging is organic or manufactured.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Multi-document temporal correlation, n-gram content similarity, statistical coordination detection, attribution assessment.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 7. Analytics & Statistics ── -->
+<div class="category" id="analytics-statistics">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(16,185,129,.09);box-shadow:0 0 18px rgba(16,185,129,.15)">&#128200;</div>
+    <div class="category-title" style="color:#10b981">Analytics &amp; Statistics</div>
+    <div class="category-count">3 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(16,185,129,.07)"><span style="color:#10b981">&#128425;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Statistical Analytics Suite</div>
+        <div class="feature-plain">Run real statistical analysis: regression, correlation, Monte Carlo simulation, hypothesis testing, and Bayesian inference on any dataset.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">OLS/multiple regression, Pearson/Spearman correlation, Monte Carlo with configurable iterations, Welch's t-test, chi-squared, beta-binomial Bayesian update.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(16,185,129,.07)"><span style="color:#10b981">&#128339;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Time-Series Analysis</div>
+        <div class="feature-plain">Analyze data over time: detect when trends shift, find anomalies, forecast future values, and decompose patterns into trend, seasonal, and noise components.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">CUSUM change-point detection, MAD anomaly detection, STL decomposition, Holt's double exponential smoothing forecast, autocorrelation.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(16,185,129,.07)"><span style="color:#10b981">&#128200;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Usage Dashboard</div>
+        <div class="feature-plain">Track your daily usage, all-time statistics, and learning streak with a visual calendar heatmap.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Per-feature usage tracking with tier-based limits, streak computation from UsageRecord dates, 30-day activity heatmap.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 8. Security & Privacy ── -->
+<div class="category" id="security-privacy">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(6,182,212,.09);box-shadow:0 0 18px rgba(6,182,212,.15)">&#128274;</div>
+    <div class="category-title" style="color:#06b6d4">Security &amp; Privacy</div>
+    <div class="category-count">4 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(6,182,212,.07)"><span style="color:#06b6d4">&#128273;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Two-Factor Authentication</div>
+        <div class="feature-plain">Protect your account with a second verification step using an authenticator app on your phone.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">RFC 6238 TOTP with HMAC-SHA1, 30-second time steps, &plusmn;1 window for clock drift, base32 secret encoding.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(6,182,212,.07)"><span style="color:#06b6d4">&lt;/&gt;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">API Key Management</div>
+        <div class="feature-plain">Create and manage API keys for programmatic access to Filament's features.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Bcrypt-hashed keys with prefix-based lookup, permission scoping, expiration, revocation.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(6,182,212,.07)"><span style="color:#06b6d4">&#128272;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Field-Level Encryption</div>
+        <div class="feature-plain">Your sensitive data is encrypted before it's stored, so even database access can't read your content.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">AES-256-GCM with PBKDF2 key derivation (100k iterations), random IVs, authenticated encryption.</div></div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(6,182,212,.07)"><span style="color:#06b6d4">&#128203;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Audit Trail</div>
+        <div class="feature-plain">Every action in the system is logged &mdash; who did what, when, and from where. Full accountability.</div>
+        <button class="tech-toggle" onclick="toggleTech(this)"><span class="tech-arrow">&#9654;</span> Technical Details</button>
+        <div class="tech-content"><div class="tech-text">Per-request audit logging with hashed IPs, classification levels, admin-only viewer with export.</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── 9. Platform Features ── -->
+<div class="category" id="platform-features">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(139,92,246,.09);box-shadow:0 0 18px rgba(139,92,246,.15)">&#128736;</div>
+    <div class="category-title" style="color:#8b5cf6">Platform Features</div>
+    <div class="category-count">7 features</div>
+  </div>
+  <div class="features-card">
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128269;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Global Search</div>
+        <div class="feature-plain">Search across all your content from anywhere &mdash; strategies, analyses, techniques, and campaigns in one unified search.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128278;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Favorites &amp; Bookmarks</div>
+        <div class="feature-plain">Save strategies, analyses, and techniques for quick access. Your personal collection of the most useful results.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128228;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Share &amp; Export</div>
+        <div class="feature-plain">Share results via the native share sheet or export as PDF reports for offline reading and collaboration.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128203;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Comparison Mode</div>
+        <div class="feature-plain">Compare two strategies side by side to evaluate which approach is stronger for your situation.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#9729;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Offline Support</div>
+        <div class="feature-plain">Keep working even when you lose connectivity. The app gracefully degrades and syncs when you reconnect.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128276;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Push Notifications</div>
+        <div class="feature-plain">Get streak reminders and daily usage reset alerts so you never miss a day of practice.</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature-icon" style="background:rgba(139,92,246,.07)"><span style="color:#8b5cf6">&#128142;</span></div>
+      <div class="feature-body">
+        <div class="feature-name">Subscription Management</div>
+        <div class="feature-plain">Upgrade to Pro for unlimited access to every feature. Native in-app purchase on iOS and Android.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-links">
+    <a href="pitch.html">Pitch</a>
+    <a href="terms.html">Terms of Service</a>
+    <a href="privacy.html">Privacy Policy</a>
+  </div>
+  <div class="footer-copy">&copy; 2026 Filament. All rights reserved.</div>
+</footer>
+
+<!-- ── Minimal JS for expand/collapse ── -->
+<script>
+function toggleTech(btn) {
+  var content = btn.nextElementSibling;
+  var isOpen = btn.classList.contains('open');
+  if (isOpen) {
+    content.style.maxHeight = '0px';
+    content.classList.remove('open');
+    btn.classList.remove('open');
+  } else {
+    content.classList.add('open');
+    btn.classList.add('open');
+    content.style.maxHeight = content.scrollHeight + 'px';
+  }
+}
+</script>
+</body>
+</html>

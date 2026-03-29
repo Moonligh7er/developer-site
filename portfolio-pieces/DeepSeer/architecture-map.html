@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deep Seer — Architecture Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; font-size: 15px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0a0a0a; color: #d4d4d4; line-height: 1.65;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+  a { color: #60a5fa; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, .mono {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.88em; background: #1a1a2e; padding: 2px 6px;
+    border-radius: 4px; color: #a78bfa;
+  }
+  pre {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+    background: #111127; border: 1px solid #222244; border-radius: 8px;
+    padding: 14px 18px; overflow-x: auto; color: #c4b5fd; margin: 10px 0;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.9rem; }
+  th, td { padding: 8px 12px; border: 1px solid #222; text-align: left; }
+  th { background: #141428; color: #a78bfa; font-weight: 600; position: sticky; top: 0; }
+  td { background: #0f0f1a; }
+  tr:hover td { background: #151530; }
+  .cost { color: #34d399; font-weight: 500; }
+  .free { color: #22d3ee; }
+  .key-example { color: #fbbf24; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; word-break: break-all; }
+
+  /* ── Sticky Header ── */
+  .header {
+    position: sticky; top: 0; z-index: 100;
+    background: #0a0a0aee; backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e1e3a; padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 8px;
+  }
+  .header h1 { font-size: 1.1rem; font-weight: 600; color: #e0e0e0; }
+  .header h1 span { color: #6366f1; }
+  .header .subtitle { font-size: 0.75rem; color: #666; font-weight: 400; }
+  .tab-bar { display: flex; gap: 4px; }
+  .tab-btn {
+    padding: 6px 18px; border: 1px solid #333; border-radius: 6px;
+    background: transparent; color: #888; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 500;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { background: #6366f1; color: #fff; border-color: #6366f1; }
+  .tab-btn:hover:not(.active) { background: #1a1a2e; color: #c4b5fd; }
+
+  /* ── Layout ── */
+  .layout { display: flex; flex: 1; }
+
+  /* ── Sidebar TOC ── */
+  .sidebar {
+    width: 240px; min-width: 200px; position: sticky; top: 56px;
+    height: calc(100vh - 56px); overflow-y: auto;
+    background: #0d0d1a; border-right: 1px solid #1e1e3a;
+    padding: 16px 0; font-size: 0.82rem;
+    scrollbar-width: thin; scrollbar-color: #333 transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  .sidebar a {
+    display: block; padding: 6px 16px; color: #777;
+    transition: all 0.15s; border-left: 2px solid transparent;
+  }
+  .sidebar a:hover { color: #c4b5fd; background: #111127; text-decoration: none; }
+  .sidebar a.active { color: #a78bfa; border-left-color: #6366f1; background: #111127; }
+  .sidebar .toc-group { margin-top: 14px; padding: 0 16px 4px; color: #555; font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; }
+
+  /* ── Main Content ── */
+  .content { flex: 1; max-width: 960px; padding: 24px 32px 80px; margin: 0 auto; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 32px; border: 1px solid #1a1a2e; border-radius: 10px; overflow: hidden; }
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 20px; background: #111127; cursor: pointer;
+    user-select: none; border-bottom: 1px solid #1a1a2e;
+  }
+  .section-header:hover { background: #151535; }
+  .section-header h2 { font-size: 1rem; font-weight: 600; color: #e0e0e0; flex: 1; }
+  .section-header .num { color: #6366f1; font-weight: 700; font-size: 0.85rem; min-width: 28px; }
+  .section-header .chevron {
+    width: 20px; height: 20px; color: #555; transition: transform 0.2s;
+  }
+  .section.open .section-header .chevron { transform: rotate(90deg); }
+  .section-body { padding: 20px; display: none; }
+  .section.open .section-body { display: block; }
+
+  /* ── Tab Content Visibility ── */
+  .plain-content, .tech-content { display: none; }
+  body.mode-plain .plain-content { display: block; }
+  body.mode-tech .tech-content { display: block; }
+
+  /* ── Misc ── */
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+  .badge-free { background: #064e3b; color: #34d399; }
+  .badge-paid { background: #4c1d95; color: #c4b5fd; }
+  .badge-enterprise { background: #7c2d12; color: #fdba74; }
+  .badge-required { background: #991b1b; color: #fca5a5; }
+  .badge-optional { background: #1e3a5f; color: #7dd3fc; }
+  .info-grid { display: grid; grid-template-columns: 140px 1fr; gap: 6px 16px; margin: 10px 0; }
+  .info-grid dt { color: #777; font-weight: 500; }
+  .info-grid dd { color: #d4d4d4; }
+  .callout { background: #111127; border-left: 3px solid #6366f1; padding: 12px 16px; border-radius: 0 6px 6px 0; margin: 12px 0; font-size: 0.9rem; }
+  .callout.warn { border-left-color: #f59e0b; }
+  .callout.success { border-left-color: #34d399; }
+  p { margin: 8px 0; }
+  h3 { color: #a78bfa; font-size: 0.95rem; margin: 16px 0 8px; }
+  h4 { color: #818cf8; font-size: 0.88rem; margin: 12px 0 6px; }
+  ul, ol { padding-left: 20px; margin: 6px 0; }
+  li { margin: 4px 0; }
+
+  /* ── Print ── */
+  @media print {
+    .header { position: static; background: #fff; color: #000; border-bottom: 2px solid #000; }
+    .sidebar { display: none; }
+    .section { break-inside: avoid; border-color: #ccc; }
+    .section-body { display: block !important; }
+    body, td, th, p, li { color: #000 !important; background: #fff !important; }
+    a { color: #2563eb !important; }
+    code, pre { background: #f3f4f6 !important; color: #4338ca !important; }
+    .tab-bar { display: none; }
+    .plain-content, .tech-content { display: block !important; }
+    .tech-content { border-top: 1px dashed #ccc; margin-top: 12px; padding-top: 12px; }
+    .tech-content::before { content: "TECHNICAL DETAILS:"; font-weight: 700; font-size: 0.8rem; color: #6366f1; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .content { padding: 16px; }
+    .header { padding: 10px 16px; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body class="mode-plain">
+
+<!-- ═══ HEADER ═══ -->
+<header class="header">
+  <div>
+    <h1><span>Deep Seer</span> Architecture Map</h1>
+    <div class="subtitle">For Developers Only &mdash; Contains no real credentials</div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" data-mode="plain">Plain Language</button>
+    <button class="tab-btn" data-mode="tech">Technical</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ═══ SIDEBAR TOC ═══ -->
+<nav class="sidebar" id="toc">
+  <div class="toc-group">Architecture</div>
+  <a href="#system-arch">1. System Architecture</a>
+  <a href="#hosting">2. Hosting &amp; Deployment</a>
+  <a href="#database">3. Database</a>
+  <a href="#cache">4. Cache Layer</a>
+  <div class="toc-group">Services</div>
+  <a href="#ai">5. AI Services</a>
+  <a href="#payments">6. Payments (Stripe)</a>
+  <a href="#errors">7. Error Tracking</a>
+  <div class="toc-group">Mapping</div>
+  <a href="#globe">8. 3D Globe (Cesium)</a>
+  <a href="#google">9. Google Maps</a>
+  <a href="#tomtom">10. TomTom Traffic</a>
+  <div class="toc-group">Data</div>
+  <a href="#feeds">11. Data Feeds (90+)</a>
+  <a href="#storage">12. Client Storage</a>
+  <div class="toc-group">Security</div>
+  <a href="#auth">13. Auth &amp; Security</a>
+  <div class="toc-group">Operations</div>
+  <a href="#costs">14. Monthly Costs</a>
+  <a href="#envvars">15. Environment Variables</a>
+</nav>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="content">
+
+<!-- ────────────────────────────────────── 1 ── -->
+<div class="section open" id="system-arch">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">01</span>
+    <h2>System Architecture Overview</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Deep Seer has <strong>three main parts</strong> that work together:</p>
+      <ul>
+        <li><strong>The Website (Client)</strong> &mdash; What users see and interact with. It runs a 3D globe, shows data layers (flights, ships, earthquakes, etc.), and lets users build investigations. Built with React and rendered in the browser.</li>
+        <li><strong>The Server (Backend)</strong> &mdash; The brain. It fetches data from 90+ sources, manages user accounts, runs AI analysis, talks to the database, and pushes real-time updates to the browser over WebSockets.</li>
+        <li><strong>The Database (PostgreSQL)</strong> &mdash; Long-term memory. Stores users, investigations, evidence, audit logs, and cached data. Uses PostGIS for geographic queries.</li>
+      </ul>
+      <p>They communicate like this: the browser sends HTTP requests and WebSocket messages to the server. The server reads/writes the database and fetches from external APIs. Data flows back to the browser in real time.</p>
+      <div class="callout">
+        <strong>Scale:</strong> The codebase has 98 server adapters, 94 services, 106 panels, 70 stores, 106 globe layers, and 35 database models. It is a full-featured OSINT intelligence platform.
+      </div>
+    </div>
+    <div class="tech-content">
+      <h3>Monorepo Structure</h3>
+      <pre>kokoro/
+├── client/          # React 19 + Vite 6 + CesiumJS + Resium + Zustand
+│   └── src/
+│       ├── globe/   # GlobeViewer, 106 layers, effects, shaders
+│       ├── panels/  # 106 UI panels
+│       ├── stores/  # 70 Zustand stores
+│       └── hooks/   # WebSocket, auth, data hooks
+├── server/          # Node.js + Express + ws + TypeScript
+│   └── src/
+│       ├── adapters/   # 98 data source adapters
+│       ├── services/   # 94 services (ingestion, AI, scoring)
+│       ├── api/        # REST routes
+│       └── ws/         # WebSocket StreamManager
+├── shared/          # Shared TypeScript types (entities, WS messages, API)
+├── Dockerfile       # 2-stage Node 20 alpine build
+├── render.yaml      # Render deployment config
+└── package.json     # npm workspaces root</pre>
+      <h3>Build Pipeline</h3>
+      <pre># Development (Vite HMR + nodemon)
+npm run dev          # concurrently: client (5173) + server (3001)
+
+# Production build order
+npx tsc --build shared/tsconfig.json --force   # 1. Shared types → dist/
+npm run build -w client                         # 2. Vite bundle → client/dist/
+npm run build -w server                         # 3. tsc → server/dist/</pre>
+      <h3>Communication</h3>
+      <ul>
+        <li><strong>HTTP:</strong> Vite dev proxy forwards <code>/api/*</code> and <code>/ws</code> to <code>localhost:3001</code></li>
+        <li><strong>WebSocket:</strong> Persistent connection for real-time entity updates (flights, ships, alerts)</li>
+        <li><strong>Database:</strong> Prisma ORM over TCP to PostgreSQL (connection pooling via Prisma)</li>
+      </ul>
+      <h3>Key Technical Decisions</h3>
+      <ul>
+        <li>TypeScript throughout (strict mode, shared types package)</li>
+        <li>CesiumJS assets served from <code>node_modules/cesium/Build/</code> (not bundled)</li>
+        <li>SGP4 satellite propagation runs client-side (no server load)</li>
+        <li>Zustand for state management (no Redux boilerplate)</li>
+        <li>Static class methods always wrapped in arrow functions (context safety)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 2 ── -->
+<div class="section" id="hosting">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">02</span>
+    <h2>Hosting &amp; Deployment</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>The app runs on <strong>Render</strong>, a cloud hosting service (like a simpler AWS). It is deployed as a Docker container in the Oregon (US West) region.</p>
+      <p>When you push code to the <code>main</code> branch on GitHub, everything happens automatically:</p>
+      <ol>
+        <li>GitHub Actions runs type checking, tests, and end-to-end tests</li>
+        <li>If all tests pass, it builds a Docker image</li>
+        <li>Render detects the new image and deploys it (zero-downtime)</li>
+      </ol>
+      <dl class="info-grid">
+        <dt>GitHub Repo</dt><dd><a href="https://github.com/Moonligh7er/deep-seer" target="_blank">github.com/Moonligh7er/deep-seer</a></dd>
+        <dt>Render Dashboard</dt><dd><a href="https://dashboard.render.com" target="_blank">dashboard.render.com</a></dd>
+        <dt>Cost</dt><dd class="cost">Web service: $7-85/mo depending on plan</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Dockerfile (2-Stage Build)</h3>
+      <pre># Stage 1: Build
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./ shared/ client/ server/
+RUN npm ci && npm run build
+
+# Stage 2: Production
+FROM node:20-alpine
+COPY --from=builder /app/server/dist ./server/dist
+COPY --from=builder /app/client/dist ./client/dist
+COPY --from=builder /app/node_modules ./node_modules
+CMD ["node", "server/dist/index.js"]</pre>
+      <h3>CI/CD Pipeline (<code>.github/workflows/ci.yml</code>)</h3>
+      <pre>Jobs (in order):
+  1. typecheck   → npx tsc --noEmit on client + server
+  2. test        → Jest unit tests
+  3. e2e         → Playwright end-to-end tests
+  4. build       → npm run build (full production build)
+  5. docker      → Build + push Docker image
+  6. deploy      → Trigger Render deploy hook</pre>
+      <h3>Render Config (<code>render.yaml</code>)</h3>
+      <dl class="info-grid">
+        <dt>Service Type</dt><dd>Web Service (Docker)</dd>
+        <dt>Region</dt><dd>Oregon (us-west-2)</dd>
+        <dt>Plan</dt><dd>Starter ($7) → Standard ($25) → Pro ($85)</dd>
+        <dt>Health Check</dt><dd><code>GET /api/health</code></dd>
+        <dt>Auto-Deploy</dt><dd>On push to <code>main</code></dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 3 ── -->
+<div class="section" id="database">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">03</span>
+    <h2>Database (PostgreSQL + PostGIS)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>The database is <strong>PostgreSQL</strong> &mdash; an industry-standard relational database. It stores everything the app needs to remember: user accounts, investigations, evidence files, audit logs, and cached data.</p>
+      <p>It also has <strong>PostGIS</strong>, an extension that lets it understand geography (e.g., "find all evidence within 5 miles of this point").</p>
+      <p>The database has <strong>35 tables</strong> (called "models") organized into groups:</p>
+      <ul>
+        <li><strong>Users &amp; Auth:</strong> User accounts, API keys, refresh tokens, subscriptions</li>
+        <li><strong>Investigations:</strong> Cases, members, evidence, annotations, manual links, timeline events</li>
+        <li><strong>Evidence Integrity:</strong> Artifacts, provenance chains, SHA-256 hashes, timestamps</li>
+        <li><strong>AI:</strong> Chat history, AI outputs, narrative briefings, usage/overage tracking</li>
+        <li><strong>Analysis:</strong> Hypotheses, tests, evidence links, analyst actions, bias alerts</li>
+        <li><strong>Operational:</strong> Audit logs, reports, documents, watchlists, workflows, saved queries</li>
+      </ul>
+      <dl class="info-grid">
+        <dt>Hosted On</dt><dd><a href="https://dashboard.render.com" target="_blank">Render PostgreSQL</a> (managed)</dd>
+        <dt>Database Name</dt><dd><code>deepseer-db</code></dd>
+        <dt>Cost</dt><dd class="cost">$7/mo (256MB) &rarr; $100/mo (4GB)</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>ORM: Prisma</h3>
+      <pre>Schema: server/prisma/schema.prisma
+Migrations: npx prisma migrate deploy    # production
+             npx prisma migrate dev      # development
+Generate:    npx prisma generate          # regenerate client after schema changes
+Studio:      npx prisma studio            # visual DB browser at localhost:5555</pre>
+      <h3>All 35 Models</h3>
+      <table>
+        <tr><th>Category</th><th>Models</th></tr>
+        <tr><td>Users &amp; Auth</td><td><code>User</code>, <code>RefreshToken</code>, <code>ApiKey</code></td></tr>
+        <tr><td>Investigations</td><td><code>Investigation</code>, <code>InvestigationMember</code>, <code>InvestigationSnapshot</code></td></tr>
+        <tr><td>Evidence</td><td><code>Evidence</code>, <code>EvidenceArtifact</code>, <code>Source</code>, <code>Annotation</code>, <code>ManualLink</code></td></tr>
+        <tr><td>Timeline</td><td><code>TimelineEvent</code>, <code>IncidentRecord</code></td></tr>
+        <tr><td>Documents</td><td><code>Document</code>, <code>DocumentAnalysis</code>, <code>Report</code></td></tr>
+        <tr><td>Monitoring</td><td><code>WatchlistItem</code>, <code>EntityPosition</code>, <code>MetricSnapshot</code></td></tr>
+        <tr><td>Analysis</td><td><code>Hypothesis</code>, <code>HypothesisTest</code>, <code>HypothesisEvidence</code>, <code>SavedQuery</code></td></tr>
+        <tr><td>Workflows</td><td><code>Workflow</code>, <code>WorkflowRun</code></td></tr>
+        <tr><td>Provenance</td><td><code>ProvenanceNode</code>, <code>ProvenanceEdge</code></td></tr>
+        <tr><td>Bias &amp; Audit</td><td><code>AnalystAction</code>, <code>BiasAlert</code>, <code>BaseRate</code>, <code>AuditLog</code></td></tr>
+        <tr><td>AI</td><td><code>AIChatHistory</code>, <code>AIOutputStore</code>, <code>NarrativeBriefing</code>, <code>AIUsageOverage</code></td></tr>
+      </table>
+      <h3>Connection String</h3>
+      <pre>DATABASE_URL=postgresql://user:password@host:5432/deepseer?sslmode=require</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 4 ── -->
+<div class="section" id="cache">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">04</span>
+    <h2>Cache Layer (Redis / In-Memory)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p><strong>Redis</strong> is a super-fast in-memory data store used for three things:</p>
+      <ul>
+        <li><strong>Rate Limiting:</strong> Prevents users from hammering the API too fast</li>
+        <li><strong>Caching:</strong> Stores frequently-requested API responses so the server doesn't re-fetch them</li>
+        <li><strong>Session State:</strong> Tracks active WebSocket connections and their subscriptions</li>
+      </ul>
+      <p>If no Redis server is available (e.g., in local development), everything falls back to <strong>in-memory storage</strong> automatically. The app works fine without Redis &mdash; it just can't share cache across multiple server instances.</p>
+      <dl class="info-grid">
+        <dt>Providers</dt><dd><a href="https://upstash.com" target="_blank">Upstash</a> (serverless) or <a href="https://dashboard.render.com" target="_blank">Render Redis</a></dd>
+        <dt>Cost</dt><dd class="cost">$0 (in-memory fallback) &rarr; $10-20/mo (managed Redis)</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Configuration</h3>
+      <pre>REDIS_URL=redis://default:password@host:6379</pre>
+      <h3>Fallback Strategy</h3>
+      <p>The server checks for <code>REDIS_URL</code> at startup. If absent or connection fails, it uses a <code>Map&lt;string, {value, expiry}&gt;</code> in-memory cache with identical API. This means:</p>
+      <ul>
+        <li>Single-instance deployments work without Redis</li>
+        <li>Multi-instance (horizontal scaling) requires Redis for shared state</li>
+        <li>Rate limits reset on server restart when using in-memory</li>
+      </ul>
+      <h3>Cache TTLs</h3>
+      <table>
+        <tr><th>Data Type</th><th>TTL</th><th>Reason</th></tr>
+        <tr><td>Flight positions</td><td>10s</td><td>Real-time, stale quickly</td></tr>
+        <tr><td>Ship positions</td><td>30s</td><td>Ships move slower</td></tr>
+        <tr><td>Earthquake data</td><td>60s</td><td>USGS updates every minute</td></tr>
+        <tr><td>Air quality</td><td>5min</td><td>Sensor readings update slowly</td></tr>
+        <tr><td>EPA facilities</td><td>24h</td><td>Rarely changes</td></tr>
+        <tr><td>Rate limit counters</td><td>60s window</td><td>Sliding window rate limiter</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 5 ── -->
+<div class="section" id="ai">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">05</span>
+    <h2>AI Services (Anthropic Claude)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Deep Seer uses <strong>Anthropic's Claude AI</strong> for intelligent analysis. Think of it as an AI analyst that can read data, summarize situations, and answer questions about investigations.</p>
+      <p>It powers:</p>
+      <ul>
+        <li><strong>Chat analysis:</strong> Ask questions about your investigation data in natural language</li>
+        <li><strong>Narrative briefings:</strong> Auto-generated situation summaries</li>
+        <li><strong>Entity extraction:</strong> Pulling names, locations, organizations from documents</li>
+        <li><strong>Anomaly explanation:</strong> When the system detects something unusual, AI explains why</li>
+      </ul>
+      <p>Two AI models are used: <strong>Haiku</strong> (fast and cheap, for simple tasks) and <strong>Sonnet</strong> (smarter, for reasoning-heavy analysis). Users get daily token quotas based on their subscription tier.</p>
+      <dl class="info-grid">
+        <dt>Console</dt><dd><a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></dd>
+        <dt>Example Key</dt><dd class="key-example">sk-ant-api03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</dd>
+        <dt>Cost</dt><dd class="cost">$0.50-50/mo (usage-based)</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Model Routing</h3>
+      <table>
+        <tr><th>Model</th><th>Use Case</th><th>Cost (per 1M tokens)</th></tr>
+        <tr><td><code>claude-3-haiku</code></td><td>Entity extraction, classification, simple Q&amp;A</td><td>$0.25 input / $1.25 output</td></tr>
+        <tr><td><code>claude-3.5-sonnet</code></td><td>Investigation analysis, narrative briefings, reasoning</td><td>$3.00 input / $15.00 output</td></tr>
+      </table>
+      <h3>Token Quotas (Daily)</h3>
+      <table>
+        <tr><th>Tier</th><th>Daily Limit</th><th>Overage Rate</th></tr>
+        <tr><td>Free</td><td>50,000 tokens</td><td>Blocked (upgrade required)</td></tr>
+        <tr><td>Pro ($29/mo)</td><td>500,000 tokens</td><td>$10 per 1M tokens</td></tr>
+        <tr><td>Enterprise ($99/mo)</td><td>5,000,000 tokens</td><td>$5 per 1M tokens</td></tr>
+      </table>
+      <h3>Prompt Caching</h3>
+      <p>Prompt caching is enabled for system prompts and investigation context. Reduces cost by ~90% for repeated queries within the same investigation context. Cache TTL: 5 minutes.</p>
+      <h3>Fallback</h3>
+      <p>If <code>ANTHROPIC_API_KEY</code> is unset, AI features gracefully degrade. Optional <strong>Ollama</strong> local LLM (<code>OLLAMA_URL</code>) can handle basic entity extraction offline.</p>
+      <pre>ANTHROPIC_API_KEY=sk-ant-api03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+OLLAMA_URL=http://localhost:11434    # optional local fallback
+OLLAMA_MODEL=llama3                  # optional</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 6 ── -->
+<div class="section" id="payments">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">06</span>
+    <h2>Payment Processing (Stripe)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p><strong>Stripe</strong> handles all payments and subscriptions. Users can sign up free and upgrade to Pro or Enterprise for more features and higher AI quotas.</p>
+      <table>
+        <tr><th>Tier</th><th>Price</th><th>What You Get</th></tr>
+        <tr><td>Free</td><td>$0/mo</td><td>Basic layers, 50K AI tokens/day, 1 investigation</td></tr>
+        <tr><td>Pro</td><td>$29/mo</td><td>All layers, 500K AI tokens/day, unlimited investigations</td></tr>
+        <tr><td>Enterprise</td><td>$99/mo</td><td>Everything + Google 3D Tiles, TomTom traffic, 5M AI tokens/day, API access</td></tr>
+      </table>
+      <p>Stripe sends "webhook" notifications when payments succeed, fail, or subscriptions change. The server listens for these and updates user tiers automatically.</p>
+      <dl class="info-grid">
+        <dt>Dashboard</dt><dd><a href="https://dashboard.stripe.com" target="_blank">dashboard.stripe.com</a></dd>
+        <dt>Cost</dt><dd class="cost">2.9% + $0.30 per successful transaction</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Keys (Test Mode)</h3>
+      <pre>STRIPE_SECRET_KEY=sk_test_REDACTED
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_REDACTED
+STRIPE_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXX
+STRIPE_PRO_PRICE_ID=price_XXXXXXXXXXXXXXXXXXXXXXXX
+STRIPE_ENTERPRISE_PRICE_ID=price_XXXXXXXXXXXXXXXXXXXXXXXX
+VITE_STRIPE_PRO_PRICE_ID=price_XXXXXXXXXXXXXXXXXXXXXXXX
+VITE_STRIPE_ENTERPRISE_PRICE_ID=price_XXXXXXXXXXXXXXXXXXXXXXXX</pre>
+      <h3>Webhook Events Handled</h3>
+      <ul>
+        <li><code>checkout.session.completed</code> &mdash; New subscription created</li>
+        <li><code>customer.subscription.updated</code> &mdash; Plan change or renewal</li>
+        <li><code>customer.subscription.deleted</code> &mdash; Cancellation</li>
+        <li><code>invoice.payment_failed</code> &mdash; Payment failure (downgrade to free after grace period)</li>
+        <li><code>invoice.paid</code> &mdash; Overage invoice paid</li>
+      </ul>
+      <h3>Webhook Endpoint</h3>
+      <pre>POST /api/stripe/webhook
+# Verified with STRIPE_WEBHOOK_SECRET (signature check)
+# Test: stripe listen --forward-to localhost:3001/api/stripe/webhook</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 7 ── -->
+<div class="section" id="errors">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">07</span>
+    <h2>Error Tracking (Sentry)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p><strong>Sentry</strong> catches errors in both the website and server before users report them. When something crashes, Sentry captures a full trace (what happened, where, and why) and sends an alert.</p>
+      <p>It tracks both the browser (client-side JavaScript errors) and the server (Node.js exceptions, unhandled promise rejections). Optional &mdash; the app works without it, you just won't get automatic error alerts.</p>
+      <dl class="info-grid">
+        <dt>Dashboard</dt><dd><a href="https://sentry.io" target="_blank">sentry.io</a></dd>
+        <dt>Cost</dt><dd class="cost">Free (5K events/mo) &rarr; $29-500/mo</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Configuration</h3>
+      <pre># Server-side
+SENTRY_DSN=https://examplePublicKey@o123456.ingest.sentry.io/1234567
+
+# Client-side (Vite)
+VITE_SENTRY_DSN=https://examplePublicKey@o123456.ingest.sentry.io/7654321</pre>
+      <h3>Integration Points</h3>
+      <ul>
+        <li>Server: Express error handler middleware captures unhandled errors</li>
+        <li>Client: React Error Boundary wraps the app root</li>
+        <li>Both: Breadcrumbs track user actions leading up to errors</li>
+        <li>Source maps uploaded on build for readable stack traces</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 8 ── -->
+<div class="section" id="globe">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">08</span>
+    <h2>3D Globe (CesiumJS + Cesium Ion)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>The centerpiece of Deep Seer is a <strong>3D globe</strong> powered by CesiumJS &mdash; the same technology used by NASA, NOAA, and the US military for geospatial visualization.</p>
+      <p>The globe renders satellite imagery, terrain, 3D buildings, and all the data layers (flights, ships, cameras, environmental data). <strong>Cesium Ion</strong> is a companion cloud service that provides high-resolution terrain data and satellite imagery tiles.</p>
+      <p>The app also includes custom <strong>visual effects</strong> (shaders): CRT monitor, Night Vision, FLIR thermal, Matrix rain, Anime style, Surveillance mode, and Crisis mode.</p>
+      <dl class="info-grid">
+        <dt>Signup</dt><dd><a href="https://ion.cesium.com/signup" target="_blank">ion.cesium.com/signup</a></dd>
+        <dt>Example Token</dt><dd class="key-example">eyJhbGciOiJIUzI1NiJ9.XXXXXXXXXXXXXXXXXXXXXXXX</dd>
+        <dt>Cost</dt><dd class="cost">Free (5GB/mo) &rarr; $150-2000/mo</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Architecture</h3>
+      <ul>
+        <li>CesiumJS open-source library (MIT) bundled with Vite</li>
+        <li>Resium: React bindings for CesiumJS declarative rendering</li>
+        <li>Assets served from <code>node_modules/cesium/Build/</code> (not bundled into JS)</li>
+        <li>SGP4 satellite propagation runs <strong>client-side</strong> (TLE data fetched from server)</li>
+        <li>Custom GLSL shaders in <code>client/src/shaders/</code></li>
+      </ul>
+      <h3>Layers (106 total)</h3>
+      <p>Located in <code>client/src/globe/layers/</code>. Each layer is a React component that renders entities on the globe using Resium primitives (Entity, PointPrimitive, Polyline, etc.).</p>
+      <h3>Token</h3>
+      <pre>VITE_CESIUM_ION_TOKEN=eyJhbGciOiJIUzI1NiJ9.XXXXXXXXXXXXXXXXXXXXXXXX
+# Set in client/.env — loaded at build time by Vite</pre>
+      <div class="callout warn">
+        <strong>Important:</strong> Do NOT declare <code>czm_frameNumber</code> as a uniform in custom shaders &mdash; CesiumJS provides it as a built-in.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 9 ── -->
+<div class="section" id="google">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">09</span>
+    <h2>Google Maps Platform</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Google Maps provides <strong>3D Photorealistic Tiles</strong> &mdash; the same high-quality 3D city models you see in Google Earth. These are only available to <strong>Enterprise tier</strong> subscribers because they are expensive.</p>
+      <p>Google gives $200/month in free credits, which covers moderate usage. After that, it charges per session.</p>
+      <dl class="info-grid">
+        <dt>Console</dt><dd><a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></dd>
+        <dt>Example Key</dt><dd class="key-example">AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXX</dd>
+        <dt>Cost</dt><dd class="cost">$200 free credit, then $7/1K map sessions</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>APIs Enabled</h3>
+      <ul>
+        <li>Map Tiles API (3D Photorealistic Tiles)</li>
+        <li>Optional: Street View Static API (for CCTV panel context)</li>
+      </ul>
+      <h3>Key Rotation</h3>
+      <p>Auto key rotation is supported via Google Cloud service account. Set <code>GOOGLE_CLOUD_PROJECT_ID</code> and <code>GOOGLE_SERVICE_ACCOUNT_KEY</code> for automatic rotation.</p>
+      <pre>VITE_GOOGLE_MAPS_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# Optional service account for key rotation:
+GOOGLE_CLOUD_PROJECT_ID=my-project-123
+GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"..."}</pre>
+      <h3>Tier Gating</h3>
+      <p>The client checks <code>user.tier === 'enterprise'</code> before loading Google 3D tiles. Free/Pro users see standard CesiumJS terrain + imagery instead.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 10 ── -->
+<div class="section" id="tomtom">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">10</span>
+    <h2>TomTom (Traffic)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p><strong>TomTom</strong> provides real-time traffic flow data as a map overlay. Roads are color-coded by congestion level (green = free flow, red = heavy traffic).</p>
+      <p>Like Google Maps, this is gated to <strong>Enterprise tier</strong> subscribers. The free tier allows 2,500 requests/day which is enough for development.</p>
+      <dl class="info-grid">
+        <dt>Signup</dt><dd><a href="https://developer.tomtom.com" target="_blank">developer.tomtom.com</a></dd>
+        <dt>Example Key</dt><dd class="key-example">aBcDeFgHiJkLmNoPqRsTuVwXyZ123456</dd>
+        <dt>Cost</dt><dd class="cost">Free (2,500 req/day) &rarr; $500+/mo at scale</dd>
+      </dl>
+    </div>
+    <div class="tech-content">
+      <h3>Integration</h3>
+      <pre>VITE_TOMTOM_API_KEY=aBcDeFgHiJkLmNoPqRsTuVwXyZ123456</pre>
+      <p>Traffic tiles loaded as a CesiumJS <code>UrlTemplateImageryProvider</code>:</p>
+      <pre>https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=KEY&thickness=10</pre>
+      <h3>Rate Limits</h3>
+      <table>
+        <tr><th>Tier</th><th>Daily Limit</th><th>Cost</th></tr>
+        <tr><td>Free</td><td>2,500 requests</td><td>$0</td></tr>
+        <tr><td>Pay-as-you-go</td><td>Unlimited</td><td>$0.50/1K requests</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 11 ── -->
+<div class="section" id="feeds">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">11</span>
+    <h2>Real-Time Data Feeds (90+ Sources)</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Deep Seer pulls data from <strong>90+ external sources</strong> to create a comprehensive intelligence picture. Most are free government or open-data APIs. The server fetches, normalizes, and pushes data to the browser in real time.</p>
+      <p>Data sources are organized by category below. Each one has a dedicated "adapter" on the server that handles fetching, parsing, and error recovery.</p>
+    </div>
+    <div class="tech-content">
+      <p>All adapters live in <code>server/src/adapters/</code>. Each extends a base adapter pattern with <code>fetch()</code>, rate limiting, retry logic, and TTL caching. The <code>IngestionScheduler</code> service orchestrates polling intervals.</p>
+    </div>
+
+    <!-- Tracking -->
+    <h3>Tracking &amp; Movement</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>OpenSky Network</td><td>Global flight tracking (ADS-B)</td><td>Optional (10x rate limit)</td><td class="free">Yes &mdash; unauthenticated: 100 req/day</td><td>Free</td><td><a href="https://opensky-network.org/index.php/-/register" target="_blank">opensky-network.org</a></td></tr>
+      <tr><td>adsb.lol</td><td>Military aircraft tracking</td><td>None (ODbL license)</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://adsb.lol" target="_blank">adsb.lol</a></td></tr>
+      <tr><td>AISStream.io</td><td>Maritime vessel tracking (WebSocket)</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://aisstream.io" target="_blank">aisstream.io</a></td></tr>
+      <tr><td>CelesTrak</td><td>Satellite TLE orbital data (SGP4)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://celestrak.org" target="_blank">celestrak.org</a></td></tr>
+      <tr><td>NOTAM</td><td>Notices to Air Missions</td><td>None</td><td class="free">Yes</td><td>Free</td><td>FAA API</td></tr>
+      <tr><td>NTSB</td><td>Aviation accident data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>NTSB API</td></tr>
+    </table>
+
+    <!-- Environmental -->
+    <h3>Environmental Monitoring</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>OpenAQ</td><td>Global air quality (PM2.5, O3, NO2, SO2)</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://explore.openaq.org/register" target="_blank">openaq.org</a></td></tr>
+      <tr><td>AirNow</td><td>US AQI readings (EPA official)</td><td>API Key</td><td class="free">500 req/hr</td><td>Free</td><td><a href="https://docs.airnowapi.org/account/request/" target="_blank">airnowapi.org</a></td></tr>
+      <tr><td>PurpleAir</td><td>Crowdsourced PM2.5 sensors</td><td>API Key</td><td class="free">1M points</td><td>Free</td><td><a href="https://develop.purpleair.com" target="_blank">purpleair.com</a></td></tr>
+      <tr><td>USGS Earthquakes</td><td>Global earthquake events (M2.5+)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://earthquake.usgs.gov/fdsnws/event/1/" target="_blank">usgs.gov</a></td></tr>
+      <tr><td>NASA FIRMS</td><td>Wildfire detection (satellite hotspots)</td><td>Optional API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://firms.modaps.eosdis.nasa.gov/api/area/" target="_blank">nasa.gov</a></td></tr>
+      <tr><td>NOAA Alerts</td><td>Weather warnings &amp; severe events</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://api.weather.gov" target="_blank">weather.gov</a></td></tr>
+      <tr><td>GDACS</td><td>Global disaster alerts</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.gdacs.org/gdacsapi/" target="_blank">gdacs.org</a></td></tr>
+      <tr><td>Open-Meteo</td><td>Weather forecasts &amp; wind data</td><td>None</td><td class="free">10K req/day</td><td>Free</td><td><a href="https://open-meteo.com" target="_blank">open-meteo.com</a></td></tr>
+      <tr><td>Global Forest Watch</td><td>Deforestation alerts</td><td>Optional API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.globalforestwatch.org/help/developers/" target="_blank">globalforestwatch.org</a></td></tr>
+      <tr><td>Iowa Mesonet NEXRAD</td><td>Weather radar tiles (WMS)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://mesonet.agron.iastate.edu" target="_blank">iastate.edu</a></td></tr>
+      <tr><td>USGS NWIS</td><td>Water level &amp; flow data</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://waterservices.usgs.gov" target="_blank">usgs.gov</a></td></tr>
+      <tr><td>Climate Anomaly</td><td>Temperature/precipitation departures</td><td>None</td><td class="free">Yes</td><td>Free</td><td>NOAA</td></tr>
+    </table>
+
+    <!-- Equity / Health -->
+    <h3>Equity, Health &amp; Environmental Justice</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>EPA TRI</td><td>Toxic Release Inventory (~30K facilities)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.epa.gov/enviro/tri-search" target="_blank">epa.gov</a></td></tr>
+      <tr><td>EPA ECHO</td><td>Enforcement &amp; compliance history</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://echo.epa.gov/tools/web-services" target="_blank">echo.epa.gov</a></td></tr>
+      <tr><td>EJScreen</td><td>Environmental justice screening</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://ejscreen.epa.gov/mapper/" target="_blank">ejscreen.epa.gov</a></td></tr>
+      <tr><td>CDC WONDER</td><td>Mortality &amp; health outcomes data</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://wonder.cdc.gov" target="_blank">wonder.cdc.gov</a></td></tr>
+      <tr><td>SVI (Social Vulnerability)</td><td>CDC social vulnerability index</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.atsdr.cdc.gov/placeandhealth/svi/" target="_blank">cdc.gov</a></td></tr>
+      <tr><td>Water Quality Portal</td><td>USGS/EPA water quality data</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.waterqualitydata.us" target="_blank">waterqualitydata.us</a></td></tr>
+      <tr><td>EPA WATERS</td><td>Stream network &amp; downstream tracing</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.epa.gov/waterdata/waters-geospatial-services" target="_blank">epa.gov</a></td></tr>
+      <tr><td>Superfund Sites</td><td>EPA Superfund hazardous waste sites</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.epa.gov/superfund" target="_blank">epa.gov</a></td></tr>
+      <tr><td>Lead Exposure</td><td>Lead paint/pipe risk scoring</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Census + EPA</td></tr>
+      <tr><td>Food Deserts</td><td>USDA food access data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>USDA ERS</td></tr>
+      <tr><td>Hospital Deserts</td><td>Healthcare access gaps</td><td>None</td><td class="free">Yes</td><td>Free</td><td>CMS/HRSA</td></tr>
+      <tr><td>Transit Deserts</td><td>Public transit coverage gaps</td><td>None</td><td class="free">Yes</td><td>Free</td><td>NTD/GTFS</td></tr>
+      <tr><td>Maternal Mortality</td><td>Maternal death rates by county</td><td>None</td><td class="free">Yes</td><td>Free</td><td>CDC</td></tr>
+      <tr><td>Opioid Overdose</td><td>Overdose death rates by county</td><td>None</td><td class="free">Yes</td><td>Free</td><td>CDC WONDER</td></tr>
+      <tr><td>Eviction Rates</td><td>Eviction filing data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Eviction Lab</td></tr>
+      <tr><td>Incarceration</td><td>Prison/jail populations</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Prison Policy</td></tr>
+      <tr><td>Broadband Access</td><td>Internet connectivity gaps</td><td>None</td><td class="free">Yes</td><td>Free</td><td>FCC</td></tr>
+      <tr><td>Education</td><td>School performance/funding data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>NCES</td></tr>
+      <tr><td>Gini Coefficient</td><td>Income inequality by county</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Census ACS</td></tr>
+      <tr><td>Minimum Wage</td><td>State/local minimum wage data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>DOL</td></tr>
+      <tr><td>Wage Theft</td><td>Wage violation complaint data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>DOL WHD</td></tr>
+      <tr><td>News Deserts</td><td>Areas with no local journalism</td><td>None</td><td class="free">Yes</td><td>Free</td><td>UNC research</td></tr>
+      <tr><td>Polling Deserts</td><td>Voting access gaps</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Public data</td></tr>
+      <tr><td>Police Use of Force</td><td>Police violence data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Mapping Police Violence</td></tr>
+    </table>
+
+    <!-- Political / Financial -->
+    <h3>Political &amp; Financial Intelligence</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>FEC</td><td>Campaign finance data</td><td>API Key (DEMO_KEY available)</td><td class="free">1K req/hr</td><td>Free</td><td><a href="https://api.open.fec.gov/developers/" target="_blank">fec.gov</a></td></tr>
+      <tr><td>Senate LDA</td><td>Lobbying disclosures</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://lda.senate.gov/api/register/" target="_blank">lda.senate.gov</a></td></tr>
+      <tr><td>USASpending</td><td>Federal contracts &amp; grants</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://api.usaspending.gov" target="_blank">usaspending.gov</a></td></tr>
+      <tr><td>Congress Trades</td><td>Congressional stock transactions</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Public filings</td></tr>
+      <tr><td>SEC EDGAR</td><td>SEC filings, Exhibit 21 subsidiaries</td><td>None (User-Agent required)</td><td class="free">10 req/sec</td><td>Free</td><td><a href="https://www.sec.gov/edgar/searchedgar/efulltext.htm" target="_blank">sec.gov</a></td></tr>
+      <tr><td>OpenCorporates</td><td>Global corporate registry data</td><td>API Key</td><td class="free">500 req/mo</td><td>Free / $$$</td><td><a href="https://opencorporates.com/api_accounts/new" target="_blank">opencorporates.com</a></td></tr>
+      <tr><td>OpenSanctions</td><td>Sanctions &amp; PEP screening</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.opensanctions.org" target="_blank">opensanctions.org</a></td></tr>
+      <tr><td>ICIJ Offshore</td><td>Offshore company leaks database</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://offshoreleaks.icij.org" target="_blank">offshoreleaks.icij.org</a></td></tr>
+      <tr><td>FollowTheMoney</td><td>State political finance</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.followthemoney.org" target="_blank">followthemoney.org</a></td></tr>
+      <tr><td>Federal Flow</td><td>Federal spending flow analysis</td><td>None</td><td class="free">Yes</td><td>Free</td><td>USASpending</td></tr>
+      <tr><td>ProPublica Nonprofit</td><td>Nonprofit financial data (990s)</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://projects.propublica.org/nonprofits/api" target="_blank">propublica.org</a></td></tr>
+      <tr><td>Asset Forfeiture</td><td>Civil asset forfeiture data</td><td>None</td><td class="free">Yes</td><td>Free</td><td>DOJ</td></tr>
+      <tr><td>SIPRI Arms</td><td>Arms trade &amp; military spending</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.sipri.org" target="_blank">sipri.org</a></td></tr>
+      <tr><td>World Bank</td><td>Development indicators</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://api.worldbank.org" target="_blank">worldbank.org</a></td></tr>
+    </table>
+
+    <!-- Social / Media -->
+    <h3>Social &amp; Media Intelligence</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>GDELT</td><td>Global news events (250M+ events)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://api.gdeltproject.org" target="_blank">gdeltproject.org</a></td></tr>
+      <tr><td>Reddit</td><td>Social media monitoring</td><td>OAuth2 (client ID/secret)</td><td class="free">60 req/min</td><td>Free</td><td><a href="https://www.reddit.com/prefs/apps" target="_blank">reddit.com</a></td></tr>
+      <tr><td>Bluesky</td><td>Decentralized social monitoring</td><td>AT Protocol</td><td class="free">Yes</td><td>Free</td><td><a href="https://bsky.app" target="_blank">bsky.app</a></td></tr>
+      <tr><td>Mastodon</td><td>Fediverse social monitoring</td><td>None (public API)</td><td class="free">Yes</td><td>Free</td><td><a href="https://joinmastodon.org" target="_blank">joinmastodon.org</a></td></tr>
+      <tr><td>RSS Feeds</td><td>News aggregation (configurable)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td>N/A</td></tr>
+      <tr><td>Federal Register</td><td>US regulatory filings</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.federalregister.gov/developers" target="_blank">federalregister.gov</a></td></tr>
+    </table>
+
+    <!-- Legal / Regulatory -->
+    <h3>Legal &amp; Regulatory</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>Regulations.gov</td><td>Federal rulemaking comments/dockets</td><td>API Key</td><td class="free">1K req/hr</td><td>Free</td><td><a href="https://regulationsgov.github.io/developers/" target="_blank">regulations.gov</a></td></tr>
+      <tr><td>CourtListener</td><td>Court case data &amp; opinions</td><td>API Key</td><td class="free">5K req/day</td><td>Free</td><td><a href="https://www.courtlistener.com/api/" target="_blank">courtlistener.com</a></td></tr>
+      <tr><td>MuckRock</td><td>FOIA request tracking</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.muckrock.com/api/" target="_blank">muckrock.com</a></td></tr>
+      <tr><td>OSHA</td><td>Workplace safety inspections</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://enforcedata.dol.gov/views/data_summary.php" target="_blank">dol.gov</a></td></tr>
+      <tr><td>OSHA Violations</td><td>Detailed violation records</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td>DOL</td></tr>
+      <tr><td>FDA Recalls</td><td>Product safety recalls</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://open.fda.gov" target="_blank">open.fda.gov</a></td></tr>
+      <tr><td>FBI Crime</td><td>Uniform crime reporting data</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://api.data.gov/signup/" target="_blank">data.gov</a></td></tr>
+      <tr><td>NRC Facilities</td><td>Nuclear facility data</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.nrc.gov" target="_blank">nrc.gov</a></td></tr>
+      <tr><td>ICE Detention</td><td>Immigration detention facilities</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Public data</td></tr>
+      <tr><td>CBP Border</td><td>Border crossing wait times</td><td>None</td><td class="free">Yes</td><td>Free</td><td>CBP</td></tr>
+      <tr><td>EPA Enforcement</td><td>Enforcement action records</td><td>None</td><td class="free">Yes</td><td>Free</td><td>EPA ECHO</td></tr>
+    </table>
+
+    <!-- Conflict / Security -->
+    <h3>Conflict &amp; Security</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>ACLED</td><td>Armed conflict &amp; protest events</td><td>API Key + Email</td><td class="free">Yes (academic/media)</td><td>Free / $$$</td><td><a href="https://acleddata.com/register/" target="_blank">acleddata.com</a></td></tr>
+      <tr><td>UCDP</td><td>Uppsala conflict data (alternative to ACLED)</td><td>Optional token</td><td class="free">Yes</td><td>Free</td><td><a href="https://ucdp.uu.se/apidocs/" target="_blank">ucdp.uu.se</a></td></tr>
+      <tr><td>CISA KEV</td><td>Known Exploited Vulnerabilities</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank">cisa.gov</a></td></tr>
+      <tr><td>IODA</td><td>Internet outage detection</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://ioda.inetintel.cc.gatech.edu" target="_blank">ioda.gatech.edu</a></td></tr>
+      <tr><td>GPS Jamming</td><td>GPS interference detection</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://gpsjam.org" target="_blank">gpsjam.org</a></td></tr>
+      <tr><td>Fragile States</td><td>State fragility index</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Fund for Peace</td></tr>
+      <tr><td>Sanctions</td><td>OFAC/EU sanctions lists</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Treasury</td></tr>
+    </table>
+
+    <!-- Infrastructure -->
+    <h3>Infrastructure &amp; Critical Systems</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>OSM / Overpass</td><td>OpenStreetMap building &amp; infrastructure queries</td><td>None</td><td class="free">Unlimited (be polite)</td><td>Free</td><td><a href="https://overpass-api.de" target="_blank">overpass-api.de</a></td></tr>
+      <tr><td>Submarine Cables</td><td>TeleGeography undersea cable routes</td><td>None</td><td class="free">Yes</td><td>Free</td><td><a href="https://www.submarinecablemap.com" target="_blank">submarinecablemap.com</a></td></tr>
+      <tr><td>Data Centers</td><td>Major data center locations</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Public data</td></tr>
+      <tr><td>Military Bases</td><td>Global military installations</td><td>None</td><td class="free">Yes</td><td>Free</td><td>Public data</td></tr>
+      <tr><td>Pipelines</td><td>Oil/gas pipeline routes</td><td>None</td><td class="free">Yes</td><td>Free</td><td>EIA / public data</td></tr>
+      <tr><td>Critical Minerals</td><td>Rare earth &amp; strategic mineral sites</td><td>None</td><td class="free">Yes</td><td>Free</td><td>USGS MRDS</td></tr>
+      <tr><td>Protected Sites</td><td>Nature reserves &amp; protected areas</td><td>None</td><td class="free">Yes</td><td>Free</td><td>WDPA</td></tr>
+      <tr><td>Blast Radius</td><td>Explosive blast modeling</td><td>None</td><td class="free">N/A (local calc)</td><td>Free</td><td>N/A</td></tr>
+      <tr><td>Bunkers &amp; Shelters</td><td>Emergency shelter locations</td><td>None</td><td class="free">Yes</td><td>Free</td><td>FEMA / public data</td></tr>
+    </table>
+
+    <!-- CCTV -->
+    <h3>CCTV &amp; Traffic Cameras</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>DOT Cameras (13+ sources)</td><td>9,500+ traffic cameras (DC, NYC, Caltrans, Austin, Michigan, etc.)</td><td>Various (mostly free API keys)</td><td class="free">Yes</td><td>Free</td><td>See individual 511 portals</td></tr>
+      <tr><td>511NY, 511LA, 511WI, AZ511, ID511, UT511, CT511, PA511, GA511</td><td>State DOT camera feeds</td><td>API Key (free)</td><td class="free">Yes</td><td>Free</td><td>Each state's /developers page</td></tr>
+      <tr><td>WSDOT</td><td>Washington state cameras</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://wsdot.wa.gov/traffic/api/" target="_blank">wsdot.wa.gov</a></td></tr>
+      <tr><td>ODOT TripCheck</td><td>Oregon state cameras</td><td>API Key</td><td class="free">Yes</td><td>Free</td><td><a href="https://apiportal.odot.state.or.us/" target="_blank">odot.state.or.us</a></td></tr>
+      <tr><td>TrafficLand</td><td>25,000+ cameras (200+ cities)</td><td>API Key</td><td>No</td><td>Paid</td><td><a href="https://www.trafficland.com/api.html" target="_blank">trafficland.com</a></td></tr>
+      <tr><td>INRIX</td><td>Commercial camera API</td><td>API Key</td><td>No</td><td>Enterprise</td><td><a href="https://docs.inrix.com" target="_blank">inrix.com</a></td></tr>
+    </table>
+
+    <!-- Imagery -->
+    <h3>Satellite Imagery</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>Copernicus Sentinel-2</td><td>10m resolution multispectral imagery</td><td>OAuth2 (client ID/secret)</td><td class="free">Yes (demo WMS)</td><td>Free</td><td><a href="https://dataspace.copernicus.eu/" target="_blank">dataspace.copernicus.eu</a></td></tr>
+      <tr><td>NASA GIBS</td><td>Global imagery (MODIS, VIIRS, etc.)</td><td>None</td><td class="free">Unlimited</td><td>Free</td><td><a href="https://earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs" target="_blank">earthdata.nasa.gov</a></td></tr>
+    </table>
+
+    <!-- Hardware -->
+    <h3>Hardware Integrations</h3>
+    <table>
+      <tr><th>Source</th><th>What It Does</th><th>Auth</th><th>Free Tier</th><th>Cost</th><th>Signup</th></tr>
+      <tr><td>SoundThinking (ShotSpotter)</td><td>Acoustic gunshot detection</td><td>API Key</td><td>No</td><td>Enterprise</td><td><a href="https://www.soundthinking.com" target="_blank">soundthinking.com</a></td></tr>
+      <tr><td>Shotpoint Acoustic</td><td>Gunshot triangulation</td><td>API Key</td><td>No</td><td>Enterprise</td><td>Contact vendor</td></tr>
+      <tr><td>SDR (Software Defined Radio)</td><td>RF signal analysis (RTL-SDR, HackRF, Airspy)</td><td>Local device URL</td><td class="free">N/A (own hardware)</td><td>$25-300 hardware</td><td>N/A</td></tr>
+      <tr><td>DJI FlightHub</td><td>Drone fleet management</td><td>API Key</td><td>No</td><td>Enterprise</td><td><a href="https://www.dji.com/flighthub-2" target="_blank">dji.com</a></td></tr>
+      <tr><td>Skydio</td><td>Autonomous drone fleet</td><td>API Key</td><td>No</td><td>Enterprise</td><td><a href="https://www.skydio.com" target="_blank">skydio.com</a></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 12 ── -->
+<div class="section" id="storage">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">12</span>
+    <h2>Client-Side Storage</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>The browser stores some data locally so the app feels fast and works partially offline:</p>
+      <ul>
+        <li><strong>localStorage:</strong> User preferences (theme, active layers, panel positions, last-used investigation)</li>
+        <li><strong>IndexedDB:</strong> Larger datasets cached for offline use (entity histories, downloaded evidence)</li>
+        <li><strong>Service Worker:</strong> Caches API responses and map tiles so previously viewed areas load instantly</li>
+      </ul>
+      <p>All local data is encrypted at rest using the user's session key. Clearing browser data resets preferences but doesn't affect server-side data.</p>
+    </div>
+    <div class="tech-content">
+      <h3>localStorage Keys</h3>
+      <table>
+        <tr><th>Key</th><th>What It Stores</th></tr>
+        <tr><td><code>ds-auth-token</code></td><td>JWT access token (15-min expiry)</td></tr>
+        <tr><td><code>ds-refresh-token</code></td><td>Refresh token (7-day expiry, rotated on use)</td></tr>
+        <tr><td><code>ds-active-layers</code></td><td>Array of enabled layer IDs</td></tr>
+        <tr><td><code>ds-panel-layout</code></td><td>Panel positions, sizes, dock state</td></tr>
+        <tr><td><code>ds-camera-position</code></td><td>Last globe camera position (lat/lon/alt/heading/pitch)</td></tr>
+        <tr><td><code>ds-theme</code></td><td>Active shader/theme (default, crt, nightvision, flir, etc.)</td></tr>
+        <tr><td><code>ds-investigation-id</code></td><td>Last active investigation UUID</td></tr>
+        <tr><td><code>ds-bookmarks</code></td><td>Saved locations and entity bookmarks</td></tr>
+        <tr><td><code>ds-alert-prefs</code></td><td>Alert notification preferences</td></tr>
+      </table>
+      <h3>Service Worker Caching Strategy</h3>
+      <table>
+        <tr><th>Resource Type</th><th>Strategy</th><th>TTL</th></tr>
+        <tr><td>API responses (<code>/api/*</code>)</td><td>NetworkFirst</td><td>Serve network, fall back to cache</td></tr>
+        <tr><td>Map tiles (Cesium/TomTom)</td><td>CacheFirst</td><td>Cache for 24h, then revalidate</td></tr>
+        <tr><td>Static assets (JS/CSS/images)</td><td>CacheFirst</td><td>Versioned by build hash</td></tr>
+        <tr><td>Fonts (Google Fonts)</td><td>CacheFirst</td><td>Cache for 1 year</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 13 ── -->
+<div class="section" id="auth">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">13</span>
+    <h2>Authentication &amp; Security</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Deep Seer uses industry-standard security practices:</p>
+      <ul>
+        <li><strong>Passwords:</strong> Never stored in plain text. Hashed with bcrypt (12 rounds) so even if the database leaks, passwords are safe.</li>
+        <li><strong>Login tokens:</strong> Short-lived (15 minutes), automatically refreshed. If a token is stolen, it expires quickly.</li>
+        <li><strong>Evidence integrity:</strong> Every piece of evidence gets a SHA-256 hash and HMAC signature. Can't be tampered with without detection. Optionally timestamped via OpenTimestamps for legal admissibility.</li>
+        <li><strong>Rate limiting:</strong> Prevents brute force attacks and API abuse.</li>
+        <li><strong>CORS &amp; CSP:</strong> Browser security headers prevent cross-site attacks.</li>
+      </ul>
+    </div>
+    <div class="tech-content">
+      <h3>JWT Authentication</h3>
+      <table>
+        <tr><th>Token Type</th><th>Lifetime</th><th>Storage</th><th>Notes</th></tr>
+        <tr><td>Access Token</td><td>15 minutes</td><td>localStorage</td><td>Sent as <code>Authorization: Bearer &lt;token&gt;</code></td></tr>
+        <tr><td>Refresh Token</td><td>7 days</td><td>localStorage + DB</td><td>Rotated on each use (old token invalidated)</td></tr>
+      </table>
+      <h3>Password Security</h3>
+      <pre>bcrypt hash with 12 salt rounds
+Minimum 8 characters, complexity requirements enforced client + server</pre>
+      <h3>Evidence Integrity Pipeline</h3>
+      <ol>
+        <li><strong>SHA-256 hash</strong> of artifact content at capture time</li>
+        <li><strong>HMAC signature</strong> using <code>EVIDENCE_SIGNING_KEY</code> for chain-of-custody</li>
+        <li><strong>RFC 3161 timestamps</strong> (optional) via trusted TSA</li>
+        <li><strong>OpenTimestamps</strong> (optional) for blockchain-anchored proof</li>
+        <li><strong>Provenance graph</strong> (ProvenanceNode + ProvenanceEdge) tracks all transformations</li>
+      </ol>
+      <h3>Security Headers</h3>
+      <pre>Content-Security-Policy: default-src 'self'; script-src 'self' 'nonce-{random}'; ...
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-XSS-Protection: 0  (CSP handles this now)</pre>
+      <h3>Rate Limiting</h3>
+      <table>
+        <tr><th>Endpoint</th><th>Limit</th><th>Window</th></tr>
+        <tr><td><code>POST /api/auth/login</code></td><td>5 attempts</td><td>15 minutes</td></tr>
+        <tr><td><code>POST /api/auth/register</code></td><td>3 attempts</td><td>1 hour</td></tr>
+        <tr><td><code>GET /api/*</code> (authenticated)</td><td>100 requests</td><td>1 minute</td></tr>
+        <tr><td><code>POST /api/ai/*</code></td><td>20 requests</td><td>1 minute</td></tr>
+        <tr><td>WebSocket messages</td><td>60 messages</td><td>1 minute</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 14 ── -->
+<div class="section" id="costs">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">14</span>
+    <h2>Monthly Cost Breakdown</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Here is what it costs to run Deep Seer at different scales. "Dev" is just you testing locally. "Production" is a small team with real users. "Enterprise" is full-scale with all premium features enabled.</p>
+    </div>
+    <div class="tech-content">
+      <p>All prices in USD. Estimates based on typical usage patterns as of 2026. Actual costs vary with traffic.</p>
+    </div>
+    <table>
+      <tr>
+        <th>Category</th>
+        <th style="text-align:center">Minimum (Dev)</th>
+        <th style="text-align:center">Production</th>
+        <th style="text-align:center">Enterprise</th>
+      </tr>
+      <tr><td>Render Web Service</td><td style="text-align:center" class="cost">$7</td><td style="text-align:center" class="cost">$25</td><td style="text-align:center" class="cost">$85</td></tr>
+      <tr><td>Render PostgreSQL</td><td style="text-align:center" class="cost">$7</td><td style="text-align:center" class="cost">$30</td><td style="text-align:center" class="cost">$100</td></tr>
+      <tr><td>Redis Cache</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$10</td><td style="text-align:center" class="cost">$20</td></tr>
+      <tr><td>Anthropic Claude AI</td><td style="text-align:center" class="cost">$0.50</td><td style="text-align:center" class="cost">$15</td><td style="text-align:center" class="cost">$50</td></tr>
+      <tr><td>Google Maps</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$200</td></tr>
+      <tr><td>TomTom Traffic</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$100</td></tr>
+      <tr><td>Cesium Ion</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$150</td></tr>
+      <tr><td>Sentry Error Tracking</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">$29</td><td style="text-align:center" class="cost">$89</td></tr>
+      <tr><td>Stripe Fees (2.9%+$0.30)</td><td style="text-align:center" class="cost">$0</td><td style="text-align:center" class="cost">~$50</td><td style="text-align:center" class="cost">~$200</td></tr>
+      <tr><td>Domain + SSL</td><td style="text-align:center" class="cost">$12/yr</td><td style="text-align:center" class="cost">$12/yr</td><td style="text-align:center" class="cost">$12/yr</td></tr>
+      <tr style="font-weight:700; font-size:1.05em">
+        <td>TOTAL (monthly)</td>
+        <td style="text-align:center; color:#22d3ee">~$15/mo</td>
+        <td style="text-align:center; color:#22d3ee">~$160/mo</td>
+        <td style="text-align:center; color:#22d3ee">~$995/mo</td>
+      </tr>
+      <tr style="color:#888">
+        <td>Annual</td>
+        <td style="text-align:center">$180</td>
+        <td style="text-align:center">$1,920</td>
+        <td style="text-align:center">$11,940</td>
+      </tr>
+    </table>
+    <div class="callout success">
+      <strong>Revenue offset:</strong> With just 35 Pro subscribers ($29/mo = $1,015/mo) or 10 Enterprise subscribers ($99/mo = $990/mo), the platform is self-sustaining at Production tier.
+    </div>
+  </div>
+</div>
+
+<!-- ────────────────────────────────────── 15 ── -->
+<div class="section" id="envvars">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="num">15</span>
+    <h2>Environment Variable Reference</h2>
+    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+  </div>
+  <div class="section-body">
+    <div class="plain-content">
+      <p>Environment variables are settings that tell the app how to connect to external services. They are stored in <code>.env</code> files (one for the client, one for the server) and <strong>never</strong> committed to Git.</p>
+      <p>Below is every environment variable the app uses, what it does, and where to get the value.</p>
+    </div>
+    <div class="tech-content">
+      <p>Client vars go in <code>client/.env</code> (must be prefixed <code>VITE_</code>). Server vars go in <code>server/.env</code>. See <code>.env.example</code> at project root.</p>
+    </div>
+
+    <h3>Client-Side (<code>client/.env</code>)</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>VITE_CESIUM_ION_TOKEN</code></td><td><span class="badge badge-required">Required</span></td><td class="key-example">eyJhbGciOi...</td><td>3D globe terrain &amp; imagery</td><td><a href="https://ion.cesium.com/signup" target="_blank">ion.cesium.com</a></td></tr>
+      <tr><td><code>VITE_GOOGLE_MAPS_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">AIzaSyXXXXX...</td><td>Google 3D tiles (Enterprise)</td><td><a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></td></tr>
+      <tr><td><code>VITE_TOMTOM_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">aBcDeFgHiJk...</td><td>Traffic flow overlay (Enterprise)</td><td><a href="https://developer.tomtom.com" target="_blank">developer.tomtom.com</a></td></tr>
+      <tr><td><code>VITE_STRIPE_PUBLISHABLE_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">pk_test_XXXX...</td><td>Stripe checkout (client-side)</td><td><a href="https://dashboard.stripe.com/test/apikeys" target="_blank">dashboard.stripe.com</a></td></tr>
+      <tr><td><code>VITE_STRIPE_PRO_PRICE_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">price_XXXX...</td><td>Stripe Pro subscription price</td><td>Stripe Products page</td></tr>
+      <tr><td><code>VITE_STRIPE_ENTERPRISE_PRICE_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">price_XXXX...</td><td>Stripe Enterprise subscription price</td><td>Stripe Products page</td></tr>
+      <tr><td><code>VITE_VAPID_PUBLIC_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">BNbxGYwER3...</td><td>Push notification public key</td><td><code>npx web-push generate-vapid-keys</code></td></tr>
+      <tr><td><code>VITE_WS_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">ws://localhost:3001/ws</td><td>WebSocket URL override</td><td>N/A (defaults to window.location)</td></tr>
+      <tr><td><code>VITE_SENTRY_DSN</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">https://key@o123.ingest.sentry.io/123</td><td>Client error tracking</td><td><a href="https://sentry.io" target="_blank">sentry.io</a></td></tr>
+    </table>
+
+    <h3>Server Core (<code>server/.env</code>)</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>DATABASE_URL</code></td><td><span class="badge badge-required">Required</span></td><td class="key-example">postgresql://user:pass@host:5432/deepseer</td><td>PostgreSQL connection</td><td><a href="https://dashboard.render.com" target="_blank">Render dashboard</a></td></tr>
+      <tr><td><code>JWT_SECRET</code></td><td><span class="badge badge-required">Required</span></td><td class="key-example">change_this_to_random_64_chars</td><td>JWT signing key</td><td>Generate: <code>openssl rand -hex 32</code></td></tr>
+      <tr><td><code>PORT</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">3001</td><td>Server listen port</td><td>Default: 3001</td></tr>
+      <tr><td><code>REDIS_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">redis://default:pass@host:6379</td><td>Redis cache</td><td><a href="https://upstash.com" target="_blank">Upstash</a> or Render</td></tr>
+      <tr><td><code>SENTRY_DSN</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">https://key@o123.ingest.sentry.io/456</td><td>Server error tracking</td><td><a href="https://sentry.io" target="_blank">sentry.io</a></td></tr>
+      <tr><td><code>ADMIN_EMAILS</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">admin@example.com</td><td>Admin-only route access</td><td>N/A</td></tr>
+    </table>
+
+    <h3>Payments (Stripe)</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>STRIPE_SECRET_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">sk_test_XXXXXXXXXXXXXXXX</td><td>Stripe server-side API</td><td><a href="https://dashboard.stripe.com/test/apikeys" target="_blank">dashboard.stripe.com</a></td></tr>
+      <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">whsec_XXXXXXXXXXXXXXXX</td><td>Webhook signature verification</td><td>Stripe Webhooks page</td></tr>
+      <tr><td><code>STRIPE_PRO_PRICE_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">price_XXXXXXXXXXXXXXXX</td><td>Pro tier price ID</td><td>Stripe Products page</td></tr>
+      <tr><td><code>STRIPE_ENTERPRISE_PRICE_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">price_XXXXXXXXXXXXXXXX</td><td>Enterprise tier price ID</td><td>Stripe Products page</td></tr>
+      <tr><td><code>VAPID_PRIVATE_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">aBcDeFg123...</td><td>Push notification signing</td><td><code>npx web-push generate-vapid-keys</code></td></tr>
+    </table>
+
+    <h3>AI / LLM</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>ANTHROPIC_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">sk-ant-api03-XXXXXXXX</td><td>Claude AI analysis</td><td><a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></td></tr>
+      <tr><td><code>OLLAMA_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">http://localhost:11434</td><td>Local LLM fallback</td><td><a href="https://ollama.ai" target="_blank">ollama.ai</a></td></tr>
+      <tr><td><code>OLLAMA_MODEL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">llama3</td><td>Which Ollama model to use</td><td>N/A</td></tr>
+    </table>
+
+    <h3>Tracking Data Sources</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>AISSTREAM_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123def456...</td><td>Maritime vessel tracking</td><td><a href="https://aisstream.io" target="_blank">aisstream.io</a></td></tr>
+      <tr><td><code>OPENSKY_CLIENT_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">myapp</td><td>OpenSky auth (10x rate limits)</td><td><a href="https://opensky-network.org" target="_blank">opensky-network.org</a></td></tr>
+      <tr><td><code>OPENSKY_CLIENT_SECRET</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">secretXXXX</td><td>OpenSky auth</td><td>Same as above</td></tr>
+    </table>
+
+    <h3>Environmental Monitoring</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>OPENAQ_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">oaq_XXXXXXXX</td><td>Global air quality</td><td><a href="https://explore.openaq.org/register" target="_blank">openaq.org</a></td></tr>
+      <tr><td><code>AIRNOW_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">XXXXXXXX-XXXX-XXXX</td><td>US AQI data</td><td><a href="https://docs.airnowapi.org/account/request/" target="_blank">airnowapi.org</a></td></tr>
+      <tr><td><code>PURPLEAIR_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">XXXXXXXX-XXXX-XXXX</td><td>Crowdsourced PM2.5</td><td><a href="https://develop.purpleair.com" target="_blank">purpleair.com</a></td></tr>
+      <tr><td><code>NASA_FIRMS_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abcdef123456</td><td>Wildfire hotspots</td><td><a href="https://firms.modaps.eosdis.nasa.gov/api/area/" target="_blank">nasa.gov</a></td></tr>
+      <tr><td><code>GFW_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">gfw_XXXXXXXX</td><td>Deforestation alerts</td><td><a href="https://www.globalforestwatch.org/help/developers/" target="_blank">globalforestwatch.org</a></td></tr>
+    </table>
+
+    <h3>Satellite Imagery</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>COPERNICUS_CLIENT_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">sh-XXXXXXXX-XXXX</td><td>Sentinel-2 imagery</td><td><a href="https://dataspace.copernicus.eu/" target="_blank">dataspace.copernicus.eu</a></td></tr>
+      <tr><td><code>COPERNICUS_CLIENT_SECRET</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abcDEF123...</td><td>Sentinel-2 imagery</td><td>Same as above</td></tr>
+    </table>
+
+    <h3>Political / Financial / Legal</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>FEC_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">DEMO_KEY</td><td>Campaign finance</td><td><a href="https://api.open.fec.gov/developers/" target="_blank">fec.gov</a></td></tr>
+      <tr><td><code>SENATE_LDA_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Lobbying disclosures</td><td><a href="https://lda.senate.gov/api/register/" target="_blank">lda.senate.gov</a></td></tr>
+      <tr><td><code>OPENSANCTIONS_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">os_XXXXXXXX</td><td>Sanctions/PEP screening</td><td><a href="https://www.opensanctions.org" target="_blank">opensanctions.org</a></td></tr>
+      <tr><td><code>DATAGOV_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>FBI crime data</td><td><a href="https://api.data.gov/signup/" target="_blank">data.gov</a></td></tr>
+      <tr><td><code>FOLLOWTHEMONEY_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">ftm_XXXX</td><td>State political finance</td><td><a href="https://www.followthemoney.org" target="_blank">followthemoney.org</a></td></tr>
+      <tr><td><code>OPENCORPORATES_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">oc_XXXXXXXX</td><td>Corporate ownership</td><td><a href="https://opencorporates.com/api_accounts/new" target="_blank">opencorporates.com</a></td></tr>
+      <tr><td><code>OPENSECRETS_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">XXXXXXXXXXXXXXXX</td><td>Political finance (discontinued Apr 2025)</td><td>N/A</td></tr>
+      <tr><td><code>REGULATIONS_GOV_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Federal rulemaking</td><td><a href="https://regulationsgov.github.io/developers/" target="_blank">regulations.gov</a></td></tr>
+      <tr><td><code>COURTLISTENER_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">cl_XXXXXXXX</td><td>Court case data</td><td><a href="https://www.courtlistener.com/api/" target="_blank">courtlistener.com</a></td></tr>
+      <tr><td><code>MUCKROCK_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">mr_XXXXXXXX</td><td>FOIA tracking</td><td><a href="https://www.muckrock.com/api/" target="_blank">muckrock.com</a></td></tr>
+    </table>
+
+    <h3>Conflict / Security</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>ACLED_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">acled_XXXXXXXX</td><td>Armed conflict events</td><td><a href="https://acleddata.com/register/" target="_blank">acleddata.com</a></td></tr>
+      <tr><td><code>ACLED_EMAIL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">user@example.com</td><td>ACLED auth (required with key)</td><td>Same as above</td></tr>
+      <tr><td><code>UCDP_API_TOKEN</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">ucdp_XXXXXXXX</td><td>Uppsala conflict data</td><td><a href="https://ucdp.uu.se/apidocs/" target="_blank">ucdp.uu.se</a></td></tr>
+    </table>
+
+    <h3>Social Media</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>REDDIT_CLIENT_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123XYZ</td><td>Reddit monitoring</td><td><a href="https://www.reddit.com/prefs/apps" target="_blank">reddit.com/prefs/apps</a></td></tr>
+      <tr><td><code>REDDIT_CLIENT_SECRET</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">secretABC123</td><td>Reddit auth</td><td>Same as above</td></tr>
+    </table>
+
+    <h3>CCTV / Traffic Cameras</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>CCTV_511NY_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>New York cameras</td><td><a href="https://511ny.org/developers" target="_blank">511ny.org</a></td></tr>
+      <tr><td><code>CCTV_511LA_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Louisiana cameras</td><td><a href="https://511la.org/developers" target="_blank">511la.org</a></td></tr>
+      <tr><td><code>CCTV_511WI_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Wisconsin cameras</td><td><a href="https://511wi.gov/developers" target="_blank">511wi.gov</a></td></tr>
+      <tr><td><code>CCTV_AZ511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Arizona cameras</td><td><a href="https://az511.com/developers" target="_blank">az511.com</a></td></tr>
+      <tr><td><code>CCTV_ID511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Idaho cameras</td><td><a href="https://511.idaho.gov/developers" target="_blank">511.idaho.gov</a></td></tr>
+      <tr><td><code>CCTV_UT511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Utah cameras</td><td><a href="https://udottraffic.utah.gov/developers" target="_blank">udottraffic.utah.gov</a></td></tr>
+      <tr><td><code>CCTV_CT511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Connecticut cameras</td><td><a href="https://prod-ct.ibi511.com/developers" target="_blank">prod-ct.ibi511.com</a></td></tr>
+      <tr><td><code>CCTV_PA511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Pennsylvania cameras</td><td><a href="https://www.pa.gov/services/penndot/" target="_blank">pa.gov</a></td></tr>
+      <tr><td><code>CCTV_GA511_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Georgia cameras</td><td><a href="https://511ga.org/developers" target="_blank">511ga.org</a></td></tr>
+      <tr><td><code>WSDOT_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Washington state cameras</td><td><a href="https://wsdot.wa.gov/traffic/api/" target="_blank">wsdot.wa.gov</a></td></tr>
+      <tr><td><code>ODOT_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">abc123...</td><td>Oregon cameras</td><td><a href="https://apiportal.odot.state.or.us/" target="_blank">odot.state.or.us</a></td></tr>
+      <tr><td><code>TRAFFICLAND_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">tl_XXXXXXXX</td><td>25K+ commercial cameras</td><td><a href="https://www.trafficland.com/api.html" target="_blank">trafficland.com</a></td></tr>
+      <tr><td><code>INRIX_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">inrix_XXXXXXXX</td><td>Commercial camera API</td><td><a href="https://docs.inrix.com" target="_blank">inrix.com</a></td></tr>
+    </table>
+
+    <h3>Hardware / Drones / SDR</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>SDR_DEVICE_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">http://localhost:1234</td><td>SDR HTTP bridge</td><td>Local hardware</td></tr>
+      <tr><td><code>SDR_DEVICE_LAT</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">38.8977</td><td>SDR device latitude</td><td>N/A</td></tr>
+      <tr><td><code>SDR_DEVICE_LON</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">-77.0365</td><td>SDR device longitude</td><td>N/A</td></tr>
+      <tr><td><code>SOUNDTHINKING_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">st_XXXXXXXX</td><td>Gunshot detection</td><td><a href="https://www.soundthinking.com" target="_blank">soundthinking.com</a></td></tr>
+      <tr><td><code>SHOTPOINT_API_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">sp_XXXXXXXX</td><td>Gunshot triangulation</td><td>Contact vendor</td></tr>
+      <tr><td><code>GUNSHOT_CUSTOM_WS_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">ws://localhost:9090/sensors</td><td>Custom acoustic sensors</td><td>N/A</td></tr>
+    </table>
+
+    <h3>Infrastructure / Storage / Security</h3>
+    <table>
+      <tr><th>Variable</th><th>Req?</th><th>Example</th><th>Purpose</th><th>Get It</th></tr>
+      <tr><td><code>STORAGE_BACKEND</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">local</td><td>Storage mode: local or s3</td><td>Default: local</td></tr>
+      <tr><td><code>DATA_DIR</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">./data</td><td>Local data directory</td><td>Default: ./data</td></tr>
+      <tr><td><code>S3_BUCKET</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">deepseer-evidence</td><td>S3 bucket for evidence storage</td><td>AWS Console</td></tr>
+      <tr><td><code>AWS_REGION</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">us-east-1</td><td>AWS region for S3</td><td>N/A</td></tr>
+      <tr><td><code>STORAGE_REGION</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">us</td><td>Data residency region</td><td>N/A</td></tr>
+      <tr><td><code>EVIDENCE_SIGNING_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">hex_random_64_chars</td><td>Evidence HMAC signing</td><td>Auto-generated if not set</td></tr>
+      <tr><td><code>SOURCE_ENCRYPTION_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">hex_random_64_chars</td><td>Confidential source protection</td><td><code>openssl rand -hex 32</code></td></tr>
+      <tr><td><code>TSA_URL</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">https://freetsa.org/tsr</td><td>RFC 3161 timestamp authority</td><td><a href="https://freetsa.org" target="_blank">freetsa.org</a></td></tr>
+      <tr><td><code>NEO4J_URI</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">bolt://localhost:7687</td><td>Graph database (ownership networks)</td><td><a href="https://neo4j.com" target="_blank">neo4j.com</a></td></tr>
+      <tr><td><code>NEO4J_USER</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">neo4j</td><td>Neo4j auth</td><td>Same as above</td></tr>
+      <tr><td><code>NEO4J_PASSWORD</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">password123</td><td>Neo4j auth</td><td>Same as above</td></tr>
+      <tr><td><code>GOOGLE_CLOUD_PROJECT_ID</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">my-project-123</td><td>Google Cloud project (key rotation)</td><td><a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></td></tr>
+      <tr><td><code>GOOGLE_SERVICE_ACCOUNT_KEY</code></td><td><span class="badge badge-optional">Optional</span></td><td class="key-example">{"type":"service_account",...}</td><td>Auto key rotation</td><td>GCP IAM page</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+// ── Tab Switching ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.body.className = 'mode-' + btn.dataset.mode;
+  });
+});
+
+// ── Accordion Toggle ──
+function toggleSection(header) {
+  header.closest('.section').classList.toggle('open');
+}
+
+// ── Open first section by default (already done via class) ──
+
+// ── Scrollspy for TOC ──
+const tocLinks = document.querySelectorAll('#toc a');
+const sections = document.querySelectorAll('.section');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+sections.forEach(s => observer.observe(s));
+
+// ── Click TOC links to open sections ──
+tocLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    const id = link.getAttribute('href').slice(1);
+    const section = document.getElementById(id);
+    if (section && !section.classList.contains('open')) {
+      section.classList.add('open');
+    }
+  });
+});
+
+// ── Keyboard shortcut: 1/2 to switch tabs ──
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === '1') { document.querySelector('[data-mode="plain"]').click(); }
+  if (e.key === '2') { document.querySelector('[data-mode="tech"]').click(); }
+});
+</script>
+</body>
+</html>

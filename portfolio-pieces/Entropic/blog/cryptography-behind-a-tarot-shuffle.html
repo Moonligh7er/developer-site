@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHA-256, HMAC-DRBG, and Fisher-Yates: The Cryptography Behind a Tarot Shuffle — Entropic Tarot Blog</title>
+<meta name="description" content="A technical deep dive into the cryptographic pipeline that makes Entropic Tarot's shuffle provably fair — the same algorithms securing global banking.">
+<meta name="theme-color" content="#7C3AED">
+<link rel="canonical" href="https://entropic-tarot-production.up.railway.app/blog/cryptography-behind-a-tarot-shuffle">
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Entropic Tarot">
+<meta property="og:url" content="https://entropic-tarot-production.up.railway.app/blog/cryptography-behind-a-tarot-shuffle">
+<meta property="og:title" content="SHA-256, HMAC-DRBG, and Fisher-Yates: The Cryptography Behind a Tarot Shuffle">
+<meta property="og:description" content="A technical deep dive into the cryptographic pipeline that makes Entropic Tarot's shuffle provably fair — the same algorithms securing global banking.">
+<meta property="og:image" content="https://entropic-tarot-production.up.railway.app/images/og-image.png">
+<meta property="article:published_time" content="2026-02-28">
+<meta property="article:author" content="Michael Wylde">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SHA-256, HMAC-DRBG, and Fisher-Yates: The Cryptography Behind a Tarot Shuffle">
+<meta name="twitter:description" content="A technical deep dive into the cryptographic pipeline that makes Entropic Tarot's shuffle provably fair — the same algorithms securing global banking.">
+<meta name="twitter:image" content="https://entropic-tarot-production.up.railway.app/images/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,sans-serif;background:#0c0c14;color:#e0e0e0;line-height:1.9;padding:0 16px}
+.container{max-width:720px;margin:0 auto;padding:48px 0 80px}
+h1{font-family:'Cinzel',Georgia,serif;color:hsl(45,90%,60%);font-size:1.8rem;margin-bottom:8px;text-align:center;line-height:1.3}
+.meta{text-align:center;color:#666;font-size:.82rem;margin-bottom:40px}
+h2{font-family:'Cinzel',Georgia,serif;color:hsl(270,60%,70%);font-size:1.15rem;margin:36px 0 14px}
+h3{color:#ccc;font-size:1rem;margin:24px 0 10px}
+p{font-size:.92rem;color:#bbb;margin-bottom:16px}
+strong{color:#ddd}
+em{color:hsl(45,90%,60%);font-style:italic}
+a{color:hsl(220,70%,60%);text-decoration:none}
+a:hover{text-decoration:underline}
+blockquote{border-left:3px solid hsl(270,60%,40%);padding:12px 20px;margin:20px 0;background:rgba(124,58,237,0.06);border-radius:0 8px 8px 0}
+blockquote p{color:#aaa;margin-bottom:0;font-style:italic}
+code{background:rgba(124,58,237,0.1);color:hsl(270,60%,70%);padding:2px 6px;border-radius:4px;font-size:.85rem}
+pre{background:rgba(20,20,31,0.8);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:16px;overflow-x:auto;margin:16px 0}
+pre code{background:none;padding:0;font-size:.82rem;color:#ccc}
+ul,ol{padding-left:24px;margin-bottom:16px}
+li{font-size:.92rem;color:#bbb;margin-bottom:8px}
+.callout{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.15);border-radius:8px;padding:16px;margin:20px 0}
+.callout p{color:#bbb;margin-bottom:0}
+.back{display:inline-block;margin-bottom:24px;color:#888;font-size:.85rem}
+.footer{text-align:center;margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06);color:#555;font-size:.75rem}
+.cta{display:block;text-align:center;margin:32px 0;padding:16px 24px;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);border-radius:10px;color:hsl(270,60%,75%);font-size:.9rem;transition:background .2s}
+.cta:hover{background:rgba(124,58,237,0.25);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="/blog/" class="back">&larr; Back to Blog</a>
+<article>
+<h1>SHA-256, HMAC-DRBG, and Fisher-Yates: The Cryptography Behind a Tarot Shuffle</h1>
+<p class="meta">By Michael Wylde &middot; February 28, 2026 &middot; 11 min read</p>
+
+<p>What does a tarot app have in common with Bitcoin, TLS, and nuclear launch codes? More than you might expect. The cryptographic primitives that secure trillions of dollars in financial transactions, protect classified military communications, and validate every block on the Bitcoin blockchain are the same ones that shuffle your tarot deck in Entropic Tarot. This is not marketing language. It is a literal description of the software pipeline.</p>
+
+<p>Most tarot apps call <code>Math.random()</code>, pick some cards, and call it a day. Entropic Tarot runs your shuffle through a four-stage cryptographic pipeline that would satisfy a security auditor at a tier-one bank. Here is exactly how it works, stage by stage, and why each step matters.</p>
+
+<h2>Stage 1: Harvesting Raw Entropy</h2>
+
+<p>Every cryptographic system begins with a source of unpredictability. In Entropic Tarot, that source is <em>you</em> -- or more precisely, the physical world around you as measured by your device's sensors.</p>
+
+<p>The app collects raw data from three independent sources: electromagnetic noise from your microphone circuit, thermal noise from your camera sensor, and microsecond-precision timing jitter from your touch interactions. Each source captures a different flavor of physical unpredictability. Combined, they produce a rich stream of raw entropy -- genuinely random data rooted in quantum-level physical processes that no algorithm can predict or reproduce.</p>
+
+<p>But raw entropy is messy. Microphone samples might cluster around certain voltage levels. Camera pixels might have consistent biases. Touch timing might carry patterns from human motor rhythms. The raw data is <em>unpredictable</em>, but it is not <em>uniform</em>. To turn it into something cryptographically useful, we need Stage 2.</p>
+
+<h2>Stage 2: SHA-256 -- Compressing Chaos into Perfect Randomness</h2>
+
+<p>A <strong>cryptographic hash function</strong> is a mathematical operation that takes an input of any size and produces a fixed-size output. Think of it as a one-way compressor: you can feed in a single byte or an entire novel, and you always get back exactly 256 bits. But unlike ordinary compression, a hash function is designed to be <em>irreversible</em>. Given the output, there is no way -- not even in principle -- to reconstruct the input.</p>
+
+<p><code>SHA-256</code> (Secure Hash Algorithm, 256-bit) is the specific hash function used in Entropic Tarot. It was designed by the National Security Agency and published by NIST in 2001. It secures every Bitcoin transaction ever made, authenticates every HTTPS connection your browser opens, and anchors the digital signature on your passport. After twenty-five years of sustained cryptanalytic attack by the best mathematicians on Earth, no one has found a collision -- two different inputs that produce the same output.</p>
+
+<p>SHA-256 has a property called the <strong>avalanche effect</strong>: change a single bit of the input and, on average, half the bits of the output flip. The result is that even highly structured, biased input produces output that is statistically indistinguishable from perfect randomness.</p>
+
+<pre><code>Conceptual flow:
+
+Raw entropy input (variable length, potentially biased):
+  microphone_noise  +  camera_noise  +  touch_timing
+  [3,847 bytes of raw sensor data]
+         |
+         v
+     SHA-256()
+         |
+         v
+Output (fixed 256 bits, uniformly distributed):
+  a7 3f 91 0b e4 22 d8 ...  [32 bytes, every bit equally likely to be 0 or 1]</code></pre>
+
+<p>This is the crucial transformation. No matter how biased or structured the raw sensor data might be, SHA-256 whitens it into a seed that is, for all practical and theoretical purposes, perfectly random. The same function that ensures no one can counterfeit a Bitcoin ensures that no one can predict your tarot shuffle.</p>
+
+<blockquote>
+<p>SHA-256 is a one-way function: given the output, reconstructing the input would require more energy than exists in the observable universe. Your shuffle seed is irreversible by the laws of thermodynamics.</p>
+</blockquote>
+
+<h2>Stage 3: HMAC-DRBG -- Stretching a Seed into a Stream</h2>
+
+<p>We now have a 256-bit seed of excellent quality. But a tarot shuffle needs more than one random number. To shuffle a 78-card deck using the Fisher-Yates algorithm, we need 77 independent random values -- one for each swap operation. We could hash the entropy 77 separate times, but that would require 77 independent pools of raw sensor data, which is impractical. Instead, we need a way to <em>deterministically expand</em> a single high-quality seed into a long sequence of random numbers without introducing patterns.</p>
+
+<p>This is precisely the problem that a <strong>Deterministic Random Bit Generator</strong> (DRBG) solves. Entropic Tarot uses <code>HMAC-DRBG</code>, specified in <strong>NIST Special Publication 800-90A</strong> -- the same standard mandated for cryptographic applications in U.S. federal systems, banking infrastructure, and hardware security modules.</p>
+
+<p>The word "deterministic" might sound alarming in this context, but it is actually the point. Given the same seed, an HMAC-DRBG will always produce the same sequence of outputs. This is a feature, not a bug -- it means the shuffle is <em>reproducible from the seed</em>, which makes it auditable. The unpredictability comes entirely from the seed, which is rooted in physical entropy. The DRBG's job is to stretch that unpredictability without degrading it.</p>
+
+<h3>How HMAC-DRBG works</h3>
+
+<p>HMAC-DRBG maintains an internal state consisting of two values: a <strong>key</strong> (<code>K</code>) and a <strong>value</strong> (<code>V</code>), both 256 bits. The lifecycle has three phases:</p>
+
+<ol>
+<li><strong>Instantiate</strong> -- The seed material (our SHA-256 output) initializes <code>K</code> and <code>V</code> through a series of HMAC operations. HMAC (Hash-based Message Authentication Code) is itself built on SHA-256, adding another layer of cryptographic mixing.</li>
+<li><strong>Generate</strong> -- Each time we need random bytes, the DRBG computes <code>V = HMAC(K, V)</code>, outputs <code>V</code>, then updates both <code>K</code> and <code>V</code> to advance the internal state. Each output is cryptographically independent of the previous one -- knowing any number of prior outputs gives an attacker zero information about the next.</li>
+<li><strong>Reseed</strong> -- If additional entropy becomes available (more sensor data), it can be mixed into the state, further strengthening the generator. This is optional but adds defense in depth.</li>
+</ol>
+
+<p>The security guarantee is strong: an attacker who observes any number of HMAC-DRBG outputs cannot predict the next output without knowing the internal state, and recovering the internal state from outputs alone is computationally infeasible. This is the same guarantee that protects the session keys in your online banking connection.</p>
+
+<blockquote>
+<p>HMAC-DRBG is not an approximation of randomness. It is a NIST-certified method for expanding a truly random seed into an arbitrarily long sequence that no known or theoretical attack can distinguish from true randomness.</p>
+</blockquote>
+
+<h2>Stage 4: Fisher-Yates -- The Only Correct Shuffle</h2>
+
+<p>We now have a cryptographic random number generator producing high-quality random values on demand. The final step is to use those values to actually arrange the 78 tarot cards into a random order. This is where the <strong>Fisher-Yates shuffle</strong> (also known as the Knuth shuffle) comes in -- and the choice of algorithm here is not arbitrary. Fisher-Yates is the <em>only</em> shuffle algorithm that is mathematically guaranteed to produce a uniform distribution over all possible permutations.</p>
+
+<h3>The algorithm</h3>
+
+<p>Fisher-Yates works by iterating through the deck from the last card to the second, and at each position, swapping that card with a randomly chosen card from the remaining unshuffled portion (including itself):</p>
+
+<pre><code>fisher_yates_shuffle(deck):
+    n = length(deck)
+
+    for i from (n - 1) down to 1:
+        j = random_integer(0, i)    // inclusive on both ends
+        swap(deck[i], deck[j])
+
+    return deck</code></pre>
+
+<p>Walk through it with a small example. Suppose you have five cards: <code>[A, B, C, D, E]</code>.</p>
+
+<ul>
+<li><strong>i = 4:</strong> Pick random j from 0..4. Say j = 2. Swap positions 4 and 2. Deck: <code>[A, B, E, D, C]</code></li>
+<li><strong>i = 3:</strong> Pick random j from 0..3. Say j = 0. Swap positions 3 and 0. Deck: <code>[D, B, E, A, C]</code></li>
+<li><strong>i = 2:</strong> Pick random j from 0..2. Say j = 2. Swap positions 2 and 2 (no change). Deck: <code>[D, B, E, A, C]</code></li>
+<li><strong>i = 1:</strong> Pick random j from 0..1. Say j = 0. Swap positions 1 and 0. Deck: <code>[B, D, E, A, C]</code></li>
+</ul>
+
+<p>Each card ends up in each position with exactly equal probability. This is provable: the algorithm makes exactly <code>n - 1</code> swaps, and the number of possible execution paths is <code>n * (n-1) * (n-2) * ... * 1 = n!</code>, which is exactly the number of possible permutations. Every permutation corresponds to exactly one path through the algorithm.</p>
+
+<h3>Why naive shuffles fail</h3>
+
+<p>A common alternative that <em>seems</em> correct -- sorting the array with a random comparator -- actually produces biased results. When you tell a sorting algorithm to compare two elements and randomly return "less than" or "greater than," the final ordering depends on the sort algorithm's internal decisions, which do not map uniformly onto permutations. Some orderings become significantly more likely than others. For a 78-card deck, certain arrangements might be two or three times more probable than others. The bias is invisible to casual observation but mathematically demonstrable.</p>
+
+<p>Fisher-Yates has no such bias. It is optimal in time complexity (<code>O(n)</code>), optimal in space complexity (<code>O(1)</code> additional space), and mathematically perfect in distribution. There is no reason to use anything else, and Entropic Tarot does not.</p>
+
+<h2>Rejection Sampling: Eliminating Modulo Bias</h2>
+
+<p>There is one more subtlety that most implementations get wrong, and Entropic Tarot gets right: <strong>modulo bias</strong>.</p>
+
+<p>When the Fisher-Yates algorithm needs a random integer between 0 and <code>i</code> (inclusive), it must convert raw random bytes into a number in that range. The naive approach is to take a random byte (value 0-255) and compute <code>byte % (i + 1)</code>. But this introduces a subtle bias whenever 256 is not evenly divisible by <code>(i + 1)</code>.</p>
+
+<p>Consider needing a random number from 0 to 77 (for the first swap of a 78-card deck). There are 256 possible byte values, and <code>256 / 78 = 3</code> remainder <code>22</code>. This means values 0-21 each map to from <em>four</em> byte values, while values 22-77 each map from only <em>three</em>. The first 22 positions are approximately 33% more likely than the remaining 56. Over a single shuffle this is slight, but across thousands of readings, it is a measurable, systematic bias.</p>
+
+<p><strong>Rejection sampling</strong> eliminates this entirely. Instead of accepting every random byte, the algorithm computes the largest multiple of 78 that fits within 256 (which is 234), and discards any byte value of 234 or higher. Only values in the range 0-233 are accepted, and since 234 divides evenly into 78 groups of 3, every outcome is exactly equally likely. Discarded values are simply replaced by drawing another random byte from the HMAC-DRBG.</p>
+
+<pre><code>unbiased_random(max, drbg):
+    range = max + 1
+    limit = 256 - (256 % range)   // largest usable value
+
+    loop:
+        byte = drbg.generate(1)   // one random byte
+        if byte &lt; limit:
+            return byte % range
+        // else: discard and try again</code></pre>
+
+<p>The expected number of rejections is small (always less than one extra draw on average), so performance is not affected. But the mathematical guarantee is absolute: every value in the target range is <em>exactly</em> equally probable.</p>
+
+<h2>The Result: 78 Factorial</h2>
+
+<p>Put it all together. Physical entropy feeds into SHA-256, which produces a perfectly uniform seed. That seed initializes an HMAC-DRBG, which generates a cryptographic stream of random values. Those values drive a Fisher-Yates shuffle with rejection sampling to eliminate modulo bias.</p>
+
+<p>The outcome space is <strong>78!</strong> (78 factorial) -- the total number of possible orderings of a 78-card tarot deck. That number is:</p>
+
+<div class="callout">
+<p><strong>78! = 1.89 x 10^115</strong> -- a number with 116 digits. For comparison, the estimated number of atoms in the observable universe is approximately 10^80. The number of possible deck orderings exceeds the number of atoms by a factor of ten trillion trillion trillion.</p>
+</div>
+
+<p>Every single one of those orderings is equally probable. Not approximately equal. Not "close enough for practical purposes." <em>Exactly</em> equal, to the limits of the cryptographic guarantees provided by SHA-256 and HMAC-DRBG -- guarantees that the entire global financial system depends on daily.</p>
+
+<h2>Verification: Trust, but Audit</h2>
+
+<p>One of the most important properties of this pipeline is that it is <strong>reproducible</strong>. Because every stage after the initial entropy harvest is deterministic, anyone who knows the seed can independently verify the shuffle. Given the same 256-bit seed, running it through the same HMAC-DRBG and Fisher-Yates implementation will always produce the same deck ordering.</p>
+
+<p>This means the shuffle is <em>auditable</em>. The code is open-source. The algorithms are public standards with decades of peer-reviewed analysis. There is no hidden server-side manipulation, no weighting of certain cards, no thumb on the scale. The shuffle is exactly what the math says it is, and anyone with the technical inclination can prove it.</p>
+
+<p>This is a property that no physical card shuffle can offer. When you shuffle a physical deck, you trust the process because you can see and feel it. When Entropic Tarot shuffles digitally, you can trust the process because you can <em>mathematically verify</em> it.</p>
+
+<blockquote>
+<p>A physical shuffle is trusted because it is tangible. A cryptographic shuffle is trusted because it is provable. Entropic Tarot offers both: physical entropy as the source, mathematical proof as the guarantee.</p>
+</blockquote>
+
+<h2>The Honest Shuffle</h2>
+
+<p>There are simpler ways to build a tarot app. You could call <code>Math.random()</code>, shuffle an array, and ship it in an afternoon. Most apps do exactly that, and for many users, it is sufficient.</p>
+
+<p>But Entropic Tarot was built on the premise that if you are going to shuffle cards digitally, you should do it <em>correctly</em> -- with the same rigor applied to systems where the stakes are measured in billions of dollars and national security. Not because a tarot reading has those stakes, but because the mathematics of fairness does not have a "good enough" threshold. A shuffle is either uniform or it is not. A random number generator is either cryptographically secure or it is not.</p>
+
+<p>SHA-256. HMAC-DRBG. Fisher-Yates. Rejection sampling. Four components, each backed by decades of mathematical proof and real-world deployment at the highest levels of security. Together, they produce the most mathematically honest card shuffle ever implemented in a consumer application.</p>
+
+<p>Your cards are not chosen by an algorithm pretending to be random. They are chosen by the physical universe, filtered through cryptography that guards the world's secrets, arranged by the only shuffle algorithm that mathematics certifies as perfect.</p>
+
+</article>
+
+<a href="/" class="cta">Try Entropic Tarot -- Free tarot readings powered by true physical entropy &rarr;</a>
+
+<div class="footer">
+<p><a href="/blog/">Blog</a> &middot; <a href="/about">About</a> &middot; <a href="/features">Features</a> &middot; <a href="/resources">Resources</a> &middot; <a href="/">App</a></p>
+<p>&copy; 2026 Entropic Tarot. All rights reserved.</p>
+</div>
+</div>
+</body>
+</html>

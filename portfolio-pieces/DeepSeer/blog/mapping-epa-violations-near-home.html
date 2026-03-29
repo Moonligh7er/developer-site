@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapping EPA Violations Near Your Home — Deep Seer Blog</title>
+<meta name="description" content="Learn how to use EPA TRI and ECHO databases to find pollution sources near your home. Understand violation types, penalty amounts, compliance status, and how to connect environmental violations to community health outcomes.">
+<meta name="keywords" content="EPA violations, TRI database, ECHO compliance, environmental violations map, pollution near me, toxic release inventory, EPA fines, environmental health">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/mapping-epa-violations-near-home">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mapping EPA Violations Near Your Home">
+<meta property="og:description" content="Every factory, plant, and facility that reports toxic releases to the EPA is public record. Here's how to find what's polluting near you and what they've been fined.">
+<meta property="og:url" content="https://deepseer.io/blog/mapping-epa-violations-near-home">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mapping EPA Violations Near Your Home">
+<meta name="twitter:description" content="Every factory, plant, and facility that reports toxic releases to the EPA is public record. Here's how to find what's polluting near you and what they've been fined.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Mapping EPA Violations Near Your Home",
+  "description": "Every factory, plant, and facility that reports toxic releases to the EPA is public record. Here's how to find what's polluting near you and what they've been fined.",
+  "url": "https://deepseer.io/blog/mapping-epa-violations-near-home",
+  "datePublished": "2026-01-31",
+  "dateModified": "2026-01-31",
+  "author": {
+    "@type": "Person",
+    "name": "Deep Seer Team"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/mapping-epa-violations-near-home"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article-header{max-width:720px;margin:0 auto;padding:60px 24px 0}
+.article-header h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;line-height:1.2;margin-bottom:16px}
+.article-meta{display:flex;align-items:center;gap:12px;font-size:13px;color:#666;margin-bottom:32px;flex-wrap:wrap}
+.category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px}
+.cat-environment{background:rgba(34,197,94,0.15);color:#22c55e}
+
+.article-body{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.article-body h2{font-size:22px;font-weight:700;color:#fff;margin:40px 0 16px;letter-spacing:-0.02em}
+.article-body p{margin-bottom:16px;font-size:15px;color:#d1d5db}
+.article-body ul,.article-body ol{margin:0 0 16px 24px;font-size:15px}
+.article-body li{margin-bottom:8px}
+.article-body code{background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article-body pre{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:16px;font-size:13px;line-height:1.5}
+.article-body pre code{background:none;padding:0}
+.article-body strong{color:#fff}
+
+.cta-box{background:linear-gradient(135deg,rgba(0,204,255,0.08),rgba(168,85,247,0.08));border:1px solid rgba(0,204,255,0.2);border-radius:12px;padding:32px;text-align:center;margin:40px 0}
+.cta-box h3{color:#fff;font-size:18px;margin-bottom:8px}
+.cta-box p{color:#9ca3af;font-size:14px;margin-bottom:16px}
+.cta-box a.btn{display:inline-block;background:#00ccff;color:#000;font-weight:600;font-size:14px;padding:10px 24px;border-radius:8px;text-decoration:none}
+.cta-box a.btn:hover{background:#00b8e6;text-decoration:none}
+
+.related{max-width:720px;margin:0 auto;padding:0 24px 60px}
+.related h3{color:#fff;font-size:16px;margin-bottom:16px}
+.related a{display:block;padding:12px 0;border-top:1px solid rgba(255,255,255,0.06);font-size:14px;color:#00ccff}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article-header h1{font-size:28px}
+  .article-header{padding:40px 16px 0}
+  .article-body{padding:0 16px 60px}
+  .related{padding:0 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<div class="article-header">
+  <h1>Mapping EPA Violations Near Your Home</h1>
+  <div class="article-meta">
+    <span>Jan 31, 2026</span>
+    <span>&middot;</span>
+    <span>9 min read</span>
+    <span>&middot;</span>
+    <span class="category cat-environment">Environment</span>
+  </div>
+</div>
+
+<div class="article-body">
+
+<p>In the United States, approximately 21,000 facilities report their toxic chemical releases to the EPA every year through the Toxics Release Inventory (TRI) program. Another database, the Enforcement and Compliance History Online (ECHO) system, tracks over 800,000 regulated facilities for violations of the Clean Air Act, Clean Water Act, and Resource Conservation and Recovery Act. Both databases are public. Anyone can query them. Yet most people have no idea what is being released into the air and water within a few miles of where they live.</p>
+
+<h2>Understanding the Two Key Databases</h2>
+
+<p>The <strong>Toxics Release Inventory (TRI)</strong> was created by the Emergency Planning and Community Right-to-Know Act of 1986, passed after the Bhopal disaster. Facilities that manufacture, process, or otherwise use more than threshold quantities of any of 770 listed toxic chemicals must report annual release amounts. The data includes pounds released to air, water, land, and underground injection, plus off-site transfers to waste facilities. TRI is a self-reported dataset &mdash; the EPA does not independently measure these releases &mdash; but it is the most comprehensive national inventory of industrial toxic emissions.</p>
+
+<p>The <strong>ECHO database</strong> is different. While TRI tracks what facilities release, ECHO tracks whether they are complying with their permits. ECHO aggregates inspection records, violation notices, enforcement actions, and penalty assessments from EPA and state agencies across three major statutes. A facility can be in the TRI database with legal releases that fall within its permit limits, or it can be in ECHO as a violator whose releases exceed what it is allowed.</p>
+
+<h2>Searching by Location</h2>
+
+<p>The EPA provides REST APIs for both datasets. For TRI, the Envirofacts API lets you query by ZIP code, city, state, or geographic coordinates:</p>
+
+<pre><code>GET https://enviro.epa.gov/enviro/efservice/
+    TRI_FACILITY/ZIP_CODE/77001/JSON
+
+Returns: [{
+  "TRI_FACILITY_ID": "77001LYNDL2250E",
+  "FACILITY_NAME": "LYONDELLBASELL CHANNELVIEW",
+  "STREET_ADDRESS": "2250 E SHELDON RD",
+  "CITY_NAME": "CHANNELVIEW",
+  "COUNTY_NAME": "HARRIS",
+  "LATITUDE": 29.7688,
+  "LONGITUDE": -95.1094,
+  "INDUSTRY_SECTOR": "Petroleum Refining",
+  ...
+}]</code></pre>
+
+<p>For ECHO, the facility search endpoint accepts latitude/longitude with a radius parameter:</p>
+
+<pre><code>GET https://echodata.epa.gov/echo/dfr_rest_services.get_facilities
+    ?p_lat=40.7128&p_long=-74.0060&p_radius=3
+    &output=JSON</code></pre>
+
+<p>This returns all regulated facilities within 3 miles of a point, along with their compliance status, recent inspections, and any penalties assessed.</p>
+
+<h2>What Violation Types Mean</h2>
+
+<p>ECHO categorizes violations into several types that indicate different levels of severity:</p>
+
+<p><strong>High Priority Violations (HPV):</strong> These are the most serious. Under the Clean Air Act, an HPV means the facility has exceeded emission limits by a significant margin, failed to install required control equipment, or operated without a valid permit. Under the Clean Water Act, the equivalent is <strong>Significant Non-Compliance (SNC)</strong>, meaning effluent limits were exceeded by 20% or more for conventional pollutants, or by any amount for toxic pollutants, in two of the last four quarters.</p>
+
+<p><strong>Federally Reportable Violations (FRV):</strong> These are violations serious enough to be reported to the EPA but not yet escalated to HPV status. They often involve paperwork failures, late reporting, or minor exceedances that may indicate systemic problems.</p>
+
+<p><strong>Compliance Schedule Violations:</strong> The facility has agreed to a compliance plan but has missed deadlines within it. This is common after enforcement actions &mdash; the facility negotiates a schedule to install new equipment or change processes, then fails to meet the milestones.</p>
+
+<h2>Reading Penalty Data</h2>
+
+<p>When the EPA or a state agency takes formal enforcement action, it typically results in a <strong>consent decree</strong> or <strong>administrative order</strong> that includes a financial penalty. ECHO tracks these amounts. However, interpreting penalty data requires context.</p>
+
+<p>The median federal penalty for Clean Air Act violations is approximately $70,000. For Clean Water Act violations, it is around $30,000. These numbers sound small relative to the revenue of major industrial facilities &mdash; and they are. Academic research consistently finds that EPA penalties are often smaller than the cost the facility saved by not complying in the first place. A facility that delayed installing a $2 million scrubber for five years and then paid a $150,000 penalty came out ahead financially.</p>
+
+<p>Supplemental Environmental Projects (SEPs) can increase the effective value of settlements. In a SEP, the violator agrees to fund an environmental project (often in the affected community) in exchange for a reduced cash penalty. ECHO records both the penalty amount and SEP commitments when available.</p>
+
+<h2>Connecting Violations to Health Outcomes</h2>
+
+<p>This is where environmental data becomes genuinely powerful. The EPA's Environmental Justice Screening Tool (EJScreen) overlays demographic data with environmental burden indicators at the Census block group level. For any location, you can see both the pollution exposure (air toxics cancer risk, particulate matter, ozone, proximity to hazardous waste) and the community vulnerability (income, race, education, linguistic isolation).</p>
+
+<p>The CDC's WONDER database provides county-level mortality and morbidity data. Specific ICD-10 codes track causes of death that correlate with environmental exposure: C34 (lung cancer), J44 (COPD), J45 (asthma), and D46 (myelodysplastic syndromes, associated with benzene exposure). By comparing facility release data from TRI with health outcome data from CDC WONDER for the same geography over time, you can begin to see whether communities near heavy polluters show elevated rates of exposure-related illness.</p>
+
+<p>This is not the same as proving causation. Confounding variables &mdash; smoking rates, occupational exposures, healthcare access &mdash; complicate any direct comparison. But the correlation analysis can identify communities that deserve further epidemiological study, and it gives residents concrete data to bring to public hearings and regulatory proceedings.</p>
+
+<h2>A Practical Example</h2>
+
+<p>Consider Harris County, Texas &mdash; home to the Houston Ship Channel, one of the most concentrated petrochemical corridors in the world. A TRI query for Harris County returns over 400 reporting facilities. In 2024, those facilities self-reported releasing approximately 18 million pounds of toxic chemicals to air alone, including benzene, 1,3-butadiene, and ethylene oxide &mdash; all known or probable carcinogens.</p>
+
+<p>Cross-referencing with ECHO shows that roughly 15% of these facilities had at least one quarter of significant non-compliance in the past three years. Cross-referencing with EJScreen reveals that the Census block groups closest to the Ship Channel are predominantly low-income communities of color with environmental justice indices above the 90th percentile nationally. And CDC WONDER data shows Harris County's age-adjusted cancer mortality rate consistently exceeds the national average.</p>
+
+<p>None of these individual datasets tells the full story. Together, they form a picture that no single source could provide.</p>
+
+<h2>Tips for Effective Research</h2>
+
+<ul>
+  <li><strong>Look at trends, not snapshots.</strong> A single year of TRI data can be misleading (a facility might have had an unusual year). Download 5-10 years of data and look for increasing or decreasing release trends.</li>
+  <li><strong>Check the SIC/NAICS codes.</strong> Industry sector matters. A facility classified under NAICS 324110 (Petroleum Refineries) will have a fundamentally different chemical profile than one under 322121 (Paper Mills).</li>
+  <li><strong>Read the inspection reports.</strong> ECHO links to detailed inspection narratives when available. These describe what the inspector actually observed &mdash; leaking valves, non-operational monitors, unpermitted discharges &mdash; and are far more informative than summary compliance flags.</li>
+  <li><strong>Compare to permit limits.</strong> A facility releasing 10,000 pounds of a chemical might sound alarming, but if its permit allows 50,000 pounds, it is operating within legal limits. Conversely, a facility releasing 500 pounds against a 100-pound limit is in serious violation regardless of the absolute amount.</li>
+</ul>
+
+<div class="cta-box">
+  <h3>Try it in Deep Seer</h3>
+  <p>Deep Seer maps 30,000+ EPA-regulated facilities with real-time compliance data from TRI and ECHO, overlaid with EJScreen environmental justice indicators and CDC health outcomes.</p>
+  <a href="/" class="btn">Launch Deep Seer</a>
+</div>
+
+</div>
+
+<div class="related">
+  <h3>Related Articles</h3>
+  <a href="/blog/is-your-drinking-water-safe">Is Your Drinking Water Safe? How to Check Water Quality Data</a>
+  <a href="/blog/environmental-justice-101">Environmental Justice 101: Who Bears the Pollution Burden</a>
+  <a href="/blog/monitoring-deforestation-satellite-data">Monitoring Deforestation From Your Desk With Satellite Data</a>
+</div>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

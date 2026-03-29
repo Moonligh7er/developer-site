@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eclipse Events LLC — Mobile Bartending & Event Services</title>
+  <meta name="description" content="New England's premier erotic mobile bartending and event staffing service. Refined cocktail programs, themed events, all-male staff, and an unforgettable experience.">
+  <meta name="keywords" content="mobile bartending, event staffing, New England, cocktail catering, themed events, erotic bartending, male bartenders">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Eclipse Events LLC — What Happens in the Eclipse...">
+  <meta property="og:description" content="Elite mobile bartending & event services in New England. Refined cocktails. All-male staff. Unforgettable nights.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Eclipse Events LLC",
+    "description": "Elite mobile bartending and event staffing services in New England.",
+    "areaServed": "New England",
+    "serviceType": ["Mobile Bartending", "Event Staffing", "Event Theming", "Cocktail Consulting"],
+    "slogan": "What happens in the Eclipse..."
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ══════ PAGE TRANSITION OVERLAY ══════ -->
+  <div class="page-transition" id="page-transition">
+    <div class="page-transition__panel page-transition__panel--1"></div>
+    <div class="page-transition__panel page-transition__panel--2"></div>
+  </div>
+
+  <!-- ══════ PRELOADER ══════ -->
+  <div id="preloader" class="preloader">
+    <div class="preloader__inner">
+      <canvas id="preloader-canvas" class="preloader__canvas" width="160" height="160"></canvas>
+      <div class="preloader__text">
+        <span>E</span><span>C</span><span>L</span><span>I</span><span>P</span><span>S</span><span>E</span>
+      </div>
+      <div class="preloader__bar">
+        <div class="preloader__bar-fill" id="preloader-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ FILM GRAIN ══════ -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ══════ SOUND TOGGLE ══════ -->
+  <button class="sound-toggle" id="sound-toggle" aria-label="Toggle ambient sound" title="Toggle sound">
+    <svg class="sound-toggle__on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/>
+    </svg>
+    <svg class="sound-toggle__off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+      <line x1="23" y1="9" x2="17" y2="15"/>
+      <line x1="17" y1="9" x2="23" y2="15"/>
+    </svg>
+  </button>
+
+  <!-- ══════ AGE GATE ══════ -->
+  <div id="age-gate" class="age-gate">
+    <div class="age-gate__backdrop"></div>
+    <canvas id="age-gate-canvas" class="age-gate__canvas"></canvas>
+    <div class="age-gate__content">
+      <div class="age-gate__ring"></div>
+      <h2 class="age-gate__title">Eclipse Events</h2>
+      <p class="age-gate__tagline">&ldquo;What happens in the Eclipse&hellip;&rdquo;</p>
+      <div class="age-gate__divider"></div>
+      <p class="age-gate__prompt">This site contains adult content.<br>You must be 18 or older to enter.</p>
+      <div class="age-gate__actions">
+        <button id="age-enter" class="btn btn--primary">I Am 18+</button>
+        <button id="age-leave" class="btn btn--ghost">Leave</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SITE                                          -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div id="site" class="site" aria-hidden="true">
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+      <div class="nav__inner container">
+        <a href="#hero" class="nav__logo" aria-label="Eclipse Events Home">
+          <svg class="nav__logo-icon" viewBox="0 0 48 48" width="36" height="36" aria-hidden="true">
+            <defs>
+              <radialGradient id="corona-nav" cx="50%" cy="50%" r="50%">
+                <stop offset="55%" stop-color="#0a0a0a"/>
+                <stop offset="70%" stop-color="#d4440f"/>
+                <stop offset="82%" stop-color="#e8750a"/>
+                <stop offset="100%" stop-color="#f5a623" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="24" cy="24" r="22" fill="url(#corona-nav)"/>
+            <circle cx="24" cy="24" r="14" fill="#0a0a0a"/>
+          </svg>
+          <span class="nav__wordmark">Eclipse Events</span>
+        </a>
+        <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#themes">Themes</a></li>
+          <li><a href="#reel">Reel</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#quote" class="btn btn--primary btn--sm">Get a Quote</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- HERO (pinned) -->
+    <section class="hero" id="hero">
+      <canvas class="hero__canvas" id="hero-canvas"></canvas>
+      <div class="hero__content container">
+        <p class="hero__super">
+          <span>M</span><span>o</span><span>b</span><span>i</span><span>l</span><span>e</span><span>&nbsp;</span><span>B</span><span>a</span><span>r</span><span>t</span><span>e</span><span>n</span><span>d</span><span>i</span><span>n</span><span>g</span><span>&nbsp;</span><span>&amp;</span><span>&nbsp;</span><span>E</span><span>v</span><span>e</span><span>n</span><span>t</span><span>&nbsp;</span><span>S</span><span>e</span><span>r</span><span>v</span><span>i</span><span>c</span><span>e</span><span>s</span>
+        </p>
+        <h1 class="hero__title">
+          <span class="hero__title-line">
+            <span class="char">E</span><span class="char">c</span><span class="char">l</span><span class="char">i</span><span class="char">p</span><span class="char">s</span><span class="char">e</span>
+          </span>
+          <span class="hero__title-line hero__title-line--accent">
+            <span class="char">E</span><span class="char">v</span><span class="char">e</span><span class="char">n</span><span class="char">t</span><span class="char">s</span>
+          </span>
+        </h1>
+        <p class="hero__tagline">&ldquo;What happens in the Eclipse&hellip;&rdquo;</p>
+        <p class="hero__sub">Elite staffing&ensp;&middot;&ensp;Refined cocktails&ensp;&middot;&ensp;Unforgettable nights</p>
+        <div class="hero__actions">
+          <a href="#quote" class="btn btn--primary">Request a Quote</a>
+          <a href="#services" class="btn btn--ghost">Explore Services</a>
+        </div>
+      </div>
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <div class="hero__scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section section--about" id="about">
+      <div class="container">
+        <div class="about__grid">
+          <div class="about__left">
+            <span class="section__label">Who We Are</span>
+            <h2 class="section__title about__title">Born from<br>the Dark</h2>
+          </div>
+          <div class="about__right">
+            <p class="about__lead">Eclipse Events LLC is New England&rsquo;s premier erotic mobile bartending and event staffing service&mdash;where primal energy meets polished sophistication.</p>
+            <p>We bring the heat, the mystery, and the craft. Our all-male staff are trained professionals: ServSafe and TIPS certified, BarSmarts Advanced credentialed, and BLS certified. Impeccably presented, skilled in the art of hospitality. Whether you need bartenders, servers, hosts, or security&mdash;we deliver an experience that lingers long after last call.</p>
+            <p>Every cocktail is intentional. Every detail, considered. We don&rsquo;t just staff your event&mdash;we <em>become</em> the event.</p>
+            <p>Discretion is foundational to everything we do. Your event details, guest lists, and privacy are held in absolute confidence.</p>
+            <div class="about__certs">
+              <div class="cert">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>ServSafe Certified</span>
+              </div>
+              <div class="cert">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>TIPS Trained</span>
+              </div>
+              <div class="cert">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>Fully Insured</span>
+              </div>
+              <div class="cert">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>BarSmarts Advanced</span>
+              </div>
+              <div class="cert">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                <span>BLS Certified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section section--services" id="services">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">What We Offer</span>
+          <h2 class="section__title">Services</h2>
+        </div>
+        <div class="services__grid">
+          <div class="service-card">
+            <span class="service-card__number">01</span>
+            <div class="service-card__icon">
+              <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 38h20M24 38V24M12 8l12 16 12-16"/><path d="M8 8h32" stroke-width="2"/></svg>
+            </div>
+            <h3 class="service-card__title">Mobile Bartending</h3>
+            <p>Craft cocktails built on experience, creativity, and obsessive attention to detail. From classic builds to Tiki-forward programs, our BarSmarts Advanced bartenders bring artistry to every pour.</p>
+            <ul class="service-card__details">
+              <li>Custom cocktail menus</li>
+              <li>Mobile bar setups available</li>
+              <li>Counter / existing bar compatible</li>
+              <li>Client provides alcohol</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <span class="service-card__number">02</span>
+            <div class="service-card__icon">
+              <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="14" r="8"/><path d="M10 40c0-8 6-14 14-14s14 6 14 14"/></svg>
+            </div>
+            <h3 class="service-card__title">Event Staffing</h3>
+            <p>Professional servers, hosts, and support staff. Attentive, discreet, and unforgettable.</p>
+            <ul class="service-card__details">
+              <li>Servers &amp; hosts</li>
+              <li>Event coordination support</li>
+              <li>Security (select states)</li>
+              <li>4-hour minimum / 20-guest minimum</li>
+              <li>1 bartender per 50 guests (minimum)</li>
+              <li>1 server per 25 guests (minimum)</li>
+              <li>Porters (barbacks) recommended: 1 per 75 guests</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <span class="service-card__number">03</span>
+            <div class="service-card__icon">
+              <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4l4 8h8l-6 6 2 8-8-4-8 4 2-8-6-6h8z"/><circle cx="24" cy="36" r="8"/></svg>
+            </div>
+            <h3 class="service-card__title">Event Theming</h3>
+            <p>Curated uniforms, atmospheric lighting, and d&eacute;cor that sets the mood from arrival.</p>
+            <ul class="service-card__details">
+              <li>Themed staff uniforms</li>
+              <li>Atmospheric lighting</li>
+              <li>Limited d&eacute;cor packages</li>
+              <li>Seasonal &amp; custom themes</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <span class="service-card__number">04</span>
+            <div class="service-card__icon">
+              <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="8" width="32" height="32" rx="4"/><path d="M8 18h32M18 18v22"/></svg>
+            </div>
+            <h3 class="service-card__title">Consulting</h3>
+            <p>Expert guidance on cocktail programs, menu creation, bar setup, and event flow.</p>
+            <ul class="service-card__details">
+              <li>Menu creation &amp; design</li>
+              <li>Bar program consulting</li>
+              <li>Event flow planning</li>
+              <li>Vendor recommendations</li>
+            </ul>
+          </div>
+        </div>
+        <div class="services__note">
+          <p><strong>Note:</strong> Eclipse Events does not provide alcohol. Clients supply all beverages. We carry general liability and liquor liability insurance and adhere strictly to all alcohol service laws.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ATTIRE -->
+    <section class="section section--attire" id="attire">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">Dress Code</span>
+          <h2 class="section__title">Staff Attire</h2>
+          <p class="section__subtitle">Choose the look that fits your event.</p>
+        </div>
+        <div class="attire__grid">
+          <div class="attire-card">
+            <div class="placeholder-img placeholder-img--attire"><div class="placeholder-img__inner"><small>Professional</small></div></div>
+            <h3>Eclipse Uniform</h3>
+            <p>Our signature look. Sleek, dark, commanding.</p>
+          </div>
+          <div class="attire-card">
+            <div class="placeholder-img placeholder-img--attire"><div class="placeholder-img__inner"><small>Themed</small></div></div>
+            <h3>Themed Attire</h3>
+            <p>Custom looks to match your event&rsquo;s theme and energy.</p>
+          </div>
+          <div class="attire-card">
+            <div class="placeholder-img placeholder-img--attire"><div class="placeholder-img__inner"><small>Minimal</small></div></div>
+            <h3>Underwear / Swimwear</h3>
+            <p>For events that call for something more&hellip; revealing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THEMES -->
+    <section class="section section--themes" id="themes">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">Event Themes</span>
+          <h2 class="section__title">Set the Mood</h2>
+          <p class="section__subtitle">From seasonal celebrations to the wildly unconventional.</p>
+        </div>
+        <div class="themes__grid">
+          <div class="theme-card"><div class="theme-card__icon">&#127875;</div><h3>Hallows&rsquo; Eve</h3><p>Dark, theatrical, and dangerously fun.</p></div>
+          <div class="theme-card"><div class="theme-card__icon">&#10052;</div><h3>Winter Holidays</h3><p>Warmth, indulgence, and seasonal spirit.</p></div>
+          <div class="theme-card"><div class="theme-card__icon">&#9752;</div><h3>St. Patrick&rsquo;s Day</h3><p>Luck, libations, and a damn good time.</p></div>
+          <div class="theme-card"><div class="theme-card__icon">&#9728;</div><h3>Spring Break</h3><p>Pool parties, rooftops, sun-drenched energy.</p></div>
+          <div class="theme-card"><div class="theme-card__icon">&#127918;</div><h3>Convention After-Parties</h3><p>Comic, gaming, anime&mdash;we match your fandom.</p></div>
+          <div class="theme-card"><div class="theme-card__icon">&plus;</div><h3>Custom Themes</h3><p>Your vision. Our execution. Let&rsquo;s talk.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OCCASIONS MARQUEE -->
+    <section class="section section--occasions" id="occasions">
+      <div class="occasions__marquee">
+        <div class="occasions__track" id="occasions-track">
+          <span class="occasion-item">Birthdays</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Divorce Parties</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Weddings</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Polyamorous Weddings</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Bachelor &amp; Bachelorette</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">House Parties</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Private Events</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Corporate Events</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Orgies</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Pool Parties</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Holiday Parties</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">Fundraisers</span>
+          <span class="occasion-dot">&middot;</span>
+          <span class="occasion-item">After-Parties</span>
+          <span class="occasion-dot">&middot;</span>
+        </div>
+      </div>
+      <div class="container">
+        <p class="occasions__tagline">No judgment. Just exceptional service.</p>
+      </div>
+    </section>
+
+    <!-- VIDEO REEL -->
+    <section class="section section--reel" id="reel">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">The Experience</span>
+          <h2 class="section__title">See the Eclipse</h2>
+        </div>
+        <div class="reel__wrapper">
+          <div class="reel__player" id="reel-player">
+            <!-- Replace with <video> when you have footage -->
+            <div class="reel__placeholder">
+              <div class="reel__placeholder-inner">
+                <svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <polygon points="26,18 46,32 26,46" fill="currentColor" stroke="none" opacity="0.6"/>
+                  <circle cx="32" cy="32" r="28"/>
+                </svg>
+                <p>Video reel coming soon</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY (horizontal scroll pinned) -->
+    <section class="section section--gallery" id="gallery">
+      <div class="gallery__header container">
+        <span class="section__label">A Glimpse</span>
+        <h2 class="section__title">Gallery</h2>
+      </div>
+      <div class="gallery__track-wrap">
+        <div class="gallery__track" id="gallery-track">
+          <div class="gallery__slide">
+            <div class="placeholder-img placeholder-img--gallery"><div class="placeholder-img__inner"><small>Event Atmosphere</small></div></div>
+          </div>
+          <div class="gallery__slide">
+            <div class="placeholder-img placeholder-img--gallery"><div class="placeholder-img__inner"><small>Cocktails</small></div></div>
+          </div>
+          <div class="gallery__slide">
+            <div class="placeholder-img placeholder-img--gallery"><div class="placeholder-img__inner"><small>The Staff</small></div></div>
+          </div>
+          <div class="gallery__slide">
+            <div class="placeholder-img placeholder-img--gallery"><div class="placeholder-img__inner"><small>Setup</small></div></div>
+          </div>
+          <div class="gallery__slide">
+            <div class="placeholder-img placeholder-img--gallery"><div class="placeholder-img__inner"><small>Themed Night</small></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAFF -->
+    <section class="section section--staff" id="staff">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">The Men of Eclipse</span>
+          <h2 class="section__title">Our Staff</h2>
+          <p class="section__subtitle">Professional. Magnetic. Unforgettable.</p>
+        </div>
+        <div class="staff__grid">
+          <div class="staff-card"><div class="placeholder-img placeholder-img--staff"><div class="placeholder-img__inner"><small>Staff</small></div></div></div>
+          <div class="staff-card"><div class="placeholder-img placeholder-img--staff"><div class="placeholder-img__inner"><small>Staff</small></div></div></div>
+          <div class="staff-card"><div class="placeholder-img placeholder-img--staff"><div class="placeholder-img__inner"><small>Staff</small></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMS -->
+    <section class="section section--ems" id="ems">
+      <div class="container">
+        <div class="ems__banner">
+          <div class="ems__text">
+            <span class="section__label">First Responder Discount</span>
+            <h2>We Support Those Who Serve</h2>
+            <p>Eclipse Events proudly offers discounts for EMS professionals. Mention your credentials when requesting a quote.</p>
+          </div>
+          <div class="ems__icon">
+            <svg viewBox="0 0 64 64" width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="24" y="8" width="16" height="48" rx="2"/><rect x="8" y="24" width="48" height="16" rx="2"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section--faq" id="faq">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">Questions</span>
+          <h2 class="section__title">FAQ</h2>
+        </div>
+        <div class="faq__list">
+          <details class="faq__item"><summary class="faq__q">What areas do you serve?</summary><div class="faq__a"><p>We currently serve all of New England. Expansion plans are in the works.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Do you provide the alcohol?</summary><div class="faq__a"><p>No. Clients are responsible for purchasing all beverages. Our staff handle setup, service, and breakdown.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">What is the minimum booking?</summary><div class="faq__a"><p>We require a minimum of 4 hours and 20 guests per booking.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Are your staff trained and certified?</summary><div class="faq__a"><p>Yes. All staff are ServSafe certified, TIPS trained, Pernod Ricard BarSmarts Advanced credentialed, and BLS (Basic Life Support) certified. We carry general liability and liquor liability insurance and adhere to all alcohol service laws.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Can I choose what the staff wear?</summary><div class="faq__a"><p>Absolutely. Eclipse uniform, themed attire, or underwear/swimwear. Discuss preferences in your quote.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Do you offer security services?</summary><div class="faq__a"><p>Yes, in select states. Inquire about availability for your location.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Do you offer discounts?</summary><div class="faq__a"><p>We offer discounts for EMS professionals. Mention your credentials in your quote request.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">What is your booking and cancellation policy?</summary><div class="faq__a"><p>A deposit is required within 48 hours of booking confirmation. Cancellations made 48+ hours before the event receive a full refund. Cancellations within 24 hours of the event incur a 50% fee to cover expenses and staff compensation.</p></div></details>
+          <details class="faq__item"><summary class="faq__q">Do you charge travel fees?</summary><div class="faq__a"><p>Events within New England are covered by our standard rate. For events outside New England, a standard hourly rate per mile applies. Contact us for a custom quote.</p></div></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE FORM -->
+    <section class="section section--quote" id="quote">
+      <div class="container">
+        <div class="section__header section__header--center">
+          <span class="section__label">Book Us</span>
+          <h2 class="section__title">Request a Quote</h2>
+          <p class="section__subtitle">Tell us about your event. We&rsquo;ll craft the perfect experience.</p>
+        </div>
+        <form class="quote-form" id="quote-form" action="https://formspree.io/f/mlgpvggv" method="POST">
+          <div class="quote-form__row">
+            <div class="form-group"><label for="name">Name</label><input type="text" id="name" name="name" required placeholder="Your name"></div>
+            <div class="form-group"><label for="email">Email</label><input type="email" id="email" name="email" required placeholder="you@email.com"></div>
+          </div>
+          <div class="quote-form__row">
+            <div class="form-group"><label for="phone">Phone <span class="optional">(optional)</span></label><input type="tel" id="phone" name="phone" placeholder="(555) 123-4567"></div>
+            <div class="form-group"><label for="event-date">Event Date</label><input type="date" id="event-date" name="event_date" required></div>
+          </div>
+          <div class="quote-form__row">
+            <div class="form-group">
+              <label for="event-type">Event Type</label>
+              <select id="event-type" name="event_type" required>
+                <option value="" disabled selected>Select event type</option>
+                <option>Birthday</option><option>Divorce Party</option><option>Wedding</option>
+                <option>Bachelor / Bachelorette</option><option>House Party</option><option>Corporate Event</option>
+                <option>Private Event</option><option>Pool Party</option><option>Convention After-Party</option>
+                <option>Holiday Party</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group"><label for="guests">Est. Guest Count</label><input type="number" id="guests" name="guest_count" min="1" placeholder="25"></div>
+          </div>
+          <div class="quote-form__row">
+            <div class="form-group">
+              <label>Services Needed</label>
+              <div class="checkbox-group">
+                <label class="checkbox"><input type="checkbox" name="services" value="bartending"><span>Bartending</span></label>
+                <label class="checkbox"><input type="checkbox" name="services" value="servers"><span>Servers / Hosts</span></label>
+                <label class="checkbox"><input type="checkbox" name="services" value="security"><span>Security</span></label>
+                <label class="checkbox"><input type="checkbox" name="services" value="theming"><span>Event Theming</span></label>
+                <label class="checkbox"><input type="checkbox" name="services" value="consulting"><span>Consulting</span></label>
+              </div>
+            </div>
+            <div class="form-group"><label for="location">Event Location</label><input type="text" id="location" name="location" placeholder="City, State"></div>
+          </div>
+          <div class="form-group form-group--full"><label for="details">Tell Us More</label><textarea id="details" name="details" rows="5" placeholder="Theme preferences, attire, special requirements, EMS discount..."></textarea></div>
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <div class="quote-form__submit">
+            <button type="submit" class="btn btn--primary btn--lg">Send Request</button>
+            <p class="quote-form__note">We typically respond within 24 hours.</p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__brand">
+            <svg class="footer__logo" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
+              <defs><radialGradient id="corona-ft" cx="50%" cy="50%" r="50%"><stop offset="55%" stop-color="#0a0a0a"/><stop offset="70%" stop-color="#d4440f"/><stop offset="82%" stop-color="#e8750a"/><stop offset="100%" stop-color="#f5a623" stop-opacity="0"/></radialGradient></defs>
+              <circle cx="24" cy="24" r="22" fill="url(#corona-ft)"/><circle cx="24" cy="24" r="14" fill="#0a0a0a"/>
+            </svg>
+            <p class="footer__tagline">&ldquo;What happens in the Eclipse&hellip;&rdquo;</p>
+          </div>
+          <div class="footer__links">
+            <h4>Navigate</h4>
+            <ul><li><a href="#about">About</a></li><li><a href="#services">Services</a></li><li><a href="#themes">Themes</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#faq">FAQ</a></li><li><a href="#quote">Get a Quote</a></li></ul>
+          </div>
+          <div class="footer__contact">
+            <h4>Connect</h4>
+            <ul><li><a href="https://instagram.com/EclipseEventsCo" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg><span>@EclipseEventsCo</span></a></li></ul>
+          </div>
+          <div class="footer__area">
+            <h4>Service Area</h4>
+            <p>Currently serving New England.<br>Expansion coming soon.</p>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <p>&copy; <span id="year"></span> Eclipse Events LLC. All rights reserved.</p>
+          <p class="footer__legal">All staff are 18+. Eclipse Events adheres to all local and state alcohol service laws. Eclipse Events does not provide alcohol.</p>
+          <p class="footer__policy-links"><a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms of Service</a></p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ══════ PAGE OVERLAY (privacy/terms) ══════ -->
+  <div class="page-overlay" id="page-overlay">
+    <button class="page-overlay__close" id="page-overlay-close" aria-label="Close">&times;</button>
+    <div class="page-overlay__scroll">
+      <div class="page-overlay__body" id="page-overlay-body"></div>
+    </div>
+  </div>
+
+  <!-- ══════ LIBS ══════ -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

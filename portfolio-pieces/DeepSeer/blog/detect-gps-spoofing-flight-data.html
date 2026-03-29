@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Detect GPS Spoofing Using Commercial Flight Data — Deep Seer Blog</title>
+<meta name="description" content="ADS-B navigation integrity values from commercial aircraft can reveal GPS interference zones in real-time. Learn how NIC and NACp values expose jamming and spoofing.">
+<meta name="keywords" content="GPS spoofing, GPS jamming, ADS-B, NIC, NACp, flight data, OSINT, aviation security, electronic warfare">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://deepseer.io/blog/detect-gps-spoofing-flight-data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Detect GPS Spoofing Using Commercial Flight Data">
+<meta property="og:description" content="ADS-B navigation integrity values from commercial aircraft reveal GPS interference zones in real-time. Here's how to read the signals.">
+<meta property="og:url" content="https://deepseer.io/blog/detect-gps-spoofing-flight-data">
+<meta property="og:image" content="https://deepseer.io/icons/og-image.png">
+<meta property="og:site_name" content="Deep Seer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Detect GPS Spoofing Using Commercial Flight Data">
+<meta name="twitter:description" content="ADS-B navigation integrity values from commercial aircraft reveal GPS interference zones in real-time.">
+<meta name="twitter:image" content="https://deepseer.io/icons/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Detect GPS Spoofing Using Commercial Flight Data",
+  "description": "ADS-B navigation integrity values from commercial aircraft can reveal GPS interference zones in real-time. Learn how NIC and NACp values expose jamming and spoofing.",
+  "datePublished": "2026-03-21",
+  "dateModified": "2026-03-21",
+  "author": {
+    "@type": "Organization",
+    "name": "Deep Seer Team",
+    "url": "https://deepseer.io"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Deep Seer",
+    "url": "https://deepseer.io",
+    "logo": "https://deepseer.io/icons/icon-512.png"
+  },
+  "mainEntityOfPage": "https://deepseer.io/blog/detect-gps-spoofing-flight-data",
+  "image": "https://deepseer.io/icons/og-image.png"
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#d1d5db;font-family:'Inter',system-ui,sans-serif;line-height:1.6}
+a{color:#00ccff;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.nav{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);z-index:100}
+.nav .brand{color:#fff;font-weight:700;font-size:16px;letter-spacing:-0.02em}
+.nav a{color:#888;font-size:13px}
+
+.article{max-width:720px;margin:0 auto;padding:60px 24px 80px}
+.article .category{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:4px;margin-bottom:16px;background:rgba(239,68,68,0.15);color:#ef4444}
+.article h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-0.03em;margin-bottom:12px;line-height:1.15}
+.article .meta{color:#666;font-size:13px;margin-bottom:40px}
+.article h2{font-size:22px;font-weight:700;color:#fff;margin:36px 0 12px;letter-spacing:-0.02em}
+.article h3{font-size:17px;font-weight:600;color:#e5e7eb;margin:28px 0 10px}
+.article p{margin-bottom:16px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article ul,.article ol{margin:0 0 16px 20px;font-size:15px;color:#b0b6c0;line-height:1.75}
+.article li{margin-bottom:6px}
+.article code{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:13px;color:#e5e7eb}
+.article blockquote{border-left:3px solid #00ccff;padding:12px 20px;margin:20px 0;background:rgba(0,204,255,0.04);color:#9ca3af;font-size:14px;border-radius:0 8px 8px 0}
+
+.footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(255,255,255,0.06);color:#666;font-size:12px;margin-top:40px}
+.footer a{color:#888}
+
+@media(max-width:600px){
+  .article h1{font-size:28px}
+  .article{padding:40px 16px 60px}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/" class="brand">Deep Seer</a>
+  <a href="/landing">Home</a>
+  <a href="/features">Features</a>
+  <a href="/blog" style="color:#fff">Blog</a>
+  <a href="/terms">Terms</a>
+  <a href="/privacy">Privacy</a>
+</div>
+
+<article class="article">
+  <span class="category">Security</span>
+  <h1>How to Detect GPS Spoofing Using Commercial Flight Data</h1>
+  <div class="meta">Mar 21, 2026 &middot; 9 min read &middot; Deep Seer Team</div>
+
+  <p>Every commercial aircraft equipped with ADS-B Out broadcasts its GPS-derived position to the world. But embedded in that broadcast are two fields that most flight tracking enthusiasts never look at: NIC (Navigation Integrity Category) and NACp (Navigation Accuracy Category - Position). These values are the aircraft's self-assessment of how much it trusts its own GPS fix. When those values drop, it means the aircraft's navigation system is detecting a problem. And when multiple aircraft in the same geographic area simultaneously report low NIC/NACp values, you've found a GPS interference zone.</p>
+
+  <p>This technique has transformed commercial aviation from a transportation network into the world's largest distributed GPS monitoring system — thousands of aircraft acting as unwitting sensors, reporting the quality of the GPS signal wherever they fly.</p>
+
+  <h2>Jamming vs. Spoofing: Two Different Threats</h2>
+
+  <p><strong>GPS jamming</strong> is brute force: a transmitter broadcasts noise on the GPS frequencies (L1 at 1575.42 MHz, L2 at 1227.60 MHz), overwhelming the weak satellite signals. The receiver knows it has a problem — it can't get a fix, or the fix is degraded. Modern aviation GPS receivers detect this and report it honestly through reduced NIC/NACp values. Jamming is easy to detect precisely because it's obvious to the receiver.</p>
+
+  <p><strong>GPS spoofing</strong> is deception: a transmitter broadcasts fake GPS signals that mimic real satellites but carry false position or timing information. A naive receiver accepts the spoofed signals and computes a wrong position while believing the fix is good. This is far more dangerous because the receiver doesn't know it's being deceived.</p>
+
+  <p>However, modern aviation GPS receivers use RAIM (Receiver Autonomous Integrity Monitoring), which cross-checks signals from multiple satellites for consistency. When spoofing is imperfect — and it almost always is, because perfectly replicating the signals from 6+ satellites simultaneously is extraordinarily difficult — RAIM detects the inconsistency and degrades the reported integrity. This is why NIC/NACp values are useful for detecting spoofing as well as jamming.</p>
+
+  <h2>Understanding NIC and NACp</h2>
+
+  <p>NIC is defined in RTCA DO-260B and ranges from 0 to 11. It describes the containment radius within which the aircraft's true position lies with a probability of at least 99.999%. Higher NIC values mean tighter containment — more trustworthy position data.</p>
+
+  <ul>
+    <li><strong>NIC 0:</strong> Unknown integrity. The system cannot bound its error. This is the red flag value.</li>
+    <li><strong>NIC 1-4:</strong> Containment radius of 20+ nautical miles down to 4 NM. Significantly degraded.</li>
+    <li><strong>NIC 5-7:</strong> Containment radius from 2 NM to 0.3 NM. Mildly degraded, possibly normal for some phases of flight.</li>
+    <li><strong>NIC 8-11:</strong> Containment radius below 0.2 NM. Normal operations with GNSS augmentation.</li>
+  </ul>
+
+  <p>NACp follows a parallel scale for accuracy (as opposed to integrity). NACp 0 means accuracy is unknown; NACp 10-11 means sub-10-meter accuracy.</p>
+
+  <p>In normal operations, a GPS-equipped aircraft on an RNAV route will report NIC 8 or higher and NACp 9 or higher. When you see these values drop to NIC 0-3 or NACp 0-4, something is interfering with the navigation solution.</p>
+
+  <h2>Crowdsourced Detection: Aircraft as Sensors</h2>
+
+  <p>The power of this approach is scale. On any given day, approximately 45,000 commercial flights are airborne. Each one broadcasts its position and integrity values via ADS-B every half-second. Networks like the OpenSky Network, ADS-B Exchange, and adsb.lol aggregate these broadcasts from thousands of ground receivers worldwide, creating a global dataset of position reports with integrity metadata.</p>
+
+  <p>To detect GPS interference, you filter this firehose for aircraft reporting NIC below a threshold (typically NIC less than or equal to 6 for initial detection, NIC 0 for confirmed interference). Then you plot these reports on a map. The geographic clustering of low-NIC reports reveals the interference zone. The boundary of the cluster approximates the jammer or spoofer's coverage area.</p>
+
+  <p>Because aircraft are at altitude — 30,000-40,000 feet for en-route traffic — they can detect GPS interference from much farther away than a ground-based sensor. A jammer that might affect a 10km radius on the ground can be detected by aircraft 100+ km away, because the line-of-sight at altitude is unobstructed.</p>
+
+  <h2>Geographic Hotspots</h2>
+
+  <h3>Eastern Mediterranean</h3>
+
+  <p>The region around Cyprus, Lebanon, Israel, and Syria has been one of the most active GPS interference zones since 2018. Israeli electronic warfare systems create widespread spoofing that causes aircraft GPS receivers to report positions in Beirut when they are actually near Ben Gurion Airport, or positions at Cairo when over Tel Aviv. Flight tracking data consistently shows clusters of NIC 0 reports throughout this region, with intensity varying based on the security situation.</p>
+
+  <h3>Baltic / Kaliningrad</h3>
+
+  <p>Russia's Kaliningrad exclave, sandwiched between Poland and Lithuania, is home to electronic warfare units that regularly jam GPS across the eastern Baltic. Finnish, Estonian, and Polish aviation authorities have documented thousands of GPS interference events. The pattern is correlated with Russian military exercises: interference increases during exercise periods and subsides between them. Flight data shows NIC degradation across a wide area extending from Kaliningrad to the Finnish border.</p>
+
+  <h3>Persian Gulf</h3>
+
+  <p>The Strait of Hormuz and surrounding waters experience chronic GPS interference from Iranian electronic warfare systems. Aircraft approaching airports in the UAE, Oman, and Bahrain regularly report navigation anomalies. The interference has been severe enough to prompt ICAO (International Civil Aviation Organization) to issue advisories, and several airlines have modified approach procedures to reduce reliance on GPS in the region.</p>
+
+  <h3>Conflict Zones</h3>
+
+  <p>Active conflict zones — Ukraine, parts of Iraq and Syria, the Red Sea region during the Houthi campaign — show persistent GPS interference. Ukrainian forces and Russian forces both deploy GPS jamming extensively, creating a broad interference zone visible in flight data as aircraft reroute or report degraded navigation over much of the Black Sea region.</p>
+
+  <h2>From Detection to Analysis</h2>
+
+  <p>Detecting the interference zone is the first step. The analytical value comes from what the interference pattern reveals about the source.</p>
+
+  <p><strong>Locating the source.</strong> By plotting the geographic distribution of low-NIC reports and their degradation values, you can triangulate the approximate source of a jammer. Reports closest to the source show the lowest NIC values; reports at the periphery show moderate degradation. The centroid of the lowest-NIC cluster approximates the jammer location.</p>
+
+  <p><strong>Timing analysis.</strong> When does the interference start and stop? Correlation with known military exercise schedules, political events, or conflict escalation provides context. A jammer that operates on a regular schedule (weekdays only, specific hours) suggests training or testing. Continuous operation suggests operational deployment.</p>
+
+  <p><strong>Coverage modeling.</strong> By collecting interference reports over time and overlaying terrain data, you can model the effective coverage area of a jammer. Mountains block line-of-sight to jammers; valleys create shadow zones. The pattern of affected and unaffected aircraft paths reveals the terrain interaction.</p>
+
+  <h2>How Deep Seer Aggregates Confidence Data</h2>
+
+  <p>In Deep Seer, we ingest flight data from the OpenSky Network with integrity fields included. Each aircraft position is stored with its NIC and NACp values. The system computes a rolling geographic heatmap of navigation confidence: areas where the average NIC value drops below a threshold are highlighted on the globe, giving analysts an immediate visual of where GPS interference is active.</p>
+
+  <p>This data layer can be combined with other feeds for richer analysis. Overlay maritime AIS data to see if ships in the same area are reporting position anomalies. Cross-reference with conflict event databases to correlate interference with military activity. Layer in NOTAM data to identify officially acknowledged interference zones versus unreported ones.</p>
+
+  <p>The result is a living map of the global GPS interference environment, built entirely from open data, updated in near real-time, and requiring no classified sources or specialized equipment. Every commercial aircraft is a sensor, and every ADS-B broadcast is a data point.</p>
+
+  <blockquote>Ten thousand aircraft at 35,000 feet, each broadcasting the trustworthiness of their GPS fix twice per second — it's the largest distributed electronic warfare monitoring network ever built, and nobody designed it to be one.</blockquote>
+</article>
+
+<div class="footer">
+  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p><a href="/">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="/features">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/privacy">Privacy</a></p>
+</div>
+
+</body>
+</html>

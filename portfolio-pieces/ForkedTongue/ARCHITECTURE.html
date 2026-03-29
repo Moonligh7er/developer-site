@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forked Tongue — Architecture & Services Map</title>
+<style>
+  /* ── Reset & Base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #0a0a0f;
+    color: #d4d4e0;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+  a { color: #a78bfa; text-decoration: none; }
+  a:hover { text-decoration: underline; color: #c4b5fd; }
+  code, pre {
+    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, monospace;
+    font-size: 0.88em;
+  }
+  pre {
+    background: #12121c;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    white-space: pre;
+    color: #b0b0c8;
+  }
+  code { background: #1a1a2e; padding: 2px 6px; border-radius: 4px; color: #c4b5fd; }
+  pre code { background: none; padding: 0; color: inherit; }
+
+  /* ── Layout ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Header ── */
+  .header { text-align: center; padding: 3rem 0 2rem; border-bottom: 1px solid #1e1e30; margin-bottom: 2rem; }
+  .header h1 { font-size: 2.4rem; font-weight: 700; background: linear-gradient(135deg, #a78bfa 0%, #6366f1 50%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+  .header p { color: #8888a8; font-size: 1.05rem; }
+
+  /* ── Tabs ── */
+  .tab-bar { display: flex; justify-content: center; gap: 0.5rem; margin: 2rem 0 2.5rem; }
+  .tab-btn {
+    padding: 0.65rem 2rem;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    background: #12121c;
+    color: #8888a8;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: #6366f1; color: #c4b5fd; }
+  .tab-btn.active { background: #1e1b4b; border-color: #6366f1; color: #e0e7ff; font-weight: 600; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── Sections ── */
+  .section { margin-bottom: 2.5rem; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: #12121c;
+    border: 1px solid #2a2a3e;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .section-header:hover { background: #181828; }
+  .section-header h2 { font-size: 1.3rem; color: #e0e7ff; flex: 1; }
+  .section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #1e1b4b;
+    color: #a78bfa;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+    color: #6366f1;
+  }
+  .section.collapsed .chevron { transform: rotate(-90deg); }
+  .section-body {
+    border: 1px solid #2a2a3e;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    padding: 1.5rem 1.25rem;
+    background: #0d0d18;
+  }
+  .section.collapsed .section-body { display: none; }
+
+  /* ── Cards ── */
+  .card {
+    background: #12121c;
+    border: 1px solid #2a2a3e;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card h3 { color: #c4b5fd; font-size: 1.1rem; margin-bottom: 0.75rem; }
+  .card h4 { color: #a78bfa; font-size: 0.95rem; margin: 1rem 0 0.5rem; }
+  .card p { margin-bottom: 0.5rem; }
+
+  /* ── Service Cards ── */
+  .service-card {
+    background: #12121c;
+    border: 1px solid #2a2a3e;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-left: 4px solid #6366f1;
+  }
+  .service-card h3 { color: #e0e7ff; font-size: 1.15rem; margin-bottom: 0.25rem; }
+  .service-card .service-subtitle { color: #8888a8; font-size: 0.85rem; margin-bottom: 1rem; }
+  .service-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0.35rem 1rem;
+    font-size: 0.92rem;
+  }
+  .service-grid dt { color: #8888a8; font-weight: 600; }
+  .service-grid dd { color: #d4d4e0; }
+
+  /* ── Tables ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: #1e1b4b; color: #c4b5fd; font-weight: 600; text-align: left; padding: 0.7rem 1rem; white-space: nowrap; }
+  td { padding: 0.6rem 1rem; border-bottom: 1px solid #1a1a2e; }
+  tr:nth-child(even) td { background: #0f0f1a; }
+  tr:hover td { background: #161628; }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .total-row td { font-weight: 700; background: #1e1b4b !important; color: #e0e7ff; border-top: 2px solid #6366f1; }
+  .profit td { color: #34d399 !important; }
+  .loss td { color: #f87171 !important; }
+
+  /* ── Flow Diagram ── */
+  .flow-diagram {
+    background: #12121c;
+    border: 1px solid #2a2a3e;
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 1rem 0;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .flow-box {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .flow-client { background: #1e1b4b; color: #c4b5fd; border: 1px solid #4338ca; }
+  .flow-server { background: #1a2e1a; color: #86efac; border: 1px solid #16a34a; }
+  .flow-db { background: #2e1a1a; color: #fca5a5; border: 1px solid #dc2626; }
+  .flow-api { background: #1a1a2e; color: #93c5fd; border: 1px solid #3b82f6; }
+  .flow-cache { background: #2e2a1a; color: #fde68a; border: 1px solid #d97706; }
+  .flow-arrow { color: #4a4a6a; font-size: 1.2rem; }
+  .flow-indent { margin-left: 2rem; }
+  .flow-indent-2 { margin-left: 4rem; }
+  .flow-indent-3 { margin-left: 6rem; }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid #1a1a2e;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4a4a6a;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── Prompt Composition ── */
+  .prompt-layer {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.7rem 0.5rem;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  .prompt-layer:last-child { border-bottom: none; }
+  .prompt-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1e1b4b;
+    color: #a78bfa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .prompt-info { flex: 1; }
+  .prompt-info strong { color: #c4b5fd; }
+  .prompt-info span { color: #8888a8; font-size: 0.88rem; }
+
+  /* ── Footer ── */
+  .footer { text-align: center; padding: 2rem 0; border-top: 1px solid #1e1e30; margin-top: 2rem; color: #5a5a7a; font-size: 0.85rem; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; color: #1a1a1a; }
+    .header h1 { -webkit-text-fill-color: #4338ca; }
+    .tab-bar { display: none; }
+    .tab-content { display: block !important; }
+    .tab-content::before { content: attr(data-tab-label); display: block; font-size: 1.4rem; font-weight: 700; color: #4338ca; margin: 1rem 0; border-bottom: 2px solid #4338ca; padding-bottom: 0.5rem; }
+    .section.collapsed .section-body { display: block; }
+    .section-header { background: #f3f4f6; }
+    .card, .service-card, .flow-diagram { background: #f9fafb; border-color: #d1d5db; }
+    pre { background: #f3f4f6; border-color: #d1d5db; }
+    th { background: #e0e7ff; color: #312e81; }
+    tr:nth-child(even) td { background: #f9fafb; }
+    code { background: #e0e7ff; color: #312e81; }
+    .service-card { border-left-color: #4338ca; }
+    a { color: #4338ca; }
+    .flow-box { border-width: 2px; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header h1 { font-size: 1.6rem; }
+    .container { padding: 1rem; }
+    .service-grid { grid-template-columns: 1fr; }
+    .service-grid dt { font-size: 0.8rem; margin-top: 0.5rem; }
+    .tab-btn { padding: 0.5rem 1.25rem; font-size: 0.85rem; }
+    table { font-size: 0.78rem; }
+    th, td { padding: 0.5rem 0.6rem; }
+    .flow-indent { margin-left: 1rem; }
+    .flow-indent-2 { margin-left: 2rem; }
+    .flow-indent-3 { margin-left: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═════════ HEADER ═════════ -->
+  <header class="header">
+    <h1>Forked Tongue</h1>
+    <p>Architecture &amp; Services Map</p>
+    <p style="color:#5a5a7a; font-size:0.9rem; margin-top:0.25rem;">Everything you need to know to build, deploy, and maintain this app</p>
+  </header>
+
+  <!-- ═════════ TABS ═════════ -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="plain">Plain Language</button>
+    <button class="tab-btn" data-tab="technical">Technical</button>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 1 — SYSTEM OVERVIEW                    ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s1">
+    <div class="section-header" onclick="toggleSection('s1')">
+      <span class="section-number">1</span>
+      <h2>System Overview</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>What Is Forked Tongue?</h3>
+          <p>Forked Tongue is a language learning app with three main parts: <strong>a website</strong>, <strong>a mobile app</strong>, and <strong>a server that powers both</strong>. Users talk to AI characters who help them learn languages through conversation.</p>
+          <p style="margin-top:1rem;">Think of it like having 16 different conversation partners, each with their own personality, teaching style, and expertise. The AI adapts to how you learn, remembers your weaknesses, and adjusts difficulty in real time.</p>
+          <h4>The Three Parts</h4>
+          <p><strong>Website</strong> &mdash; What users see in their browser. Built for speed and works on any device.</p>
+          <p><strong>Mobile App</strong> &mdash; A native app for iPhone and Android, distributed through the App Store and Play Store.</p>
+          <p><strong>Server (API)</strong> &mdash; The backend brain. Handles user accounts, talks to the AI, tracks progress, and manages subscriptions.</p>
+          <h4>The Hidden Packages</h4>
+          <p><strong>Shared</strong> &mdash; Code that both the website and mobile app need (types, constants, utilities).</p>
+          <p><strong>AI</strong> &mdash; Wrappers around Claude (conversation), ElevenLabs (speech), and Deepgram (voice input).</p>
+          <p><strong>Characters</strong> &mdash; The 16 AI conversation partners: their backstories, teaching styles, and conversation rules.</p>
+          <p><strong>LNN</strong> &mdash; The Linguistic Neural Network &mdash; a custom engine that maps what a user knows, finds gaps, and drives adaptive difficulty.</p>
+        </div>
+      </div>
+
+      <!-- Technical tab -->
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="card">
+          <h3>Monorepo Structure</h3>
+          <pre><code>forked-tongue/
+├── apps/
+│   ├── api/          Express + TypeScript + Prisma (Port 3001)
+│   ├── web/          React 19 + Vite 6 + TypeScript (Port 5173)
+│   └── mobile/       Expo SDK 52 + React Native 0.76
+├── packages/
+│   ├── shared/       Types, constants, utilities
+│   ├── ai/           Claude, ElevenLabs, Deepgram wrappers
+│   ├── characters/   16 character definitions + system prompts
+│   └── lnn/          Linguistic Neural Network engine
+├── prisma/           PostgreSQL schema + 3 migrations
+├── public/           Static landing page, blog, legal pages
+└── aso/              App Store + Play Store metadata</code></pre>
+
+          <h4>Tech Stack Summary</h4>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Layer</th><th>Technology</th><th>Version</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Runtime</td><td>Node.js</td><td>20+</td><td>LTS required</td></tr>
+                <tr><td>Package Manager</td><td>npm workspaces</td><td>&mdash;</td><td>Monorepo via <code>workspaces</code> in root package.json</td></tr>
+                <tr><td>API Server</td><td>Express</td><td>4.x</td><td>REST + WebSocket</td></tr>
+                <tr><td>ORM</td><td>Prisma</td><td>6.x</td><td>PostgreSQL adapter</td></tr>
+                <tr><td>Web Frontend</td><td>React + Vite</td><td>19 / 6</td><td>SPA with client-side routing</td></tr>
+                <tr><td>Mobile</td><td>Expo + React Native</td><td>SDK 52 / 0.76</td><td>Managed workflow</td></tr>
+                <tr><td>Language</td><td>TypeScript</td><td>5.7</td><td>Strict mode, shared tsconfig</td></tr>
+                <tr><td>Testing</td><td>Vitest</td><td>latest</td><td>Root config, workspace-aware</td></tr>
+                <tr><td>Containers</td><td>Docker Compose</td><td>&mdash;</td><td>PostgreSQL 17 + Redis 7</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 2 — EXTERNAL SERVICES                  ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s2">
+    <div class="section-header" onclick="toggleSection('s2')">
+      <span class="section-number">2</span>
+      <h2>External Services</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>Services at a Glance</h3>
+          <p>Forked Tongue relies on 10 external services. Here is what each one does in plain English:</p>
+          <p style="margin-top:1rem;"><strong>Anthropic (Claude)</strong> &mdash; The AI brain. Every conversation, correction, and analysis flows through Claude. It is the single most important service.</p>
+          <p><strong>ElevenLabs</strong> &mdash; Turns text into lifelike speech for premium users. Free users get Kokoro (an in-browser voice engine that costs nothing).</p>
+          <p><strong>Deepgram</strong> &mdash; Turns spoken words into text for premium users. Free users get the browser's built-in speech recognition.</p>
+          <p><strong>PostgreSQL</strong> &mdash; The database. Stores user accounts, conversations, messages, points, and progress.</p>
+          <p><strong>Redis</strong> &mdash; A fast cache. Handles rate limiting, session management, and temporary data.</p>
+          <p><strong>Stripe</strong> &mdash; Processes credit card payments for website subscriptions.</p>
+          <p><strong>RevenueCat</strong> &mdash; Handles in-app purchases on iPhone and Android so we don't deal with Apple/Google billing directly.</p>
+          <p><strong>Google AdSense</strong> &mdash; Shows ads to free web users to generate revenue.</p>
+          <p><strong>Google AdMob</strong> &mdash; Shows ads to free mobile users.</p>
+          <p><strong>Sentry</strong> &mdash; Catches errors in production and alerts us. Not yet configured.</p>
+        </div>
+      </div>
+
+      <!-- Technical tab -->
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+
+        <!-- 2.1 Anthropic -->
+        <div class="service-card">
+          <h3>2.1 &mdash; Anthropic (Claude API)</h3>
+          <p class="service-subtitle">Core AI &mdash; conversation, analysis, adaptation</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Conversation AI, correction analysis, memory summaries, LNN translations, scenario generation, word translations, conversation quality scoring, teaching notes, pronunciation analysis, replay annotation, cross-language insights</dd>
+            <dt>Account</dt>
+            <dd><a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></dd>
+            <dt>Models</dt>
+            <dd>Haiku 4.5 (bulk conversations) &middot; Sonnet 4.6 (vision, scenarios, complex analysis)</dd>
+            <dt>Pricing</dt>
+            <dd>Haiku: $1 / $5 per M tokens (input/output) &middot; Sonnet: $3 / $15 per M tokens</dd>
+            <dt>Caching</dt>
+            <dd>Prompt caching enabled &mdash; ~90% savings on repeated system prompts</dd>
+            <dt>Env var</dt>
+            <dd><code>CLAUDE_API_KEY</code></dd>
+            <dt>Example key</dt>
+            <dd><code>sk-ant-api03-xxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.2 ElevenLabs -->
+        <div class="service-card">
+          <h3>2.2 &mdash; ElevenLabs (Text-to-Speech)</h3>
+          <p class="service-subtitle">Premium voice output for characters</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Premium-tier voice output &mdash; lifelike character speech</dd>
+            <dt>Account</dt>
+            <dd><a href="https://elevenlabs.io/" target="_blank">elevenlabs.io</a></dd>
+            <dt>Model</dt>
+            <dd><code>eleven_multilingual_v2</code></dd>
+            <dt>Pricing</dt>
+            <dd>$0.12 per 1,000 characters (~$0.024 per average message)</dd>
+            <dt>Free alt</dt>
+            <dd>Kokoro TTS &mdash; in-browser WASM, $0 cost</dd>
+            <dt>Env var</dt>
+            <dd><code>ELEVENLABS_API_KEY</code></dd>
+            <dt>Example key</dt>
+            <dd><code>xi-xxxxxxxxxxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.3 Deepgram -->
+        <div class="service-card">
+          <h3>2.3 &mdash; Deepgram (Speech-to-Text)</h3>
+          <p class="service-subtitle">Premium voice input transcription</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Premium-tier voice input transcription</dd>
+            <dt>Account</dt>
+            <dd><a href="https://console.deepgram.com/" target="_blank">console.deepgram.com</a></dd>
+            <dt>Model</dt>
+            <dd>Nova-2</dd>
+            <dt>Pricing</dt>
+            <dd>$0.0058 / minute</dd>
+            <dt>Free alt</dt>
+            <dd>Web Speech API &mdash; browser-native, $0 cost</dd>
+            <dt>Env var</dt>
+            <dd><code>DEEPGRAM_API_KEY</code></dd>
+            <dt>Example key</dt>
+            <dd><code>dg-xxxxxxxxxxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.4 PostgreSQL -->
+        <div class="service-card">
+          <h3>2.4 &mdash; PostgreSQL (Database)</h3>
+          <p class="service-subtitle">Primary data store</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>User accounts, conversations, messages, points, community places, language progress, LNN state</dd>
+            <dt>Docker</dt>
+            <dd><code>postgres:17-alpine</code> on port 5433</dd>
+            <dt>ORM</dt>
+            <dd>Prisma 6.x &mdash; 3 migrations</dd>
+            <dt>Managed opts</dt>
+            <dd>Supabase (free tier) &middot; Neon &middot; AWS RDS</dd>
+            <dt>Env var</dt>
+            <dd><code>DATABASE_URL</code></dd>
+            <dt>Example</dt>
+            <dd><code>postgresql://ft_user:password@localhost:5433/forked_tongue</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.5 Redis -->
+        <div class="service-card">
+          <h3>2.5 &mdash; Redis (Cache + Sessions)</h3>
+          <p class="service-subtitle">Fast ephemeral storage</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Rate limiting, token blacklist, teaching notes, pronunciation profiles, linguistic insights, contact form storage, cross-user patterns cache, cookie consent</dd>
+            <dt>Docker</dt>
+            <dd><code>redis:7-alpine</code> on port 6379</dd>
+            <dt>Managed opts</dt>
+            <dd>Upstash (free tier) &middot; AWS ElastiCache &middot; Redis Cloud</dd>
+            <dt>Env var</dt>
+            <dd><code>REDIS_URL</code></dd>
+            <dt>Example</dt>
+            <dd><code>redis://localhost:6379</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.6 Stripe -->
+        <div class="service-card">
+          <h3>2.6 &mdash; Stripe (Web Payments)</h3>
+          <p class="service-subtitle">Subscription billing for web users</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Credit card subscription billing (web only)</dd>
+            <dt>Account</dt>
+            <dd><a href="https://dashboard.stripe.com/" target="_blank">dashboard.stripe.com</a></dd>
+            <dt>Pricing</dt>
+            <dd>2.9% + $0.30 per transaction</dd>
+            <dt>Env vars</dt>
+            <dd><code>STRIPE_SECRET_KEY</code>, <code>STRIPE_PRICE_PLUS_MONTHLY</code>, <code>STRIPE_PRICE_PLUS_YEARLY</code>, <code>STRIPE_PRICE_PREMIUM_MONTHLY</code>, <code>STRIPE_PRICE_PREMIUM_YEARLY</code></dd>
+            <dt>Example key</dt>
+            <dd><code>sk_test_xxxxxxxxxxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.7 RevenueCat -->
+        <div class="service-card">
+          <h3>2.7 &mdash; RevenueCat (Mobile IAP)</h3>
+          <p class="service-subtitle">Apple StoreKit + Google Play Billing wrapper</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Mobile subscription management across iOS and Android</dd>
+            <dt>Account</dt>
+            <dd><a href="https://app.revenuecat.com/" target="_blank">app.revenuecat.com</a></dd>
+            <dt>Pricing</dt>
+            <dd>Free up to $2.5K MTR, then 1%</dd>
+            <dt>Note</dt>
+            <dd>Apple takes 30% of mobile revenue &middot; Google takes 30%</dd>
+            <dt>Env vars</dt>
+            <dd><code>REVENUECAT_API_KEY</code>, <code>REVENUECAT_WEBHOOK_SECRET</code></dd>
+            <dt>Example key</dt>
+            <dd><code>appl_xxxxxxxxxxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.8 AdSense -->
+        <div class="service-card">
+          <h3>2.8 &mdash; Google AdSense (Web Ads)</h3>
+          <p class="service-subtitle">Ad backfill for free-tier web users</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Display ads for free web users</dd>
+            <dt>Account</dt>
+            <dd><a href="https://adsense.google.com/" target="_blank">adsense.google.com</a></dd>
+            <dt>Requires</dt>
+            <dd>15+ content pages, privacy policy, cookie consent (TCF v2.3)</dd>
+            <dt>Env var</dt>
+            <dd><code>GOOGLE_ADSENSE_CLIENT_ID</code></dd>
+            <dt>Example</dt>
+            <dd><code>ca-pub-xxxxxxxxxxxxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.9 AdMob -->
+        <div class="service-card">
+          <h3>2.9 &mdash; Google AdMob (Mobile Ads)</h3>
+          <p class="service-subtitle">Ad backfill for free-tier mobile users</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Display ads for free mobile users</dd>
+            <dt>Account</dt>
+            <dd><a href="https://admob.google.com/" target="_blank">admob.google.com</a></dd>
+            <dt>Env vars</dt>
+            <dd><code>GOOGLE_ADMOB_ANDROID_APP_ID</code>, <code>GOOGLE_ADMOB_IOS_APP_ID</code></dd>
+            <dt>Example</dt>
+            <dd><code>ca-app-pub-xxxxxxxxxxxx~xxxxxxxxxx</code></dd>
+          </dl>
+        </div>
+
+        <!-- 2.10 Sentry -->
+        <div class="service-card" style="border-left-color: #4a4a6a; opacity: 0.75;">
+          <h3>2.10 &mdash; Sentry (Error Tracking)</h3>
+          <p class="service-subtitle">Placeholder &mdash; not yet configured</p>
+          <dl class="service-grid">
+            <dt>Purpose</dt>
+            <dd>Production error monitoring and crash reporting</dd>
+            <dt>Account</dt>
+            <dd><a href="https://sentry.io/" target="_blank">sentry.io</a></dd>
+            <dt>Env var</dt>
+            <dd><code>SENTRY_DSN</code></dd>
+            <dt>Example</dt>
+            <dd><code>https://xxxxx@o0.ingest.sentry.io/0</code></dd>
+            <dt>Status</dt>
+            <dd style="color:#fbbf24;">Not yet configured</dd>
+          </dl>
+        </div>
+
+      </div><!-- /technical -->
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 3 — DATA FLOW                          ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s3">
+    <div class="section-header" onclick="toggleSection('s3')">
+      <span class="section-number">3</span>
+      <h2>Data Flow Diagram</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>How a Conversation Works</h3>
+          <p>1. You type or speak a message in the app.</p>
+          <p>2. The message is sent to our server.</p>
+          <p>3. The server checks your login, applies rate limits, then builds a massive prompt for the AI. That prompt includes your character's personality, your learning history, your weak points, and the entire conversation so far.</p>
+          <p>4. The AI (Claude) generates a response, which streams back word-by-word in real time.</p>
+          <p>5. The server saves the message, updates your progress, and (for premium users) also sends the text to ElevenLabs to create speech audio.</p>
+          <p>6. If you used voice input, Deepgram converted your speech to text before step 2.</p>
+          <p>7. Everything is cached in Redis for speed and stored permanently in PostgreSQL.</p>
+        </div>
+      </div>
+
+      <!-- Technical tab -->
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="flow-diagram">
+          <div class="flow-row">
+            <span class="flow-box flow-client">User (Web / Mobile)</span>
+          </div>
+          <div class="flow-row flow-indent">
+            <span class="flow-arrow">&darr;</span>
+            <span style="color:#5a5a7a; font-size:0.82rem;">HTTPS / WSS</span>
+          </div>
+          <div class="flow-row flow-indent">
+            <span class="flow-box flow-server">API Server (Express :3001)</span>
+          </div>
+          <div class="flow-row flow-indent-2">
+            <span class="flow-arrow">&darr;</span>
+            <span class="flow-box flow-cache">Auth (JWT + Redis blacklist)</span>
+          </div>
+          <div class="flow-row flow-indent-2">
+            <span class="flow-arrow">&darr;</span>
+            <span class="flow-box flow-cache">Rate Limiter (Redis + in-memory fallback)</span>
+          </div>
+          <div class="flow-row flow-indent-2">
+            <span class="flow-arrow">&darr;</span>
+            <span class="flow-box flow-server">Route Handler</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-db">Prisma &rarr; PostgreSQL :5433</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-api">Claude API (conversation / analysis)</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-cache">Redis :6379 (caching / sessions)</span>
+          </div>
+          <div class="flow-row flow-indent-2" style="margin-top:1rem;">
+            <span class="flow-arrow">&darr;</span>
+            <span style="color:#5a5a7a; font-size:0.82rem;">WebSocket (real-time streaming)</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-api">Claude streaming &rarr; token-by-token delivery</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-api">Deepgram STT (voice input)</span>
+          </div>
+          <div class="flow-row flow-indent-3">
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-box flow-api">ElevenLabs TTS (voice output)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 4 — SYSTEM PROMPT COMPOSITION          ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s4">
+    <div class="section-header" onclick="toggleSection('s4')">
+      <span class="section-number">4</span>
+      <h2>System Prompt Composition</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>How the AI "Knows" You</h3>
+          <p>Every time you send a message, the app assembles a detailed instruction set for the AI from 15 different sources. This is what makes each conversation feel personalized and adaptive rather than generic.</p>
+          <p style="margin-top:0.75rem;">It includes the character's personality, your learning mode, your weak spots, past conversation summaries, what teaching strategies work best for you, and even your pronunciation trouble areas. All of this is stitched together dynamically before every API call.</p>
+        </div>
+      </div>
+
+      <!-- Technical tab -->
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="card">
+          <h3>15-Layer Prompt Assembly</h3>
+          <p style="margin-bottom:1rem; color:#8888a8;">Each conversation request assembles the system prompt from these sources, in order:</p>
+
+          <div class="prompt-layer"><span class="prompt-num">1</span><div class="prompt-info"><strong>Character Template</strong><br><span>Persona, traits, interests, speaking style, native language</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">2</span><div class="prompt-info"><strong>Conversation Mode Instructions</strong><br><span>Chill / Nudge / Immersion / Tutor &mdash; controls correction density and target language ratio</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">3</span><div class="prompt-info"><strong>LNN Adaptive Fragment</strong><br><span>Weak nodes, error-prone concepts, suggested practice targets from the Linguistic Neural Network</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">4</span><div class="prompt-info"><strong>Conversation Memory</strong><br><span>Summarized history of the current conversation thread</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">5</span><div class="prompt-info"><strong>Character Memory</strong><br><span>Cross-session personality memory &mdash; things the character "remembers" about the user</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">6</span><div class="prompt-info"><strong>Language Triangulation</strong><br><span>Multi-language comparisons (e.g., "In Spanish you already know this pattern; French uses it differently")</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">7</span><div class="prompt-info"><strong>Teaching Notes</strong><br><span>What strategies work best for this specific user (cached in Redis)</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">8</span><div class="prompt-info"><strong>Linguistic Insights</strong><br><span>Past correction discoveries &mdash; recurring error patterns</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">9</span><div class="prompt-info"><strong>Cross-User Difficulty Patterns</strong><br><span>Universal hard concepts aggregated from all users (Redis cache)</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">10</span><div class="prompt-info"><strong>Pronunciation Profile</strong><br><span>Phoneme weaknesses specific to this user's native language &rarr; target language pair</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">11</span><div class="prompt-info"><strong>Emotional State Guidance</strong><br><span>Frustration / confidence detection &mdash; adjusts encouragement level and difficulty</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">12</span><div class="prompt-info"><strong>Immersion Moment Trigger</strong><br><span>10% random chance, memory-personalized &mdash; brief full-immersion bursts</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">13</span><div class="prompt-info"><strong>Contextual Scenario Suggestion</strong><br><span>5% chance, topic-matched &mdash; "Let's pretend you're ordering at a cafe"</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">14</span><div class="prompt-info"><strong>Active Recall Challenge</strong><br><span>20% chance, spaced repetition quiz on previously learned items</span></div></div>
+          <div class="prompt-layer"><span class="prompt-num">15</span><div class="prompt-info"><strong>Content Filter</strong><br><span>Post-response safety net &mdash; checks output for policy compliance</span></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 5 — COST PROJECTIONS                   ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s5">
+    <div class="section-header" onclick="toggleSection('s5')">
+      <span class="section-number">5</span>
+      <h2>Monthly Cost Projections</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>What Does It Cost to Run?</h3>
+          <p>For 1,000 users (900 free, 80 Plus, 20 Premium), the app costs roughly <strong>$2,200&ndash;$2,500 per month</strong> to operate. The biggest expense by far is the Claude AI API. Voice services (ElevenLabs, Deepgram) only apply to Premium users.</p>
+          <p style="margin-top:0.75rem;">Revenue from subscriptions and ads should bring in roughly <strong>$2,640 per month</strong>, making the app profitable at this scale.</p>
+          <p style="margin-top:0.75rem;">The key insight: free users are cheap (Kokoro TTS is free, Web Speech API is free, and cached Haiku prompts are very affordable). Premium users cost more per-head but pay enough to cover it.</p>
+        </div>
+      </div>
+
+      <!-- Technical tab -->
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="card">
+          <h3>Assumptions</h3>
+          <p><strong>1,000 users:</strong> 900 Free, 80 Plus ($14.99/mo), 20 Premium ($49.99/mo)</p>
+          <p><strong>Messages/day:</strong> Free = 15, Plus = 60, Premium = 150</p>
+          <p><strong>Claude cached Haiku cost per message:</strong> ~$0.0025 (with prompt caching)</p>
+          <p><strong>Claude Sonnet invocations:</strong> ~10% of messages at ~$0.0075 each</p>
+        </div>
+
+        <div class="card">
+          <h3>Monthly Costs</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th class="num">Free (900)</th>
+                  <th class="num">Plus (80)</th>
+                  <th class="num">Premium (20)</th>
+                  <th class="num">Total/mo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Claude Haiku (cached)</td>
+                  <td class="num">900 &times; 15 &times; 30 &times; $0.0025 = $1,012.50</td>
+                  <td class="num">80 &times; 60 &times; 30 &times; $0.0025 = $360.00</td>
+                  <td class="num">20 &times; 150 &times; 30 &times; $0.0025 = $225.00</td>
+                  <td class="num"><strong>$1,597.50</strong></td>
+                </tr>
+                <tr>
+                  <td>Claude Sonnet (~10%)</td>
+                  <td class="num">40,500 &times; $0.0075 = $303.75</td>
+                  <td class="num">14,400 &times; $0.0075 = $108.00</td>
+                  <td class="num">9,000 &times; $0.0075 = $67.50</td>
+                  <td class="num"><strong>$479.25</strong></td>
+                </tr>
+                <tr>
+                  <td>ElevenLabs TTS</td>
+                  <td class="num">$0 (Kokoro)</td>
+                  <td class="num">$0 (Kokoro)</td>
+                  <td class="num">20 &times; 20min &times; 30 &times; $0.012/min = $144.00</td>
+                  <td class="num"><strong>$144.00</strong></td>
+                </tr>
+                <tr>
+                  <td>Deepgram STT</td>
+                  <td class="num">$0 (Web Speech)</td>
+                  <td class="num">$0 (Web Speech)</td>
+                  <td class="num">20 &times; 10min &times; 30 &times; $0.0058 = $34.80</td>
+                  <td class="num"><strong>$34.80</strong></td>
+                </tr>
+                <tr>
+                  <td>PostgreSQL</td>
+                  <td class="num" colspan="3">Supabase free tier</td>
+                  <td class="num"><strong>$0</strong></td>
+                </tr>
+                <tr>
+                  <td>Redis</td>
+                  <td class="num" colspan="3">Upstash free tier</td>
+                  <td class="num"><strong>$0</strong></td>
+                </tr>
+                <tr>
+                  <td>Stripe fees</td>
+                  <td class="num">N/A</td>
+                  <td class="num">~$38</td>
+                  <td class="num">~$32</td>
+                  <td class="num"><strong>$70.00</strong></td>
+                </tr>
+                <tr>
+                  <td>RevenueCat</td>
+                  <td class="num" colspan="3">Free (&lt;$2.5K MTR)</td>
+                  <td class="num"><strong>$0</strong></td>
+                </tr>
+                <tr>
+                  <td>Hosting (VPS / PaaS)</td>
+                  <td class="num" colspan="3">&mdash;</td>
+                  <td class="num"><strong>$75.00</strong></td>
+                </tr>
+                <tr class="total-row">
+                  <td colspan="4">Total Monthly Costs</td>
+                  <td class="num">$2,400.55</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Monthly Revenue</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Source</th><th>Calculation</th><th class="num">Monthly</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Plus subscriptions (web, after Stripe)</td>
+                  <td>80 &times; $14.99 &times; 0.971 (Stripe cut)</td>
+                  <td class="num">$1,164.42</td>
+                </tr>
+                <tr>
+                  <td>Premium subscriptions (web, after Stripe)</td>
+                  <td>20 &times; $49.99 &times; 0.971</td>
+                  <td class="num">$970.81</td>
+                </tr>
+                <tr>
+                  <td>Plus subs (mobile, after Apple/Google 30%)</td>
+                  <td>Assume 50% mobile: 40 &times; $14.99 &times; 0.70</td>
+                  <td class="num">$419.72</td>
+                </tr>
+                <tr>
+                  <td>Premium subs (mobile, after 30% cut)</td>
+                  <td>Assume 50% mobile: 10 &times; $49.99 &times; 0.70</td>
+                  <td class="num">$349.93</td>
+                </tr>
+                <tr>
+                  <td>Ad revenue (AdSense + AdMob)</td>
+                  <td>900 free users &times; ~$3 RPM &times; 2 pageviews/day &times; 30</td>
+                  <td class="num">$162.00</td>
+                </tr>
+                <tr class="total-row">
+                  <td colspan="2">Total Monthly Revenue</td>
+                  <td class="num">$3,066.88</td>
+                </tr>
+                <tr class="total-row" style="border-top:none;">
+                  <td colspan="2">Total Monthly Costs</td>
+                  <td class="num">-$2,400.55</td>
+                </tr>
+                <tr class="total-row profit" style="border-top:none;">
+                  <td colspan="2">Net Monthly Profit</td>
+                  <td class="num">+$666.33</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:1rem; color:#8888a8; font-size:0.85rem;">Note: Mobile revenue split assumes 50/50 web/mobile. Actual split will vary. If all subscriptions are mobile (30% cut), net profit drops. If all web (2.9% Stripe), it rises significantly. Numbers above assume a blended scenario.</p>
+        </div>
+
+        <div class="card">
+          <h3>Yearly Projections</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Metric</th><th class="num">Monthly</th><th class="num">Yearly</th></tr></thead>
+              <tbody>
+                <tr><td>Revenue</td><td class="num">$3,066.88</td><td class="num">$36,802.56</td></tr>
+                <tr><td>Costs</td><td class="num">$2,400.55</td><td class="num">$28,806.60</td></tr>
+                <tr class="total-row profit"><td>Net Profit</td><td class="num">+$666.33</td><td class="num">+$7,995.96</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 6 — ENVIRONMENT VARIABLES              ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s6">
+    <div class="section-header" onclick="toggleSection('s6')">
+      <span class="section-number">6</span>
+      <h2>Environment Variables Reference</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Both tabs show the same content -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <p>These are the secret keys and connection strings the app needs to run. They go in a <code>.env</code> file that is never committed to git.</p>
+        </div>
+      </div>
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="card"><p>All variables below belong in <code>.env</code> at the project root. Never commit real values.</p></div>
+      </div>
+
+      <!-- Shared table (always visible) -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Variable</th><th>Req?</th><th>Service</th><th>Description</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>DATABASE_URL</code></td><td>Yes</td><td>PostgreSQL</td><td>Database connection string</td><td><code>postgresql://ft_user:pw@localhost:5433/forked_tongue</code></td></tr>
+            <tr><td><code>REDIS_URL</code></td><td>Yes</td><td>Redis</td><td>Cache connection string</td><td><code>redis://localhost:6379</code></td></tr>
+            <tr><td><code>CLAUDE_API_KEY</code></td><td>Yes</td><td>Anthropic</td><td>Claude API authentication</td><td><code>sk-ant-api03-xxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>JWT_SECRET</code></td><td>Yes</td><td>Auth</td><td>JWT signing secret (min 32 chars)</td><td><code>your-random-secret-min-32-chars</code></td></tr>
+            <tr><td><code>JWT_REFRESH_SECRET</code></td><td>Yes</td><td>Auth</td><td>Refresh token signing secret</td><td><code>another-random-secret-min-32-chars</code></td></tr>
+            <tr><td><code>ELEVENLABS_API_KEY</code></td><td>Premium</td><td>ElevenLabs</td><td>TTS API key</td><td><code>xi-xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>DEEPGRAM_API_KEY</code></td><td>Premium</td><td>Deepgram</td><td>STT API key</td><td><code>dg-xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_SECRET_KEY</code></td><td>Payments</td><td>Stripe</td><td>Stripe secret key</td><td><code>sk_test_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_WEBHOOK_SECRET</code></td><td>Payments</td><td>Stripe</td><td>Webhook endpoint secret</td><td><code>whsec_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_PRICE_PLUS_MONTHLY</code></td><td>Payments</td><td>Stripe</td><td>Plus monthly price ID</td><td><code>price_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_PRICE_PLUS_YEARLY</code></td><td>Payments</td><td>Stripe</td><td>Plus yearly price ID</td><td><code>price_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_PRICE_PREMIUM_MONTHLY</code></td><td>Payments</td><td>Stripe</td><td>Premium monthly price ID</td><td><code>price_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>STRIPE_PRICE_PREMIUM_YEARLY</code></td><td>Payments</td><td>Stripe</td><td>Premium yearly price ID</td><td><code>price_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>REVENUECAT_API_KEY</code></td><td>Mobile</td><td>RevenueCat</td><td>RevenueCat API key</td><td><code>appl_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>REVENUECAT_WEBHOOK_SECRET</code></td><td>Mobile</td><td>RevenueCat</td><td>Webhook verification secret</td><td><code>whsec_xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>GOOGLE_ADSENSE_CLIENT_ID</code></td><td>Ads</td><td>AdSense</td><td>Web ad publisher ID</td><td><code>ca-pub-xxxxxxxxxxxxxxxxxxxx</code></td></tr>
+            <tr><td><code>GOOGLE_ADMOB_ANDROID_APP_ID</code></td><td>Ads</td><td>AdMob</td><td>Android ad app ID</td><td><code>ca-app-pub-xxxxxxxxxxxx~xxxxxxxxxx</code></td></tr>
+            <tr><td><code>GOOGLE_ADMOB_IOS_APP_ID</code></td><td>Ads</td><td>AdMob</td><td>iOS ad app ID</td><td><code>ca-app-pub-xxxxxxxxxxxx~xxxxxxxxxx</code></td></tr>
+            <tr><td><code>SENTRY_DSN</code></td><td>No</td><td>Sentry</td><td>Error tracking DSN</td><td><code>https://xxxxx@o0.ingest.sentry.io/0</code></td></tr>
+            <tr><td><code>NODE_ENV</code></td><td>Yes</td><td>Runtime</td><td>Environment mode</td><td><code>development</code> / <code>production</code></td></tr>
+            <tr><td><code>PORT</code></td><td>No</td><td>API</td><td>API server port (default 3001)</td><td><code>3001</code></td></tr>
+            <tr><td><code>CORS_ORIGIN</code></td><td>Prod</td><td>API</td><td>Allowed CORS origin</td><td><code>https://forkedtongue.app</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ╔══════════════════════════════════════════════════╗ -->
+  <!-- ║  SECTION 7 — DEPLOYMENT CHECKLIST               ║ -->
+  <!-- ╚══════════════════════════════════════════════════╝ -->
+  <div class="section" id="s7">
+    <div class="section-header" onclick="toggleSection('s7')">
+      <span class="section-number">7</span>
+      <h2>Deployment Checklist</h2>
+      <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>
+    </div>
+    <div class="section-body">
+
+      <!-- Plain tab -->
+      <div class="tab-content active" data-tab-label="Plain Language" data-tab="plain">
+        <div class="card">
+          <h3>Everything Needed to Go Live</h3>
+          <p>This is the full checklist. Work through it top to bottom.</p>
+        </div>
+      </div>
+      <div class="tab-content" data-tab-label="Technical" data-tab="technical">
+        <div class="card">
+          <h3>Pre-Launch Requirements</h3>
+          <p>Each item must be completed before production deployment.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Infrastructure</h3>
+        <ul class="checklist">
+          <li><span class="check-box"></span>Set up production PostgreSQL (Supabase / Neon / RDS)</li>
+          <li><span class="check-box"></span>Set up production Redis (Upstash / ElastiCache / Redis Cloud)</li>
+          <li><span class="check-box"></span>Configure HTTPS / SSL certificates</li>
+          <li><span class="check-box"></span>Deploy API server to cloud (Docker / Railway / Render)</li>
+          <li><span class="check-box"></span>Deploy web frontend to CDN (Vercel / Netlify / Cloudflare Pages)</li>
+          <li><span class="check-box"></span>Set up monitoring and alerting</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>API Keys &amp; Accounts</h3>
+        <ul class="checklist">
+          <li><span class="check-box"></span>Get Claude API key (<a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>)</li>
+          <li><span class="check-box"></span>Get ElevenLabs API key for Premium tier (<a href="https://elevenlabs.io/" target="_blank">elevenlabs.io</a>)</li>
+          <li><span class="check-box"></span>Get Deepgram API key for Premium tier (<a href="https://console.deepgram.com/" target="_blank">console.deepgram.com</a>)</li>
+          <li><span class="check-box"></span>Set up Stripe account + create products/prices (<a href="https://dashboard.stripe.com/" target="_blank">stripe.com</a>)</li>
+          <li><span class="check-box"></span>Set up RevenueCat + connect App Store / Play Store (<a href="https://app.revenuecat.com/" target="_blank">revenuecat.com</a>)</li>
+          <li><span class="check-box"></span>Set up Google AdSense account (<a href="https://adsense.google.com/" target="_blank">adsense.google.com</a>)</li>
+          <li><span class="check-box"></span>Set up Google AdMob account (<a href="https://admob.google.com/" target="_blank">admob.google.com</a>)</li>
+          <li><span class="check-box"></span>Set up Sentry project (<a href="https://sentry.io/" target="_blank">sentry.io</a>)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Mobile</h3>
+        <ul class="checklist">
+          <li><span class="check-box"></span>Build mobile app with EAS Build</li>
+          <li><span class="check-box"></span>Submit to Apple App Store (requires Apple Developer account, $99/year)</li>
+          <li><span class="check-box"></span>Submit to Google Play Store (requires Google Developer account, $25 one-time)</li>
+          <li><span class="check-box"></span>Configure in-app purchase products in App Store Connect and Google Play Console</li>
+          <li><span class="check-box"></span>Set up ASO metadata (screenshots, descriptions, keywords)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Pre-Flight Checks</h3>
+        <ul class="checklist">
+          <li><span class="check-box"></span>Run database migrations on production (<code>prisma migrate deploy</code>)</li>
+          <li><span class="check-box"></span>Verify all environment variables are set</li>
+          <li><span class="check-box"></span>Test Stripe webhooks with <code>stripe listen --forward-to</code></li>
+          <li><span class="check-box"></span>Test RevenueCat webhook delivery</li>
+          <li><span class="check-box"></span>Load test API with expected traffic volume</li>
+          <li><span class="check-box"></span>Verify CORS configuration for production domain</li>
+          <li><span class="check-box"></span>Confirm cookie consent and TCF v2.3 compliance</li>
+          <li><span class="check-box"></span>Review privacy policy and terms of service</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═════════ FOOTER ═════════ -->
+  <footer class="footer">
+    <p>Generated March 28, 2026. Forked Tongue Architecture v1.0</p>
+    <p style="margin-top:0.25rem;">This file is gitignored and contains no real keys or secrets.</p>
+  </footer>
+
+</div><!-- /.container -->
+
+<script>
+  // ── Tab Switching ──
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      // Update buttons
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Update content
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.toggle('active', el.dataset.tab === tab);
+      });
+    });
+  });
+
+  // ── Section Collapse ──
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('collapsed');
+  }
+</script>
+</body>
+</html>

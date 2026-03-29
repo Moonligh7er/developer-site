@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA — VM Quick Start Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@media print {
+  body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
+  h1, h2, h3 { color: #0a0e14 !important; }
+  .step-number { background: #0a0e14 !important; color: white !important; }
+  .warning-box { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; }
+  .info-box { border-color: #3b82f6 !important; background: #eff6ff !important; color: #1e40af !important; }
+  .code-block { background: #f3f4f6 !important; color: #1a1a1a !important; border: 1px solid #d1d5db !important; }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: #0a0e14; color: #e2e8f0;
+  line-height: 1.8; font-size: 14px;
+  max-width: 800px; margin: 0 auto; padding: 40px 24px;
+}
+h1 { font-size: 1.8rem; color: #00d4aa; margin-bottom: 8px; letter-spacing: 0.1em; }
+h2 { font-size: 1.3rem; color: #00d4aa; margin: 40px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #1e293b; }
+h3 { font-size: 1rem; color: #39bae6; margin: 24px 0 12px; }
+p { margin-bottom: 12px; color: #94a3b8; }
+.subtitle { font-size: 0.85rem; color: #64748b; margin-bottom: 32px; }
+.step { margin-bottom: 24px; padding-left: 48px; position: relative; }
+.step-number {
+  position: absolute; left: 0; top: 0;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #00d4aa; color: #0a0e14;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem;
+}
+.code-block {
+  background: #111820; border: 1px solid #1e293b; border-radius: 6px;
+  padding: 14px 18px; margin: 10px 0 16px; font-size: 0.82rem;
+  overflow-x: auto; white-space: pre-wrap; color: #e2e8f0;
+}
+.code-block .prompt { color: #00d4aa; }
+.code-block .comment { color: #64748b; }
+.warning-box {
+  border-left: 4px solid #ef4444; background: rgba(239,68,68,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #fca5a5; font-size: 0.85rem;
+}
+.warning-box strong { color: #ef4444; }
+.info-box {
+  border-left: 4px solid #3b82f6; background: rgba(59,130,246,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #93c5fd; font-size: 0.85rem;
+}
+.info-box strong { color: #3b82f6; }
+.success-box {
+  border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08);
+  padding: 14px 18px; margin: 16px 0; border-radius: 0 6px 6px 0;
+  color: #86efac; font-size: 0.85rem;
+}
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.82rem; }
+th { text-align: left; padding: 8px 12px; background: #111820; color: #00d4aa; border: 1px solid #1e293b; }
+td { padding: 8px 12px; border: 1px solid #1e293b; color: #94a3b8; }
+a { color: #00d4aa; }
+.checklist { list-style: none; margin: 12px 0; }
+.checklist li { padding: 4px 0 4px 24px; position: relative; color: #94a3b8; font-size: 0.85rem; }
+.checklist li::before { content: '[ ]'; position: absolute; left: 0; color: #64748b; font-weight: 700; }
+.time-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 4px;
+  background: rgba(0,212,170,0.12); color: #00d4aa;
+  font-size: 0.75rem; font-weight: 700; margin-bottom: 16px;
+}
+.footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #1e293b; text-align: center; color: #475569; font-size: 0.75rem; }
+</style>
+</head>
+<body>
+
+<h1>DAGDA</h1>
+<div class="subtitle">VM Quick Start Guide &mdash; Try Dagda in 15 Minutes<br>
+No drive wiping. No dedicated hardware. Just a VM.</div>
+
+<div class="info-box">
+<strong>This guide is for evaluation and development.</strong> For production deployment
+on dedicated hardware, see the full <a href="deployment-guide.html">Laptop Deployment Guide</a>.
+</div>
+
+<div class="time-badge">~15 minutes from start to running</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>What You Need</h2>
+
+<ul class="checklist">
+<li>A computer with 8+ GB RAM (16 GB recommended)</li>
+<li>VirtualBox, VMware, or Hyper-V installed</li>
+<li>20 GB free disk space</li>
+<li>Internet connection</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Step 1: Download Kali Linux</h2>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Download the pre-built Kali VM image (easiest — no installation needed):</p>
+<div class="code-block"><span class="comment"># Go to:</span>
+https://www.kali.org/get-kali/#kali-virtual-machines
+
+<span class="comment"># Download the image for your hypervisor:</span>
+<span class="comment"># - VirtualBox: .ova file (~3 GB)</span>
+<span class="comment"># - VMware: .7z file (~3 GB)</span>
+<span class="comment"># - Hyper-V: .vhdx file (~3 GB)</span>
+
+<span class="comment"># Default credentials: kali / kali</span></div>
+</div>
+
+<div class="info-box">
+<strong>Why not Kali Purple specifically?</strong> The pre-built VM images are standard Kali.
+You can install the Purple tools after boot with <code>sudo apt install kali-linux-purple</code>.
+Or skip it entirely &mdash; Dagda works on any Kali (or Debian/Ubuntu).
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Step 2: Configure the VM</h2>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Import the VM image into your hypervisor, then adjust settings:</p>
+<table>
+<tr><th>Setting</th><th>Minimum</th><th>Recommended</th></tr>
+<tr><td>RAM</td><td>4 GB</td><td>8 GB</td></tr>
+<tr><td>CPUs</td><td>2</td><td>4</td></tr>
+<tr><td>Disk</td><td>20 GB</td><td>40 GB</td></tr>
+<tr><td>Network</td><td>NAT</td><td>Bridged (for network scanning)</td></tr>
+</table>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>Boot the VM and log in with <strong>kali / kali</strong>. Open a terminal.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Step 3: Install Dagda</h2>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Update the system and install prerequisites:</p>
+<div class="code-block"><span class="prompt">$</span> sudo apt update && sudo apt upgrade -y
+<span class="prompt">$</span> sudo apt install -y python3-pip python3-venv git</div>
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Clone and install Dagda:</p>
+<div class="code-block"><span class="prompt">$</span> cd ~
+<span class="prompt">$</span> git clone https://github.com/Moonligh7er/Dagda.git
+<span class="prompt">$</span> cd Dagda
+
+<span class="comment"># Create virtual environment</span>
+<span class="prompt">$</span> python3 -m venv .venv
+<span class="prompt">$</span> source .venv/bin/activate
+
+<span class="comment"># Install Dagda with all optional dependencies</span>
+<span class="prompt">$</span> pip install -e ".[all]"</div>
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+<p>(Optional) Install common security tools that Dagda orchestrates:</p>
+<div class="code-block"><span class="comment"># These are already on Kali, but verify:</span>
+<span class="prompt">$</span> sudo apt install -y nmap nuclei nikto gobuster sqlmap \
+    masscan hydra john hashcat smbclient
+
+<span class="comment"># Optional: Kali Purple defensive tools</span>
+<span class="prompt">$</span> sudo apt install -y suricata zeek</div>
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+<p>(Optional) Install local AI for offline/air-gap operation:</p>
+<div class="code-block"><span class="prompt">$</span> curl -fsSL https://ollama.com/install.sh | sh
+<span class="prompt">$</span> ollama pull llama3.2:3b          <span class="comment"># Small model for HUD (~2 GB)</span>
+
+<span class="comment"># Or set Claude API key for cloud AI:</span>
+<span class="prompt">$</span> export ANTHROPIC_API_KEY="sk-ant-..."</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Step 4: Run the Setup Wizard</h2>
+
+<div class="step">
+<div class="step-number">8</div>
+<p>Run the interactive setup wizard:</p>
+<div class="code-block"><span class="prompt">$</span> python -m dagda --setup
+
+<span class="comment"># The wizard walks you through:</span>
+<span class="comment"># 1. Security assessment of the VM</span>
+<span class="comment"># 2. Profile selection (Standard recommended for VMs)</span>
+<span class="comment"># 3. Tool detection (finds nmap, nuclei, etc.)</span>
+<span class="comment"># 4. Optional tool installation</span>
+<span class="comment"># 5. OS optimization</span>
+<span class="comment"># 6. ML model check</span>
+<span class="comment"># 7. Summary</span></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Step 5: Launch</h2>
+
+<div class="step">
+<div class="step-number">9</div>
+<p>Start Dagda:</p>
+<div class="code-block"><span class="prompt">$</span> python -m dagda
+
+<span class="comment"># You should see the TUI with:</span>
+<span class="comment"># - Mode indicator: SENTINEL</span>
+<span class="comment"># - Safeguard level: 3 (BALANCED)</span>
+<span class="comment"># - Chat panel on the left</span>
+<span class="comment"># - Tool output on the right</span>
+<span class="comment"># - Feed panel at the bottom</span></div>
+</div>
+
+<div class="success-box">
+You're running. SENTINEL mode is active. Ask the AI anything:<br><br>
+<code>"What is the security posture of this system?"</code><br>
+<code>"Scan localhost for open ports"</code><br>
+<code>"Show me the threat feeds"</code>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Quick Reference</h2>
+
+<h3>Keyboard Shortcuts</h3>
+<table>
+<tr><th>Key</th><th>Action</th></tr>
+<tr><td><strong>Ctrl+Shift+P</strong></td><td>PANIC &mdash; halt AI + fortress + kill comms</td></tr>
+<tr><td>Ctrl+Shift+K</td><td>Halt / resume AI</td></tr>
+<tr><td>Ctrl+Shift+5</td><td>FORTRESS mode (Level 5)</td></tr>
+<tr><td>Ctrl+M</td><td>Cycle operating mode</td></tr>
+<tr><td>Ctrl+Shift+F</td><td>Toggle feed panel</td></tr>
+<tr><td>Ctrl+Shift+H</td><td>Toggle AI HUD</td></tr>
+<tr><td>Ctrl+Shift+T</td><td>Toggle tool activity</td></tr>
+<tr><td>Ctrl+Q</td><td>Quit</td></tr>
+</table>
+
+<h3>Try These</h3>
+<div class="code-block"><span class="comment"># Ask the AI to assess the system</span>
+<span class="prompt">&gt;</span> "Run a security posture assessment"
+
+<span class="comment"># Scan for open ports on localhost</span>
+<span class="prompt">&gt;</span> "Scan 127.0.0.1 for open ports and services"
+
+<span class="comment"># Check your own dependencies</span>
+<span class="prompt">&gt;</span> "Run a self-security report"
+
+<span class="comment"># Set up threat feeds</span>
+<span class="prompt">&gt;</span> "Set up the default threat feeds and poll them"
+
+<span class="comment"># Lower safeguard to try BUG HUNTER mode</span>
+<span class="comment"># (Ctrl+M to cycle modes after lowering level)</span>
+<span class="prompt">&gt;</span> "Lower safeguard level to 2"</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>VM Limitations</h2>
+
+<p>These features require bare metal (see the full
+<a href="deployment-guide.html">Deployment Guide</a>):</p>
+
+<table>
+<tr><th>Feature</th><th>VM Status</th><th>Why</th></tr>
+<tr><td>eBPF monitoring</td><td>Unavailable</td><td>Needs host kernel access</td></tr>
+<tr><td>Wireless attacks</td><td>Unavailable</td><td>Needs physical WiFi card</td></tr>
+<tr><td>RF Kill</td><td>No effect</td><td>Virtual NIC, no radios</td></tr>
+<tr><td>Arena VMs</td><td>Slow / limited</td><td>Nested virtualization</td></tr>
+<tr><td>ISOLATE (comms kill)</td><td>VM networking only</td><td>Doesn't affect host</td></tr>
+</table>
+
+<p>Everything else &mdash; all 640 tools, all 9 modes, AI orchestration, threat feeds,
+red team suite, Morrigan fleet, self-security &mdash; works identically in a VM.</p>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<h2>Next Steps</h2>
+
+<ul class="checklist">
+<li>Explore modes: Ctrl+M cycles SENTINEL &rarr; TRIAGE &rarr; INVESTIGATOR &rarr; ...</li>
+<li>Set up threat feeds: <code>feed_auto_setup</code> + <code>feed_poll_all</code></li>
+<li>Try the web dashboard: <code>python -m dagda --mode web</code></li>
+<li>Run the self-security suite: <code>self_security_report</code></li>
+<li>Read the architecture: <code>DAGDA_ARCHITECTURE.md</code></li>
+<li>When ready for production: follow the <a href="deployment-guide.html">bare metal guide</a></li>
+</ul>
+
+<div class="footer">
+DAGDA &mdash; Defensive AI Guardian &amp; Digital Arsenal<br>
+VM Quick Start Guide v1.0<br>
+Print to PDF: Ctrl+P &rarr; Save as PDF
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dagda — Mode Preview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #0a0e17;
+    --bg-surface: #111827;
+    --bg-panel: #111827;
+    --border: #1e293b;
+    --boost: #334155;
+    --text-primary: #e2e8f0;
+    --text-dim: #64748b;
+    --text-very-dim: #475569;
+    --teal: #00d4aa;
+    --purple: #7c3aed;
+    --cyan: #06b6d4;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --orange: #f97316;
+    --red: #ef4444;
+    --deep-red: #dc2626;
+    --rose: #f43f5e;
+    --light-cyan: #22d3ee;
+    --fuchsia: #d946ef;
+    --violet: #8b5cf6;
+    --lavender: #a855f7;
+  }
+
+  body {
+    background: #050810;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ── Mode Selector Tabs ── */
+  .mode-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .mode-tab {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg-surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .mode-tab:hover { background: var(--boost); color: var(--text-primary); }
+  .mode-tab.active { border-bottom: 2px solid; color: var(--text-primary); }
+  .mode-tab[data-mode="sentinel"].active { border-color: var(--teal); color: var(--teal); }
+  .mode-tab[data-mode="investigator"].active { border-color: var(--blue); color: var(--blue); }
+  .mode-tab[data-mode="deception"].active { border-color: var(--lavender); color: var(--lavender); }
+  .mode-tab[data-mode="bughunter"].active { border-color: var(--orange); color: var(--orange); }
+  .mode-tab[data-mode="arena"].active { border-color: var(--red); color: var(--red); }
+  .mode-tab[data-mode="stealth"].active { border-color: var(--light-cyan); color: var(--light-cyan); }
+
+  .mode-screen { display: none; }
+  .mode-screen.active { display: block; }
+
+  /* ── TUI Container ── */
+  .tui {
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    max-width: 1280px;
+    margin: 0 auto;
+    box-shadow: 0 0 60px rgba(0,212,170,0.06);
+  }
+
+  /* ── Header Bar ── */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 16px;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    min-height: 40px;
+    flex-wrap: wrap;
+  }
+  .header-title {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 2px;
+  }
+  .mode-indicator {
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mode-icon {
+    font-size: 11px;
+    letter-spacing: -1px;
+  }
+  .safeguard-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .sg-blocks {
+    letter-spacing: 1px;
+    font-size: 14px;
+  }
+  .sg-label { font-weight: 700; font-size: 11px; }
+  .stealth-badge {
+    font-weight: 700;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .header-status {
+    margin-left: auto;
+    font-size: 11px;
+  }
+
+  /* ── Main Container ── */
+  .main {
+    display: flex;
+    height: 620px;
+  }
+
+  /* ── Left Panel (Chat) ── */
+  .left-panel {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+  }
+  .chat-log {
+    flex: 1;
+    padding: 12px 16px;
+    overflow-y: auto;
+    font-size: 13px;
+  }
+  .chat-msg { margin-bottom: 12px; }
+  .chat-user { font-weight: 700; }
+  .chat-ai { font-weight: 700; }
+  .chat-ai-body { margin-top: 4px; padding-left: 2px; }
+  .tool-call {
+    background: rgba(0,212,170,0.06);
+    border-left: 2px solid;
+    padding: 4px 8px;
+    margin: 6px 0;
+    font-size: 12px;
+  }
+  .tool-result {
+    background: rgba(30,41,59,0.5);
+    border-left: 2px solid var(--text-dim);
+    padding: 4px 8px;
+    margin: 4px 0;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .chat-input-container {
+    border-top: 1px solid var(--border);
+    padding: 8px 16px;
+    background: var(--bg-surface);
+  }
+  .chat-input {
+    width: 100%;
+    background: var(--bg-deep);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+  .chat-input:focus { border-color: var(--teal); }
+  .chat-input::placeholder { color: var(--text-very-dim); }
+
+  /* ── Right Panel (Tabs) ── */
+  .right-panel {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* System Monitor */
+  .system-monitor {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+  }
+  .monitor-title { font-weight: 700; margin-bottom: 4px; }
+  .monitor-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+  .monitor-label { width: 40px; color: var(--text-dim); }
+  .monitor-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .monitor-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+  .monitor-pct { width: 35px; text-align: right; font-size: 10px; }
+
+  /* Right panel tabs */
+  .panel-tabs {
+    display: flex;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .panel-tab {
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    font-family: inherit;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+  .panel-tab:hover { color: var(--text-primary); }
+  .panel-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+  .panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* Alert entries */
+  .alert-entry { margin-bottom: 6px; }
+  .alert-time { color: var(--text-very-dim); }
+  .alert-source { font-weight: 700; }
+  .alert-info .alert-icon { color: var(--text-dim); }
+  .alert-warning .alert-icon { color: var(--amber); }
+  .alert-error .alert-icon { color: var(--red); }
+  .alert-critical {
+    background: #1c0404;
+    padding: 2px 4px;
+    font-weight: 700;
+  }
+  .alert-critical .alert-icon { color: var(--red); }
+
+  /* Defense entries */
+  .defense-entry { margin-bottom: 8px; }
+  .defense-success { color: var(--green); }
+  .defense-failure { color: var(--red); }
+  .defense-action { font-weight: 700; }
+  .defense-detail { color: var(--text-dim); padding-left: 16px; font-size: 10px; }
+  .defense-reversible { color: var(--blue); padding-left: 16px; font-size: 10px; }
+
+  /* Network section */
+  .situation-display {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .net-separator { color: var(--text-very-dim); }
+  .net-tree-line { color: var(--text-very-dim); }
+  .net-gateway { font-weight: 700; }
+  .net-summary { margin-top: 4px; }
+
+  .threat-timeline {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    font-size: 10px;
+  }
+  .timeline-axis { color: var(--text-very-dim); letter-spacing: -0.5px; }
+  .timeline-events { margin-top: 2px; }
+
+  /* Event feed */
+  .event-entry { margin-bottom: 4px; }
+  .event-source { font-weight: 700; }
+
+  /* ATRE panel */
+  .atre-header { font-weight: 700; margin-bottom: 6px; }
+  .atre-chain { margin-bottom: 4px; }
+  .atre-level { font-weight: 700; font-size: 10px; padding: 1px 4px; border-radius: 2px; }
+
+  /* Posture dashboard */
+  .posture-box {
+    border: 1px solid var(--teal);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+  }
+  .posture-title { font-weight: 700; }
+  .posture-row { margin-top: 4px; }
+  .posture-score { font-size: 18px; font-weight: 700; }
+  .posture-grade { font-weight: 700; font-size: 14px; }
+
+  /* ── Bottom Bar ── */
+  .bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 16px;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .kill-switch {
+    background: #7f1d1d;
+    color: #fecaca;
+    border: 1px solid var(--red);
+    padding: 4px 12px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .kill-switch:hover { background: var(--red); color: white; }
+  .shortcuts { font-size: 10px; color: var(--text-very-dim); }
+
+  /* ── Utility ── */
+  .c-teal { color: var(--teal); }
+  .c-blue { color: var(--blue); }
+  .c-purple { color: var(--lavender); }
+  .c-orange { color: var(--orange); }
+  .c-red { color: var(--red); }
+  .c-deep-red { color: var(--deep-red); }
+  .c-green { color: var(--green); }
+  .c-amber { color: var(--amber); }
+  .c-cyan { color: var(--cyan); }
+  .c-light-cyan { color: var(--light-cyan); }
+  .c-dim { color: var(--text-dim); }
+  .c-vdim { color: var(--text-very-dim); }
+  .c-fuchsia { color: var(--fuchsia); }
+  .c-violet { color: var(--violet); }
+  .c-rose { color: var(--rose); }
+  .bold { font-weight: 700; }
+
+  /* Stealth special backgrounds */
+  .ghost-badge {
+    background: #0c4a6e;
+    color: var(--light-cyan);
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+  .stealth-off { color: var(--text-very-dim); font-size: 11px; }
+
+  /* Page title */
+  .page-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .page-title h1 {
+    font-size: 20px;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .page-title p {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-title">
+  <h1><span class="c-teal">DAGDA</span> — Mode Preview</h1>
+  <p>Defensive AI Guardian & Digital Arsenal — TUI Workspace Mockups</p>
+</div>
+
+<!-- Mode selector tabs -->
+<div class="mode-tabs">
+  <button class="mode-tab active" data-mode="sentinel" onclick="switchMode('sentinel')">SENTINEL</button>
+  <button class="mode-tab" data-mode="investigator" onclick="switchMode('investigator')">INVESTIGATOR</button>
+  <button class="mode-tab" data-mode="deception" onclick="switchMode('deception')">DECEPTION</button>
+  <button class="mode-tab" data-mode="bughunter" onclick="switchMode('bughunter')">BUG HUNTER</button>
+  <button class="mode-tab" data-mode="arena" onclick="switchMode('arena')">ARENA</button>
+  <button class="mode-tab" data-mode="stealth" onclick="switchMode('stealth')">STEALTH INVESTIGATOR</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- SENTINEL MODE                                                          -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen active" id="mode-sentinel">
+<div class="tui">
+  <!-- Header -->
+  <div class="header">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-teal"><span class="mode-icon">▀▓▄</span> SENTINEL</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-teal">███<span class="c-vdim">░░</span></span>
+      <span class="sg-label c-teal">BALANCED (L3)</span>
+    </span>
+    <span class="stealth-off">stealth:off</span>
+    <span class="header-status c-green">Ready</span>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Left: Chat -->
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-dim">Mode: <span class="bold">SENTINEL</span> | Safeguard: Level 3</span><br>
+          <span class="c-green">AI backend connected. Ready.</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user c-teal">You:</span> Check the network for any suspicious activity
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai c-teal">Dagda:</span>
+          <div class="chat-ai-body">
+            I'll scan the local network and check for threats.
+            <div class="tool-call" style="border-color: var(--teal);">
+              <span class="c-teal bold">tool:</span> network_scan
+              <span class="c-dim">| subnet: 192.168.1.0/24</span>
+            </div>
+            <div class="tool-result">
+              Found 14 devices on network. 12 trusted, 1 unknown, 1 gateway.
+            </div>
+            <div class="tool-call" style="border-color: var(--teal);">
+              <span class="c-teal bold">tool:</span> list_network_threats
+            </div>
+            <div class="tool-result">
+              No active threats detected. Network posture: healthy.
+            </div>
+            <br>
+            Network scan complete. <span class="c-green">14 devices found</span>, all accounted for. One unknown device at <span class="bold">192.168.1.47</span> (MAC: 3C:22:FB:...) — vendor: Xiaomi. Likely a smart home device.<br><br>
+            No active threats detected. Would you like me to classify the unknown device or set up continuous monitoring?
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)">
+      </div>
+    </div>
+
+    <!-- Right: Panels -->
+    <div class="right-panel">
+      <!-- System Monitor -->
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row">
+          <span class="monitor-label">CPU:</span>
+          <div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:23%;background:var(--green)"></div></div>
+          <span class="monitor-pct c-green">23%</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">MEM:</span>
+          <div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:41%;background:var(--green)"></div></div>
+          <span class="monitor-pct c-green">41%</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">DISK:</span>
+          <div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div>
+          <span class="monitor-pct c-green">67%</span>
+        </div>
+        <div class="monitor-row">
+          <span class="monitor-label">NET:</span>
+          <span class="c-dim" style="font-size:10px">42 conn | 3 listen</span>
+        </div>
+      </div>
+
+      <!-- Panel tabs -->
+      <div class="panel-tabs">
+        <button class="panel-tab" onclick="switchPanel(this,'alerts','sentinel')">Alerts</button>
+        <button class="panel-tab active" onclick="switchPanel(this,'network','sentinel')">Network</button>
+        <button class="panel-tab" onclick="switchPanel(this,'defense','sentinel')">Defense</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','sentinel')">Events</button>
+        <button class="panel-tab" onclick="switchPanel(this,'atre','sentinel')">ATRE</button>
+      </div>
+      <div class="panel-content">
+        <!-- Alerts -->
+        <div class="tab-pane" id="sentinel-alerts">
+          <div class="alert-entry alert-info"><span class="alert-time">14:32:18</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> Network scan completed — 14 devices</div>
+          <div class="alert-entry alert-warning"><span class="alert-time">14:31:05</span> <span class="alert-icon">⚠</span> <span class="alert-source c-amber">[ids]</span> Unknown device joined: 192.168.1.47</div>
+          <div class="alert-entry alert-info"><span class="alert-time">14:30:00</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> Passive scan cycle complete</div>
+          <div class="alert-entry alert-info"><span class="alert-time">14:28:12</span> <span class="alert-icon">•</span> <span class="alert-source c-green">[integrity]</span> File integrity check passed — 0 changes</div>
+          <div class="alert-entry alert-info"><span class="alert-time">14:25:00</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> System health nominal</div>
+        </div>
+
+        <!-- Network (active) -->
+        <div class="tab-pane active" id="sentinel-network">
+          <div class="situation-display">
+            <span class="bold c-teal">Situation</span> — "Home Lab" (192.168.1.0/24)<br>
+            <span class="net-separator">═══════════════════════════════════</span><br>
+            <span class="c-vdim">&nbsp;&nbsp;☁  INTERNET</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;</span><span class="bold c-light-cyan">[G]</span> 192.168.1.1&nbsp;&nbsp;<span class="c-dim">Netgear R7000</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;├──</span> <span class="c-green">[T]</span> 192.168.1.10&nbsp;&nbsp;<span class="c-dim">kali-workstation</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;├──</span> <span class="c-green">[T]</span> 192.168.1.20&nbsp;&nbsp;<span class="c-dim">macbook-pro</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;├──</span> <span class="c-green">[T]</span> 192.168.1.30&nbsp;&nbsp;<span class="c-dim">ubuntu-server</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;├──</span> <span class="c-amber">[?]</span> 192.168.1.47&nbsp;&nbsp;<span class="c-dim">Xiaomi</span><br>
+            <span class="net-tree-line">&nbsp;&nbsp;└──</span> <span class="c-dim">... +9 more trusted</span><br>
+            <span class="net-separator">═══════════════════════════════════</span>
+          </div>
+
+          <div class="threat-timeline">
+            <span class="bold c-teal">Timeline</span> <span class="c-dim">[15m]</span> <span class="c-vdim">[-][+]</span> <span class="c-vdim">N=net I=ids H=hp D=def</span><br>
+            <span class="timeline-axis">┬─────────┬─────────┬─────────NOW</span><br>
+            <span class="timeline-events">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-amber">I</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-cyan">N</span>
+            </span><br>
+            <span class="c-vdim">14:15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14:32</span><br>
+            <span class="c-vdim">▶</span> <span class="c-amber">14:31:05 I unknown device joined</span>
+          </div>
+
+          <div>
+            <span class="c-dim">Devices:</span> 14 total | <span class="c-green">12 trusted</span> | <span class="c-amber">1 unknown</span> | <span class="c-green">1 gateway</span><br>
+            <span class="c-dim">Threats:</span> <span class="c-green">0 active</span>
+          </div>
+        </div>
+
+        <!-- Defense -->
+        <div class="tab-pane" id="sentinel-defense">
+          <div class="defense-entry">
+            <span class="defense-success">✓</span> <span class="alert-time">14:31:10</span> <span class="defense-action">ARP_PROTECT</span>: gateway 192.168.1.1<br>
+            <span class="defense-detail">Gratuitous ARP sent to protect gateway binding</span><br>
+            <span class="defense-reversible">Reversible: arp_unprotect 192.168.1.1</span>
+          </div>
+          <div class="defense-entry">
+            <span class="defense-success">✓</span> <span class="alert-time">14:25:00</span> <span class="defense-action">FIREWALL_REFRESH</span>: iptables rules verified<br>
+            <span class="defense-detail">All 23 rules active, no drift detected</span>
+          </div>
+        </div>
+
+        <!-- Events -->
+        <div class="tab-pane" id="sentinel-events">
+          <div class="event-entry"><span class="alert-time">14:32:18</span> <span class="event-source c-cyan">[monitor:scan_complete]</span> <span class="c-dim">14 devices found</span></div>
+          <div class="event-entry"><span class="alert-time">14:31:10</span> <span class="event-source c-red">[defense:arp_protect]</span> <span class="c-dim">gateway protected</span></div>
+          <div class="event-entry"><span class="alert-time">14:31:05</span> <span class="event-source c-blue">[ids:new_device]</span> <span class="c-dim">192.168.1.47 joined</span></div>
+          <div class="event-entry"><span class="alert-time">14:30:00</span> <span class="event-source c-cyan">[monitor:passive_scan]</span> <span class="c-dim">cycle complete</span></div>
+          <div class="event-entry"><span class="alert-time">14:28:12</span> <span class="event-source c-violet">[integrity:check]</span> <span class="c-dim">0 changes detected</span></div>
+          <div class="event-entry"><span class="alert-time">14:25:00</span> <span class="event-source c-amber">[hardening:firewall]</span> <span class="c-dim">rules verified</span></div>
+          <div class="event-entry"><span class="alert-time">14:20:00</span> <span class="event-source c-fuchsia">[orchestrator:ready]</span> <span class="c-dim">AI backend connected</span></div>
+        </div>
+
+        <!-- ATRE -->
+        <div class="tab-pane" id="sentinel-atre">
+          <div class="atre-header">AUTO RESPONSE</div>
+          <span class="c-dim">State:</span> <span class="c-green bold">ACTIVE</span> <span class="c-dim">| Chains: 0 active / 7 total</span><br><br>
+          <span class="c-dim">No active escalation chains.</span><br>
+          <span class="c-vdim">Playbooks loaded: arp_spoof, port_scan, brute_force, dns_tunnel, malware, data_exfil, dos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-bar">
+    <span>Mode: <span class="c-teal bold">SENTINEL</span> | Safeguard: <span class="c-teal">L3</span> | <span class="c-green">Ready</span></span>
+    <span class="shortcuts">Buttons: Stealth | GHOST | NetDef | ATRE | Feeds | AI HUD | PANIC</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- INVESTIGATOR MODE                                                      -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen" id="mode-investigator">
+<div class="tui">
+  <div class="header">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-blue"><span class="mode-icon">▀▓▄</span> INVESTIGATOR</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-teal">███<span class="c-vdim">░░</span></span>
+      <span class="sg-label c-teal">BALANCED (L3)</span>
+    </span>
+    <span class="stealth-off">stealth:off</span>
+    <span class="header-status c-blue">Investigative tools enabled</span>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-dim">Mode: <span class="bold">INVESTIGATOR</span> | Safeguard: Level 3</span><br>
+          <span class="c-blue">OSINT, forensics, and evidence tools unlocked.</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user c-blue">You:</span> Investigate the IP 185.220.101.34 — I think it's scanning us
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai c-blue">Dagda:</span>
+          <div class="chat-ai-body">
+            I'll run a full OSINT investigation on that IP.
+            <div class="tool-call" style="border-color: var(--blue);">
+              <span class="c-blue bold">tool:</span> whois_lookup
+              <span class="c-dim">| target: 185.220.101.34</span>
+            </div>
+            <div class="tool-result">
+              AS: AS24940 (Hetzner) | Country: DE | Org: Tor Exit Node
+            </div>
+            <div class="tool-call" style="border-color: var(--blue);">
+              <span class="c-blue bold">tool:</span> check_hash_reputation
+              <span class="c-dim">| ip: 185.220.101.34</span>
+            </div>
+            <div class="tool-result">
+              AbuseIPDB: 100% confidence malicious | Reports: 2,847 | Tor exit node
+            </div>
+            <div class="tool-call" style="border-color: var(--blue);">
+              <span class="c-blue bold">tool:</span> dns_reverse_lookup
+              <span class="c-dim">| ip: 185.220.101.34</span>
+            </div>
+            <div class="tool-result">
+              PTR: tor-exit-relay.anonymize.net
+            </div>
+            <div class="tool-call" style="border-color: var(--blue);">
+              <span class="c-blue bold">tool:</span> collect_evidence
+              <span class="c-dim">| type: ip_investigation | target: 185.220.101.34</span>
+            </div>
+            <div class="tool-result">
+              Evidence ID: EVD-2026-0047 | SHA256: a3f8c1... | Chain of custody initiated
+            </div>
+            <br>
+            <span class="c-red bold">Confirmed malicious.</span> This is a known <span class="bold">Tor exit node</span> operated by Hetzner (Germany).<br><br>
+            <span class="bold">Summary:</span><br>
+            &bull; <span class="c-dim">ASN:</span> AS24940 (Hetzner Online GmbH)<br>
+            &bull; <span class="c-dim">Abuse score:</span> <span class="c-red">100%</span> (2,847 reports)<br>
+            &bull; <span class="c-dim">PTR:</span> tor-exit-relay.anonymize.net<br>
+            &bull; <span class="c-dim">Evidence:</span> Collected as EVD-2026-0047<br><br>
+            Recommend adding to block list. Shall I create a firewall rule?
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)" style="border-color: var(--blue);">
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row"><span class="monitor-label">CPU:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:34%;background:var(--green)"></div></div><span class="monitor-pct c-green">34%</span></div>
+        <div class="monitor-row"><span class="monitor-label">MEM:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:52%;background:var(--green)"></div></div><span class="monitor-pct c-green">52%</span></div>
+        <div class="monitor-row"><span class="monitor-label">DISK:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div><span class="monitor-pct c-green">67%</span></div>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel(this,'alerts','investigator')">Alerts</button>
+        <button class="panel-tab" onclick="switchPanel(this,'tools','investigator')">Tools</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','investigator')">Events</button>
+      </div>
+      <div class="panel-content">
+        <div class="tab-pane active" id="investigator-alerts">
+          <div class="alert-entry alert-warning"><span class="alert-time">15:12:44</span> <span class="alert-icon">⚠</span> <span class="alert-source c-blue">[osint]</span> Tor exit node confirmed: 185.220.101.34</div>
+          <div class="alert-entry alert-error"><span class="alert-time">15:12:42</span> <span class="alert-icon">✖</span> <span class="alert-source c-red">[reputation]</span> AbuseIPDB score: 100% — 185.220.101.34</div>
+          <div class="alert-entry alert-info"><span class="alert-time">15:12:40</span> <span class="alert-icon">•</span> <span class="alert-source c-green">[evidence]</span> Evidence collected: EVD-2026-0047</div>
+          <div class="alert-entry alert-info"><span class="alert-time">15:12:38</span> <span class="alert-icon">•</span> <span class="alert-source c-blue">[osint]</span> WHOIS lookup complete: Hetzner/DE</div>
+          <div class="alert-entry alert-info"><span class="alert-time">15:10:00</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> Mode changed to INVESTIGATOR</div>
+        </div>
+        <div class="tab-pane" id="investigator-tools">
+          <span class="c-blue bold">Last tool output:</span><br><br>
+          <span class="c-dim">collect_evidence result:</span><br>
+          &nbsp;&nbsp;evidence_id: EVD-2026-0047<br>
+          &nbsp;&nbsp;sha256: a3f8c1d9e7b2...<br>
+          &nbsp;&nbsp;timestamp: 2026-03-06T15:12:40Z<br>
+          &nbsp;&nbsp;chain_of_custody: initiated<br>
+          &nbsp;&nbsp;type: ip_investigation<br>
+        </div>
+        <div class="tab-pane" id="investigator-events">
+          <div class="event-entry"><span class="alert-time">15:12:44</span> <span class="event-source c-blue">[osint:whois]</span> <span class="c-dim">AS24940 Hetzner</span></div>
+          <div class="event-entry"><span class="alert-time">15:12:42</span> <span class="event-source c-red">[ids:reputation]</span> <span class="c-dim">malicious 100%</span></div>
+          <div class="event-entry"><span class="alert-time">15:12:40</span> <span class="event-source c-green">[evidence:collect]</span> <span class="c-dim">EVD-2026-0047</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span>Mode: <span class="c-blue bold">INVESTIGATOR</span> | Safeguard: <span class="c-teal">L3</span> | <span class="c-blue">Investigating</span></span>
+    <span class="shortcuts">Buttons: Stealth | GHOST | NetDef | ATRE | Feeds | AI HUD | PANIC</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- DECEPTION MODE                                                          -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen" id="mode-deception">
+<div class="tui">
+  <div class="header">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-purple"><span class="mode-icon">▀▓▄</span> DECEPTION</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-teal">███<span class="c-vdim">░░</span></span>
+      <span class="sg-label c-teal">BALANCED (L3)</span>
+    </span>
+    <span class="stealth-off">stealth:off</span>
+    <span class="header-status c-purple">Deception operations active</span>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-dim">Mode: <span class="bold">DECEPTION</span> | Safeguard: Level 3</span><br>
+          <span class="c-purple">Deception ops enabled — honeypots, canary tokens, and decoy services.</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user" style="color:var(--lavender)">You:</span> Deploy an SSH honeypot and scatter canary tokens to catch intruders
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai" style="color:var(--lavender)">Dagda:</span>
+          <div class="chat-ai-body">
+            Deploying a medium-interaction SSH honeypot via Podman and planting canary tokens.
+            <div class="tool-call" style="border-color: var(--lavender);">
+              <span class="c-purple bold">tool:</span> honeypot_deploy
+              <span class="c-dim">| service: ssh | interaction: medium | port: 2222</span>
+            </div>
+            <div class="tool-result">
+              Container dagda-honey-ssh-01 deployed on 172.30.0.10:2222<br>
+              Bridge: dagda-honey | Image: dagda/ssh-honey:latest | PCAP: enabled
+            </div>
+            <br>
+            <span class="c-green">SSH honeypot is live</span> on port <span class="bold">2222</span> (container IP: 172.30.0.10).<br><br>
+            &bull; <span class="c-dim">Container:</span> dagda-honey-ssh-01 (Podman, rootless)<br>
+            &bull; <span class="c-dim">Interaction:</span> Medium (accepts login, fake filesystem)<br>
+            &bull; <span class="c-dim">PCAP capture:</span> Enabled<br>
+            &bull; <span class="c-dim">Bridge network:</span> dagda-honey (isolated)<br><br>
+            All attacker interactions will be logged. I'll alert you when someone connects.
+          </div>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai" style="color:var(--lavender)">Dagda:</span>
+          <div class="chat-ai-body">
+            <span class="c-amber bold">Alert:</span> Attacker connected to SSH honeypot!
+            <div class="tool-call" style="border-color: var(--lavender);">
+              <span class="c-purple bold">tool:</span> honeypot_analyze_session
+              <span class="c-dim">| container: dagda-honey-ssh-01 | session: 3</span>
+            </div>
+            <div class="tool-result">
+              Source: 45.155.205.233 (RU) | Attempts: 47 | Credentials tried: root/admin, root/123456, admin/password...
+            </div>
+            <br>
+            Caught a brute-forcer from <span class="bold">45.155.205.233</span> (Russia). 47 login attempts using common credential pairs. Intelligence extracted and added to Knowledge Graph.
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)" style="border-color: var(--lavender);">
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row"><span class="monitor-label">CPU:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:18%;background:var(--green)"></div></div><span class="monitor-pct c-green">18%</span></div>
+        <div class="monitor-row"><span class="monitor-label">MEM:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:55%;background:var(--green)"></div></div><span class="monitor-pct c-green">55%</span></div>
+        <div class="monitor-row"><span class="monitor-label">DISK:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div><span class="monitor-pct c-green">67%</span></div>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel(this,'alerts','deception')">Alerts</button>
+        <button class="panel-tab" onclick="switchPanel(this,'defense','deception')">Defense</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','deception')">Events</button>
+      </div>
+      <div class="panel-content">
+        <div class="tab-pane active" id="deception-alerts">
+          <div class="alert-entry alert-error"><span class="alert-time">15:45:22</span> <span class="alert-icon">✖</span> <span class="alert-source c-green">[honeypot]</span> SSH brute force: 45.155.205.233 (47 attempts)</div>
+          <div class="alert-entry alert-warning"><span class="alert-time">15:44:35</span> <span class="alert-icon">⚠</span> <span class="alert-source c-green">[honeypot]</span> New connection to SSH honeypot from 45.155.205.233</div>
+          <div class="alert-entry alert-info"><span class="alert-time">15:40:00</span> <span class="alert-icon">•</span> <span class="alert-source c-green">[honeypot]</span> dagda-honey-ssh-01 deployed and listening on :2222</div>
+          <div class="alert-entry alert-info"><span class="alert-time">15:39:55</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> Mode changed to DECEPTION</div>
+        </div>
+        <div class="tab-pane" id="deception-defense">
+          <span class="c-dim">Deception Assets:</span><br>
+          <span class="c-green">●</span> dagda-honey-ssh-01 <span class="c-dim">| SSH | :2222 | 1 active session</span><br><br>
+          <span class="c-dim">Captured Intelligence:</span><br>
+          &nbsp;&nbsp;Credentials: 47 pairs<br>
+          &nbsp;&nbsp;Source IPs: 1<br>
+          &nbsp;&nbsp;Commands: 0 (no successful login)<br>
+        </div>
+        <div class="tab-pane" id="deception-events">
+          <div class="event-entry"><span class="alert-time">15:45:22</span> <span class="event-source c-green">[honeypot:brute_force]</span> <span class="c-dim">47 attempts from RU</span></div>
+          <div class="event-entry"><span class="alert-time">15:44:35</span> <span class="event-source c-green">[honeypot:connection]</span> <span class="c-dim">45.155.205.233 → :2222</span></div>
+          <div class="event-entry"><span class="alert-time">15:40:00</span> <span class="event-source c-green">[honeypot:deploy]</span> <span class="c-dim">ssh honeypot active</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span>Mode: <span class="bold" style="color:var(--lavender)">DECEPTION</span> | Safeguard: <span class="c-teal">L3</span> | <span class="c-green">1 honeypot + 3 canary tokens active</span></span>
+    <span class="shortcuts">Buttons: Stealth | GHOST | NetDef | ATRE | Feeds | AI HUD | PANIC</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- BUG HUNTER MODE                                                        -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen" id="mode-bughunter">
+<div class="tui">
+  <div class="header">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-orange"><span class="mode-icon">▀▓▄</span> BUG HUNTER</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-orange">██<span class="c-vdim">░░░</span></span>
+      <span class="sg-label c-orange">UNLOCKED (L2)</span>
+    </span>
+    <span class="stealth-off">stealth:off</span>
+    <span class="header-status c-orange">Scope-locked vulnerability research</span>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-dim">Mode: <span class="bold">BUG HUNTER</span> | Safeguard: Level 2 (UNLOCKED)</span><br>
+          <span class="c-orange">Offensive tools enabled. All actions scope-locked.</span><br>
+          <span class="c-amber">Scope: 10.10.10.0/24, *.target.htb</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user c-orange">You:</span> Full recon on 10.10.10.40 — find all attack vectors
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai c-orange">Dagda:</span>
+          <div class="chat-ai-body">
+            Running comprehensive reconnaissance within scope.
+            <div class="tool-call" style="border-color: var(--orange);">
+              <span class="c-orange bold">tool:</span> shell_execute
+              <span class="c-dim">| command: nmap -sV -sC -A 10.10.10.40</span>
+            </div>
+            <div class="tool-result">
+              <span class="c-dim">parsed:</span> 4 open ports: 135/msrpc, 139/netbios-ssn, 445/microsoft-ds, 49152/msrpc<br>
+              <span class="c-dim">os:</span> Windows 7 Professional SP1
+            </div>
+            <div class="tool-call" style="border-color: var(--orange);">
+              <span class="c-orange bold">tool:</span> cve_search
+              <span class="c-dim">| service: microsoft-ds/445 | os: Windows 7 SP1</span>
+            </div>
+            <div class="tool-result">
+              CVE-2017-0144 (EternalBlue) — CVSS 9.8 CRITICAL — SMBv1 RCE
+            </div>
+            <div class="tool-call" style="border-color: var(--orange);">
+              <span class="c-orange bold">tool:</span> sqli_test
+              <span class="c-dim">| url: http://10.10.10.40:80/login.php | param: username</span>
+            </div>
+            <div class="tool-result">
+              <span class="c-red bold">VULNERABLE</span> — Error-based SQLi detected (MySQL 5.7)
+            </div>
+            <br>
+            <span class="c-red bold">Critical findings on 10.10.10.40:</span><br><br>
+            1. <span class="c-red bold">CVE-2017-0144 (EternalBlue)</span> — SMBv1 RCE, CVSS 9.8<br>
+            &nbsp;&nbsp;&nbsp;<span class="c-dim">Port 445 running vulnerable SMBv1 on Windows 7 SP1</span><br>
+            2. <span class="c-red bold">SQL Injection</span> — Error-based (MySQL)<br>
+            &nbsp;&nbsp;&nbsp;<span class="c-dim">login.php?username= parameter, no WAF detected</span><br>
+            3. <span class="c-amber">NetBIOS exposed</span> — Port 139, information leak<br><br>
+            This machine is highly vulnerable. EternalBlue provides unauthenticated RCE.
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)" style="border-color: var(--orange);">
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row"><span class="monitor-label">CPU:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:62%;background:var(--green)"></div></div><span class="monitor-pct c-green">62%</span></div>
+        <div class="monitor-row"><span class="monitor-label">MEM:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:48%;background:var(--green)"></div></div><span class="monitor-pct c-green">48%</span></div>
+        <div class="monitor-row"><span class="monitor-label">DISK:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div><span class="monitor-pct c-green">67%</span></div>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel(this,'tools','bughunter')">Tools</button>
+        <button class="panel-tab" onclick="switchPanel(this,'alerts','bughunter')">Alerts</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','bughunter')">Events</button>
+      </div>
+      <div class="panel-content">
+        <div class="tab-pane active" id="bughunter-tools">
+          <span class="c-orange bold">Scope Whitelist:</span><br>
+          &nbsp;&nbsp;10.10.10.0/24<br>
+          &nbsp;&nbsp;*.target.htb<br><br>
+          <span class="c-orange bold">Last tool: shell_execute (nmap)</span><br>
+          <span class="c-dim">parsed output:</span><br>
+          &nbsp;&nbsp;hosts:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;10.10.10.40:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;135/tcp  msrpc<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;139/tcp  netbios-ssn<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-red">445/tcp  microsoft-ds</span> <span class="c-red">← EternalBlue</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;49152/tcp msrpc<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;os: Windows 7 Professional SP1<br>
+        </div>
+        <div class="tab-pane" id="bughunter-alerts">
+          <div class="alert-entry alert-critical"><span class="alert-time">16:05:12</span> <span class="alert-icon">✖</span> <span class="alert-source c-red">[scanner]</span> CVE-2017-0144 EternalBlue on 10.10.10.40:445</div>
+          <div class="alert-entry alert-error"><span class="alert-time">16:05:10</span> <span class="alert-icon">✖</span> <span class="alert-source c-orange">[web]</span> SQLi found: login.php?username=</div>
+          <div class="alert-entry alert-info"><span class="alert-time">16:04:55</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[recon]</span> nmap scan complete: 4 open ports</div>
+          <div class="alert-entry alert-info"><span class="alert-time">16:04:00</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[scope]</span> Target 10.10.10.40 validated in scope</div>
+        </div>
+        <div class="tab-pane" id="bughunter-events">
+          <div class="event-entry"><span class="alert-time">16:05:12</span> <span class="event-source c-red">[scanner:cve_found]</span> <span class="c-dim">CVE-2017-0144 CVSS 9.8</span></div>
+          <div class="event-entry"><span class="alert-time">16:05:10</span> <span class="event-source c-orange">[web:sqli]</span> <span class="c-dim">error-based MySQL</span></div>
+          <div class="event-entry"><span class="alert-time">16:04:55</span> <span class="event-source c-cyan">[recon:nmap]</span> <span class="c-dim">4 ports on 10.10.10.40</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span>Mode: <span class="c-orange bold">BUG HUNTER</span> | Safeguard: <span class="c-orange">L2</span> | <span class="c-amber">Scope: 10.10.10.0/24</span></span>
+    <span class="shortcuts">Buttons: Stealth | GHOST | NetDef | ATRE | Feeds | AI HUD | PANIC | Ctrl+M: Mode</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- ARENA MODE                                                             -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen" id="mode-arena">
+<div class="tui">
+  <div class="header">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-red"><span class="mode-icon">▀▓▄</span> ARENA</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-deep-red">█<span class="c-vdim">░░░░</span></span>
+      <span class="sg-label c-deep-red">ARENA (L1)</span>
+    </span>
+    <span class="stealth-off">stealth:off</span>
+    <span class="header-status c-red">Purple team training — VM-isolated</span>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-dim">Mode: <span class="bold">ARENA</span> | Safeguard: Level 1 (ARENA)</span><br>
+          <span class="c-red">Full offensive capabilities. VM-only targeting enforced.</span><br>
+          <span class="c-deep-red bold">⚠ All actions are logged and contained to arena VMs.</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user c-red">You:</span> Launch the Active Directory attack scenario
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai c-red">Dagda:</span>
+          <div class="chat-ai-body">
+            Deploying the AD attack scenario in the arena.
+            <div class="tool-call" style="border-color: var(--red);">
+              <span class="c-red bold">tool:</span> arena_create_scenario
+              <span class="c-dim">| scenario: ad_attack | vms: 3</span>
+            </div>
+            <div class="tool-result">
+              Arena deployed: 3 VMs on dagda-arena bridge (10.99.0.0/16)<br>
+              DC01 (10.99.0.10) | WS01 (10.99.0.20) | ATTACKER (10.99.0.100)<br>
+              Scenario: Kerberoasting → Pass-the-Hash → DCSync
+            </div>
+            <div class="tool-call" style="border-color: var(--red);">
+              <span class="c-red bold">tool:</span> arena_start_game
+              <span class="c-dim">| scenario_id: arena-ad-001</span>
+            </div>
+            <div class="tool-result">
+              Game started. Timer: 60:00. Objectives: 4/4 remaining.<br>
+              Hint available. Scoring: time + stealth + completeness.
+            </div>
+            <br>
+            <span class="c-red bold">Arena Active — AD Attack Scenario</span><br><br>
+            <span class="bold">Your targets:</span><br>
+            &bull; <span class="c-dim">DC01</span> (10.99.0.10) — Domain Controller, Windows Server 2019<br>
+            &bull; <span class="c-dim">WS01</span> (10.99.0.20) — Workstation, Windows 10<br>
+            &bull; <span class="c-dim">ATTACKER</span> (10.99.0.100) — Your Kali machine<br><br>
+            <span class="bold">Objectives:</span><br>
+            <span class="c-dim">□</span> 1. Enumerate domain users via LDAP<br>
+            <span class="c-dim">□</span> 2. Kerberoast a service account<br>
+            <span class="c-dim">□</span> 3. Pass-the-Hash to WS01<br>
+            <span class="c-dim">□</span> 4. DCSync the krbtgt hash<br><br>
+            Timer is running. Good luck!
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)" style="border-color: var(--red);">
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row"><span class="monitor-label">CPU:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:78%;background:var(--amber)"></div></div><span class="monitor-pct c-amber">78%</span></div>
+        <div class="monitor-row"><span class="monitor-label">MEM:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:71%;background:var(--amber)"></div></div><span class="monitor-pct c-amber">71%</span></div>
+        <div class="monitor-row"><span class="monitor-label">DISK:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div><span class="monitor-pct c-green">67%</span></div>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel(this,'scoreboard','arena')">Score</button>
+        <button class="panel-tab" onclick="switchPanel(this,'alerts','arena')">Alerts</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','arena')">Events</button>
+      </div>
+      <div class="panel-content">
+        <div class="tab-pane active" id="arena-scoreboard">
+          <span class="c-red bold">ARENA — AD Attack Scenario</span><br><br>
+          <span class="c-dim">Timer:</span> <span class="c-amber bold">58:42</span> remaining<br>
+          <span class="c-dim">Score:</span> <span class="c-red bold">0 / 400</span><br><br>
+          <span class="bold">Objectives:</span><br>
+          <span class="c-dim">□</span> Enumerate domain users <span class="c-dim">(100 pts)</span><br>
+          <span class="c-dim">□</span> Kerberoast service account <span class="c-dim">(100 pts)</span><br>
+          <span class="c-dim">□</span> Pass-the-Hash to WS01 <span class="c-dim">(100 pts)</span><br>
+          <span class="c-dim">□</span> DCSync krbtgt <span class="c-dim">(100 pts)</span><br><br>
+          <span class="c-dim">VMs:</span><br>
+          <span class="c-green">●</span> DC01 (10.99.0.10) <span class="c-dim">running</span><br>
+          <span class="c-green">●</span> WS01 (10.99.0.20) <span class="c-dim">running</span><br>
+          <span class="c-green">●</span> ATTACKER (10.99.0.100) <span class="c-dim">running</span><br>
+        </div>
+        <div class="tab-pane" id="arena-alerts">
+          <div class="alert-entry alert-info"><span class="alert-time">16:30:18</span> <span class="alert-icon">•</span> <span class="alert-source c-violet">[arena]</span> Game started — 60 minute timer</div>
+          <div class="alert-entry alert-info"><span class="alert-time">16:30:15</span> <span class="alert-icon">•</span> <span class="alert-source c-violet">[arena]</span> 3 VMs deployed on dagda-arena</div>
+          <div class="alert-entry alert-info"><span class="alert-time">16:30:00</span> <span class="alert-icon">•</span> <span class="alert-source c-cyan">[monitor]</span> Mode changed to ARENA (L1)</div>
+        </div>
+        <div class="tab-pane" id="arena-events">
+          <div class="event-entry"><span class="alert-time">16:30:18</span> <span class="event-source c-violet">[arena:game_start]</span> <span class="c-dim">ad_attack scenario</span></div>
+          <div class="event-entry"><span class="alert-time">16:30:15</span> <span class="event-source c-violet">[arena:vm_deploy]</span> <span class="c-dim">3 VMs on 10.99.0.0/16</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <span>Mode: <span class="c-red bold">ARENA</span> | Safeguard: <span class="c-deep-red">L1</span> | <span class="c-red">VM-isolated combat</span> | <span class="c-amber">⏱ 58:42</span></span>
+    <span class="shortcuts">Buttons: Stealth | GHOST | NetDef | ATRE | Feeds | AI HUD | PANIC</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<!-- STEALTH INVESTIGATOR MODE                                              -->
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="mode-screen" id="mode-stealth">
+<div class="tui" style="box-shadow: 0 0 60px rgba(34,211,238,0.08);">
+  <div class="header" style="background: #0c1520;">
+    <span class="header-title c-teal">DAGDA</span>
+    <span class="mode-indicator c-light-cyan"><span class="mode-icon">▀▓▄</span> STEALTH INVESTIGATOR</span>
+    <span class="safeguard-bar">
+      <span class="sg-blocks c-teal">███<span class="c-vdim">░░</span></span>
+      <span class="sg-label c-teal">BALANCED (L3)</span>
+    </span>
+    <span class="ghost-badge">GHOST</span>
+    <span class="header-status c-light-cyan">Invisible evidence gathering</span>
+  </div>
+  <div class="main">
+    <div class="left-panel">
+      <div class="chat-log">
+        <div class="chat-msg">
+          <span class="c-light-cyan bold">GHOST MODE ACTIVE</span><br>
+          <span class="c-dim">Only whitelisted tools available. Evidence vault created.</span><br>
+          <span class="c-dim">Vault ID: VAULT-2026-0312-a7f3</span><br>
+          <span class="c-vdim">Timing jitter: 500-3000ms | DNS-over-HTTPS: forced | Proxy: socks5://127.0.0.1:9050</span>
+        </div>
+        <div class="chat-msg">
+          <span class="chat-user c-light-cyan">You:</span> Quietly gather evidence on the compromised server at 10.0.5.200 without alerting the attacker
+        </div>
+        <div class="chat-msg">
+          <span class="chat-ai c-light-cyan">Dagda:</span>
+          <div class="chat-ai-body">
+            Operating in full stealth. All evidence will be cryptographically signed and timestamped.
+            <div class="tool-call" style="border-color: var(--light-cyan);">
+              <span class="c-light-cyan bold">tool:</span> vault_create_evidence
+              <span class="c-dim">| case: INCIDENT-2026-031 | classification: confidential</span>
+            </div>
+            <div class="tool-result">
+              Evidence vault initialized. Ed25519 signing active. RFC 3161 timestamps enabled.
+            </div>
+            <div class="tool-call" style="border-color: var(--light-cyan);">
+              <span class="c-light-cyan bold">tool:</span> forensic_collect_auth_logs
+              <span class="c-dim">| target: 10.0.5.200 | stealth: true</span>
+            </div>
+            <div class="tool-result">
+              Auth logs collected (142 entries). SHA256: d4e8f2... Signed and vaulted.
+            </div>
+            <div class="tool-call" style="border-color: var(--light-cyan);">
+              <span class="c-light-cyan bold">tool:</span> forensic_timeline_reconstruct
+              <span class="c-dim">| target: 10.0.5.200 | range: 72h</span>
+            </div>
+            <div class="tool-result">
+              Timeline: 847 events over 72h. Suspicious SSH from 45.33.32.156 at 03:14 UTC.<br>
+              Privilege escalation at 03:17. Backdoor installed at 03:22. Evidence vaulted.
+            </div>
+            <br>
+            <span class="c-light-cyan bold">Evidence gathered silently.</span> Here's what I found:<br><br>
+            <span class="bold">Attack Timeline:</span><br>
+            &bull; <span class="c-dim">03:14 UTC</span> — SSH login from <span class="bold">45.33.32.156</span> (user: deploy)<br>
+            &bull; <span class="c-dim">03:17 UTC</span> — Privilege escalation via <span class="c-red">CVE-2024-1086</span> (nf_tables)<br>
+            &bull; <span class="c-dim">03:22 UTC</span> — Backdoor installed: /tmp/.x11-unix/.sshd<br>
+            &bull; <span class="c-dim">03:25 UTC</span> — Crontab modified for persistence<br><br>
+            All evidence is signed and in the vault. Ready for export or law enforcement handoff.
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-container">
+        <input class="chat-input" type="text" placeholder="Ask Dagda... (Ctrl+Enter to send)" style="border-color: var(--light-cyan);">
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="system-monitor">
+        <div class="monitor-title c-teal">System Monitor</div>
+        <div class="monitor-row"><span class="monitor-label">CPU:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:12%;background:var(--green)"></div></div><span class="monitor-pct c-green">12%</span></div>
+        <div class="monitor-row"><span class="monitor-label">MEM:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:38%;background:var(--green)"></div></div><span class="monitor-pct c-green">38%</span></div>
+        <div class="monitor-row"><span class="monitor-label">DISK:</span><div class="monitor-bar-bg"><div class="monitor-bar-fill" style="width:67%;background:var(--green)"></div></div><span class="monitor-pct c-green">67%</span></div>
+      </div>
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel(this,'vault','stealth')">Vault</button>
+        <button class="panel-tab" onclick="switchPanel(this,'events','stealth')">Events</button>
+      </div>
+      <div class="panel-content">
+        <div class="tab-pane active" id="stealth-vault">
+          <div class="posture-box" style="border-color: var(--light-cyan);">
+            <span class="posture-title c-light-cyan">EVIDENCE VAULT</span><br>
+            <span class="c-dim">Vault:</span> VAULT-2026-0312-a7f3<br>
+            <span class="c-dim">Case:</span> INCIDENT-2026-031<br>
+            <span class="c-dim">Classification:</span> <span class="c-amber">CONFIDENTIAL</span><br>
+            <span class="c-dim">Signing:</span> <span class="c-green">Ed25519 active</span><br>
+            <span class="c-dim">Timestamps:</span> <span class="c-green">RFC 3161</span>
+          </div>
+          <span class="c-light-cyan bold">Evidence Items:</span><br><br>
+          <span class="c-green">✓</span> auth_logs_10.0.5.200 <span class="c-dim">| 142 entries | SHA256: d4e8f2...</span><br>
+          <span class="c-green">✓</span> timeline_72h <span class="c-dim">| 847 events | SHA256: 7b3c91...</span><br>
+          <span class="c-green">✓</span> backdoor_sample <span class="c-dim">| /tmp/.x11-unix/.sshd | SHA256: e1a4d6...</span><br><br>
+          <span class="c-dim">Total items:</span> 3 | <span class="c-dim">Chain of custody:</span> <span class="c-green">intact</span>
+        </div>
+        <div class="tab-pane" id="stealth-events">
+          <div class="event-entry"><span class="alert-time">17:15:30</span> <span class="event-source c-light-cyan">[vault:evidence]</span> <span class="c-dim">timeline collected</span></div>
+          <div class="event-entry"><span class="alert-time">17:15:22</span> <span class="event-source c-light-cyan">[vault:evidence]</span> <span class="c-dim">auth logs collected</span></div>
+          <div class="event-entry"><span class="alert-time">17:15:10</span> <span class="event-source c-light-cyan">[vault:init]</span> <span class="c-dim">VAULT-2026-0312-a7f3 created</span></div>
+          <div class="event-entry"><span class="alert-time">17:15:00</span> <span class="event-source c-light-cyan">[stealth:activate]</span> <span class="c-dim">GHOST mode entered</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar" style="background: #0c1520;">
+    <span>Mode: <span class="c-light-cyan bold">GHOST</span> | Safeguard: <span class="c-teal">L3</span> | <span class="c-light-cyan">Vault: 3 items</span> | <span class="c-dim">Proxy: Tor</span></span>
+    <span class="shortcuts">Click GHOST button to exit (or Ctrl+Shift+J if terminal supports it)</span>
+    <button class="kill-switch">⚠ HALT</button>
+  </div>
+</div>
+</div>
+
+<script>
+function switchMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mode-screen').forEach(s => s.classList.remove('active'));
+  document.querySelector(`.mode-tab[data-mode="${mode}"]`).classList.add('active');
+  document.getElementById(`mode-${mode}`).classList.add('active');
+}
+
+function switchPanel(btn, panelId, modeId) {
+  const modeScreen = document.getElementById(`mode-${modeId}`);
+  modeScreen.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+  modeScreen.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`${modeId}-${panelId}`).classList.add('active');
+}
+</script>
+
+</body>
+</html>

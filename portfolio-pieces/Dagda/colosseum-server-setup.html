@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAGDA COLOSSEUM — Server Deployment Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@media print {
+  body { background: white !important; color: #1a1a1a !important; font-size: 10pt; }
+  .page-break { page-break-before: always; }
+  h1, h2, h3 { color: #0a0e14 !important; }
+  .step-number { background: #0a0e14 !important; color: white !important; }
+  .warning-box { border-color: #ef4444 !important; background: #fef2f2 !important; color: #991b1b !important; }
+  .info-box { border-color: #3b82f6 !important; background: #eff6ff !important; color: #1e40af !important; }
+  .code-block { background: #f3f4f6 !important; color: #1a1a1a !important; border: 1px solid #d1d5db !important; }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: #0a0e14; color: #e2e8f0;
+  line-height: 1.8; font-size: 13px;
+  max-width: 800px; margin: 0 auto; padding: 40px 24px;
+}
+h1 { font-size: 1.6rem; color: #e11d48; margin-bottom: 8px; letter-spacing: 0.1em; }
+h2 { font-size: 1.2rem; color: #e11d48; margin: 36px 0 14px; padding-bottom: 6px; border-bottom: 1px solid #1e293b; }
+h3 { font-size: 0.95rem; color: #39bae6; margin: 20px 0 10px; }
+p { margin-bottom: 10px; color: #94a3b8; }
+.subtitle { font-size: 0.8rem; color: #64748b; margin-bottom: 28px; }
+.step { margin-bottom: 20px; padding-left: 44px; position: relative; }
+.step-number {
+  position: absolute; left: 0; top: 0;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #e11d48; color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.8rem;
+}
+.code-block {
+  background: #111820; border: 1px solid #1e293b; border-radius: 6px;
+  padding: 12px 16px; margin: 8px 0 14px; font-size: 0.78rem;
+  overflow-x: auto; white-space: pre-wrap; color: #e2e8f0;
+}
+.code-block .prompt { color: #e11d48; }
+.code-block .comment { color: #64748b; }
+.code-block .success { color: #22c55e; }
+.warning-box {
+  border-left: 4px solid #ef4444; background: rgba(239,68,68,0.08);
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0;
+  color: #fca5a5; font-size: 0.8rem;
+}
+.warning-box strong { color: #ef4444; }
+.info-box {
+  border-left: 4px solid #3b82f6; background: rgba(59,130,246,0.08);
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0;
+  color: #93c5fd; font-size: 0.8rem;
+}
+.info-box strong { color: #3b82f6; }
+.success-box {
+  border-left: 4px solid #22c55e; background: rgba(34,197,94,0.08);
+  padding: 12px 16px; margin: 14px 0; border-radius: 0 6px 6px 0;
+  color: #86efac; font-size: 0.8rem;
+}
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.78rem; }
+th { text-align: left; padding: 6px 10px; background: #111820; color: #e11d48; border: 1px solid #1e293b; }
+td { padding: 6px 10px; border: 1px solid #1e293b; color: #94a3b8; }
+.checklist { list-style: none; margin: 10px 0; }
+.checklist li { padding: 3px 0 3px 24px; position: relative; color: #94a3b8; font-size: 0.8rem; }
+.checklist li::before { content: '[ ]'; position: absolute; left: 0; color: #64748b; font-weight: 700; }
+a { color: #e11d48; }
+.toc { margin: 20px 0; padding: 16px; background: #111820; border: 1px solid #1e293b; border-radius: 6px; }
+.toc a { display: block; padding: 3px 0; font-size: 0.8rem; color: #94a3b8; text-decoration: none; }
+.toc a:hover { color: #e11d48; }
+.footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #1e293b; text-align: center; color: #475569; font-size: 0.7rem; }
+</style>
+</head>
+<body>
+
+<h1>DAGDA COLOSSEUM</h1>
+<div class="subtitle">Server Deployment Guide &mdash; Complete Step-by-Step<br>
+Live-Fire Training Arena on Dedicated Hardware</div>
+
+<div class="warning-box">
+<strong>This guide deploys a public-facing attack arena.</strong> Attackers will be
+intentionally given tools and access to your VMs. Ensure all isolation
+steps are followed precisely. Mistakes here mean real compromise.
+</div>
+
+<div class="toc">
+<strong style="color:#e11d48">Contents</strong>
+<a href="#part1">Part 1: Order and Access the Server</a>
+<a href="#part2">Part 2: Base OS Installation and Hardening</a>
+<a href="#part3">Part 3: Install Dagda</a>
+<a href="#part4">Part 4: Configure Container Infrastructure</a>
+<a href="#part5">Part 5: Build the Attacker Container Image</a>
+<a href="#part6">Part 6: Set Up Target VMs</a>
+<a href="#part7">Part 7: Configure Network Isolation</a>
+<a href="#part8">Part 8: TLS and Domain Setup</a>
+<a href="#part9">Part 9: Launch the Colosseum</a>
+<a href="#part10">Part 10: Monitoring and Maintenance</a>
+<a href="#verification">Verification Checklist</a>
+<a href="#troubleshooting">Troubleshooting</a>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part1">Part 1: Order and Access the Server</h2>
+
+<div class="step">
+<div class="step-number">1</div>
+<p>Order a dedicated server. Recommended:</p>
+<table>
+<tr><th>Provider</th><th>Server</th><th>Specs</th><th>Price</th></tr>
+<tr><td>Hetzner</td><td>AX42</td><td>Ryzen 5 3600, 64GB, 2x512GB NVMe</td><td>~$55/mo</td></tr>
+<tr><td>OVH</td><td>Rise-1</td><td>Xeon E-2136, 32GB, 2x500GB SSD</td><td>~$60/mo</td></tr>
+</table>
+<p>When ordering, select <strong>Kali Linux</strong> or <strong>Debian 12</strong> as the OS.
+If Kali isn't available as a pre-install option, choose Debian 12 (Kali is Debian-based).</p>
+</div>
+
+<div class="step">
+<div class="step-number">2</div>
+<p>Once provisioned (usually 5-30 minutes), you'll receive: IP address, root password, SSH port.
+Connect via SSH from your local machine:</p>
+<div class="code-block"><span class="prompt">local$</span> ssh root@YOUR_SERVER_IP
+<span class="comment"># Enter the password from your provider's email/dashboard</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">3</div>
+<p>If you ordered Debian instead of Kali, convert to Kali:</p>
+<div class="code-block"><span class="comment"># Add Kali repos to Debian</span>
+<span class="prompt">#</span> echo "deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware" > /etc/apt/sources.list.d/kali.list
+<span class="prompt">#</span> wget -q -O - https://archive.kali.org/archive-key.asc | apt-key add -
+<span class="prompt">#</span> apt update && apt full-upgrade -y
+<span class="prompt">#</span> apt install -y kali-linux-core kali-linux-purple
+<span class="prompt">#</span> reboot</div>
+</div>
+
+<div class="info-box">
+<strong>Tell your hosting provider</strong> you're running a security research/training platform.
+Open a support ticket: "We're hosting a controlled cybersecurity training lab.
+Attacker traffic is intentional and contained within our isolated network.
+No external targets are involved." This prevents abuse reports.
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part1b" class="page-break">Part 1B: Full Disk Encryption (LUKS)</h2>
+
+<div class="warning-box">
+<strong>Encrypt BEFORE storing any sensitive data.</strong> This protects against physical
+disk theft, data center breaches, and decommissioned drives retaining data.
+AES-256 (XTS mode) &mdash; the same standard used by classified government systems.
+</div>
+
+<div class="info-box">
+<strong>Two approaches depending on your provider:</strong><br>
+<strong>Option A:</strong> Provider offers Kali/Debian install with LUKS (Hetzner installimage) &mdash; use it.<br>
+<strong>Option B:</strong> Provider pre-installs OS without encryption &mdash; encrypt the data partition after install.
+</div>
+
+<h3>Option A: Hetzner installimage with LUKS (Recommended)</h3>
+
+<div class="step">
+<div class="step-number">A1</div>
+<p>Boot into Hetzner Rescue System (from their dashboard: Rescue tab &rarr; Activate).</p>
+</div>
+
+<div class="step">
+<div class="step-number">A2</div>
+<p>SSH into rescue and run installimage with encryption:</p>
+<div class="code-block"><span class="prompt">rescue#</span> installimage
+
+<span class="comment"># In the config editor, set:</span>
+DRIVE1 /dev/sda          <span class="comment"># or /dev/nvme0n1</span>
+SWRAID 0                 <span class="comment"># No software RAID (single disk)</span>
+BOOTLOADER grub
+HOSTNAME dagda-colosseum
+PART /boot ext4 1G
+PART /     ext4 all crypt <span class="comment"># &larr; THIS enables LUKS encryption</span>
+IMAGE /root/.oldroot/nfs/images/Debian-1210-bookworm-amd64-base.tar.gz
+
+<span class="comment"># Save and confirm. It will ask for a LUKS passphrase.</span>
+<span class="comment"># Use 20+ characters. DIFFERENT from your user password.</span>
+<span class="comment"># Store this passphrase securely &mdash; losing it = losing the server.</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">A3</div>
+<p>Set up remote LUKS unlock via SSH (so you can reboot without physical console):</p>
+<div class="code-block"><span class="prompt">#</span> apt install -y dropbear-initramfs
+
+<span class="comment"># Add your SSH public key for initramfs unlock</span>
+<span class="prompt">#</span> echo "YOUR_PUBLIC_KEY" > /etc/dropbear/initramfs/authorized_keys
+
+<span class="comment"># Configure dropbear</span>
+<span class="prompt">#</span> echo 'DROPBEAR_OPTIONS="-p 2222 -s -j -k"' >> /etc/dropbear/initramfs/dropbear.conf
+
+<span class="comment"># Rebuild initramfs</span>
+<span class="prompt">#</span> update-initramfs -u
+
+<span class="comment"># After reboot, unlock remotely:</span>
+<span class="prompt">local$</span> ssh -p 2222 root@YOUR_SERVER_IP
+<span class="prompt">initramfs$</span> cryptroot-unlock
+<span class="comment"># Enter LUKS passphrase, server continues booting</span></div>
+</div>
+
+<h3>Option B: Post-Install Data Partition Encryption</h3>
+
+<p>If your provider doesn't support LUKS during install, encrypt the data partition where
+Dagda stores its databases, logs, and session data:</p>
+
+<div class="step">
+<div class="step-number">B1</div>
+<p>Create an encrypted partition for Dagda data:</p>
+<div class="code-block"><span class="comment"># Create a LUKS-encrypted file container (if no spare partition)</span>
+<span class="prompt">#</span> dd if=/dev/urandom of=/root/dagda-vault.img bs=1M count=50000  <span class="comment"># 50GB</span>
+<span class="prompt">#</span> cryptsetup luksFormat --type luks2 \
+    --cipher aes-xts-plain64 \
+    --key-size 512 \
+    --hash sha512 \
+    --iter-time 5000 \
+    /root/dagda-vault.img
+
+<span class="comment"># Enter passphrase (20+ characters)</span>
+
+<span class="comment"># Open the encrypted volume</span>
+<span class="prompt">#</span> cryptsetup open /root/dagda-vault.img dagda-vault
+
+<span class="comment"># Create filesystem</span>
+<span class="prompt">#</span> mkfs.ext4 /dev/mapper/dagda-vault
+
+<span class="comment"># Mount</span>
+<span class="prompt">#</span> mkdir -p /opt/dagda-data
+<span class="prompt">#</span> mount /dev/mapper/dagda-vault /opt/dagda-data
+<span class="prompt">#</span> chown dagda:dagda /opt/dagda-data</div>
+</div>
+
+<div class="step">
+<div class="step-number">B2</div>
+<p>Configure Dagda to store data on the encrypted volume:</p>
+<div class="code-block"><span class="comment"># In dagda.toml:</span>
+[general]
+data_dir = "/opt/dagda-data"
+log_dir = "/opt/dagda-data/logs"
+
+[security]
+audit_log = "/opt/dagda-data/audit.log"</div>
+</div>
+
+<div class="step">
+<div class="step-number">B3</div>
+<p>Create a startup script to unlock the vault before Dagda starts:</p>
+<div class="code-block"><span class="prompt">$</span> sudo tee /usr/local/bin/dagda-unlock.sh &lt;&lt; 'SCRIPT'
+#!/bin/bash
+if ! cryptsetup status dagda-vault &>/dev/null; then
+    echo "Unlocking Dagda vault..."
+    cryptsetup open /root/dagda-vault.img dagda-vault
+    mount /dev/mapper/dagda-vault /opt/dagda-data
+fi
+SCRIPT
+<span class="prompt">$</span> sudo chmod 700 /usr/local/bin/dagda-unlock.sh</div>
+</div>
+
+<div class="info-box">
+<strong>Encryption specs:</strong><br>
+&bull; Algorithm: AES-256-XTS (512-bit key, split into two 256-bit AES keys)<br>
+&bull; Hash: SHA-512 for key derivation<br>
+&bull; Key derivation: PBKDF2 with 5000ms iteration time (brute-force resistant)<br>
+&bull; This matches FIPS 140-2 Level 1 and NATO RESTRICTED classification requirements
+</div>
+
+<h2 id="part2" class="page-break">Part 2: Base OS Installation and Hardening</h2>
+
+<div class="step">
+<div class="step-number">4</div>
+<p>Create a non-root user and disable root SSH:</p>
+<div class="code-block"><span class="prompt">#</span> adduser dagda
+<span class="prompt">#</span> usermod -aG sudo dagda
+
+<span class="comment"># Set up SSH key authentication</span>
+<span class="prompt">#</span> mkdir -p /home/dagda/.ssh
+<span class="prompt">#</span> echo "YOUR_PUBLIC_KEY_HERE" > /home/dagda/.ssh/authorized_keys
+<span class="prompt">#</span> chmod 700 /home/dagda/.ssh && chmod 600 /home/dagda/.ssh/authorized_keys
+<span class="prompt">#</span> chown -R dagda:dagda /home/dagda/.ssh
+
+<span class="comment"># Harden SSH</span>
+<span class="prompt">#</span> nano /etc/ssh/sshd_config
+<span class="comment"># Set: PermitRootLogin no</span>
+<span class="comment"># Set: PasswordAuthentication no</span>
+<span class="comment"># Set: MaxAuthTries 3</span>
+<span class="prompt">#</span> systemctl restart sshd</div>
+</div>
+
+<div class="warning-box">
+<strong>Test SSH key login BEFORE disabling password auth.</strong> Open a new terminal,
+verify <code>ssh dagda@YOUR_SERVER_IP</code> works with your key. If it doesn't,
+you'll lock yourself out.
+</div>
+
+<div class="step">
+<div class="step-number">5</div>
+<p>Configure the firewall:</p>
+<div class="code-block"><span class="prompt">$</span> sudo apt install -y ufw
+<span class="prompt">$</span> sudo ufw default deny incoming
+<span class="prompt">$</span> sudo ufw default allow outgoing
+<span class="prompt">$</span> sudo ufw allow 22/tcp comment "SSH"
+<span class="prompt">$</span> sudo ufw allow 443/tcp comment "Colosseum HTTPS"
+<span class="prompt">$</span> sudo ufw enable
+<span class="prompt">$</span> sudo ufw status</div>
+</div>
+
+<div class="step">
+<div class="step-number">6</div>
+<p>Apply kernel hardening:</p>
+<div class="code-block"><span class="prompt">$</span> sudo tee /etc/sysctl.d/99-colosseum.conf &lt;&lt; 'EOF'
+net.ipv4.tcp_syncookies = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv6.conf.all.accept_redirects = 0
+kernel.randomize_va_space = 2
+kernel.kptr_restrict = 2
+kernel.dmesg_restrict = 1
+net.ipv4.ip_forward = 1          <span class="comment"># Needed for container networking</span>
+net.ipv4.conf.all.forwarding = 1 <span class="comment"># Needed for VM networking</span>
+EOF
+<span class="prompt">$</span> sudo sysctl --system</div>
+</div>
+
+<div class="step">
+<div class="step-number">7</div>
+<p>Update everything and install prerequisites:</p>
+<div class="code-block"><span class="prompt">$</span> sudo apt update && sudo apt full-upgrade -y
+<span class="prompt">$</span> sudo apt install -y \
+    python3-pip python3-venv git curl wget jq \
+    podman podman-compose \
+    qemu-kvm libvirt-daemon-system virtinst \
+    nginx certbot python3-certbot-nginx \
+    nmap suricata zeek \
+    auditd fail2ban</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part3" class="page-break">Part 3: Install Dagda</h2>
+
+<div class="step">
+<div class="step-number">8</div>
+<p>Clone and install Dagda:</p>
+<div class="code-block"><span class="prompt">$</span> cd /opt
+<span class="prompt">$</span> sudo git clone https://github.com/Moonligh7er/Dagda.git dagda
+<span class="prompt">$</span> sudo chown -R dagda:dagda /opt/dagda
+<span class="prompt">$</span> cd /opt/dagda
+
+<span class="prompt">$</span> python3 -m venv .venv
+<span class="prompt">$</span> source .venv/bin/activate
+<span class="prompt">$</span> pip install -e ".[all]"</div>
+</div>
+
+<div class="step">
+<div class="step-number">9</div>
+<p>Build the Rust security core:</p>
+<div class="code-block"><span class="prompt">$</span> curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+<span class="prompt">$</span> source ~/.cargo/env
+<span class="prompt">$</span> cd /opt/dagda/core
+<span class="prompt">$</span> cargo build --release
+<span class="prompt">$</span> pip install maturin
+<span class="prompt">$</span> maturin develop --release
+<span class="prompt">$</span> cd /opt/dagda</div>
+</div>
+
+<div class="step">
+<div class="step-number">10</div>
+<p>Set up the Claude API key:</p>
+<div class="code-block"><span class="prompt">$</span> python -m dagda --setup
+<span class="comment"># Step 9 of the wizard will ask for your API key</span>
+<span class="comment"># Or manually:</span>
+<span class="prompt">$</span> mkdir -p ~/.config/dagda
+<span class="prompt">$</span> echo 'ANTHROPIC_API_KEY=sk-ant-...' > ~/.config/dagda/.env
+<span class="prompt">$</span> chmod 600 ~/.config/dagda/.env</div>
+</div>
+
+<div class="step">
+<div class="step-number">11</div>
+<p>Install Ollama as backup AI:</p>
+<div class="code-block"><span class="prompt">$</span> curl -fsSL https://ollama.com/install.sh | sh
+<span class="prompt">$</span> ollama pull llama3.2:3b</div>
+</div>
+
+<div class="step">
+<div class="step-number">12</div>
+<p>Create the integrity baseline:</p>
+<div class="code-block"><span class="prompt">$</span> source /opt/dagda/.venv/bin/activate
+<span class="prompt">$</span> python -c "
+from brain.self_security import DagdaIntegrityMonitor
+m = DagdaIntegrityMonitor()
+r = m.create_baseline()
+print(f'Baseline: {r[\"file_count\"]} files')
+"</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part4" class="page-break">Part 4: Configure Container Infrastructure</h2>
+
+<div class="step">
+<div class="step-number">13</div>
+<p>Configure Podman for rootless containers (more secure):</p>
+<div class="code-block"><span class="prompt">$</span> sudo loginctl enable-linger dagda
+<span class="prompt">$</span> podman info | head -5
+<span class="comment"># Should show: host: ... rootless: true</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">14</div>
+<p>Create the isolated Colosseum network:</p>
+<div class="code-block"><span class="comment"># Create an internal-only Podman network (no internet access)</span>
+<span class="prompt">$</span> podman network create \
+    --subnet 10.99.0.0/24 \
+    --gateway 10.99.0.1 \
+    --internal \
+    colosseum-arena
+
+<span class="comment"># Verify it's internal (no external routing)</span>
+<span class="prompt">$</span> podman network inspect colosseum-arena | jq '.[] | .internal'
+<span class="comment"># Should output: true</span></div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part5" class="page-break">Part 5: Build the Attacker Container Image</h2>
+
+<div class="step">
+<div class="step-number">15</div>
+<p>Create the Dockerfile for attacker containers:</p>
+<div class="code-block"><span class="prompt">$</span> mkdir -p /opt/dagda/colosseum/docker
+<span class="prompt">$</span> cat > /opt/dagda/colosseum/docker/Dockerfile.attacker &lt;&lt; 'EOF'
+FROM kalilinux/kali-rolling:latest
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nmap nikto gobuster dirb sqlmap hydra john hashcat \
+    crackmapexec impacket-scripts enum4linux smbclient \
+    netcat-openbsd socat curl wget python3 python3-pip \
+    vim nano less tmux git openssh-client whois dnsutils \
+    wordlists seclists \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create non-root attacker user
+RUN useradd -m -s /bin/bash attacker
+USER attacker
+WORKDIR /home/attacker
+
+# Welcome message
+RUN echo 'echo "=== DAGDA COLOSSEUM ==="' >> ~/.bashrc && \
+    echo 'echo "Target network: 10.99.0.0/24"' >> ~/.bashrc && \
+    echo 'echo "Objective: shown in the web UI"' >> ~/.bashrc && \
+    echo 'echo "Time limit: shown in the web UI"' >> ~/.bashrc && \
+    echo 'echo ""' >> ~/.bashrc
+
+CMD ["/bin/bash"]
+EOF</div>
+</div>
+
+<div class="step">
+<div class="step-number">16</div>
+<p>Build the attacker image:</p>
+<div class="code-block"><span class="prompt">$</span> cd /opt/dagda/colosseum/docker
+<span class="prompt">$</span> podman build -t dagda-colosseum-kali -f Dockerfile.attacker .
+<span class="comment"># This takes 5-10 minutes (downloading Kali packages)</span>
+
+<span class="comment"># Verify</span>
+<span class="prompt">$</span> podman images | grep colosseum
+<span class="comment"># dagda-colosseum-kali   latest   ...   ~2GB</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">17</div>
+<p>Test the attacker container:</p>
+<div class="code-block"><span class="comment"># Spin up a test container on the isolated network</span>
+<span class="prompt">$</span> podman run --rm -it \
+    --name test-attacker \
+    --network colosseum-arena \
+    --cpus 2 --memory 2g \
+    dagda-colosseum-kali
+
+<span class="comment"># Inside the container:</span>
+<span class="prompt">attacker$</span> nmap --version    <span class="comment"># Should work</span>
+<span class="prompt">attacker$</span> ping 8.8.8.8     <span class="comment"># Should FAIL (no internet)</span>
+<span class="prompt">attacker$</span> exit</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part6" class="page-break">Part 6: Set Up Target VMs</h2>
+
+<div class="step">
+<div class="step-number">18</div>
+<p>Download or create vulnerable VM images. Options:</p>
+<table>
+<tr><th>Image</th><th>Description</th><th>Source</th></tr>
+<tr><td>Metasploitable 3</td><td>Intentionally vulnerable Windows/Linux</td><td>rapid7/metasploitable3 (GitHub)</td></tr>
+<tr><td>DVWA</td><td>Damn Vulnerable Web App</td><td>Docker: vulnerables/web-dvwa</td></tr>
+<tr><td>VulnHub VMs</td><td>Community vulnerable VMs</td><td>vulnhub.com</td></tr>
+<tr><td>Custom</td><td>Build your own with specific CVEs</td><td>Your Dockerfiles</td></tr>
+</table>
+</div>
+
+<div class="step">
+<div class="step-number">19</div>
+<p>Deploy target containers on the isolated network:</p>
+<div class="code-block"><span class="comment"># Example: DVWA web target</span>
+<span class="prompt">$</span> podman run -d \
+    --name target-web-01 \
+    --network colosseum-arena \
+    --ip 10.99.0.10 \
+    vulnerables/web-dvwa
+
+<span class="comment"># Example: Metasploitable-style target</span>
+<span class="prompt">$</span> podman run -d \
+    --name target-linux-01 \
+    --network colosseum-arena \
+    --ip 10.99.0.20 \
+    your-vulnerable-image
+
+<span class="comment"># Verify targets are running</span>
+<span class="prompt">$</span> podman ps --filter network=colosseum-arena</div>
+</div>
+
+<div class="step">
+<div class="step-number">20</div>
+<p>For libvirt VMs (full OS targets, more realistic):</p>
+<div class="code-block"><span class="comment"># Create an isolated libvirt network</span>
+<span class="prompt">$</span> cat > /tmp/colosseum-net.xml &lt;&lt; 'EOF'
+&lt;network&gt;
+  &lt;name&gt;colosseum-arena&lt;/name&gt;
+  &lt;bridge name="virbr-arena"/&gt;
+  &lt;ip address="10.99.0.1" netmask="255.255.255.0"/&gt;
+  &lt;!-- No forward = isolated, no internet --&gt;
+&lt;/network&gt;
+EOF
+<span class="prompt">$</span> sudo virsh net-define /tmp/colosseum-net.xml
+<span class="prompt">$</span> sudo virsh net-start colosseum-arena
+<span class="prompt">$</span> sudo virsh net-autostart colosseum-arena
+
+<span class="comment"># Import a vulnerable VM</span>
+<span class="prompt">$</span> sudo virt-install \
+    --name target-dc-01 \
+    --ram 2048 --vcpus 2 \
+    --disk path=/var/lib/libvirt/images/target-dc-01.qcow2 \
+    --network network=colosseum-arena \
+    --import --noautoconsole</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part7" class="page-break">Part 7: Configure Network Isolation</h2>
+
+<div class="warning-box">
+<strong>This is the most critical section.</strong> Incorrect isolation means attackers
+can escape the arena and access your server or the internet.
+</div>
+
+<div class="step">
+<div class="step-number">21</div>
+<p>Verify container network isolation:</p>
+<div class="code-block"><span class="comment"># Start a test attacker container</span>
+<span class="prompt">$</span> podman run --rm -it --network colosseum-arena dagda-colosseum-kali
+
+<span class="comment"># These should SUCCEED (target VMs accessible):</span>
+<span class="prompt">attacker$</span> ping -c1 10.99.0.10   <span class="success"># ✓ Target web server</span>
+<span class="prompt">attacker$</span> nmap -sn 10.99.0.0/24  <span class="success"># ✓ Target network</span>
+
+<span class="comment"># These should FAIL (isolation working):</span>
+<span class="prompt">attacker$</span> ping -c1 8.8.8.8       <span class="comment"># ✗ No internet</span>
+<span class="prompt">attacker$</span> ping -c1 YOUR_SERVER_IP <span class="comment"># ✗ No host access</span>
+<span class="prompt">attacker$</span> curl https://google.com <span class="comment"># ✗ No internet</span>
+
+<span class="prompt">attacker$</span> exit</div>
+</div>
+
+<div class="step">
+<div class="step-number">22</div>
+<p>Add iptables rules to prevent container escape:</p>
+<div class="code-block"><span class="comment"># Block containers from reaching the host's management interface</span>
+<span class="prompt">$</span> sudo iptables -I FORWARD -s 10.99.0.0/24 -d YOUR_SERVER_IP -j DROP
+<span class="prompt">$</span> sudo iptables -I FORWARD -s 10.99.0.0/24 ! -d 10.99.0.0/24 -j DROP
+
+<span class="comment"># Save rules to persist across reboots</span>
+<span class="prompt">$</span> sudo apt install -y iptables-persistent
+<span class="prompt">$</span> sudo netfilter-persistent save</div>
+</div>
+
+<div class="step">
+<div class="step-number">23</div>
+<p>Connect Dagda to the arena network for monitoring:</p>
+<div class="code-block"><span class="comment"># Dagda needs to see traffic on the arena network</span>
+<span class="comment"># Option A: Run Dagda in a container on the same network</span>
+<span class="comment"># Option B: Use eBPF on the host to monitor the bridge interface</span>
+
+<span class="comment"># Find the bridge interface</span>
+<span class="prompt">$</span> ip link | grep -E "virbr-arena|cni-podman"
+<span class="comment"># Note the interface name (e.g., cni-podman1)</span>
+
+<span class="comment"># Dagda will monitor this interface via eBPF and pcap tools</span></div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part8" class="page-break">Part 8: TLS and Domain Setup</h2>
+
+<div class="step">
+<div class="step-number">24</div>
+<p>Point a domain to your server. In your DNS provider:</p>
+<div class="code-block"><span class="comment"># A record:</span>
+colosseum.yourdomain.com → YOUR_SERVER_IP
+
+<span class="comment"># Wait for DNS propagation (5-30 minutes)</span>
+<span class="prompt">$</span> dig colosseum.yourdomain.com
+<span class="comment"># Should resolve to your server IP</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">25</div>
+<p>Get a TLS certificate with Let's Encrypt:</p>
+<div class="code-block"><span class="prompt">$</span> sudo certbot certonly --standalone \
+    -d colosseum.yourdomain.com \
+    --email your-email@example.com \
+    --agree-tos --non-interactive
+
+<span class="comment"># Certificate saved to:</span>
+<span class="comment"># /etc/letsencrypt/live/colosseum.yourdomain.com/fullchain.pem</span>
+<span class="comment"># /etc/letsencrypt/live/colosseum.yourdomain.com/privkey.pem</span></div>
+</div>
+
+<div class="step">
+<div class="step-number">26</div>
+<p>Configure Nginx as reverse proxy:</p>
+<div class="code-block"><span class="prompt">$</span> sudo tee /etc/nginx/sites-available/colosseum &lt;&lt; 'EOF'
+server {
+    listen 443 ssl http2;
+    server_name colosseum.yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/colosseum.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/colosseum.yourdomain.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+
+    # Colosseum web UI
+    location / {
+        proxy_pass http://127.0.0.1:8443;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # WebSocket for terminal
+    location /colosseum/ws/ {
+        proxy_pass http://127.0.0.1:8443;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_read_timeout 3600s;
+    }
+}
+
+server {
+    listen 80;
+    server_name colosseum.yourdomain.com;
+    return 301 https://$host$request_uri;
+}
+EOF
+
+<span class="prompt">$</span> sudo ln -sf /etc/nginx/sites-available/colosseum /etc/nginx/sites-enabled/
+<span class="prompt">$</span> sudo nginx -t && sudo systemctl reload nginx</div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part9" class="page-break">Part 9: Launch the Colosseum</h2>
+
+<div class="step">
+<div class="step-number">27</div>
+<p>Create a systemd service for persistent operation:</p>
+<div class="code-block"><span class="prompt">$</span> sudo tee /etc/systemd/system/dagda-colosseum.service &lt;&lt; 'EOF'
+[Unit]
+Description=Dagda Colosseum — Live-Fire Arena
+After=network.target podman.service libvirtd.service
+Wants=podman.service
+
+[Service]
+Type=simple
+User=dagda
+WorkingDirectory=/opt/dagda
+Environment=PATH=/opt/dagda/.venv/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/opt/dagda/.venv/bin/python -m dagda --mode colosseum
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+<span class="prompt">$</span> sudo systemctl daemon-reload
+<span class="prompt">$</span> sudo systemctl enable dagda-colosseum
+<span class="prompt">$</span> sudo systemctl start dagda-colosseum</div>
+</div>
+
+<div class="step">
+<div class="step-number">28</div>
+<p>Verify the Colosseum is running:</p>
+<div class="code-block"><span class="prompt">$</span> sudo systemctl status dagda-colosseum
+<span class="comment"># Should show: active (running)</span>
+
+<span class="prompt">$</span> curl -k https://localhost:8443/colosseum/stats
+<span class="comment"># Should return JSON: {"active_sessions": 0, "total_attackers": 0, ...}</span>
+
+<span class="comment"># Open in browser:</span>
+<span class="comment"># https://colosseum.yourdomain.com</span></div>
+</div>
+
+<div class="success-box">
+The Colosseum is live. Attackers can register at your domain, choose a scenario,
+and get a browser terminal connected to your isolated target network. Dagda
+defends autonomously. Everything is logged.
+</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="part10" class="page-break">Part 10: Monitoring and Maintenance</h2>
+
+<h3>Daily</h3>
+<div class="code-block"><span class="comment"># Check Dagda is running</span>
+<span class="prompt">$</span> sudo systemctl status dagda-colosseum
+
+<span class="comment"># Check container health</span>
+<span class="prompt">$</span> podman ps -a | grep colosseum
+
+<span class="comment"># Check disk space (containers + logs)</span>
+<span class="prompt">$</span> df -h /</div>
+
+<h3>Weekly</h3>
+<div class="code-block"><span class="comment"># Update Dagda</span>
+<span class="prompt">$</span> cd /opt/dagda && git pull && pip install -e ".[all]"
+<span class="prompt">$</span> sudo systemctl restart dagda-colosseum
+
+<span class="comment"># Clean old containers</span>
+<span class="prompt">$</span> podman container prune -f
+
+<span class="comment"># Renew TLS cert (auto-renew should handle this)</span>
+<span class="prompt">$</span> sudo certbot renew --dry-run
+
+<span class="comment"># Export learnings</span>
+<span class="prompt">$</span> source /opt/dagda/.venv/bin/activate
+<span class="prompt">$</span> python -c "from colosseum.learning_engine import ColosseumLearningEngine; ..."</div>
+
+<h3>Monthly</h3>
+<div class="code-block"><span class="comment"># Full system update</span>
+<span class="prompt">$</span> sudo apt update && sudo apt full-upgrade -y
+
+<span class="comment"># Rebuild attacker image (get latest tools)</span>
+<span class="prompt">$</span> cd /opt/dagda/colosseum/docker
+<span class="prompt">$</span> podman build --no-cache -t dagda-colosseum-kali -f Dockerfile.attacker .
+
+<span class="comment"># Review Dagda's self-audit</span>
+<span class="prompt">$</span> python -c "
+from brain.self_security import DagdaSelfAudit
+a = DagdaSelfAudit()
+r = a.run()
+print(f'{r[\"summary\"][\"passed\"]} passed, {r[\"summary\"][\"failed\"]} failed')
+"</div>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="verification" class="page-break">Verification Checklist</h2>
+
+<p>Complete every item before opening to public attackers:</p>
+
+<h3>Isolation</h3>
+<ul class="checklist">
+<li>Attacker container CANNOT ping 8.8.8.8 (no internet)</li>
+<li>Attacker container CANNOT ping host server IP</li>
+<li>Attacker container CAN ping target VMs (10.99.0.x)</li>
+<li>iptables FORWARD rules block 10.99.0.0/24 → outside</li>
+<li>Podman network is marked as "internal"</li>
+</ul>
+
+<h3>Security</h3>
+<ul class="checklist">
+<li>SSH root login disabled</li>
+<li>SSH password auth disabled (key only)</li>
+<li>UFW firewall active (only 22 + 443 open)</li>
+<li>TLS certificate valid and auto-renewing</li>
+<li>Dagda integrity baseline created</li>
+<li>PANIC button works (Ctrl+Shift+P on TUI session)</li>
+</ul>
+
+<h3>Functionality</h3>
+<ul class="checklist">
+<li>Colosseum web UI loads at https://your-domain</li>
+<li>Registration + login works</li>
+<li>Scenario cards display correctly</li>
+<li>Terminal connects and provides working shell</li>
+<li>Tools work inside container (nmap, sqlmap, etc.)</li>
+<li>Dagda detects scans from attacker container</li>
+<li>Session timer counts down correctly</li>
+<li>Session end calculates score</li>
+<li>Leaderboard updates after session</li>
+</ul>
+
+<h3>Resilience</h3>
+<ul class="checklist">
+<li>Dagda restarts automatically after reboot (systemd)</li>
+<li>Containers are destroyed when sessions end</li>
+<li>Orphaned containers are cleaned up</li>
+<li>Server survives attacker DoS attempt inside container (resource limits work)</li>
+</ul>
+
+<!-- ═════════════════════════════════════════════════════════ -->
+<h2 id="troubleshooting" class="page-break">Troubleshooting</h2>
+
+<h3>Attacker can reach the internet</h3>
+<div class="code-block"><span class="comment"># Verify Podman network is internal</span>
+<span class="prompt">$</span> podman network inspect colosseum-arena | jq '.[] | .internal'
+<span class="comment"># Must be: true</span>
+
+<span class="comment"># If false, recreate the network:</span>
+<span class="prompt">$</span> podman network rm colosseum-arena
+<span class="prompt">$</span> podman network create --subnet 10.99.0.0/24 --internal colosseum-arena
+
+<span class="comment"># Verify iptables rules:</span>
+<span class="prompt">$</span> sudo iptables -L FORWARD -n | grep 10.99</div>
+
+<h3>Terminal doesn't connect</h3>
+<div class="code-block"><span class="comment"># Check Nginx WebSocket config</span>
+<span class="prompt">$</span> sudo nginx -t
+
+<span class="comment"># Check Dagda is listening</span>
+<span class="prompt">$</span> ss -tlnp | grep 8443
+
+<span class="comment"># Check container is running</span>
+<span class="prompt">$</span> podman ps | grep colosseum</div>
+
+<h3>Dagda not detecting attacks</h3>
+<div class="code-block"><span class="comment"># Verify Dagda is monitoring the arena network interface</span>
+<span class="prompt">$</span> ip link | grep -E "virbr|cni"
+<span class="comment"># Dagda should be watching this interface</span>
+
+<span class="comment"># Check eBPF is available</span>
+<span class="prompt">$</span> python -c "from tools.defensive.ebpf_monitor import EbpfMonitor; print(EbpfMonitor.is_available())"
+<span class="comment"># Should be: True (on Linux as root)</span></div>
+
+<h3>Emergency shutdown</h3>
+<div class="code-block"><span class="comment"># Kill everything immediately</span>
+<span class="prompt">$</span> sudo systemctl stop dagda-colosseum
+<span class="prompt">$</span> podman stop --all
+<span class="prompt">$</span> podman rm --all --force
+
+<span class="comment"># Or from Dagda TUI: Ctrl+Shift+P (PANIC)</span></div>
+
+<div class="footer">
+DAGDA COLOSSEUM &mdash; Server Deployment Guide<br>
+Print to PDF: Ctrl+P &rarr; Save as PDF
+</div>
+
+</body>
+</html>

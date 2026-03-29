@@ -4,6 +4,44 @@
    cyberpunk undertones, dimensional ambiguity
    ============================================ */
 
+/* --- Minimum Font Size --- */
+*, *::before, *::after {
+  font-size: max(inherit, 12px);
+}
+html { font-size: max(100%, 12px); }
+body { font-size: max(1rem, 12px); }
+
+/* Override for elements that intentionally use smaller sizes */
+.stat-block__label,
+.case-study__section-label,
+.case-study__meta,
+.stack-section__title,
+.tag,
+.tech-tag,
+.card__category,
+.status {
+  font-size: max(0.6rem, 12px);
+}
+
+/* --- Ko-fi Footer Button --- */
+.kofi-btn {
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #07070d;
+  background: linear-gradient(135deg, #00ffc8, #a855f7);
+  padding: 0.6rem 1.5rem;
+  text-decoration: none;
+  transition: box-shadow 0.3s, transform 0.2s;
+  font-weight: 500;
+}
+.kofi-btn:hover {
+  box-shadow: 0 0 20px rgba(0,255,200,0.4), 0 0 40px rgba(168,85,247,0.2);
+  transform: translateY(-1px);
+}
+
 /* --- Page Transition --- */
 .page-transition {
   position: fixed;

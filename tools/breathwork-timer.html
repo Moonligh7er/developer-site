@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof &amp; More | Moonlit Social Labs</title>
+  <meta name="description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8 Technique, Wim Hof Method, and Nadi Shodhana. No signup required.">
+  <meta name="keywords" content="breathwork timer, box breathing timer, 4-7-8 breathing, wim hof breathing timer, guided breathing exercise, meditation timer, nadi shodhana, alternate nostril breathing">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/breathwork-timer.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Breathwork Timer",
+    "description": "Free guided breathwork timer with hypnotic visualizations. Supports Box Breathing, 4-7-8 Technique, Wim Hof Method, and Nadi Shodhana alternate nostril breathing.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/breathwork-timer.html",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof & More">
+  <meta property="og:description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8, Wim Hof Method, and Nadi Shodhana. No signup required.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/breathwork-timer.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Breathwork Timer | Moonlit Social Labs">
+  <meta name="twitter:description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8, Wim Hof, and Nadi Shodhana.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ── Layout ── */
+    .bw-hero {
+      text-align: center;
+      padding: 8rem 0 2rem;
+    }
+    .bw-hero .heading-xl {
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .bw-hero .text-body {
+      margin: 1rem auto 0;
+      text-align: center;
+      max-width: 50ch;
+    }
+
+    /* ── Technique Selector ── */
+    .technique-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      max-width: 1060px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .technique-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .technique-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .technique-card:hover,
+    .technique-card.active {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .technique-card:hover::before,
+    .technique-card.active::before {
+      opacity: 1;
+    }
+    .technique-card.active {
+      border-color: var(--teal);
+      box-shadow: 0 0 20px var(--teal-glow), 0 8px 30px rgba(0,0,0,0.4);
+    }
+    .technique-card__name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text-bright);
+      margin-bottom: 0.4rem;
+    }
+    .technique-card__pattern {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--teal);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .technique-card__desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ── Breathing Visualizer ── */
+    .breathwork-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .circle-wrapper {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      margin: 2rem auto;
+    }
+    #particle-canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .breathing-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0.6);
+      background: radial-gradient(circle at 40% 35%, rgba(0,212,170,0.15), rgba(0,212,170,0.03));
+      border: 2px solid rgba(0,212,170,0.3);
+      box-shadow: 0 0 40px rgba(0,212,170,0.05), inset 0 0 40px rgba(0,212,170,0.03);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      will-change: transform, border-color, box-shadow, background;
+    }
+    .phase-label {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+    .phase-timer {
+      font-family: var(--font-mono);
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--teal);
+    }
+    .phase-detail {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+    .round-display {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.1em;
+      margin-top: 1.5rem;
+    }
+
+    /* ── Controls ── */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .btn-breath {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.7rem 1.8rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-breath:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      box-shadow: 0 0 15px var(--teal-glow);
+    }
+    .btn-breath.primary {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: rgba(0,212,170,0.06);
+    }
+    .btn-breath.primary:hover {
+      background: rgba(0,212,170,0.12);
+      box-shadow: 0 0 25px var(--teal-glow);
+    }
+    .btn-breath:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .rounds-control {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      justify-content: center;
+    }
+    .rounds-control label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .rounds-control input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 120px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+    }
+    .rounds-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--teal);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+    .rounds-control input[type="range"]::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: var(--teal);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+    .rounds-value {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--teal);
+      min-width: 1.5ch;
+      text-align: center;
+    }
+    .sound-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 0.75rem;
+    }
+    .sound-toggle label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 36px;
+      height: 18px;
+      background: var(--border);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch.on {
+      background: var(--teal-dim);
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--text-dim);
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+    .toggle-switch.on::after {
+      left: 20px;
+      background: var(--teal);
+      box-shadow: 0 0 6px var(--teal-dim);
+    }
+
+    /* ── Session Summary ── */
+    .session-summary {
+      display: none;
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .session-summary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--violet));
+    }
+    .session-summary.visible {
+      display: block;
+    }
+    .session-summary h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .summary-value {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--teal);
+    }
+
+    /* ── Ad container ── */
+    .ad-container {
+      margin: 3rem auto;
+      text-align: center;
+      max-width: 728px;
+    }
+    .ad-container ins { display: block; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .bw-hero { padding: 5rem 0 1.5rem; }
+      .technique-grid { grid-template-columns: 1fr 1fr; }
+      .circle-wrapper { width: 300px; height: 300px; }
+      .breathing-circle { width: 240px; height: 240px; }
+      #particle-canvas { width: 460px; height: 460px; }
+      .phase-label { font-size: 1.1rem; }
+      .phase-timer { font-size: 1.8rem; }
+    }
+    @media (max-width: 480px) {
+      .technique-grid { grid-template-columns: 1fr; }
+      .circle-wrapper { width: 260px; height: 260px; }
+      .breathing-circle { width: 200px; height: 200px; }
+      #particle-canvas { width: 380px; height: 380px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo"><img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <!-- Hero -->
+    <section class="bw-hero container">
+      <div class="reveal">
+        <p class="label" style="color:var(--violet);">Wellness</p>
+        <h1 class="heading-xl glitch">Breathwork Timer</h1>
+        <p class="text-body">Just breathe. Guided breathing exercises with hypnotic visualizations. Everything runs client-side.</p>
+      </div>
+    </section>
+
+    <!-- Ad Unit: Top -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Technique Selector -->
+    <section class="technique-grid" role="radiogroup" aria-label="Breathing technique">
+      <div class="technique-card active" data-technique="box" role="radio" aria-checked="true" tabindex="0">
+        <div class="technique-card__name">Box Breathing</div>
+        <div class="technique-card__pattern">4s - 4s - 4s - 4s</div>
+        <div class="technique-card__desc">Navy SEAL stress management. Equal phases of inhale, hold, exhale, hold.</div>
+      </div>
+      <div class="technique-card" data-technique="478" role="radio" aria-checked="false" tabindex="0">
+        <div class="technique-card__name">4-7-8 Technique</div>
+        <div class="technique-card__pattern">4s - 7s - 8s</div>
+        <div class="technique-card__desc">Dr. Andrew Weil's parasympathetic activation. Deep calm through extended exhale.</div>
+      </div>
+      <div class="technique-card" data-technique="wimhof" role="radio" aria-checked="false" tabindex="0">
+        <div class="technique-card__name">Wim Hof Method</div>
+        <div class="technique-card__pattern">30 breaths + 60s hold</div>
+        <div class="technique-card__desc">Power breathing with retention. 30 rapid breaths, breath hold, recovery breath.</div>
+      </div>
+      <div class="technique-card" data-technique="nadi" role="radio" aria-checked="false" tabindex="0">
+        <div class="technique-card__name">Nadi Shodhana</div>
+        <div class="technique-card__pattern">Alternate Nostril</div>
+        <div class="technique-card__desc">Yogic channel purification. Alternate nostril breathing for balance and clarity.</div>
+      </div>
+    </section>
+
+    <!-- Breathing Visualizer -->
+    <section class="breathwork-container">
+      <div class="circle-wrapper">
+        <canvas id="particle-canvas"></canvas>
+        <div class="breathing-circle" id="breathingCircle">
+          <div class="phase-label" id="phaseLabel">READY</div>
+          <div class="phase-timer" id="phaseTimer">--</div>
+          <div class="phase-detail" id="phaseDetail"></div>
+        </div>
+      </div>
+
+      <div class="round-display" id="roundDisplay">Round 1 of 4</div>
+
+      <div class="controls">
+        <button class="btn-breath primary" id="btnStart">Start</button>
+        <button class="btn-breath" id="btnPause" disabled>Pause</button>
+        <button class="btn-breath" id="btnReset" disabled>Reset</button>
+      </div>
+
+      <div class="rounds-control">
+        <label for="roundsSlider">Rounds</label>
+        <input type="range" id="roundsSlider" min="1" max="10" value="4">
+        <span class="rounds-value" id="roundsValue">4</span>
+      </div>
+
+      <div class="sound-toggle">
+        <label for="soundToggle">Sound</label>
+        <div class="toggle-switch" id="soundToggle" role="switch" aria-checked="false" tabindex="0"></div>
+      </div>
+    </section>
+
+    <!-- Session Summary -->
+    <div class="session-summary" id="sessionSummary">
+      <h3>Session Complete</h3>
+      <div class="summary-row">
+        <span class="summary-label">Technique</span>
+        <span class="summary-value" id="sumTechnique">--</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Rounds</span>
+        <span class="summary-value" id="sumRounds">--</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">Total Time</span>
+        <span class="summary-value" id="sumTime">--</span>
+      </div>
+    </div>
+
+    <!-- CTA for Entheo -->
+    <section style="max-width:700px;margin:3rem auto;padding:0 2rem;">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--teal));"></div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e80;"></span>
+          <span style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);">Active Development</span>
+        </div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Entheo</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Consciousness exploration platform — guided journaling, AI-powered session analysis, breathwork integration, and psychedelic harm reduction tools.</p>
+        <a href="https://entheo-eosin.vercel.app/" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);">Learn More →</a>
+      </div>
+    </section>
+
+    <!-- Ad Unit: Bottom -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer"><p class="footer__text"><span class="footer-accent">Moonlit Social Labs</span> — architecture for the signal-seekers</p></footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* ================================================================
+       TECHNIQUE DEFINITIONS
+       ================================================================ */
+    const TECHNIQUES = {
+      box: {
+        name: 'Box Breathing',
+        phases: [
+          { label: 'INHALE',  duration: 4, type: 'inhale' },
+          { label: 'HOLD',    duration: 4, type: 'hold-full' },
+          { label: 'EXHALE',  duration: 4, type: 'exhale' },
+          { label: 'HOLD',    duration: 4, type: 'hold-empty' }
+        ]
+      },
+      '478': {
+        name: '4-7-8 Technique',
+        phases: [
+          { label: 'INHALE',  duration: 4, type: 'inhale' },
+          { label: 'HOLD',    duration: 7, type: 'hold-full' },
+          { label: 'EXHALE',  duration: 8, type: 'exhale' }
+        ]
+      },
+      wimhof: {
+        name: 'Wim Hof Method',
+        /* Wim Hof is handled specially: 30 power breaths, then hold, then recovery */
+        powerBreaths: 30,
+        breathDuration: 2,  /* 2s per inhale/exhale cycle = 1s in, 1s out */
+        holdDuration: 60,
+        recoveryDuration: 15,
+        phases: [] /* generated dynamically */
+      },
+      nadi: {
+        name: 'Nadi Shodhana',
+        phases: [
+          { label: 'INHALE',  detail: 'Left Nostril',  duration: 4, type: 'inhale' },
+          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-full' },
+          { label: 'EXHALE',  detail: 'Right Nostril',  duration: 4, type: 'exhale' },
+          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-empty' },
+          { label: 'INHALE',  detail: 'Right Nostril',  duration: 4, type: 'inhale' },
+          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-full' },
+          { label: 'EXHALE',  detail: 'Left Nostril',   duration: 4, type: 'exhale' },
+          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-empty' }
+        ]
+      }
+    };
+
+    /* Generate Wim Hof phases for one round */
+    function generateWimHofPhases() {
+      const phases = [];
+      const t = TECHNIQUES.wimhof;
+      for (let i = 0; i < t.powerBreaths; i++) {
+        phases.push({ label: 'INHALE', detail: 'Breath ' + (i + 1) + ' of ' + t.powerBreaths, duration: 1, type: 'inhale' });
+        phases.push({ label: 'EXHALE', detail: 'Breath ' + (i + 1) + ' of ' + t.powerBreaths, duration: 1, type: 'exhale' });
+      }
+      phases.push({ label: 'HOLD', detail: 'Retention', duration: t.holdDuration, type: 'hold-empty' });
+      phases.push({ label: 'INHALE', detail: 'Recovery', duration: t.recoveryDuration, type: 'inhale' });
+      return phases;
+    }
+
+    /* ================================================================
+       STATE MACHINE
+       ================================================================ */
+    const State = { IDLE: 'idle', RUNNING: 'running', PAUSED: 'paused', COMPLETE: 'complete' };
+
+    let state = State.IDLE;
+    let selectedTechnique = 'box';
+    let totalRounds = 4;
+    let currentRound = 1;
+    let currentPhaseIndex = 0;
+    let phaseElapsed = 0;      /* seconds elapsed in current phase */
+    let sessionStartTime = 0;
+    let sessionTotalTime = 0;
+    let lastFrameTime = 0;
+    let animFrameId = null;
+    let soundEnabled = false;
+    let phases = [];           /* current phase sequence */
+
+    /* ================================================================
+       DOM REFS
+       ================================================================ */
+    const circle       = document.getElementById('breathingCircle');
+    const phaseLabel   = document.getElementById('phaseLabel');
+    const phaseTimer   = document.getElementById('phaseTimer');
+    const phaseDetail  = document.getElementById('phaseDetail');
+    const roundDisplay = document.getElementById('roundDisplay');
+    const btnStart     = document.getElementById('btnStart');
+    const btnPause     = document.getElementById('btnPause');
+    const btnReset     = document.getElementById('btnReset');
+    const roundsSlider = document.getElementById('roundsSlider');
+    const roundsValue  = document.getElementById('roundsValue');
+    const soundToggle  = document.getElementById('soundToggle');
+    const summary      = document.getElementById('sessionSummary');
+    const sumTechnique = document.getElementById('sumTechnique');
+    const sumRounds    = document.getElementById('sumRounds');
+    const sumTime      = document.getElementById('sumTime');
+    const particleCanvas = document.getElementById('particle-canvas');
+
+    /* ================================================================
+       WEB AUDIO (optional tone)
+       ================================================================ */
+    let audioCtx = null;
+    function playTone(freq, dur) {
+      if (!soundEnabled) return;
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, audioCtx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.05);
+      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + dur);
+    }
+
+    /* ================================================================
+       PARTICLE SYSTEM
+       ================================================================ */
+    const pCtx = particleCanvas.getContext('2d');
+    let particles = [];
+    const PARTICLE_COUNT = 60;
+
+    function initParticles() {
+      const w = particleCanvas.width;
+      const h = particleCanvas.height;
+      particles = [];
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: Math.random() * 1.5 + 0.5,
+          alpha: Math.random() * 0.3 + 0.05,
+          hue: Math.random() > 0.5 ? 165 : 260  /* teal or violet */
+        });
+      }
+    }
+
+    function resizeParticleCanvas() {
+      const rect = particleCanvas.getBoundingClientRect();
+      particleCanvas.width = rect.width * window.devicePixelRatio;
+      particleCanvas.height = rect.height * window.devicePixelRatio;
+      pCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      initParticles();
+    }
+
+    function drawParticles(breathProgress) {
+      const w = particleCanvas.getBoundingClientRect().width;
+      const h = particleCanvas.getBoundingClientRect().height;
+      pCtx.clearRect(0, 0, w, h);
+      const cx = w / 2;
+      const cy = h / 2;
+      /* breathProgress: 0 = exhaled, 1 = inhaled */
+      const pull = (breathProgress - 0.5) * 0.15;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        /* gentle drift toward/away from center based on breathing */
+        const dx = cx - p.x;
+        const dy = cy - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        p.x += p.vx + (dx / dist) * pull;
+        p.y += p.vy + (dy / dist) * pull;
+        /* wrap */
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+
+        const sat = p.hue === 165 ? '100%' : '80%';
+        const light = p.hue === 165 ? '42%' : '66%';
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        pCtx.fillStyle = 'hsla(' + p.hue + ',' + sat + ',' + light + ',' + p.alpha + ')';
+        pCtx.fill();
+      }
+    }
+
+    resizeParticleCanvas();
+    window.addEventListener('resize', resizeParticleCanvas);
+
+    /* ================================================================
+       CIRCLE ANIMATION
+       ================================================================ */
+    function updateCircleVisual(phaseType, progress) {
+      /* progress: 0..1 within current phase
+         phaseType: inhale, exhale, hold-full, hold-empty */
+      let scale, borderColor, glowColor, bgGrad;
+
+      switch (phaseType) {
+        case 'inhale':
+          /* scale from small to large */
+          scale = 0.6 + 0.4 * easeInOutSine(progress);
+          borderColor = 'rgba(0,212,170,' + (0.3 + 0.5 * progress) + ')';
+          glowColor = '0 0 ' + (40 + 40 * progress) + 'px rgba(0,212,170,' + (0.08 + 0.15 * progress) + ')';
+          bgGrad = 'radial-gradient(circle at 40% 35%, rgba(0,212,170,' + (0.08 + 0.15 * progress) + '), rgba(0,212,170,' + (0.02 + 0.06 * progress) + '))';
+          break;
+        case 'hold-full':
+          /* full size, violet pulse */
+          const pulse = 0.5 + 0.5 * Math.sin(progress * Math.PI * 4);
+          scale = 1.0 + 0.02 * pulse;
+          borderColor = 'rgba(139,92,246,' + (0.5 + 0.3 * pulse) + ')';
+          glowColor = '0 0 ' + (50 + 20 * pulse) + 'px rgba(139,92,246,' + (0.1 + 0.1 * pulse) + ')';
+          bgGrad = 'radial-gradient(circle at 40% 35%, rgba(139,92,246,' + (0.1 + 0.08 * pulse) + '), rgba(139,92,246,' + (0.03 + 0.04 * pulse) + '))';
+          break;
+        case 'exhale':
+          /* scale from large to small */
+          scale = 1.0 - 0.4 * easeInOutSine(progress);
+          const fade = 1 - progress;
+          borderColor = 'rgba(0,212,170,' + (0.6 * fade + 0.1) + ')';
+          glowColor = '0 0 ' + (60 * fade + 10) + 'px rgba(0,212,170,' + (0.15 * fade) + ')';
+          bgGrad = 'radial-gradient(circle at 40% 35%, rgba(0,212,170,' + (0.15 * fade) + '), rgba(0,212,170,' + (0.05 * fade) + '))';
+          break;
+        case 'hold-empty':
+          /* small, dark, minimal */
+          const dimPulse = 0.5 + 0.5 * Math.sin(progress * Math.PI * 2);
+          scale = 0.6 + 0.01 * dimPulse;
+          borderColor = 'rgba(74,74,96,' + (0.2 + 0.1 * dimPulse) + ')';
+          glowColor = '0 0 10px rgba(0,0,0,0.2)';
+          bgGrad = 'radial-gradient(circle at 40% 35%, rgba(30,30,58,' + (0.1 + 0.05 * dimPulse) + '), rgba(15,15,26,0.3))';
+          break;
+        default:
+          scale = 0.6;
+          borderColor = 'rgba(74,74,96,0.3)';
+          glowColor = '0 0 10px rgba(0,0,0,0.1)';
+          bgGrad = 'radial-gradient(circle at 40% 35%, rgba(30,30,58,0.1), rgba(15,15,26,0.2))';
+      }
+
+      circle.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
+      circle.style.borderColor = borderColor;
+      circle.style.boxShadow = glowColor;
+      circle.style.background = bgGrad;
+    }
+
+    function easeInOutSine(t) {
+      return -(Math.cos(Math.PI * t) - 1) / 2;
+    }
+
+    /* ================================================================
+       BREATHING PROGRESS (for particles)
+       ================================================================ */
+    function getBreathProgress(phaseType, progress) {
+      switch (phaseType) {
+        case 'inhale': return progress;
+        case 'hold-full': return 1;
+        case 'exhale': return 1 - progress;
+        case 'hold-empty': return 0;
+        default: return 0.5;
+      }
+    }
+
+    /* ================================================================
+       GET PHASES FOR CURRENT TECHNIQUE
+       ================================================================ */
+    function getPhasesForTechnique() {
+      if (selectedTechnique === 'wimhof') {
+        return generateWimHofPhases();
+      }
+      return TECHNIQUES[selectedTechnique].phases.slice();
+    }
+
+    /* ================================================================
+       MAIN LOOP (requestAnimationFrame + delta time)
+       ================================================================ */
+    function tick(timestamp) {
+      if (state !== State.RUNNING) {
+        /* Still draw particles for ambience even when paused */
+        drawParticles(getCurrentBreathProgress());
+        animFrameId = requestAnimationFrame(tick);
+        return;
+      }
+
+      if (lastFrameTime === 0) lastFrameTime = timestamp;
+      const dt = (timestamp - lastFrameTime) / 1000; /* delta in seconds */
+      lastFrameTime = timestamp;
+
+      /* Clamp delta to avoid huge jumps (e.g., tab was backgrounded) */
+      const clampedDt = Math.min(dt, 0.1);
+
+      phaseElapsed += clampedDt;
+
+      const phase = phases[currentPhaseIndex];
+      if (!phase) {
+        completeSession();
+        animFrameId = requestAnimationFrame(tick);
+        return;
+      }
+
+      const phaseDuration = phase.duration;
+      const progress = Math.min(phaseElapsed / phaseDuration, 1);
+      const remaining = Math.max(phaseDuration - phaseElapsed, 0);
+
+      /* Update visuals */
+      phaseLabel.textContent = phase.label;
+      phaseTimer.textContent = Math.ceil(remaining);
+      phaseDetail.textContent = phase.detail || '';
+      updateCircleVisual(phase.type, progress);
+      drawParticles(getBreathProgress(phase.type, progress));
+
+      /* Phase complete? */
+      if (phaseElapsed >= phaseDuration) {
+        phaseElapsed -= phaseDuration; /* carry over excess */
+        currentPhaseIndex++;
+
+        /* Check if round is complete */
+        if (currentPhaseIndex >= phases.length) {
+          currentRound++;
+          if (currentRound > totalRounds) {
+            completeSession();
+            animFrameId = requestAnimationFrame(tick);
+            return;
+          }
+          /* Next round */
+          currentPhaseIndex = 0;
+          phases = getPhasesForTechnique();
+          roundDisplay.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
+        }
+
+        /* Play transition tone */
+        const nextPhase = phases[currentPhaseIndex];
+        if (nextPhase) {
+          if (nextPhase.type === 'inhale') playTone(440, 0.4);
+          else if (nextPhase.type === 'exhale') playTone(330, 0.4);
+          else playTone(392, 0.3);
+        }
+      }
+
+      animFrameId = requestAnimationFrame(tick);
+    }
+
+    function getCurrentBreathProgress() {
+      if (state === State.IDLE || !phases.length) return 0.3;
+      if (state === State.COMPLETE) return 0.3;
+      const phase = phases[currentPhaseIndex];
+      if (!phase) return 0.3;
+      const progress = Math.min(phaseElapsed / phase.duration, 1);
+      return getBreathProgress(phase.type, progress);
+    }
+
+    /* ================================================================
+       STATE TRANSITIONS
+       ================================================================ */
+    function startSession() {
+      if (state === State.RUNNING) return;
+
+      if (state === State.PAUSED) {
+        /* Resume */
+        state = State.RUNNING;
+        lastFrameTime = 0;
+        btnStart.textContent = 'Start';
+        btnStart.disabled = true;
+        btnPause.disabled = false;
+        return;
+      }
+
+      /* Fresh start */
+      state = State.RUNNING;
+      currentRound = 1;
+      currentPhaseIndex = 0;
+      phaseElapsed = 0;
+      lastFrameTime = 0;
+      sessionStartTime = performance.now();
+      phases = getPhasesForTechnique();
+
+      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
+      summary.classList.remove('visible');
+
+      btnStart.disabled = true;
+      btnPause.disabled = false;
+      btnReset.disabled = false;
+      disableTechniqueCards(true);
+      roundsSlider.disabled = true;
+
+      /* Play start tone */
+      playTone(523, 0.5);
+
+      if (!animFrameId) {
+        animFrameId = requestAnimationFrame(tick);
+      }
+    }
+
+    function pauseSession() {
+      if (state !== State.RUNNING) return;
+      state = State.PAUSED;
+      btnStart.textContent = 'Resume';
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+      phaseLabel.textContent = 'PAUSED';
+    }
+
+    function resetSession() {
+      state = State.IDLE;
+      currentRound = 1;
+      currentPhaseIndex = 0;
+      phaseElapsed = 0;
+      lastFrameTime = 0;
+
+      phaseLabel.textContent = 'READY';
+      phaseTimer.textContent = '--';
+      phaseDetail.textContent = '';
+      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
+
+      updateCircleVisual('idle', 0);
+
+      btnStart.textContent = 'Start';
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+      btnReset.disabled = true;
+      disableTechniqueCards(false);
+      roundsSlider.disabled = false;
+
+      summary.classList.remove('visible');
+    }
+
+    function completeSession() {
+      state = State.COMPLETE;
+      sessionTotalTime = (performance.now() - sessionStartTime) / 1000;
+
+      phaseLabel.textContent = 'COMPLETE';
+      phaseTimer.textContent = '';
+      phaseDetail.textContent = '';
+      updateCircleVisual('idle', 0);
+
+      btnStart.textContent = 'Start';
+      btnStart.disabled = false;
+      btnPause.disabled = true;
+      btnReset.disabled = false;
+      disableTechniqueCards(false);
+      roundsSlider.disabled = false;
+
+      /* Play completion tone */
+      playTone(523, 0.6);
+      setTimeout(function() { playTone(659, 0.6); }, 200);
+      setTimeout(function() { playTone(784, 0.8); }, 400);
+
+      /* Show summary */
+      const mins = Math.floor(sessionTotalTime / 60);
+      const secs = Math.floor(sessionTotalTime % 60);
+      sumTechnique.textContent = TECHNIQUES[selectedTechnique].name;
+      sumRounds.textContent = totalRounds;
+      sumTime.textContent = mins + 'm ' + secs + 's';
+      summary.classList.add('visible');
+
+      /* Reset for next start */
+      state = State.IDLE;
+      currentRound = 1;
+      currentPhaseIndex = 0;
+      phaseElapsed = 0;
+    }
+
+    function disableTechniqueCards(disabled) {
+      document.querySelectorAll('.technique-card').forEach(function(card) {
+        card.style.pointerEvents = disabled ? 'none' : '';
+        card.style.opacity = disabled ? '0.5' : '';
+      });
+    }
+
+    /* ================================================================
+       EVENT LISTENERS
+       ================================================================ */
+    btnStart.addEventListener('click', startSession);
+    btnPause.addEventListener('click', pauseSession);
+    btnReset.addEventListener('click', resetSession);
+
+    roundsSlider.addEventListener('input', function() {
+      totalRounds = parseInt(this.value, 10);
+      roundsValue.textContent = totalRounds;
+      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
+    });
+
+    soundToggle.addEventListener('click', function() {
+      soundEnabled = !soundEnabled;
+      this.classList.toggle('on', soundEnabled);
+      this.setAttribute('aria-checked', soundEnabled);
+      if (soundEnabled && !audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    });
+    soundToggle.addEventListener('keydown', function(e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+
+    /* Technique selection */
+    document.querySelectorAll('.technique-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        if (state === State.RUNNING || state === State.PAUSED) return;
+        document.querySelectorAll('.technique-card').forEach(function(c) {
+          c.classList.remove('active');
+          c.setAttribute('aria-checked', 'false');
+        });
+        this.classList.add('active');
+        this.setAttribute('aria-checked', 'true');
+        selectedTechnique = this.dataset.technique;
+      });
+      card.addEventListener('keydown', function(e) {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    /* ================================================================
+       INIT: Start animation loop (particles always animate)
+       ================================================================ */
+    updateCircleVisual('idle', 0);
+    animFrameId = requestAnimationFrame(tick);
+
+  })();
+  </script>
+</body>
+</html>

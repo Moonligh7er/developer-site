@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Financial Calculators — Compound Interest, Loan, Debt Payoff &amp; More | Moonlit Social Labs</title>
+  <meta name="description" content="Free compound interest calculator, loan payment calculator, debt payoff calculator, savings goal planner, ROI calculator, and freelancer tax estimator. No signup required.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/financial-calculators.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Financial Calculators — Moonlit Social Labs",
+    "description": "Free compound interest calculator, loan payment calculator, debt payoff calculator, savings goal planner, ROI calculator, and freelancer tax estimator.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/financial-calculators.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Financial Calculators — Compound Interest, Loan, Debt Payoff & More">
+  <meta property="og:description" content="Free compound interest calculator, loan payment calculator, debt payoff calculator, savings goal planner, ROI calculator, and freelancer tax estimator.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/financial-calculators.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Financial Calculators | Moonlit Social Labs">
+  <meta name="twitter:description" content="Free compound interest, loan, debt payoff, savings, ROI, and freelancer tax calculators.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ── Hero ── */
+    .calc-hero {
+      text-align: center;
+      padding: 8rem 0 3rem;
+    }
+    .calc-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .calc-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0;
+    }
+    .calc-hero .text-body {
+      margin: 1.5rem auto 0;
+      text-align: center;
+      max-width: 55ch;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* ── Ad containers ── */
+    .ad-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      text-align: center;
+      min-height: 90px;
+    }
+
+    /* ── Tab bar ── */
+    .calc-tabs {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .calc-tab {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .calc-tab:hover {
+      border-color: var(--border-glow);
+      color: var(--text-primary);
+    }
+    .calc-tab.active {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-glow);
+      box-shadow: 0 0 12px var(--teal-dim);
+    }
+
+    /* ── Calculator panels ── */
+    .calc-panels {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .calc-panel {
+      display: none;
+    }
+    .calc-panel.active {
+      display: block;
+    }
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .calc-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Inputs ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .form-group input,
+    .form-group select {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.65rem 0.85rem;
+      transition: border-color 0.25s ease;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+    .form-group input::placeholder {
+      color: var(--text-dim);
+    }
+    .form-group select option {
+      background: var(--deep);
+      color: var(--text-primary);
+    }
+
+    /* ── Buttons ── */
+    .calc-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .calc-btn:hover {
+      background: var(--teal-glow);
+      box-shadow: 0 0 20px var(--teal-dim);
+      color: var(--text-bright);
+    }
+    .calc-btn-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .calc-btn--secondary {
+      border-color: var(--border-glow);
+      color: var(--text-secondary);
+    }
+    .calc-btn--secondary:hover {
+      border-color: var(--violet);
+      color: var(--violet);
+      background: var(--violet-glow);
+      box-shadow: 0 0 20px var(--violet-dim);
+    }
+
+    /* ── Results ── */
+    .calc-results {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .calc-results.visible {
+      display: block;
+    }
+    .calc-results h4 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-row:last-child {
+      border-bottom: none;
+    }
+    .result-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .result-value {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+
+    /* ── Growth table ── */
+    .growth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .growth-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-glow);
+    }
+    .growth-table td {
+      padding: 0.4rem 0.75rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+    .growth-table tr:hover td {
+      background: var(--teal-glow);
+    }
+    .growth-table-wrap {
+      max-height: 360px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+    .growth-table-wrap::-webkit-scrollbar {
+      width: 6px;
+    }
+    .growth-table-wrap::-webkit-scrollbar-track {
+      background: var(--deep);
+    }
+    .growth-table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border-glow);
+    }
+
+    /* ── Error ── */
+    .calc-error {
+      color: var(--rose);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .calc-error.visible {
+      display: block;
+    }
+
+    /* ── Debt rows ── */
+    .debt-rows { margin-bottom: 1rem; }
+    .debt-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: end;
+    }
+    .debt-row .remove-debt {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--rose);
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .debt-row .remove-debt:hover {
+      background: rgba(196, 74, 138, 0.15);
+      border-color: var(--rose);
+    }
+
+    /* ── Tax bracket table ── */
+    .bracket-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+    .bracket-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-glow);
+    }
+    .bracket-table td {
+      padding: 0.4rem 0.75rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Subheading ── */
+    .calc-subhead {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    /* ── Toggle switch for savings mode ── */
+    .mode-toggle {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+    }
+    .mode-toggle button {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.2rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .mode-toggle button.active {
+      background: var(--violet-glow);
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+    .mode-toggle button:first-child {
+      border-right: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .calc-tabs { gap: 0.35rem; }
+      .calc-tab { font-size: 0.6rem; padding: 0.5rem 0.65rem; }
+      .calc-card { padding: 1.25rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .debt-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo"><img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <!-- ── Hero ── -->
+    <section class="calc-hero">
+      <span class="section-label">Finance</span>
+      <h1 class="heading-xl">Financial Calculators</h1>
+      <p class="text-body">Six essential money calculators — compound interest, loan payments, debt payoff, savings goals, ROI, and freelancer taxes. All math runs locally in your browser.</p>
+    </section>
+
+    <!-- ── Ad: Top Leaderboard ── -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- ── Tab Bar ── -->
+    <div class="calc-tabs" role="tablist">
+      <button class="calc-tab active" role="tab" data-tab="compound" aria-selected="true">Compound Interest</button>
+      <button class="calc-tab" role="tab" data-tab="loan" aria-selected="false">Loan / Mortgage</button>
+      <button class="calc-tab" role="tab" data-tab="debt" aria-selected="false">Debt Payoff</button>
+      <button class="calc-tab" role="tab" data-tab="savings" aria-selected="false">Savings Goal</button>
+      <button class="calc-tab" role="tab" data-tab="roi" aria-selected="false">ROI</button>
+      <button class="calc-tab" role="tab" data-tab="tax" aria-selected="false">Freelancer Tax</button>
+    </div>
+
+    <!-- ── Calculator Panels ── -->
+    <div class="calc-panels">
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 1. COMPOUND INTEREST                    -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel active" id="panel-compound" role="tabpanel">
+        <div class="calc-card">
+          <h3>Compound Interest Calculator</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ci-principal">Principal ($)</label>
+              <input type="number" id="ci-principal" placeholder="10000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ci-rate">Annual Rate (%)</label>
+              <input type="number" id="ci-rate" placeholder="7" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ci-time">Time (Years)</label>
+              <input type="number" id="ci-time" placeholder="10" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ci-freq">Compounding</label>
+              <select id="ci-freq">
+                <option value="1">Annually</option>
+                <option value="2">Semi-Annually</option>
+                <option value="4">Quarterly</option>
+                <option value="12" selected>Monthly</option>
+                <option value="365">Daily</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ci-contrib">Monthly Contribution ($)</label>
+              <input type="number" id="ci-contrib" placeholder="0" min="0" step="any">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcCompound()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('compound')">Clear</button>
+          </div>
+          <div class="calc-error" id="ci-error"></div>
+          <div class="calc-results" id="ci-results">
+            <h4>Results</h4>
+            <div id="ci-output"></div>
+            <div class="growth-table-wrap" id="ci-table-wrap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 2. LOAN / MORTGAGE                      -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel" id="panel-loan" role="tabpanel">
+        <div class="calc-card">
+          <h3>Loan / Mortgage Payment Calculator</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ln-amount">Loan Amount ($)</label>
+              <input type="number" id="ln-amount" placeholder="250000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ln-rate">Interest Rate (%)</label>
+              <input type="number" id="ln-rate" placeholder="6.5" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ln-term">Term (Years)</label>
+              <input type="number" id="ln-term" placeholder="30" min="1" step="1">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcLoan()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('loan')">Clear</button>
+          </div>
+          <div class="calc-error" id="ln-error"></div>
+          <div class="calc-results" id="ln-results">
+            <h4>Results</h4>
+            <div id="ln-output"></div>
+            <p class="calc-subhead">Amortization Summary (Yearly)</p>
+            <div class="growth-table-wrap" id="ln-table-wrap"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 3. DEBT PAYOFF                          -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel" id="panel-debt" role="tabpanel">
+        <div class="calc-card">
+          <h3>Debt Payoff Calculator</h3>
+          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Enter one or more debts. With multiple debts, you'll see an avalanche vs. snowball comparison.</p>
+          <div class="debt-rows" id="debt-rows">
+            <div class="debt-row" data-index="0">
+              <div class="form-group">
+                <label>Balance ($)</label>
+                <input type="number" class="debt-balance" placeholder="5000" min="0" step="any">
+              </div>
+              <div class="form-group">
+                <label>Rate (%)</label>
+                <input type="number" class="debt-rate" placeholder="18" min="0" step="any">
+              </div>
+              <div class="form-group">
+                <label>Min Payment ($)</label>
+                <input type="number" class="debt-payment" placeholder="150" min="0" step="any">
+              </div>
+              <div>
+                <button class="remove-debt" onclick="removeDebt(this)" title="Remove">&times;</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-bottom:1.25rem;">
+            <button class="calc-btn calc-btn--secondary" onclick="addDebtRow()" style="font-size:0.65rem;padding:0.5rem 1rem;">+ Add Debt</button>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="debt-extra">Extra Monthly Payment ($)</label>
+              <input type="number" id="debt-extra" placeholder="0" min="0" step="any">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcDebt()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('debt')">Clear</button>
+          </div>
+          <div class="calc-error" id="debt-error"></div>
+          <div class="calc-results" id="debt-results">
+            <h4>Results</h4>
+            <div id="debt-output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 4. SAVINGS GOAL                         -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel" id="panel-savings" role="tabpanel">
+        <div class="calc-card">
+          <h3>Savings Goal Calculator</h3>
+          <div class="mode-toggle" id="sav-mode-toggle">
+            <button class="active" data-mode="goal" onclick="switchSavMode('goal')">Find Monthly Contribution</button>
+            <button data-mode="final" onclick="switchSavMode('final')">Find Final Amount</button>
+          </div>
+          <div class="form-grid">
+            <div class="form-group" id="sav-target-group">
+              <label for="sav-target">Target Amount ($)</label>
+              <input type="number" id="sav-target" placeholder="50000" min="0" step="any">
+            </div>
+            <div class="form-group" id="sav-contrib-group" style="display:none;">
+              <label for="sav-contrib">Monthly Contribution ($)</label>
+              <input type="number" id="sav-contrib" placeholder="500" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-time">Timeline (Years)</label>
+              <input type="number" id="sav-time" placeholder="10" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-rate">Annual Return (%)</label>
+              <input type="number" id="sav-rate" placeholder="7" min="0" step="any">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcSavings()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('savings')">Clear</button>
+          </div>
+          <div class="calc-error" id="sav-error"></div>
+          <div class="calc-results" id="sav-results">
+            <h4>Results</h4>
+            <div id="sav-output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 5. ROI                                  -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel" id="panel-roi" role="tabpanel">
+        <div class="calc-card">
+          <h3>Investment Return (ROI) Calculator</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="roi-initial">Initial Investment ($)</label>
+              <input type="number" id="roi-initial" placeholder="10000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="roi-final">Final Value ($)</label>
+              <input type="number" id="roi-final" placeholder="25000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="roi-years">Time Period (Years)</label>
+              <input type="number" id="roi-years" placeholder="5" min="0" step="any">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcROI()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('roi')">Clear</button>
+          </div>
+          <div class="calc-error" id="roi-error"></div>
+          <div class="calc-results" id="roi-results">
+            <h4>Results</h4>
+            <div id="roi-output"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════ -->
+      <!-- 6. FREELANCER TAX ESTIMATOR             -->
+      <!-- ═══════════════════════════════════════ -->
+      <div class="calc-panel" id="panel-tax" role="tabpanel">
+        <div class="calc-card">
+          <h3>Freelancer Tax Estimator (2025 US)</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="tax-income">Gross Income ($)</label>
+              <input type="number" id="tax-income" placeholder="100000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="tax-expenses">Business Expenses ($)</label>
+              <input type="number" id="tax-expenses" placeholder="15000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="tax-status">Filing Status</label>
+              <select id="tax-status">
+                <option value="single">Single</option>
+                <option value="married">Married Filing Jointly</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tax-state">State</label>
+              <select id="tax-state">
+                <option value="none">No State Income Tax</option>
+                <option value="AL">Alabama (5.00%)</option>
+                <option value="AZ">Arizona (2.50%)</option>
+                <option value="AR">Arkansas (4.40%)</option>
+                <option value="CA">California (est. 9.30%)</option>
+                <option value="CO">Colorado (4.40%)</option>
+                <option value="CT">Connecticut (5.00%)</option>
+                <option value="DE">Delaware (6.60%)</option>
+                <option value="GA">Georgia (5.49%)</option>
+                <option value="HI">Hawaii (8.25%)</option>
+                <option value="ID">Idaho (5.80%)</option>
+                <option value="IL">Illinois (4.95%)</option>
+                <option value="IN">Indiana (3.05%)</option>
+                <option value="IA">Iowa (5.70%)</option>
+                <option value="KS">Kansas (5.70%)</option>
+                <option value="KY">Kentucky (4.00%)</option>
+                <option value="LA">Louisiana (4.25%)</option>
+                <option value="ME">Maine (7.15%)</option>
+                <option value="MD">Maryland (5.75%)</option>
+                <option value="MA">Massachusetts (5.00%)</option>
+                <option value="MI">Michigan (4.25%)</option>
+                <option value="MN">Minnesota (7.85%)</option>
+                <option value="MS">Mississippi (5.00%)</option>
+                <option value="MO">Missouri (4.95%)</option>
+                <option value="MT">Montana (5.90%)</option>
+                <option value="NE">Nebraska (5.84%)</option>
+                <option value="NJ">New Jersey (6.37%)</option>
+                <option value="NM">New Mexico (5.90%)</option>
+                <option value="NY">New York (est. 6.85%)</option>
+                <option value="NC">North Carolina (4.50%)</option>
+                <option value="ND">North Dakota (2.50%)</option>
+                <option value="OH">Ohio (3.50%)</option>
+                <option value="OK">Oklahoma (4.75%)</option>
+                <option value="OR">Oregon (9.00%)</option>
+                <option value="PA">Pennsylvania (3.07%)</option>
+                <option value="RI">Rhode Island (5.99%)</option>
+                <option value="SC">South Carolina (6.40%)</option>
+                <option value="UT">Utah (4.65%)</option>
+                <option value="VT">Vermont (7.60%)</option>
+                <option value="VA">Virginia (5.75%)</option>
+                <option value="WV">West Virginia (5.12%)</option>
+                <option value="WI">Wisconsin (5.30%)</option>
+                <option value="DC">Washington DC (8.50%)</option>
+              </select>
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcTax()">Estimate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('tax')">Clear</button>
+          </div>
+          <div class="calc-error" id="tax-error"></div>
+          <div class="calc-results" id="tax-results">
+            <h4>Tax Estimate</h4>
+            <div id="tax-output"></div>
+            <p class="calc-subhead">Federal Tax Bracket Breakdown</p>
+            <div id="tax-brackets"></div>
+            <p style="color:var(--text-dim);font-size:0.75rem;font-style:italic;margin-top:1rem;">This is an estimate for informational purposes only. Consult a tax professional for advice specific to your situation.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /calc-panels -->
+
+    <!-- ── Ad: Bottom Leaderboard ── -->
+    <div class="ad-container" style="margin-top:3rem;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer"><p class="footer__text"><span class="footer-accent">Moonlit Social Labs</span> — architecture for the signal-seekers</p></footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  /* ================================================================
+     FINANCIAL CALCULATORS — ALL INLINE JS
+     ================================================================ */
+
+  /* ── Utility ── */
+  function fmt(n) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtPct(n) {
+    return n.toFixed(2) + '%';
+  }
+  function getVal(id) {
+    var v = parseFloat(document.getElementById(id).value);
+    return isNaN(v) ? null : v;
+  }
+  function showError(id, msg) {
+    var el = document.getElementById(id);
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+  function hideError(id) {
+    var el = document.getElementById(id);
+    el.textContent = '';
+    el.classList.remove('visible');
+  }
+  function showResults(id) {
+    document.getElementById(id).classList.add('visible');
+  }
+  function hideResults(id) {
+    document.getElementById(id).classList.remove('visible');
+  }
+  function resultRow(label, value, cls) {
+    return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">$' + fmt(value) + '</span></div>';
+  }
+  function resultRowText(label, value, cls) {
+    return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+  }
+
+  /* ── Tab switching ── */
+  document.querySelectorAll('.calc-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.calc-tab').forEach(function(t) {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      document.querySelectorAll('.calc-panel').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  /* ── Clear ── */
+  function clearPanel(name) {
+    var panel = document.getElementById('panel-' + name);
+    panel.querySelectorAll('input[type="number"]').forEach(function(i) { i.value = ''; });
+    panel.querySelectorAll('.calc-results').forEach(function(r) { r.classList.remove('visible'); });
+    panel.querySelectorAll('.calc-error').forEach(function(e) { e.classList.remove('visible'); e.textContent = ''; });
+  }
+
+  /* ================================================================
+     1. COMPOUND INTEREST
+     ================================================================ */
+  function calcCompound() {
+    hideError('ci-error');
+    hideResults('ci-results');
+    var P = getVal('ci-principal');
+    var r = getVal('ci-rate');
+    var t = getVal('ci-time');
+    var n = getVal('ci-freq');
+    var c = getVal('ci-contrib') || 0;
+
+    if (P === null || P < 0) { showError('ci-error', 'Enter a valid principal amount.'); return; }
+    if (r === null || r < 0) { showError('ci-error', 'Enter a valid annual interest rate.'); return; }
+    if (t === null || t <= 0) { showError('ci-error', 'Enter a valid time period greater than 0.'); return; }
+
+    var rate = r / 100;
+    var rn = rate / n;
+    var nt = n * t;
+
+    /* Future value with contributions:
+       FV = P*(1+r/n)^(nt) + c*[((1+r/n)^(nt) - 1) / (r/n)]
+       If rate is 0: FV = P + c * 12 * t */
+    var fv, totalContrib;
+    if (rate === 0) {
+      fv = P + c * 12 * t;
+    } else {
+      var compoundFactor = Math.pow(1 + rn, nt);
+      fv = P * compoundFactor;
+      /* Monthly contributions: convert to per-period contribution */
+      if (c > 0) {
+        /* Contributions are monthly; compounding might differ.
+           Use the future value of annuity with monthly deposits,
+           growing at the effective monthly rate */
+        var monthlyRate = rate / 12;
+        var totalMonths = t * 12;
+        fv = P * Math.pow(1 + monthlyRate, totalMonths) + c * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+      }
+    }
+
+    totalContrib = c * 12 * t;
+    var totalInterest = fv - P - totalContrib;
+
+    var html = '';
+    html += resultRow('Future Value', fv, 'teal');
+    html += resultRow('Total Contributions', totalContrib);
+    html += resultRow('Principal', P);
+    html += resultRow('Total Interest Earned', totalInterest, 'violet');
+    document.getElementById('ci-output').innerHTML = html;
+
+    /* Growth table year by year */
+    var tableHtml = '<table class="growth-table"><thead><tr><th>Year</th><th>Balance</th><th>Contributions</th><th>Interest</th></tr></thead><tbody>';
+    var balance = P;
+    var monthlyRate2 = (rate === 0) ? 0 : rate / 12;
+    var cumulativeContrib = 0;
+    for (var y = 1; y <= Math.ceil(t); y++) {
+      var months = (y <= t) ? 12 : Math.round((t % 1) * 12);
+      if (months === 0 && y > t) break;
+      var startBal = balance;
+      for (var m = 0; m < months; m++) {
+        balance = balance * (1 + monthlyRate2) + c;
+        cumulativeContrib += c;
+      }
+      var yearInterest = balance - startBal - (c * months);
+      tableHtml += '<tr><td>' + y + '</td><td>$' + fmt(balance) + '</td><td>$' + fmt(cumulativeContrib) + '</td><td>$' + fmt(yearInterest) + '</td></tr>';
+    }
+    tableHtml += '</tbody></table>';
+    document.getElementById('ci-table-wrap').innerHTML = tableHtml;
+    showResults('ci-results');
+  }
+
+  /* ================================================================
+     2. LOAN / MORTGAGE
+     ================================================================ */
+  function calcLoan() {
+    hideError('ln-error');
+    hideResults('ln-results');
+    var P = getVal('ln-amount');
+    var r = getVal('ln-rate');
+    var years = getVal('ln-term');
+
+    if (P === null || P <= 0) { showError('ln-error', 'Enter a valid loan amount.'); return; }
+    if (r === null || r < 0) { showError('ln-error', 'Enter a valid interest rate.'); return; }
+    if (years === null || years <= 0) { showError('ln-error', 'Enter a valid term in years.'); return; }
+
+    var n = years * 12;
+    var monthlyRate = (r / 100) / 12;
+    var monthly;
+
+    if (monthlyRate === 0) {
+      monthly = P / n;
+    } else {
+      monthly = P * (monthlyRate * Math.pow(1 + monthlyRate, n)) / (Math.pow(1 + monthlyRate, n) - 1);
+    }
+
+    var totalPaid = monthly * n;
+    var totalInterest = totalPaid - P;
+
+    var html = '';
+    html += resultRow('Monthly Payment', monthly, 'teal');
+    html += resultRow('Total Paid', totalPaid);
+    html += resultRow('Total Interest', totalInterest, 'rose');
+    html += resultRowText('Loan Amount', '$' + fmt(P));
+    html += resultRowText('Interest-to-Principal Ratio', fmtPct((totalInterest / P) * 100), 'amber');
+    document.getElementById('ln-output').innerHTML = html;
+
+    /* Amortization summary by year */
+    var tableHtml = '<table class="growth-table"><thead><tr><th>Year</th><th>Principal Paid</th><th>Interest Paid</th><th>Remaining Balance</th></tr></thead><tbody>';
+    var balance = P;
+    for (var y = 1; y <= years; y++) {
+      var yearPrincipal = 0;
+      var yearInterest2 = 0;
+      for (var m = 0; m < 12; m++) {
+        if (balance <= 0) break;
+        var intPmt = balance * monthlyRate;
+        var prinPmt = monthly - intPmt;
+        if (prinPmt > balance) prinPmt = balance;
+        yearPrincipal += prinPmt;
+        yearInterest2 += intPmt;
+        balance -= prinPmt;
+      }
+      if (balance < 0.01) balance = 0;
+      tableHtml += '<tr><td>' + y + '</td><td>$' + fmt(yearPrincipal) + '</td><td>$' + fmt(yearInterest2) + '</td><td>$' + fmt(balance) + '</td></tr>';
+    }
+    tableHtml += '</tbody></table>';
+    document.getElementById('ln-table-wrap').innerHTML = tableHtml;
+    showResults('ln-results');
+  }
+
+  /* ================================================================
+     3. DEBT PAYOFF
+     ================================================================ */
+  var debtIndex = 1;
+
+  function addDebtRow() {
+    var container = document.getElementById('debt-rows');
+    var div = document.createElement('div');
+    div.className = 'debt-row';
+    div.dataset.index = debtIndex++;
+    div.innerHTML = '<div class="form-group"><label>Balance ($)</label><input type="number" class="debt-balance" placeholder="5000" min="0" step="any"></div>' +
+      '<div class="form-group"><label>Rate (%)</label><input type="number" class="debt-rate" placeholder="18" min="0" step="any"></div>' +
+      '<div class="form-group"><label>Min Payment ($)</label><input type="number" class="debt-payment" placeholder="150" min="0" step="any"></div>' +
+      '<div><button class="remove-debt" onclick="removeDebt(this)" title="Remove">&times;</button></div>';
+    container.appendChild(div);
+  }
+
+  function removeDebt(btn) {
+    var rows = document.querySelectorAll('.debt-row');
+    if (rows.length <= 1) return;
+    btn.closest('.debt-row').remove();
+  }
+
+  function simulatePayoff(debts, extra, strategy) {
+    /* deep copy */
+    var ds = debts.map(function(d) { return { balance: d.balance, rate: d.rate, minPay: d.minPay, name: d.name }; });
+
+    /* sort: avalanche = highest rate first, snowball = lowest balance first */
+    if (strategy === 'avalanche') {
+      ds.sort(function(a, b) { return b.rate - a.rate; });
+    } else {
+      ds.sort(function(a, b) { return a.balance - b.balance; });
+    }
+
+    var months = 0;
+    var totalInterest = 0;
+    var maxMonths = 1200; /* 100 year safety cap */
+
+    while (months < maxMonths) {
+      var allPaid = ds.every(function(d) { return d.balance <= 0.005; });
+      if (allPaid) break;
+      months++;
+
+      var extraLeft = extra;
+
+      /* Apply minimum payments & interest */
+      for (var i = 0; i < ds.length; i++) {
+        if (ds[i].balance <= 0.005) continue;
+        var interest = ds[i].balance * (ds[i].rate / 100 / 12);
+        totalInterest += interest;
+        ds[i].balance += interest;
+        var pmt = Math.min(ds[i].minPay, ds[i].balance);
+        ds[i].balance -= pmt;
+      }
+
+      /* Apply extra to top priority debt */
+      for (var i = 0; i < ds.length; i++) {
+        if (ds[i].balance <= 0.005 || extraLeft <= 0) continue;
+        var apply = Math.min(extraLeft, ds[i].balance);
+        ds[i].balance -= apply;
+        extraLeft -= apply;
+      }
+    }
+
+    return { months: months, totalInterest: totalInterest, capped: months >= maxMonths };
+  }
+
+  function calcDebt() {
+    hideError('debt-error');
+    hideResults('debt-results');
+
+    var rows = document.querySelectorAll('.debt-row');
+    var debts = [];
+    var valid = true;
+    rows.forEach(function(row, idx) {
+      var bal = parseFloat(row.querySelector('.debt-balance').value);
+      var rate = parseFloat(row.querySelector('.debt-rate').value);
+      var pay = parseFloat(row.querySelector('.debt-payment').value);
+      if (isNaN(bal) || bal <= 0 || isNaN(rate) || rate < 0 || isNaN(pay) || pay <= 0) {
+        valid = false;
+      } else {
+        /* Validate minimum payment covers at least interest */
+        var monthlyInterest = bal * (rate / 100 / 12);
+        if (pay <= monthlyInterest) {
+          showError('debt-error', 'Debt #' + (idx + 1) + ': minimum payment ($' + fmt(pay) + ') must exceed monthly interest ($' + fmt(monthlyInterest) + ') or the debt will never be paid off.');
+          valid = false;
+        }
+        debts.push({ balance: bal, rate: rate, minPay: pay, name: 'Debt ' + (idx + 1) });
+      }
+    });
+
+    if (!valid && !document.getElementById('debt-error').textContent) {
+      showError('debt-error', 'Fill in all debt fields with valid numbers.');
+      return;
+    }
+    if (!valid) return;
+
+    var extra = getVal('debt-extra') || 0;
+
+    var avalanche = simulatePayoff(debts, extra, 'avalanche');
+    var snowball = simulatePayoff(debts, extra, 'snowball');
+
+    var now = new Date();
+    var payoffDate = new Date(now);
+    payoffDate.setMonth(payoffDate.getMonth() + avalanche.months);
+    var dateStr = payoffDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    var totalDebt = debts.reduce(function(s, d) { return s + d.balance; }, 0);
+
+    var html = '';
+    html += resultRow('Total Debt', totalDebt);
+
+    if (debts.length === 1) {
+      html += resultRowText('Months to Payoff', avalanche.months + ' months', 'teal');
+      html += resultRowText('Payoff Date', dateStr);
+      html += resultRow('Total Interest Paid', avalanche.totalInterest, 'rose');
+      if (avalanche.capped) {
+        html += resultRowText('Warning', 'Payment too low — payoff exceeds 100 years', 'rose');
+      }
+    } else {
+      /* Comparison */
+      html += '<p class="calc-subhead" style="margin-top:1.5rem;">Avalanche Method (Highest Rate First)</p>';
+      html += resultRowText('Months to Payoff', avalanche.months + ' months', 'teal');
+      html += resultRow('Total Interest Paid', avalanche.totalInterest, 'rose');
+
+      var payoffDateSnow = new Date(now);
+      payoffDateSnow.setMonth(payoffDateSnow.getMonth() + snowball.months);
+      var dateStrSnow = payoffDateSnow.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      html += '<p class="calc-subhead" style="margin-top:1.5rem;">Snowball Method (Lowest Balance First)</p>';
+      html += resultRowText('Months to Payoff', snowball.months + ' months', 'teal');
+      html += resultRow('Total Interest Paid', snowball.totalInterest, 'rose');
+
+      var saved = snowball.totalInterest - avalanche.totalInterest;
+      if (saved > 0.01) {
+        html += '<p class="calc-subhead" style="margin-top:1.5rem;">Comparison</p>';
+        html += resultRow('Interest Saved (Avalanche vs Snowball)', saved, 'teal');
+        html += resultRowText('Time Saved', (snowball.months - avalanche.months) + ' months');
+      }
+    }
+
+    document.getElementById('debt-output').innerHTML = html;
+    showResults('debt-results');
+  }
+
+  /* ================================================================
+     4. SAVINGS GOAL
+     ================================================================ */
+  var savingsMode = 'goal';
+  function switchSavMode(mode) {
+    savingsMode = mode;
+    document.querySelectorAll('#sav-mode-toggle button').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('#sav-mode-toggle button[data-mode="' + mode + '"]').classList.add('active');
+    if (mode === 'goal') {
+      document.getElementById('sav-target-group').style.display = '';
+      document.getElementById('sav-contrib-group').style.display = 'none';
+    } else {
+      document.getElementById('sav-target-group').style.display = 'none';
+      document.getElementById('sav-contrib-group').style.display = '';
+    }
+  }
+
+  function calcSavings() {
+    hideError('sav-error');
+    hideResults('sav-results');
+
+    var t = getVal('sav-time');
+    var r = getVal('sav-rate');
+    if (t === null || t <= 0) { showError('sav-error', 'Enter a valid timeline.'); return; }
+    if (r === null || r < 0) { showError('sav-error', 'Enter a valid annual return rate.'); return; }
+
+    var monthlyRate = (r / 100) / 12;
+    var totalMonths = t * 12;
+    var html = '';
+
+    if (savingsMode === 'goal') {
+      var target = getVal('sav-target');
+      if (target === null || target <= 0) { showError('sav-error', 'Enter a valid target amount.'); return; }
+
+      var monthlyContrib;
+      if (monthlyRate === 0) {
+        monthlyContrib = target / totalMonths;
+      } else {
+        /* PMT = FV * r / ((1+r)^n - 1) */
+        monthlyContrib = target * monthlyRate / (Math.pow(1 + monthlyRate, totalMonths) - 1);
+      }
+
+      var totalContrib = monthlyContrib * totalMonths;
+      var totalInterest = target - totalContrib;
+
+      html += resultRow('Required Monthly Contribution', monthlyContrib, 'teal');
+      html += resultRow('Total Contributed', totalContrib);
+      html += resultRow('Interest Earned', totalInterest, 'violet');
+      html += resultRow('Target Amount', target);
+    } else {
+      var contrib = getVal('sav-contrib');
+      if (contrib === null || contrib <= 0) { showError('sav-error', 'Enter a valid monthly contribution.'); return; }
+
+      var finalAmount;
+      if (monthlyRate === 0) {
+        finalAmount = contrib * totalMonths;
+      } else {
+        finalAmount = contrib * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+      }
+
+      var totalContrib2 = contrib * totalMonths;
+      var totalInterest2 = finalAmount - totalContrib2;
+
+      html += resultRow('Final Amount', finalAmount, 'teal');
+      html += resultRow('Total Contributed', totalContrib2);
+      html += resultRow('Interest Earned', totalInterest2, 'violet');
+    }
+
+    document.getElementById('sav-output').innerHTML = html;
+    showResults('sav-results');
+  }
+
+  /* ================================================================
+     5. ROI
+     ================================================================ */
+  function calcROI() {
+    hideError('roi-error');
+    hideResults('roi-results');
+
+    var initial = getVal('roi-initial');
+    var final2 = getVal('roi-final');
+    var years = getVal('roi-years');
+
+    if (initial === null || initial <= 0) { showError('roi-error', 'Enter a valid initial investment greater than 0.'); return; }
+    if (final2 === null || final2 < 0) { showError('roi-error', 'Enter a valid final value.'); return; }
+    if (years === null || years <= 0) { showError('roi-error', 'Enter a valid time period greater than 0.'); return; }
+
+    var roi = ((final2 - initial) / initial) * 100;
+    var cagr = (Math.pow(final2 / initial, 1 / years) - 1) * 100;
+    var totalGain = final2 - initial;
+
+    var html = '';
+    html += resultRowText('Total ROI', fmtPct(roi), roi >= 0 ? 'teal' : 'rose');
+    html += resultRowText('Annualized Return (CAGR)', fmtPct(cagr), cagr >= 0 ? 'violet' : 'rose');
+    html += resultRow('Total Gain / Loss', totalGain, totalGain >= 0 ? 'teal' : 'rose');
+    html += resultRow('Initial Investment', initial);
+    html += resultRow('Final Value', final2);
+    html += resultRowText('Time Period', years + (years === 1 ? ' year' : ' years'));
+
+    document.getElementById('roi-output').innerHTML = html;
+    showResults('roi-results');
+  }
+
+  /* ================================================================
+     6. FREELANCER TAX ESTIMATOR
+     ================================================================ */
+  function calcTax() {
+    hideError('tax-error');
+    hideResults('tax-results');
+
+    var gross = getVal('tax-income');
+    var expenses = getVal('tax-expenses') || 0;
+    var status = document.getElementById('tax-status').value;
+    var stateCode = document.getElementById('tax-state').value;
+
+    if (gross === null || gross <= 0) { showError('tax-error', 'Enter a valid gross income.'); return; }
+    if (expenses < 0) { showError('tax-error', 'Expenses cannot be negative.'); return; }
+    if (expenses >= gross) { showError('tax-error', 'Expenses must be less than gross income.'); return; }
+
+    var netIncome = gross - expenses;
+
+    /* Self-employment tax: 15.3% on 92.35% of net self-employment income */
+    var seBase = netIncome * 0.9235;
+    /* Social Security tax: 12.4% on first $176,100 (2025), Medicare: 2.9% on all */
+    var ssCap = 176100;
+    var ssTax = Math.min(seBase, ssCap) * 0.124;
+    var medicareTax = seBase * 0.029;
+    /* Additional Medicare Tax: 0.9% on earnings above $200k single / $250k married */
+    var additionalMedicareThreshold = (status === 'married') ? 250000 : 200000;
+    var additionalMedicare = 0;
+    if (seBase > additionalMedicareThreshold) {
+      additionalMedicare = (seBase - additionalMedicareThreshold) * 0.009;
+    }
+    var selfEmploymentTax = ssTax + medicareTax + additionalMedicare;
+
+    /* Deduction: half of SE tax */
+    var seDeduction = selfEmploymentTax / 2;
+
+    /* Adjusted gross income for federal tax */
+    var agi = netIncome - seDeduction;
+
+    /* Standard deduction 2025 */
+    var standardDeduction = (status === 'married') ? 30000 : 15000;
+    var taxableIncome = Math.max(0, agi - standardDeduction);
+
+    /* 2025 Federal tax brackets */
+    var brackets;
+    if (status === 'single') {
+      brackets = [
+        { limit: 11925, rate: 0.10 },
+        { limit: 48475, rate: 0.12 },
+        { limit: 103350, rate: 0.22 },
+        { limit: 197300, rate: 0.24 },
+        { limit: 250525, rate: 0.32 },
+        { limit: 626350, rate: 0.35 },
+        { limit: Infinity, rate: 0.37 }
+      ];
+    } else {
+      brackets = [
+        { limit: 23850, rate: 0.10 },
+        { limit: 96950, rate: 0.12 },
+        { limit: 206700, rate: 0.22 },
+        { limit: 394600, rate: 0.24 },
+        { limit: 501050, rate: 0.32 },
+        { limit: 752800, rate: 0.35 },
+        { limit: Infinity, rate: 0.37 }
+      ];
+    }
+
+    var federalTax = 0;
+    var bracketDetails = [];
+    var prev = 0;
+    for (var i = 0; i < brackets.length; i++) {
+      if (taxableIncome <= prev) break;
+      var taxable = Math.min(taxableIncome, brackets[i].limit) - prev;
+      var tax = taxable * brackets[i].rate;
+      federalTax += tax;
+      bracketDetails.push({
+        rate: (brackets[i].rate * 100).toFixed(0) + '%',
+        range: '$' + fmt(prev) + ' — $' + (brackets[i].limit === Infinity ? '...' : fmt(brackets[i].limit)),
+        taxable: taxable,
+        tax: tax
+      });
+      prev = brackets[i].limit;
+    }
+
+    /* State tax (simplified flat rate estimate) */
+    var stateRates = {
+      none: 0, AL: 5.00, AZ: 2.50, AR: 4.40, CA: 9.30, CO: 4.40, CT: 5.00,
+      DE: 6.60, GA: 5.49, HI: 8.25, ID: 5.80, IL: 4.95, IN: 3.05, IA: 5.70,
+      KS: 5.70, KY: 4.00, LA: 4.25, ME: 7.15, MD: 5.75, MA: 5.00, MI: 4.25,
+      MN: 7.85, MS: 5.00, MO: 4.95, MT: 5.90, NE: 5.84, NJ: 6.37, NM: 5.90,
+      NY: 6.85, NC: 4.50, ND: 2.50, OH: 3.50, OK: 4.75, OR: 9.00, PA: 3.07,
+      RI: 5.99, SC: 6.40, UT: 4.65, VT: 7.60, VA: 5.75, WV: 5.12, WI: 5.30,
+      DC: 8.50
+    };
+    var stateRate = stateRates[stateCode] || 0;
+    var stateTax = taxableIncome * (stateRate / 100);
+
+    var totalTax = federalTax + selfEmploymentTax + stateTax;
+    var effectiveRate = (totalTax / gross) * 100;
+    var quarterlyPayment = totalTax / 4;
+    var takeHome = gross - expenses - totalTax;
+
+    var html = '';
+    html += resultRow('Net Self-Employment Income', netIncome);
+    html += resultRowText('Adjusted Gross Income', '$' + fmt(agi));
+    html += resultRowText('Taxable Income (after std deduction)', '$' + fmt(taxableIncome));
+    html += '<div style="height:0.75rem;"></div>';
+    html += resultRow('Federal Income Tax', federalTax, 'violet');
+    html += resultRow('Self-Employment Tax (15.3%)', selfEmploymentTax, 'amber');
+    if (stateRate > 0) {
+      html += resultRow('State Tax (' + stateRate.toFixed(2) + '%)', stateTax, 'rose');
+    }
+    html += '<div style="height:0.75rem;"></div>';
+    html += resultRow('Total Estimated Tax', totalTax, 'rose');
+    html += resultRowText('Effective Tax Rate', fmtPct(effectiveRate), 'amber');
+    html += resultRow('Quarterly Payment (Est.)', quarterlyPayment, 'teal');
+    html += resultRow('Estimated Take-Home', takeHome, 'teal');
+
+    document.getElementById('tax-output').innerHTML = html;
+
+    /* Bracket breakdown table */
+    var tbl = '<table class="bracket-table"><thead><tr><th>Bracket</th><th>Range</th><th>Taxable</th><th>Tax</th></tr></thead><tbody>';
+    for (var j = 0; j < bracketDetails.length; j++) {
+      tbl += '<tr><td>' + bracketDetails[j].rate + '</td><td>' + bracketDetails[j].range + '</td><td>$' + fmt(bracketDetails[j].taxable) + '</td><td>$' + fmt(bracketDetails[j].tax) + '</td></tr>';
+    }
+    tbl += '</tbody></table>';
+    document.getElementById('tax-brackets').innerHTML = tbl;
+
+    showResults('tax-results');
+  }
+  </script>
+</body>
+</html>

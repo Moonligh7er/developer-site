@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Tools — Developer Utilities, Calculators &amp; More | Moonlit Social Labs</title>
+  <meta name="description" content="Free cyberpunk-styled developer tools, financial calculators, construction calculators, breathwork timer, entropy visualizer, and manipulation detector. No signup required.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/free-tools.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Free Tools — Moonlit Social Labs",
+    "description": "Free cyberpunk-styled developer tools, calculators, breathwork timer, entropy visualizer, and manipulation detector.",
+    "url": "https://moonligh7er.github.io/developer-site/free-tools.html",
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Tools — Developer Utilities, Calculators & More">
+  <meta property="og:description" content="Free cyberpunk-styled developer tools, financial calculators, construction calculators, breathwork timer, entropy visualizer, and manipulation detector.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/free-tools.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Tools | Moonlit Social Labs">
+  <meta name="twitter:description" content="Free cyberpunk-styled developer tools, financial calculators, construction calculators, breathwork timer, and more.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .tools-hero {
+      text-align: center;
+      padding: 8rem 0 3rem;
+    }
+    .tools-hero .heading-xl {
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .tools-hero .text-body {
+      margin: 1.5rem auto 0;
+      text-align: center;
+      max-width: 55ch;
+    }
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      position: relative;
+      transition: all var(--transition-med);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity var(--transition-med);
+    }
+    .tool-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+    .tool-card__icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: grayscale(0.3);
+    }
+    .tool-card__category {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .tool-card--teal .tool-card__category { color: var(--teal); }
+    .tool-card--violet .tool-card__category { color: var(--violet); }
+    .tool-card--amber .tool-card__category { color: var(--amber); }
+    .tool-card--rose .tool-card__category { color: var(--rose); }
+    .tool-card__title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .tool-card__desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+    .tool-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .tool-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .tool-card__link {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap var(--transition-fast);
+    }
+    .tool-card__link:hover {
+      gap: 0.75rem;
+      color: var(--text-bright);
+    }
+    .tool-card__link::after {
+      content: '\2192';
+    }
+    .tool-card__badge {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0.2rem 0.5rem;
+      border: 1px solid var(--border);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .tools-count {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    /* Ad container */
+    .ad-container {
+      margin: 3rem auto;
+      text-align: center;
+      max-width: 728px;
+    }
+    .ad-container ins {
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .tools-grid { grid-template-columns: 1fr; }
+      .tools-hero { padding: 5rem 0 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <section class="tools-hero container">
+      <div class="reveal">
+        <p class="label">Utilities</p>
+        <h1 class="heading-xl glitch">Free Tools</h1>
+        <p class="text-body">Client-side utilities that respect your data. No accounts. No tracking. Everything runs in your browser.</p>
+        <p class="tools-count">6 tools available</p>
+      </div>
+    </section>
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <section class="section container" style="padding-top: 0;">
+      <div class="tools-grid stagger">
+
+        <!-- #1: Cyberpunk Developer Tools Suite -->
+        <a href="tools/dev-tools.html" class="tool-card tool-card--teal" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x2318;</span>
+          <p class="tool-card__category">Developer &middot; Utilities</p>
+          <h2 class="tool-card__title">Developer Tools Suite</h2>
+          <p class="tool-card__desc">JSON formatter, Base64 encoder, hash generator, UUID maker, JWT decoder, regex tester, color converter, and more. 10+ tools in one cyberpunk interface.</p>
+          <div class="tool-card__tags">
+            <span class="tag">JSON</span>
+            <span class="tag">Base64</span>
+            <span class="tag">Hash</span>
+            <span class="tag">UUID</span>
+            <span class="tag">JWT</span>
+            <span class="tag">Regex</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Launch Tools</span>
+            <span class="tool-card__badge">Client-Side</span>
+          </div>
+        </a>
+
+        <!-- #4: Financial Calculators -->
+        <a href="tools/financial-calculators.html" class="tool-card tool-card--amber" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x00A5;</span>
+          <p class="tool-card__category">Finance &middot; Calculators</p>
+          <h2 class="tool-card__title">Financial Calculators</h2>
+          <p class="tool-card__desc">Compound interest, loan payments, debt payoff strategy, savings goals, investment returns, and freelancer tax estimates. Plan your money in the dark.</p>
+          <div class="tool-card__tags">
+            <span class="tag">Compound Interest</span>
+            <span class="tag">Loan</span>
+            <span class="tag">Debt</span>
+            <span class="tag">Savings</span>
+            <span class="tag">Tax</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Calculate</span>
+            <span class="tool-card__badge">No Data Stored</span>
+          </div>
+        </a>
+
+        <!-- #5: Manipulation / Bias Detector -->
+        <a href="tools/manipulation-detector.html" class="tool-card tool-card--rose" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x2622;</span>
+          <p class="tool-card__category">Analysis &middot; AI-Powered</p>
+          <h2 class="tool-card__title">Manipulation Detector</h2>
+          <p class="tool-card__desc">Paste any text and get an instant analysis of persuasion tactics, emotional manipulation, logical fallacies, and deceptive language patterns. See through the noise.</p>
+          <div class="tool-card__tags">
+            <span class="tag">Stylometry</span>
+            <span class="tag">Bias</span>
+            <span class="tag">Persuasion</span>
+            <span class="tag">NLP</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Analyze Text</span>
+            <span class="tool-card__badge">Linguistic AI</span>
+          </div>
+        </a>
+
+        <!-- #9: Entropy Visualizer / True RNG -->
+        <a href="tools/entropy-visualizer.html" class="tool-card tool-card--violet" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x2684;</span>
+          <p class="tool-card__category">Cryptography &middot; Randomness</p>
+          <h2 class="tool-card__title">Entropy Visualizer</h2>
+          <p class="tool-card__desc">Generate true random numbers from device entropy — mouse movement, sensors, and cryptographic sources. Watch randomness form in real time. Bank-grade HMAC-DRBG.</p>
+          <div class="tool-card__tags">
+            <span class="tag">CSPRNG</span>
+            <span class="tag">HMAC-DRBG</span>
+            <span class="tag">Visualization</span>
+            <span class="tag">Entropy</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Generate</span>
+            <span class="tool-card__badge">True Random</span>
+          </div>
+        </a>
+
+        <!-- #14: Construction / Home Improvement Calculators -->
+        <a href="tools/construction-calculators.html" class="tool-card tool-card--amber" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x2692;</span>
+          <p class="tool-card__category">Construction &middot; Calculators</p>
+          <h2 class="tool-card__title">Construction Calculators</h2>
+          <p class="tool-card__desc">Concrete volume, paint coverage, flooring area, lumber estimator, fence post spacing, and wallpaper calculator. Blueprint your next project with precision.</p>
+          <div class="tool-card__tags">
+            <span class="tag">Concrete</span>
+            <span class="tag">Paint</span>
+            <span class="tag">Flooring</span>
+            <span class="tag">Lumber</span>
+            <span class="tag">Fence</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Calculate</span>
+            <span class="tool-card__badge">Client-Side</span>
+          </div>
+        </a>
+
+        <!-- #15: Breathwork / Meditation Timer -->
+        <a href="tools/breathwork-timer.html" class="tool-card tool-card--violet" style="text-decoration:none;">
+          <span class="tool-card__icon">&#x2609;</span>
+          <p class="tool-card__category">Wellness &middot; Breathwork</p>
+          <h2 class="tool-card__title">Breathwork Timer</h2>
+          <p class="tool-card__desc">Guided breathing exercises with hypnotic visualizations. Box Breathing, 4-7-8, Wim Hof, and Nadi Shodhana. No app install needed. Just breathe.</p>
+          <div class="tool-card__tags">
+            <span class="tag">Box Breathing</span>
+            <span class="tag">4-7-8</span>
+            <span class="tag">Wim Hof</span>
+            <span class="tag">Visualization</span>
+          </div>
+          <div class="tool-card__footer">
+            <span class="tool-card__link">Start Breathing</span>
+            <span class="tool-card__badge">No Signup</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+</body>
+</html>

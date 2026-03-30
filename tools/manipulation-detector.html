@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Manipulation Detector — Analyze Text for Bias, Persuasion &amp; Deception</title>
+  <meta name="description" content="Free manipulation detector and bias checker. Paste any text to analyze persuasion tactics, emotional manipulation, logical fallacies, propaganda patterns, and deceptive language. Client-side linguistic analysis — no data sent anywhere.">
+  <meta name="keywords" content="manipulation detector, bias checker, propaganda analyzer, persuasion technique identifier, deception detector, logical fallacy finder, emotional manipulation, stylometry analysis">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/manipulation-detector.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Manipulation Detector",
+    "description": "Free client-side tool to analyze text for manipulation tactics, bias, persuasion techniques, logical fallacies, and deceptive language patterns.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/manipulation-detector.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Michael Wylde" }
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Manipulation Detector — Analyze Text for Bias, Persuasion & Deception">
+  <meta property="og:description" content="Paste any text and get instant analysis of persuasion tactics, emotional manipulation, logical fallacies, and deceptive language patterns. 100% client-side.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/manipulation-detector.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Manipulation Detector | Moonlit Social Labs">
+  <meta name="twitter:description" content="Analyze text for manipulation, bias, persuasion techniques, and deceptive language. Runs entirely in your browser.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ---- Tool-specific styles ---- */
+    .tool-hero {
+      text-align: center;
+      padding: 8rem 0 2rem;
+    }
+    .tool-hero .heading-xl {
+      background: linear-gradient(135deg, var(--rose, #c44a8a), var(--violet, #8b5cf6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .tool-hero .text-body {
+      margin: 1rem auto 0;
+      text-align: center;
+      max-width: 55ch;
+    }
+
+    .tool-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    /* Input area */
+    .input-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .input-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose), var(--violet));
+    }
+    .input-panel label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .input-panel textarea {
+      width: 100%;
+      min-height: 200px;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      padding: 1rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .input-panel textarea:focus {
+      border-color: var(--violet);
+    }
+    .input-panel textarea::placeholder {
+      color: var(--text-dim);
+    }
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      align-items: center;
+    }
+    .btn-analyze {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--rose), var(--violet));
+      color: var(--void);
+      border: none;
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+    .btn-analyze:hover {
+      box-shadow: 0 0 20px rgba(196,74,138,0.4), 0 0 40px rgba(139,92,246,0.2);
+      transform: translateY(-1px);
+    }
+    .btn-analyze:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .btn-clear {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.7rem 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .btn-clear:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+    }
+    .char-count {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* Results */
+    .results-panel {
+      display: none;
+    }
+    .results-panel.active {
+      display: block;
+    }
+
+    /* Score gauge */
+    .score-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .score-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--teal), var(--amber), var(--rose));
+    }
+    .score-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1.5rem;
+    }
+    .gauge-wrap {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 1rem;
+    }
+    .gauge-wrap svg {
+      transform: rotate(-90deg);
+    }
+    .gauge-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 10;
+    }
+    .gauge-fill {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease, stroke 0.5s ease;
+    }
+    .gauge-score {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 500;
+      color: var(--text-bright);
+    }
+    .score-verdict {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .score-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      max-width: 50ch;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .persuasion-domain {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border: 1px solid var(--violet-dim);
+      color: var(--violet);
+      background: var(--violet-glow);
+    }
+
+    /* Category cards */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .cat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .cat-card--hedge::before { background: var(--amber); }
+    .cat-card--certainty::before { background: var(--teal); }
+    .cat-card--emotional::before { background: var(--rose); }
+    .cat-card--fallacy::before { background: var(--violet); }
+    .cat-card__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .cat-card__title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .cat-card__count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .cat-card--hedge .cat-card__count { color: var(--amber); }
+    .cat-card--certainty .cat-card__count { color: var(--teal); }
+    .cat-card--emotional .cat-card__count { color: var(--rose); }
+    .cat-card--fallacy .cat-card__count { color: var(--violet); }
+    .cat-bar {
+      height: 4px;
+      background: var(--border);
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+    .cat-bar__fill {
+      height: 100%;
+      transition: width 0.8s ease;
+    }
+    .cat-card--hedge .cat-bar__fill { background: var(--amber); }
+    .cat-card--certainty .cat-bar__fill { background: var(--teal); }
+    .cat-card--emotional .cat-bar__fill { background: var(--rose); }
+    .cat-card--fallacy .cat-bar__fill { background: var(--violet); }
+    .cat-card__words {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .cat-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid;
+    }
+    .cat-card--hedge .cat-tag { border-color: var(--amber-dim); color: var(--amber); background: rgba(212,160,32,0.08); }
+    .cat-card--certainty .cat-tag { border-color: var(--teal-dim); color: var(--teal); background: var(--teal-glow); }
+    .cat-card--emotional .cat-tag { border-color: rgba(196,74,138,0.4); color: var(--rose); background: rgba(196,74,138,0.08); }
+    .cat-card--fallacy .cat-tag { border-color: var(--violet-dim); color: var(--violet); background: var(--violet-glow); }
+
+    /* Highlighted text */
+    .highlight-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .highlight-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rose), var(--violet));
+    }
+    .highlight-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .highlighted-text {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .hl-hedge {
+      background: rgba(212,160,32,0.2);
+      border-bottom: 2px solid var(--amber);
+      padding: 0.1rem 0.2rem;
+      cursor: help;
+    }
+    .hl-certainty {
+      background: rgba(0,212,170,0.15);
+      border-bottom: 2px solid var(--teal);
+      padding: 0.1rem 0.2rem;
+      cursor: help;
+    }
+    .hl-emotional {
+      background: rgba(196,74,138,0.2);
+      border-bottom: 2px solid var(--rose);
+      padding: 0.1rem 0.2rem;
+      cursor: help;
+    }
+    .hl-fallacy {
+      background: rgba(139,92,246,0.2);
+      border-bottom: 2px solid var(--violet);
+      padding: 0.1rem 0.2rem;
+      cursor: help;
+    }
+    .highlight-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .legend-swatch {
+      width: 12px;
+      height: 12px;
+      border: 1px solid;
+    }
+    .legend-swatch--hedge { background: rgba(212,160,32,0.3); border-color: var(--amber); }
+    .legend-swatch--certainty { background: rgba(0,212,170,0.2); border-color: var(--teal); }
+    .legend-swatch--emotional { background: rgba(196,74,138,0.3); border-color: var(--rose); }
+    .legend-swatch--fallacy { background: rgba(139,92,246,0.3); border-color: var(--violet); }
+
+    /* Stylometry */
+    .stylo-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    .stylo-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--teal);
+    }
+    .stylo-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .stylo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+    .stylo-stat {
+      text-align: center;
+      padding: 0.75rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+    }
+    .stylo-stat__value {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--text-bright);
+      margin-bottom: 0.25rem;
+    }
+    .stylo-stat__label {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+    .stylo-stat__sub {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Ad container */
+    .ad-container {
+      margin: 3rem auto;
+      text-align: center;
+      max-width: 728px;
+    }
+    .ad-container ins { display: block; }
+
+    @media (max-width: 768px) {
+      .tool-hero { padding: 5rem 0 2rem; }
+      .tool-container { padding: 0 1rem 3rem; }
+      .category-grid { grid-template-columns: 1fr; }
+      .stylo-grid { grid-template-columns: repeat(2, 1fr); }
+      .btn-row { flex-wrap: wrap; }
+      .char-count { margin-left: 0; width: 100%; text-align: right; }
+    }
+    @media (max-width: 480px) {
+      .stylo-grid { grid-template-columns: 1fr 1fr; }
+      .gauge-wrap { width: 140px; height: 140px; }
+      .gauge-score { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo"><img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <section class="tool-hero container">
+      <div class="reveal">
+        <p class="label">Analysis</p>
+        <h1 class="heading-xl glitch">Manipulation Detector</h1>
+        <p class="text-body">See through the noise. Paste any text and get instant linguistic analysis of persuasion tactics, emotional manipulation, logical fallacies, and deceptive patterns.</p>
+      </div>
+    </section>
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="tool-container">
+      <!-- Input Panel -->
+      <div class="input-panel">
+        <label for="text-input">Paste text to analyze</label>
+        <textarea id="text-input" placeholder="Paste an article, social media post, sales pitch, political speech, or any text you want to analyze for manipulation tactics..."></textarea>
+        <div class="btn-row">
+          <button class="btn-analyze" id="btn-analyze" type="button">Analyze</button>
+          <button class="btn-clear" id="btn-clear" type="button">Clear</button>
+          <span class="char-count" id="char-count">0 characters</span>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="results-panel" id="results-panel">
+
+        <!-- Overall Score -->
+        <div class="score-section" id="score-section">
+          <p class="score-label">Overall Manipulation Score</p>
+          <div class="gauge-wrap">
+            <svg viewBox="0 0 180 180" width="180" height="180">
+              <circle class="gauge-bg" cx="90" cy="90" r="75"></circle>
+              <circle class="gauge-fill" id="gauge-fill" cx="90" cy="90" r="75"
+                      stroke-dasharray="471.24" stroke-dashoffset="471.24"></circle>
+            </svg>
+            <span class="gauge-score" id="gauge-score">0</span>
+          </div>
+          <p class="score-verdict" id="score-verdict"></p>
+          <p class="score-desc" id="score-desc"></p>
+          <span class="persuasion-domain" id="persuasion-domain"></span>
+        </div>
+
+        <!-- Category Breakdown -->
+        <div class="category-grid" id="category-grid">
+          <div class="cat-card cat-card--hedge">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Hedge Words</span>
+              <span class="cat-card__count" id="hedge-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="hedge-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="hedge-words"></div>
+          </div>
+          <div class="cat-card cat-card--certainty">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Certainty / Absolutism</span>
+              <span class="cat-card__count" id="certainty-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="certainty-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="certainty-words"></div>
+          </div>
+          <div class="cat-card cat-card--emotional">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Emotional Manipulation</span>
+              <span class="cat-card__count" id="emotional-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="emotional-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="emotional-words"></div>
+          </div>
+          <div class="cat-card cat-card--fallacy">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Logical Fallacy Indicators</span>
+              <span class="cat-card__count" id="fallacy-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="fallacy-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="fallacy-words"></div>
+          </div>
+        </div>
+
+        <!-- Highlighted Text -->
+        <div class="highlight-section">
+          <p class="highlight-label">Annotated Text</p>
+          <div class="highlighted-text" id="highlighted-text"></div>
+          <div class="highlight-legend">
+            <span class="legend-item"><span class="legend-swatch legend-swatch--hedge"></span>Hedge</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--certainty"></span>Certainty</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--emotional"></span>Emotional</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--fallacy"></span>Fallacy</span>
+          </div>
+        </div>
+
+        <!-- Stylometry -->
+        <div class="stylo-section">
+          <p class="stylo-label">Stylometry Analysis</p>
+          <div class="stylo-grid">
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-words">--</div>
+              <div class="stylo-stat__label">Total Words</div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-sentences">--</div>
+              <div class="stylo-stat__label">Sentences</div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-avg-word">--</div>
+              <div class="stylo-stat__label">Avg Word Length</div>
+              <div class="stylo-stat__sub" id="stat-avg-word-sub"></div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-avg-sent">--</div>
+              <div class="stylo-stat__label">Avg Sentence Length</div>
+              <div class="stylo-stat__sub" id="stat-avg-sent-sub"></div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-ttr">--</div>
+              <div class="stylo-stat__label">Vocabulary Richness</div>
+              <div class="stylo-stat__sub" id="stat-ttr-sub"></div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-fk">--</div>
+              <div class="stylo-stat__label">Flesch-Kincaid</div>
+              <div class="stylo-stat__sub" id="stat-fk-sub"></div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-func">--</div>
+              <div class="stylo-stat__label">Function Word Ratio</div>
+              <div class="stylo-stat__sub" id="stat-func-sub"></div>
+            </div>
+            <div class="stylo-stat">
+              <div class="stylo-stat__value" id="stat-punct">--</div>
+              <div class="stylo-stat__label">Punctuation Freq</div>
+              <div class="stylo-stat__sub" id="stat-punct-sub"></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /results-panel -->
+    </div><!-- /tool-container -->
+
+    <!-- CTA for Filament -->
+    <section style="max-width:700px;margin:3rem auto;padding:0 2rem;">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--rose),var(--violet));"></div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e80;"></span>
+          <span style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);">Active Development</span>
+        </div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Filament</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Full influence operations platform — 9 categories, 47 tools, real-time persuasion detection, counter-influence training, and narrative design analysis.</p>
+        <a href="https://filament-7l9q8xbdx-moonligh7er-3255s-projects.vercel.app" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);">Learn More &rarr;</a>
+      </div>
+    </section>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ========== WORD LISTS ==========
+    const HEDGE_WORDS = [
+      'maybe', 'perhaps', 'possibly', 'might', 'seems', 'appears', 'could',
+      'somewhat', 'arguably', 'potentially', 'presumably', 'likely', 'unlikely',
+      'rarely', 'occasionally', 'sometimes', 'often', 'usually', 'generally', 'typically'
+    ];
+
+    const CERTAINTY_WORDS = [
+      'definitely', 'absolutely', 'always', 'never', 'proven', 'guaranteed',
+      'undeniable', 'without doubt', 'clearly', 'obviously', 'certainly',
+      'unquestionably', 'surely', 'inevitably', 'indisputably', 'conclusively', 'irrefutably'
+    ];
+
+    const MANIPULATION_WORDS = [
+      'shocking', 'urgent', 'breaking', 'censored', 'banned', 'secret',
+      'exposed', 'devastating', 'terrifying', 'horrifying', 'outrageous',
+      'unbelievable', 'mind-blowing', 'game-changing', 'life-changing',
+      'revolutionary', 'miracle', 'conspiracy', 'cover-up', 'suppressed',
+      'silenced', "they don't want you to know", 'wake up', 'open your eyes'
+    ];
+
+    const FUNCTION_WORDS = [
+      'the', 'a', 'an', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+      'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'shall',
+      'should', 'may', 'might', 'must', 'can', 'could', 'of', 'in', 'to',
+      'for', 'with', 'on', 'at', 'by', 'from', 'as', 'into', 'through',
+      'during', 'before', 'after', 'above', 'below', 'between', 'under',
+      'again', 'further', 'then', 'once', 'this', 'that', 'these', 'those',
+      'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'him', 'his',
+      'she', 'her', 'it', 'its', 'they', 'them', 'their'
+    ];
+
+    // Logical fallacy patterns (regex + label)
+    const FALLACY_PATTERNS = [
+      // Ad hominem
+      { pattern: /\b(you('re| are) (just|only|nothing|merely)|what (do|would) you know|typical .{1,20}(supporter|believer|fan)|people like you|of course (he|she|they) would say|consider the source)\b/gi, label: 'Ad Hominem' },
+      // Straw man
+      { pattern: /\b(so (you('re| are) saying|what you('re| are) really saying)|in other words.{0,20}(you think|you believe|you want)|that('s| is) like saying|nobody (is saying|said|believes))\b/gi, label: 'Straw Man' },
+      // Appeal to authority
+      { pattern: /\b(experts (say|agree|confirm|warn)|scientists (say|have shown|confirm|agree)|studies (show|prove|confirm|have shown)|according to (experts|scientists|researchers|doctors|studies)|research (proves|shows|confirms))\b/gi, label: 'Appeal to Authority' },
+      // False dichotomy
+      { pattern: /\b(you('re| are) either.{1,40}or|either you.{1,40}or|there (are|is) (only )?two (choices|options|ways)|you (can|must) (only|either)|it('s| is) (either|simple).{1,30}or|if you('re| are) not.{1,30}you('re| are))\b/gi, label: 'False Dichotomy' },
+      // Slippery slope
+      { pattern: /\b(next thing you know|before (you know it|long)|where (does|will) it (end|stop)|what('s| is) next|this (will|is going to) lead to|open(ing|s)? the (door|floodgates)|slippery slope|if we allow.{1,40}(then|next|soon))\b/gi, label: 'Slippery Slope' },
+      // Bandwagon
+      { pattern: /\b(everyone (knows|agrees|is|says|thinks|believes)|most people (think|believe|agree|know)|nobody (believes|thinks|disagrees)|the majority|millions of people|everybody (knows|says|thinks)|join the movement|don('t| not) be left behind|growing number)\b/gi, label: 'Bandwagon' },
+      // Appeal to emotion
+      { pattern: /\b(think of the children|how would you feel|imagine if.{1,30}(your|you)|put yourself in|won('t| not) someone think of|what about (our|the) (kids|children|families|future))\b/gi, label: 'Appeal to Emotion' },
+      // Red herring / whataboutism
+      { pattern: /\b(what about|but what about|yes but|but (he|she|they|you) (also|too)|let('s| us) (talk|not forget) about|the real (issue|problem|question) (is|here))\b/gi, label: 'Whataboutism / Red Herring' }
+    ];
+
+    // Persuasion domain keywords
+    const DOMAIN_KEYWORDS = {
+      marketing: ['buy', 'sale', 'discount', 'offer', 'limited time', 'free shipping', 'exclusive', 'deal', 'save', 'price', 'order now', 'best seller', 'customer', 'product', 'brand', 'subscribe', 'premium', 'checkout', 'cart', 'promotion'],
+      politics: ['vote', 'election', 'democrat', 'republican', 'liberal', 'conservative', 'policy', 'government', 'congress', 'senate', 'president', 'campaign', 'legislation', 'bipartisan', 'constituent', 'politician', 'party', 'platform', 'rally', 'mandate'],
+      'self-help': ['manifest', 'mindset', 'abundance', 'gratitude', 'affirmation', 'self-love', 'inner peace', 'growth', 'transformation', 'empower', 'journey', 'authentic', 'healing', 'vibration', 'energy', 'purpose', 'unlock', 'potential', 'breakthrough', 'habit'],
+      news: ['reported', 'sources say', 'according to', 'breaking', 'developing', 'update', 'confirmed', 'officials', 'spokesperson', 'investigation', 'press release', 'coverage', 'correspondent', 'headline', 'statement', 'briefing', 'incident', 'witnesses'],
+      academic: ['hypothesis', 'methodology', 'peer-reviewed', 'data suggests', 'statistically significant', 'correlation', 'analysis', 'findings', 'literature', 'framework', 'empirical', 'variables', 'sample size', 'study', 'research', 'conclusion', 'abstract'],
+      legal: ['plaintiff', 'defendant', 'jurisdiction', 'statute', 'pursuant', 'hereby', 'whereas', 'liability', 'indemnify', 'arbitration', 'covenant', 'breach', 'enforceable', 'stipulate', 'clause', 'provision', 'compliance', 'regulation'],
+      'social media': ['like and share', 'follow', 'subscribe', 'comment below', 'tag someone', 'viral', 'trending', 'dm me', 'link in bio', 'swipe up', 'retweet', 'thread', 'ratio', 'influencer', 'content creator', 'algorithm', 'engagement', 'clout'],
+      religious: ['faith', 'salvation', 'blessed', 'scripture', 'divine', 'pray', 'sin', 'righteous', 'holy', 'eternal', 'soul', 'worship', 'commandment', 'gospel', 'revelation', 'spirit', 'covenant', 'congregation'],
+      conspiracy: ['deep state', 'false flag', 'new world order', 'big pharma', 'mainstream media', 'globalist', 'controlled opposition', 'crisis actor', 'plandemic', 'sheep', 'sheeple', 'red pill', 'awake', 'truth movement', 'puppet master', 'agenda']
+    };
+
+    // ========== UTILITY FUNCTIONS ==========
+
+    function countSyllables(word) {
+      word = word.toLowerCase().replace(/[^a-z]/g, '');
+      if (word.length <= 2) return 1;
+      // Remove silent e at end
+      word = word.replace(/e$/, '');
+      // Count vowel groups
+      var matches = word.match(/[aeiouy]+/g);
+      var count = matches ? matches.length : 1;
+      // Minimum 1 syllable
+      return Math.max(1, count);
+    }
+
+    function getWords(text) {
+      return text.match(/[a-zA-Z']+/g) || [];
+    }
+
+    function getSentences(text) {
+      var sents = text.split(/[.!?]+/).filter(function(s) {
+        return s.trim().length > 0;
+      });
+      return sents.length > 0 ? sents : [text];
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ========== ANALYSIS ENGINE ==========
+
+    function findMatches(text, wordList) {
+      var lower = text.toLowerCase();
+      var results = [];
+      var found = {};
+
+      // Sort by length descending so multi-word phrases match first
+      var sorted = wordList.slice().sort(function(a, b) { return b.length - a.length; });
+
+      for (var i = 0; i < sorted.length; i++) {
+        var word = sorted[i];
+        var regex;
+        if (word.includes(' ')) {
+          // Multi-word phrase: match anywhere
+          regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        } else {
+          // Single word: word boundary match
+          regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+        }
+        var match;
+        while ((match = regex.exec(text)) !== null) {
+          var key = match.index + ':' + match[0].length;
+          if (!found[key]) {
+            found[key] = true;
+            results.push({
+              word: match[0],
+              index: match.index,
+              length: match[0].length,
+              term: word
+            });
+          }
+        }
+      }
+      return results;
+    }
+
+    function findFallacies(text) {
+      var results = [];
+      var found = {};
+      for (var i = 0; i < FALLACY_PATTERNS.length; i++) {
+        var fp = FALLACY_PATTERNS[i];
+        var regex = new RegExp(fp.pattern.source, fp.pattern.flags);
+        var match;
+        while ((match = regex.exec(text)) !== null) {
+          var key = match.index + ':' + match[0].length;
+          if (!found[key]) {
+            found[key] = true;
+            results.push({
+              word: match[0],
+              index: match.index,
+              length: match[0].length,
+              term: fp.label + ': ' + match[0]
+            });
+          }
+        }
+      }
+      return results;
+    }
+
+    function detectDomain(text) {
+      var lower = text.toLowerCase();
+      var scores = {};
+      var best = 'general';
+      var bestScore = 0;
+
+      for (var domain in DOMAIN_KEYWORDS) {
+        var keywords = DOMAIN_KEYWORDS[domain];
+        var score = 0;
+        for (var i = 0; i < keywords.length; i++) {
+          if (lower.includes(keywords[i])) {
+            score++;
+          }
+        }
+        scores[domain] = score;
+        if (score > bestScore) {
+          bestScore = score;
+          best = domain;
+        }
+      }
+      return bestScore >= 2 ? best : 'general';
+    }
+
+    function computeStylometry(text) {
+      var words = getWords(text);
+      var sentences = getSentences(text);
+      var totalWords = words.length;
+      var totalSentences = sentences.length;
+
+      if (totalWords === 0) {
+        return {
+          totalWords: 0, totalSentences: 0, avgWordLength: 0,
+          avgSentenceLength: 0, ttr: 0, fleschKincaid: 0,
+          functionWordRatio: 0, punctuationFreq: 0, totalSyllables: 0
+        };
+      }
+
+      // Average word length
+      var totalChars = 0;
+      for (var i = 0; i < words.length; i++) {
+        totalChars += words[i].replace(/'/g, '').length;
+      }
+      var avgWordLength = totalChars / totalWords;
+
+      // Average sentence length
+      var avgSentenceLength = totalWords / totalSentences;
+
+      // Type-Token Ratio (vocabulary richness)
+      var uniqueWords = {};
+      for (var i = 0; i < words.length; i++) {
+        uniqueWords[words[i].toLowerCase()] = true;
+      }
+      var ttr = Object.keys(uniqueWords).length / totalWords;
+
+      // Syllable count
+      var totalSyllables = 0;
+      for (var i = 0; i < words.length; i++) {
+        totalSyllables += countSyllables(words[i]);
+      }
+
+      // Flesch-Kincaid readability
+      var fleschKincaid = 206.835 - 1.015 * (totalWords / totalSentences) - 84.6 * (totalSyllables / totalWords);
+      fleschKincaid = Math.max(0, Math.min(100, fleschKincaid));
+
+      // Function word ratio
+      var funcCount = 0;
+      for (var i = 0; i < words.length; i++) {
+        if (FUNCTION_WORDS.indexOf(words[i].toLowerCase()) !== -1) {
+          funcCount++;
+        }
+      }
+      var functionWordRatio = funcCount / totalWords;
+
+      // Punctuation frequency
+      var punctCount = (text.match(/[.,;:!?'"()\-—]/g) || []).length;
+      var punctuationFreq = punctCount / totalWords;
+
+      return {
+        totalWords: totalWords,
+        totalSentences: totalSentences,
+        avgWordLength: avgWordLength,
+        avgSentenceLength: avgSentenceLength,
+        ttr: ttr,
+        fleschKincaid: fleschKincaid,
+        functionWordRatio: functionWordRatio,
+        punctuationFreq: punctuationFreq,
+        totalSyllables: totalSyllables
+      };
+    }
+
+    function computeOverallScore(hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches, stylo) {
+      if (stylo.totalWords === 0) return 0;
+
+      var wc = stylo.totalWords;
+
+      // Density scores (matches per 100 words, capped)
+      var hedgeDensity = Math.min((hedgeMatches.length / wc) * 100, 15);
+      var certaintyDensity = Math.min((certaintyMatches.length / wc) * 100, 15);
+      var emotionalDensity = Math.min((emotionalMatches.length / wc) * 100, 10);
+      var fallacyDensity = Math.min((fallacyMatches.length / wc) * 100, 8);
+
+      // Normalize to 0-100 sub-scores
+      var hedgeScore = (hedgeDensity / 15) * 100;
+      var certaintyScore = (certaintyDensity / 15) * 100;
+      var emotionalScore = (emotionalDensity / 10) * 100;
+      var fallacyScore = (fallacyDensity / 8) * 100;
+
+      // Weighted combination
+      var raw = (hedgeScore * 0.15) + (certaintyScore * 0.20) + (emotionalScore * 0.35) + (fallacyScore * 0.30);
+
+      // Boost if multiple categories active
+      var activeCats = 0;
+      if (hedgeMatches.length > 0) activeCats++;
+      if (certaintyMatches.length > 0) activeCats++;
+      if (emotionalMatches.length > 0) activeCats++;
+      if (fallacyMatches.length > 0) activeCats++;
+
+      if (activeCats >= 3) raw *= 1.15;
+      if (activeCats >= 4) raw *= 1.10;
+
+      return Math.min(100, Math.max(0, Math.round(raw)));
+    }
+
+    function getVerdict(score) {
+      if (score <= 10) return { text: 'Minimal Manipulation', desc: 'This text appears largely neutral and factual. Low use of emotional triggers, absolutist language, or persuasion tactics.' };
+      if (score <= 25) return { text: 'Low Manipulation', desc: 'Some persuasive language detected, but within normal communication ranges. May include mild hedging or occasional emphasis.' };
+      if (score <= 45) return { text: 'Moderate Manipulation', desc: 'Notable use of persuasion techniques. The text employs emotional language, absolutist framing, or logical pressure tactics that may influence the reader.' };
+      if (score <= 65) return { text: 'High Manipulation', desc: 'Significant manipulation patterns detected. Multiple persuasion categories are active with above-average density. Read critically.' };
+      if (score <= 80) return { text: 'Very High Manipulation', desc: 'Heavy use of manipulation tactics across multiple dimensions. This text is designed to persuade rather than inform. Strong emotional triggers and logical pressure detected.' };
+      return { text: 'Extreme Manipulation', desc: 'Saturated with manipulation tactics. Nearly every dimension flags high density. This text aggressively deploys deceptive language patterns, emotional exploitation, and logical fallacies.' };
+    }
+
+    function getGaugeColor(score) {
+      if (score <= 20) return '#00d4aa';
+      if (score <= 40) return '#5dd490';
+      if (score <= 55) return '#d4a020';
+      if (score <= 70) return '#d47020';
+      if (score <= 85) return '#c44a8a';
+      return '#e03060';
+    }
+
+    // ========== HIGHLIGHT ENGINE ==========
+
+    function buildHighlightedText(text, hedgeM, certM, emoM, fallM) {
+      // Collect all matches with type
+      var allMarks = [];
+      var i;
+      for (i = 0; i < hedgeM.length; i++) {
+        allMarks.push({ idx: hedgeM[i].index, len: hedgeM[i].length, type: 'hedge', label: hedgeM[i].term });
+      }
+      for (i = 0; i < certM.length; i++) {
+        allMarks.push({ idx: certM[i].index, len: certM[i].length, type: 'certainty', label: certM[i].term });
+      }
+      for (i = 0; i < emoM.length; i++) {
+        allMarks.push({ idx: emoM[i].index, len: emoM[i].length, type: 'emotional', label: emoM[i].term });
+      }
+      for (i = 0; i < fallM.length; i++) {
+        allMarks.push({ idx: fallM[i].index, len: fallM[i].length, type: 'fallacy', label: fallM[i].term });
+      }
+
+      // Sort by index ascending, then by length descending
+      allMarks.sort(function(a, b) {
+        if (a.idx !== b.idx) return a.idx - b.idx;
+        return b.len - a.len;
+      });
+
+      // Remove overlapping (keep the first/largest)
+      var filtered = [];
+      var lastEnd = -1;
+      for (i = 0; i < allMarks.length; i++) {
+        if (allMarks[i].idx >= lastEnd) {
+          filtered.push(allMarks[i]);
+          lastEnd = allMarks[i].idx + allMarks[i].len;
+        }
+      }
+
+      // Build HTML
+      var html = '';
+      var cursor = 0;
+      for (i = 0; i < filtered.length; i++) {
+        var m = filtered[i];
+        if (m.idx > cursor) {
+          html += escapeHtml(text.substring(cursor, m.idx));
+        }
+        var snippet = text.substring(m.idx, m.idx + m.len);
+        html += '<span class="hl-' + m.type + '" title="' + escapeHtml(m.label) + '">' + escapeHtml(snippet) + '</span>';
+        cursor = m.idx + m.len;
+      }
+      if (cursor < text.length) {
+        html += escapeHtml(text.substring(cursor));
+      }
+      return html;
+    }
+
+    // ========== UI RENDERING ==========
+
+    function renderCategoryTags(containerId, matches) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      // Deduplicate by lowercase term
+      var seen = {};
+      for (var i = 0; i < matches.length; i++) {
+        var key = matches[i].term.toLowerCase();
+        if (!seen[key]) {
+          seen[key] = true;
+          var tag = document.createElement('span');
+          tag.className = 'cat-tag';
+          tag.textContent = matches[i].term;
+          container.appendChild(tag);
+        }
+      }
+      if (matches.length === 0) {
+        container.innerHTML = '<span style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);">None detected</span>';
+      }
+    }
+
+    function animateGauge(score) {
+      var circumference = 2 * Math.PI * 75; // ~471.24
+      var offset = circumference - (score / 100) * circumference;
+      var color = getGaugeColor(score);
+      var fillEl = document.getElementById('gauge-fill');
+      fillEl.style.stroke = color;
+      fillEl.style.strokeDashoffset = offset;
+
+      // Animate number
+      var scoreEl = document.getElementById('gauge-score');
+      var start = 0;
+      var duration = 800;
+      var startTime = performance.now();
+
+      function tick(now) {
+        var elapsed = now - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        // Ease out
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = Math.round(eased * score);
+        scoreEl.textContent = current;
+        scoreEl.style.color = getGaugeColor(current);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    function getReadabilityLabel(score) {
+      if (score >= 90) return 'Very Easy';
+      if (score >= 80) return 'Easy';
+      if (score >= 70) return 'Fairly Easy';
+      if (score >= 60) return 'Standard';
+      if (score >= 50) return 'Fairly Difficult';
+      if (score >= 30) return 'Difficult';
+      return 'Very Difficult';
+    }
+
+    function getTTRLabel(ttr) {
+      if (ttr >= 0.8) return 'Very Rich';
+      if (ttr >= 0.6) return 'Rich';
+      if (ttr >= 0.4) return 'Moderate';
+      if (ttr >= 0.2) return 'Repetitive';
+      return 'Very Repetitive';
+    }
+
+    function getFuncLabel(ratio) {
+      if (ratio >= 0.55) return 'Very High';
+      if (ratio >= 0.45) return 'High';
+      if (ratio >= 0.35) return 'Normal';
+      if (ratio >= 0.25) return 'Low';
+      return 'Very Low';
+    }
+
+    // ========== MAIN ANALYZE ==========
+
+    function analyze() {
+      var text = document.getElementById('text-input').value.trim();
+      if (!text) return;
+
+      // Run analysis
+      var hedgeMatches = findMatches(text, HEDGE_WORDS);
+      var certaintyMatches = findMatches(text, CERTAINTY_WORDS);
+      var emotionalMatches = findMatches(text, MANIPULATION_WORDS);
+      var fallacyMatches = findFallacies(text);
+      var stylo = computeStylometry(text);
+      var score = computeOverallScore(hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches, stylo);
+      var verdict = getVerdict(score);
+      var domain = detectDomain(text);
+
+      // Show results
+      var panel = document.getElementById('results-panel');
+      panel.classList.add('active');
+
+      // Score
+      animateGauge(score);
+      document.getElementById('score-verdict').textContent = verdict.text;
+      document.getElementById('score-desc').textContent = verdict.desc;
+      document.getElementById('persuasion-domain').textContent = 'Domain: ' + domain;
+
+      // Category counts and bars
+      var maxPossible = Math.max(stylo.totalWords * 0.05, 1);
+
+      document.getElementById('hedge-count').textContent = hedgeMatches.length + ' found';
+      document.getElementById('hedge-bar').style.width = Math.min(100, (hedgeMatches.length / maxPossible) * 100) + '%';
+      renderCategoryTags('hedge-words', hedgeMatches);
+
+      document.getElementById('certainty-count').textContent = certaintyMatches.length + ' found';
+      document.getElementById('certainty-bar').style.width = Math.min(100, (certaintyMatches.length / maxPossible) * 100) + '%';
+      renderCategoryTags('certainty-words', certaintyMatches);
+
+      document.getElementById('emotional-count').textContent = emotionalMatches.length + ' found';
+      document.getElementById('emotional-bar').style.width = Math.min(100, (emotionalMatches.length / maxPossible) * 100) + '%';
+      renderCategoryTags('emotional-words', emotionalMatches);
+
+      document.getElementById('fallacy-count').textContent = fallacyMatches.length + ' found';
+      document.getElementById('fallacy-bar').style.width = Math.min(100, (fallacyMatches.length / maxPossible) * 100) + '%';
+      renderCategoryTags('fallacy-words', fallacyMatches);
+
+      // Highlighted text
+      document.getElementById('highlighted-text').innerHTML =
+        buildHighlightedText(text, hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches);
+
+      // Stylometry
+      document.getElementById('stat-words').textContent = stylo.totalWords;
+      document.getElementById('stat-sentences').textContent = stylo.totalSentences;
+      document.getElementById('stat-avg-word').textContent = stylo.avgWordLength.toFixed(1);
+      document.getElementById('stat-avg-word-sub').textContent = stylo.avgWordLength > 5.5 ? 'Complex' : stylo.avgWordLength > 4.5 ? 'Moderate' : 'Simple';
+      document.getElementById('stat-avg-sent').textContent = stylo.avgSentenceLength.toFixed(1);
+      document.getElementById('stat-avg-sent-sub').textContent = stylo.avgSentenceLength > 25 ? 'Long / Complex' : stylo.avgSentenceLength > 15 ? 'Standard' : 'Short / Punchy';
+      document.getElementById('stat-ttr').textContent = (stylo.ttr * 100).toFixed(0) + '%';
+      document.getElementById('stat-ttr-sub').textContent = getTTRLabel(stylo.ttr);
+      document.getElementById('stat-fk').textContent = stylo.fleschKincaid.toFixed(1);
+      document.getElementById('stat-fk-sub').textContent = getReadabilityLabel(stylo.fleschKincaid);
+      document.getElementById('stat-func').textContent = (stylo.functionWordRatio * 100).toFixed(0) + '%';
+      document.getElementById('stat-func-sub').textContent = getFuncLabel(stylo.functionWordRatio);
+      document.getElementById('stat-punct').textContent = stylo.punctuationFreq.toFixed(2);
+      document.getElementById('stat-punct-sub').textContent = stylo.punctuationFreq > 0.3 ? 'Heavy' : stylo.punctuationFreq > 0.15 ? 'Normal' : 'Light';
+
+      // Scroll to results
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ========== EVENT LISTENERS ==========
+
+    var textInput = document.getElementById('text-input');
+    var charCount = document.getElementById('char-count');
+    var btnAnalyze = document.getElementById('btn-analyze');
+    var btnClear = document.getElementById('btn-clear');
+
+    textInput.addEventListener('input', function() {
+      var len = this.value.length;
+      charCount.textContent = len.toLocaleString() + ' character' + (len !== 1 ? 's' : '');
+      btnAnalyze.disabled = this.value.trim().length === 0;
+    });
+
+    btnAnalyze.addEventListener('click', analyze);
+
+    textInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        analyze();
+      }
+    });
+
+    btnClear.addEventListener('click', function() {
+      textInput.value = '';
+      charCount.textContent = '0 characters';
+      btnAnalyze.disabled = true;
+      var panel = document.getElementById('results-panel');
+      panel.classList.remove('active');
+      // Reset gauge
+      document.getElementById('gauge-fill').style.strokeDashoffset = '471.24';
+      document.getElementById('gauge-score').textContent = '0';
+    });
+
+    // Initialize
+    btnAnalyze.disabled = true;
+
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Entropy Visualizer &amp; True Random Number Generator &mdash; CSPRNG | Moonlit Social Labs</title>
+  <meta name="description" content="Visualize cryptographic entropy in real time. Generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips using the Web Crypto API. No data leaves your device.">
+  <meta name="keywords" content="random number generator, entropy visualizer, secure password generator, UUID generator, dice roller, CSPRNG, Web Crypto API, true random">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Entropy Visualizer & True Random Number Generator",
+    "description": "Visualize cryptographic entropy and generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips using the Web Crypto API.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+  }
+  </script>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Entropy Visualizer & True Random Number Generator">
+  <meta property="og:description" content="Visualize cryptographic entropy in real time. Generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips. Everything runs client-side.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Entropy Visualizer & True Random Number Generator">
+  <meta name="twitter:description" content="Visualize cryptographic entropy in real time. Secure random generators powered by Web Crypto API.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    :root {
+      --void: #07070d; --deep: #0a0a14; --surface: #0f0f1a; --panel: #141422;
+      --border: #1a1a30; --border-glow: #1e1e3a;
+      --text-primary: #c8c8d4; --text-secondary: #7a7a90; --text-dim: #4a4a60; --text-bright: #e8e8f0;
+      --teal: #00d4aa; --teal-dim: #00a88440; --teal-glow: #00d4aa18;
+      --violet: #8b5cf6; --violet-dim: #8b5cf640; --violet-glow: #8b5cf618;
+      --amber: #d4a020; --amber-dim: #d4a02040; --rose: #c44a8a;
+      --font-mono: 'JetBrains Mono', monospace; --font-sans: 'Inter', sans-serif; --font-display: 'Space Grotesk', sans-serif;
+    }
+
+    .ev-hero {
+      text-align: center;
+      padding: 8rem 0 2rem;
+    }
+    .ev-hero__label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .ev-hero__heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 500;
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+    }
+    .ev-hero__sub {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Ad slots */
+    .ad-slot {
+      max-width: 728px;
+      margin: 2rem auto;
+      text-align: center;
+      min-height: 90px;
+    }
+
+    /* Canvas section */
+    .ev-canvas-wrap {
+      max-width: 840px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .ev-canvas-container {
+      position: relative;
+      background: var(--void);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .ev-canvas-container canvas {
+      display: block;
+      width: 100%;
+      height: 400px;
+      cursor: crosshair;
+    }
+    .ev-canvas-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      pointer-events: none;
+      transition: opacity 0.6s;
+    }
+    .ev-canvas-hint.hidden { opacity: 0; }
+
+    /* Entropy meter */
+    .ev-meter {
+      max-width: 840px;
+      margin: 1rem auto 2rem;
+      padding: 0 1rem;
+    }
+    .ev-meter__bar-wrap {
+      background: var(--deep);
+      border: 1px solid var(--border);
+      height: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ev-meter__bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--teal), var(--violet));
+      transition: width 0.3s ease;
+    }
+    .ev-meter__label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    /* Quality display */
+    .ev-quality {
+      max-width: 840px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .ev-quality__card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+    }
+    .ev-quality__title {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .ev-quality__value {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--text-bright);
+    }
+    .ev-quality__sub {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-secondary);
+      margin-top: 0.3rem;
+    }
+    .ev-bit-bar {
+      display: flex;
+      height: 8px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .ev-bit-bar__zero {
+      background: var(--teal);
+      height: 100%;
+      transition: width 0.3s;
+    }
+    .ev-bit-bar__one {
+      background: var(--violet);
+      height: 100%;
+      transition: width 0.3s;
+    }
+    .ev-chi-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    .ev-chi-indicator.good { background: #22c55e; box-shadow: 0 0 6px #22c55e80; }
+    .ev-chi-indicator.warning { background: var(--amber); box-shadow: 0 0 6px #d4a02080; }
+    .ev-chi-indicator.poor { background: var(--rose); box-shadow: 0 0 6px #c44a8a80; }
+
+    /* Tabs */
+    .ev-tabs {
+      max-width: 840px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+    }
+    .ev-tabs__nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .ev-tabs__btn {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .ev-tabs__btn:hover {
+      color: var(--text-secondary);
+    }
+    .ev-tabs__btn.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+    .ev-tabs__panel {
+      display: none;
+    }
+    .ev-tabs__panel.active {
+      display: block;
+    }
+
+    /* Generator panels */
+    .ev-gen {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+    }
+    .ev-gen__row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .ev-gen__label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      min-width: 80px;
+    }
+    .ev-gen input[type="number"],
+    .ev-gen select {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-bright);
+      padding: 0.5rem 0.75rem;
+      width: 100px;
+      outline: none;
+    }
+    .ev-gen input[type="number"]:focus,
+    .ev-gen select:focus {
+      border-color: var(--teal-dim);
+    }
+    .ev-gen select {
+      width: auto;
+      cursor: pointer;
+    }
+    .ev-gen select option {
+      background: var(--deep);
+      color: var(--text-bright);
+    }
+    .ev-gen__check {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .ev-gen__check input[type="checkbox"] {
+      accent-color: var(--teal);
+      cursor: pointer;
+    }
+    .ev-btn {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      padding: 0.6rem 1.25rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .ev-btn:hover {
+      background: var(--teal-glow);
+      box-shadow: 0 0 12px var(--teal-dim);
+    }
+    .ev-btn--violet {
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+    .ev-btn--violet:hover {
+      background: var(--violet-glow);
+      box-shadow: 0 0 12px var(--violet-dim);
+    }
+    .ev-btn--small {
+      font-size: 0.6rem;
+      padding: 0.4rem 0.75rem;
+    }
+    .ev-output {
+      background: var(--void);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--teal);
+      word-break: break-all;
+      min-height: 2.5rem;
+      position: relative;
+      line-height: 1.6;
+    }
+    .ev-output__copy {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .ev-output__copy:hover {
+      color: var(--teal);
+      border-color: var(--teal-dim);
+    }
+    .ev-output__copy.copied {
+      color: #22c55e;
+      border-color: #22c55e40;
+    }
+
+    /* Coin flip display */
+    .ev-coins {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .ev-coin {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+    }
+    .ev-coin--heads {
+      background: var(--teal-glow);
+      border: 1px solid var(--teal-dim);
+      color: var(--teal);
+    }
+    .ev-coin--tails {
+      background: var(--violet-glow);
+      border: 1px solid var(--violet-dim);
+      color: var(--violet);
+    }
+    .ev-stats {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      margin-top: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Dice display */
+    .ev-dice-results {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    .ev-die {
+      width: 44px;
+      height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--teal-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--teal);
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .ev-quality { grid-template-columns: 1fr; }
+      .ev-gen__row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .ev-tabs__btn { padding: 0.5rem 0.6rem; font-size: 0.55rem; }
+      .ev-canvas-container canvas { height: 280px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo"><img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+
+    <!-- Hero -->
+    <section class="ev-hero">
+      <span class="ev-hero__label">Cryptography</span>
+      <h1 class="ev-hero__heading">Entropy Visualizer</h1>
+      <p class="ev-hero__sub">True randomness from the void</p>
+    </section>
+
+    <!-- Ad: top -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Entropy Visualization Canvas -->
+    <section class="ev-canvas-wrap">
+      <div class="ev-canvas-container">
+        <canvas id="entropy-canvas"></canvas>
+        <div id="canvas-hint" class="ev-canvas-hint">Move your cursor to generate entropy</div>
+      </div>
+    </section>
+
+    <!-- Entropy Pool Meter -->
+    <section class="ev-meter">
+      <div class="ev-meter__bar-wrap">
+        <div id="entropy-bar" class="ev-meter__bar"></div>
+      </div>
+      <div class="ev-meter__label">
+        <span>Entropy Pool</span>
+        <span id="entropy-pct">0%</span>
+      </div>
+    </section>
+
+    <!-- Randomness Quality Display -->
+    <section class="ev-quality">
+      <div class="ev-quality__card">
+        <div class="ev-quality__title">Bit Distribution</div>
+        <div id="bit-counts" class="ev-quality__value" style="font-size:0.8rem;">0s: 0 &nbsp; 1s: 0</div>
+        <div class="ev-bit-bar">
+          <div id="bit-bar-zero" class="ev-bit-bar__zero" style="width:50%;"></div>
+          <div id="bit-bar-one" class="ev-bit-bar__one" style="width:50%;"></div>
+        </div>
+        <div id="bit-ratio" class="ev-quality__sub">Ratio: --</div>
+      </div>
+      <div class="ev-quality__card">
+        <div class="ev-quality__title">Chi-Square Uniformity</div>
+        <div id="chi-value" class="ev-quality__value" style="font-size:0.8rem;">
+          <span id="chi-dot" class="ev-chi-indicator good"></span>
+          <span id="chi-num">--</span>
+        </div>
+        <div id="chi-verdict" class="ev-quality__sub">Generate data to test</div>
+      </div>
+    </section>
+
+    <!-- Generator Tabs -->
+    <section class="ev-tabs">
+      <div class="ev-tabs__nav" role="tablist">
+        <button class="ev-tabs__btn active" data-tab="integer" role="tab" aria-selected="true">Integer</button>
+        <button class="ev-tabs__btn" data-tab="float" role="tab" aria-selected="false">Float</button>
+        <button class="ev-tabs__btn" data-tab="bytes" role="tab" aria-selected="false">Bytes</button>
+        <button class="ev-tabs__btn" data-tab="password" role="tab" aria-selected="false">Password</button>
+        <button class="ev-tabs__btn" data-tab="dice" role="tab" aria-selected="false">Dice</button>
+        <button class="ev-tabs__btn" data-tab="coin" role="tab" aria-selected="false">Coin</button>
+        <button class="ev-tabs__btn" data-tab="uuid" role="tab" aria-selected="false">UUID</button>
+      </div>
+
+      <!-- Integer Generator -->
+      <div id="tab-integer" class="ev-tabs__panel active" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="int-min">Min</label>
+            <input type="number" id="int-min" value="0">
+            <label class="ev-gen__label" for="int-max">Max</label>
+            <input type="number" id="int-max" value="100">
+            <button class="ev-btn" onclick="generateInteger()">Generate</button>
+          </div>
+          <div id="int-output" class="ev-output">
+            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Float Generator -->
+      <div id="tab-float" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="float-prec">Precision</label>
+            <input type="number" id="float-prec" value="6" min="1" max="17">
+            <button class="ev-btn" onclick="generateFloat()">Generate</button>
+          </div>
+          <div id="float-output" class="ev-output">
+            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bytes Generator -->
+      <div id="tab-bytes" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="bytes-len">Length</label>
+            <select id="bytes-len">
+              <option value="16">16 bytes</option>
+              <option value="32" selected>32 bytes</option>
+              <option value="64">64 bytes</option>
+              <option value="128">128 bytes</option>
+              <option value="256">256 bytes</option>
+            </select>
+            <button class="ev-btn" onclick="generateBytes()">Generate</button>
+          </div>
+          <div id="bytes-output" class="ev-output">
+            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Generator -->
+      <div id="tab-password" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="pw-len">Length</label>
+            <input type="number" id="pw-len" value="20" min="4" max="128">
+          </div>
+          <div class="ev-gen__row">
+            <label class="ev-gen__check"><input type="checkbox" id="pw-upper" checked> Uppercase</label>
+            <label class="ev-gen__check"><input type="checkbox" id="pw-lower" checked> Lowercase</label>
+            <label class="ev-gen__check"><input type="checkbox" id="pw-numbers" checked> Numbers</label>
+            <label class="ev-gen__check"><input type="checkbox" id="pw-symbols" checked> Symbols</label>
+          </div>
+          <div class="ev-gen__row">
+            <button class="ev-btn" onclick="generatePassword()">Generate</button>
+          </div>
+          <div id="pw-output" class="ev-output">
+            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dice Roller -->
+      <div id="tab-dice" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="dice-count">Count</label>
+            <input type="number" id="dice-count" value="1" min="1" max="100">
+            <label class="ev-gen__label" for="dice-type">Type</label>
+            <select id="dice-type">
+              <option value="4">d4</option>
+              <option value="6" selected>d6</option>
+              <option value="8">d8</option>
+              <option value="10">d10</option>
+              <option value="12">d12</option>
+              <option value="20">d20</option>
+              <option value="100">d100</option>
+              <option value="custom">Custom</option>
+            </select>
+            <input type="number" id="dice-custom" value="6" min="2" max="1000" style="display:none;width:80px;">
+            <button class="ev-btn" onclick="rollDice()">Roll</button>
+          </div>
+          <div id="dice-output" class="ev-output">
+            <span class="ev-output__text">
+              <div class="ev-dice-results" id="dice-results"></div>
+              <div class="ev-stats" id="dice-stats">--</div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coin Flipper -->
+      <div id="tab-coin" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="coin-count">Flips</label>
+            <input type="number" id="coin-count" value="1" min="1" max="1000">
+            <button class="ev-btn" onclick="flipCoins()">Flip</button>
+          </div>
+          <div id="coin-output" class="ev-output">
+            <span class="ev-output__text">
+              <div class="ev-coins" id="coin-results"></div>
+              <div class="ev-stats" id="coin-stats">--</div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- UUID Generator -->
+      <div id="tab-uuid" class="ev-tabs__panel" role="tabpanel">
+        <div class="ev-gen">
+          <div class="ev-gen__row">
+            <label class="ev-gen__label" for="uuid-count">Count</label>
+            <input type="number" id="uuid-count" value="1" min="1" max="50">
+            <button class="ev-btn" onclick="generateUUIDs()">Generate</button>
+          </div>
+          <div id="uuid-output" class="ev-output" style="white-space:pre-wrap;">
+            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text">--</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA for Entropic Tarot -->
+    <section style="max-width:700px;margin:3rem auto;padding:0 2rem;">
+      <div style="background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--teal));"></div>
+        <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e80;"></span>
+          <span style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);">Active Development</span>
+        </div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Entropic Tarot</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Tarot readings powered by true device entropy — cryptographic randomness from physical sensors, not Math.random(). Every card drawn from genuine chaos.</p>
+        <a href="https://entropic-tarot-production.up.railway.app" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);text-decoration:none;">Learn More &rarr;</a>
+      </div>
+    </section>
+
+    <!-- Ad: bottom -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0000000001" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&#9825; Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;"><a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    /* =========================================================
+       ENTROPY POOL — XOR-mixed mouse data (for visualization)
+       Actual generation always uses crypto.getRandomValues()
+       ========================================================= */
+    const entropyPool = new Uint8Array(256);
+    let entropyIndex = 0;
+    let entropyCount = 0;
+    const ENTROPY_GOAL = 2048;
+
+    function feedEntropy(x, y, t) {
+      const data = [
+        x & 0xFF, (x >> 8) & 0xFF,
+        y & 0xFF, (y >> 8) & 0xFF,
+        t & 0xFF, (t >> 8) & 0xFF, (t >> 16) & 0xFF, (t >> 24) & 0xFF
+      ];
+      for (let i = 0; i < data.length; i++) {
+        entropyPool[(entropyIndex + i) % 256] ^= data[i];
+      }
+      entropyIndex = (entropyIndex + data.length) % 256;
+      entropyCount = Math.min(entropyCount + data.length, ENTROPY_GOAL);
+      updateMeter();
+    }
+
+    function updateMeter() {
+      const pct = Math.min(100, (entropyCount / ENTROPY_GOAL) * 100);
+      document.getElementById('entropy-bar').style.width = pct + '%';
+      document.getElementById('entropy-pct').textContent = Math.round(pct) + '%';
+    }
+
+    /* =========================================================
+       CANVAS ENTROPY VISUALIZATION
+       ========================================================= */
+    const canvas = document.getElementById('entropy-canvas');
+    const ctx = canvas.getContext('2d');
+    const hint = document.getElementById('canvas-hint');
+    let particles = [];
+    let hintVisible = true;
+    let canvasRect;
+
+    function resizeCanvas() {
+      canvasRect = canvas.getBoundingClientRect();
+      canvas.width = canvasRect.width * window.devicePixelRatio;
+      canvas.height = canvasRect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor(x, y, vx, vy, color) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.color = color;
+        this.alpha = 0.9;
+        this.decay = 0.003 + Math.random() * 0.008;
+        this.size = 1.5 + Math.random() * 2.5;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.995;
+        this.vy *= 0.995;
+        this.vy += 0.01; // subtle gravity
+        this.alpha -= this.decay;
+      }
+      draw(c) {
+        c.beginPath();
+        c.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        c.fillStyle = this.color.replace('ALPHA', this.alpha.toFixed(3));
+        c.fill();
+      }
+    }
+
+    const COLORS = [
+      'rgba(0,212,170,ALPHA)',   // teal
+      'rgba(139,92,246,ALPHA)',  // violet
+      'rgba(0,168,132,ALPHA)',   // teal-dim
+      'rgba(110,70,200,ALPHA)',  // violet-dim
+      'rgba(0,240,190,ALPHA)',   // teal-bright
+    ];
+
+    canvas.addEventListener('mousemove', function(e) {
+      if (hintVisible) {
+        hint.classList.add('hidden');
+        hintVisible = false;
+      }
+      const rect = canvas.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      feedEntropy(e.clientX, e.clientY, performance.now() | 0);
+      // spawn particles
+      const count = 2 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.3 + Math.random() * 1.5;
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        particles.push(new Particle(
+          mx, my,
+          Math.cos(angle) * speed + (e.movementX || 0) * 0.1,
+          Math.sin(angle) * speed + (e.movementY || 0) * 0.1,
+          color
+        ));
+      }
+      // cap particles
+      if (particles.length > 600) particles = particles.slice(-500);
+    });
+
+    // Touch support
+    canvas.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+      if (hintVisible) {
+        hint.classList.add('hidden');
+        hintVisible = false;
+      }
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const mx = touch.clientX - rect.left;
+      const my = touch.clientY - rect.top;
+      feedEntropy(touch.clientX | 0, touch.clientY | 0, performance.now() | 0);
+      const count = 2 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.3 + Math.random() * 1.5;
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+        particles.push(new Particle(mx, my, Math.cos(angle) * speed, Math.sin(angle) * speed, color));
+      }
+      if (particles.length > 600) particles = particles.slice(-500);
+    }, { passive: false });
+
+    function drawConnections(c, parts) {
+      const maxDist = 80;
+      for (let i = 0; i < parts.length; i++) {
+        for (let j = i + 1; j < parts.length; j++) {
+          const dx = parts[i].x - parts[j].x;
+          const dy = parts[i].y - parts[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < maxDist) {
+            const alpha = (1 - dist / maxDist) * Math.min(parts[i].alpha, parts[j].alpha) * 0.3;
+            c.beginPath();
+            c.moveTo(parts[i].x, parts[i].y);
+            c.lineTo(parts[j].x, parts[j].y);
+            c.strokeStyle = 'rgba(0,212,170,' + alpha.toFixed(3) + ')';
+            c.lineWidth = 0.5;
+            c.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      const w = canvas.getBoundingClientRect().width;
+      const h = canvas.getBoundingClientRect().height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Background subtle grid
+      ctx.strokeStyle = 'rgba(26,26,48,0.3)';
+      ctx.lineWidth = 0.5;
+      const gridSize = 40;
+      for (let x = 0; x < w; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // Update and draw particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        if (particles[i].alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+        particles[i].draw(ctx);
+      }
+
+      // Draw connections among nearby live particles (sample to avoid O(n^2) on large sets)
+      if (particles.length > 0) {
+        let sample = particles;
+        if (particles.length > 150) {
+          sample = [];
+          const step = Math.floor(particles.length / 150);
+          for (let i = 0; i < particles.length; i += step) sample.push(particles[i]);
+        }
+        drawConnections(ctx, sample);
+      }
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    /* =========================================================
+       TABS
+       ========================================================= */
+    document.querySelectorAll('.ev-tabs__btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.ev-tabs__btn').forEach(function(b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.ev-tabs__panel').forEach(function(p) {
+          p.classList.remove('active');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Dice custom toggle
+    document.getElementById('dice-type').addEventListener('change', function() {
+      document.getElementById('dice-custom').style.display = this.value === 'custom' ? 'inline-block' : 'none';
+    });
+
+    /* =========================================================
+       CRYPTO HELPERS
+       ========================================================= */
+    function secureRandomInt(min, max) {
+      // Generates a uniform random integer in [min, max] using rejection sampling
+      const range = max - min + 1;
+      if (range <= 0) return min;
+      const bitsNeeded = Math.ceil(Math.log2(range)) || 1;
+      const bytesNeeded = Math.ceil(bitsNeeded / 8);
+      const mask = (1 << bitsNeeded) - 1;
+      const buf = new Uint8Array(bytesNeeded);
+      while (true) {
+        crypto.getRandomValues(buf);
+        let val = 0;
+        for (let i = 0; i < bytesNeeded; i++) {
+          val = (val << 8) | buf[i];
+        }
+        val = val & mask;
+        if (val < range) return min + val;
+      }
+    }
+
+    function secureRandomFloat(precision) {
+      // 53 bits of randomness for a float in [0, 1)
+      const buf = new Uint8Array(7);
+      crypto.getRandomValues(buf);
+      let val = 0;
+      for (let i = 0; i < 7; i++) {
+        val = val * 256 + buf[i];
+      }
+      // Use 53 bits (max safe integer bits)
+      val = val % (Math.pow(2, 53));
+      return val / Math.pow(2, 53);
+    }
+
+    /* =========================================================
+       RANDOMNESS QUALITY TRACKING
+       ========================================================= */
+    let bitHistory = []; // array of 0s and 1s
+    const MAX_BIT_HISTORY = 8192;
+
+    function trackBits(bytes) {
+      for (let i = 0; i < bytes.length; i++) {
+        for (let b = 7; b >= 0; b--) {
+          bitHistory.push((bytes[i] >> b) & 1);
+        }
+      }
+      if (bitHistory.length > MAX_BIT_HISTORY) {
+        bitHistory = bitHistory.slice(-MAX_BIT_HISTORY);
+      }
+      updateQualityDisplay();
+    }
+
+    function updateQualityDisplay() {
+      if (bitHistory.length === 0) return;
+      let zeros = 0, ones = 0;
+      for (let i = 0; i < bitHistory.length; i++) {
+        if (bitHistory[i] === 0) zeros++; else ones++;
+      }
+      const total = zeros + ones;
+      const zeroPct = ((zeros / total) * 100).toFixed(1);
+      const onePct = ((ones / total) * 100).toFixed(1);
+      document.getElementById('bit-counts').textContent = '0s: ' + zeros + '  1s: ' + ones;
+      document.getElementById('bit-bar-zero').style.width = zeroPct + '%';
+      document.getElementById('bit-bar-one').style.width = onePct + '%';
+      document.getElementById('bit-ratio').textContent = 'Ratio: ' + zeroPct + '% / ' + onePct + '% (' + total + ' bits)';
+
+      // Chi-square on byte-level distribution (256 bins)
+      if (bitHistory.length >= 2048) {
+        // Reconstruct bytes from bits
+        const byteCount = Math.floor(bitHistory.length / 8);
+        const observed = new Array(256).fill(0);
+        for (let i = 0; i < byteCount; i++) {
+          let byteVal = 0;
+          for (let b = 0; b < 8; b++) {
+            byteVal = (byteVal << 1) | bitHistory[i * 8 + b];
+          }
+          observed[byteVal]++;
+        }
+        const expected = byteCount / 256;
+        let chi2 = 0;
+        for (let i = 0; i < 256; i++) {
+          const diff = observed[i] - expected;
+          chi2 += (diff * diff) / expected;
+        }
+        chi2 = Math.round(chi2 * 100) / 100;
+        document.getElementById('chi-num').textContent = chi2.toFixed(2);
+        const dot = document.getElementById('chi-dot');
+        const verdict = document.getElementById('chi-verdict');
+        // For 255 df, expected chi2 ~ 255. Good range roughly 200-310
+        if (chi2 >= 190 && chi2 <= 320) {
+          dot.className = 'ev-chi-indicator good';
+          verdict.textContent = 'Good uniformity (expected ~255 for 255 df)';
+        } else if (chi2 >= 150 && chi2 <= 380) {
+          dot.className = 'ev-chi-indicator warning';
+          verdict.textContent = 'Marginal (' + byteCount + ' bytes sampled)';
+        } else {
+          dot.className = 'ev-chi-indicator poor';
+          verdict.textContent = 'Unusual — sample more data';
+        }
+      }
+    }
+
+    /* =========================================================
+       GENERATORS
+       ========================================================= */
+
+    // Integer
+    window.generateInteger = function() {
+      const min = parseInt(document.getElementById('int-min').value) || 0;
+      const max = parseInt(document.getElementById('int-max').value) || 100;
+      if (min > max) {
+        setOutput('int-output', 'Error: min must be <= max');
+        return;
+      }
+      const result = secureRandomInt(min, max);
+      setOutput('int-output', result.toString());
+      // track bits
+      const buf = new Uint8Array(4);
+      crypto.getRandomValues(buf);
+      trackBits(buf);
+    };
+
+    // Float
+    window.generateFloat = function() {
+      let prec = parseInt(document.getElementById('float-prec').value);
+      if (isNaN(prec) || prec < 1) prec = 6;
+      if (prec > 17) prec = 17;
+      const val = secureRandomFloat(prec);
+      setOutput('float-output', val.toFixed(prec));
+      const buf = new Uint8Array(8);
+      crypto.getRandomValues(buf);
+      trackBits(buf);
+    };
+
+    // Bytes
+    window.generateBytes = function() {
+      const len = parseInt(document.getElementById('bytes-len').value) || 32;
+      const buf = new Uint8Array(len);
+      crypto.getRandomValues(buf);
+      const hex = Array.from(buf).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+      setOutput('bytes-output', hex);
+      trackBits(buf);
+    };
+
+    // Password
+    window.generatePassword = function() {
+      let len = parseInt(document.getElementById('pw-len').value) || 20;
+      if (len < 4) len = 4;
+      if (len > 128) len = 128;
+      const upper = document.getElementById('pw-upper').checked;
+      const lower = document.getElementById('pw-lower').checked;
+      const numbers = document.getElementById('pw-numbers').checked;
+      const symbols = document.getElementById('pw-symbols').checked;
+
+      let charset = '';
+      if (upper) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (lower) charset += 'abcdefghijklmnopqrstuvwxyz';
+      if (numbers) charset += '0123456789';
+      if (symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+      if (charset.length === 0) {
+        setOutput('pw-output', 'Error: select at least one character type');
+        return;
+      }
+
+      let password = '';
+      const buf = new Uint8Array(len);
+      crypto.getRandomValues(buf);
+      for (let i = 0; i < len; i++) {
+        password += charset[secureRandomInt(0, charset.length - 1)];
+      }
+      setOutput('pw-output', password);
+      trackBits(buf);
+    };
+
+    // Dice
+    window.rollDice = function() {
+      let count = parseInt(document.getElementById('dice-count').value) || 1;
+      if (count < 1) count = 1;
+      if (count > 100) count = 100;
+      let sides;
+      const typeVal = document.getElementById('dice-type').value;
+      if (typeVal === 'custom') {
+        sides = parseInt(document.getElementById('dice-custom').value) || 6;
+        if (sides < 2) sides = 2;
+      } else {
+        sides = parseInt(typeVal);
+      }
+
+      const results = [];
+      let sum = 0;
+      for (let i = 0; i < count; i++) {
+        const val = secureRandomInt(1, sides);
+        results.push(val);
+        sum += val;
+      }
+
+      const container = document.getElementById('dice-results');
+      container.innerHTML = '';
+      results.forEach(function(val) {
+        const div = document.createElement('div');
+        div.className = 'ev-die';
+        div.textContent = val;
+        container.appendChild(div);
+      });
+
+      const stats = document.getElementById('dice-stats');
+      if (count > 1) {
+        const avg = (sum / count).toFixed(2);
+        const min = Math.min.apply(null, results);
+        const max = Math.max.apply(null, results);
+        stats.textContent = 'Sum: ' + sum + '  Avg: ' + avg + '  Min: ' + min + '  Max: ' + max;
+      } else {
+        stats.textContent = count + 'd' + sides + ' = ' + sum;
+      }
+
+      const buf = new Uint8Array(count * 2);
+      crypto.getRandomValues(buf);
+      trackBits(buf);
+    };
+
+    // Coin
+    window.flipCoins = function() {
+      let count = parseInt(document.getElementById('coin-count').value) || 1;
+      if (count < 1) count = 1;
+      if (count > 1000) count = 1000;
+
+      const results = [];
+      for (let i = 0; i < count; i++) {
+        results.push(secureRandomInt(0, 1));
+      }
+
+      const container = document.getElementById('coin-results');
+      container.innerHTML = '';
+      const displayCount = Math.min(count, 200); // cap visual display
+      for (let i = 0; i < displayCount; i++) {
+        const div = document.createElement('div');
+        div.className = 'ev-coin ' + (results[i] === 0 ? 'ev-coin--heads' : 'ev-coin--tails');
+        div.textContent = results[i] === 0 ? 'H' : 'T';
+        container.appendChild(div);
+      }
+      if (count > 200) {
+        const more = document.createElement('span');
+        more.style.cssText = 'font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-left:0.5rem;';
+        more.textContent = '+ ' + (count - 200) + ' more';
+        container.appendChild(more);
+      }
+
+      const heads = results.filter(function(r) { return r === 0; }).length;
+      const tails = count - heads;
+      const stats = document.getElementById('coin-stats');
+      stats.textContent = 'Heads: ' + heads + ' (' + ((heads / count) * 100).toFixed(1) + '%)  Tails: ' + tails + ' (' + ((tails / count) * 100).toFixed(1) + '%)';
+
+      const buf = new Uint8Array(Math.ceil(count / 8));
+      crypto.getRandomValues(buf);
+      trackBits(buf);
+    };
+
+    // UUID v4
+    window.generateUUIDs = function() {
+      let count = parseInt(document.getElementById('uuid-count').value) || 1;
+      if (count < 1) count = 1;
+      if (count > 50) count = 50;
+
+      const uuids = [];
+      for (let i = 0; i < count; i++) {
+        uuids.push(generateUUIDv4());
+      }
+      setOutput('uuid-output', uuids.join('\n'));
+      const buf = new Uint8Array(count * 16);
+      crypto.getRandomValues(buf);
+      trackBits(buf);
+    };
+
+    function generateUUIDv4() {
+      const buf = new Uint8Array(16);
+      crypto.getRandomValues(buf);
+      // Set version 4 (0100) in byte 6
+      buf[6] = (buf[6] & 0x0f) | 0x40;
+      // Set variant 10 in byte 8
+      buf[8] = (buf[8] & 0x3f) | 0x80;
+      const hex = Array.from(buf).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+      return hex.slice(0,8) + '-' + hex.slice(8,12) + '-' + hex.slice(12,16) + '-' + hex.slice(16,20) + '-' + hex.slice(20,32);
+    }
+
+    /* =========================================================
+       OUTPUT HELPERS
+       ========================================================= */
+    function setOutput(id, text) {
+      const el = document.getElementById(id);
+      const span = el.querySelector('.ev-output__text');
+      if (span) {
+        span.textContent = text;
+      }
+    }
+
+    window.copyOutput = function(btn) {
+      const container = btn.parentElement;
+      const span = container.querySelector('.ev-output__text');
+      if (!span) return;
+      const text = span.textContent;
+      if (!text || text === '--') return;
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    };
+
+  })();
+  </script>
+</body>
+</html>

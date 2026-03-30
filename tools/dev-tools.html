@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dev Tools Suite — Free JSON Formatter, Base64 Encoder, Hash Generator & More | Moonlit Social Labs</title>
+  <meta name="description" content="Free online developer tools: JSON formatter & validator, Base64 encoder/decoder, URL encoder, SHA-256 hash generator, UUID generator, JWT decoder, color converter, regex tester, timestamp converter, and lorem ipsum generator. No signup required.">
+  <meta name="keywords" content="free online JSON formatter, base64 encoder, hash generator, UUID generator, JWT decoder, regex tester, URL encoder, color converter, timestamp converter, lorem ipsum generator, developer tools">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/dev-tools.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Dev Tools Suite — Moonlit Social Labs",
+    "description": "Free online developer tools suite with JSON formatter, Base64 encoder, hash generator, UUID generator, JWT decoder, color converter, regex tester, timestamp converter, and lorem ipsum generator.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/dev-tools.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Dev Tools Suite — Free JSON Formatter, Hash Generator & More">
+  <meta property="og:description" content="Free online developer tools: JSON formatter, Base64 encoder, hash generator, UUID generator, JWT decoder, regex tester, and more. No signup required.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/dev-tools.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dev Tools Suite | Moonlit Social Labs">
+  <meta name="twitter:description" content="Free online developer tools: JSON formatter, Base64 encoder, hash generator, UUID generator, JWT decoder, regex tester, and more.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ── Tool Page Styles ── */
+    .tools-hero {
+      text-align: center;
+      padding: 8rem 0 3rem;
+    }
+    .tools-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .tools-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .tools-hero .text-body {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 55ch;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Ad containers */
+    .ad-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    /* ── Tabs ── */
+    .dt-tabs-wrap {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+    }
+    .dt-tabs {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      border-bottom: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+    .dt-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .dt-tabs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .dt-tabs::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+    .dt-tab {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .dt-tab:hover {
+      color: var(--text-secondary);
+      background: var(--teal-glow);
+    }
+    .dt-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    /* ── Panels ── */
+    .dt-panels {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .dt-panel {
+      display: none;
+      animation: panelFade 0.3s ease;
+    }
+    .dt-panel.active {
+      display: block;
+    }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Tool Card Containers ── */
+    .dt-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .dt-card__title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .dt-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Form Elements ── */
+    .dt-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .dt-textarea,
+    .dt-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+      box-sizing: border-box;
+    }
+    .dt-textarea:focus,
+    .dt-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px var(--teal-dim);
+    }
+    .dt-textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .dt-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .dt-select:focus {
+      border-color: var(--teal);
+    }
+
+    .dt-btn {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dt-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      box-shadow: 0 0 12px var(--teal-dim);
+    }
+    .dt-btn--primary {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .dt-btn--primary:hover {
+      background: var(--teal-glow);
+      box-shadow: 0 0 20px var(--teal-dim);
+    }
+    .dt-btn--violet {
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+    .dt-btn--violet:hover {
+      box-shadow: 0 0 12px var(--violet-dim);
+      background: var(--violet-glow);
+    }
+
+    .dt-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .dt-output {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 1rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      min-height: 60px;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .dt-output.error {
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .dt-output.success {
+      border-color: var(--teal);
+    }
+
+    .dt-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      .dt-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dt-inline-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* Status messages */
+    .dt-status {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+    .dt-status--ok {
+      color: var(--teal);
+      border-left: 2px solid var(--teal);
+    }
+    .dt-status--err {
+      color: var(--rose);
+      border-left: 2px solid var(--rose);
+    }
+
+    /* ── Regex Highlight ── */
+    .regex-highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-all;
+      min-height: 60px;
+      margin-top: 0.5rem;
+    }
+    .regex-highlight mark {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border-bottom: 1px solid var(--teal);
+      padding: 0 2px;
+      border-radius: 0;
+    }
+
+    /* ── Color Preview ── */
+    .color-swatch {
+      width: 100%;
+      height: 80px;
+      border: 1px solid var(--border);
+      margin: 1rem 0;
+      transition: background-color 0.2s ease;
+    }
+
+    /* ── Timestamp live ── */
+    .ts-live {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      color: var(--teal);
+      text-align: center;
+      padding: 1rem 0;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .cta-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    .cta-card {
+      background: var(--panel);
+      border: 1px solid transparent;
+      border-image: linear-gradient(135deg, var(--border-glow), var(--border), var(--border-glow)) 1;
+      padding: 2rem;
+      text-decoration: none;
+      display: block;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .cta-card:hover {
+      border-image: linear-gradient(135deg, var(--teal-dim), var(--violet-dim), var(--teal-dim)) 1;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+    .cta-card__status {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .cta-card__status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #22c55e80;
+    }
+    .cta-card__title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .cta-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .cta-card__link {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cta-card__link::after {
+      content: '\2192';
+    }
+
+    /* ── Hash output table ── */
+    .hash-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .hash-table td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+    .hash-table td:first-child {
+      width: 80px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.65rem;
+      white-space: nowrap;
+    }
+
+    /* JWT sections */
+    .jwt-section {
+      margin-bottom: 1rem;
+    }
+    .jwt-section__label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.35rem;
+    }
+
+    /* ── Copy feedback ── */
+    .dt-btn.copied {
+      border-color: var(--teal) !important;
+      color: var(--teal) !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <!-- Nav -->
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <!-- Hero -->
+    <section class="tools-hero">
+      <span class="section-label">Developer Utilities</span>
+      <h1 class="heading-xl">Dev Tools Suite</h1>
+      <p class="text-body">10 essential developer tools in one place. JSON formatter, hash generator, regex tester, and more. All client-side, no data leaves your browser.</p>
+    </section>
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Tabs -->
+    <div class="dt-tabs-wrap">
+      <div class="dt-tabs" role="tablist">
+        <button class="dt-tab active" role="tab" data-tab="json" aria-selected="true">JSON</button>
+        <button class="dt-tab" role="tab" data-tab="base64" aria-selected="false">Base64</button>
+        <button class="dt-tab" role="tab" data-tab="url" aria-selected="false">URL Encode</button>
+        <button class="dt-tab" role="tab" data-tab="hash" aria-selected="false">Hash</button>
+        <button class="dt-tab" role="tab" data-tab="uuid" aria-selected="false">UUID</button>
+        <button class="dt-tab" role="tab" data-tab="jwt" aria-selected="false">JWT</button>
+        <button class="dt-tab" role="tab" data-tab="color" aria-selected="false">Color</button>
+        <button class="dt-tab" role="tab" data-tab="regex" aria-selected="false">Regex</button>
+        <button class="dt-tab" role="tab" data-tab="timestamp" aria-selected="false">Timestamp</button>
+        <button class="dt-tab" role="tab" data-tab="lorem" aria-selected="false">Lorem Ipsum</button>
+      </div>
+    </div>
+
+    <!-- Panels -->
+    <div class="dt-panels">
+
+      <!-- ═══════════════════ JSON Formatter ═══════════════════ -->
+      <div class="dt-panel active" id="panel-json" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">JSON Formatter & Validator</h2>
+          <p class="dt-card__desc">Paste JSON to format, minify, or validate. Syntax errors are highlighted with line numbers.</p>
+          <label class="dt-label" for="json-input">Input JSON</label>
+          <textarea class="dt-textarea" id="json-input" rows="10" placeholder='{"key": "value", "nested": {"a": 1}}'></textarea>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="jsonFormat()">Format</button>
+            <button class="dt-btn" onclick="jsonMinify()">Minify</button>
+            <button class="dt-btn" onclick="jsonValidate()">Validate</button>
+            <button class="dt-btn" onclick="copyOutput('json-output')">Copy</button>
+            <button class="dt-btn" onclick="clearFields('json-input','json-output','json-status')">Clear</button>
+          </div>
+          <div id="json-status"></div>
+          <label class="dt-label">Output</label>
+          <div class="dt-output" id="json-output"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Base64 ═══════════════════ -->
+      <div class="dt-panel" id="panel-base64" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Base64 Encode / Decode</h2>
+          <p class="dt-card__desc">Convert text to and from Base64 encoding. Supports UTF-8 characters.</p>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="b64-input">Text</label>
+              <textarea class="dt-textarea" id="b64-input" rows="8" placeholder="Enter text to encode..."></textarea>
+            </div>
+            <div>
+              <label class="dt-label" for="b64-output">Base64</label>
+              <textarea class="dt-textarea" id="b64-output" rows="8" placeholder="Enter Base64 to decode..."></textarea>
+            </div>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="b64Encode()">Encode &rarr;</button>
+            <button class="dt-btn dt-btn--violet" onclick="b64Decode()">&larr; Decode</button>
+            <button class="dt-btn" onclick="copyOutput('b64-output')">Copy Base64</button>
+            <button class="dt-btn" onclick="copyOutput('b64-input')">Copy Text</button>
+            <button class="dt-btn" onclick="clearFields('b64-input','b64-output','b64-status')">Clear</button>
+          </div>
+          <div id="b64-status"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ URL Encode ═══════════════════ -->
+      <div class="dt-panel" id="panel-url" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">URL Encode / Decode</h2>
+          <p class="dt-card__desc">Encode or decode URL components. Handles special characters, spaces, and unicode.</p>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="url-input">Decoded Text</label>
+              <textarea class="dt-textarea" id="url-input" rows="8" placeholder="hello world & foo=bar"></textarea>
+            </div>
+            <div>
+              <label class="dt-label" for="url-output">Encoded URL</label>
+              <textarea class="dt-textarea" id="url-output" rows="8" placeholder="hello%20world%20%26%20foo%3Dbar"></textarea>
+            </div>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="urlEncode()">Encode &rarr;</button>
+            <button class="dt-btn dt-btn--violet" onclick="urlDecode()">&larr; Decode</button>
+            <button class="dt-btn" onclick="urlEncodeComponent()">Encode Component</button>
+            <button class="dt-btn" onclick="copyOutput('url-output')">Copy Encoded</button>
+            <button class="dt-btn" onclick="clearFields('url-input','url-output')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Hash Generator ═══════════════════ -->
+      <div class="dt-panel" id="panel-hash" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Hash Generator</h2>
+          <p class="dt-card__desc">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text input. SHA hashes use the Web Crypto API.</p>
+          <label class="dt-label" for="hash-input">Input Text</label>
+          <textarea class="dt-textarea" id="hash-input" rows="6" placeholder="Enter text to hash..."></textarea>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="generateHashes()">Generate All Hashes</button>
+            <button class="dt-btn" onclick="clearFields('hash-input');document.getElementById('hash-results').innerHTML=''">Clear</button>
+          </div>
+          <div id="hash-results"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ UUID Generator ═══════════════════ -->
+      <div class="dt-panel" id="panel-uuid" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">UUID Generator</h2>
+          <p class="dt-card__desc">Generate cryptographically random v4 UUIDs. Bulk generate up to 1000 at once.</p>
+          <div class="dt-inline-group">
+            <label class="dt-label" for="uuid-count" style="margin-bottom:0">Count</label>
+            <input class="dt-input" id="uuid-count" type="number" min="1" max="1000" value="1" style="width:100px">
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
+              <input type="checkbox" id="uuid-uppercase"> Uppercase
+            </label>
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
+              <input type="checkbox" id="uuid-braces"> {Braces}
+            </label>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="generateUUIDs()">Generate</button>
+            <button class="dt-btn" onclick="copyOutput('uuid-output')">Copy</button>
+            <button class="dt-btn" onclick="document.getElementById('uuid-output').textContent=''">Clear</button>
+          </div>
+          <label class="dt-label">Output</label>
+          <div class="dt-output" id="uuid-output" style="max-height:300px;overflow-y:auto"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ JWT Decoder ═══════════════════ -->
+      <div class="dt-panel" id="panel-jwt" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">JWT Decoder</h2>
+          <p class="dt-card__desc">Paste a JSON Web Token to decode its header and payload. Shows expiration status.</p>
+          <label class="dt-label" for="jwt-input">Paste JWT</label>
+          <textarea class="dt-textarea" id="jwt-input" rows="5" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="decodeJWT()">Decode</button>
+            <button class="dt-btn" onclick="clearFields('jwt-input');document.getElementById('jwt-results').innerHTML=''">Clear</button>
+          </div>
+          <div id="jwt-results"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Color Converter ═══════════════════ -->
+      <div class="dt-panel" id="panel-color" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Color Converter</h2>
+          <p class="dt-card__desc">Convert between HEX, RGB, and HSL color formats with a live preview swatch.</p>
+          <div class="color-swatch" id="color-swatch" style="background:#00d4aa"></div>
+          <div class="dt-row" style="grid-template-columns:1fr 1fr 1fr">
+            <div>
+              <label class="dt-label" for="color-hex">HEX</label>
+              <input class="dt-input" id="color-hex" type="text" value="#00d4aa" placeholder="#00d4aa">
+            </div>
+            <div>
+              <label class="dt-label" for="color-rgb">RGB</label>
+              <input class="dt-input" id="color-rgb" type="text" value="rgb(0, 212, 170)" placeholder="rgb(0, 212, 170)">
+            </div>
+            <div>
+              <label class="dt-label" for="color-hsl">HSL</label>
+              <input class="dt-input" id="color-hsl" type="text" value="hsl(168, 100%, 42%)" placeholder="hsl(168, 100%, 42%)">
+            </div>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="colorFromHex()">From HEX</button>
+            <button class="dt-btn" onclick="colorFromRGB()">From RGB</button>
+            <button class="dt-btn" onclick="colorFromHSL()">From HSL</button>
+            <button class="dt-btn" onclick="copyText(document.getElementById('color-hex').value)">Copy HEX</button>
+            <button class="dt-btn" onclick="copyText(document.getElementById('color-rgb').value)">Copy RGB</button>
+            <button class="dt-btn" onclick="copyText(document.getElementById('color-hsl').value)">Copy HSL</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Regex Tester ═══════════════════ -->
+      <div class="dt-panel" id="panel-regex" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Regex Tester</h2>
+          <p class="dt-card__desc">Test regular expressions against a string. Matches are highlighted and capture groups are listed.</p>
+          <div class="dt-inline-group">
+            <label class="dt-label" style="margin-bottom:0">Pattern</label>
+            <input class="dt-input" id="regex-pattern" type="text" placeholder="\b\w+@\w+\.\w+\b" style="flex:1">
+            <input class="dt-input" id="regex-flags" type="text" value="gi" placeholder="gi" style="width:60px">
+          </div>
+          <label class="dt-label" for="regex-test">Test String</label>
+          <textarea class="dt-textarea" id="regex-test" rows="5" placeholder="Enter text to test the regex against..."></textarea>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="testRegex()">Test</button>
+            <button class="dt-btn" onclick="clearFields('regex-pattern','regex-test');document.getElementById('regex-result').innerHTML='';document.getElementById('regex-groups').innerHTML=''">Clear</button>
+          </div>
+          <label class="dt-label">Highlighted Matches</label>
+          <div class="regex-highlight" id="regex-result"></div>
+          <label class="dt-label" style="margin-top:1rem">Capture Groups</label>
+          <div class="dt-output" id="regex-groups"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Timestamp Converter ═══════════════════ -->
+      <div class="dt-panel" id="panel-timestamp" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Timestamp Converter</h2>
+          <p class="dt-card__desc">Convert between Unix timestamps and human-readable dates. Live current timestamp updates every second.</p>
+          <div class="ts-live" id="ts-live">---</div>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="ts-unix">Unix Timestamp (seconds)</label>
+              <input class="dt-input" id="ts-unix" type="text" placeholder="1711843200">
+              <div class="dt-btn-row">
+                <button class="dt-btn dt-btn--primary" onclick="tsToHuman()">To Date &rarr;</button>
+                <button class="dt-btn" onclick="tsNow()">Now</button>
+              </div>
+            </div>
+            <div>
+              <label class="dt-label" for="ts-human">Date & Time</label>
+              <input class="dt-input" id="ts-human" type="text" placeholder="2024-03-31T00:00:00Z">
+              <div class="dt-btn-row">
+                <button class="dt-btn dt-btn--violet" onclick="tsToUnix()">&larr; To Unix</button>
+              </div>
+            </div>
+          </div>
+          <label class="dt-label">Details</label>
+          <div class="dt-output" id="ts-details"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════ Lorem Ipsum ═══════════════════ -->
+      <div class="dt-panel" id="panel-lorem" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">Lorem Ipsum Generator</h2>
+          <p class="dt-card__desc">Generate placeholder text by paragraphs, sentences, or words.</p>
+          <div class="dt-inline-group">
+            <label class="dt-label" style="margin-bottom:0">Type</label>
+            <select class="dt-select" id="lorem-type">
+              <option value="paragraphs">Paragraphs</option>
+              <option value="sentences">Sentences</option>
+              <option value="words">Words</option>
+            </select>
+            <label class="dt-label" style="margin-bottom:0">Count</label>
+            <input class="dt-input" id="lorem-count" type="number" min="1" max="100" value="3" style="width:80px">
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
+              <input type="checkbox" id="lorem-start-lorem" checked> Start with "Lorem ipsum..."
+            </label>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="generateLorem()">Generate</button>
+            <button class="dt-btn" onclick="copyOutput('lorem-output')">Copy</button>
+            <button class="dt-btn" onclick="document.getElementById('lorem-output').textContent=''">Clear</button>
+          </div>
+          <label class="dt-label">Output</label>
+          <div class="dt-output" id="lorem-output" style="max-height:400px;overflow-y:auto"></div>
+        </div>
+      </div>
+
+    </div><!-- /dt-panels -->
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <a href="../Thoughtform.html" class="cta-card" style="text-decoration:none;">
+        <span class="cta-card__status">Active Development</span>
+        <h3 class="cta-card__title">Thought+Form</h3>
+        <p class="cta-card__desc">Developer command center with 44 interconnected modules. Organize projects, track tasks, manage knowledge, and ship faster.</p>
+        <span class="cta-card__link">Explore Thought+Form</span>
+      </a>
+      <a href="../Dagda.html" class="cta-card" style="text-decoration:none;">
+        <span class="cta-card__status">Active Development</span>
+        <h3 class="cta-card__title">Dagda</h3>
+        <p class="cta-card__desc">Cybersecurity command platform with 640+ security tools. Reconnaissance, exploitation, forensics, and defense in one unified interface.</p>
+        <span class="cta-card__link">Explore Dagda</span>
+      </a>
+    </section>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════════
+     DEV TOOLS SUITE — All tool logic
+     ════════════════════════════════════════════════════════════════ */
+
+  // ── Tab Switching ──
+  document.querySelectorAll('.dt-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.dt-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      document.querySelectorAll('.dt-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected','true');
+      const panel = document.getElementById('panel-' + tab.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  // ── Utility: copy to clipboard ──
+  function copyOutput(id) {
+    const el = document.getElementById(id);
+    const text = el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' ? el.value : el.textContent;
+    copyText(text);
+  }
+  function copyText(text) {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      // brief visual feedback — no alert
+    }).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    });
+  }
+  function clearFields(...ids) {
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.value = '';
+      else el.textContent = '';
+      el.classList.remove('error','success');
+    });
+  }
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  /* ═══════════════════ 1. JSON Formatter ═══════════════════ */
+  function jsonFormat() {
+    const input = document.getElementById('json-input').value.trim();
+    const out = document.getElementById('json-output');
+    const status = document.getElementById('json-status');
+    if (!input) { out.textContent = ''; status.innerHTML = ''; return; }
+    try {
+      const parsed = JSON.parse(input);
+      out.textContent = JSON.stringify(parsed, null, 2);
+      out.className = 'dt-output success';
+      status.innerHTML = '<span class="dt-status dt-status--ok">Valid JSON — formatted with 2-space indent</span>';
+    } catch(e) {
+      out.textContent = '';
+      out.className = 'dt-output error';
+      status.innerHTML = '<span class="dt-status dt-status--err">Error: ' + escapeHtml(e.message) + '</span>';
+    }
+  }
+  function jsonMinify() {
+    const input = document.getElementById('json-input').value.trim();
+    const out = document.getElementById('json-output');
+    const status = document.getElementById('json-status');
+    if (!input) { out.textContent = ''; status.innerHTML = ''; return; }
+    try {
+      const parsed = JSON.parse(input);
+      out.textContent = JSON.stringify(parsed);
+      out.className = 'dt-output success';
+      const origLen = input.length;
+      const minLen = out.textContent.length;
+      status.innerHTML = '<span class="dt-status dt-status--ok">Minified: ' + origLen + ' → ' + minLen + ' chars (' + Math.round((1 - minLen/origLen)*100) + '% reduction)</span>';
+    } catch(e) {
+      out.textContent = '';
+      out.className = 'dt-output error';
+      status.innerHTML = '<span class="dt-status dt-status--err">Error: ' + escapeHtml(e.message) + '</span>';
+    }
+  }
+  function jsonValidate() {
+    const input = document.getElementById('json-input').value.trim();
+    const out = document.getElementById('json-output');
+    const status = document.getElementById('json-status');
+    if (!input) { out.textContent = ''; status.innerHTML = ''; return; }
+    try {
+      const parsed = JSON.parse(input);
+      const type = Array.isArray(parsed) ? 'array' : typeof parsed;
+      let keys = '';
+      if (type === 'object' && parsed !== null) {
+        const k = Object.keys(parsed);
+        keys = ' — ' + k.length + ' top-level key' + (k.length !== 1 ? 's' : '');
+      } else if (type === 'array') {
+        keys = ' — ' + parsed.length + ' element' + (parsed.length !== 1 ? 's' : '');
+      }
+      out.textContent = JSON.stringify(parsed, null, 2);
+      out.className = 'dt-output success';
+      status.innerHTML = '<span class="dt-status dt-status--ok">Valid JSON (' + type + ')' + keys + '</span>';
+    } catch(e) {
+      out.textContent = '';
+      out.className = 'dt-output error';
+      status.innerHTML = '<span class="dt-status dt-status--err">Invalid JSON: ' + escapeHtml(e.message) + '</span>';
+    }
+  }
+
+  /* ═══════════════════ 2. Base64 ═══════════════════ */
+  function b64Encode() {
+    const input = document.getElementById('b64-input').value;
+    const status = document.getElementById('b64-status');
+    try {
+      document.getElementById('b64-output').value = btoa(unescape(encodeURIComponent(input)));
+      status.innerHTML = '<span class="dt-status dt-status--ok">Encoded ' + input.length + ' characters</span>';
+    } catch(e) {
+      status.innerHTML = '<span class="dt-status dt-status--err">Encode error: ' + escapeHtml(e.message) + '</span>';
+    }
+  }
+  function b64Decode() {
+    const input = document.getElementById('b64-output').value;
+    const status = document.getElementById('b64-status');
+    try {
+      document.getElementById('b64-input').value = decodeURIComponent(escape(atob(input.trim())));
+      status.innerHTML = '<span class="dt-status dt-status--ok">Decoded successfully</span>';
+    } catch(e) {
+      status.innerHTML = '<span class="dt-status dt-status--err">Decode error: Invalid Base64 string</span>';
+    }
+  }
+
+  /* ═══════════════════ 3. URL Encode ═══════════════════ */
+  function urlEncode() {
+    const input = document.getElementById('url-input').value;
+    document.getElementById('url-output').value = encodeURI(input);
+  }
+  function urlDecode() {
+    const input = document.getElementById('url-output').value;
+    try {
+      document.getElementById('url-input').value = decodeURI(input);
+    } catch(e) {
+      document.getElementById('url-input').value = 'Error: Invalid encoded URI';
+    }
+  }
+  function urlEncodeComponent() {
+    const input = document.getElementById('url-input').value;
+    document.getElementById('url-output').value = encodeURIComponent(input);
+  }
+
+  /* ═══════════════════ 4. Hash Generator ═══════════════════ */
+
+  // Simple MD5 implementation
+  function md5(string) {
+    function md5cycle(x, k) {
+      var a = x[0], b = x[1], c = x[2], d = x[3];
+      a = ff(a, b, c, d, k[0], 7, -680876936);  d = ff(d, a, b, c, k[1], 12, -389564586);
+      c = ff(c, d, a, b, k[2], 17, 606105819);   b = ff(b, c, d, a, k[3], 22, -1044525330);
+      a = ff(a, b, c, d, k[4], 7, -176418897);   d = ff(d, a, b, c, k[5], 12, 1200080426);
+      c = ff(c, d, a, b, k[6], 17, -1473231341);  b = ff(b, c, d, a, k[7], 22, -45705983);
+      a = ff(a, b, c, d, k[8], 7, 1770035416);   d = ff(d, a, b, c, k[9], 12, -1958414417);
+      c = ff(c, d, a, b, k[10], 17, -42063);      b = ff(b, c, d, a, k[11], 22, -1990404162);
+      a = ff(a, b, c, d, k[12], 7, 1804603682);  d = ff(d, a, b, c, k[13], 12, -40341101);
+      c = ff(c, d, a, b, k[14], 17, -1502002290); b = ff(b, c, d, a, k[15], 22, 1236535329);
+      a = gg(a, b, c, d, k[1], 5, -165796510);   d = gg(d, a, b, c, k[6], 9, -1069501632);
+      c = gg(c, d, a, b, k[11], 14, 643717713);   b = gg(b, c, d, a, k[0], 20, -373897302);
+      a = gg(a, b, c, d, k[5], 5, -701558691);   d = gg(d, a, b, c, k[10], 9, 38016083);
+      c = gg(c, d, a, b, k[15], 14, -660478335);  b = gg(b, c, d, a, k[4], 20, -405537848);
+      a = gg(a, b, c, d, k[9], 5, 568446438);    d = gg(d, a, b, c, k[14], 9, -1019803690);
+      c = gg(c, d, a, b, k[3], 14, -187363961);   b = gg(b, c, d, a, k[8], 20, 1163531501);
+      a = gg(a, b, c, d, k[13], 5, -1444681467);  d = gg(d, a, b, c, k[2], 9, -51403784);
+      c = gg(c, d, a, b, k[7], 14, 1735328473);   b = gg(b, c, d, a, k[12], 20, -1926607734);
+      a = hh(a, b, c, d, k[5], 4, -378558);      d = hh(d, a, b, c, k[8], 11, -2022574463);
+      c = hh(c, d, a, b, k[11], 16, 1839030562);  b = hh(b, c, d, a, k[14], 23, -35309556);
+      a = hh(a, b, c, d, k[1], 4, -1530992060);  d = hh(d, a, b, c, k[4], 11, 1272893353);
+      c = hh(c, d, a, b, k[7], 16, -155497632);   b = hh(b, c, d, a, k[10], 23, -1094730640);
+      a = hh(a, b, c, d, k[13], 4, 681279174);   d = hh(d, a, b, c, k[0], 11, -358537222);
+      c = hh(c, d, a, b, k[3], 16, -722521979);   b = hh(b, c, d, a, k[6], 23, 76029189);
+      a = hh(a, b, c, d, k[9], 4, -640364487);   d = hh(d, a, b, c, k[12], 11, -421815835);
+      c = hh(c, d, a, b, k[15], 16, 530742520);   b = hh(b, c, d, a, k[2], 23, -995338651);
+      a = ii(a, b, c, d, k[0], 6, -198630844);   d = ii(d, a, b, c, k[7], 10, 1126891415);
+      c = ii(c, d, a, b, k[14], 15, -1416354905); b = ii(b, c, d, a, k[5], 21, -57434055);
+      a = ii(a, b, c, d, k[12], 6, 1700485571);  d = ii(d, a, b, c, k[3], 10, -1894986606);
+      c = ii(c, d, a, b, k[10], 15, -1051523);    b = ii(b, c, d, a, k[1], 21, -2054922799);
+      a = ii(a, b, c, d, k[8], 6, 1873313359);   d = ii(d, a, b, c, k[15], 10, -30611744);
+      c = ii(c, d, a, b, k[6], 15, -1560198380);  b = ii(b, c, d, a, k[13], 21, 1309151649);
+      a = ii(a, b, c, d, k[4], 6, -145523070);   d = ii(d, a, b, c, k[11], 10, -1120210379);
+      c = ii(c, d, a, b, k[2], 15, 718787259);    b = ii(b, c, d, a, k[9], 21, -343485551);
+      x[0] = add32(a, x[0]); x[1] = add32(b, x[1]);
+      x[2] = add32(c, x[2]); x[3] = add32(d, x[3]);
+    }
+    function cmn(q, a, b, x, s, t) {
+      a = add32(add32(a, q), add32(x, t));
+      return add32((a << s) | (a >>> (32 - s)), b);
+    }
+    function ff(a, b, c, d, x, s, t) { return cmn((b & c) | ((~b) & d), a, b, x, s, t); }
+    function gg(a, b, c, d, x, s, t) { return cmn((b & d) | (c & (~d)), a, b, x, s, t); }
+    function hh(a, b, c, d, x, s, t) { return cmn(b ^ c ^ d, a, b, x, s, t); }
+    function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
+    function md51(s) {
+      var n = s.length,
+          state = [1732584193, -271733879, -1732584194, 271733878], i;
+      for (i = 64; i <= n; i += 64) {
+        md5cycle(state, md5blk(s.substring(i - 64, i)));
+      }
+      s = s.substring(i - 64);
+      var tail = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+      for (i = 0; i < s.length; i++)
+        tail[i >> 2] |= s.charCodeAt(i) << ((i % 4) << 3);
+      tail[i >> 2] |= 0x80 << ((i % 4) << 3);
+      if (i > 55) {
+        md5cycle(state, tail);
+        for (i = 0; i < 16; i++) tail[i] = 0;
+      }
+      tail[14] = n * 8;
+      md5cycle(state, tail);
+      return state;
+    }
+    function md5blk(s) {
+      var md5blks = [], i;
+      for (i = 0; i < 64; i += 4) {
+        md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i+1) << 8) +
+                          (s.charCodeAt(i+2) << 16) + (s.charCodeAt(i+3) << 24);
+      }
+      return md5blks;
+    }
+    var hex_chr = '0123456789abcdef'.split('');
+    function rhex(n) {
+      var s = '', j = 0;
+      for (; j < 4; j++)
+        s += hex_chr[(n >> (j * 8 + 4)) & 0x0F] + hex_chr[(n >> (j * 8)) & 0x0F];
+      return s;
+    }
+    function hex(x) {
+      for (var i = 0; i < x.length; i++) x[i] = rhex(x[i]);
+      return x.join('');
+    }
+    function add32(a, b) {
+      return (a + b) & 0xFFFFFFFF;
+    }
+    return hex(md51(string));
+  }
+
+  async function shaHash(algo, text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest(algo, data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function generateHashes() {
+    const input = document.getElementById('hash-input').value;
+    const container = document.getElementById('hash-results');
+    if (!input) { container.innerHTML = ''; return; }
+
+    const md5Hash = md5(input);
+    const sha1 = await shaHash('SHA-1', input);
+    const sha256 = await shaHash('SHA-256', input);
+    const sha512 = await shaHash('SHA-512', input);
+
+    container.innerHTML = '<table class="hash-table">' +
+      '<tr><td>MD5</td><td>' + md5Hash + '</td></tr>' +
+      '<tr><td>SHA-1</td><td>' + sha1 + '</td></tr>' +
+      '<tr><td>SHA-256</td><td>' + sha256 + '</td></tr>' +
+      '<tr><td>SHA-512</td><td>' + sha512 + '</td></tr>' +
+      '</table>';
+  }
+
+  /* ═══════════════════ 5. UUID Generator ═══════════════════ */
+  function generateUUID() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = crypto.getRandomValues(new Uint8Array(1))[0] & 15;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  function generateUUIDs() {
+    const count = Math.min(Math.max(parseInt(document.getElementById('uuid-count').value) || 1, 1), 1000);
+    const uppercase = document.getElementById('uuid-uppercase').checked;
+    const braces = document.getElementById('uuid-braces').checked;
+    const uuids = [];
+    for (let i = 0; i < count; i++) {
+      let uuid = generateUUID();
+      if (uppercase) uuid = uuid.toUpperCase();
+      if (braces) uuid = '{' + uuid + '}';
+      uuids.push(uuid);
+    }
+    document.getElementById('uuid-output').textContent = uuids.join('\n');
+  }
+
+  /* ═══════════════════ 6. JWT Decoder ═══════════════════ */
+  function base64UrlDecode(str) {
+    str = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (str.length % 4) str += '=';
+    return decodeURIComponent(escape(atob(str)));
+  }
+
+  function decodeJWT() {
+    const input = document.getElementById('jwt-input').value.trim();
+    const container = document.getElementById('jwt-results');
+    if (!input) { container.innerHTML = ''; return; }
+
+    const parts = input.split('.');
+    if (parts.length < 2 || parts.length > 3) {
+      container.innerHTML = '<span class="dt-status dt-status--err">Invalid JWT: Expected 2 or 3 parts separated by dots, got ' + parts.length + '</span>';
+      return;
+    }
+
+    try {
+      const header = JSON.parse(base64UrlDecode(parts[0]));
+      const payload = JSON.parse(base64UrlDecode(parts[1]));
+
+      let expInfo = '';
+      if (payload.exp) {
+        const expDate = new Date(payload.exp * 1000);
+        const now = new Date();
+        const expired = expDate < now;
+        expInfo = '<div class="jwt-section"><div class="jwt-section__label">Expiration</div>' +
+          '<div class="dt-output' + (expired ? ' error' : ' success') + '">' +
+          (expired ? 'EXPIRED' : 'VALID') + ' — ' + expDate.toISOString() +
+          '\n' + (expired ? 'Expired ' : 'Expires in ') +
+          formatTimeDiff(Math.abs(expDate - now)) + (expired ? ' ago' : '') +
+          '</div></div>';
+      }
+
+      let iatInfo = '';
+      if (payload.iat) {
+        iatInfo = '\nIssued: ' + new Date(payload.iat * 1000).toISOString();
+      }
+
+      container.innerHTML =
+        '<div class="jwt-section"><div class="jwt-section__label">Header</div>' +
+        '<div class="dt-output">' + escapeHtml(JSON.stringify(header, null, 2)) + '</div></div>' +
+        '<div class="jwt-section"><div class="jwt-section__label">Payload</div>' +
+        '<div class="dt-output">' + escapeHtml(JSON.stringify(payload, null, 2)) + '</div></div>' +
+        expInfo +
+        (parts[2] ? '<div class="jwt-section"><div class="jwt-section__label">Signature</div>' +
+        '<div class="dt-output" style="color:var(--text-dim)">' + parts[2] + '\n(Signature verification requires the secret key)</div></div>' : '');
+    } catch(e) {
+      container.innerHTML = '<span class="dt-status dt-status--err">Error decoding JWT: ' + escapeHtml(e.message) + '</span>';
+    }
+  }
+
+  function formatTimeDiff(ms) {
+    const s = Math.floor(ms / 1000);
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const parts = [];
+    if (d) parts.push(d + 'd');
+    if (h) parts.push(h + 'h');
+    if (m) parts.push(m + 'm');
+    if (!parts.length) parts.push(s + 's');
+    return parts.join(' ');
+  }
+
+  /* ═══════════════════ 7. Color Converter ═══════════════════ */
+  function hexToRgb(hex) {
+    hex = hex.replace(/^#/, '');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    const n = parseInt(hex, 16);
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+
+  function rgbToHex(r, g, b) {
+    return '#' + [r, g, b].map(x => Math.max(0, Math.min(255, Math.round(x))).toString(16).padStart(2, '0')).join('');
+  }
+
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+        case g: h = ((b - r) / d + 2) / 6; break;
+        case b: h = ((r - g) / d + 4) / 6; break;
+      }
+    }
+    return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+
+  function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    let r, g, b;
+    if (s === 0) {
+      r = g = b = l;
+    } else {
+      function hue2rgb(p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      }
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+    }
+    return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+  }
+
+  function updateColorUI(r, g, b) {
+    const hex = rgbToHex(r, g, b);
+    const hsl = rgbToHsl(r, g, b);
+    document.getElementById('color-hex').value = hex;
+    document.getElementById('color-rgb').value = 'rgb(' + r + ', ' + g + ', ' + b + ')';
+    document.getElementById('color-hsl').value = 'hsl(' + hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%)';
+    document.getElementById('color-swatch').style.backgroundColor = hex;
+  }
+
+  function colorFromHex() {
+    const val = document.getElementById('color-hex').value.trim();
+    const rgb = hexToRgb(val);
+    updateColorUI(rgb.r, rgb.g, rgb.b);
+  }
+
+  function colorFromRGB() {
+    const val = document.getElementById('color-rgb').value.trim();
+    const m = val.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+    if (m) updateColorUI(parseInt(m[1]), parseInt(m[2]), parseInt(m[3]));
+  }
+
+  function colorFromHSL() {
+    const val = document.getElementById('color-hsl').value.trim();
+    const m = val.match(/([\d.]+)\s*,\s*([\d.]+)%?\s*,\s*([\d.]+)%?/);
+    if (m) {
+      const rgb = hslToRgb(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]));
+      updateColorUI(rgb.r, rgb.g, rgb.b);
+    }
+  }
+
+  /* ═══════════════════ 8. Regex Tester ═══════════════════ */
+  function testRegex() {
+    const pattern = document.getElementById('regex-pattern').value;
+    const flags = document.getElementById('regex-flags').value;
+    const testStr = document.getElementById('regex-test').value;
+    const resultEl = document.getElementById('regex-result');
+    const groupsEl = document.getElementById('regex-groups');
+
+    if (!pattern || !testStr) {
+      resultEl.innerHTML = '';
+      groupsEl.textContent = '';
+      return;
+    }
+
+    try {
+      const regex = new RegExp(pattern, flags);
+      let matchCount = 0;
+      const groups = [];
+
+      if (flags.includes('g')) {
+        // Global: highlight all matches
+        let html = '';
+        let lastIndex = 0;
+        let match;
+        const re2 = new RegExp(pattern, flags);
+        while ((match = re2.exec(testStr)) !== null) {
+          html += escapeHtml(testStr.slice(lastIndex, match.index));
+          html += '<mark>' + escapeHtml(match[0]) + '</mark>';
+          lastIndex = re2.lastIndex;
+          matchCount++;
+          if (match.length > 1) {
+            const g = [];
+            for (let i = 1; i < match.length; i++) g.push('$' + i + ': ' + (match[i] !== undefined ? match[i] : '(undefined)'));
+            groups.push('Match ' + matchCount + ' @ index ' + match.index + ': "' + match[0] + '"\n  ' + g.join('\n  '));
+          } else {
+            groups.push('Match ' + matchCount + ' @ index ' + match.index + ': "' + match[0] + '"');
+          }
+          if (re2.lastIndex === match.index) re2.lastIndex++;
+        }
+        html += escapeHtml(testStr.slice(lastIndex));
+        resultEl.innerHTML = html;
+      } else {
+        // Non-global: single match
+        const match = regex.exec(testStr);
+        if (match) {
+          matchCount = 1;
+          let html = escapeHtml(testStr.slice(0, match.index));
+          html += '<mark>' + escapeHtml(match[0]) + '</mark>';
+          html += escapeHtml(testStr.slice(match.index + match[0].length));
+          resultEl.innerHTML = html;
+          if (match.length > 1) {
+            const g = [];
+            for (let i = 1; i < match.length; i++) g.push('$' + i + ': ' + (match[i] !== undefined ? match[i] : '(undefined)'));
+            groups.push('Match @ index ' + match.index + ': "' + match[0] + '"\n  ' + g.join('\n  '));
+          } else {
+            groups.push('Match @ index ' + match.index + ': "' + match[0] + '"');
+          }
+        } else {
+          resultEl.innerHTML = escapeHtml(testStr);
+        }
+      }
+
+      groupsEl.textContent = matchCount + ' match' + (matchCount !== 1 ? 'es' : '') + ' found\n\n' + groups.join('\n\n');
+    } catch(e) {
+      resultEl.innerHTML = '<span style="color:var(--rose)">' + escapeHtml(e.message) + '</span>';
+      groupsEl.textContent = '';
+    }
+  }
+
+  /* ═══════════════════ 9. Timestamp Converter ═══════════════════ */
+  function updateTimestampLive() {
+    const now = Math.floor(Date.now() / 1000);
+    document.getElementById('ts-live').textContent = 'Current Unix: ' + now;
+  }
+  updateTimestampLive();
+  setInterval(updateTimestampLive, 1000);
+
+  function tsNow() {
+    document.getElementById('ts-unix').value = Math.floor(Date.now() / 1000);
+    tsToHuman();
+  }
+
+  function tsToHuman() {
+    const input = document.getElementById('ts-unix').value.trim();
+    if (!input) return;
+    let ts = parseInt(input);
+    // Auto-detect milliseconds vs seconds
+    if (ts > 9999999999) ts = Math.floor(ts / 1000);
+    const date = new Date(ts * 1000);
+    if (isNaN(date.getTime())) {
+      document.getElementById('ts-human').value = 'Invalid timestamp';
+      document.getElementById('ts-details').textContent = '';
+      return;
+    }
+    document.getElementById('ts-human').value = date.toISOString();
+    const details = [
+      'UTC:        ' + date.toUTCString(),
+      'Local:      ' + date.toLocaleString(),
+      'ISO 8601:   ' + date.toISOString(),
+      'Unix (s):   ' + ts,
+      'Unix (ms):  ' + (ts * 1000),
+      'Day of Week: ' + date.toLocaleDateString('en-US', { weekday: 'long' }),
+      'Relative:   ' + formatTimeDiff(Math.abs(Date.now() - ts * 1000)) + (ts * 1000 < Date.now() ? ' ago' : ' from now')
+    ];
+    document.getElementById('ts-details').textContent = details.join('\n');
+  }
+
+  function tsToUnix() {
+    const input = document.getElementById('ts-human').value.trim();
+    if (!input) return;
+    const date = new Date(input);
+    if (isNaN(date.getTime())) {
+      document.getElementById('ts-unix').value = 'Invalid date';
+      return;
+    }
+    const ts = Math.floor(date.getTime() / 1000);
+    document.getElementById('ts-unix').value = ts;
+    const details = [
+      'UTC:        ' + date.toUTCString(),
+      'Local:      ' + date.toLocaleString(),
+      'ISO 8601:   ' + date.toISOString(),
+      'Unix (s):   ' + ts,
+      'Unix (ms):  ' + (ts * 1000),
+      'Day of Week: ' + date.toLocaleDateString('en-US', { weekday: 'long' }),
+      'Relative:   ' + formatTimeDiff(Math.abs(Date.now() - ts * 1000)) + (ts * 1000 < Date.now() ? ' ago' : ' from now')
+    ];
+    document.getElementById('ts-details').textContent = details.join('\n');
+  }
+
+  /* ═══════════════════ 10. Lorem Ipsum Generator ═══════════════════ */
+  const LOREM_WORDS = [
+    'lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do',
+    'eiusmod','tempor','incididunt','ut','labore','et','dolore','magna','aliqua','enim',
+    'ad','minim','veniam','quis','nostrud','exercitation','ullamco','laboris','nisi',
+    'aliquip','ex','ea','commodo','consequat','duis','aute','irure','in','reprehenderit',
+    'voluptate','velit','esse','cillum','fugiat','nulla','pariatur','excepteur','sint',
+    'occaecat','cupidatat','non','proident','sunt','culpa','qui','officia','deserunt',
+    'mollit','anim','id','est','laborum','blandit','volutpat','maecenas','pharetra',
+    'convallis','posuere','morbi','leo','urna','molestie','at','elementum','eu',
+    'facilisis','gravida','neque','eget','vulputate','sapien','nec','sagittis','aliquam',
+    'malesuada','bibendum','arcu','vitae','auctor','augue','mauris','egestas','tortor',
+    'condimentum','lacinia','quis','vel','eros','donec','ac','odio','pellentesque',
+    'habitant','tristique','senectus','netus','fames','turpis','massa','tincidunt',
+    'dui','praesent','semper','feugiat','nibh','cras','fermentum','pretium','lectus',
+    'quam','ultrices','libero','proin','natoque','penatibus','magnis','dis','parturient',
+    'montes','nascetur','ridiculus','mus','faucibus','ornare','suspendisse','potenti',
+    'nullam','porttitor','lacus','luctus','accumsan','mattis','cursus','risus','fusce',
+    'viverra','diam','sollicitudin','purus','pulvinar','iaculis','placerat','imperdiet',
+    'ante','interdum','velit','euismod','scelerisque','varius','nunc','nam','justo',
+    'laoreet','dignissim','conubia','nostra','per','inceptos','himenaeos','integer'
+  ];
+
+  const LOREM_START = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+
+  function randomWord() {
+    return LOREM_WORDS[Math.floor(Math.random() * LOREM_WORDS.length)];
+  }
+
+  function generateSentence(minWords, maxWords) {
+    const len = minWords + Math.floor(Math.random() * (maxWords - minWords + 1));
+    const words = [];
+    for (let i = 0; i < len; i++) words.push(randomWord());
+    words[0] = words[0][0].toUpperCase() + words[0].slice(1);
+    return words.join(' ') + '.';
+  }
+
+  function generateParagraph() {
+    const sentCount = 4 + Math.floor(Math.random() * 5);
+    const sentences = [];
+    for (let i = 0; i < sentCount; i++) sentences.push(generateSentence(6, 16));
+    return sentences.join(' ');
+  }
+
+  function generateLorem() {
+    const type = document.getElementById('lorem-type').value;
+    const count = Math.min(Math.max(parseInt(document.getElementById('lorem-count').value) || 1, 1), 100);
+    const startWithLorem = document.getElementById('lorem-start-lorem').checked;
+    let result = '';
+
+    if (type === 'paragraphs') {
+      const paragraphs = [];
+      for (let i = 0; i < count; i++) {
+        if (i === 0 && startWithLorem) {
+          paragraphs.push(LOREM_START + ' ' + generateParagraph());
+        } else {
+          paragraphs.push(generateParagraph());
+        }
+      }
+      result = paragraphs.join('\n\n');
+    } else if (type === 'sentences') {
+      const sentences = [];
+      for (let i = 0; i < count; i++) {
+        if (i === 0 && startWithLorem) {
+          sentences.push(LOREM_START);
+        } else {
+          sentences.push(generateSentence(6, 16));
+        }
+      }
+      result = sentences.join(' ');
+    } else {
+      // words
+      const words = [];
+      if (startWithLorem) {
+        const lw = LOREM_START.replace('.','').split(' ');
+        for (let i = 0; i < Math.min(count, lw.length); i++) words.push(lw[i]);
+        for (let i = lw.length; i < count; i++) words.push(randomWord());
+      } else {
+        for (let i = 0; i < count; i++) words.push(randomWord());
+      }
+      result = words.join(' ');
+    }
+
+    document.getElementById('lorem-output').textContent = result;
+  }
+
+  /* ═══════════════════ URL Hash-based Tab Routing ═══════════════════ */
+  function activateTabFromHash() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash) {
+      const tab = document.querySelector('.dt-tab[data-tab="' + hash + '"]');
+      if (tab) tab.click();
+    }
+  }
+  window.addEventListener('hashchange', activateTabFromHash);
+  activateTabFromHash();
+
+  // Update hash when tab clicked
+  document.querySelectorAll('.dt-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      history.replaceState(null, '', '#' + tab.dataset.tab);
+    });
+  });
+  </script>
+</body>
+</html>

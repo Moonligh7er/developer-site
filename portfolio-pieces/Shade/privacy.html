@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Reclaim</title>
+  <meta name="description" content="Reclaim's privacy policy. We built a privacy tool, not a surveillance product. Your data stays on your device, encrypted.">
+  <meta property="og:title" content="Privacy Policy — Reclaim">
+  <meta property="og:description" content="Reclaim is privacy-first. All data stays local, encrypted with AES-256-GCM. No tracking. No ads. No telemetry.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg-card: #16162a; --border: #1e1e3a;
+      --cyan: #00f0ff; --magenta: #ff006e; --green: #00ff88;
+      --text: #e0e0f0; --text-dim: #8888aa; --text-muted: #555577;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'JetBrains Mono', monospace; line-height: 1.3; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 800px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 56px;
+    }
+    .logo {
+      font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.1rem;
+      color: var(--cyan); letter-spacing: 0.15em;
+      text-shadow: 0 0 15px rgba(0,240,255,0.3);
+    }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text-dim); font-size: 0.85rem; text-decoration: none; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* Header */
+    .page-header { margin-bottom: 40px; }
+    .page-header .icon-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .page-header .shield { font-size: 1.5rem; }
+    .page-header h1 { font-size: 1.75rem; color: var(--text); }
+    .page-header .updated { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+    .page-header .intro { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; }
+
+    /* Collapsible Sections */
+    .section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .section-toggle {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: var(--bg-card);
+      border: none; cursor: pointer; text-align: left;
+      transition: background 0.2s;
+    }
+    .section-toggle:hover { background: rgba(22,22,42,0.8); }
+    .section-toggle:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
+    .section-toggle h2 { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .section-toggle .chevron {
+      color: var(--text-muted); font-size: 1.2rem;
+      transition: transform 0.2s; display: inline-block;
+    }
+    .section-toggle.open .chevron { transform: rotate(180deg); color: var(--cyan); }
+    .section-body {
+      display: none; padding: 20px;
+      background: rgba(22,22,42,0.3);
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem; color: var(--text-dim); line-height: 1.7;
+    }
+    .section-body.open { display: block; }
+    .section-body p { margin-bottom: 12px; }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body strong { color: var(--text); }
+    .section-body ul { margin: 8px 0 12px 20px; }
+    .section-body li { margin-bottom: 6px; }
+    .section-body .code { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--cyan); }
+    .section-body .service-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 10px; }
+    .section-body .bullet { color: var(--cyan); margin-top: 2px; flex-shrink: 0; }
+    .section-body .disclaimer {
+      background: rgba(255,0,110,0.05); border: 1px solid rgba(255,0,110,0.15);
+      border-radius: 8px; padding: 12px 16px; margin: 12px 0;
+    }
+    .section-body .contact-box {
+      background: rgba(10,10,15,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    }
+    .section-body .contact-box .label { color: var(--text-muted); }
+    .section-body .contact-box .value { color: var(--cyan); }
+    .section-body .note { font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; }
+
+    /* Footer */
+    .footer-links {
+      display: flex; gap: 16px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+    .footer-links a { color: var(--cyan); font-size: 0.85rem; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-links .sep { color: var(--text-muted); }
+
+    /* Print styles */
+    @media print {
+      body { background: #fff; color: #222; font-size: 11pt; }
+      nav { display: none; }
+      :root { --bg: #fff; --bg-card: #f5f5f5; --border: #ddd; --cyan: #0066cc; --text: #222; --text-dim: #555; --text-muted: #888; }
+      .section-body { display: block !important; }
+      .section-toggle .chevron { display: none; }
+      .container { max-width: 100%; padding: 20px; }
+      a { color: #0066cc; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 32px 16px 60px; }
+      .page-header h1 { font-size: 1.4rem; }
+      .nav-links a:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="landing.html" class="logo">RECLAIM</a>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="terms.html">Terms</a>
+        <a href="/">Open App</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-header">
+      <div class="icon-row">
+        <span class="shield" role="img" aria-label="shield">&#x1F6E1;</span>
+        <h1>Privacy Policy</h1>
+      </div>
+      <p class="updated">Last updated: March 27, 2026</p>
+      <p class="intro">Reclaim is a privacy-first application. We built it to protect your data, not exploit it. This policy explains what data we handle, how it stays secure, and your rights over it.</p>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle open" aria-expanded="true" onclick="toggleSection(this)">
+        <h2>1. Data We Collect</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body open">
+        <p>Reclaim processes only the personal information <strong>you explicitly provide</strong> for the purpose of scanning data brokers and generating removal requests. This may include:</p>
+        <ul>
+          <li>Full name and any known aliases</li>
+          <li>Email addresses</li>
+          <li>Phone numbers</li>
+          <li>Physical addresses (current and former)</li>
+          <li>Date of birth</li>
+        </ul>
+        <p>We do <strong>not</strong> collect analytics, telemetry, device fingerprints, advertising identifiers, or any data beyond what you type into the app.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>2. How Data Is Stored</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>All personal data is stored <strong>locally on your device</strong>, encrypted at rest using <span class="code">AES-256-GCM</span> encryption.</p>
+        <ul>
+          <li>Your data never leaves your device in unencrypted form.</li>
+          <li>Encryption keys are derived from your device credentials and are never transmitted.</li>
+          <li>No cloud backups of your personal data are made by Reclaim.</li>
+          <li>You can export or delete all stored data at any time from the app settings.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>3. Data Sharing</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim follows a <strong>local-first architecture</strong>. Your data is never sold, shared, rented, or transmitted to any party for any purpose other than executing the specific actions you initiate (e.g., checking if your email appears in a data breach).</p>
+        <p>When you run a scan or submit a removal request, only the minimum data necessary is sent to the relevant service, and only at your explicit direction.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>4. Third-Party Services</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim interacts with the following third-party services when you initiate a scan or search:</p>
+        <div class="service-item">
+          <span class="bullet">&#x2022;</span>
+          <div><strong>Have I Been Pwned (HIBP)</strong> — checks if your email appears in known data breaches. <a href="https://haveibeenpwned.com/Privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a></div>
+        </div>
+        <div class="service-item">
+          <span class="bullet">&#x2022;</span>
+          <div><strong>Google Search API</strong> — used for people-search and broker detection. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a></div>
+        </div>
+        <div class="service-item">
+          <span class="bullet">&#x2022;</span>
+          <div><strong>Bing Search API</strong> — secondary search engine for broader broker coverage. <a href="https://privacy.microsoft.com/en-us/privacystatement" target="_blank" rel="noopener noreferrer">Privacy Policy</a></div>
+        </div>
+        <p class="note">No third-party analytics, advertising, or tracking SDKs are embedded in Reclaim.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>5. Your Rights</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>You have full control over your data within Reclaim:</p>
+        <ul>
+          <li><strong>Access</strong> — view all data Reclaim stores about you at any time from your profile.</li>
+          <li><strong>Deletion</strong> — permanently delete all stored data with a single action in settings. This is immediate and irreversible.</li>
+          <li><strong>Portability</strong> — export your data in a standard JSON format for use with other services.</li>
+          <li><strong>Correction</strong> — edit any stored personal information at any time.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>6. Data Retention</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim retains data <strong>only as long as you choose</strong>. Since all data is stored locally on your device, you are in complete control of its lifecycle.</p>
+        <ul>
+          <li>There are no mandatory retention periods imposed by Reclaim.</li>
+          <li>Deleting the app removes all associated data from your device.</li>
+          <li>You can selectively delete individual records or wipe everything at once.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>7. Children's Privacy</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim is <strong>not intended for use by anyone under the age of 13</strong>. We do not knowingly collect personal information from children under 13 in compliance with the Children's Online Privacy Protection Act (COPPA).</p>
+        <p>If you believe a child under 13 has provided personal information through Reclaim, please contact us immediately so we can take appropriate action.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>8. California Residents (CCPA)</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA):</p>
+        <ul>
+          <li><strong>Right to Know</strong> — you may request disclosure of the categories and specific pieces of personal information collected.</li>
+          <li><strong>Right to Delete</strong> — you may request deletion of your personal information (already available via app settings).</li>
+          <li><strong>Right to Opt-Out</strong> — Reclaim does not sell personal information. There is nothing to opt out of.</li>
+          <li><strong>Non-Discrimination</strong> — exercising your CCPA rights will not result in different pricing or service levels.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>9. EU Residents (GDPR)</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>If you are located in the European Economic Area (EEA), you have rights under the General Data Protection Regulation (GDPR):</p>
+        <ul>
+          <li><strong>Lawful Basis</strong> — we process your data based on your explicit consent and legitimate interest in protecting your privacy.</li>
+          <li><strong>Data Minimization</strong> — we only process data you explicitly provide and only for the stated purpose.</li>
+          <li><strong>Right to Erasure</strong> — delete all your data at any time through the app.</li>
+          <li><strong>Data Portability</strong> — export your data in machine-readable format.</li>
+          <li><strong>Right to Object</strong> — you may object to any processing at any time by simply not using the relevant feature.</li>
+        </ul>
+        <p>No data is transferred outside your device, so cross-border transfer provisions do not apply.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>10. Contact Information</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>For any privacy-related questions, concerns, or requests, please contact us at:</p>
+        <div class="contact-box">
+          <p><span class="label">Email:</span> <span class="value">privacy@reclaim.app</span></p>
+          <p><span class="label">Address:</span> <span style="color:var(--text-dim);">[Your Business Address]</span></p>
+        </div>
+        <p class="note">We will respond to all privacy inquiries within 30 days.</p>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <a href="terms.html">Terms of Service</a>
+      <span class="sep">|</span>
+      <a href="features.html">Features</a>
+      <span class="sep">|</span>
+      <a href="landing.html">Home</a>
+      <span class="sep">|</span>
+      <a href="/">Back to Dashboard</a>
+    </div>
+  </main>
+
+  <script>
+    function toggleSection(btn) {
+      var body = btn.nextElementSibling;
+      var isOpen = btn.classList.contains('open');
+      btn.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', !isOpen);
+      body.classList.toggle('open', !isOpen);
+    }
+  </script>
+</body>
+</html>

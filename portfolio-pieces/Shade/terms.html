@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Reclaim</title>
+  <meta name="description" content="Terms of Service for Reclaim, the personal data reclamation tool. Read our terms covering acceptable use, liability, and dispute resolution.">
+  <meta property="og:title" content="Terms of Service — Reclaim">
+  <meta property="og:description" content="Terms of Service for Reclaim. Understand your rights and obligations when using our privacy tool.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a0f; --bg-card: #16162a; --border: #1e1e3a;
+      --cyan: #00f0ff; --magenta: #ff006e; --green: #00ff88;
+      --text: #e0e0f0; --text-dim: #8888aa; --text-muted: #555577;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: 'JetBrains Mono', monospace; line-height: 1.3; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 800px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 56px;
+    }
+    .logo {
+      font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.1rem;
+      color: var(--cyan); letter-spacing: 0.15em;
+      text-shadow: 0 0 15px rgba(0,240,255,0.3);
+    }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text-dim); font-size: 0.85rem; text-decoration: none; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    /* Header */
+    .page-header { margin-bottom: 40px; }
+    .page-header .icon-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .page-header .icon { font-size: 1.5rem; }
+    .page-header h1 { font-size: 1.75rem; color: var(--text); }
+    .page-header .updated { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+    .page-header .intro { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; }
+
+    /* Collapsible Sections */
+    .section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .section-toggle {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: var(--bg-card);
+      border: none; cursor: pointer; text-align: left;
+      transition: background 0.2s;
+    }
+    .section-toggle:hover { background: rgba(22,22,42,0.8); }
+    .section-toggle:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
+    .section-toggle h2 { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .section-toggle .chevron {
+      color: var(--text-muted); font-size: 1.2rem;
+      transition: transform 0.2s; display: inline-block;
+    }
+    .section-toggle.open .chevron { transform: rotate(180deg); color: var(--cyan); }
+    .section-body {
+      display: none; padding: 20px;
+      background: rgba(22,22,42,0.3);
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem; color: var(--text-dim); line-height: 1.7;
+    }
+    .section-body.open { display: block; }
+    .section-body p { margin-bottom: 12px; }
+    .section-body p:last-child { margin-bottom: 0; }
+    .section-body strong { color: var(--text); }
+    .section-body ul { margin: 8px 0 12px 20px; }
+    .section-body li { margin-bottom: 6px; }
+
+    .disclaimer-box {
+      border-radius: 8px; padding: 14px 18px; margin: 12px 0;
+    }
+    .disclaimer-magenta {
+      background: rgba(255,0,110,0.05); border: 1px solid rgba(255,0,110,0.2);
+    }
+    .disclaimer-magenta .disc-title { color: var(--magenta); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+    .disclaimer-cyan {
+      background: rgba(0,240,255,0.05); border: 1px solid rgba(0,240,255,0.2);
+    }
+    .disclaimer-cyan .disc-title { color: var(--cyan); font-weight: 600; font-size: 0.85rem; margin-bottom: 6px; }
+
+    .legal-block {
+      background: rgba(10,10,15,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      color: var(--text-muted); line-height: 1.7;
+    }
+    .legal-block ul { margin: 8px 0 8px 16px; }
+
+    .contact-box {
+      background: rgba(10,10,15,0.5); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    }
+    .contact-box .label { color: var(--text-muted); }
+    .contact-box .value { color: var(--cyan); }
+
+    /* Footer */
+    .footer-links {
+      display: flex; gap: 16px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+    .footer-links a { color: var(--cyan); font-size: 0.85rem; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-links .sep { color: var(--text-muted); }
+
+    /* Print styles */
+    @media print {
+      body { background: #fff; color: #222; font-size: 11pt; }
+      nav { display: none; }
+      :root { --bg: #fff; --bg-card: #f5f5f5; --border: #ddd; --cyan: #0066cc; --magenta: #cc0044; --text: #222; --text-dim: #555; --text-muted: #888; }
+      .section-body { display: block !important; }
+      .section-toggle .chevron { display: none; }
+      .container { max-width: 100%; padding: 20px; }
+      a { color: #0066cc; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 32px 16px 60px; }
+      .page-header h1 { font-size: 1.4rem; }
+      .nav-links a:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="landing.html" class="logo">RECLAIM</a>
+      <div class="nav-links">
+        <a href="landing.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="/">Open App</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-header">
+      <div class="icon-row">
+        <span class="icon" role="img" aria-label="scroll">&#x1F4DC;</span>
+        <h1>Terms of Service</h1>
+      </div>
+      <p class="updated">Last updated: March 27, 2026</p>
+      <p class="intro">By using Reclaim, you agree to these terms. Please read them carefully before using the application.</p>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle open" aria-expanded="true" onclick="toggleSection(this)">
+        <h2>1. Acceptance of Terms</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body open">
+        <p>By accessing or using the Reclaim application ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the Service.</p>
+        <p>We may update these Terms from time to time. Continued use of the Service after changes constitutes acceptance of the revised Terms. We will notify you of material changes through the application.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>2. Description of Service</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim is a personal data privacy tool that helps you:</p>
+        <ul>
+          <li>Scan data brokers to find where your personal information is listed</li>
+          <li>Generate legal removal request letters based on applicable privacy laws</li>
+          <li>Track the status of your data removal requests</li>
+          <li>Monitor your online privacy exposure over time</li>
+        </ul>
+        <p>The Service is provided as a tool to assist you in exercising your existing privacy rights. It does not create new legal rights or guarantees.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>3. Acceptable Use</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>You agree to use Reclaim only for lawful purposes and in accordance with these Terms. You agree NOT to:</p>
+        <ul>
+          <li>Use the Service for any illegal or unauthorized purpose</li>
+          <li>Submit false or misleading personal information for the purpose of harassing others or submitting fraudulent removal requests</li>
+          <li>Attempt to reverse-engineer, decompile, or extract the source code of the application</li>
+          <li>Use automated scripts or bots to interact with the Service in a way that degrades performance</li>
+          <li>Resell, sublicense, or commercially redistribute the Service without authorization</li>
+          <li>Use the Service to impersonate another person or submit removal requests on behalf of someone else without their explicit written consent</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>4. Not Legal Advice</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <div class="disclaimer-box disclaimer-magenta">
+          <p class="disc-title">Important Disclaimer</p>
+          <p>Reclaim is a <strong>software tool</strong>, not a law firm, and does not provide legal advice. The removal request templates and information provided are for general informational purposes only and should not be construed as legal counsel.</p>
+        </div>
+        <p>While our templates reference applicable privacy laws (GDPR, CCPA, etc.), we make no representation that any specific request will be legally sufficient or successful. For legal advice regarding your specific situation, consult a qualified attorney.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>5. No Guarantee of Removal</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>Reclaim facilitates the creation and sending of data removal requests, but we <strong>cannot guarantee</strong> that any data broker or website will:</p>
+        <ul>
+          <li>Comply with your removal request</li>
+          <li>Respond within any specific timeframe</li>
+          <li>Remove all instances of your data</li>
+          <li>Refrain from re-listing your data in the future</li>
+        </ul>
+        <p>Success of removal requests depends on the data broker's policies, applicable laws in your jurisdiction, and the accuracy of the information you provide. Reclaim tracks request status to the best of its ability but cannot control third-party behavior.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>6. User Responsibility</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>You are solely responsible for:</p>
+        <ul>
+          <li><strong>Accuracy of Information</strong> — ensuring all personal information you enter is accurate and belongs to you or someone who has authorized you in writing.</li>
+          <li><strong>Compliance with Laws</strong> — ensuring your use of the Service complies with all applicable local, state, national, and international laws.</li>
+          <li><strong>Account Security</strong> — maintaining the security of your device and any authentication credentials used with Reclaim.</li>
+          <li><strong>Backup</strong> — maintaining your own backups of any data you consider important, as Reclaim stores data locally on your device.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>7. Limitation of Liability</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <div class="legal-block">
+          <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL RECLAIM, ITS DEVELOPERS, AFFILIATES, OR LICENSORS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING FROM:</p>
+          <ul>
+            <li>YOUR USE OR INABILITY TO USE THE SERVICE</li>
+            <li>ANY UNAUTHORIZED ACCESS TO OR USE OF YOUR DATA</li>
+            <li>ANY THIRD PARTY'S FAILURE TO COMPLY WITH A REMOVAL REQUEST</li>
+            <li>ANY ERRORS OR OMISSIONS IN THE SERVICE'S CONTENT</li>
+          </ul>
+          <p>OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID FOR THE SERVICE IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>8. Disclaimer of Warranties</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+        <p>We do not warrant that the Service will be uninterrupted, error-free, or that defects will be corrected. We do not warrant the accuracy or completeness of any scan results.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>9. Intellectual Property</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>The Service, including its original content, features, and functionality, is owned by Reclaim and is protected by international copyright, trademark, and other intellectual property laws.</p>
+        <p>The removal request templates generated by the Service are provided for your personal use. You retain ownership of your personal data at all times.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>10. Dispute Resolution & Arbitration</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <div class="disclaimer-box disclaimer-cyan">
+          <p class="disc-title">Arbitration Agreement</p>
+          <p>Any dispute, controversy, or claim arising out of or relating to these Terms or the Service shall be resolved through <strong>binding individual arbitration</strong>, rather than in court, except that you may assert claims in small claims court if your claims qualify.</p>
+        </div>
+        <ul>
+          <li>Arbitration shall be conducted under the rules of the American Arbitration Association (AAA).</li>
+          <li><strong>Class Action Waiver</strong> — you agree to resolve disputes only on an individual basis and waive any right to participate in a class action or class-wide arbitration.</li>
+          <li>The arbitrator's decision shall be final and binding.</li>
+          <li>You may opt out of this arbitration agreement by sending written notice within 30 days of first using the Service.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>11. Governing Law</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>These Terms shall be governed by and construed in accordance with the laws of the State of <span style="color:var(--text-muted);">[Your State]</span>, United States, without regard to its conflict of law provisions.</p>
+        <p>If arbitration is not applicable, any legal proceedings shall be brought exclusively in the state or federal courts located in <span style="color:var(--text-muted);">[Your County, Your State]</span>.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>12. Termination</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>You may stop using the Service at any time by deleting the application and all associated data from your device. Since Reclaim uses a local-first architecture, uninstalling the app effectively terminates your relationship with the Service.</p>
+        <p>We reserve the right to suspend or terminate access to the Service for violations of these Terms, with or without notice.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>13. Changes to Terms</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>We reserve the right to modify these Terms at any time. Material changes will be communicated through the application at least 30 days before they take effect. Your continued use of the Service after the effective date constitutes acceptance of the updated Terms.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <button class="section-toggle" aria-expanded="false" onclick="toggleSection(this)">
+        <h2>14. Contact</h2>
+        <span class="chevron">&#x25BC;</span>
+      </button>
+      <div class="section-body">
+        <p>For questions about these Terms, please contact us at:</p>
+        <div class="contact-box">
+          <p><span class="label">Email:</span> <span class="value">legal@reclaim.app</span></p>
+          <p><span class="label">Address:</span> <span style="color:var(--text-dim);">[Your Business Address]</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <span class="sep">|</span>
+      <a href="features.html">Features</a>
+      <span class="sep">|</span>
+      <a href="landing.html">Home</a>
+      <span class="sep">|</span>
+      <a href="/">Back to Dashboard</a>
+    </div>
+  </main>
+
+  <script>
+    function toggleSection(btn) {
+      var body = btn.nextElementSibling;
+      var isOpen = btn.classList.contains('open');
+      btn.classList.toggle('open', !isOpen);
+      btn.setAttribute('aria-expanded', !isOpen);
+      body.classList.toggle('open', !isOpen);
+    }
+  </script>
+</body>
+</html>

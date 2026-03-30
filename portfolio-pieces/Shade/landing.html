@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reclaim — Take Back Your Personal Data</title>
+  <meta name="description" content="Your data is being bought, sold, and profiled by 4,000+ companies. Reclaim scans 101+ data brokers, auto-generates legal removal requests, and makes you disappear.">
+  <meta property="og:title" content="Reclaim — Take Back Your Personal Data">
+  <meta property="og:description" content="Your data is being bought, sold, and profiled by 4,000+ companies right now. Take it all back.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://reclaim.app">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reclaim — Take Back Your Personal Data">
+  <meta name="twitter:description" content="Your data is being bought, sold, and profiled by 4,000+ companies right now. Take it all back.">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #16162a;
+      --border: #1e1e3a;
+      --cyan: #00f0ff;
+      --magenta: #ff006e;
+      --green: #00ff88;
+      --amber: #ffb800;
+      --text: #e0e0f0;
+      --text-dim: #8888aa;
+      --text-muted: #555577;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.2;
+    }
+
+    a { color: var(--cyan); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.85; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding: 0 24px;
+    }
+    nav .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    nav .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800; font-size: 1.25rem;
+      color: var(--cyan);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+      letter-spacing: 0.15em;
+    }
+    nav .nav-links { display: flex; gap: 32px; align-items: center; }
+    nav .nav-links a { color: var(--text-dim); font-size: 0.875rem; font-weight: 500; transition: color 0.2s; }
+    nav .nav-links a:hover { color: var(--text); opacity: 1; }
+    .nav-cta {
+      background: var(--cyan);
+      color: var(--bg);
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { color: var(--bg); transform: translateY(-1px); box-shadow: 0 0 20px rgba(0,240,255,0.3); opacity: 1; }
+
+    /* ── HERO ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 120px 24px 80px;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 20%, rgba(0,240,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 30% 80%, rgba(255,0,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 70% 60%, rgba(0,255,136,0.04) 0%, transparent 60%);
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+    @keyframes heroGlow {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      color: var(--cyan);
+      text-shadow: 0 0 60px rgba(0,240,255,0.3), 0 0 120px rgba(0,240,255,0.1);
+      letter-spacing: 0.2em;
+      margin-bottom: 24px;
+    }
+    .hero .subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--text);
+      max-width: 640px;
+      margin: 0 auto 12px;
+      font-weight: 300;
+    }
+    .hero .subtitle strong { color: var(--magenta); font-weight: 600; }
+    .hero .tagline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--green);
+      text-shadow: 0 0 30px rgba(0,255,136,0.3);
+      margin-bottom: 40px;
+    }
+    .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--cyan); color: var(--bg);
+      padding: 14px 32px; border-radius: 12px;
+      font-weight: 700; font-size: 1rem;
+      border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,240,255,0.4); color: var(--bg); opacity: 1; }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--text);
+      padding: 14px 32px; border-radius: 12px;
+      font-weight: 600; font-size: 1rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .btn-secondary:hover { border-color: var(--cyan); background: rgba(0,240,255,0.05); color: var(--text); opacity: 1; }
+    .hero-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: var(--text-dim);
+    }
+    .hero-counter span { color: var(--green); font-weight: 600; }
+
+    /* ── SECTIONS ───────────────────────────────────────── */
+    section { padding: 100px 0; }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--cyan);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+    .section-desc {
+      font-size: 1.125rem;
+      color: var(--text-dim);
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    /* Fade in on scroll */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── PROBLEM SECTION ────────────────────────────────── */
+    .problem { background: linear-gradient(180deg, var(--bg) 0%, #0d0815 100%); }
+    .problem-text {
+      font-size: 1.15rem;
+      color: var(--text);
+      line-height: 1.8;
+      max-width: 760px;
+      margin-bottom: 48px;
+    }
+    .problem-text strong { color: var(--magenta); }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .stat-card:hover { border-color: var(--magenta); transform: translateY(-4px); }
+    .stat-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--magenta);
+      text-shadow: 0 0 20px rgba(255,0,110,0.3);
+      margin-bottom: 8px;
+    }
+    .stat-label { font-size: 0.9rem; color: var(--text-dim); }
+
+    /* ── PILLARS ────────────────────────────────────────── */
+    .pillars { background: var(--bg); }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .pillar {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .pillar:hover { transform: translateY(-4px); }
+    .pillar:nth-child(1) { border-top: 3px solid var(--cyan); }
+    .pillar:nth-child(1):hover { border-color: var(--cyan); }
+    .pillar:nth-child(1) .pillar-number { color: var(--cyan); }
+    .pillar:nth-child(2) { border-top: 3px solid var(--magenta); }
+    .pillar:nth-child(2):hover { border-color: var(--magenta); }
+    .pillar:nth-child(2) .pillar-number { color: var(--magenta); }
+    .pillar:nth-child(3) { border-top: 3px solid var(--green); }
+    .pillar:nth-child(3):hover { border-color: var(--green); }
+    .pillar:nth-child(3) .pillar-number { color: var(--green); }
+    .pillar-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .pillar h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .pillar p { color: var(--text-dim); font-size: 1rem; line-height: 1.7; }
+
+    /* ── FEATURES SHOWCASE ──────────────────────────────── */
+    .features-section { background: linear-gradient(180deg, var(--bg) 0%, #0d0815 50%, var(--bg) 100%); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: default;
+    }
+    .feature-card:hover { border-color: rgba(0,240,255,0.4); transform: translateY(-3px); }
+    .feature-icon {
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+    .feature-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .feature-card p { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; }
+
+    /* ── HOW IT WORKS ───────────────────────────────────── */
+    .how-it-works { background: var(--bg); }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 48px;
+      max-width: 700px;
+      margin-left: auto; margin-right: auto;
+    }
+    .step {
+      display: flex; gap: 24px; align-items: flex-start;
+      padding: 28px 0;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 23px; top: 72px; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--cyan), transparent);
+    }
+    .step-num {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(0,240,255,0.1);
+      border: 2px solid var(--cyan);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700; font-size: 1.1rem;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .step h4 {
+      font-size: 1.1rem; font-weight: 600;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .step p { color: var(--text-dim); font-size: 0.95rem; }
+
+    /* ── SOCIAL PROOF ───────────────────────────────────── */
+    .social-proof { background: linear-gradient(180deg, var(--bg) 0%, #0d0815 100%); text-align: center; }
+    .proof-stats {
+      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+      margin-bottom: 64px;
+    }
+    .proof-stat .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem; font-weight: 800;
+      color: var(--green);
+      text-shadow: 0 0 20px rgba(0,255,136,0.3);
+    }
+    .proof-stat .label { font-size: 0.9rem; color: var(--text-dim); margin-top: 4px; }
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .testimonial {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      text-align: left;
+    }
+    .testimonial p { font-size: 0.95rem; color: var(--text); line-height: 1.7; font-style: italic; margin-bottom: 16px; }
+    .testimonial .author { font-size: 0.8rem; color: var(--text-dim); }
+    .testimonial .author strong { color: var(--text); font-style: normal; }
+
+    /* ── PRICING ────────────────────────────────────────── */
+    .pricing { background: var(--bg); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+      max-width: 960px;
+      margin-left: auto; margin-right: auto;
+    }
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card.featured {
+      border-color: var(--cyan);
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,240,255,0.1);
+    }
+    .price-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--cyan); color: var(--bg);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 4px 16px; border-radius: 20px;
+      letter-spacing: 0.1em;
+    }
+    .price-card .tier {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.2em;
+      color: var(--text-dim); margin-bottom: 8px;
+    }
+    .price-card .price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 2.5rem; font-weight: 800;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .price-card .price-sub { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
+    .price-card ul { list-style: none; text-align: left; margin-bottom: 28px; }
+    .price-card li {
+      font-size: 0.875rem; color: var(--text-dim);
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .price-card li::before { content: '\2713'; color: var(--green); font-weight: 700; }
+    .price-btn {
+      display: inline-block; width: 100%;
+      padding: 12px; border-radius: 10px;
+      font-weight: 600; font-size: 0.9rem;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--text);
+      cursor: pointer; transition: all 0.2s;
+      text-decoration: none; text-align: center;
+    }
+    .price-btn:hover { border-color: var(--cyan); background: rgba(0,240,255,0.05); color: var(--text); opacity: 1; }
+    .price-card.featured .price-btn {
+      background: var(--cyan); color: var(--bg); border-color: var(--cyan);
+    }
+    .price-card.featured .price-btn:hover {
+      box-shadow: 0 0 20px rgba(0,240,255,0.3);
+      color: var(--bg);
+    }
+
+    /* ── MANIFESTO ──────────────────────────────────────── */
+    .manifesto {
+      background: linear-gradient(180deg, var(--bg) 0%, #0d0815 50%, var(--bg) 100%);
+      text-align: center;
+      padding: 120px 24px;
+    }
+    .manifesto blockquote {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 760px;
+      margin: 0 auto;
+      font-style: italic;
+      position: relative;
+      padding: 0 20px;
+    }
+    .manifesto blockquote::before {
+      content: '\201C';
+      font-size: 6rem;
+      color: var(--cyan);
+      opacity: 0.2;
+      position: absolute;
+      top: -40px; left: -10px;
+      font-family: Georgia, serif;
+    }
+
+    /* ── CTA FOOTER ─────────────────────────────────────── */
+    .cta-footer {
+      text-align: center;
+      padding: 80px 24px;
+      background: var(--bg);
+    }
+    .cta-footer h2 {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+    .cta-footer .ghost-text {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--cyan);
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .footer-links a { color: var(--text-dim); font-size: 0.875rem; }
+    .footer-links a:hover { color: var(--cyan); opacity: 1; }
+    .footer-copy { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* ── MOBILE MENU ────────────────────────────────────── */
+    .mobile-toggle {
+      display: none;
+      background: none; border: none; color: var(--text); cursor: pointer;
+      font-size: 1.5rem; padding: 4px;
+    }
+    .nav-links.open {
+      display: flex !important;
+      position: absolute; top: 64px; left: 0; right: 0;
+      flex-direction: column; align-items: center;
+      background: rgba(10,10,15,0.98);
+      padding: 24px; gap: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .mobile-toggle { display: block; }
+      nav .nav-links { display: none; }
+      .proof-stats { gap: 24px; }
+      .proof-stat .num { font-size: 2rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+      .step { gap: 16px; }
+      .step-num { width: 40px; height: 40px; font-size: 0.9rem; }
+      .step:not(:last-child)::after { left: 19px; }
+      section { padding: 64px 0; }
+      .hero { padding: 100px 20px 60px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Counter animation */
+    .count-up { display: inline-block; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="landing.html" class="logo" aria-label="Reclaim home">RECLAIM</a>
+      <button class="mobile-toggle" aria-label="Toggle navigation menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="features.html">All Features</a>
+        <a href="/" class="nav-cta">Get Started Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" role="banner">
+    <div class="hero-content">
+      <h1>RECLAIM</h1>
+      <p class="subtitle">Your data is being bought, sold, and profiled<br>by <strong>4,000+ companies</strong> &mdash; right now.</p>
+      <p class="tagline">Take it all back.</p>
+      <div class="hero-buttons">
+        <a href="/" class="btn-primary" role="button">Get Started Free &rarr;</a>
+        <a href="#features" class="btn-secondary" role="button">See Features</a>
+      </div>
+      <p class="hero-counter"><span class="count-up" data-target="12847">0</span> people have already started fighting back</p>
+    </div>
+  </section>
+
+  <!-- The Problem -->
+  <section class="problem" id="problem">
+    <div class="container fade-in">
+      <p class="section-label">The Problem</p>
+      <h2 class="section-title">You are the product.</h2>
+      <p class="problem-text">
+        Right now, data brokers have your home address, phone number, email, relatives' names, and more &mdash; <strong>for sale to anyone with a credit card</strong>. Skip tracers use it to find people. Stalkers use it to locate victims. Scammers use it to steal identities. And your own government buys it to bypass warrant requirements.
+      </p>
+      <div class="stats-grid">
+        <div class="stat-card fade-in">
+          <div class="stat-number count-up" data-target="4000">0</div>
+          <div class="stat-label">Data brokers operate in the US</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-number">47</div>
+          <div class="stat-label">Average broker sites listing your data</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-number">$200B+</div>
+          <div class="stat-label">Data broker industry valuation</div>
+        </div>
+        <div class="stat-card fade-in">
+          <div class="stat-number">$170M+</div>
+          <div class="stat-label">Gov. spent on commercial surveillance data</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Three Pillars -->
+  <section class="pillars">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">What Reclaim Does</p>
+        <h2 class="section-title">Three steps to disappear.</h2>
+      </div>
+      <div class="pillars-grid">
+        <article class="pillar fade-in">
+          <p class="pillar-number">Step 01 &mdash; Discover</p>
+          <h3>Find Everything</h3>
+          <p>We scan 101+ data brokers, search the web, check breach databases, and run the same OSINT techniques a private investigator would use &mdash; against yourself. Know exactly who has what.</p>
+        </article>
+        <article class="pillar fade-in">
+          <p class="pillar-number">Step 02 &mdash; Fight</p>
+          <h3>Demand Removal</h3>
+          <p>We auto-generate legally binding removal requests under 13 privacy laws, track every response, and auto-escalate when brokers miss their legal deadlines. No more polite requests &mdash; these have teeth.</p>
+        </article>
+        <article class="pillar fade-in">
+          <p class="pillar-number">Step 03 &mdash; Disappear</p>
+          <h3>Go Ghost</h3>
+          <p>One-click Ghost Protocol. Coordinated removal across all brokers, canary token deployment, automation workflows, continuous monitoring. Become invisible to the surveillance economy.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Showcase -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">Features</p>
+        <h2 class="section-title">Built for the fight.</h2>
+        <p class="section-desc">Every tool you need to take back your privacy, in one app.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="monitor">&#x1F5A5;</span>
+          <h4>Counter-Intelligence Dashboard</h4>
+          <p>Real-time mission control showing your exposure score, active threats, and removal progress in a single view.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="ghost">&#x1F480;</span>
+          <h4>Ghost Protocol</h4>
+          <p>One-click coordinated removal across all brokers simultaneously. Deploy canary tokens. Vanish from the internet.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="robot">&#x1F916;</span>
+          <h4>AI-Powered Legal Letters</h4>
+          <p>Auto-generated removal requests citing the exact laws and deadlines applicable to each broker and your jurisdiction.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="network">&#x1F578;</span>
+          <h4>Attack Surface Visualization</h4>
+          <p>Force-directed graph showing every connection between your data points across brokers, breaches, and the web.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="canary">&#x1F426;</span>
+          <h4>Canary Token System</h4>
+          <p>Deploy honeypot data points that alert you instantly when your information is accessed or sold again.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="shield">&#x1F6E1;</span>
+          <h4>Threat Model Profiler</h4>
+          <p>Answer questions about your risk profile. Get a personalized threat assessment and prioritized action plan.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="browser">&#x1F310;</span>
+          <h4>Browser Extension</h4>
+          <p>Auto-fill opt-out forms, detect broker sites as you browse, and get real-time privacy alerts.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="money">&#x1F4B0;</span>
+          <h4>Debt Negotiation</h4>
+          <p>Challenge debts that appear on your records. Generate dispute letters and track resolution status.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="book">&#x1F4DA;</span>
+          <h4>30-Article Knowledge Base</h4>
+          <p>Deep-dive articles on privacy law, OPSEC, data brokers, and digital self-defense. Written for real people.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="training">&#x1F3AF;</span>
+          <h4>Social Engineering Training</h4>
+          <p>Interactive scenarios that teach you to recognize phishing, pretexting, and manipulation tactics.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="chat">&#x1F4AC;</span>
+          <h4>OPSEC Coach</h4>
+          <p>AI assistant that analyzes your habits and gives personalized operational security recommendations.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="tools">&#x1F527;</span>
+          <h4>Privacy Tool Recommendations</h4>
+          <p>Curated directory of VPNs, password managers, encrypted messengers, and other tools rated by real criteria.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="eye">&#x1F441;</span>
+          <h4>Identity Monitoring</h4>
+          <p>24/7 passive monitoring. Push alerts for new breaches, broker listings, and canary leaks.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="report">&#x1F4C4;</span>
+          <h4>Reports &amp; Documentation</h4>
+          <p>Generate PDF intelligence briefings, OSINT assessments, and regulatory complaint packages.</p>
+        </div>
+        <div class="feature-card fade-in">
+          <span class="feature-icon" role="img" aria-label="redact">&#x1F576;</span>
+          <h4>Document Redaction</h4>
+          <p>Safely redact IDs before sending to brokers. Never leaves your browser.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">How It Works</p>
+        <h2 class="section-title">Five steps. Full control.</h2>
+      </div>
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step-num">1</div>
+          <div>
+            <h4>Enter your info</h4>
+            <p>Your name, email, phone, and addresses. Everything is encrypted locally on your device using AES-256-GCM. It never leaves unencrypted.</p>
+          </div>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">2</div>
+          <div>
+            <h4>We scan everything</h4>
+            <p>101+ data brokers, web search results, data breach databases, and public records. We use the same techniques investigators use &mdash; against yourself.</p>
+          </div>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">3</div>
+          <div>
+            <h4>See your attack surface</h4>
+            <p>A force-directed graph visualizes every broker, breach, and data point connected to your identity. See exactly how exposed you are.</p>
+          </div>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">4</div>
+          <div>
+            <h4>One click: Go Ghost</h4>
+            <p>Ghost Protocol fires off legal removal requests to every broker simultaneously. AI-generated letters cite the exact laws they must obey.</p>
+          </div>
+        </div>
+        <div class="step fade-in">
+          <div class="step-num">5</div>
+          <div>
+            <h4>Monitor and defend</h4>
+            <p>Canary tokens detect re-listing. Automated workflows escalate non-compliance. Continuous scanning catches new exposures. You stay invisible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section class="social-proof">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label">Traction</p>
+        <h2 class="section-title">The movement is growing.</h2>
+      </div>
+      <div class="proof-stats fade-in">
+        <div class="proof-stat">
+          <div class="num count-up" data-target="12847">0</div>
+          <div class="label">Users fighting back</div>
+        </div>
+        <div class="proof-stat">
+          <div class="num count-up" data-target="284932">0</div>
+          <div class="label">Removal requests sent</div>
+        </div>
+        <div class="proof-stat">
+          <div class="num count-up" data-target="198234">0</div>
+          <div class="label">Confirmed deletions</div>
+        </div>
+      </div>
+      <div class="testimonials fade-in">
+        <div class="testimonial">
+          <p>"I found my home address listed on 39 different sites. Reclaim sent removal requests to all of them in under a minute. Within two weeks, 34 had confirmed deletion."</p>
+          <div class="author"><strong>Sarah M.</strong> &mdash; Journalist</div>
+        </div>
+        <div class="testimonial">
+          <p>"After a stalking incident, I needed to disappear fast. Ghost Protocol removed my info from every major broker in days. I finally feel safe again."</p>
+          <div class="author"><strong>Anonymous</strong> &mdash; Domestic violence survivor</div>
+        </div>
+        <div class="testimonial">
+          <p>"As a security researcher, I'm impressed by the OSINT capabilities. The attack surface visualization alone is worth it. This is a serious tool."</p>
+          <div class="author"><strong>David K.</strong> &mdash; Security Engineer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="fade-in" style="text-align:center;">
+        <p class="section-label">Pricing</p>
+        <h2 class="section-title">Privacy shouldn't be a luxury.</h2>
+        <p class="section-desc" style="margin: 0 auto;">Start free. Upgrade when you're ready to go all-in.</p>
+      </div>
+      <div class="pricing-grid fade-in">
+        <div class="price-card">
+          <div class="tier">Free</div>
+          <div class="price">$0</div>
+          <div class="price-sub">Forever free</div>
+          <ul>
+            <li>Scan 20 data brokers</li>
+            <li>5 removal requests per month</li>
+            <li>Basic exposure report</li>
+            <li>Knowledge base access</li>
+            <li>Community support</li>
+          </ul>
+          <a href="/" class="price-btn">Get Started</a>
+        </div>
+        <div class="price-card featured">
+          <div class="tier">Pro</div>
+          <div class="price">$9.99</div>
+          <div class="price-sub">per month</div>
+          <ul>
+            <li>Scan 101+ data brokers</li>
+            <li>Unlimited removal requests</li>
+            <li>Ghost Protocol</li>
+            <li>AI-powered legal letters</li>
+            <li>Canary token system</li>
+            <li>Attack surface visualization</li>
+            <li>OSINT intelligence tools</li>
+            <li>Priority support</li>
+          </ul>
+          <a href="/" class="price-btn">Start Free Trial</a>
+        </div>
+        <div class="price-card">
+          <div class="tier">Family</div>
+          <div class="price">$19.99</div>
+          <div class="price-sub">per month &middot; up to 5 members</div>
+          <ul>
+            <li>Everything in Pro</li>
+            <li>5 protected family members</li>
+            <li>Family threat dashboard</li>
+            <li>Shared workflow automation</li>
+            <li>Dedicated support</li>
+          </ul>
+          <a href="/" class="price-btn">Start Free Trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto -->
+  <section class="manifesto">
+    <div class="container fade-in">
+      <p class="section-label">The Manifesto</p>
+      <blockquote>
+        Privacy is not a luxury. It's not a feature you should have to pay for. It's a fundamental human right that's been systematically stripped from you by an industry built on exploitation. Reclaim exists because we believe you have the right to disappear &mdash; to choose who knows your name, where you live, and what you've done. The surveillance economy has had its turn. Now it's yours.
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- CTA Footer -->
+  <section class="cta-footer">
+    <div class="container fade-in">
+      <h2>Ready to become <span class="ghost-text">a ghost</span>?</h2>
+      <p style="color: var(--text-dim); margin-bottom: 32px; font-size: 1rem;">No credit card required. Start reclaiming your privacy in under 2 minutes.</p>
+      <a href="/" class="btn-primary" role="button" style="font-size: 1.1rem; padding: 16px 40px;">Start Free &mdash; No Credit Card Required &rarr;</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="features.html">Features</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/">Dashboard</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Reclaim. All rights reserved. Your data belongs to you.</p>
+  </footer>
+
+  <script>
+    // Intersection Observer for fade-in animations
+    (function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.fade-in').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      // Count-up animation
+      var countObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            var target = parseInt(el.getAttribute('data-target'), 10);
+            if (!target || el.dataset.counted) return;
+            el.dataset.counted = 'true';
+            var duration = 2000;
+            var start = performance.now();
+            function update(now) {
+              var progress = Math.min((now - start) / duration, 1);
+              var eased = 1 - Math.pow(1 - progress, 3);
+              var current = Math.floor(eased * target);
+              el.textContent = current.toLocaleString() + (target >= 4000 && target <= 4000 ? '+' : '');
+              if (progress < 1) {
+                requestAnimationFrame(update);
+              } else {
+                el.textContent = target.toLocaleString() + '+';
+              }
+            }
+            requestAnimationFrame(update);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.count-up').forEach(function(el) {
+        countObserver.observe(el);
+      });
+    })();
+  </script>
+</body>
+</html>

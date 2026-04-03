@@ -43,7 +43,7 @@
   <link rel="preload" href="../js/main.js" as="script">
 
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
@@ -59,7 +59,7 @@
     /* ---- Tool-specific styles ---- */
     .tool-hero {
       text-align: center;
-      padding: 8rem 0 2rem;
+      padding: 1.5rem 0 0.75rem;
     }
     .tool-hero .heading-xl {
       background: linear-gradient(135deg, var(--rose, #c44a8a), var(--violet, #8b5cf6));
@@ -78,6 +78,89 @@
       margin: 0 auto;
       padding: 0 2rem 4rem;
     }
+
+    /* Amber AI notice */
+    .ai-notice {
+      max-width: 900px;
+      margin: 0 auto 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(212,160,32,0.06);
+      border: 1px solid rgba(212,160,32,0.25);
+      position: relative;
+    }
+    .ai-notice::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--amber);
+    }
+    .ai-notice__header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .ai-notice__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px rgba(212,160,32,0.6);
+      animation: amberpulse 2s ease-in-out infinite;
+    }
+    @keyframes amberpulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .ai-notice__title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .ai-notice__body {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+    .ai-notice__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.3rem 1rem;
+    }
+    .ai-notice__list li {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      padding-left: 1rem;
+      position: relative;
+    }
+    .ai-notice__list li::before {
+      content: '\2014';
+      position: absolute;
+      left: 0;
+      color: rgba(212,160,32,0.5);
+    }
+    .ai-notice details { cursor: pointer; }
+    .ai-notice summary {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      list-style: none;
+    }
+    .ai-notice summary::-webkit-details-marker { display: none; }
+    .ai-notice summary:hover { opacity: 1; }
+    .ai-notice details[open] summary { margin-bottom: 0.6rem; }
 
     /* Input area */
     .input-panel {
@@ -176,12 +259,8 @@
     }
 
     /* Results */
-    .results-panel {
-      display: none;
-    }
-    .results-panel.active {
-      display: block;
-    }
+    .results-panel { display: none; }
+    .results-panel.active { display: block; }
 
     /* Score gauge */
     .score-section {
@@ -213,14 +292,8 @@
       height: 180px;
       margin: 0 auto 1rem;
     }
-    .gauge-wrap svg {
-      transform: rotate(-90deg);
-    }
-    .gauge-bg {
-      fill: none;
-      stroke: var(--border);
-      stroke-width: 10;
-    }
+    .gauge-wrap svg { transform: rotate(-90deg); }
+    .gauge-bg { fill: none; stroke: var(--border); stroke-width: 10; }
     .gauge-fill {
       fill: none;
       stroke-width: 10;
@@ -229,8 +302,7 @@
     }
     .gauge-score {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       font-family: var(--font-display);
       font-size: 2.5rem;
@@ -287,6 +359,9 @@
     .cat-card--certainty::before { background: var(--teal); }
     .cat-card--emotional::before { background: var(--rose); }
     .cat-card--fallacy::before { background: var(--violet); }
+    .cat-card--propaganda::before { background: #e63946; }
+    .cat-card--urgency::before { background: #fb8500; }
+    .cat-card--control::before { background: #4cc9f0; }
     .cat-card__header {
       display: flex;
       justify-content: space-between;
@@ -309,20 +384,23 @@
     .cat-card--certainty .cat-card__count { color: var(--teal); }
     .cat-card--emotional .cat-card__count { color: var(--rose); }
     .cat-card--fallacy .cat-card__count { color: var(--violet); }
+    .cat-card--propaganda .cat-card__count { color: #e63946; }
+    .cat-card--urgency .cat-card__count { color: #fb8500; }
+    .cat-card--control .cat-card__count { color: #4cc9f0; }
     .cat-bar {
       height: 4px;
       background: var(--border);
       margin-bottom: 0.75rem;
       overflow: hidden;
     }
-    .cat-bar__fill {
-      height: 100%;
-      transition: width 0.8s ease;
-    }
+    .cat-bar__fill { height: 100%; transition: width 0.8s ease; }
     .cat-card--hedge .cat-bar__fill { background: var(--amber); }
     .cat-card--certainty .cat-bar__fill { background: var(--teal); }
     .cat-card--emotional .cat-bar__fill { background: var(--rose); }
     .cat-card--fallacy .cat-bar__fill { background: var(--violet); }
+    .cat-card--propaganda .cat-bar__fill { background: #e63946; }
+    .cat-card--urgency .cat-bar__fill { background: #fb8500; }
+    .cat-card--control .cat-bar__fill { background: #4cc9f0; }
     .cat-card__words {
       display: flex;
       flex-wrap: wrap;
@@ -338,6 +416,9 @@
     .cat-card--certainty .cat-tag { border-color: var(--teal-dim); color: var(--teal); background: var(--teal-glow); }
     .cat-card--emotional .cat-tag { border-color: rgba(196,74,138,0.4); color: var(--rose); background: rgba(196,74,138,0.08); }
     .cat-card--fallacy .cat-tag { border-color: var(--violet-dim); color: var(--violet); background: var(--violet-glow); }
+    .cat-card--propaganda .cat-tag { border-color: rgba(230,57,70,0.4); color: #e63946; background: rgba(230,57,70,0.08); }
+    .cat-card--urgency .cat-tag { border-color: rgba(251,133,0,0.4); color: #fb8500; background: rgba(251,133,0,0.08); }
+    .cat-card--control .cat-tag { border-color: rgba(76,201,240,0.4); color: #4cc9f0; background: rgba(76,201,240,0.08); }
 
     /* Highlighted text */
     .highlight-section {
@@ -370,30 +451,13 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-    .hl-hedge {
-      background: rgba(212,160,32,0.2);
-      border-bottom: 2px solid var(--amber);
-      padding: 0.1rem 0.2rem;
-      cursor: help;
-    }
-    .hl-certainty {
-      background: rgba(0,212,170,0.15);
-      border-bottom: 2px solid var(--teal);
-      padding: 0.1rem 0.2rem;
-      cursor: help;
-    }
-    .hl-emotional {
-      background: rgba(196,74,138,0.2);
-      border-bottom: 2px solid var(--rose);
-      padding: 0.1rem 0.2rem;
-      cursor: help;
-    }
-    .hl-fallacy {
-      background: rgba(139,92,246,0.2);
-      border-bottom: 2px solid var(--violet);
-      padding: 0.1rem 0.2rem;
-      cursor: help;
-    }
+    .hl-hedge { background: rgba(212,160,32,0.2); border-bottom: 2px solid var(--amber); padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-certainty { background: rgba(0,212,170,0.15); border-bottom: 2px solid var(--teal); padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-emotional { background: rgba(196,74,138,0.2); border-bottom: 2px solid var(--rose); padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-fallacy { background: rgba(139,92,246,0.2); border-bottom: 2px solid var(--violet); padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-propaganda { background: rgba(230,57,70,0.2); border-bottom: 2px solid #e63946; padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-urgency { background: rgba(251,133,0,0.2); border-bottom: 2px solid #fb8500; padding: 0.1rem 0.2rem; cursor: help; }
+    .hl-control { background: rgba(76,201,240,0.2); border-bottom: 2px solid #4cc9f0; padding: 0.1rem 0.2rem; cursor: help; }
     .highlight-legend {
       display: flex;
       flex-wrap: wrap;
@@ -412,15 +476,14 @@
       text-transform: uppercase;
       color: var(--text-secondary);
     }
-    .legend-swatch {
-      width: 12px;
-      height: 12px;
-      border: 1px solid;
-    }
+    .legend-swatch { width: 12px; height: 12px; border: 1px solid; }
     .legend-swatch--hedge { background: rgba(212,160,32,0.3); border-color: var(--amber); }
     .legend-swatch--certainty { background: rgba(0,212,170,0.2); border-color: var(--teal); }
     .legend-swatch--emotional { background: rgba(196,74,138,0.3); border-color: var(--rose); }
     .legend-swatch--fallacy { background: rgba(139,92,246,0.3); border-color: var(--violet); }
+    .legend-swatch--propaganda { background: rgba(230,57,70,0.3); border-color: #e63946; }
+    .legend-swatch--urgency { background: rgba(251,133,0,0.3); border-color: #fb8500; }
+    .legend-swatch--control { background: rgba(76,201,240,0.3); border-color: #4cc9f0; }
 
     /* Stylometry */
     .stylo-section {
@@ -479,19 +542,21 @@
 
     /* Ad container */
     .ad-container {
-      margin: 3rem auto;
+      margin: 1rem auto;
       text-align: center;
       max-width: 728px;
     }
     .ad-container ins { display: block; }
 
     @media (max-width: 768px) {
-      .tool-hero { padding: 5rem 0 2rem; }
+      .tool-hero { padding: 1rem 0 0.5rem; }
       .tool-container { padding: 0 1rem 3rem; }
       .category-grid { grid-template-columns: 1fr; }
       .stylo-grid { grid-template-columns: repeat(2, 1fr); }
       .btn-row { flex-wrap: wrap; }
       .char-count { margin-left: 0; width: 100%; text-align: right; }
+      .ai-notice { margin-left: 1rem; margin-right: 1rem; }
+      .ai-notice__list { grid-template-columns: 1fr; }
     }
     @media (max-width: 480px) {
       .stylo-grid { grid-template-columns: 1fr 1fr; }
@@ -533,11 +598,43 @@
     <div class="ad-container">
       <ins class="adsbygoogle"
            style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-client="ca-pub-1548397763792213"
            data-ad-slot="XXXXXXXXXX"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- AI Notice -->
+    <div class="ai-notice">
+      <div class="ai-notice__header">
+        <span class="ai-notice__dot"></span>
+        <span class="ai-notice__title">Demo Mode &mdash; AI Unavailable</span>
+      </div>
+      <p class="ai-notice__body">This demo uses pattern matching only. It detects linguistic surface patterns &mdash; specific words, phrases, and sentence structures associated with manipulation. For full contextual analysis, see <strong>Filament</strong>.</p>
+      <details>
+        <summary>Techniques requiring AI to detect &darr;</summary>
+        <ul class="ai-notice__list">
+          <li>Gaslighting (requires conversational context)</li>
+          <li>Love Bombing (intensity patterns over time)</li>
+          <li>Anchoring &amp; Framing (requires omission analysis)</li>
+          <li>Decoy Effect (requires option comparison)</li>
+          <li>Cognitive Dissonance Exploitation</li>
+          <li>DARVO (denial/attack/reversal sequences)</li>
+          <li>Trauma Bonding &amp; Intermittent Reinforcement</li>
+          <li>Triangulation &amp; Flying Monkeys</li>
+          <li>Overton Window Shifting</li>
+          <li>Manufactured Consent &amp; Agenda Setting</li>
+          <li>Astroturfing (requires source analysis)</li>
+          <li>Regulatory Capture &amp; Policy Laundering</li>
+          <li>Choice Architecture &amp; Nudge Theory</li>
+          <li>Mere Exposure / Illusory Truth (requires repetition tracking)</li>
+          <li>Sunk Cost Exploitation (requires context)</li>
+          <li>Pygmalion &amp; Spotlight Effect Exploitation</li>
+          <li>Network Effects &amp; Social Exchange Manipulation</li>
+          <li>Plausible Deniability Architecture</li>
+        </ul>
+      </details>
     </div>
 
     <div class="tool-container">
@@ -575,7 +672,7 @@
         <div class="category-grid" id="category-grid">
           <div class="cat-card cat-card--hedge">
             <div class="cat-card__header">
-              <span class="cat-card__title">Hedge Words</span>
+              <span class="cat-card__title">Hedge / Weasel Words</span>
               <span class="cat-card__count" id="hedge-count">0 found</span>
             </div>
             <div class="cat-bar"><div class="cat-bar__fill" id="hedge-bar" style="width:0%"></div></div>
@@ -591,7 +688,7 @@
           </div>
           <div class="cat-card cat-card--emotional">
             <div class="cat-card__header">
-              <span class="cat-card__title">Emotional Manipulation</span>
+              <span class="cat-card__title">Loaded / Emotional Language</span>
               <span class="cat-card__count" id="emotional-count">0 found</span>
             </div>
             <div class="cat-bar"><div class="cat-bar__fill" id="emotional-bar" style="width:0%"></div></div>
@@ -599,11 +696,35 @@
           </div>
           <div class="cat-card cat-card--fallacy">
             <div class="cat-card__header">
-              <span class="cat-card__title">Logical Fallacy Indicators</span>
+              <span class="cat-card__title">Logical Fallacies</span>
               <span class="cat-card__count" id="fallacy-count">0 found</span>
             </div>
             <div class="cat-bar"><div class="cat-bar__fill" id="fallacy-bar" style="width:0%"></div></div>
             <div class="cat-card__words" id="fallacy-words"></div>
+          </div>
+          <div class="cat-card cat-card--propaganda">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Propaganda / Rhetoric</span>
+              <span class="cat-card__count" id="propaganda-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="propaganda-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="propaganda-words"></div>
+          </div>
+          <div class="cat-card cat-card--urgency">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Urgency / Pressure / FOMO</span>
+              <span class="cat-card__count" id="urgency-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="urgency-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="urgency-words"></div>
+          </div>
+          <div class="cat-card cat-card--control">
+            <div class="cat-card__header">
+              <span class="cat-card__title">Control / Coercion Phrases</span>
+              <span class="cat-card__count" id="control-count">0 found</span>
+            </div>
+            <div class="cat-bar"><div class="cat-bar__fill" id="control-bar" style="width:0%"></div></div>
+            <div class="cat-card__words" id="control-words"></div>
           </div>
         </div>
 
@@ -616,6 +737,9 @@
             <span class="legend-item"><span class="legend-swatch legend-swatch--certainty"></span>Certainty</span>
             <span class="legend-item"><span class="legend-swatch legend-swatch--emotional"></span>Emotional</span>
             <span class="legend-item"><span class="legend-swatch legend-swatch--fallacy"></span>Fallacy</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--propaganda"></span>Propaganda</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--urgency"></span>Urgency</span>
+            <span class="legend-item"><span class="legend-swatch legend-swatch--control"></span>Control</span>
           </div>
         </div>
 
@@ -684,7 +808,7 @@
     <div class="ad-container">
       <ins class="adsbygoogle"
            style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-client="ca-pub-1548397763792213"
            data-ad-slot="XXXXXXXXXX"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
@@ -707,24 +831,169 @@
     'use strict';
 
     // ========== WORD LISTS ==========
+
+    // 1. Hedge / Weasel Words — qualifiers, softeners, plausible deniability
     const HEDGE_WORDS = [
       'maybe', 'perhaps', 'possibly', 'might', 'seems', 'appears', 'could',
       'somewhat', 'arguably', 'potentially', 'presumably', 'likely', 'unlikely',
-      'rarely', 'occasionally', 'sometimes', 'often', 'usually', 'generally', 'typically'
+      'rarely', 'occasionally', 'sometimes', 'often', 'usually', 'generally', 'typically',
+      'probably', 'roughly', 'approximately', 'sort of', 'kind of', 'more or less',
+      'in a way', 'to some extent', 'not necessarily', 'may or may not',
+      'allegedly', 'reportedly', 'purportedly', 'ostensibly',
+      'conceivably', 'hypothetically', 'theoretically', 'in theory', 'on the surface',
+      'at first glance', 'tend to', 'for the most part', 'by and large',
+      // Weasel words (Filament: Weasel Words)
+      'some say', 'many people say', 'some people think', 'it has been said',
+      'it is believed', 'research suggests', 'studies suggest', 'sources say',
+      'critics say', 'some argue', 'many believe', 'it could be argued',
+      'there are those who', 'questions have been raised', 'concerns have been raised',
+      'mistakes were made', 'up to', 'as much as', 'as many as',
+      // Euphemisms (Filament: Euphemism)
+      'collateral damage', 'enhanced interrogation', 'downsizing', 'right-sizing',
+      'restructuring', 'letting go', 'passed away', 'neutralize', 'pacification',
+      'regime change', 'kinetic action', 'ethnic cleansing', 'alternative facts',
+      'economically disadvantaged', 'pre-owned', 'negative growth', 'friendly fire',
+      'strategic withdrawal', 'correctional facility'
     ];
 
+    // 2. Certainty / Absolutism — all-or-nothing, sweeping claims
     const CERTAINTY_WORDS = [
       'definitely', 'absolutely', 'always', 'never', 'proven', 'guaranteed',
       'undeniable', 'without doubt', 'clearly', 'obviously', 'certainly',
-      'unquestionably', 'surely', 'inevitably', 'indisputably', 'conclusively', 'irrefutably'
+      'unquestionably', 'surely', 'inevitably', 'indisputably', 'conclusively',
+      'irrefutably', 'every single', 'all of them', 'none of them', 'no one',
+      'everyone', 'without exception', 'there is no', 'not a single',
+      'every time', 'each and every', 'nothing', 'everything', 'entirely',
+      'completely', 'totally', 'utterly', 'wholly', 'perfectly', 'fundamentally',
+      'inherently', 'categorically', 'beyond question', 'no doubt',
+      'plain and simple', 'end of story', 'fact is', 'the truth is',
+      'the fact remains', 'make no mistake', 'beyond dispute', 'without a doubt',
+      'hands down', 'no exceptions', 'there is zero', 'one hundred percent',
+      'incontrovertible', 'unmistakable', 'unequivocal', 'beyond any doubt',
+      // Thought-terminating cliches (Filament: Thought-Terminating Cliche)
+      'it is what it is', 'agree to disagree', 'everything happens for a reason',
+      'boys will be boys', "that's just how it is", "that's just the way it is",
+      "you can't fight city hall", "don't rock the boat", 'the science is settled',
+      'end of discussion', 'case closed', 'no debate', 'enough said',
+      "it's common sense", "everybody knows that", 'need I say more',
+      'it goes without saying', "that's just human nature", 'rules are rules',
+      "if it ain't broke", 'at the end of the day'
     ];
 
+    // 3. Loaded / Emotional Language — emotionally charged words designed to provoke
     const MANIPULATION_WORDS = [
-      'shocking', 'urgent', 'breaking', 'censored', 'banned', 'secret',
-      'exposed', 'devastating', 'terrifying', 'horrifying', 'outrageous',
+      'shocking', 'exposed', 'devastating', 'terrifying', 'horrifying', 'outrageous',
       'unbelievable', 'mind-blowing', 'game-changing', 'life-changing',
-      'revolutionary', 'miracle', 'conspiracy', 'cover-up', 'suppressed',
-      'silenced', "they don't want you to know", 'wake up', 'open your eyes'
+      'revolutionary', 'miracle',
+      // Loaded language (Filament: Loaded Language)
+      'evil', 'wicked', 'vile', 'disgusting', 'repulsive', 'sickening',
+      'stupid', 'idiotic', 'moronic', 'brainless', 'clueless', 'ignorant',
+      'pathetic', 'worthless', 'useless', 'incompetent', 'lazy', 'cowardly',
+      'dangerous', 'deadly', 'toxic', 'corrupt', 'crooked',
+      'horrible', 'terrible', 'awful', 'dreadful', 'atrocious', 'abysmal',
+      'insane', 'crazy', 'deranged', 'delusional', 'lunatic', 'unhinged',
+      'ridiculous', 'absurd', 'laughable', 'preposterous', 'ludicrous',
+      'shameful', 'disgraceful', 'deplorable', 'despicable', 'contemptible',
+      'grotesque', 'monstrous', 'sinister', 'demonic', 'diabolical',
+      'catastrophic', 'apocalyptic', 'nightmarish', 'hellish', 'ruinous',
+      'treacherous', 'treasonous', 'traitorous', 'subversive', 'parasitic',
+      'barbaric', 'savage', 'brutal', 'ruthless', 'merciless', 'heartless',
+      'radical', 'extremist', 'fanatic', 'militant', 'tyrannical',
+      'infuriating', 'enraging', 'gut-wrenching',
+      // Dehumanizing language
+      'vermin', 'cockroaches', 'thugs', 'monsters',
+      'predators', 'parasites', 'scum', 'filth',
+      'infestation', 'plague', 'cancer',
+      // Manufactured outrage (Filament: Manufactured Outrage)
+      'slap in the face', 'war on', 'attack on', 'assault on',
+      'stab in the back', 'betrayal', 'betrayed'
+    ];
+
+    // 5. Propaganda / Rhetoric — dog whistles, us-vs-them, thought control
+    const PROPAGANDA_WORDS = [
+      // Conspiracy / propaganda (Filament: Firehose of Falsehood, The Big Lie, Dog Whistling)
+      'wake up', 'open your eyes', 'sheeple', 'sheep',
+      'mainstream media', 'fake news', 'lamestream', 'deep state',
+      'new world order', 'globalist', 'globalists', 'elites', 'the elites',
+      'puppet', 'puppets', 'puppet master', 'agenda', 'the narrative',
+      'brainwashed', 'indoctrinated', 'red pill', 'blue pill',
+      'controlled opposition', 'false flag', 'plandemic', 'big pharma',
+      'truth movement', 'follow the money', 'do your own research',
+      'censored', 'banned', 'secret', 'cover-up', 'suppressed', 'silenced',
+      "they don't want you to know", 'what they are not telling you',
+      'the media won\'t report', 'exposed', 'conspiracy',
+      // Dog whistles (Filament: Dog Whistling)
+      'welfare queen', 'states rights', 'traditional values', 'family values',
+      'law and order', 'silent majority', 'real Americans', 'real America',
+      'coastal elites', 'hard-working Americans', 'urban', 'inner city',
+      'thugs', 'illegals', 'invasion',
+      // Us-vs-them framing (Filament: In-Group/Out-Group, Divide and Conquer, Wedge Issues)
+      'those people', 'these people', 'people like them', 'our way of life',
+      'true patriots', 'the enemy', 'the other side', 'us versus them',
+      'the real enemy', 'enemies of the people', 'enemy of the state',
+      'anti-American', 'un-American', 'traitor', 'traitors',
+      // Fear mongering (Filament: Fear Mongering, Rally Around the Flag)
+      'under siege', 'under attack', 'ticking time bomb',
+      'existential threat', 'national security threat'
+    ];
+
+    // 6. Urgency / Pressure / FOMO — time pressure, scarcity, dark patterns
+    const URGENCY_WORDS = [
+      // Scarcity & urgency (Filament: Scarcity, FOMO, Loss Aversion)
+      'act now', 'limited time', 'last chance', 'once in a lifetime',
+      'now or never', 'while supplies last', 'exclusive offer', 'time is running out',
+      'hurry', 'immediately', 'before it is too late', "before it's too late",
+      "don't wait", 'expires', 'deadline', 'selling fast', 'going fast',
+      'almost gone', 'final warning', 'your last opportunity', 'closing soon',
+      'only a few left', 'limited availability', 'while you still can',
+      'running out of time', 'point of no return', 'urgent', 'breaking',
+      'emergency', 'crisis',
+      // FOMO (Filament: Fear of Missing Out)
+      "don't miss out", "you're missing out", "don't be left behind",
+      'join now', 'trending', 'viral', 'everyone is',
+      "don't miss", 'before everyone else', 'get in early',
+      // Social proof pressure (Filament: Social Proof, Bandwagon Effect)
+      'thousands have already', 'join thousands', 'most popular',
+      'best-selling', 'as seen on', 'recommended by', 'trusted by',
+      'millions of people', 'growing number', 'movement',
+      // Marketing dark patterns (Filament: Choice Architecture, Default Bias)
+      'risk-free', 'no obligation', 'money-back guarantee', 'nothing to lose',
+      'what have you got to lose', 'try it free', 'cancel anytime',
+      'limited edition', 'members only', 'invitation only', 'apply now',
+      'spots are filling up', 'register before', 'early bird'
+    ];
+
+    // 7. Control / Coercion Phrases — interpersonal manipulation
+    const CONTROL_WORDS = [
+      // Gaslighting phrases (Filament: Gaslighting)
+      "you're imagining things", 'that never happened', "you're being paranoid",
+      "you're overreacting", "you're too sensitive", "you're crazy",
+      'I never said that', "you're making things up", 'stop being dramatic',
+      'it was just a joke', "you can't take a joke", 'calm down',
+      "you're blowing this out of proportion", 'no one else has a problem with this',
+      // Guilt tripping (Filament: Guilt Tripping, Emotional Blackmail)
+      'after everything I have done', "after everything I've done",
+      'if you really loved me', "I'm not good enough",
+      'fine do whatever you want', 'I sacrifice everything',
+      'no one cares about me', 'I guess I will just',
+      'you owe me', 'how could you do this to me', 'look what you made me do',
+      // DARVO phrases (Filament: DARVO, Playing the Victim)
+      "I'm the real victim", "you're the one who", 'you started it',
+      'this is your fault', 'you drove me to this', 'if you hadn\'t',
+      'you made me do this', "I wouldn't have to if you",
+      // Passive aggression (Filament: Passive Aggression)
+      "I'm fine", 'whatever you say', 'no it is fine', 'sure go ahead',
+      "I don't care", 'do what you want', 'I just think it is funny how',
+      'I just find it interesting that', 'must be nice',
+      // Stonewalling & silent treatment phrases (Filament: Stonewalling, Silent Treatment)
+      "I'm done talking", 'there is nothing to discuss',
+      "I don't want to talk about it", 'this conversation is over',
+      // Boundary violation (Filament: Boundary Violation Testing)
+      'I was just trying to help', "I'm only saying this because I care",
+      "don't you trust me", 'if you have nothing to hide',
+      // Future faking (Filament: Future Faking)
+      'I promise I will change', 'things will be different', 'just give me one more chance',
+      'next time I will', 'I swear it will never happen again'
     ];
 
     const FUNCTION_WORDS = [
@@ -738,24 +1007,54 @@
       'she', 'her', 'it', 'its', 'they', 'them', 'their'
     ];
 
-    // Logical fallacy patterns (regex + label)
+    // Logical fallacy patterns (regex + label) — expanded from Filament encyclopedia
     const FALLACY_PATTERNS = [
-      // Ad hominem
+      // Ad hominem (Filament: Ad Hominem)
       { pattern: /\b(you('re| are) (just|only|nothing|merely)|what (do|would) you know|typical .{1,20}(supporter|believer|fan)|people like you|of course (he|she|they) would say|consider the source)\b/gi, label: 'Ad Hominem' },
-      // Straw man
+      // Straw man (Filament: Straw Man)
       { pattern: /\b(so (you('re| are) saying|what you('re| are) really saying)|in other words.{0,20}(you think|you believe|you want)|that('s| is) like saying|nobody (is saying|said|believes))\b/gi, label: 'Straw Man' },
-      // Appeal to authority
+      // Appeal to authority (Filament: Authority)
       { pattern: /\b(experts (say|agree|confirm|warn)|scientists (say|have shown|confirm|agree)|studies (show|prove|confirm|have shown)|according to (experts|scientists|researchers|doctors|studies)|research (proves|shows|confirms))\b/gi, label: 'Appeal to Authority' },
-      // False dichotomy
+      // False dichotomy (Filament: False Dichotomy)
       { pattern: /\b(you('re| are) either.{1,40}or|either you.{1,40}or|there (are|is) (only )?two (choices|options|ways)|you (can|must) (only|either)|it('s| is) (either|simple).{1,30}or|if you('re| are) not.{1,30}you('re| are))\b/gi, label: 'False Dichotomy' },
-      // Slippery slope
+      // Slippery slope (Filament: Slippery Slope)
       { pattern: /\b(next thing you know|before (you know it|long)|where (does|will) it (end|stop)|what('s| is) next|this (will|is going to) lead to|open(ing|s)? the (door|floodgates)|slippery slope|if we allow.{1,40}(then|next|soon))\b/gi, label: 'Slippery Slope' },
-      // Bandwagon
-      { pattern: /\b(everyone (knows|agrees|is|says|thinks|believes)|most people (think|believe|agree|know)|nobody (believes|thinks|disagrees)|the majority|millions of people|everybody (knows|says|thinks)|join the movement|don('t| not) be left behind|growing number)\b/gi, label: 'Bandwagon' },
-      // Appeal to emotion
+      // Bandwagon (Filament: Bandwagon Effect)
+      { pattern: /\b(everyone (knows|agrees|is|says|thinks|believes)|most people (think|believe|agree|know)|nobody (believes|thinks|disagrees)|the majority|everybody (knows|says|thinks)|join the movement)\b/gi, label: 'Bandwagon' },
+      // Appeal to emotion (Filament: Emotional Appeal, Appeal to Pity)
       { pattern: /\b(think of the children|how would you feel|imagine if.{1,30}(your|you)|put yourself in|won('t| not) someone think of|what about (our|the) (kids|children|families|future))\b/gi, label: 'Appeal to Emotion' },
-      // Red herring / whataboutism
-      { pattern: /\b(what about|but what about|yes but|but (he|she|they|you) (also|too)|let('s| us) (talk|not forget) about|the real (issue|problem|question) (is|here))\b/gi, label: 'Whataboutism / Red Herring' }
+      // Whataboutism (Filament: Whataboutism, Tu Quoque)
+      { pattern: /\b(what about|but what about|yes but|but (he|she|they|you) (also|too)|let('s| us) (talk|not forget) about|the real (issue|problem|question) (is|here))\b/gi, label: 'Whataboutism' },
+      // Sweeping generalization (Filament: Hasty Generalization)
+      { pattern: /\b(all (men|women|cops|politicians|lawyers|rich people|poor people|millennials|boomers|liberals|conservatives|christians|muslims|jews|immigrants|americans|whites?|blacks?|asians?)\b.{0,20}\bare\b|every (man|woman|cop|politician|liberal|conservative)\b.{0,15}\bis\b|\b(men|women|people|they) are (all|just|nothing but|simply))\b/gi, label: 'Sweeping Generalization' },
+      // Guilt by association (Filament: Genetic Fallacy)
+      { pattern: /\b(just like (hitler|nazis?|stalin|communists?|fascists?|terrorists?)|reminds me of (hitler|nazi|stalin)|sounds like (something|what).{1,20}(nazi|fascist|communist|terrorist))\b/gi, label: 'Guilt by Association' },
+      // Appeal to fear (Filament: Appeal to Fear)
+      { pattern: /\b(if (we|you|they) (don't|do not).{1,40}(will|going to|gonna).{1,30}(die|suffer|lose|destroy|collapse|end)|imagine.{1,30}(worst|nightmare|horror|catastrophe))\b/gi, label: 'Appeal to Fear' },
+      // Appeal to nature (Filament: Appeal to Nature)
+      { pattern: /\b(it('s| is) (only )?natural|nature intended|the natural (way|order)|as nature intended|unnatural|goes against nature|god intended|not how (god|nature) (made|designed|intended))\b/gi, label: 'Appeal to Nature' },
+      // Appeal to tradition (Filament: Appeal to Tradition)
+      { pattern: /\b(we('ve| have) always done it this way|tradition(al|ally)?|the way it('s| has) always been|our ancestors|time-honored|that('s| is) how (we|it) (do|has always been)|if it was good enough for)\b/gi, label: 'Appeal to Tradition' },
+      // Moving the goalposts (Filament: Moving the Goalposts)
+      { pattern: /\b(yes but that('s| is) (different|not the same)|that('s| is) not what I (meant|said)|the real (question|issue|point) is|but what about|ok but now)\b/gi, label: 'Moving Goalposts' },
+      // No True Scotsman (Filament: No True Scotsman)
+      { pattern: /\b(no (real|true) (american|christian|patriot|man|woman|conservative|liberal|believer|supporter)|a real .{1,15} would (never|always)|any (true|real) .{1,15} (knows|would|should))\b/gi, label: 'No True Scotsman' },
+      // Circular reasoning (Filament: Circular Reasoning, Begging the Question)
+      { pattern: /\b(because (I|it) said so|it('s| is) true because|the reason is because|it('s| is) obvious(ly)? (true|right|correct)|everyone knows it('s| is) true)\b/gi, label: 'Circular Reasoning' },
+      // Appeal to ignorance (Filament: Appeal to Ignorance)
+      { pattern: /\b(you can('t| not) (prove|disprove)|there('s| is) no (evidence|proof) (against|that it (isn't|is not))|absence of evidence|until you can prove|no one has (ever )?proven)\b/gi, label: 'Appeal to Ignorance' },
+      // Burden of proof shifting (Filament: Burden of Proof Shifting)
+      { pattern: /\b(prove (me|it|that I('m| am)) wrong|show me (where|proof|evidence)|the burden (of proof )?is on you|prove (it|that) (isn't|is not) (true|real))\b/gi, label: 'Burden of Proof Shifting' },
+      // Gish Gallop (Filament: Gish Gallop) — detectable via rapid-fire questions
+      { pattern: /(\?[^.]*\?[^.]*\?[^.]*\?)/gi, label: 'Gish Gallop (rapid claims)' },
+      // Kafka Trap (Filament: Kafka Trap)
+      { pattern: /\b(your denial (proves|confirms|shows)|the fact that you deny it|if you (weren't|were not) guilty|only a .{1,15} would deny|of course you('d| would) say that)\b/gi, label: 'Kafka Trap' },
+      // Motte and Bailey
+      { pattern: /\b(what I (actually|really) (meant|said)|I('m| am) just saying|all I('m| am) saying is|I never said|that('s| is) not what I (said|meant))\b/gi, label: 'Motte and Bailey' },
+      // Special Pleading (Filament: Special Pleading)
+      { pattern: /\b(this (is|case is) (different|special|unique|an exception)|yes but (this|my|our) (situation|case) is|that (rule|doesn't|does not) apply (here|to (us|me|this)))\b/gi, label: 'Special Pleading' },
+      // Post hoc (Filament: Post Hoc Ergo Propter Hoc)
+      { pattern: /\b(ever since|right after.{1,20}(started|began|happened)|coincidence\??|just a coincidence|and then.{1,20}(happened|started|began))\b/gi, label: 'Post Hoc' }
     ];
 
     // Persuasion domain keywords
@@ -776,23 +1075,15 @@
     function countSyllables(word) {
       word = word.toLowerCase().replace(/[^a-z]/g, '');
       if (word.length <= 2) return 1;
-      // Remove silent e at end
       word = word.replace(/e$/, '');
-      // Count vowel groups
       var matches = word.match(/[aeiouy]+/g);
-      var count = matches ? matches.length : 1;
-      // Minimum 1 syllable
-      return Math.max(1, count);
+      return Math.max(1, matches ? matches.length : 1);
     }
 
-    function getWords(text) {
-      return text.match(/[a-zA-Z']+/g) || [];
-    }
+    function getWords(text) { return text.match(/[a-zA-Z']+/g) || []; }
 
     function getSentences(text) {
-      var sents = text.split(/[.!?]+/).filter(function(s) {
-        return s.trim().length > 0;
-      });
+      var sents = text.split(/[.!?]+/).filter(function(s) { return s.trim().length > 0; });
       return sents.length > 0 ? sents : [text];
     }
 
@@ -803,34 +1094,22 @@
     // ========== ANALYSIS ENGINE ==========
 
     function findMatches(text, wordList) {
-      var lower = text.toLowerCase();
       var results = [];
       var found = {};
-
-      // Sort by length descending so multi-word phrases match first
       var sorted = wordList.slice().sort(function(a, b) { return b.length - a.length; });
 
       for (var i = 0; i < sorted.length; i++) {
         var word = sorted[i];
-        var regex;
-        if (word.includes(' ')) {
-          // Multi-word phrase: match anywhere
-          regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-        } else {
-          // Single word: word boundary match
-          regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
-        }
+        var escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = word.includes(' ')
+          ? new RegExp(escaped, 'gi')
+          : new RegExp('\\b' + escaped + '\\b', 'gi');
         var match;
         while ((match = regex.exec(text)) !== null) {
           var key = match.index + ':' + match[0].length;
           if (!found[key]) {
             found[key] = true;
-            results.push({
-              word: match[0],
-              index: match.index,
-              length: match[0].length,
-              term: word
-            });
+            results.push({ word: match[0], index: match.index, length: match[0].length, term: word });
           }
         }
       }
@@ -848,12 +1127,7 @@
           var key = match.index + ':' + match[0].length;
           if (!found[key]) {
             found[key] = true;
-            results.push({
-              word: match[0],
-              index: match.index,
-              length: match[0].length,
-              term: fp.label + ': ' + match[0]
-            });
+            results.push({ word: match[0], index: match.index, length: match[0].length, term: fp.label });
           }
         }
       }
@@ -862,23 +1136,14 @@
 
     function detectDomain(text) {
       var lower = text.toLowerCase();
-      var scores = {};
       var best = 'general';
       var bestScore = 0;
-
       for (var domain in DOMAIN_KEYWORDS) {
-        var keywords = DOMAIN_KEYWORDS[domain];
         var score = 0;
-        for (var i = 0; i < keywords.length; i++) {
-          if (lower.includes(keywords[i])) {
-            score++;
-          }
+        for (var i = 0; i < DOMAIN_KEYWORDS[domain].length; i++) {
+          if (lower.includes(DOMAIN_KEYWORDS[domain][i])) score++;
         }
-        scores[domain] = score;
-        if (score > bestScore) {
-          bestScore = score;
-          best = domain;
-        }
+        if (score > bestScore) { bestScore = score; best = domain; }
       }
       return bestScore >= 2 ? best : 'general';
     }
@@ -890,95 +1155,65 @@
       var totalSentences = sentences.length;
 
       if (totalWords === 0) {
-        return {
-          totalWords: 0, totalSentences: 0, avgWordLength: 0,
-          avgSentenceLength: 0, ttr: 0, fleschKincaid: 0,
-          functionWordRatio: 0, punctuationFreq: 0, totalSyllables: 0
-        };
+        return { totalWords: 0, totalSentences: 0, avgWordLength: 0, avgSentenceLength: 0, ttr: 0, fleschKincaid: 0, functionWordRatio: 0, punctuationFreq: 0, totalSyllables: 0 };
       }
 
-      // Average word length
-      var totalChars = 0;
-      for (var i = 0; i < words.length; i++) {
-        totalChars += words[i].replace(/'/g, '').length;
-      }
-      var avgWordLength = totalChars / totalWords;
-
-      // Average sentence length
-      var avgSentenceLength = totalWords / totalSentences;
-
-      // Type-Token Ratio (vocabulary richness)
+      var totalChars = 0, totalSyllables = 0, funcCount = 0;
       var uniqueWords = {};
       for (var i = 0; i < words.length; i++) {
-        uniqueWords[words[i].toLowerCase()] = true;
-      }
-      var ttr = Object.keys(uniqueWords).length / totalWords;
-
-      // Syllable count
-      var totalSyllables = 0;
-      for (var i = 0; i < words.length; i++) {
+        totalChars += words[i].replace(/'/g, '').length;
         totalSyllables += countSyllables(words[i]);
+        uniqueWords[words[i].toLowerCase()] = true;
+        if (FUNCTION_WORDS.indexOf(words[i].toLowerCase()) !== -1) funcCount++;
       }
 
-      // Flesch-Kincaid readability
-      var fleschKincaid = 206.835 - 1.015 * (totalWords / totalSentences) - 84.6 * (totalSyllables / totalWords);
-      fleschKincaid = Math.max(0, Math.min(100, fleschKincaid));
-
-      // Function word ratio
-      var funcCount = 0;
-      for (var i = 0; i < words.length; i++) {
-        if (FUNCTION_WORDS.indexOf(words[i].toLowerCase()) !== -1) {
-          funcCount++;
-        }
-      }
-      var functionWordRatio = funcCount / totalWords;
-
-      // Punctuation frequency
-      var punctCount = (text.match(/[.,;:!?'"()\-—]/g) || []).length;
-      var punctuationFreq = punctCount / totalWords;
+      var avgWordLength = totalChars / totalWords;
+      var avgSentenceLength = totalWords / totalSentences;
+      var ttr = Object.keys(uniqueWords).length / totalWords;
+      var fleschKincaid = Math.max(0, Math.min(100, 206.835 - 1.015 * (totalWords / totalSentences) - 84.6 * (totalSyllables / totalWords)));
+      var punctCount = (text.match(/[.,;:!?'"()\-\u2014]/g) || []).length;
 
       return {
-        totalWords: totalWords,
-        totalSentences: totalSentences,
-        avgWordLength: avgWordLength,
-        avgSentenceLength: avgSentenceLength,
-        ttr: ttr,
-        fleschKincaid: fleschKincaid,
-        functionWordRatio: functionWordRatio,
-        punctuationFreq: punctuationFreq,
+        totalWords: totalWords, totalSentences: totalSentences,
+        avgWordLength: avgWordLength, avgSentenceLength: avgSentenceLength,
+        ttr: ttr, fleschKincaid: fleschKincaid,
+        functionWordRatio: funcCount / totalWords,
+        punctuationFreq: punctCount / totalWords,
         totalSyllables: totalSyllables
       };
     }
 
-    function computeOverallScore(hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches, stylo) {
-      if (stylo.totalWords === 0) return 0;
+    // ========== SCORING (7 categories) ==========
 
-      var wc = stylo.totalWords;
+    function computeOverallScore(cats, wc) {
+      if (wc === 0) return 0;
 
-      // Density scores (matches per 100 words, capped)
-      var hedgeDensity = Math.min((hedgeMatches.length / wc) * 100, 15);
-      var certaintyDensity = Math.min((certaintyMatches.length / wc) * 100, 15);
-      var emotionalDensity = Math.min((emotionalMatches.length / wc) * 100, 10);
-      var fallacyDensity = Math.min((fallacyMatches.length / wc) * 100, 8);
+      // Density per 100 words, capped, then normalized to 0-100
+      function densityScore(count, cap) {
+        return (Math.min((count / wc) * 100, cap) / cap) * 100;
+      }
 
-      // Normalize to 0-100 sub-scores
-      var hedgeScore = (hedgeDensity / 15) * 100;
-      var certaintyScore = (certaintyDensity / 15) * 100;
-      var emotionalScore = (emotionalDensity / 10) * 100;
-      var fallacyScore = (fallacyDensity / 8) * 100;
+      var scores = {
+        hedge:      densityScore(cats.hedge, 12),
+        certainty:  densityScore(cats.certainty, 12),
+        emotional:  densityScore(cats.emotional, 8),
+        fallacy:    densityScore(cats.fallacy, 5),
+        propaganda: densityScore(cats.propaganda, 6),
+        urgency:    densityScore(cats.urgency, 8),
+        control:    densityScore(cats.control, 4)
+      };
 
       // Weighted combination
-      var raw = (hedgeScore * 0.15) + (certaintyScore * 0.20) + (emotionalScore * 0.35) + (fallacyScore * 0.30);
+      var raw = (scores.hedge * 0.08) + (scores.certainty * 0.10) + (scores.emotional * 0.22) +
+                (scores.fallacy * 0.20) + (scores.propaganda * 0.18) + (scores.urgency * 0.10) +
+                (scores.control * 0.12);
 
       // Boost if multiple categories active
-      var activeCats = 0;
-      if (hedgeMatches.length > 0) activeCats++;
-      if (certaintyMatches.length > 0) activeCats++;
-      if (emotionalMatches.length > 0) activeCats++;
-      if (fallacyMatches.length > 0) activeCats++;
-
-      if (activeCats >= 3) raw *= 1.15;
-      if (activeCats >= 4) raw *= 1.10;
+      var active = 0;
+      for (var k in cats) { if (cats[k] > 0) active++; }
+      if (active >= 4) raw *= 1.12;
+      if (active >= 5) raw *= 1.10;
+      if (active >= 6) raw *= 1.08;
 
       return Math.min(100, Math.max(0, Math.round(raw)));
     }
@@ -988,8 +1223,8 @@
       if (score <= 25) return { text: 'Low Manipulation', desc: 'Some persuasive language detected, but within normal communication ranges. May include mild hedging or occasional emphasis.' };
       if (score <= 45) return { text: 'Moderate Manipulation', desc: 'Notable use of persuasion techniques. The text employs emotional language, absolutist framing, or logical pressure tactics that may influence the reader.' };
       if (score <= 65) return { text: 'High Manipulation', desc: 'Significant manipulation patterns detected. Multiple persuasion categories are active with above-average density. Read critically.' };
-      if (score <= 80) return { text: 'Very High Manipulation', desc: 'Heavy use of manipulation tactics across multiple dimensions. This text is designed to persuade rather than inform. Strong emotional triggers and logical pressure detected.' };
-      return { text: 'Extreme Manipulation', desc: 'Saturated with manipulation tactics. Nearly every dimension flags high density. This text aggressively deploys deceptive language patterns, emotional exploitation, and logical fallacies.' };
+      if (score <= 80) return { text: 'Very High Manipulation', desc: 'Heavy use of manipulation tactics across multiple dimensions. This text is designed to persuade rather than inform.' };
+      return { text: 'Extreme Manipulation', desc: 'Saturated with manipulation tactics. Nearly every dimension flags high density. This text aggressively deploys deceptive language, emotional exploitation, and logical fallacies.' };
     }
 
     function getGaugeColor(score) {
@@ -1003,54 +1238,42 @@
 
     // ========== HIGHLIGHT ENGINE ==========
 
-    function buildHighlightedText(text, hedgeM, certM, emoM, fallM) {
-      // Collect all matches with type
+    function addMarks(arr, matches, type) {
+      for (var i = 0; i < matches.length; i++) {
+        arr.push({ idx: matches[i].index, len: matches[i].length, type: type, label: matches[i].term });
+      }
+    }
+
+    function buildHighlightedText(text, allMatchSets) {
       var allMarks = [];
-      var i;
-      for (i = 0; i < hedgeM.length; i++) {
-        allMarks.push({ idx: hedgeM[i].index, len: hedgeM[i].length, type: 'hedge', label: hedgeM[i].term });
-      }
-      for (i = 0; i < certM.length; i++) {
-        allMarks.push({ idx: certM[i].index, len: certM[i].length, type: 'certainty', label: certM[i].term });
-      }
-      for (i = 0; i < emoM.length; i++) {
-        allMarks.push({ idx: emoM[i].index, len: emoM[i].length, type: 'emotional', label: emoM[i].term });
-      }
-      for (i = 0; i < fallM.length; i++) {
-        allMarks.push({ idx: fallM[i].index, len: fallM[i].length, type: 'fallacy', label: fallM[i].term });
+      for (var i = 0; i < allMatchSets.length; i++) {
+        addMarks(allMarks, allMatchSets[i].matches, allMatchSets[i].type);
       }
 
-      // Sort by index ascending, then by length descending
       allMarks.sort(function(a, b) {
         if (a.idx !== b.idx) return a.idx - b.idx;
         return b.len - a.len;
       });
 
-      // Remove overlapping (keep the first/largest)
+      // Remove overlapping
       var filtered = [];
       var lastEnd = -1;
-      for (i = 0; i < allMarks.length; i++) {
-        if (allMarks[i].idx >= lastEnd) {
-          filtered.push(allMarks[i]);
-          lastEnd = allMarks[i].idx + allMarks[i].len;
+      for (var j = 0; j < allMarks.length; j++) {
+        if (allMarks[j].idx >= lastEnd) {
+          filtered.push(allMarks[j]);
+          lastEnd = allMarks[j].idx + allMarks[j].len;
         }
       }
 
-      // Build HTML
       var html = '';
       var cursor = 0;
-      for (i = 0; i < filtered.length; i++) {
-        var m = filtered[i];
-        if (m.idx > cursor) {
-          html += escapeHtml(text.substring(cursor, m.idx));
-        }
-        var snippet = text.substring(m.idx, m.idx + m.len);
-        html += '<span class="hl-' + m.type + '" title="' + escapeHtml(m.label) + '">' + escapeHtml(snippet) + '</span>';
+      for (var k = 0; k < filtered.length; k++) {
+        var m = filtered[k];
+        if (m.idx > cursor) html += escapeHtml(text.substring(cursor, m.idx));
+        html += '<span class="hl-' + m.type + '" title="' + escapeHtml(m.label) + '">' + escapeHtml(text.substring(m.idx, m.idx + m.len)) + '</span>';
         cursor = m.idx + m.len;
       }
-      if (cursor < text.length) {
-        html += escapeHtml(text.substring(cursor));
-      }
+      if (cursor < text.length) html += escapeHtml(text.substring(cursor));
       return html;
     }
 
@@ -1059,7 +1282,6 @@
     function renderCategoryTags(containerId, matches) {
       var container = document.getElementById(containerId);
       container.innerHTML = '';
-      // Deduplicate by lowercase term
       var seen = {};
       for (var i = 0; i < matches.length; i++) {
         var key = matches[i].term.toLowerCase();
@@ -1076,60 +1298,35 @@
       }
     }
 
+    function renderCategory(prefix, matches, maxPossible) {
+      document.getElementById(prefix + '-count').textContent = matches.length + ' found';
+      document.getElementById(prefix + '-bar').style.width = Math.min(100, (matches.length / maxPossible) * 100) + '%';
+      renderCategoryTags(prefix + '-words', matches);
+    }
+
     function animateGauge(score) {
-      var circumference = 2 * Math.PI * 75; // ~471.24
+      var circumference = 2 * Math.PI * 75;
       var offset = circumference - (score / 100) * circumference;
-      var color = getGaugeColor(score);
       var fillEl = document.getElementById('gauge-fill');
-      fillEl.style.stroke = color;
+      fillEl.style.stroke = getGaugeColor(score);
       fillEl.style.strokeDashoffset = offset;
 
-      // Animate number
       var scoreEl = document.getElementById('gauge-score');
-      var start = 0;
-      var duration = 800;
       var startTime = performance.now();
-
       function tick(now) {
-        var elapsed = now - startTime;
-        var progress = Math.min(elapsed / duration, 1);
-        // Ease out
+        var progress = Math.min((now - startTime) / 800, 1);
         var eased = 1 - Math.pow(1 - progress, 3);
         var current = Math.round(eased * score);
         scoreEl.textContent = current;
         scoreEl.style.color = getGaugeColor(current);
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        }
+        if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
     }
 
-    function getReadabilityLabel(score) {
-      if (score >= 90) return 'Very Easy';
-      if (score >= 80) return 'Easy';
-      if (score >= 70) return 'Fairly Easy';
-      if (score >= 60) return 'Standard';
-      if (score >= 50) return 'Fairly Difficult';
-      if (score >= 30) return 'Difficult';
-      return 'Very Difficult';
-    }
-
-    function getTTRLabel(ttr) {
-      if (ttr >= 0.8) return 'Very Rich';
-      if (ttr >= 0.6) return 'Rich';
-      if (ttr >= 0.4) return 'Moderate';
-      if (ttr >= 0.2) return 'Repetitive';
-      return 'Very Repetitive';
-    }
-
-    function getFuncLabel(ratio) {
-      if (ratio >= 0.55) return 'Very High';
-      if (ratio >= 0.45) return 'High';
-      if (ratio >= 0.35) return 'Normal';
-      if (ratio >= 0.25) return 'Low';
-      return 'Very Low';
-    }
+    function getReadabilityLabel(s) { return s >= 90 ? 'Very Easy' : s >= 80 ? 'Easy' : s >= 70 ? 'Fairly Easy' : s >= 60 ? 'Standard' : s >= 50 ? 'Fairly Difficult' : s >= 30 ? 'Difficult' : 'Very Difficult'; }
+    function getTTRLabel(t) { return t >= 0.8 ? 'Very Rich' : t >= 0.6 ? 'Rich' : t >= 0.4 ? 'Moderate' : t >= 0.2 ? 'Repetitive' : 'Very Repetitive'; }
+    function getFuncLabel(r) { return r >= 0.55 ? 'Very High' : r >= 0.45 ? 'High' : r >= 0.35 ? 'Normal' : r >= 0.25 ? 'Low' : 'Very Low'; }
 
     // ========== MAIN ANALYZE ==========
 
@@ -1137,13 +1334,23 @@
       var text = document.getElementById('text-input').value.trim();
       if (!text) return;
 
-      // Run analysis
-      var hedgeMatches = findMatches(text, HEDGE_WORDS);
-      var certaintyMatches = findMatches(text, CERTAINTY_WORDS);
-      var emotionalMatches = findMatches(text, MANIPULATION_WORDS);
-      var fallacyMatches = findFallacies(text);
+      // Run all 7 detectors
+      var hedgeM      = findMatches(text, HEDGE_WORDS);
+      var certaintyM  = findMatches(text, CERTAINTY_WORDS);
+      var emotionalM  = findMatches(text, MANIPULATION_WORDS);
+      var fallacyM    = findFallacies(text);
+      var propagandaM = findMatches(text, PROPAGANDA_WORDS);
+      var urgencyM    = findMatches(text, URGENCY_WORDS);
+      var controlM    = findMatches(text, CONTROL_WORDS);
+
       var stylo = computeStylometry(text);
-      var score = computeOverallScore(hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches, stylo);
+      var cats = {
+        hedge: hedgeM.length, certainty: certaintyM.length,
+        emotional: emotionalM.length, fallacy: fallacyM.length,
+        propaganda: propagandaM.length, urgency: urgencyM.length,
+        control: controlM.length
+      };
+      var score = computeOverallScore(cats, stylo.totalWords);
       var verdict = getVerdict(score);
       var domain = detectDomain(text);
 
@@ -1151,34 +1358,31 @@
       var panel = document.getElementById('results-panel');
       panel.classList.add('active');
 
-      // Score
       animateGauge(score);
       document.getElementById('score-verdict').textContent = verdict.text;
       document.getElementById('score-desc').textContent = verdict.desc;
       document.getElementById('persuasion-domain').textContent = 'Domain: ' + domain;
 
-      // Category counts and bars
-      var maxPossible = Math.max(stylo.totalWords * 0.05, 1);
+      // Render all 7 categories
+      var maxP = Math.max(stylo.totalWords * 0.05, 1);
+      renderCategory('hedge', hedgeM, maxP);
+      renderCategory('certainty', certaintyM, maxP);
+      renderCategory('emotional', emotionalM, maxP);
+      renderCategory('fallacy', fallacyM, maxP);
+      renderCategory('propaganda', propagandaM, maxP);
+      renderCategory('urgency', urgencyM, maxP);
+      renderCategory('control', controlM, maxP);
 
-      document.getElementById('hedge-count').textContent = hedgeMatches.length + ' found';
-      document.getElementById('hedge-bar').style.width = Math.min(100, (hedgeMatches.length / maxPossible) * 100) + '%';
-      renderCategoryTags('hedge-words', hedgeMatches);
-
-      document.getElementById('certainty-count').textContent = certaintyMatches.length + ' found';
-      document.getElementById('certainty-bar').style.width = Math.min(100, (certaintyMatches.length / maxPossible) * 100) + '%';
-      renderCategoryTags('certainty-words', certaintyMatches);
-
-      document.getElementById('emotional-count').textContent = emotionalMatches.length + ' found';
-      document.getElementById('emotional-bar').style.width = Math.min(100, (emotionalMatches.length / maxPossible) * 100) + '%';
-      renderCategoryTags('emotional-words', emotionalMatches);
-
-      document.getElementById('fallacy-count').textContent = fallacyMatches.length + ' found';
-      document.getElementById('fallacy-bar').style.width = Math.min(100, (fallacyMatches.length / maxPossible) * 100) + '%';
-      renderCategoryTags('fallacy-words', fallacyMatches);
-
-      // Highlighted text
-      document.getElementById('highlighted-text').innerHTML =
-        buildHighlightedText(text, hedgeMatches, certaintyMatches, emotionalMatches, fallacyMatches);
+      // Highlighted text with all 7 types
+      document.getElementById('highlighted-text').innerHTML = buildHighlightedText(text, [
+        { matches: hedgeM, type: 'hedge' },
+        { matches: certaintyM, type: 'certainty' },
+        { matches: emotionalM, type: 'emotional' },
+        { matches: fallacyM, type: 'fallacy' },
+        { matches: propagandaM, type: 'propaganda' },
+        { matches: urgencyM, type: 'urgency' },
+        { matches: controlM, type: 'control' }
+      ]);
 
       // Stylometry
       document.getElementById('stat-words').textContent = stylo.totalWords;
@@ -1196,7 +1400,6 @@
       document.getElementById('stat-punct').textContent = stylo.punctuationFreq.toFixed(2);
       document.getElementById('stat-punct-sub').textContent = stylo.punctuationFreq > 0.3 ? 'Heavy' : stylo.punctuationFreq > 0.15 ? 'Normal' : 'Light';
 
-      // Scroll to results
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
@@ -1226,14 +1429,11 @@
       textInput.value = '';
       charCount.textContent = '0 characters';
       btnAnalyze.disabled = true;
-      var panel = document.getElementById('results-panel');
-      panel.classList.remove('active');
-      // Reset gauge
+      document.getElementById('results-panel').classList.remove('active');
       document.getElementById('gauge-fill').style.strokeDashoffset = '471.24';
       document.getElementById('gauge-score').textContent = '0';
     });
 
-    // Initialize
     btnAnalyze.disabled = true;
 
   })();

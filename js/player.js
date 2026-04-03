@@ -142,6 +142,12 @@
       border: none;
       cursor: pointer;
     }
+    .msl-player__visualizer {
+      display: block;
+      width: 100%;
+      height: 32px;
+      background: transparent;
+    }
     .msl-player__progress {
       height: 3px;
       background: #1a1a2e;
@@ -181,6 +187,7 @@
         <button class="msl-player__btn" data-action="next" title="Next">\u25B6\u25B6</button>
         <input type="range" class="msl-player__volume" min="0" max="100" value="${Math.round(audio.volume * 100)}" title="Volume">
       </div>
+      <canvas class="msl-player__visualizer"></canvas>
       <div class="msl-player__progress">
         <div class="msl-player__progress-fill"></div>
       </div>
@@ -201,11 +208,83 @@
       titleEl.textContent = track.title;
     }
 
+    // ── Waveform Visualizer ──
+    const canvas = el.querySelector('.msl-player__visualizer');
+    const ctx = canvas.getContext('2d');
+    let audioCtx = null;
+    let analyser = null;
+    let source = null;
+    let animFrameId = null;
+
+    function initAudioContext() {
+      if (audioCtx) return;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 128;
+      source = audioCtx.createMediaElementSource(audio);
+      source.connect(analyser);
+      analyser.connect(audioCtx.destination);
+    }
+
+    function drawVisualizer() {
+      animFrameId = requestAnimationFrame(drawVisualizer);
+      if (!analyser) return;
+
+      const bufLen = analyser.frequencyBinCount;
+      const data = new Uint8Array(bufLen);
+      analyser.getByteFrequencyData(data);
+
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const barCount = Math.min(bufLen, 48);
+      const barW = (w / barCount) - 1;
+      const step = Math.floor(bufLen / barCount);
+
+      for (let i = 0; i < barCount; i++) {
+        const val = data[i * step] / 255;
+        const barH = Math.max(1, val * h);
+        const x = i * (barW + 1);
+        const t = i / barCount;
+
+        // Gradient: teal → violet across bars
+        const r = Math.round(0 + t * 168);
+        const g = Math.round(255 - t * 170);
+        const b = Math.round(200 + t * 47);
+        ctx.fillStyle = `rgba(${r},${g},${b},${0.5 + val * 0.5})`;
+        ctx.fillRect(x, h - barH, barW, barH);
+      }
+    }
+
+    function startVisualizer() {
+      // Size canvas to actual pixel width
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * (window.devicePixelRatio || 1);
+      canvas.height = rect.height * (window.devicePixelRatio || 1);
+      ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+
+      if (!animFrameId) drawVisualizer();
+    }
+
+    function stopVisualizer() {
+      if (animFrameId) {
+        cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
     function play() {
+      initAudioContext();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
       audio.play().then(() => {
         playBtn.textContent = '\u23F8';
         if (navToggle) navToggle.classList.add('playing');
         saveState({ playing: true, track: currentTrack, volume: audio.volume, time: audio.currentTime });
+        startVisualizer();
       }).catch(() => {});
     }
 
@@ -214,6 +293,7 @@
       playBtn.textContent = '\u25B6';
       if (navToggle) navToggle.classList.remove('playing');
       saveState({ playing: false, track: currentTrack, volume: audio.volume, time: audio.currentTime });
+      stopVisualizer();
     }
 
     function toggle() {

@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Regex Generator — Natural Language to Regex Converter | AI Regex Architect | Moonlit Social Labs</title>
+  <meta name="description" content="Free AI Regex Architect: describe what you want to match in plain English and get the exact regular expression with explanation. Natural language to regex converter. No signup, no API calls, 100% client-side.">
+  <meta name="keywords" content="free regex generator, natural language to regex, regex builder, regular expression generator, regex converter, regex tester, regex patterns, email regex, URL regex, phone number regex, regex explained">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/regex-architect.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI Regex Architect — Natural Language to Regex Generator",
+    "description": "Free natural language to regex converter. Describe what you want to match in plain English and get the exact regular expression with detailed explanation. 100% client-side, no API calls.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/regex-architect.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Regex Generator — Natural Language to Regex Converter">
+  <meta property="og:description" content="Describe what you want to match in plain English and get the exact regular expression with explanation. No signup, 100% client-side.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/regex-architect.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Regex Architect | Moonlit Social Labs">
+  <meta name="twitter:description" content="Free natural language to regex converter. Describe what you want to match and get the exact regular expression with explanation.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ── Layout ── */
+    .rx-hero {
+      text-align: center;
+      padding: 1.5rem 0 0.75rem;
+    }
+    .rx-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .rx-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .rx-hero .text-body {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 55ch;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Ad containers */
+    .ad-container {
+      max-width: 728px;
+      margin: 1rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    /* ── Terminal Container ── */
+    .rx-terminal {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .rx-terminal__window {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .rx-terminal__bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1rem;
+      background: var(--deep);
+      border-bottom: 1px solid var(--border);
+    }
+    .rx-terminal__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .rx-terminal__dot:nth-child(1) { background: var(--rose); }
+    .rx-terminal__dot:nth-child(2) { background: var(--amber); }
+    .rx-terminal__dot:nth-child(3) { background: var(--teal); }
+    .rx-terminal__title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-left: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    .rx-terminal__body {
+      padding: 1.5rem;
+    }
+
+    /* ── Input Area ── */
+    .rx-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .rx-prompt {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--teal);
+      white-space: nowrap;
+      user-select: none;
+    }
+    .rx-input {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-bright);
+      background: transparent;
+      border: none;
+      outline: none;
+      caret-color: var(--teal);
+    }
+    .rx-input::placeholder {
+      color: var(--text-dim);
+    }
+    .rx-btn {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--void);
+      background: var(--teal);
+      border: none;
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .rx-btn:hover {
+      background: var(--text-bright);
+      box-shadow: 0 0 15px var(--teal-glow);
+    }
+    .rx-btn--outline {
+      background: transparent;
+      color: var(--teal);
+      border: 1px solid var(--teal);
+    }
+    .rx-btn--outline:hover {
+      background: var(--teal);
+      color: var(--void);
+    }
+    .rx-btn--sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.6rem;
+    }
+
+    /* ── Quick Tags ── */
+    .rx-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .rx-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .rx-tag:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+
+    /* ── Output Section ── */
+    .rx-output {
+      display: none;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .rx-output.active { display: block; }
+
+    .rx-output__label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+    .rx-output__pattern {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--teal);
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      word-break: break-all;
+      line-height: 1.6;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .rx-output__pattern .rx-copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+    .rx-output__explain {
+      margin-bottom: 1.5rem;
+    }
+    .rx-output__explain-item {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      padding: 0.25rem 0;
+    }
+    .rx-output__explain-item code {
+      color: var(--amber);
+      background: var(--deep);
+      padding: 0.15rem 0.4rem;
+      font-size: 0.7rem;
+    }
+
+    /* ── Flags ── */
+    .rx-flags {
+      display: flex;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    .rx-flags__label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .rx-flag {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+    }
+    .rx-flag input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--border);
+      background: var(--deep);
+      cursor: pointer;
+      position: relative;
+    }
+    .rx-flag input[type="checkbox"]:checked {
+      border-color: var(--teal);
+      background: var(--teal);
+    }
+    .rx-flag input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 1px; left: 4px;
+      width: 4px;
+      height: 8px;
+      border: solid var(--void);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .rx-flag span {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Test Area ── */
+    .rx-test {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .rx-test__textarea {
+      width: 100%;
+      min-height: 120px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-bright);
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      resize: vertical;
+      outline: none;
+      line-height: 1.7;
+      box-sizing: border-box;
+    }
+    .rx-test__textarea:focus {
+      border-color: var(--teal);
+    }
+    .rx-test__results {
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      background: var(--deep);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      min-height: 60px;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+    .rx-test__results .rx-match {
+      background: rgba(0, 255, 200, 0.15);
+      color: var(--teal);
+      border-bottom: 1px solid var(--teal);
+      padding: 0 2px;
+    }
+    .rx-test__stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+    .rx-test__stat {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+    }
+    .rx-test__stat strong {
+      color: var(--teal);
+    }
+
+    /* ── Groups ── */
+    .rx-groups {
+      margin-top: 0.75rem;
+    }
+    .rx-groups__item {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      padding: 0.2rem 0;
+    }
+    .rx-groups__item code {
+      color: var(--violet);
+      background: var(--deep);
+      padding: 0.1rem 0.3rem;
+    }
+
+    /* ── Cheat Sheet ── */
+    .rx-cheat {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+    .rx-cheat__title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--text-bright);
+      margin-bottom: 1.5rem;
+    }
+    .rx-cheat__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .rx-cheat__card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem;
+    }
+    .rx-cheat__card-title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.75rem;
+    }
+    .rx-cheat__row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .rx-cheat__row:last-child { border-bottom: none; }
+    .rx-cheat__row code {
+      color: var(--amber);
+      background: var(--deep);
+      padding: 0.1rem 0.35rem;
+    }
+    .rx-cheat__row span {
+      color: var(--text-dim);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .rx-input-wrap {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .rx-prompt { display: none; }
+      .rx-flags { flex-wrap: wrap; gap: 0.75rem; }
+      .rx-cheat__grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <!-- Hero -->
+    <section class="rx-hero">
+      <span class="section-label">Developer Utility</span>
+      <h1 class="heading-xl">AI Regex Architect</h1>
+      <p class="text-body">Describe what you want to match in plain English. Get the exact regular expression with a full breakdown. 100% client-side &mdash; no data leaves your browser.</p>
+    </section>
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Terminal -->
+    <div class="rx-terminal">
+      <div class="rx-terminal__window">
+        <div class="rx-terminal__bar">
+          <div class="rx-terminal__dot"></div>
+          <div class="rx-terminal__dot"></div>
+          <div class="rx-terminal__dot"></div>
+          <span class="rx-terminal__title">regex-architect v1.0</span>
+        </div>
+        <div class="rx-terminal__body">
+
+          <!-- Quick Tags -->
+          <div class="rx-tags" id="rxTags">
+            <button class="rx-tag" data-query="match email addresses">email</button>
+            <button class="rx-tag" data-query="match URLs">URL</button>
+            <button class="rx-tag" data-query="match phone numbers">phone</button>
+            <button class="rx-tag" data-query="match IP addresses">IP address</button>
+            <button class="rx-tag" data-query="match dates in MM/DD/YYYY format">date MM/DD/YYYY</button>
+            <button class="rx-tag" data-query="match hex color codes">hex color</button>
+            <button class="rx-tag" data-query="match UUIDs">UUID</button>
+            <button class="rx-tag" data-query="match credit card numbers">credit card</button>
+            <button class="rx-tag" data-query="match HTML tags">HTML tags</button>
+            <button class="rx-tag" data-query="match hashtags">hashtags</button>
+            <button class="rx-tag" data-query="match semantic version numbers">semver</button>
+            <button class="rx-tag" data-query="match currency amounts">currency</button>
+          </div>
+
+          <!-- Input -->
+          <div class="rx-input-wrap">
+            <span class="rx-prompt">regex&gt;</span>
+            <input type="text" class="rx-input" id="rxInput" placeholder="describe what you want to match... (e.g. &quot;match email addresses&quot;)" autocomplete="off" spellcheck="false">
+            <button class="rx-btn" id="rxGenerate">Generate</button>
+          </div>
+
+          <!-- Flags -->
+          <div class="rx-flags">
+            <span class="rx-flags__label">Flags:</span>
+            <label class="rx-flag"><input type="checkbox" id="flagG" checked><span>global (g)</span></label>
+            <label class="rx-flag"><input type="checkbox" id="flagI"><span>case-insensitive (i)</span></label>
+            <label class="rx-flag"><input type="checkbox" id="flagM"><span>multiline (m)</span></label>
+          </div>
+
+          <!-- Output -->
+          <div class="rx-output" id="rxOutput">
+            <div class="rx-output__label">// generated pattern</div>
+            <div class="rx-output__pattern" id="rxPattern">
+              <button class="rx-btn rx-btn--sm rx-btn--outline rx-copy-btn" id="rxCopy" title="Copy regex">copy</button>
+            </div>
+
+            <div class="rx-output__label">// explanation</div>
+            <div class="rx-output__explain" id="rxExplain"></div>
+
+            <!-- Test Area -->
+            <div class="rx-test">
+              <div class="rx-output__label">// test your regex</div>
+              <textarea class="rx-test__textarea" id="rxTestInput" placeholder="Paste or type text here to test matches..." spellcheck="false"></textarea>
+              <div class="rx-test__results" id="rxTestResults">Matches will appear here...</div>
+              <div class="rx-test__stats" id="rxTestStats">
+                <span class="rx-test__stat">Matches: <strong id="rxMatchCount">0</strong></span>
+                <span class="rx-test__stat">Groups: <strong id="rxGroupCount">0</strong></span>
+              </div>
+              <div class="rx-groups" id="rxGroups"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Cheat Sheet -->
+    <div class="rx-cheat">
+      <h2 class="rx-cheat__title">Regex Cheat Sheet</h2>
+      <div class="rx-cheat__grid">
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Character Classes</div>
+          <div class="rx-cheat__row"><code>.</code> <span>Any character (except newline)</span></div>
+          <div class="rx-cheat__row"><code>\d</code> <span>Digit [0-9]</span></div>
+          <div class="rx-cheat__row"><code>\D</code> <span>Not a digit</span></div>
+          <div class="rx-cheat__row"><code>\w</code> <span>Word char [a-zA-Z0-9_]</span></div>
+          <div class="rx-cheat__row"><code>\W</code> <span>Not a word char</span></div>
+          <div class="rx-cheat__row"><code>\s</code> <span>Whitespace</span></div>
+          <div class="rx-cheat__row"><code>\S</code> <span>Not whitespace</span></div>
+        </div>
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Quantifiers</div>
+          <div class="rx-cheat__row"><code>*</code> <span>0 or more</span></div>
+          <div class="rx-cheat__row"><code>+</code> <span>1 or more</span></div>
+          <div class="rx-cheat__row"><code>?</code> <span>0 or 1 (optional)</span></div>
+          <div class="rx-cheat__row"><code>{n}</code> <span>Exactly n times</span></div>
+          <div class="rx-cheat__row"><code>{n,}</code> <span>n or more times</span></div>
+          <div class="rx-cheat__row"><code>{n,m}</code> <span>Between n and m times</span></div>
+          <div class="rx-cheat__row"><code>*?</code> <span>Lazy (non-greedy) match</span></div>
+        </div>
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Anchors &amp; Boundaries</div>
+          <div class="rx-cheat__row"><code>^</code> <span>Start of string/line</span></div>
+          <div class="rx-cheat__row"><code>$</code> <span>End of string/line</span></div>
+          <div class="rx-cheat__row"><code>\b</code> <span>Word boundary</span></div>
+          <div class="rx-cheat__row"><code>\B</code> <span>Not a word boundary</span></div>
+          <div class="rx-cheat__row"><code>(?=...)</code> <span>Positive lookahead</span></div>
+          <div class="rx-cheat__row"><code>(?!...)</code> <span>Negative lookahead</span></div>
+          <div class="rx-cheat__row"><code>(?&lt;=...)</code> <span>Positive lookbehind</span></div>
+        </div>
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Groups &amp; Alternation</div>
+          <div class="rx-cheat__row"><code>(...)</code> <span>Capturing group</span></div>
+          <div class="rx-cheat__row"><code>(?:...)</code> <span>Non-capturing group</span></div>
+          <div class="rx-cheat__row"><code>(?&lt;name&gt;...)</code> <span>Named group</span></div>
+          <div class="rx-cheat__row"><code>a|b</code> <span>Alternation (a or b)</span></div>
+          <div class="rx-cheat__row"><code>[abc]</code> <span>Character set</span></div>
+          <div class="rx-cheat__row"><code>[^abc]</code> <span>Negated set</span></div>
+          <div class="rx-cheat__row"><code>[a-z]</code> <span>Range</span></div>
+        </div>
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Common Escape Sequences</div>
+          <div class="rx-cheat__row"><code>\n</code> <span>Newline</span></div>
+          <div class="rx-cheat__row"><code>\t</code> <span>Tab</span></div>
+          <div class="rx-cheat__row"><code>\\</code> <span>Literal backslash</span></div>
+          <div class="rx-cheat__row"><code>\.</code> <span>Literal period</span></div>
+          <div class="rx-cheat__row"><code>\*</code> <span>Literal asterisk</span></div>
+          <div class="rx-cheat__row"><code>\+</code> <span>Literal plus</span></div>
+          <div class="rx-cheat__row"><code>\?</code> <span>Literal question mark</span></div>
+        </div>
+        <div class="rx-cheat__card">
+          <div class="rx-cheat__card-title">Flags</div>
+          <div class="rx-cheat__row"><code>g</code> <span>Global (find all matches)</span></div>
+          <div class="rx-cheat__row"><code>i</code> <span>Case-insensitive</span></div>
+          <div class="rx-cheat__row"><code>m</code> <span>Multiline (^ $ per line)</span></div>
+          <div class="rx-cheat__row"><code>s</code> <span>Dotall (. matches \n)</span></div>
+          <div class="rx-cheat__row"><code>u</code> <span>Unicode support</span></div>
+          <div class="rx-cheat__row"><code>y</code> <span>Sticky (from lastIndex)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════════
+     AI REGEX ARCHITECT — Rule-Based Natural Language to Regex Engine
+     100% Client-Side, Zero API Calls
+     ════════════════════════════════════════════════════════════════ */
+  (function() {
+    'use strict';
+
+    // ── Pattern Database (30+ patterns) ──
+    const PATTERNS = [
+      {
+        keywords: ['email', 'e-mail', 'mail address', 'email address'],
+        pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}',
+        explanation: [
+          { token: '[a-zA-Z0-9._%+-]+', desc: 'One or more valid username characters (letters, digits, dots, underscores, percent, plus, hyphen)' },
+          { token: '@', desc: 'Literal @ symbol separating username from domain' },
+          { token: '[a-zA-Z0-9.-]+', desc: 'One or more domain name characters (letters, digits, dots, hyphens)' },
+          { token: '\\.[a-zA-Z]{2,}', desc: 'A dot followed by the top-level domain (2 or more letters)' }
+        ],
+        sample: 'Contact us at hello@example.com or support@moonlit-labs.io for help.'
+      },
+      {
+        keywords: ['url', 'urls', 'web address', 'website', 'link', 'http'],
+        pattern: 'https?:\\/\\/[a-zA-Z0-9.-]+(?:\\.[a-zA-Z]{2,})(?:\\/[^\\s]*)?',
+        explanation: [
+          { token: 'https?', desc: 'Matches "http" or "https" (the s is optional)' },
+          { token: ':\\/\\/', desc: 'Literal "://" separator' },
+          { token: '[a-zA-Z0-9.-]+', desc: 'Domain name characters' },
+          { token: '(?:\\.[a-zA-Z]{2,})', desc: 'Top-level domain (.com, .org, etc.)' },
+          { token: '(?:\\/[^\\s]*)?', desc: 'Optional path after the domain' }
+        ],
+        sample: 'Visit https://example.com/docs or http://api.test.org/v2/users for more info.'
+      },
+      {
+        keywords: ['phone', 'phone number', 'telephone', 'tel'],
+        pattern: '(?:\\+?1[-.\\s]?)?\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}',
+        explanation: [
+          { token: '(?:\\+?1[-.\\s]?)?', desc: 'Optional country code (+1) with optional separator' },
+          { token: '\\(?\\d{3}\\)?', desc: 'Area code, optionally wrapped in parentheses' },
+          { token: '[-.\\s]?', desc: 'Optional separator (dash, dot, or space)' },
+          { token: '\\d{3}', desc: 'Three-digit exchange number' },
+          { token: '[-.\\s]?\\d{4}', desc: 'Optional separator followed by four-digit line number' }
+        ],
+        sample: 'Call us at (555) 123-4567 or +1-800-555-0199 or 5551234567.'
+      },
+      {
+        keywords: ['ip', 'ip address', 'ipv4', 'ip v4'],
+        pattern: '\\b(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\.(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary to avoid partial matches' },
+          { token: '(?:25[0-5]|2[0-4]\\d|[01]?\\d\\d?)', desc: 'Matches a number from 0 to 255 (one octet)' },
+          { token: '\\.', desc: 'Literal dot separator between octets' },
+          { token: '(repeated 4 times)', desc: 'Four octets separated by dots form a valid IPv4 address' }
+        ],
+        sample: 'Server IPs: 192.168.1.1, 10.0.0.255, 172.16.254.1, invalid: 999.999.999.999'
+      },
+      {
+        keywords: ['date mm/dd/yyyy', 'date mm-dd-yyyy', 'date us', 'date slash', 'us date'],
+        pattern: '(?:0[1-9]|1[0-2])[\\/\\-](?:0[1-9]|[12]\\d|3[01])[\\/\\-](?:19|20)\\d{2}',
+        explanation: [
+          { token: '(?:0[1-9]|1[0-2])', desc: 'Month: 01-12' },
+          { token: '[\\/\\-]', desc: 'Separator: slash or dash' },
+          { token: '(?:0[1-9]|[12]\\d|3[01])', desc: 'Day: 01-31' },
+          { token: '[\\/\\-]', desc: 'Separator: slash or dash' },
+          { token: '(?:19|20)\\d{2}', desc: 'Year: 1900-2099' }
+        ],
+        sample: 'Dates: 01/15/2024, 12-25-2023, 06/01/1999, invalid: 13/32/2024'
+      },
+      {
+        keywords: ['date yyyy-mm-dd', 'iso date', 'date iso', 'date international'],
+        pattern: '(?:19|20)\\d{2}[\\-\\/](?:0[1-9]|1[0-2])[\\-\\/](?:0[1-9]|[12]\\d|3[01])',
+        explanation: [
+          { token: '(?:19|20)\\d{2}', desc: 'Year: 1900-2099' },
+          { token: '[\\-\\/]', desc: 'Separator: dash or slash' },
+          { token: '(?:0[1-9]|1[0-2])', desc: 'Month: 01-12' },
+          { token: '[\\-\\/](?:0[1-9]|[12]\\d|3[01])', desc: 'Day: 01-31' }
+        ],
+        sample: 'Dates: 2024-01-15, 2023/12/25, 1999-06-01'
+      },
+      {
+        keywords: ['date dd/mm/yyyy', 'date european', 'date eu', 'date british', 'date uk'],
+        pattern: '(?:0[1-9]|[12]\\d|3[01])[\\/\\-](?:0[1-9]|1[0-2])[\\/\\-](?:19|20)\\d{2}',
+        explanation: [
+          { token: '(?:0[1-9]|[12]\\d|3[01])', desc: 'Day: 01-31' },
+          { token: '[\\/\\-]', desc: 'Separator: slash or dash' },
+          { token: '(?:0[1-9]|1[0-2])', desc: 'Month: 01-12' },
+          { token: '[\\/\\-](?:19|20)\\d{2}', desc: 'Year: 1900-2099' }
+        ],
+        sample: 'Dates: 15/01/2024, 25-12-2023, 01/06/1999'
+      },
+      {
+        keywords: ['date', 'dates'],
+        pattern: '\\d{1,2}[\\/\\-\\.]\\d{1,2}[\\/\\-\\.]\\d{2,4}',
+        explanation: [
+          { token: '\\d{1,2}', desc: '1-2 digit number (month or day)' },
+          { token: '[\\/\\-\\.]', desc: 'Separator: slash, dash, or dot' },
+          { token: '\\d{1,2}', desc: '1-2 digit number (day or month)' },
+          { token: '[\\/\\-\\.]\\d{2,4}', desc: 'Separator then 2-4 digit year' }
+        ],
+        sample: 'Dates: 1/15/24, 12-25-2023, 6.1.1999'
+      },
+      {
+        keywords: ['time', 'times', 'clock', '12 hour', '24 hour'],
+        pattern: '(?:[01]?\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d)?(?:\\s?[AaPp][Mm])?',
+        explanation: [
+          { token: '(?:[01]?\\d|2[0-3])', desc: 'Hours: 0-23 (or 1-12 for 12-hour)' },
+          { token: ':[0-5]\\d', desc: 'Colon followed by minutes (00-59)' },
+          { token: '(?::[0-5]\\d)?', desc: 'Optional seconds' },
+          { token: '(?:\\s?[AaPp][Mm])?', desc: 'Optional AM/PM indicator' }
+        ],
+        sample: 'Times: 14:30, 2:30 PM, 08:45:30, 11:59 am'
+      },
+      {
+        keywords: ['hex', 'hex color', 'color code', 'colour code', 'hexadecimal color'],
+        pattern: '#(?:[0-9a-fA-F]{3}){1,2}\\b',
+        explanation: [
+          { token: '#', desc: 'Literal hash symbol' },
+          { token: '(?:[0-9a-fA-F]{3})', desc: 'Three hex digits (short form like #FFF)' },
+          { token: '{1,2}', desc: 'Matches once (3-digit) or twice (6-digit)' },
+          { token: '\\b', desc: 'Word boundary to prevent partial matches' }
+        ],
+        sample: 'Colors: #FF5733, #fff, #00ffc8, #333, not valid: #GGG'
+      },
+      {
+        keywords: ['credit card', 'card number', 'cc number', 'visa', 'mastercard'],
+        pattern: '\\b(?:4\\d{3}|5[1-5]\\d{2}|3[47]\\d{2}|6(?:011|5\\d{2}))[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '4\\d{3}', desc: 'Visa: starts with 4' },
+          { token: '5[1-5]\\d{2}', desc: 'MasterCard: starts with 51-55' },
+          { token: '3[47]\\d{2}', desc: 'Amex: starts with 34 or 37' },
+          { token: '6(?:011|5\\d{2})', desc: 'Discover: starts with 6011 or 65' },
+          { token: '[\\s-]?\\d{4}', desc: 'Groups of 4 digits with optional space/dash separator' }
+        ],
+        sample: '4111 1111 1111 1111, 5500-0000-0000-0004, 371449635398431'
+      },
+      {
+        keywords: ['ssn', 'social security', 'social security number'],
+        pattern: '\\b\\d{3}-\\d{2}-\\d{4}\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '\\d{3}', desc: 'Three-digit area number' },
+          { token: '-', desc: 'Literal dash separator' },
+          { token: '\\d{2}', desc: 'Two-digit group number' },
+          { token: '-\\d{4}', desc: 'Dash then four-digit serial number' }
+        ],
+        sample: 'SSN examples: 123-45-6789, 001-01-0001'
+      },
+      {
+        keywords: ['zip', 'zip code', 'postal code', 'zipcode'],
+        pattern: '\\b\\d{5}(?:-\\d{4})?\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '\\d{5}', desc: 'Five-digit ZIP code' },
+          { token: '(?:-\\d{4})?', desc: 'Optional ZIP+4 extension (dash plus 4 digits)' },
+          { token: '\\b', desc: 'Word boundary' }
+        ],
+        sample: 'ZIP codes: 90210, 10001-4567, 60601'
+      },
+      {
+        keywords: ['mac', 'mac address', 'hardware address', 'physical address'],
+        pattern: '(?:[0-9a-fA-F]{2}[:\\-]){5}[0-9a-fA-F]{2}',
+        explanation: [
+          { token: '[0-9a-fA-F]{2}', desc: 'Two hexadecimal characters (one octet)' },
+          { token: '[:\\-]', desc: 'Colon or dash separator' },
+          { token: '{5}', desc: 'Repeated 5 times (first 5 octets with separator)' },
+          { token: '[0-9a-fA-F]{2}', desc: 'Final octet (no trailing separator)' }
+        ],
+        sample: 'MAC: 00:1A:2B:3C:4D:5E, AA-BB-CC-DD-EE-FF'
+      },
+      {
+        keywords: ['uuid', 'guid', 'unique id'],
+        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+        explanation: [
+          { token: '[0-9a-fA-F]{8}', desc: 'First block: 8 hex characters' },
+          { token: '-', desc: 'Dash separator' },
+          { token: '[0-9a-fA-F]{4}', desc: 'Second block: 4 hex characters (repeated for blocks 2-4)' },
+          { token: '[0-9a-fA-F]{12}', desc: 'Fifth block: 12 hex characters' }
+        ],
+        sample: 'ID: 550e8400-e29b-41d4-a716-446655440000'
+      },
+      {
+        keywords: ['file extension', 'file type', 'filename extension'],
+        pattern: '\\.[a-zA-Z0-9]{1,10}$',
+        explanation: [
+          { token: '\\.', desc: 'Literal dot before extension' },
+          { token: '[a-zA-Z0-9]{1,10}', desc: '1-10 alphanumeric characters for the extension' },
+          { token: '$', desc: 'End of string' }
+        ],
+        sample: 'report.pdf, image.png, script.js, data.json'
+      },
+      {
+        keywords: ['html tag', 'html tags', 'xml tag', 'markup tag', 'opening tag', 'closing tag'],
+        pattern: '<\\/?[a-zA-Z][a-zA-Z0-9]*(?:\\s[^>]*)?\\/?>',
+        explanation: [
+          { token: '<', desc: 'Opening angle bracket' },
+          { token: '\\/?', desc: 'Optional forward slash (for closing tags)' },
+          { token: '[a-zA-Z][a-zA-Z0-9]*', desc: 'Tag name starting with a letter' },
+          { token: '(?:\\s[^>]*)?', desc: 'Optional attributes (any characters except >)' },
+          { token: '\\/?>',  desc: 'Optional self-closing slash, then closing bracket' }
+        ],
+        sample: '<div class="test">, </p>, <br/>, <img src="pic.png" />'
+      },
+      {
+        keywords: ['markdown link', 'md link', 'markdown url'],
+        pattern: '\\[([^\\]]+)\\]\\(([^)]+)\\)',
+        explanation: [
+          { token: '\\[', desc: 'Opening square bracket (literal)' },
+          { token: '([^\\]]+)', desc: 'Capture group 1: link text (any chars except ])' },
+          { token: '\\]\\(', desc: 'Closing bracket then opening parenthesis' },
+          { token: '([^)]+)', desc: 'Capture group 2: URL (any chars except ))' },
+          { token: '\\)', desc: 'Closing parenthesis' }
+        ],
+        sample: 'Check [this link](https://example.com) and [docs](https://docs.test.org).'
+      },
+      {
+        keywords: ['variable', 'variable name', 'identifier', 'programming variable'],
+        pattern: '\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '[a-zA-Z_$]', desc: 'First character: letter, underscore, or dollar sign' },
+          { token: '[a-zA-Z0-9_$]*', desc: 'Remaining characters: letters, digits, underscores, dollar signs' },
+          { token: '\\b', desc: 'Word boundary' }
+        ],
+        sample: 'const myVar = 123; let _private = true; var $el = null;'
+      },
+      {
+        keywords: ['number with comma', 'formatted number', 'thousand separator', 'comma number'],
+        pattern: '\\b\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?\\b',
+        explanation: [
+          { token: '\\d{1,3}', desc: '1-3 digits before the first comma' },
+          { token: '(?:,\\d{3})*', desc: 'Repeated groups of comma + 3 digits' },
+          { token: '(?:\\.\\d+)?', desc: 'Optional decimal portion' }
+        ],
+        sample: 'Values: 1,000, 1,234,567.89, 100, 10,000,000'
+      },
+      {
+        keywords: ['currency', 'money', 'dollar', 'price', 'amount'],
+        pattern: '\\$\\d{1,3}(?:,\\d{3})*(?:\\.\\d{2})?',
+        explanation: [
+          { token: '\\$', desc: 'Literal dollar sign' },
+          { token: '\\d{1,3}', desc: '1-3 digits before first comma' },
+          { token: '(?:,\\d{3})*', desc: 'Optional thousands groups (comma + 3 digits)' },
+          { token: '(?:\\.\\d{2})?', desc: 'Optional cents (dot + 2 digits)' }
+        ],
+        sample: 'Prices: $9.99, $1,000, $25,000.50, $1,234,567.89'
+      },
+      {
+        keywords: ['slug', 'url slug', 'path slug', 'kebab case'],
+        pattern: '\\b[a-z0-9]+(?:-[a-z0-9]+)*\\b',
+        explanation: [
+          { token: '[a-z0-9]+', desc: 'Lowercase letters and digits' },
+          { token: '(?:-[a-z0-9]+)*', desc: 'Optional repeated groups of dash + lowercase alphanumeric' }
+        ],
+        sample: 'Slugs: my-blog-post, regex-architect, hello-world-123'
+      },
+      {
+        keywords: ['hashtag', 'hash tag', 'twitter hashtag'],
+        pattern: '#[a-zA-Z_][a-zA-Z0-9_]*',
+        explanation: [
+          { token: '#', desc: 'Literal hash symbol' },
+          { token: '[a-zA-Z_]', desc: 'First character must be a letter or underscore' },
+          { token: '[a-zA-Z0-9_]*', desc: 'Remaining: letters, digits, or underscores' }
+        ],
+        sample: 'Trending: #coding #WebDev #regex_tips #100DaysOfCode'
+      },
+      {
+        keywords: ['mention', '@mention', 'at mention', 'username mention', 'twitter mention'],
+        pattern: '@[a-zA-Z_][a-zA-Z0-9_]*',
+        explanation: [
+          { token: '@', desc: 'Literal at symbol' },
+          { token: '[a-zA-Z_]', desc: 'First character: letter or underscore' },
+          { token: '[a-zA-Z0-9_]*', desc: 'Remaining: letters, digits, or underscores' }
+        ],
+        sample: 'Shoutout to @moonligh7er and @dev_guru for the help!'
+      },
+      {
+        keywords: ['ipv6', 'ip v6', 'ipv6 address'],
+        pattern: '(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}',
+        explanation: [
+          { token: '[0-9a-fA-F]{1,4}', desc: '1-4 hex digits (one group)' },
+          { token: ':', desc: 'Colon separator' },
+          { token: '{7}', desc: 'First 7 groups with colons' },
+          { token: '[0-9a-fA-F]{1,4}', desc: 'Eighth and final group' }
+        ],
+        sample: 'IPv6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+      },
+      {
+        keywords: ['semver', 'semantic version', 'version number', 'software version'],
+        pattern: '\\bv?\\d+\\.\\d+\\.\\d+(?:-[a-zA-Z0-9.]+)?(?:\\+[a-zA-Z0-9.]+)?\\b',
+        explanation: [
+          { token: 'v?', desc: 'Optional "v" prefix' },
+          { token: '\\d+\\.\\d+\\.\\d+', desc: 'Major.Minor.Patch numbers' },
+          { token: '(?:-[a-zA-Z0-9.]+)?', desc: 'Optional pre-release label (e.g., -beta.1)' },
+          { token: '(?:\\+[a-zA-Z0-9.]+)?', desc: 'Optional build metadata (e.g., +build.42)' }
+        ],
+        sample: 'Versions: v1.0.0, 2.3.1-beta.1, 0.9.0+build.123'
+      },
+      {
+        keywords: ['password strength', 'strong password', 'password validation'],
+        pattern: '(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}',
+        explanation: [
+          { token: '(?=.*[a-z])', desc: 'Lookahead: at least one lowercase letter' },
+          { token: '(?=.*[A-Z])', desc: 'Lookahead: at least one uppercase letter' },
+          { token: '(?=.*\\d)', desc: 'Lookahead: at least one digit' },
+          { token: '(?=.*[!@#$%^&*])', desc: 'Lookahead: at least one special character' },
+          { token: '.{8,}', desc: 'Minimum 8 characters total' }
+        ],
+        sample: 'Passwords: P@ssw0rd!, weakpass, Strong#1Pass, 12345678'
+      },
+      {
+        keywords: ['whitespace', 'spaces', 'blank', 'trim'],
+        pattern: '^\\s+|\\s+$',
+        explanation: [
+          { token: '^\\s+', desc: 'One or more whitespace characters at the start of string' },
+          { token: '|', desc: 'OR' },
+          { token: '\\s+$', desc: 'One or more whitespace characters at the end of string' }
+        ],
+        sample: '   hello world   '
+      },
+      {
+        keywords: ['integer', 'whole number', 'digits only', 'number only'],
+        pattern: '-?\\b\\d+\\b',
+        explanation: [
+          { token: '-?', desc: 'Optional negative sign' },
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '\\d+', desc: 'One or more digits' },
+          { token: '\\b', desc: 'Word boundary' }
+        ],
+        sample: 'Numbers: 42, -7, 0, 1000, 999'
+      },
+      {
+        keywords: ['decimal', 'float', 'floating point', 'real number'],
+        pattern: '-?\\d+\\.\\d+',
+        explanation: [
+          { token: '-?', desc: 'Optional negative sign' },
+          { token: '\\d+', desc: 'One or more digits before decimal' },
+          { token: '\\.', desc: 'Literal decimal point' },
+          { token: '\\d+', desc: 'One or more digits after decimal' }
+        ],
+        sample: 'Decimals: 3.14, -0.5, 100.00, 2.71828'
+      },
+      {
+        keywords: ['domain', 'domain name', 'hostname'],
+        pattern: '\\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}\\b',
+        explanation: [
+          { token: '[a-zA-Z0-9]', desc: 'Label must start with alphanumeric' },
+          { token: '(?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?', desc: 'Optional middle characters (up to 63 total), cannot end with hyphen' },
+          { token: '\\.', desc: 'Dot separator between labels' },
+          { token: '[a-zA-Z]{2,}', desc: 'Top-level domain (2+ letters)' }
+        ],
+        sample: 'Domains: example.com, sub.domain.co.uk, my-site.io'
+      },
+      {
+        keywords: ['word', 'words', 'single word', 'alphabetic'],
+        pattern: '\\b[a-zA-Z]+\\b',
+        explanation: [
+          { token: '\\b', desc: 'Word boundary' },
+          { token: '[a-zA-Z]+', desc: 'One or more letters' },
+          { token: '\\b', desc: 'Word boundary' }
+        ],
+        sample: 'Hello World 123 test foo_bar'
+      },
+      {
+        keywords: ['camel case', 'camelcase', 'camel-case'],
+        pattern: '\\b[a-z]+(?:[A-Z][a-z]+)+\\b',
+        explanation: [
+          { token: '[a-z]+', desc: 'Starts with one or more lowercase letters' },
+          { token: '(?:[A-Z][a-z]+)+', desc: 'Followed by one or more uppercase-then-lowercase groups' }
+        ],
+        sample: 'Variables: myVariable, getUserName, parseJsonData, notcamel, ALLCAPS'
+      },
+      {
+        keywords: ['snake case', 'snake_case', 'underscore case'],
+        pattern: '\\b[a-z]+(?:_[a-z]+)+\\b',
+        explanation: [
+          { token: '[a-z]+', desc: 'One or more lowercase letters' },
+          { token: '(?:_[a-z]+)+', desc: 'One or more underscore-separated lowercase segments' }
+        ],
+        sample: 'Variables: my_variable, get_user_name, parse_json, notsnake'
+      },
+      {
+        keywords: ['base64', 'base 64', 'base64 string'],
+        pattern: '[A-Za-z0-9+/]{4,}(?:={1,2})?',
+        explanation: [
+          { token: '[A-Za-z0-9+/]{4,}', desc: 'Base64 characters (letters, digits, +, /) at least 4 chars' },
+          { token: '(?:={1,2})?', desc: 'Optional padding (1 or 2 equals signs)' }
+        ],
+        sample: 'Encoded: SGVsbG8gV29ybGQ=, dGVzdA==, abc'
+      },
+      {
+        keywords: ['jwt', 'json web token'],
+        pattern: 'eyJ[a-zA-Z0-9_-]*\\.eyJ[a-zA-Z0-9_-]*\\.[a-zA-Z0-9_-]+',
+        explanation: [
+          { token: 'eyJ[a-zA-Z0-9_-]*', desc: 'JWT header (base64url encoded, starts with eyJ)' },
+          { token: '\\.', desc: 'Dot separator' },
+          { token: 'eyJ[a-zA-Z0-9_-]*', desc: 'JWT payload (base64url encoded)' },
+          { token: '\\.[a-zA-Z0-9_-]+', desc: 'Dot separator and signature' }
+        ],
+        sample: 'Token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.abc123def456'
+      },
+      {
+        keywords: ['hex string', 'hexadecimal', 'hex value', 'hex number'],
+        pattern: '\\b(?:0x)?[0-9a-fA-F]+\\b',
+        explanation: [
+          { token: '(?:0x)?', desc: 'Optional "0x" prefix' },
+          { token: '[0-9a-fA-F]+', desc: 'One or more hexadecimal characters' }
+        ],
+        sample: 'Hex: 0xFF, 1A2B3C, DEADBEEF, 0x00'
+      },
+      {
+        keywords: ['image file', 'image extension', 'picture file'],
+        pattern: '\\S+\\.(?:jpg|jpeg|png|gif|svg|webp|bmp|ico)\\b',
+        explanation: [
+          { token: '\\S+', desc: 'One or more non-whitespace characters (filename)' },
+          { token: '\\.', desc: 'Literal dot' },
+          { token: '(?:jpg|jpeg|png|gif|svg|webp|bmp|ico)', desc: 'Common image extensions' }
+        ],
+        sample: 'Files: photo.jpg, logo.png, icon.svg, doc.pdf, bg.webp'
+      },
+      {
+        keywords: ['quoted string', 'double quotes', 'string literal'],
+        pattern: '"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"',
+        explanation: [
+          { token: '"', desc: 'Opening double quote' },
+          { token: '[^"\\\\]*', desc: 'Any characters except quote or backslash' },
+          { token: '(?:\\\\.[^"\\\\]*)*', desc: 'Escaped characters followed by more content (handles \\" inside strings)' },
+          { token: '"', desc: 'Closing double quote' }
+        ],
+        sample: 'Strings: "hello", "world \\"escaped\\"", "test 123"'
+      },
+      {
+        keywords: ['css class', 'class name', 'css selector'],
+        pattern: '\\.[a-zA-Z_-][a-zA-Z0-9_-]*',
+        explanation: [
+          { token: '\\.', desc: 'Literal dot (CSS class prefix)' },
+          { token: '[a-zA-Z_-]', desc: 'First character: letter, underscore, or hyphen' },
+          { token: '[a-zA-Z0-9_-]*', desc: 'Remaining: letters, digits, underscores, hyphens' }
+        ],
+        sample: '.container, .nav__link, .btn-primary, .my-class-123'
+      }
+    ];
+
+    // ── DOM refs ──
+    const input = document.getElementById('rxInput');
+    const generateBtn = document.getElementById('rxGenerate');
+    const output = document.getElementById('rxOutput');
+    const patternEl = document.getElementById('rxPattern');
+    const explainEl = document.getElementById('rxExplain');
+    const copyBtn = document.getElementById('rxCopy');
+    const testInput = document.getElementById('rxTestInput');
+    const testResults = document.getElementById('rxTestResults');
+    const matchCountEl = document.getElementById('rxMatchCount');
+    const groupCountEl = document.getElementById('rxGroupCount');
+    const groupsEl = document.getElementById('rxGroups');
+    const flagG = document.getElementById('flagG');
+    const flagI = document.getElementById('flagI');
+    const flagM = document.getElementById('flagM');
+
+    let currentPattern = null;
+
+    // ── Find matching pattern ──
+    function findPattern(query) {
+      const q = query.toLowerCase().trim();
+      if (!q) return null;
+
+      let bestMatch = null;
+      let bestScore = 0;
+
+      for (const p of PATTERNS) {
+        for (const kw of p.keywords) {
+          const kwLower = kw.toLowerCase();
+          // Exact match
+          if (q === kwLower || q === 'match ' + kwLower || q === 'find ' + kwLower ||
+              q === 'extract ' + kwLower || q === 'detect ' + kwLower ||
+              q === 'match all ' + kwLower || q === 'find all ' + kwLower) {
+            return p;
+          }
+          // Contains keyword
+          if (q.includes(kwLower)) {
+            const score = kwLower.length;
+            if (score > bestScore) {
+              bestScore = score;
+              bestMatch = p;
+            }
+          }
+          // Keyword words appear in query
+          const kwWords = kwLower.split(/\s+/);
+          const matchedWords = kwWords.filter(w => q.includes(w));
+          if (matchedWords.length === kwWords.length && kwWords.length > 0) {
+            const score = kwLower.length + 5;
+            if (score > bestScore) {
+              bestScore = score;
+              bestMatch = p;
+            }
+          }
+        }
+      }
+
+      return bestMatch;
+    }
+
+    // ── Build flags string ──
+    function getFlags() {
+      let f = '';
+      if (flagG.checked) f += 'g';
+      if (flagI.checked) f += 'i';
+      if (flagM.checked) f += 'm';
+      return f;
+    }
+
+    // ── Render output ──
+    function renderPattern(match) {
+      currentPattern = match;
+      output.classList.add('active');
+
+      const flags = getFlags();
+      const displayPattern = '/' + match.pattern + '/' + flags;
+
+      // Pattern display
+      patternEl.innerHTML = '';
+      const patternText = document.createTextNode(displayPattern);
+      patternEl.appendChild(patternText);
+      // Re-add copy button
+      const btn = document.createElement('button');
+      btn.className = 'rx-btn rx-btn--sm rx-btn--outline rx-copy-btn';
+      btn.textContent = 'copy';
+      btn.title = 'Copy regex';
+      btn.addEventListener('click', function() {
+        navigator.clipboard.writeText(match.pattern).then(() => {
+          btn.textContent = 'copied!';
+          setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+        });
+      });
+      patternEl.appendChild(btn);
+
+      // Explanation
+      explainEl.innerHTML = '';
+      for (const item of match.explanation) {
+        const div = document.createElement('div');
+        div.className = 'rx-output__explain-item';
+        div.innerHTML = '<code>' + escapeHtml(item.token) + '</code> &mdash; ' + escapeHtml(item.desc);
+        explainEl.appendChild(div);
+      }
+
+      // Set sample text if test area is empty
+      if (!testInput.value.trim() && match.sample) {
+        testInput.value = match.sample;
+      }
+
+      runTest();
+    }
+
+    // ── Escape HTML ──
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // ── Run test matches ──
+    function runTest() {
+      if (!currentPattern) return;
+
+      const text = testInput.value;
+      if (!text) {
+        testResults.innerHTML = '<span style="color:var(--text-dim)">Matches will appear here...</span>';
+        matchCountEl.textContent = '0';
+        groupCountEl.textContent = '0';
+        groupsEl.innerHTML = '';
+        return;
+      }
+
+      const flags = getFlags();
+      let regex;
+      try {
+        regex = new RegExp(currentPattern.pattern, flags);
+      } catch (e) {
+        testResults.innerHTML = '<span style="color:var(--rose)">Invalid regex: ' + escapeHtml(e.message) + '</span>';
+        return;
+      }
+
+      // Find all matches and groups
+      const matches = [];
+      const groups = [];
+      let m;
+
+      if (flags.includes('g')) {
+        while ((m = regex.exec(text)) !== null) {
+          matches.push({ index: m.index, length: m[0].length, text: m[0] });
+          if (m.length > 1) {
+            const g = [];
+            for (let i = 1; i < m.length; i++) {
+              g.push(m[i]);
+            }
+            groups.push({ match: m[0], groups: g });
+          }
+          if (m[0].length === 0) { regex.lastIndex++; }
+        }
+      } else {
+        m = regex.exec(text);
+        if (m) {
+          matches.push({ index: m.index, length: m[0].length, text: m[0] });
+          if (m.length > 1) {
+            const g = [];
+            for (let i = 1; i < m.length; i++) {
+              g.push(m[i]);
+            }
+            groups.push({ match: m[0], groups: g });
+          }
+        }
+      }
+
+      // Highlight matches in text
+      if (matches.length === 0) {
+        testResults.innerHTML = '<span style="color:var(--text-dim)">No matches found.</span>';
+      } else {
+        let highlighted = '';
+        let lastIdx = 0;
+        for (const match of matches) {
+          highlighted += escapeHtml(text.slice(lastIdx, match.index));
+          highlighted += '<span class="rx-match">' + escapeHtml(text.slice(match.index, match.index + match.length)) + '</span>';
+          lastIdx = match.index + match.length;
+        }
+        highlighted += escapeHtml(text.slice(lastIdx));
+        testResults.innerHTML = highlighted;
+      }
+
+      // Stats
+      matchCountEl.textContent = matches.length;
+      groupCountEl.textContent = groups.reduce((sum, g) => sum + g.groups.length, 0);
+
+      // Captured groups
+      groupsEl.innerHTML = '';
+      if (groups.length > 0) {
+        for (const g of groups) {
+          for (let i = 0; i < g.groups.length; i++) {
+            const div = document.createElement('div');
+            div.className = 'rx-groups__item';
+            div.innerHTML = 'Group ' + (i + 1) + ': <code>' + escapeHtml(g.groups[i] || '(empty)') + '</code>';
+            groupsEl.appendChild(div);
+          }
+        }
+      }
+    }
+
+    // ── Not found response ──
+    function showNotFound(query) {
+      output.classList.add('active');
+      patternEl.innerHTML = '<span style="color:var(--rose)">// pattern not recognized</span>';
+      explainEl.innerHTML = '<div class="rx-output__explain-item" style="color:var(--text-dim)">Could not match "' + escapeHtml(query) + '" to a known pattern. Try keywords like: <span style="color:var(--teal)">email, URL, phone, IP address, date, time, hex color, credit card, SSN, ZIP code, MAC address, UUID, HTML tags, markdown links, variable names, currency, hashtags, mentions, IPv6, semver, password, domain, slug, camelCase, snake_case, base64, JWT, quoted string, CSS class</span></div>';
+      testResults.innerHTML = '';
+      matchCountEl.textContent = '0';
+      groupCountEl.textContent = '0';
+      groupsEl.innerHTML = '';
+      currentPattern = null;
+    }
+
+    // ── Event: Generate ──
+    function handleGenerate() {
+      const query = input.value.trim();
+      if (!query) return;
+
+      const match = findPattern(query);
+      if (match) {
+        renderPattern(match);
+      } else {
+        showNotFound(query);
+      }
+    }
+
+    generateBtn.addEventListener('click', handleGenerate);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleGenerate();
+    });
+
+    // ── Event: Quick tags ──
+    document.getElementById('rxTags').addEventListener('click', function(e) {
+      const tag = e.target.closest('.rx-tag');
+      if (!tag) return;
+      input.value = tag.dataset.query;
+      handleGenerate();
+    });
+
+    // ── Event: Live test ──
+    testInput.addEventListener('input', runTest);
+
+    // ── Event: Flags change ──
+    [flagG, flagI, flagM].forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        if (currentPattern) renderPattern(currentPattern);
+      });
+    });
+
+    // ── Focus input on load ──
+    input.focus();
+
+  })();
+  </script>
+
+</body>
+</html>

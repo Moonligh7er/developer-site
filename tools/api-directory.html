@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Nexus — Public API Directory | Free APIs for Developers | Moonlit Social Labs</title>
+  <meta name="description" content="Curated public API directory with 50+ APIs for developers. AI, voice, payments, government data, traffic, analytics and more. Documentation links, auth types, and pricing info.">
+  <meta name="keywords" content="public API directory, free APIs for developers, API list, REST API collection, developer APIs, AI APIs, government APIs, data APIs, voice APIs, payment APIs">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/api-directory.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "The Nexus — Public API Directory | Moonlit Social Labs",
+    "description": "Curated public API directory with 50+ APIs across AI, voice, payments, government data, traffic, analytics and more. Free documentation links, auth types, and pricing info for developers.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/api-directory.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="The Nexus — Public API Directory for Developers">
+  <meta property="og:description" content="Curated directory of 50+ public APIs. AI, voice, payments, government data, traffic, analytics and more. Documentation links, auth types, and pricing.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/api-directory.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Nexus — Public API Directory | Moonlit Social Labs">
+  <meta name="twitter:description" content="Curated directory of 50+ public APIs for developers. AI, voice, payments, government data, traffic, analytics and more.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    /* ── Hero ── */
+    .tools-hero {
+      text-align: center;
+      padding: 1.5rem 0 0.75rem;
+    }
+    .tools-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .tools-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .tools-hero .text-body {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 55ch;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Ad containers ── */
+    .ad-container {
+      max-width: 728px;
+      margin: 1rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    /* ── Search & Controls ── */
+    .nx-controls {
+      max-width: 1200px;
+      margin: 0 auto 1.5rem;
+      padding: 0 2rem;
+    }
+    .nx-search-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    .nx-search {
+      flex: 1;
+      min-width: 200px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .nx-search:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px var(--teal-dim);
+    }
+    .nx-search::placeholder {
+      color: var(--text-dim);
+    }
+    .nx-count {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .nx-count span {
+      color: var(--teal);
+      font-weight: 500;
+    }
+    .nx-sort {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .nx-sort:focus {
+      border-color: var(--teal);
+    }
+
+    /* ── Category Tabs ── */
+    .nx-tabs-wrap {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+    }
+    .nx-tabs {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      border-bottom: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+    .nx-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .nx-tabs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .nx-tabs::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+    .nx-tab {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .nx-tab:hover {
+      color: var(--text-secondary);
+      background: var(--teal-glow);
+    }
+    .nx-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    /* ── API Grid ── */
+    .nx-grid {
+      max-width: 1200px;
+      margin: 0 auto 3rem;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    @media (max-width: 420px) {
+      .nx-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── API Card ── */
+    .nx-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      position: relative;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .nx-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .nx-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 20px rgba(0, 255, 200, 0.06), 0 0 40px rgba(0, 255, 200, 0.03);
+      transform: translateY(-2px);
+    }
+    .nx-card:hover::before {
+      opacity: 1;
+    }
+    .nx-card.hidden {
+      display: none;
+    }
+    .nx-card__header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .nx-card__icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      width: 1.5rem;
+      text-align: center;
+    }
+    .nx-card__name {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-bright);
+    }
+    .nx-card__desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .nx-card__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+    .nx-badge {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+    .nx-badge--category {
+      color: var(--violet);
+      border-color: var(--violet);
+      opacity: 0.8;
+    }
+    .nx-badge--free {
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+    .nx-badge--freemium {
+      color: var(--amber);
+      border-color: var(--amber);
+    }
+    .nx-badge--paid {
+      color: var(--rose);
+      border-color: var(--rose);
+    }
+    .nx-badge--auth {
+      color: var(--text-dim);
+      border-color: var(--border);
+    }
+    .nx-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      margin-top: 0.25rem;
+    }
+    .nx-card__link:hover {
+      color: var(--text-bright);
+      text-shadow: 0 0 8px var(--teal);
+    }
+
+    /* ── No Results ── */
+    .nx-empty {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      grid-column: 1 / -1;
+      display: none;
+    }
+    .nx-empty.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <!-- Hero -->
+    <section class="tools-hero">
+      <span class="section-label">API Reference</span>
+      <h1 class="heading-xl">The Nexus</h1>
+      <p class="text-body">A curated directory of public APIs used across real projects. Documentation links, auth types, and pricing tiers — all in one place.</p>
+    </section>
+
+    <!-- Ad Unit: Top -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Search & Controls -->
+    <div class="nx-controls">
+      <div class="nx-search-row">
+        <input type="text" class="nx-search" id="nxSearch" placeholder="Search APIs by name, category, or keyword..." aria-label="Search APIs">
+        <select class="nx-sort" id="nxSort" aria-label="Sort APIs">
+          <option value="category">Sort: Category</option>
+          <option value="alpha">Sort: A-Z</option>
+        </select>
+        <div class="nx-count">Showing <span id="nxCount">0</span> APIs</div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="nx-tabs-wrap">
+      <div class="nx-tabs" role="tablist" id="nxTabs">
+        <button class="nx-tab active" data-cat="all">All</button>
+        <button class="nx-tab" data-cat="ai">AI &amp; ML</button>
+        <button class="nx-tab" data-cat="voice">Voice &amp; Audio</button>
+        <button class="nx-tab" data-cat="backend">Backend &amp; DB</button>
+        <button class="nx-tab" data-cat="data">Data &amp; Intel</button>
+        <button class="nx-tab" data-cat="gov">Government</button>
+        <button class="nx-tab" data-cat="traffic">Traffic</button>
+        <button class="nx-tab" data-cat="monetization">Monetization</button>
+        <button class="nx-tab" data-cat="comms">Communication</button>
+        <button class="nx-tab" data-cat="social">Social</button>
+      </div>
+    </div>
+
+    <!-- API Grid -->
+    <div class="nx-grid" id="nxGrid">
+      <div class="nx-empty" id="nxEmpty">No APIs match your search.</div>
+    </div>
+
+    <!-- Ad Unit: Bottom -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  /* ════════════════════════════════════════════════════════════════
+     THE NEXUS — API Directory Logic
+     ════════════════════════════════════════════════════════════════ */
+
+  const APIs = [
+    // ── AI & Machine Learning ──
+    { name: "Anthropic Claude API", icon: "\u{1F9E0}", desc: "LLM for text generation, analysis, and code generation", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://docs.anthropic.com" },
+    { name: "Voyage AI", icon: "\u{1F50D}", desc: "Embeddings and semantic search", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://docs.voyageai.com" },
+    { name: "DeepInfra", icon: "\u26A1", desc: "Inference API for open-source models", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://deepinfra.com/docs" },
+
+    // ── Voice & Audio ──
+    { name: "ElevenLabs", icon: "\u{1F3A4}", desc: "AI voice synthesis and text-to-speech", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://elevenlabs.io/docs" },
+    { name: "Deepgram", icon: "\u{1F4AC}", desc: "Speech-to-text transcription", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://developers.deepgram.com" },
+    { name: "Google TTS", icon: "\u{1F50A}", desc: "Text-to-speech API", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://cloud.google.com/text-to-speech/docs" },
+
+    // ── Backend & Database ──
+    { name: "Supabase", icon: "\u{1F5C4}", desc: "Open-source Firebase alternative \u2014 Postgres + Auth + Realtime", cat: "backend", catLabel: "Backend & DB", pricing: "freemium", auth: "API Key", docs: "https://supabase.com/docs" },
+    { name: "Stripe", icon: "\u{1F4B3}", desc: "Payments, subscriptions, and billing", cat: "backend", catLabel: "Backend & DB", pricing: "paid", auth: "API Key", docs: "https://stripe.com/docs/api" },
+    { name: "Firebase", icon: "\u{1F525}", desc: "Push notifications, auth, and cloud messaging", cat: "backend", catLabel: "Backend & DB", pricing: "freemium", auth: "API Key", docs: "https://firebase.google.com/docs" },
+
+    // ── Data & Intelligence ──
+    { name: "OpenAQ", icon: "\u{1F32C}", desc: "Global air quality data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://docs.openaq.org" },
+    { name: "PurpleAir", icon: "\u{1F7E3}", desc: "Real-time air quality sensors", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://api.purpleair.com" },
+    { name: "AirNow", icon: "\u{1F4A8}", desc: "EPA air quality index", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://docs.airnowapi.org" },
+    { name: "NASA FIRMS", icon: "\u{1F6F0}", desc: "Active fire data from satellites", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://firms.modaps.eosdis.nasa.gov" },
+    { name: "OpenWeather", icon: "\u26C5", desc: "Weather data and forecasts", cat: "data", catLabel: "Data & Intel", pricing: "freemium", auth: "API Key", docs: "https://openweathermap.org/api" },
+    { name: "AISStream", icon: "\u{1F6A2}", desc: "Real-time vessel tracking", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://aisstream.io/documentation" },
+    { name: "OpenSky Network", icon: "\u2708", desc: "Live aircraft tracking", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "None", docs: "https://openskynetwork.github.io/opensky-api" },
+    { name: "ACLED", icon: "\u{1F4CA}", desc: "Armed conflict and crisis data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://apidocs.acleddata.com" },
+    { name: "Copernicus", icon: "\u{1F30D}", desc: "EU earth observation satellite data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "OAuth", docs: "https://dataspace.copernicus.eu" },
+
+    // ── Government & Transparency ──
+    { name: "OpenSecrets", icon: "\u{1F4B0}", desc: "Campaign finance and lobbying data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.opensecrets.org/open-data/api" },
+    { name: "FEC API", icon: "\u{1F3DB}", desc: "Federal Election Commission data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://api.open.fec.gov" },
+    { name: "Senate LDA", icon: "\u{1F4DC}", desc: "Lobbying disclosure reports", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://lda.senate.gov" },
+    { name: "Follow The Money", icon: "\u{1F4B5}", desc: "State-level campaign finance", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.followthemoney.org/our-data/apis" },
+    { name: "Regulations.gov", icon: "\u{1F4DD}", desc: "Federal rulemaking comments", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://regulationsgov.github.io/developers" },
+    { name: "CourtListener", icon: "\u2696", desc: "Federal court opinions and PACER data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.courtlistener.com/api" },
+    { name: "MuckRock", icon: "\u{1F4F0}", desc: "FOIA requests and documents", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.muckrock.com/api" },
+    { name: "OpenSanctions", icon: "\u{1F6A8}", desc: "Global sanctions and PEP data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.opensanctions.org/api" },
+    { name: "OpenCorporates", icon: "\u{1F3E2}", desc: "Global corporate registry", cat: "gov", catLabel: "Government", pricing: "freemium", auth: "API Key", docs: "https://api.opencorporates.com" },
+    { name: "Data.gov", icon: "\u{1F5C3}", desc: "US government open data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://catalog.data.gov" },
+    { name: "BTS", icon: "\u{1F68C}", desc: "Bureau of Transportation Statistics", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://www.bts.gov/developers" },
+
+    // ── Traffic & Transportation ──
+    { name: "WSDOT", icon: "\u{1F6E3}", desc: "Washington State DOT traffic data", cat: "traffic", catLabel: "Traffic", pricing: "free", auth: "API Key", docs: "https://wsdot.wa.gov/traffic/api" },
+    { name: "ODOT", icon: "\u{1F6A6}", desc: "Oregon DOT traffic data", cat: "traffic", catLabel: "Traffic", pricing: "free", auth: "None", docs: null },
+    { name: "TrafficLand", icon: "\u{1F4F7}", desc: "Traffic camera feeds", cat: "traffic", catLabel: "Traffic", pricing: "freemium", auth: "API Key", docs: "https://www.trafficland.com" },
+    { name: "INRIX", icon: "\u{1F697}", desc: "Real-time traffic data", cat: "traffic", catLabel: "Traffic", pricing: "paid", auth: "API Key", docs: "https://docs.inrix.com" },
+
+    // ── Monetization & Analytics ──
+    { name: "RevenueCat", icon: "\u{1F4B2}", desc: "In-app subscriptions management", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://docs.revenuecat.com/api-v1" },
+    { name: "LemonSqueezy", icon: "\u{1F34B}", desc: "Digital product payments", cat: "monetization", catLabel: "Monetization", pricing: "paid", auth: "API Key", docs: "https://docs.lemonsqueezy.com/api" },
+    { name: "Google AdMob", icon: "\u{1F4F1}", desc: "Mobile advertising", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "OAuth", docs: "https://developers.google.com/admob" },
+    { name: "Google AdSense", icon: "\u{1F4E2}", desc: "Web advertising", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "OAuth", docs: "https://developers.google.com/adsense" },
+    { name: "PostHog", icon: "\u{1F994}", desc: "Product analytics and feature flags", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://posthog.com/docs/api" },
+    { name: "Sentry", icon: "\u{1F6E1}", desc: "Error tracking and monitoring", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://docs.sentry.io/api" },
+    { name: "Google Analytics", icon: "\u{1F4C8}", desc: "Web analytics and reporting", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "OAuth", docs: "https://developers.google.com/analytics" },
+    { name: "GoatCounter", icon: "\u{1F410}", desc: "Privacy-friendly web analytics", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "API Key", docs: "https://www.goatcounter.com/help/api" },
+
+    // ── Communication ──
+    { name: "Resend", icon: "\u2709", desc: "Email API for developers", cat: "comms", catLabel: "Communication", pricing: "freemium", auth: "API Key", docs: "https://resend.com/docs/api-reference" },
+    { name: "SMTP", icon: "\u{1F4E8}", desc: "Standard email protocol", cat: "comms", catLabel: "Communication", pricing: "free", auth: "None", docs: null },
+
+    // ── Social ──
+    { name: "Reddit API", icon: "\u{1F4AC}", desc: "Reddit data and content", cat: "social", catLabel: "Social", pricing: "free", auth: "OAuth", docs: "https://www.reddit.com/dev/api" }
+  ];
+
+  const grid = document.getElementById('nxGrid');
+  const searchInput = document.getElementById('nxSearch');
+  const sortSelect = document.getElementById('nxSort');
+  const countEl = document.getElementById('nxCount');
+  const emptyEl = document.getElementById('nxEmpty');
+  const tabsContainer = document.getElementById('nxTabs');
+  let activeCategory = 'all';
+
+  function createCard(api) {
+    const card = document.createElement('div');
+    card.className = 'nx-card';
+    card.dataset.cat = api.cat;
+    card.dataset.name = api.name.toLowerCase();
+
+    const pricingClass = api.pricing === 'free' ? 'nx-badge--free' : api.pricing === 'freemium' ? 'nx-badge--freemium' : 'nx-badge--paid';
+    const pricingLabel = api.pricing.charAt(0).toUpperCase() + api.pricing.slice(1);
+
+    let docsLink = '';
+    if (api.docs) {
+      docsLink = `<a href="${api.docs}" target="_blank" rel="noopener noreferrer" class="nx-card__link">View Docs \u2192</a>`;
+    }
+
+    card.innerHTML = `
+      <div class="nx-card__header">
+        <span class="nx-card__icon">${api.icon}</span>
+        <span class="nx-card__name">${api.name}</span>
+      </div>
+      <div class="nx-card__desc">${api.desc}</div>
+      <div class="nx-card__badges">
+        <span class="nx-badge nx-badge--category">${api.catLabel}</span>
+        <span class="nx-badge ${pricingClass}">${pricingLabel}</span>
+        <span class="nx-badge nx-badge--auth">${api.auth}</span>
+      </div>
+      ${docsLink}
+    `;
+    return card;
+  }
+
+  function renderCards() {
+    // Remove existing cards (keep emptyEl)
+    grid.querySelectorAll('.nx-card').forEach(c => c.remove());
+
+    const query = searchInput.value.toLowerCase().trim();
+    const sort = sortSelect.value;
+
+    let filtered = APIs.filter(api => {
+      const matchesCat = activeCategory === 'all' || api.cat === activeCategory;
+      const matchesSearch = !query ||
+        api.name.toLowerCase().includes(query) ||
+        api.desc.toLowerCase().includes(query) ||
+        api.catLabel.toLowerCase().includes(query) ||
+        api.auth.toLowerCase().includes(query) ||
+        api.pricing.includes(query);
+      return matchesCat && matchesSearch;
+    });
+
+    if (sort === 'alpha') {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    // 'category' keeps the original insertion order (grouped by category)
+
+    filtered.forEach(api => {
+      grid.appendChild(createCard(api));
+    });
+
+    countEl.textContent = filtered.length;
+    emptyEl.classList.toggle('visible', filtered.length === 0);
+  }
+
+  // Tab switching
+  tabsContainer.addEventListener('click', (e) => {
+    if (!e.target.classList.contains('nx-tab')) return;
+    tabsContainer.querySelectorAll('.nx-tab').forEach(t => t.classList.remove('active'));
+    e.target.classList.add('active');
+    activeCategory = e.target.dataset.cat;
+    renderCards();
+  });
+
+  // Search
+  searchInput.addEventListener('input', renderCards);
+
+  // Sort
+  sortSelect.addEventListener('change', renderCards);
+
+  // Initial render
+  renderCards();
+  </script>
+
+</body>
+</html>

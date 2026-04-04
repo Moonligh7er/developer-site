@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features — Synapse Protocol</title>
+<meta name="description" content="45+ features for civic engagement, government accountability, and community advocacy. All free for communities.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--void:#050508;--void-light:#0a0a12;--cyan:#00f0ff;--violet:#a855f7;--amber:#f0c040;--rose:#f43f5e;--emerald:#10b981;--text:#e8e8f0;--text-dim:#8888a8;--text-faint:#555570}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text);font-family:'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:var(--cyan);text-decoration:none;transition:opacity .3s}a:hover{opacity:.8}
+.c{max-width:900px;margin:0 auto;padding:0 24px}
+.nav{padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.03)}
+.nav a{color:var(--text-faint);font-size:10px;letter-spacing:.2em}
+.nav .brand{color:var(--cyan);font-size:11px;letter-spacing:.4em}
+h1{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:200;margin-bottom:12px;line-height:1.2}
+h1 em{font-style:normal;color:var(--cyan)}
+.sub{font-size:13px;color:var(--text-dim);margin-bottom:40px;max-width:600px}
+.tag{font-size:9px;letter-spacing:.5em;color:var(--text-faint);margin-bottom:16px;display:block}
+.cat-header{padding:24px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.cat-header h2{font-size:14px;font-weight:400;margin-bottom:2px}
+.cat-header p{font-size:10px;color:var(--text-faint)}
+.feature{padding:20px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.feature h3{font-size:13px;font-weight:400;margin-bottom:6px}
+.feature .plain{font-size:11px;color:var(--text-dim);line-height:1.7;margin-bottom:8px}
+.feature .tech{font-size:10px;color:var(--text-faint);line-height:1.6;padding:10px 14px;border-left:2px solid rgba(0,240,255,.1);background:rgba(0,240,255,.01);margin-top:8px;font-family:inherit}
+.badge{display:inline-block;font-size:7px;letter-spacing:.15em;padding:2px 6px;border:1px solid rgba(255,255,255,.08);color:var(--text-faint);margin-left:8px;vertical-align:middle}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(0,240,255,.1),transparent);margin:48px 0}
+.footer{padding:32px 0;text-align:center;font-size:9px;color:var(--text-faint);letter-spacing:.3em;border-top:1px solid rgba(255,255,255,.03)}
+.footer a{color:var(--text-faint);margin:0 8px}
+.cta-bar{text-align:center;padding:48px 0}
+.btn{display:inline-block;padding:12px 32px;font-size:9px;letter-spacing:.3em;border:1px solid rgba(0,240,255,.4);color:var(--cyan);font-family:inherit;margin:4px}
+.btn:hover{background:rgba(0,240,255,.06)}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="/launch" class="brand">SYNAPSE</a>
+  <div>
+    <a href="/launch">Home</a> &nbsp;&middot;&nbsp;
+    <a href="/s/about">About</a> &nbsp;&middot;&nbsp;
+    <a href="/s/privacy">Privacy</a> &nbsp;&middot;&nbsp;
+    <a href="/s/terms">Terms</a>
+  </div>
+</div>
+
+<div style="padding:64px 0 0">
+<div class="c">
+  <span class="tag">CAPABILITIES</span>
+  <h1>Every feature. <em>No fine print.</em></h1>
+  <p class="sub">45+ features across 6 categories. Every one works offline. Every one is scientifically grounded. Here's exactly what Synapse does and how.</p>
+
+  <!-- ═══ COMMUNITY LISTENING ═══ -->
+  <div class="cat-header"><h2 style="color:var(--cyan)">Community Listening</h2><p>How the system hears what your community actually thinks</p></div>
+
+  <div class="feature"><h3>AI-Mediated Interviews</h3><p class="plain">Instead of filling out a survey, you have a real conversation with an AI mediator. It asks open-ended questions, listens for what you actually care about, and helps you articulate values you might not have put into words. Think of it as a wise counselor who wants to understand — not win an argument.</p><div class="tech">Motivational Interviewing (OARS) + NVC frameworks. Claude Sonnet with adaptive 3-7 turn interviews. Dynamic system prompt adjusts based on real-time confidence monitoring.</div></div>
+
+  <div class="feature"><h3>Cognitive Debiasing</h3><p class="plain">The system detects common thinking traps — like overweighting a single bad experience or assuming nothing should ever change — and gently steers the conversation to help you think from angles you might have missed. It never tells you you're wrong.</p><div class="tech">8 bias types detected via regex patterns (status quo, availability, anchoring, NIMBY, loss aversion, confirmation, bandwagon, zero-sum). Debiasing prompts injected into mediator system prompt. Bias-adjusted confidence weights (floor 0.5).</div></div>
+
+  <div class="feature"><h3>Voice Input</h3><p class="plain">Tap the microphone and speak. The system transcribes in real time. Makes participation accessible to people who find typing difficult or prefer talking.</p><div class="tech">Web Speech API (SpeechRecognition) with continuous mode. Graceful fallback on unsupported browsers.</div></div>
+
+  <div class="feature"><h3>Live Value Extraction</h3><p class="plain">As you talk, the side panel shows your values and needs appearing in real time. Watch the AI understand you — see confidence bars grow as you explain what matters.</p><div class="tech">Parallel Claude Haiku calls after each participant turn. Returns emerging values with confidence scores. Animated via Framer Motion.</div></div>
+
+  <div class="feature"><h3>Interview Save &amp; Resume</h3><p class="plain">Close the browser and come back later. Your conversation is automatically saved. Pick up right where you left off.</p><div class="tech">Anonymous session tokens (crypto.randomUUID) in localStorage. Full state persisted to IndexedDB after each message.</div></div>
+
+  <div class="feature"><h3>Empathy Reveal</h3><p class="plain">After your interview, see someone who seems to disagree with you — but actually shares your core values. A powerful moment that makes polarization feel less inevitable.</p><div class="tech">positionDivergence × valueOverlap = empathyScore. Schwartz circumplex + Moral Foundations + embedding cosine similarity. AI-generated narrative bridge.</div></div>
+
+  <!-- ═══ CIVIC INTELLIGENCE ═══ -->
+  <div class="divider"></div>
+  <div class="cat-header"><h2 style="color:var(--violet)">Civic Intelligence</h2><p>How raw perspectives become actionable insight</p></div>
+
+  <div class="feature"><h3>Consensus Synthesis</h3><p class="plain">Thousands of conversations analyzed together — not by counting votes, but by grouping people by underlying values. Finds what they actually agree on. No survey could produce this.</p><div class="tech">16-dimensional value embeddings → DBSCAN clustering → AI consensus statements → Bayesian confidence (Beta-Binomial). Incremental mode for new perspectives.</div></div>
+
+  <div class="feature"><h3>Policy Simulator</h3><p class="plain">Drag conditions into a proposal, see predicted support shift in real time. "Add a trial period: +28%. Add parking: +25%." Finds the cheapest path to consensus.</p><div class="tech">Diminishing returns model. Pareto frontier optimization. Automated quick-win/threshold/max-support recommendations.</div></div>
+
+  <div class="feature"><h3>Ask the Synthesis</h3><p class="plain">Ask questions in plain English: "What do renters think?" Get instant answers with citations from the data.</p><div class="tech">NL question → Claude Haiku → structured response with typed citations. Template fallback for offline.</div></div>
+
+  <div class="feature"><h3>Real-Time Dashboard</h3><p class="plain">Watch consensus form as interviews happen. A live feed shows every finding as it emerges.</p><div class="tech">Server-Sent Events. Event types: perspective_added, consensus_changed, gap_closed, threshold_crossed. 30s heartbeat.</div></div>
+
+  <div class="feature"><h3>Counterfactual Analysis</h3><p class="plain">"What if we only counted people within 2 blocks?" Test assumptions about who drives consensus.</p><div class="tech">Re-runs clustering on filtered/weighted perspective subsets. Demographic filtering, date range, DQI minimum, weight multipliers.</div></div>
+
+  <div class="feature"><h3>Spatial Intelligence</h3><p class="plain">Consensus on a map. Which blocks support the proposal? Where are participation gaps? Export as GeoJSON for your city's GIS.</p><div class="tech">Haversine distance, proximity weighting (gaussian/linear/inverse decay), grid heatmaps, spatial gap detection.</div></div>
+
+  <div class="feature"><h3>Cross-Community Intelligence</h3><p class="plain">When your city debates bike lanes, what happened in Portland and Minneapolis? Real precedents with real outcomes.</p><div class="tech">Archetype library from deliberative democracy literature. Anomaly detection flags local divergence from patterns.</div></div>
+
+  <div class="feature"><h3>Historical Intelligence</h3><p class="plain">This was debated in 2018 and 2022 too. How has support shifted? What was promised? Institutional memory that outlasts any official.</p><div class="tech">Issue recurrence detection. Consensus evolution tracking (strengthening/weakening/oscillating). Prior outcome retrieval.</div></div>
+
+  <!-- ═══ GOVERNMENT ACCOUNTABILITY ═══ -->
+  <div class="divider"></div>
+  <div class="cat-header"><h2 style="color:var(--rose)">Government Accountability</h2><p>How governance is measured against community will</p></div>
+
+  <div class="feature"><h3>Representation Alignment</h3><p class="plain">A civic credit score for officials. "Council Member X aligned 34% across 6 issues." Not partisan — just data.</p><div class="tech">Vote alignment (60%) + condition alignment (40%). Promise-keeping score. Report card with letter grades.</div></div>
+
+  <div class="feature"><h3>Budget-Value Alignment</h3><p class="plain">"94% consensus on safety, 8% of budget." See where spending matches — and contradicts — community priorities.</p><div class="tech">Keyword mapping of budget line items to value priorities. Alignment gap computation. Reallocation recommendations.</div></div>
+
+  <div class="feature"><h3>Campaign Finance Correlation</h3><p class="plain">Follow the money. "Officials receiving >$5K from real estate voted against housing consensus 83% of the time."</p><div class="tech">Pearson correlation between donation amounts and vote-against-consensus rate. Funded vs unfunded differential.</div></div>
+
+  <div class="feature"><h3>Transparency Scoring</h3><p class="plain">Grade governance process quality across 7 dimensions. Detects potential open meetings law violations.</p><div class="tech">7 dimensions scored 0-3. Compliance flag detection for Sunshine Law violations. Improvement plans.</div></div>
+
+  <div class="feature"><h3>Governance Scorecard</h3><p class="plain">One grade. Published quarterly. Representation + budget + transparency + outcomes + responsiveness + equity.</p><div class="tech">Weighted composite (25/20/15/15/15/10). Trend tracking. Shareable summary. Full methodology.</div></div>
+
+  <div class="feature"><h3>Accountability Timeline</h3><p class="plain">Promise → Hearing → Vote → Implementation → Outcome. Tracks drift between promises and delivery.</p><div class="tech">13 event types, 6 phases. Drift detection. Skipped-phase identification. Process quality grading.</div></div>
+
+  <div class="feature"><h3>Corporate Accountability</h3><p class="plain">Track corporate promises vs reality. "15% affordable units promised. 8% delivered." Flags broken binding commitments.</p><div class="tech">Enforceability-weighted scoring. Auto-status from target vs actual. Deadline tracking.</div></div>
+
+  <div class="feature"><h3>Predictive Model</h3><p class="plain">"Moneyball for Democracy." What predicts whether an official will vote against constituents?</p><div class="tech">Logistic regression. Features: donations, tenure, prior alignment, absenteeism, committees. Trainable from outcomes.</div></div>
+
+  <div class="feature"><h3>Media Narrative Gap</h3><p class="plain">When the newspaper says "divided" but data shows 82% agreement — that gap is now measurable.</p><div class="tech">Per-article framing/sentiment/tone analysis. Narrative gap detection vs synthesis confidence.</div></div>
+
+  <div class="feature"><h3>Electoral Alignment</h3><p class="plain">Non-partisan voter guide. "Candidate A: 78%. Candidate B: 34%." No endorsements — just data.</p><div class="tech">Per-candidate scoring against consensus. Incumbency record. Biggest differentiator identification.</div></div>
+
+  <div class="feature"><h3>Monitoring &amp; Alerts</h3><p class="plain">Automated watchdog. Get notified when tracked issues appear on agendas, votes happen, or deadlines approach.</p><div class="tech">Rule-based monitoring (11 event types). Default rules per issue. Deadline tracker with overdue detection.</div></div>
+
+  <!-- ═══ ADVOCACY ═══ -->
+  <div class="divider"></div>
+  <div class="cat-header"><h2 style="color:var(--amber)">Advocacy &amp; Action</h2><p>How insights become real-world change</p></div>
+
+  <div class="feature"><h3>Testimony Generator</h3><p class="plain">2-minute and 5-minute scripts, pre-filled with your community's data. Includes counter-arguments with rebuttals.</p></div>
+  <div class="feature"><h3>Petition Generator</h3><p class="plain">Complete legal petition from consensus data. Every demand cites specific agreement percentages.</p></div>
+  <div class="feature"><h3>FOIA Request Generator</h3><p class="plain">State-specific public records requests targeting transparency gaps. 5 state templates + federal. Appeal letters if denied.</p></div>
+  <div class="feature"><h3>Coalition Builder</h3><p class="plain">Which organizations share values? Generates shared platform statements natural alliances can sign.</p></div>
+  <div class="feature"><h3>Power Mapping</h3><p class="plain">Who are the decision-makers? What influences them? Who to talk to and what to say.</p></div>
+  <div class="feature"><h3>Social Cards &amp; Op-Ed Templates</h3><p class="plain">Ready-to-paste social posts, 700-word op-ed templates, one-page briefing sheets. Copy/download buttons.</p></div>
+  <div class="feature"><h3>Regulatory Comments</h3><p class="plain">One click to generate a public comment backed by thousands of interviews.</p></div>
+  <div class="feature"><h3>Collective Action Toolkit</h3><p class="plain">Canvassing plans, volunteer tasks, 5-phase campaign timelines. Everything an organizer needs.</p></div>
+  <div class="feature"><h3>Rights-Based Mapping</h3><p class="plain">Maps consensus to 7 legal frameworks (ADA, Fair Housing, Civil Rights, EPA EJ, UDHR). Legal teeth, not just mandate.</p></div>
+  <div class="feature"><h3>Participatory Budget</h3><p class="plain">Let the community allocate the budget. "Here's how they'd spend it if they had the power."</p></div>
+
+  <!-- ═══ RESEARCH ═══ -->
+  <div class="divider"></div>
+  <div class="cat-header"><h2 style="color:var(--emerald)">Research &amp; Analysis</h2><p>Scientific rigor behind every finding</p></div>
+
+  <div class="feature"><h3>Schwartz Value Theory</h3><p class="plain">10 universal value types on a circular model validated in 82 countries. Shows how values relate and conflict.</p></div>
+  <div class="feature"><h3>Discourse Quality Index</h3><p class="plain">Scores deliberation quality on 5 dimensions. Higher-quality conversations carry more weight.</p></div>
+  <div class="feature"><h3>Bayesian Confidence</h3><p class="plain">"95% confident the real number is between 78% and 86%." Exactly how certain every finding is.</p></div>
+  <div class="feature"><h3>Inter-Rater Reliability</h3><p class="plain">AI extracts values 3x at different settings. If results disagree, it's flagged as ambiguous.</p></div>
+  <div class="feature"><h3>Toulmin Argumentation</h3><p class="plain">Maps logical argument structure. Distinguishes value disagreements from factual ones.</p></div>
+  <div class="feature"><h3>Outcome Calibration</h3><p class="plain">Tracks predictions vs reality. The system gets more accurate over time.</p></div>
+  <div class="feature"><h3>Evidence Repository</h3><p class="plain">Submit corroborating evidence with PII auto-redaction. Community-verified.</p></div>
+  <div class="feature"><h3>Cryptographic Provenance</h3><p class="plain">Merkle tree verification. Every finding is mathematically auditable.</p></div>
+
+  <!-- ═══ PLATFORM ═══ -->
+  <div class="divider"></div>
+  <div class="cat-header"><h2 style="color:var(--text-faint)">Platform</h2><p>What makes it all work</p></div>
+
+  <div class="feature"><h3>Offline-First</h3><p class="plain">Everything works without internet. Data syncs when you reconnect. You never lose work.</p></div>
+  <div class="feature"><h3>Accessibility</h3><p class="plain">High contrast, large text, reduced motion, keyboard nav, screen reader support, voice input.</p></div>
+  <div class="feature"><h3>Progressive Web App</h3><p class="plain">Install on your phone. Works offline. No app store required.</p></div>
+  <div class="feature"><h3>API &amp; Exports</h3><p class="plain">Full REST API. Export as JSON, Markdown, GeoJSON.</p></div>
+  <div class="feature"><h3>Community Narratives</h3><p class="plain">AI generates compelling stories from data — tweet, paragraph, or full essay length.</p></div>
+  <div class="feature"><h3>Knowledge Gap Steering</h3><p class="plain">The system knows what it doesn't know and steers future interviews to fill the gaps.</p></div>
+
+  <div class="cta-bar">
+    <a href="/participate" class="btn">PARTICIPATE FREE</a>
+    <a href="/launch" class="btn">BACK TO HOME</a>
+  </div>
+</div>
+</div>
+
+<footer class="footer">
+  <div class="c">
+    SYNAPSE PROTOCOL // MOONLIT SOCIAL LABS<br><br>
+    <a href="/launch">Home</a><a href="/s/about">About</a><a href="/s/privacy">Privacy</a><a href="/s/terms">Terms</a><a href="https://ko-fi.com/moonlitsociallabs" style="color:var(--amber)">Ko-fi</a>
+  </div>
+</footer>
+</body>
+</html>

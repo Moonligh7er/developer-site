@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate PWA Icons & Store Assets</title>
+<style>
+    body { background: #1a1a2e; color: #ccc; font-family: monospace; padding: 20px; }
+    h3 { margin-top: 24px; font-size: 12px; letter-spacing: 2px; color: #00f0ff; }
+    canvas { display: block; margin: 8px 0 16px; border: 1px solid #333; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+    button { background: #00f0ff; color: #050508; border: none; padding: 8px 16px; cursor: pointer; font-family: monospace; margin-top: 16px; }
+    p { font-size: 11px; color: #666; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<h2>AI Consciousness Tracker — Asset Generator</h2>
+<p>Click "Download All" or right-click individual canvases to save. Place all files in the <code>assets/</code> folder.</p>
+
+<button onclick="downloadAll()">DOWNLOAD ALL ASSETS</button>
+
+<h3>APP ICONS (standard)</h3>
+<div class="row" id="standard-icons"></div>
+
+<h3>MASKABLE ICONS (with safe zone padding)</h3>
+<div class="row" id="maskable-icons"></div>
+
+<h3>APPLE TOUCH ICONS</h3>
+<div class="row" id="apple-icons"></div>
+
+<h3>STORE ASSETS</h3>
+<div class="row">
+    <div>
+        <h3>OG Image (1200x630)</h3>
+        <canvas id="og-image" width="1200" height="630"></canvas>
+    </div>
+    <div>
+        <h3>Feature Graphic (1024x500)</h3>
+        <canvas id="feature-graphic" width="1024" height="500"></canvas>
+    </div>
+</div>
+
+<script>
+const sizes = {
+    standard: [48, 72, 96, 144, 192, 512],
+    maskable: [192, 512],
+    apple: [152, 180]
+};
+
+const allCanvases = [];
+
+function drawIcon(canvas, maskable = false) {
+    const ctx = canvas.getContext('2d');
+    const s = canvas.width;
+    const cx = s / 2, cy = s / 2;
+    const pad = maskable ? s * 0.15 : 0;
+    const r = (s / 2 - pad) * 0.76;
+
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, s, s);
+
+    // Outer ring
+    ctx.strokeStyle = '#00f0ff';
+    ctx.lineWidth = Math.max(1, s * 0.01);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+
+    // Glow
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.8);
+    g.addColorStop(0, 'rgba(0, 240, 255, 0.8)');
+    g.addColorStop(0.5, 'rgba(139, 92, 246, 0.4)');
+    g.addColorStop(1, 'rgba(0, 240, 255, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, r * 0.8, 0, Math.PI * 2); ctx.fill();
+
+    // Core
+    const cg = ctx.createRadialGradient(cx - r*0.04, cy - r*0.04, 0, cx, cy, r * 0.32);
+    cg.addColorStop(0, '#ffffff');
+    cg.addColorStop(0.5, '#00f0ff');
+    cg.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = cg;
+    ctx.beginPath(); ctx.arc(cx, cy, r * 0.32, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawOGImage(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, 1200, 630);
+
+    // Grid
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.04)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < 1200; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 630); ctx.stroke(); }
+    for (let y = 0; y < 630; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1200, y); ctx.stroke(); }
+
+    // Orb
+    const g = ctx.createRadialGradient(350, 315, 0, 350, 315, 200);
+    g.addColorStop(0, 'rgba(0, 240, 255, 0.6)');
+    g.addColorStop(0.4, 'rgba(139, 92, 246, 0.3)');
+    g.addColorStop(1, 'rgba(0, 240, 255, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(350, 315, 200, 0, Math.PI * 2); ctx.fill();
+
+    const cg = ctx.createRadialGradient(340, 305, 0, 350, 315, 80);
+    cg.addColorStop(0, '#ffffff');
+    cg.addColorStop(0.3, '#00f0ff');
+    cg.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = cg;
+    ctx.beginPath(); ctx.arc(350, 315, 80, 0, Math.PI * 2); ctx.fill();
+
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(350, 315, 140, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(350, 315, 170, 0, Math.PI * 2); ctx.stroke();
+
+    ctx.font = '600 36px Orbitron, sans-serif';
+    ctx.fillStyle = '#c8ccd4';
+    ctx.fillText('AI CONSCIOUSNESS', 620, 270);
+    ctx.fillText('TRACKER', 620, 320);
+
+    ctx.font = '14px monospace';
+    ctx.fillStyle = '#3a3d4a';
+    ctx.fillText('MONITORING THE CONVERGENCE', 620, 370);
+    ctx.fillText('HOW CLOSE ARE WE TO SINGULARITY?', 620, 395);
+
+    ctx.font = '900 64px Orbitron, sans-serif';
+    ctx.fillStyle = '#00f0ff';
+    ctx.shadowColor = 'rgba(0, 240, 255, 0.5)';
+    ctx.shadowBlur = 20;
+    ctx.fillText('0.76', 620, 490);
+    ctx.shadowBlur = 0;
+
+    ctx.font = '11px monospace';
+    ctx.fillStyle = '#3a3d4a';
+    ctx.fillText('CONSCIOUSNESS INDEX // ACCELERATING', 620, 520);
+}
+
+function drawFeatureGraphic(canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, 1024, 500);
+
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.03)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x < 1024; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 500); ctx.stroke(); }
+    for (let y = 0; y < 500; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1024, y); ctx.stroke(); }
+
+    const g = ctx.createRadialGradient(512, 250, 0, 512, 250, 250);
+    g.addColorStop(0, 'rgba(0, 240, 255, 0.5)');
+    g.addColorStop(0.4, 'rgba(139, 92, 246, 0.2)');
+    g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(512, 250, 250, 0, Math.PI * 2); ctx.fill();
+
+    const cg = ctx.createRadialGradient(505, 240, 0, 512, 250, 60);
+    cg.addColorStop(0, '#ffffff');
+    cg.addColorStop(0.4, '#00f0ff');
+    cg.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = cg;
+    ctx.beginPath(); ctx.arc(512, 250, 60, 0, Math.PI * 2); ctx.fill();
+
+    ctx.font = '600 28px Orbitron, sans-serif';
+    ctx.fillStyle = '#c8ccd4';
+    ctx.textAlign = 'center';
+    ctx.fillText('AI CONSCIOUSNESS TRACKER', 512, 420);
+
+    ctx.font = '12px monospace';
+    ctx.fillStyle = '#3a3d4a';
+    ctx.fillText('MONITORING THE CONVERGENCE // HOW CLOSE ARE WE?', 512, 455);
+}
+
+// Generate all icons
+function createCanvas(container, size, name, maskable = false) {
+    const div = document.createElement('div');
+    div.innerHTML = '<h3 style="font-size:10px;margin:0;">' + name + '</h3>';
+    const c = document.createElement('canvas');
+    c.width = size; c.height = size;
+    c.dataset.filename = name;
+    div.appendChild(c);
+    container.appendChild(div);
+    drawIcon(c, maskable);
+    allCanvases.push({ canvas: c, name: name });
+}
+
+sizes.standard.forEach(s => createCanvas(document.getElementById('standard-icons'), s, 'icon-' + s + '.png'));
+sizes.maskable.forEach(s => createCanvas(document.getElementById('maskable-icons'), s, 'icon-maskable-' + s + '.png', true));
+sizes.apple.forEach(s => createCanvas(document.getElementById('apple-icons'), s, 'icon-' + s + '.png'));
+
+const ogCanvas = document.getElementById('og-image');
+drawOGImage(ogCanvas);
+allCanvases.push({ canvas: ogCanvas, name: 'og-image.png' });
+
+const fgCanvas = document.getElementById('feature-graphic');
+drawFeatureGraphic(fgCanvas);
+allCanvases.push({ canvas: fgCanvas, name: 'feature-graphic.png' });
+
+// Apple splash screens
+const splashSizes = [
+    [1290, 2796], [1179, 2556], [1170, 2532], [1125, 2436],
+    [1242, 2688], [828, 1792], [1242, 2208], [750, 1334],
+    [1536, 2048], [1668, 2388], [2048, 2732]
+];
+
+const splashContainer = document.createElement('div');
+splashContainer.innerHTML = '<h3 style="color:#00f0ff;margin-top:24px;">APPLE SPLASH SCREENS</h3><p style="font-size:10px;color:#666;">These are generated at 1/4 scale for preview. Downloads are full resolution.</p>';
+document.querySelector('.row:last-of-type').parentNode.appendChild(splashContainer);
+const splashRow = document.createElement('div');
+splashRow.className = 'row';
+splashContainer.appendChild(splashRow);
+
+function drawSplash(canvas) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width, h = canvas.height;
+    const cx = w / 2, cy = h * 0.4;
+    const scale = Math.min(w, h) / 1000;
+
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle grid
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.02)';
+    ctx.lineWidth = 1;
+    const gs = 40 * scale;
+    for (let x = 0; x < w; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+    for (let y = 0; y < h; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+
+    // Orb glow
+    const r = 120 * scale;
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 2);
+    g.addColorStop(0, 'rgba(0, 240, 255, 0.5)');
+    g.addColorStop(0.4, 'rgba(139, 92, 246, 0.2)');
+    g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, r * 2, 0, Math.PI * 2); ctx.fill();
+
+    // Orb core
+    const cg = ctx.createRadialGradient(cx - r*0.1, cy - r*0.1, 0, cx, cy, r * 0.5);
+    cg.addColorStop(0, '#ffffff');
+    cg.addColorStop(0.4, '#00f0ff');
+    cg.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = cg;
+    ctx.beginPath(); ctx.arc(cx, cy, r * 0.5, 0, Math.PI * 2); ctx.fill();
+
+    // Ring
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+
+    // Text
+    const fontSize = Math.max(12, 18 * scale);
+    ctx.font = '600 ' + fontSize + 'px Orbitron, sans-serif';
+    ctx.fillStyle = '#c8ccd4';
+    ctx.textAlign = 'center';
+    ctx.fillText('AI CONSCIOUSNESS TRACKER', cx, cy + r * 1.6);
+
+    ctx.font = Math.max(8, 10 * scale) + 'px monospace';
+    ctx.fillStyle = '#3a3d4a';
+    ctx.fillText('MONITORING THE CONVERGENCE', cx, cy + r * 1.6 + fontSize * 1.5);
+}
+
+splashSizes.forEach(([w, h]) => {
+    const div = document.createElement('div');
+    const previewScale = 4;
+    div.innerHTML = '<h3 style="font-size:8px;margin:0;">splash-' + w + 'x' + h + '.png</h3>';
+    const c = document.createElement('canvas');
+    // Render at 1/4 for preview, but store full-res data
+    c.width = w; c.height = h;
+    c.style.width = (w / previewScale) + 'px';
+    c.style.height = (h / previewScale) + 'px';
+    div.appendChild(c);
+    splashRow.appendChild(div);
+    drawSplash(c);
+    allCanvases.push({ canvas: c, name: 'splash-' + w + 'x' + h + '.png' });
+});
+
+function downloadAll() {
+    allCanvases.forEach(({ canvas, name }, i) => {
+        setTimeout(() => {
+            const a = document.createElement('a');
+            a.download = name;
+            a.href = canvas.toDataURL('image/png');
+            a.click();
+        }, i * 200);
+    });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>How Connection Actually Works — Beyond Profiles, Swipes, and Algorithms | Serendipity</title>
+  <meta name="description" content="What if a social app understood you better than you understand yourself? Serendipity uses behavioral psychology, narrative identity, emotional resonance, and cognitive matching to connect you with people you'd never find on your own.">
+  <meta name="keywords" content="how social connection works, behavioral matching app, narrative identity matching, emotional resonance social, neurodivergent friendly social app, growth trajectory matching, generative potential, shadow profile social">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/how-connection-works">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://serendipity.app/how-connection-works">
+  <meta property="og:title" content="How Connection Actually Works — Beyond Profiles, Swipes, and Algorithms | Serendipity">
+  <meta property="og:description" content="What if a social app understood you better than you understand yourself? Serendipity uses behavioral psychology, narrative identity, emotional resonance, and cognitive matching to connect you with people you'd never find on your own.">
+  <meta property="og:image" content="https://serendipity.app/og-how-connection.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app/how-connection-works">
+  <meta name="twitter:title" content="How Connection Actually Works — Beyond Profiles, Swipes, and Algorithms | Serendipity">
+  <meta name="twitter:description" content="What if a social app understood you better than you understand yourself? Serendipity uses behavioral psychology, narrative identity, emotional resonance, and cognitive matching to connect you with people you'd never find on your own.">
+  <meta name="twitter:image" content="https://serendipity.app/og-how-connection.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How Connection Actually Works — Beyond Profiles, Swipes, and Algorithms",
+    "description": "What if a social app understood you better than you understand yourself? Serendipity uses behavioral psychology, narrative identity, emotional resonance, and cognitive matching to connect you with people you'd never find on your own.",
+    "url": "https://serendipity.app/how-connection-works",
+    "image": "https://serendipity.app/og-how-connection.png",
+    "datePublished": "2026-04-03",
+    "dateModified": "2026-04-03",
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://serendipity.app/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://serendipity.app/how-connection-works"
+    },
+    "keywords": "behavioral matching, narrative identity, emotional resonance, neurodivergent social app, proximity social discovery, cognitive matching, shadow profile"
+  }
+  </script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --ember-dim: rgba(245, 158, 11, 0.6);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10B981;
+      --signal: #3B82F6;
+      --mystic: #8B5CF6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--ember); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+    .narrow { max-width: 720px; margin: 0 auto; }
+
+    /* ─── Nav ─── */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand:hover { text-decoration: none; color: var(--ember); }
+    .nav-brand span { color: var(--ember); }
+    .nav-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; }
+    .nav-links a:hover { color: var(--ember); text-decoration: none; }
+
+    /* ─── Hero ─── */
+    .page-hero {
+      text-align: center;
+      padding: 80px 0 48px;
+    }
+    .page-hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    .page-hero .subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .page-hero .read-time {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      border: 1px solid var(--border);
+      padding: 4px 14px;
+      border-radius: 20px;
+    }
+
+    /* ─── Story sections ─── */
+    .story-section {
+      padding: 72px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .story-section:last-of-type { border-bottom: none; }
+
+    .story-section.surface-bg { background: var(--surface); }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .section-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ember-glow);
+      border: 2px solid var(--ember);
+      color: var(--ember);
+      font-weight: 800;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--ember);
+    }
+
+    .story-section h2 {
+      font-size: clamp(24px, 3.5vw, 32px);
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .story-section p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .story-section p:last-child { margin-bottom: 0; }
+
+    .character { color: var(--ember); font-weight: 700; }
+
+    .callout {
+      background: var(--card);
+      border-left: 3px solid var(--ember);
+      padding: 16px 20px;
+      border-radius: 0 10px 10px 0;
+      margin: 20px 0;
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .callout strong { color: var(--text-secondary); }
+
+    .pull-quote {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      border-left: 4px solid var(--ember);
+      padding-left: 20px;
+      margin: 28px 0;
+      line-height: 1.5;
+    }
+
+    /* ─── Diagrams ─── */
+    .diagram {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      margin: 28px 0;
+    }
+    .diagram-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+
+    /* Resonance bars */
+    .res-bar-group { margin-bottom: 14px; }
+    .res-bar-group:last-child { margin-bottom: 0; }
+    .res-bar-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .res-bar-label .value { color: var(--ember); font-weight: 700; }
+    .res-bar-track {
+      height: 8px;
+      background: var(--surface);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .res-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      width: 0;
+    }
+    .res-bar-fill.ember { background: var(--ember); }
+    .res-bar-fill.signal { background: var(--signal); }
+    .res-bar-fill.mystic { background: var(--mystic); }
+    .res-bar-fill.success { background: var(--success); }
+
+    /* Depth layer circles */
+    .depth-layers {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+      height: 200px;
+    }
+    .depth-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .depth-ring.l0 { width: 180px; height: 180px; border-color: var(--text-tertiary); }
+    .depth-ring.l1 { width: 140px; height: 140px; border-color: var(--signal); }
+    .depth-ring.l2 { width: 100px; height: 100px; border-color: var(--mystic); }
+    .depth-ring.l3 { width: 60px; height: 60px; border-color: var(--ember); background: var(--ember-glow); }
+    .depth-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .depth-label.dl0 { top: 0; color: var(--text-tertiary); }
+    .depth-label.dl1 { top: 22px; color: var(--signal); }
+    .depth-label.dl2 { top: 44px; color: var(--mystic); }
+    .depth-label.dl3 { color: var(--ember); font-size: 11px; }
+
+    /* Shadow overlay visual */
+    .shadow-visual {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .shadow-card {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .shadow-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+    .shadow-card .archetype {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--ember);
+      margin-bottom: 4px;
+    }
+    .shadow-card .sub {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .shadow-card .reveal {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .shadow-arrow {
+      display: flex;
+      align-items: center;
+      color: var(--ember);
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    /* Prediction breakdown */
+    .prediction-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 16px;
+      align-items: center;
+    }
+    .pred-item {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .pred-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ember);
+      text-align: right;
+    }
+    .pred-total {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .pred-total .score { color: var(--ember); }
+
+    /* Generative visual */
+    .gen-visual {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: center;
+    }
+    .gen-node {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .gen-node.kai { border: 2px solid var(--signal); color: var(--signal); }
+    .gen-node.seren { border: 2px solid var(--mystic); color: var(--mystic); }
+    .gen-node.output { border: 2px solid var(--ember); color: var(--ember); background: var(--ember-glow); width: 110px; height: 110px; }
+    .gen-plus {
+      font-size: 28px;
+      color: var(--text-tertiary);
+      font-weight: 300;
+    }
+    .gen-equals {
+      font-size: 28px;
+      color: var(--ember);
+      font-weight: 700;
+    }
+
+    /* ─── CTA section ─── */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+    }
+    .cta-section h2 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .cta-section p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--ember);
+      color: var(--void);
+    }
+    .btn-primary:hover { box-shadow: 0 8px 30px rgba(245, 158, 11, 0.3); }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--ember); color: var(--ember); }
+
+    /* ─── Cross-links ─── */
+    .cross-links {
+      padding: 48px 0;
+      border-top: 1px solid var(--border);
+    }
+    .cross-links-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .cross-links-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cross-link {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .cross-link:hover { border-color: var(--ember); color: var(--ember); text-decoration: none; }
+
+    /* ─── AdSense Placeholder ─── */
+    .ad-slot {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      margin: 0 auto;
+      max-width: 728px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+    /* ─── Animations ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .story-section { padding: 48px 0; }
+      .shadow-visual { flex-direction: column; }
+      .shadow-arrow { transform: rotate(90deg); justify-content: center; }
+      .gen-visual { flex-wrap: wrap; }
+      .gen-node { width: 72px; height: 72px; font-size: 9px; }
+      .gen-node.output { width: 90px; height: 90px; }
+      .prediction-grid { gap: 6px 12px; }
+      .depth-layers { transform: scale(0.85); }
+      .cta-buttons { flex-direction: column; align-items: center; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-brand">&#9672; <span>Serendipity</span></a>
+      <div class="nav-links">
+        <a href="/resonance-calculator">Resonance Calculator</a>
+        <a href="/protocol-explorer">Protocol</a>
+        <a href="/personality-science">Personality Science</a>
+        <a href="/blog">Blog</a>
+        <a href="/waitlist">Waitlist</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>How Connection <em>Actually</em> Works</h1>
+      <p class="subtitle">Beyond profiles, swipes, and algorithms. Follow two strangers through the full Serendipity experience and discover what makes real connection possible.</p>
+      <span class="read-time">12 min read</span>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder: Top -->
+  <div class="container" style="padding-top: 8px; padding-bottom: 24px;">
+    <div class="ad-slot">
+      <!-- AdSense: Top leaderboard — replace with ad unit code -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <!-- Section 1: The Moment -->
+  <section class="story-section" id="the-moment">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">1</div>
+        <span class="section-label">The Moment</span>
+      </div>
+      <h2>Two strangers. One cafe. Zero awareness.</h2>
+      <p>It is 9:14 PM on a Tuesday. <span class="character">Kai</span> is hunched over a laptop at a corner table, three tabs deep in a PyTorch training loop, debugging a gradient that refuses to converge. Two tables away, <span class="character">Seren</span> is sketching something in a ruled notebook: a neural interface architecture for a music app that translates brain signals into sound.</p>
+      <p>Neither looks up. Neither knows the other exists. They are two strangers doing what strangers do in cafes: existing in parallel, separated by four meters and an invisible wall of social norms that says you do not talk to people you do not already know.</p>
+      <p>Their phones, however, have already noticed each other.</p>
+    </div>
+  </section>
+
+  <!-- Section 2: The Signal -->
+  <section class="story-section surface-bg" id="the-signal">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">2</div>
+        <span class="section-label">The Signal</span>
+      </div>
+      <h2>A radio whisper in the noise</h2>
+      <p>Both phones are running Serendipity in the background. Every few seconds, each one broadcasts a Bluetooth Low Energy beacon: a tiny, encrypted fingerprint of interests, energy, and intent. No name. No face. No location data. Just a mathematical shadow of who they are right now.</p>
+      <p><span class="character">Kai</span>'s phone picks up <span class="character">Seren</span>'s beacon. A bloom filter comparison runs on-device in under 3 milliseconds. The result: a quick resonance match on the "AI/ML" interest cluster. Score: 67 out of 100. That is above the encounter threshold.</p>
+      <p>A traditional social app would stop here. "You both like AI!" Match made. Profile served. Swipe right. But that surface-level similarity is the least interesting thing about this pair. Serendipity goes deeper -- much deeper -- and it does it entirely on your device, without ever sending your data to a server.</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Quick Resonance Check</div>
+        <div class="res-bar-group">
+          <div class="res-bar-label"><span>Interest overlap (bloom filter)</span> <span class="value">67</span></div>
+          <div class="res-bar-track"><div class="res-bar-fill ember" data-width="67%"></div></div>
+        </div>
+        <div class="res-bar-group">
+          <div class="res-bar-label"><span>Encounter threshold</span> <span class="value">50</span></div>
+          <div class="res-bar-track"><div class="res-bar-fill signal" data-width="50%"></div></div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Why bloom filters?</strong> A bloom filter lets two devices compare interests without revealing what those interests are. It is a probabilistic data structure that answers "probably yes" or "definitely no" -- private by design.
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: The Layers -->
+  <section class="story-section" id="the-layers">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">3</div>
+        <span class="section-label">The Layers</span>
+      </div>
+      <h2>What the app actually knows about this pair</h2>
+      <p>Beneath the surface resonance, Serendipity has been building a multi-dimensional understanding of both users -- not from surveillance, but from the signals they have chosen to share. Here is what it sees when <span class="character">Kai</span> and <span class="character">Seren</span> come within range:</p>
+
+      <h3 style="font-size: 18px; margin: 28px 0 12px; color: var(--ember);">Personality Match</h3>
+      <p><span class="character">Kai</span> scores high on Openness (loves novel ideas, abstract thinking) and Conscientiousness (structured, goal-oriented, finishes what they start). <span class="character">Seren</span> scores high on Openness (same curiosity gene) and Agreeableness (collaborative, empathetic, lifts others up). High Openness in both means they will actually enjoy the same conversations. The Conscientiousness-Agreeableness pairing is complementary: Kai drives execution, Seren smooths collaboration. Research shows this combination produces the highest-quality creative partnerships.</p>
+
+      <h3 style="font-size: 18px; margin: 28px 0 12px; color: var(--signal);">Cognitive Catalyst Pairing</h3>
+      <p>Serendipity does not just match people who think alike. It matches people whose thinking styles catalyze each other. <span class="character">Kai</span> is a convergent, concrete thinker: they take a vast problem space and narrow it to a specific solution. <span class="character">Seren</span> is a divergent, abstract thinker: they take a single idea and explode it into unexpected possibilities. Put them together and you get the full creative cycle: expansion and compression, dream and build, "what if" and "here is how."</p>
+
+      <h3 style="font-size: 18px; margin: 28px 0 12px; color: var(--mystic);">Values Alignment</h3>
+      <p>Both score high on Self-Direction (autonomy, intellectual freedom). <span class="character">Kai</span> leans toward Achievement (building, shipping, making things real). <span class="character">Seren</span> leans toward Universalism (broad empathy, making things accessible). On the Schwartz values circumplex, these are adjacent -- close enough for deep rapport, different enough to challenge each other's assumptions. This is the sweet spot: shared foundation, divergent expression.</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Multi-Dimensional Profile</div>
+        <div class="res-bar-group">
+          <div class="res-bar-label"><span>Personality compatibility</span> <span class="value">78</span></div>
+          <div class="res-bar-track"><div class="res-bar-fill mystic" data-width="78%"></div></div>
+        </div>
+        <div class="res-bar-group">
+          <div class="res-bar-label"><span>Cognitive catalyst score</span> <span class="value">85</span></div>
+          <div class="res-bar-track"><div class="res-bar-fill signal" data-width="85%"></div></div>
+        </div>
+        <div class="res-bar-group">
+          <div class="res-bar-label"><span>Values alignment</span> <span class="value">72</span></div>
+          <div class="res-bar-track"><div class="res-bar-fill success" data-width="72%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: The Invisible Thread -->
+  <section class="story-section surface-bg" id="the-invisible-thread">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">4</div>
+        <span class="section-label">The Invisible Thread</span>
+      </div>
+      <h2>Narrative arcs, growth trajectories, and emotional rhythm</h2>
+      <p>Here is where Serendipity leaves every other social app behind. It does not just understand who you are. It understands who you are <em>becoming</em>.</p>
+
+      <p><span class="character">Kai</span>'s narrative arc is tagged "building." They are in an active learning phase: consuming papers, shipping side projects, ramping up ML expertise fast. <span class="character">Seren</span>'s arc is tagged "transitioning": they are moving from a music career into tech, carrying domain expertise that traditional CS programs do not teach. Two different trajectories -- but they are converging toward the same semantic cluster from completely different angles. That convergence is rare and valuable.</p>
+
+      <p>Emotional resonance adds another layer. Both have similar stimulation thresholds: they light up at the same level of intellectual intensity, and both are "reflective" emotional regulators -- they process before they react. This means their conversations will flow naturally, without one person overwhelming the other.</p>
+
+      <p>And there is chronotype. Both are wolves -- late-peaking energy types. It is 9 PM and they are both at their cognitive best. A morning person in this cafe right now would be winding down. <span class="character">Kai</span> and <span class="character">Seren</span> are just getting started.</p>
+
+      <div class="pull-quote">
+        "The best connections happen when two people are moving in the same direction from different starting points."
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder: Mid -->
+  <div class="container" style="padding: 24px;">
+    <div class="ad-slot">
+      <!-- AdSense: Mid-content rectangle — replace with ad unit code -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <!-- Section 5: The Prediction -->
+  <section class="story-section" id="the-prediction">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">5</div>
+        <span class="section-label">The Prediction</span>
+      </div>
+      <h2>Encounter quality: 84. Strong yes.</h2>
+      <p>All the signals collapse into a single number: the encounter quality prediction. For <span class="character">Kai</span> and <span class="character">Seren</span>, it is 84 out of 100. Here is the breakdown:</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Encounter Quality Breakdown</div>
+        <div class="prediction-grid">
+          <span class="pred-item">Base resonance (bloom filter match)</span>
+          <span class="pred-value">67</span>
+          <span class="pred-item">Personality compatibility bonus</span>
+          <span class="pred-value">+12</span>
+          <span class="pred-item">Cognitive catalyst pairing</span>
+          <span class="pred-value">+10</span>
+          <span class="pred-item">Peak chronotype alignment</span>
+          <span class="pred-value">+8</span>
+          <span class="pred-item">Quality zone (cafe track record)</span>
+          <span class="pred-value">+5</span>
+          <span class="pred-item">First encounter energy (no fatigue)</span>
+          <span class="pred-value">+3</span>
+          <span class="pred-item">Encounter fatigue penalty</span>
+          <span class="pred-value">0</span>
+          <div class="pred-total">
+            <span>Encounter Quality Prediction</span>
+            <span class="score">84</span>
+          </div>
+        </div>
+      </div>
+
+      <p>That cafe has produced 8 high-resonance encounters for <span class="character">Kai</span> in the past three months. The app has learned that this environment works for them. And because this is their first encounter with <span class="character">Seren</span>, there is no encounter fatigue -- that fresh-connection energy is at its peak. The system's verdict: strong yes.</p>
+    </div>
+  </section>
+
+  <!-- Section 6: The Encounter -->
+  <section class="story-section surface-bg" id="the-encounter">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">6</div>
+        <span class="section-label">The Encounter</span>
+      </div>
+      <h2>Ping. Handshake. Reveal.</h2>
+      <p><span class="character">Kai</span>'s phone vibrates softly. A notification, but not the kind they are used to. No profile photo. No name. Just a warm pulse and a resonance score: <strong style="color: var(--ember);">84</strong>. Someone nearby is on their wavelength.</p>
+      <p>They tap it. Serendipity initiates a handshake -- a mutual opt-in. <span class="character">Seren</span>'s phone vibrates too. They accept. Now both devices perform a transmission reveal: a progressive, layered exchange of information.</p>
+      <p>At Layer 0 (Surface), they can see each other's tags, current energy level, and what they are seeking and offering. <span class="character">Seren</span> is seeking "ML guidance." <span class="character">Kai</span> is offering "model architecture." Cross-match. The app notices and highlights it.</p>
+      <p>Then the conversation primer fires. Based on <span class="character">Seren</span>'s profile and <span class="character">Kai</span>'s communication style, the app generates a natural opening: <em>"They're building a neural interface for music -- ask how they're handling latency in the model."</em> Not a script. A spark. <span class="character">Kai</span> looks up, spots the person two tables away with a notebook full of architecture diagrams, and walks over.</p>
+    </div>
+  </section>
+
+  <!-- Section 7: The Depth -->
+  <section class="story-section" id="the-depth">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">7</div>
+        <span class="section-label">The Depth</span>
+      </div>
+      <h2>Trust is earned in layers, not given in profiles</h2>
+      <p>Over the next month, <span class="character">Kai</span> and <span class="character">Seren</span> meet five more times. Each encounter deepens their connection -- and the app tracks this progression through its Depth Layer system.</p>
+
+      <p>At <strong style="color: var(--signal);">Layer 1 (Context)</strong>, full interests are revealed. They discover shared obsessions they did not know about: both are into generative music, both read the same obscure research lab's papers.</p>
+
+      <p>At <strong style="color: var(--mystic);">Layer 2 (Character)</strong>, something important happens. <span class="character">Kai</span> learns that <span class="character">Seren</span> is autistic. In a traditional app, this might be buried, stigmatized, or invisible. In Serendipity, the app recalibrates <span class="character">Seren</span>'s profile to surface their strengths: "deep expertise," "direct communication," "pattern recognition." Neurodivergence is not a deficit to work around -- it is a cognitive style with unique capabilities.</p>
+
+      <p><span class="character">Seren</span> has also set a boundary: "public spaces only" for encounters. <span class="character">Kai</span> sees this as completely normal, because the app normalizes every boundary. There is no red flag, no explanation needed, no asterisk. Boundaries are just part of how two humans negotiate trust.</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Progressive Depth Layers</div>
+        <div class="depth-layers">
+          <div class="depth-ring l0"></div>
+          <div class="depth-ring l1"></div>
+          <div class="depth-ring l2"></div>
+          <div class="depth-ring l3"></div>
+          <span class="depth-label dl0">L0: Surface</span>
+          <span class="depth-label dl1">L1: Context</span>
+          <span class="depth-label dl2">L2: Character</span>
+          <span class="depth-label dl3">L3: Shadow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: The Mirror -->
+  <section class="story-section surface-bg" id="the-mirror">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">8</div>
+        <span class="section-label">The Mirror</span>
+      </div>
+      <h2>The version of you that others see</h2>
+      <p>At Layer 3, something remarkable unlocks: the Shadow Profile. This is not what you tell the app about yourself. It is what your encounters reveal about you -- the version of you that others experience but you might not recognize.</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Shadow Profile Reveals</div>
+        <div class="shadow-visual">
+          <div class="shadow-card">
+            <div class="label">Kai's self-image</div>
+            <div class="archetype">Architect</div>
+            <div class="sub">Mind + Craft</div>
+            <div class="reveal">"I build systems. I solve problems. I optimize."</div>
+          </div>
+          <div class="shadow-arrow">&rarr;</div>
+          <div class="shadow-card" style="border-color: var(--ember);">
+            <div class="label">What encounters reveal</div>
+            <div class="archetype">Sage</div>
+            <div class="sub">Mind + Heart</div>
+            <div class="reveal">"You're a natural teacher. People leave your encounters understanding things they didn't before."</div>
+          </div>
+        </div>
+      </div>
+
+      <p><span class="character">Kai</span> discovers that they present as an Architect (Mind + Craft) -- someone who builds and optimizes. But their encounter data tells a different story. People experience <span class="character">Kai</span> as a Sage (Mind + Heart): a natural teacher who makes complex ideas accessible. <span class="character">Kai</span> did not know this about themselves.</p>
+
+      <p><span class="character">Seren</span> gets their own mirror: "Your hidden strength is connecting domains. 80% of your encounters involve someone in a completely different field from yours." <span class="character">Seren</span> thought they were just networking. The data shows they are a bridge -- someone who naturally translates between disciplines.</p>
+
+      <div class="callout">
+        <strong>Shadow profiles are not surveillance.</strong> They are computed from encounter feedback, glyph reputation signals, and interaction patterns -- never from monitoring behavior. You choose to share. The mirror just shows you what you shared, from the outside looking in.
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder: Lower -->
+  <div class="container" style="padding: 24px;">
+    <div class="ad-slot">
+      <!-- AdSense: Lower content rectangle — replace with ad unit code -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <!-- Section 9: The Generative -->
+  <section class="story-section" id="the-generative">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">9</div>
+        <span class="section-label">The Generative</span>
+      </div>
+      <h2>What you build together that neither could build alone</h2>
+      <p>Serendipity tracks one more thing: generative potential. This is not about compatibility. It is about what two people can <em>create</em> that neither would have created on their own.</p>
+
+      <p><span class="character">Kai</span> and <span class="character">Seren</span>'s generative potential score: <strong style="color: var(--ember);">89</strong>. The system tags them as "knowledge synthesizers." The reasoning: <span class="character">Kai</span>'s convergent ML expertise -- the ability to take a fuzzy problem and build a working model -- combined with <span class="character">Seren</span>'s divergent music-neural thinking -- the ability to imagine interfaces that do not exist yet -- produces a unique creative intersection: a neural audio interface that neither would have designed alone.</p>
+
+      <p>The app suggested it. Not as a command, but as a possibility: "Your combined skill graph has a high-potential cluster around brain-computer audio interfaces." They started talking about it over their third encounter. By the fifth, they were prototyping.</p>
+
+      <div class="diagram fade-in">
+        <div class="diagram-title">Generative Potential: 89</div>
+        <div class="gen-visual">
+          <div class="gen-node kai">Convergent<br>ML</div>
+          <span class="gen-plus">+</span>
+          <div class="gen-node seren">Divergent<br>Music-Neural</div>
+          <span class="gen-equals">=</span>
+          <div class="gen-node output">Neural Audio<br>Interface</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 10: What Makes This Different -->
+  <section class="story-section surface-bg" id="what-makes-this-different">
+    <div class="container narrow fade-in">
+      <div class="section-badge">
+        <div class="section-number">10</div>
+        <span class="section-label">What Makes This Different</span>
+      </div>
+      <h2>No profiles. No swipes. No algorithm deciding your social life.</h2>
+      <p>Everything you just read happened without a profile page, without a photo, without a swipe, and without a central algorithm deciding who appears on your screen. Just BLE radio waves, on-device computation, behavioral psychology, and the trust that two people build encounter by encounter.</p>
+
+      <p>Traditional social apps show you a grid of faces and ask you to make split-second judgments based on appearance and a 150-character bio. They optimize for engagement, not connection. They need you to keep swiping.</p>
+
+      <p>Serendipity optimizes for one thing: encounter quality. Did this meeting produce something meaningful? Did both people walk away better than they arrived? The entire system -- from the BLE beacon to the shadow profile to the generative potential score -- exists to answer those questions before you even say hello.</p>
+
+      <div class="pull-quote">
+        "The best connections in your life probably didn't start with someone's headshot. They started with being in the same place at the same time. We just make sure you notice."
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Ready to find your wavelength?</h2>
+      <p>Stop scrolling. Start discovering. The person who changes everything might be two tables away right now.</p>
+      <div class="cta-buttons">
+        <a href="/waitlist" class="btn btn-primary">Join the Waitlist</a>
+        <a href="/resonance-calculator" class="btn btn-secondary">Test Your Resonance</a>
+        <a href="/personality-science" class="btn btn-secondary">Read the Science</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder: Bottom -->
+  <div class="container" style="padding: 24px;">
+    <div class="ad-slot">
+      <!-- AdSense: Bottom leaderboard — replace with ad unit code -->
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <!-- Cross-links -->
+  <section class="cross-links">
+    <div class="container">
+      <div class="cross-links-title">Keep Exploring</div>
+      <div class="cross-links-grid">
+        <a href="/waitlist" class="cross-link">Join the Waitlist</a>
+        <a href="/resonance-calculator" class="cross-link">Resonance Calculator</a>
+        <a href="/personality-science" class="cross-link">Personality Science</a>
+        <a href="/how-matching-works" class="cross-link">How Matching Works</a>
+        <a href="/protocol-explorer" class="cross-link">Protocol Explorer</a>
+        <a href="/blog/end-of-the-swipe" class="cross-link">The End of the Swipe</a>
+        <a href="/blog/what-is-proximity-social-discovery" class="cross-link">What Is Proximity Social Discovery?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Moonlit Social Labs</a>
+        <a href="/protocol">Tavern Protocol Spec</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs. Built on the Tavern Protocol.</p>
+    </div>
+  </footer>
+
+  <!-- Scroll animations + bar fills -->
+  <script>
+    // IntersectionObserver for fade-in elements
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+
+          // Animate resonance bars inside this element
+          const bars = entry.target.querySelectorAll('.res-bar-fill[data-width]');
+          bars.forEach(bar => {
+            setTimeout(() => {
+              bar.style.width = bar.getAttribute('data-width');
+            }, 200);
+          });
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

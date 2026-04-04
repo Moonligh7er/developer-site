@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Terms of Service | Serendipity</title>
+  <meta name="description" content="Terms of Service for Serendipity, the privacy-first proximity social discovery app by Moonlit Social Labs.">
+  <meta name="keywords" content="serendipity terms of service, serendipity app terms, moonlit social labs, proximity social app terms">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/terms">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/terms">
+  <meta property="og:title" content="Terms of Service | Serendipity">
+  <meta property="og:description" content="Terms of Service for Serendipity, the privacy-first proximity social discovery app by Moonlit Social Labs.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Terms of Service | Serendipity">
+  <meta name="twitter:description" content="Terms of Service for Serendipity, the privacy-first proximity social discovery app by Moonlit Social Labs.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Terms of Service",
+    "description": "Terms of Service for Serendipity, the privacy-first proximity social discovery app by Moonlit Social Labs.",
+    "url": "https://serendipity.app/terms",
+    "inLanguage": "en",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Serendipity",
+      "url": "https://serendipity.app"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs"
+    },
+    "dateModified": "2026-04-01"
+  }
+  </script>
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- AdSense placeholder -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --danger: #EF4444;
+      --safety: #10B981;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--ember);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ember); }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 100px 0 40px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--ember); }
+    .hero-meta {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+    .hero-meta strong { color: var(--text-secondary); font-weight: 600; }
+
+    /* ─── TOC ─── */
+    .toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 48px;
+    }
+    .toc-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--ember);
+      margin-bottom: 16px;
+    }
+    .toc-list {
+      list-style: none;
+      columns: 2;
+      column-gap: 32px;
+    }
+    .toc-list li {
+      margin-bottom: 8px;
+      break-inside: avoid;
+    }
+    .toc-list a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--ember); }
+    .toc-list .toc-num {
+      color: var(--text-tertiary);
+      font-weight: 600;
+      margin-right: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ─── Sections ─── */
+    .terms-content { padding-bottom: 60px; }
+
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-anchor {
+      display: block;
+      position: relative;
+      top: -80px;
+      visibility: hidden;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .section-number {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ember);
+      background: var(--ember-glow);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+    .section-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .section-title a:hover { color: var(--ember); }
+    .section-body {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 720px;
+    }
+    .section-body a {
+      color: var(--ember);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .section-body a:hover { text-decoration: underline; }
+
+    /* ─── Highlighted Cards ─── */
+    .highlight-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-top: 16px;
+    }
+    .highlight-card--ember {
+      border-left: 3px solid var(--ember);
+    }
+    .highlight-card--safety {
+      border-left: 3px solid var(--safety);
+      background: rgba(16, 185, 129, 0.04);
+    }
+    .highlight-card--danger {
+      border-left: 3px solid var(--danger);
+      background: rgba(239, 68, 68, 0.04);
+    }
+    .highlight-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .highlight-card p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+    .highlight-card .age-badge {
+      display: inline-block;
+      background: var(--ember);
+      color: var(--void);
+      font-weight: 800;
+      font-size: 18px;
+      padding: 4px 14px;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+
+    /* ─── Styled List ─── */
+    .styled-list {
+      list-style: none;
+      margin-top: 12px;
+    }
+    .styled-list li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .styled-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ember);
+      opacity: 0.7;
+    }
+    .styled-list--danger li::before { background: var(--danger); }
+    .styled-list--safety li::before { background: var(--safety); }
+
+    /* ─── Sub-sections ─── */
+    .subsection {
+      margin-top: 20px;
+    }
+    .subsection-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    /* ─── Pricing Table ─── */
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+    .pricing-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--ember);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .pricing-table th:first-child { border-radius: 8px 0 0 0; }
+    .pricing-table th:last-child { border-radius: 0 8px 0 0; }
+    .pricing-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+    .pricing-table tr:last-child td { border-bottom: none; }
+    .pricing-table .tier-name {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .pricing-table .tier-founder {
+      color: var(--ember);
+      font-weight: 700;
+    }
+
+    /* ─── Contact Card ─── */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .contact-card .email-link {
+      display: inline-block;
+      background: var(--ember);
+      color: var(--void);
+      font-weight: 700;
+      font-size: 16px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 12px;
+      transition: opacity 0.2s;
+    }
+    .contact-card .email-link:hover { opacity: 0.9; }
+
+    /* ─── AdSense ─── */
+    .ad-slot {
+      text-align: center;
+      padding: 24px 0;
+      min-height: 90px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      .hero { padding: 60px 0 30px; }
+      .toc-list { columns: 1; }
+      .toc { padding: 20px 20px; }
+      .highlight-card { padding: 20px 20px; }
+      .nav-links { gap: 16px; }
+      .section-header { flex-wrap: wrap; gap: 8px; }
+      .pricing-table { font-size: 13px; }
+      .pricing-table th, .pricing-table td { padding: 10px 10px; }
+      .contact-card { padding: 24px 20px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Serendipity</a>
+      <div class="nav-links">
+        <a href="/">App</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Terms of <span>Service</span></h1>
+      <p class="hero-meta">Last updated: <strong>April 2026</strong> &middot; Operator: <strong>Moonlit Social Labs</strong></p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <div class="container terms-content">
+
+    <!-- Table of Contents -->
+    <div class="toc">
+      <p class="toc-title">Contents</p>
+      <ol class="toc-list">
+        <li><span class="toc-num">1.</span><a href="#acceptance">Acceptance</a></li>
+        <li><span class="toc-num">2.</span><a href="#eligibility">Eligibility</a></li>
+        <li><span class="toc-num">3.</span><a href="#service">Description of Service</a></li>
+        <li><span class="toc-num">4.</span><a href="#conduct">User Conduct</a></li>
+        <li><span class="toc-num">5.</span><a href="#safety">Safety</a></li>
+        <li><span class="toc-num">6.</span><a href="#content">Content</a></li>
+        <li><span class="toc-num">7.</span><a href="#subscriptions">Subscriptions</a></li>
+        <li><span class="toc-num">8.</span><a href="#privacy-section">Privacy</a></li>
+        <li><span class="toc-num">9.</span><a href="#ip">Intellectual Property</a></li>
+        <li><span class="toc-num">10.</span><a href="#disclaimers">Disclaimers</a></li>
+        <li><span class="toc-num">11.</span><a href="#liability">Limitation of Liability</a></li>
+        <li><span class="toc-num">12.</span><a href="#termination">Termination</a></li>
+        <li><span class="toc-num">13.</span><a href="#governing-law">Governing Law</a></li>
+        <li><span class="toc-num">14.</span><a href="#changes">Changes</a></li>
+        <li><span class="toc-num">15.</span><a href="#contact">Contact</a></li>
+      </ol>
+    </div>
+
+    <!-- 1. Acceptance -->
+    <div class="section">
+      <span class="section-anchor" id="acceptance"></span>
+      <div class="section-header">
+        <span class="section-number">1</span>
+        <h2 class="section-title"><a href="#acceptance">Acceptance</a></h2>
+      </div>
+      <p class="section-body">
+        By accessing or using Serendipity ("the App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App. Your continued use of Serendipity constitutes acceptance of any updates or modifications to these Terms.
+      </p>
+    </div>
+
+    <!-- 2. Eligibility -->
+    <div class="section">
+      <span class="section-anchor" id="eligibility"></span>
+      <div class="section-header">
+        <span class="section-number">2</span>
+        <h2 class="section-title"><a href="#eligibility">Eligibility</a></h2>
+      </div>
+      <div class="highlight-card highlight-card--ember">
+        <p><span class="age-badge">17+</span> You must be at least <strong>17 years of age</strong> to use Serendipity. By using the App, you represent and warrant that you meet this minimum age requirement. If we learn that a user is under 17, their account will be terminated immediately and all associated data will be deleted.</p>
+      </div>
+    </div>
+
+    <!-- 3. Description of Service -->
+    <div class="section">
+      <span class="section-anchor" id="service"></span>
+      <div class="section-header">
+        <span class="section-number">3</span>
+        <h2 class="section-title"><a href="#service">Description of Service</a></h2>
+      </div>
+      <p class="section-body">
+        Serendipity is a proximity-based social discovery application that uses Bluetooth Low Energy (BLE) technology to detect compatible people nearby. The App computes multi-dimensional resonance scores entirely on your device and facilitates mutual encounters through the Tavern Protocol. We do not guarantee the availability, accuracy, or reliability of the service at any time. Features, range, and functionality may vary by device and operating system.
+      </p>
+    </div>
+
+    <!-- 4. User Conduct -->
+    <div class="section">
+      <span class="section-anchor" id="conduct"></span>
+      <div class="section-header">
+        <span class="section-number">4</span>
+        <h2 class="section-title"><a href="#conduct">User Conduct</a></h2>
+      </div>
+      <p class="section-body">You agree not to engage in any of the following prohibited activities:</p>
+      <div class="highlight-card highlight-card--danger">
+        <h4>Prohibited Conduct</h4>
+        <ul class="styled-list styled-list--danger">
+          <li>Use the App if you are under 17 years of age</li>
+          <li>Harass, threaten, stalk, or intimidate other users</li>
+          <li>Engage in any illegal activity through the App</li>
+          <li>Impersonate another person or entity</li>
+          <li>Circumvent, disable, or interfere with safety or security features</li>
+          <li>Collect, harvest, or store personal information of other users without their explicit consent</li>
+          <li>Distribute spam, malware, or any harmful content</li>
+          <li>Create fake beacons or conduct Sybil attacks to manipulate the mesh</li>
+          <li>Reverse-engineer, decompile, or attempt to break the App's encryption</li>
+          <li>Use the App in any manner that violates applicable local, state, national, or international law</li>
+        </ul>
+      </div>
+      <p class="section-body" style="margin-top: 16px;">Violation of these rules may result in immediate suspension or permanent termination of your account.</p>
+    </div>
+
+    <!-- 5. Safety -->
+    <div class="section">
+      <span class="section-anchor" id="safety"></span>
+      <div class="section-header">
+        <span class="section-number">5</span>
+        <h2 class="section-title"><a href="#safety">Safety</a></h2>
+      </div>
+      <p class="section-body">Serendipity facilitates encounters with people nearby. While we build safety into the architecture, meeting strangers always carries inherent risk. Please exercise caution.</p>
+      <div class="highlight-card highlight-card--safety">
+        <h4>Safety Guidelines</h4>
+        <ul class="styled-list styled-list--safety">
+          <li><strong>Meet in public, well-lit spaces</strong> &mdash; especially for first encounters. Coffee shops, libraries, and co-working spaces are great choices.</li>
+          <li><strong>Tell a trusted person</strong> &mdash; let a friend or family member know who you are meeting and where.</li>
+          <li><strong>Trust your instincts</strong> &mdash; if something feels off, leave. Your safety is more important than any connection score.</li>
+          <li><strong>Use Report and Block</strong> &mdash; if someone makes you uncomfortable, report them immediately. Our trust and safety team reviews every report.</li>
+        </ul>
+      </div>
+      <p class="section-body" style="margin-top: 16px;">Serendipity is not responsible for the actions of its users. You assume all risk associated with in-person meetings facilitated through the App.</p>
+    </div>
+
+    <!-- Ad Slot -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- 6. Content -->
+    <div class="section">
+      <span class="section-anchor" id="content"></span>
+      <div class="section-header">
+        <span class="section-number">6</span>
+        <h2 class="section-title"><a href="#content">Content</a></h2>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">6.1 Your Content</h3>
+        <p class="section-body">
+          You retain full ownership of any content you create, upload, or share through Serendipity, including your transmission profile, messages, and resonance preferences. By using the App, you grant Serendipity a limited, non-exclusive license to process your content solely for the purpose of providing the service (e.g., computing resonance scores on-device, transmitting encrypted messages).
+        </p>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">6.2 Prohibited Content</h3>
+        <p class="section-body">You may not share content that:</p>
+        <ul class="styled-list styled-list--danger" style="margin-top: 8px;">
+          <li>Constitutes hate speech, discrimination, or incitement to violence</li>
+          <li>Contains sexually explicit or pornographic material</li>
+          <li>Exposes personal information of others without their consent</li>
+          <li>Is illegal or promotes illegal activities</li>
+          <li>Contains unsolicited advertising or commercial solicitations</li>
+        </ul>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">6.3 Content Moderation</h3>
+        <p class="section-body">
+          We review user reports and may take action including content removal, account suspension, or permanent bans. Because Serendipity uses end-to-end encryption for direct messages, we cannot access or review the content of private conversations. Moderation applies to public-facing content, transmission profiles, and reported behavior.
+        </p>
+      </div>
+    </div>
+
+    <!-- 7. Subscriptions -->
+    <div class="section">
+      <span class="section-anchor" id="subscriptions"></span>
+      <div class="section-header">
+        <span class="section-number">7</span>
+        <h2 class="section-title"><a href="#subscriptions">Subscriptions &amp; Purchases</a></h2>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">7.1 In-App Purchases</h3>
+        <p class="section-body">
+          Premium features are available through in-app purchases processed by the Apple App Store or Google Play Store. All transactions are subject to the respective platform's terms and conditions.
+        </p>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">7.2 Auto-Renewal</h3>
+        <p class="section-body">
+          Monthly subscriptions auto-renew unless cancelled at least 24 hours before the end of the current billing period. You can manage and cancel subscriptions in your device's account settings (App Store or Google Play).
+        </p>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">7.3 Founder Tier</h3>
+        <p class="section-body">
+          The Founder tier is a one-time, lifetime purchase granting permanent access to all premium features. Founder purchases are <strong>non-refundable</strong> except where required by applicable law.
+        </p>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-title">7.4 Pricing</h3>
+        <p class="section-body">
+          Prices may change with reasonable advance notice. Existing subscribers will be notified before any price increase takes effect.
+        </p>
+        <div class="highlight-card" style="margin-top: 16px; padding: 0; overflow: hidden;">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Price</th>
+                <th>Billing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="tier-name">Wanderer</td>
+                <td>Free</td>
+                <td>&mdash;</td>
+              </tr>
+              <tr>
+                <td class="tier-name">Signal</td>
+                <td>$4.99</td>
+                <td>Monthly</td>
+              </tr>
+              <tr>
+                <td class="tier-name">Resonance</td>
+                <td>$9.99</td>
+                <td>Monthly</td>
+              </tr>
+              <tr>
+                <td class="tier-founder">Founder</td>
+                <td class="tier-founder">$99.99</td>
+                <td>One-time (lifetime)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. Privacy -->
+    <div class="section">
+      <span class="section-anchor" id="privacy-section"></span>
+      <div class="section-header">
+        <span class="section-number">8</span>
+        <h2 class="section-title"><a href="#privacy-section">Privacy</a></h2>
+      </div>
+      <p class="section-body">
+        Your use of Serendipity is also governed by our <a href="/privacy">Privacy Policy</a>, which describes how we collect, use, and protect your information. By using the App, you consent to the practices described in the Privacy Policy.
+      </p>
+    </div>
+
+    <!-- 9. Intellectual Property -->
+    <div class="section">
+      <span class="section-anchor" id="ip"></span>
+      <div class="section-header">
+        <span class="section-number">9</span>
+        <h2 class="section-title"><a href="#ip">Intellectual Property</a></h2>
+      </div>
+      <p class="section-body">
+        The <strong>Tavern Protocol</strong> specification is released under the <strong>Creative Commons Attribution 4.0 International (CC-BY-4.0)</strong> license. You are free to share and adapt the protocol specification with appropriate attribution.
+      </p>
+      <p class="section-body" style="margin-top: 12px;">
+        The <strong>Serendipity application</strong> &mdash; including its source code, design, user interface, branding, graphics, and proprietary algorithms &mdash; is the exclusive property of Moonlit Social Labs and is protected by applicable intellectual property laws. All rights reserved.
+      </p>
+    </div>
+
+    <!-- 10. Disclaimers -->
+    <div class="section">
+      <span class="section-anchor" id="disclaimers"></span>
+      <div class="section-header">
+        <span class="section-number">10</span>
+        <h2 class="section-title"><a href="#disclaimers">Disclaimers</a></h2>
+      </div>
+      <div class="highlight-card highlight-card--danger">
+        <h4>No Warranties</h4>
+        <p>
+          SERENDIPITY IS PROVIDED ON AN <strong>"AS IS"</strong> AND <strong>"AS AVAILABLE"</strong> BASIS WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. MOONLIT SOCIAL LABS DOES NOT WARRANT THAT THE APP WILL BE UNINTERRUPTED, ERROR-FREE, SECURE, OR FREE OF VIRUSES OR OTHER HARMFUL COMPONENTS. WE MAKE NO GUARANTEES REGARDING THE QUALITY, ACCURACY, OR RELIABILITY OF ANY MATCHES, RESONANCE SCORES, OR ENCOUNTERS.
+        </p>
+      </div>
+    </div>
+
+    <!-- 11. Limitation of Liability -->
+    <div class="section">
+      <span class="section-anchor" id="liability"></span>
+      <div class="section-header">
+        <span class="section-number">11</span>
+        <h2 class="section-title"><a href="#liability">Limitation of Liability</a></h2>
+      </div>
+      <div class="highlight-card highlight-card--danger">
+        <h4>Liability Cap</h4>
+        <p>
+          TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL MOONLIT SOCIAL LABS, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (A) YOUR ACCESS TO OR USE OF (OR INABILITY TO ACCESS OR USE) THE APP; (B) ANY CONDUCT OR CONTENT OF ANY THIRD PARTY OR OTHER USER; (C) ANY ENCOUNTERS OR MEETINGS FACILITATED THROUGH THE APP; OR (D) UNAUTHORIZED ACCESS, USE, OR ALTERATION OF YOUR TRANSMISSIONS OR CONTENT. OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID US IN THE TWELVE (12) MONTHS PRECEDING THE CLAIM, OR FIFTY DOLLARS ($50), WHICHEVER IS GREATER.
+        </p>
+      </div>
+    </div>
+
+    <!-- 12. Termination -->
+    <div class="section">
+      <span class="section-anchor" id="termination"></span>
+      <div class="section-header">
+        <span class="section-number">12</span>
+        <h2 class="section-title"><a href="#termination">Termination</a></h2>
+      </div>
+      <p class="section-body">
+        We reserve the right to suspend or terminate your access to Serendipity at any time, with or without cause, and with or without notice. Reasons for termination may include, but are not limited to, violation of these Terms, abusive behavior, or fraudulent activity.
+      </p>
+      <p class="section-body" style="margin-top: 12px;">
+        You may delete your account at any time from <strong>Settings &rarr; Account &rarr; Delete Account</strong>. Upon deletion, your beacon identity, transmission profile, and all locally stored data will be permanently erased. Data that has already been end-to-end encrypted and delivered to other users cannot be recalled.
+      </p>
+    </div>
+
+    <!-- 13. Governing Law -->
+    <div class="section">
+      <span class="section-anchor" id="governing-law"></span>
+      <div class="section-header">
+        <span class="section-number">13</span>
+        <h2 class="section-title"><a href="#governing-law">Governing Law</a></h2>
+      </div>
+      <p class="section-body">
+        These Terms shall be governed by and construed in accordance with the laws of the applicable state within the United States, without regard to its conflict of law provisions. Any disputes arising under these Terms shall be resolved in the courts of competent jurisdiction within the United States.
+      </p>
+    </div>
+
+    <!-- 14. Changes -->
+    <div class="section">
+      <span class="section-anchor" id="changes"></span>
+      <div class="section-header">
+        <span class="section-number">14</span>
+        <h2 class="section-title"><a href="#changes">Changes to These Terms</a></h2>
+      </div>
+      <p class="section-body">
+        We may update these Terms from time to time. For material changes, we will provide notice through an in-app notification before the changes take effect. Your continued use of Serendipity after such notification constitutes acceptance of the revised Terms. We encourage you to review these Terms periodically.
+      </p>
+    </div>
+
+    <!-- 15. Contact -->
+    <div class="section">
+      <span class="section-anchor" id="contact"></span>
+      <div class="section-header">
+        <span class="section-number">15</span>
+        <h2 class="section-title"><a href="#contact">Contact</a></h2>
+      </div>
+      <p class="section-body">If you have questions or concerns about these Terms, please contact us:</p>
+      <div class="contact-card">
+        <p style="color: var(--text-muted); font-size: 15px;">Moonlit Social Labs &mdash; Legal Department</p>
+        <a href="mailto:legal@moonlitsociallabs.com" class="email-link">legal@moonlitsociallabs.com</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Ko-fi</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs</p>
+    </div>
+  </footer>
+
+</body>
+</html>

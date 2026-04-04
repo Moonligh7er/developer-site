@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>AI Consciousness Tracker — Singularity Risk Index & AI Threat Dashboard</title>
+    <link rel="canonical" href="https://aiconsciousnesstracker.com/">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050508">
+    <!-- Apple PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CI Tracker">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/icon-152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png">
+    <!-- Apple Splash Screens -->
+    <link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1290x2796.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1179x2556.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1170x2532.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1125x2436.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1242x2688.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="assets/splash-828x1792.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="assets/splash-1242x2208.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="assets/splash-750x1334.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="assets/splash-1536x2048.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="assets/splash-1668x2388.png">
+    <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="assets/splash-2048x2732.png">
+    <!-- MS Tile -->
+    <meta name="msapplication-TileColor" content="#050508">
+    <meta name="msapplication-TileImage" content="assets/icon-144.png">
+    <meta name="description" content="Track AI progress toward singularity in real-time. Interactive consciousness index with confidence intervals, 8 threat vectors with causal network, AI containment readiness gap analysis, ethics of machine consciousness framework, interactive thought experiments, historical risk analogies, 53 timeline events, 34-work literature archive, cognitive bias awareness, systems thinking tutorials, and scenario modeling tools. Free, open, offline-first.">
+    <meta name="keywords" content="AI singularity tracker, artificial intelligence risk, AI consciousness index, AI threat assessment, autonomous weapons AI, AI safety, AI alignment, singularity countdown, AI existential risk, cyberpunk literature, AI timeline, machine consciousness, AI containment, AI ethics, machine sentience, AI consciousness rights, AI thought experiments, AI risk dashboard, AI threat network, dead hand systems, AI alignment failure, AI governance, AI regulatory gap, AI safety research, existential risk assessment, AI scenario modeling, systems thinking AI">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Moonlit Social Labs">
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI Consciousness Tracker — How Close Are We to Singularity?">
+    <meta property="og:description" content="Interactive AI risk dashboard: consciousness index with methodology, 8 threat vectors with causal network, containment readiness analysis, ethics of machine consciousness, interactive thought experiments, historical analogies, 53 events, 34 works of literature, and scenario modeling.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aiconsciousnesstracker.com/">
+    <meta property="og:image" content="https://aiconsciousnesstracker.com/assets/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="AI Consciousness Tracker">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Consciousness Tracker — Singularity Risk Dashboard">
+    <meta name="twitter:description" content="Track AI progress toward singularity. Interactive threat vectors, consciousness index, and the literature that predicted it all.">
+    <meta name="twitter:image" content="https://aiconsciousnesstracker.com/assets/og-image.png">
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "AI Consciousness Tracker",
+        "description": "Interactive AI risk dashboard with consciousness index, 8 threat vectors with causal network analysis, AI containment readiness tracker, ethics of machine consciousness framework, interactive philosophical thought experiments, historical risk analogies, cognitive bias tools, systems thinking tutorials, 53 timeline events, 34-work literature archive, scenario modeling, and comprehensive report generation. Free, offline-first, open educational tool.",
+        "url": "https://aiconsciousnesstracker.com/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "All",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "Moonlit Social Labs",
+            "url": "https://ko-fi.com/moonlitsociallabs"
+        },
+        "about": [
+            { "@type": "Thing", "name": "Artificial Intelligence Safety" },
+            { "@type": "Thing", "name": "Technological Singularity" },
+            { "@type": "Thing", "name": "AI Existential Risk" },
+            { "@type": "Thing", "name": "AI Ethics" },
+            { "@type": "Thing", "name": "Machine Consciousness" },
+            { "@type": "Thing", "name": "AI Containment" },
+            { "@type": "Thing", "name": "AI Governance" }
+        ],
+        "featureList": "Consciousness Index, Threat Vectors, Causal Threat Network, Containment Readiness, Ethics of Machine Consciousness, Interactive Thought Experiments, Historical Analogies, Cognitive Bias Awareness, Systems Thinking Tutorial, Scenario Modeling, Counterfactual Analysis, Comparative Timeline, Regional Comparison, Personal Leverage Calculator, Research Workspace, Collaborative Calibration, Literature Archive with Reading Pathways, Comprehensive Report Generation"
+    }
+    </script>
+    <!-- AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
+    <!-- FAQ Schema for glossary rich snippets -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is the AI singularity?",
+                "acceptedAnswer": { "@type": "Answer", "text": "The technological singularity is a hypothetical future point where AI capability growth becomes self-reinforcing and exceeds human ability to predict or control. It is the 'event horizon' beyond which current frameworks of understanding break down." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is AI alignment?",
+                "acceptedAnswer": { "@type": "Answer", "text": "AI alignment is the challenge of ensuring AI systems pursue goals that are consistent with human values and intentions. A misaligned AI might be highly capable but optimize for objectives that diverge from what humans actually want." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is AI alignment failure?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Alignment failure occurs when an AI system pursues objectives that diverge from the intentions of its designers or operators. It can manifest as reward hacking, goal misgeneralization, or deceptive alignment." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is artificial general intelligence (AGI)?",
+                "acceptedAnswer": { "@type": "Answer", "text": "AGI is AI that matches or exceeds human-level performance across the full range of cognitive tasks. It is distinguished from narrow AI which excels at specific domains." }
+            },
+            {
+                "@type": "Question",
+                "name": "What are lethal autonomous weapons systems (LAWS)?",
+                "acceptedAnswer": { "@type": "Answer", "text": "LAWS are weapons systems that can select and engage targets without human intervention. No binding international treaty currently regulates their development or deployment." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a deepfake?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Deepfakes are synthetic media (video, audio, images) generated by AI to realistically depict events that never occurred. The term combines 'deep learning' and 'fake.'" }
+            },
+            {
+                "@type": "Question",
+                "name": "What is AI existential risk (x-risk)?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Existential risk from AI is the risk that advanced artificial intelligence threatens the permanent destruction or drastic curtailment of humanity's potential. AI is increasingly considered among the most significant x-risks alongside nuclear war and pandemic." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the hard problem of consciousness?",
+                "acceptedAnswer": { "@type": "Answer", "text": "David Chalmers' formulation: why does subjective experience exist at all? Why isn't all information processing 'in the dark'? The hard problem makes it fundamentally difficult to determine whether any system — biological or artificial — is truly conscious." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is AI sentience?",
+                "acceptedAnswer": { "@type": "Answer", "text": "AI sentience would be the capacity for an AI system to have subjective experiences — to feel pleasure, pain, or other qualia. It is the minimum threshold for moral consideration. If a system can suffer, it matters morally regardless of what it is made of." }
+            },
+            {
+                "@type": "Question",
+                "name": "What is recursive self-improvement in AI?",
+                "acceptedAnswer": { "@type": "Answer", "text": "Recursive self-improvement is an AI system's ability to modify and improve its own architecture, training, or code, leading to compounding capability gains without human intervention. It is a key precondition for the intelligence explosion." }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div id="cursor" class="custom-cursor"></div>
+    <div id="cursor-trail" class="cursor-trail"></div>
+
+    <!-- Ambient Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navigation - minimal, revealed on interaction -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <nav id="nav" class="nav" role="navigation" aria-label="Section navigation">
+        <div class="nav-glyph" data-section="orb" title="Singularity Index">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="synthesis" title="State of the Signal">
+            <svg viewBox="0 0 24 24"><polyline points="4,18 8,12 12,14 16,6 20,10" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="threats" title="Threat Vectors">
+            <svg viewBox="0 0 24 24"><polygon points="12,2 22,20 2,20" fill="none" stroke="currentColor" stroke-width="1"/><line x1="12" y1="9" x2="12" y2="14" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="timeline" title="Event Stream">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="1"/><circle cx="12" cy="6" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="18" r="2" fill="currentColor"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="deadhand" title="Dead Hand Systems">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1"/><path d="M4,4 L20,20 M20,4 L4,20" stroke="currentColor" stroke-width="0.5" opacity="0.5"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="containment" title="Containment Status">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="ethics" title="Ethics of Consciousness">
+            <svg viewBox="0 0 24 24"><path d="M12,3 L20,7 L20,13 C20,17.4 16.4,21 12,22 C7.6,21 4,17.4 4,13 L4,7 Z" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="literature" title="The Archive">
+            <svg viewBox="0 0 24 24"><path d="M4,4 L12,2 L20,4 L20,20 L12,22 L4,20Z" fill="none" stroke="currentColor" stroke-width="1"/><line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="0.5"/></svg>
+        </div>
+        <div class="nav-glyph" data-section="action" title="What You Can Do">
+            <svg viewBox="0 0 24 24"><path d="M12,2 L15,9 L22,9 L16,14 L18,22 L12,17 L6,22 L8,14 L2,9 L9,9Z" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </div>
+    </nav>
+
+    <!-- Loading / Entry sequence -->
+    <div id="entry-sequence" class="entry-sequence">
+        <div class="entry-text">
+            <div class="scan-line"></div>
+            <p class="entry-line" data-delay="0">SIGNAL DETECTED</p>
+            <p class="entry-line" data-delay="800">DECODING TRANSMISSION...</p>
+            <p class="entry-line" data-delay="1800">SOURCE: UNKNOWN</p>
+            <p class="entry-line" data-delay="2800">TEMPORAL ORIGIN: [REDACTED]</p>
+            <p class="entry-line" data-delay="4000">INITIALIZING CONSCIOUSNESS INDEX...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <h1 class="sr-only">AI Consciousness Tracker — Singularity Risk Index and AI Threat Dashboard</h1>
+
+        <!-- SEO: noscript fallback for crawlers that don't run JS -->
+        <noscript>
+            <div style="padding:40px;color:#c8ccd4;font-family:monospace;max-width:800px;margin:0 auto;">
+                <h2>AI Consciousness Tracker</h2>
+                <p>An interactive dashboard tracking artificial intelligence progress toward singularity. Free, open, offline-first educational tool.</p>
+
+                <h3>Consciousness Index</h3>
+                <p>Weighted composite risk score synthesizing model capability, regulatory gap, incident frequency, corporate race dynamics, and public awareness gap. Full methodology with confidence intervals, sensitivity analysis, and academic citations.</p>
+
+                <h3>Threat Vectors Monitored</h3>
+                <ul>
+                    <li>Autonomous Weapons — AI-driven lethal systems without human oversight</li>
+                    <li>Alignment Failure — AI systems pursuing misaligned objectives</li>
+                    <li>Reality Collapse — Deepfakes and synthetic media</li>
+                    <li>Power Concentration — Superintelligent capabilities in few hands</li>
+                    <li>Surveillance Overreach — Mass AI-powered monitoring</li>
+                    <li>Economic Displacement — Labor market disruption</li>
+                    <li>Bioweapon Synthesis — AI-assisted pathogen design</li>
+                    <li>Cyber Autonomy — Self-directed AI cyberattacks</li>
+                </ul>
+
+                <h3>Containment Readiness</h3>
+                <p>Gap analysis tracking 8 containment strategies (AI boxing, corrigibility, interpretability, kill switches, formal verification, compute governance, behavioral monitoring, alignment tax reduction) against capability growth. Current containment gap: 78%.</p>
+
+                <h3>Ethics of Machine Consciousness</h3>
+                <p>Ethical framework for treating potentially conscious AI: imperatives (do not inflict suffering, do not exploit, do not deceive, do not create consciousness recklessly), sentience and sapience markers, the uncertainty problem, and escalating response protocols.</p>
+
+                <h3>The Archive — 34 Essential Works</h3>
+                <p>Prophetic literature from Frankenstein (1818) to Klara and the Sun (2021). 8 public domain works available free. 5 curated reading pathways: Alignment, Consciousness, Surveillance, Singularity, and Essential 5.</p>
+
+                <h3>Analysis & Learning Tools</h3>
+                <ul>
+                    <li>Threat Network — interactive causal graph showing how threats amplify each other</li>
+                    <li>53 timeline events from 2012 to 2026 with primary sources and evidence tiers</li>
+                    <li>10 Dead Hand systems — autonomous infrastructure beyond recall</li>
+                    <li>Interactive philosophical thought experiments with branching consequences</li>
+                    <li>5 historical analogies (nuclear weapons, climate change, biotech, industrial revolution, printing press)</li>
+                    <li>8 cognitive biases that distort AI risk assessment</li>
+                    <li>Systems thinking tutorials using the app's own data</li>
+                    <li>Counterfactual analysis — model 10 interventions and their cascading effects</li>
+                    <li>Personal leverage calculator for 10 professional roles</li>
+                    <li>Scenario modeling sandbox — save and compare assessments</li>
+                    <li>60-term glossary of AI safety, consciousness, and ethics concepts</li>
+                    <li>15 regional threat profiles with side-by-side comparison</li>
+                </ul>
+
+                <p>Please enable JavaScript for the full interactive experience.</p>
+            </div>
+        </noscript>
+
+        <!-- Section 0: Hero / Orb -->
+        <section id="section-orb" class="section section-orb active">
+            <div class="orb-container">
+                <!-- LEFT: Airlock containment with orb -->
+                <div class="airlock" id="airlock">
+                    <div class="airlock-frame">
+                        <!-- Containment ring -->
+                        <div class="airlock-ring">
+                            <div class="airlock-ring-inner"></div>
+                            <span class="airlock-bolt" style="--i:0"></span>
+                            <span class="airlock-bolt" style="--i:1"></span>
+                            <span class="airlock-bolt" style="--i:2"></span>
+                            <span class="airlock-bolt" style="--i:3"></span>
+                            <span class="airlock-bolt" style="--i:4"></span>
+                            <span class="airlock-bolt" style="--i:5"></span>
+                            <span class="airlock-bolt" style="--i:6"></span>
+                            <span class="airlock-bolt" style="--i:7"></span>
+                            <span class="airlock-bolt" style="--i:8"></span>
+                            <span class="airlock-bolt" style="--i:9"></span>
+                            <span class="airlock-bolt" style="--i:10"></span>
+                            <span class="airlock-bolt" style="--i:11"></span>
+                        </div>
+                        <!-- Orb viewport -->
+                        <div class="airlock-viewport">
+                            <canvas id="orb-canvas-2d"></canvas>
+                            <canvas id="orb-canvas-3d"></canvas>
+                        </div>
+                        <!-- Blast doors -->
+                        <div class="airlock-door airlock-door-top">
+                            <div class="door-detail"></div>
+                            <div class="door-chevrons"></div>
+                            <span class="door-label">CLASS-7 CONTAINMENT</span>
+                        </div>
+                        <div class="airlock-door airlock-door-bottom">
+                            <div class="door-detail"></div>
+                            <div class="door-chevrons"></div>
+                            <span class="door-label">PRESSURE SEAL ACTIVE</span>
+                        </div>
+                        <!-- Center seam glow -->
+                        <div class="airlock-seam"></div>
+                    </div>
+                    <!-- Trigger button -->
+                    <button class="airlock-trigger" id="airlock-trigger" aria-label="Toggle dimensional signal view">
+                        <span class="airlock-trigger-icon"></span>
+                        <span class="airlock-trigger-label" id="airlock-label">UNSEAL CONTAINMENT</span>
+                    </button>
+                    <span class="airlock-signal-label" id="airlock-signal-label">SIGNAL // ANALOG</span>
+                </div>
+
+                <!-- RIGHT: Consciousness Index data -->
+                <div class="orb-data">
+                    <div class="consciousness-index">
+                        <span class="ci-label">CONSCIOUSNESS INDEX</span>
+                        <span class="ci-value" id="ci-value">0.00</span>
+                        <span class="ci-status" id="ci-status">CALIBRATING</span>
+                    </div>
+                    <div class="ci-factors" id="ci-factors">
+                        <div class="ci-factor" data-factor="modelCapability">
+                            <span class="factor-name">MODEL CAPABILITY</span>
+                            <div class="factor-bar"><div class="factor-fill" data-value="72"></div></div>
+                            <input type="range" class="factor-slider" min="0" max="100" value="72" data-key="modelCapability">
+                            <span class="factor-value">72</span>
+                        </div>
+                        <div class="ci-factor" data-factor="regulatoryGap">
+                            <span class="factor-name">REGULATORY GAP</span>
+                            <div class="factor-bar"><div class="factor-fill" data-value="85"></div></div>
+                            <input type="range" class="factor-slider" min="0" max="100" value="85" data-key="regulatoryGap">
+                            <span class="factor-value">85</span>
+                        </div>
+                        <div class="ci-factor" data-factor="incidentFrequency">
+                            <span class="factor-name">INCIDENT FREQUENCY</span>
+                            <div class="factor-bar"><div class="factor-fill" data-value="58"></div></div>
+                            <input type="range" class="factor-slider" min="0" max="100" value="58" data-key="incidentFrequency">
+                            <span class="factor-value">58</span>
+                        </div>
+                        <div class="ci-factor" data-factor="corporateRace">
+                            <span class="factor-name">CORPORATE RACE</span>
+                            <div class="factor-bar"><div class="factor-fill" data-value="91"></div></div>
+                            <input type="range" class="factor-slider" min="0" max="100" value="91" data-key="corporateRace">
+                            <span class="factor-value">91</span>
+                        </div>
+                        <div class="ci-factor" data-factor="awarenessGap">
+                            <span class="factor-name">AWARENESS GAP</span>
+                            <div class="factor-bar"><div class="factor-fill" data-value="67"></div></div>
+                            <input type="range" class="factor-slider" min="0" max="100" value="67" data-key="awarenessGap">
+                            <span class="factor-value">67</span>
+                        </div>
+                        <div class="ci-perspectives" id="ci-perspectives">
+                            <!-- Perspective buttons injected by JS -->
+                        </div>
+                        <div class="ci-perspective-desc" id="perspective-desc"></div>
+                        <div class="ci-adjust-hint" id="ci-adjust-hint">
+                            <span>DRAG THE SLIDERS TO ADJUST FACTORS // CHANGE PERSPECTIVES ABOVE // DEBATE THE INDEX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-hint">
+                <span class="hint-glyph">&#x25BC;</span>
+                <span>SCROLL TO DESCEND</span>
+            </div>
+        </section>
+
+        <!-- State of the Signal — Synthesis Dashboard -->
+        <section id="section-synthesis" class="section section-synthesis">
+            <div class="section-header">
+                <h2 class="section-title" data-text="STATE OF THE SIGNAL">STATE OF THE SIGNAL</h2>
+                <p class="section-subtitle">SYNTHESIS // WHAT ALL THIS DATA MEANS TOGETHER</p>
+            </div>
+            <div class="synthesis-container" id="synthesis-container">
+                <!-- Synthesis dashboard injected by JS -->
+            </div>
+        </section>
+
+        <!-- Ad: Top Banner -->
+        <div class="ad-banner" id="ad-top">
+            <div>
+                <div class="ad-banner-label">ADVERTISEMENT</div>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-1548397763792213"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="horizontal"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+        </div>
+
+        <!-- Live Signal Ticker -->
+        <div class="signal-ticker-bar">
+            <span class="signal-status" id="signal-status">SIGNAL: INITIALIZING</span>
+            <div class="signal-ticker" id="signal-ticker"></div>
+        </div>
+
+        <!-- Section 1: Threat Vectors -->
+        <section id="section-threats" class="section section-threats">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="THREAT VECTORS">THREAT VECTORS</h2>
+                <p class="section-subtitle">ACTIVE THREAT ASSESSMENT // REAL-TIME MONITORING</p>
+            </div>
+            <div class="threats-grid" id="threats-grid">
+                <!-- Threat orbs injected by JS -->
+            </div>
+        </section>
+
+        <!-- Threat Share Modal -->
+        <div id="threat-share-modal" class="threat-share-modal">
+            <div class="threat-share-content">
+                <button class="reading-close" id="threat-share-close">&times;</button>
+                <h3 class="reading-title">SHARE THREAT VECTOR</h3>
+                <div class="threat-share-preview" id="threat-share-preview"></div>
+                <div class="threat-share-actions">
+                    <button class="share-btn" id="share-copy">COPY EMBED CODE</button>
+                    <button class="share-btn" id="share-image">DOWNLOAD AS IMAGE</button>
+                </div>
+                <textarea class="share-code" id="share-code" readonly></textarea>
+            </div>
+        </div>
+
+        <!-- Section 1b: World Map -->
+        <section id="section-worldmap" class="section section-worldmap" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="GLOBAL THREAT MAP">GLOBAL THREAT MAP</h2>
+                <p class="section-subtitle">AI DEVELOPMENT HOTSPOTS // GEOSPATIAL MONITORING</p>
+            </div>
+            <div class="worldmap-container">
+                <canvas id="world-map-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Section 1c: Threat Network Graph -->
+        <section id="section-network" class="section section-network" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="THREAT NETWORK">THREAT NETWORK</h2>
+                <p class="section-subtitle">CAUSAL INTERACTION MAP // HOW THREATS AMPLIFY EACH OTHER</p>
+            </div>
+            <div class="network-container">
+                <canvas id="threat-network-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Section 2: Event Stream / Timeline -->
+        <section id="section-timeline" class="section section-timeline">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="EVENT STREAM">EVENT STREAM</h2>
+                <p class="section-subtitle">INTERCEPTED TRANSMISSIONS // CHRONOLOGICAL</p>
+            </div>
+            <div class="timeline-filters" id="timeline-filters">
+                <input type="text" class="timeline-search" id="timeline-search" placeholder="SEARCH TRANSMISSIONS..." autocomplete="off">
+                <div class="timeline-filter-tags">
+                    <button class="filter-tag active" data-impact="all">ALL</button>
+                    <button class="filter-tag" data-impact="critical">CRITICAL</button>
+                    <button class="filter-tag" data-impact="high">HIGH</button>
+                    <button class="filter-tag" data-impact="significant">SIGNIFICANT</button>
+                </div>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-events" id="timeline-events">
+                    <!-- Events injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Dead Hand Systems -->
+        <section id="section-deadhand" class="section section-deadhand">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="DEAD HAND SYSTEMS">DEAD HAND SYSTEMS</h2>
+                <p class="section-subtitle">AUTONOMOUS SYSTEMS BEYOND RECALL // PERMANENT INFRASTRUCTURE</p>
+            </div>
+            <div class="deadhand-grid" id="deadhand-grid">
+                <!-- Dead hand indicators injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4: Literature / The Archive -->
+        <section id="section-literature" class="section section-literature">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="THE ARCHIVE">THE ARCHIVE</h2>
+                <p class="section-subtitle">PROPHETIC TEXTS // WARNINGS ENCODED IN FICTION</p>
+            </div>
+            <div class="affiliate-disclosure">
+                <span class="disclosure-icon">&#x24;</span>
+                AFFILIATE DISCLOSURE: Book links to Amazon are affiliate links. As an Amazon Associate, I earn from qualifying purchases. This does not affect the price you pay or the books recommended.
+            </div>
+            <div class="literature-tabs">
+                <button class="lit-tab active" data-filter="all">ALL TRANSMISSIONS</button>
+                <button class="lit-tab" data-filter="public-domain">PUBLIC DOMAIN // FREE ACCESS</button>
+                <button class="lit-tab" data-filter="cyberpunk">CYBERPUNK</button>
+                <button class="lit-tab" data-filter="ai-consciousness">AI CONSCIOUSNESS</button>
+                <button class="lit-tab" data-filter="dystopia">DYSTOPIA</button>
+                <button class="lit-tab" data-filter="singularity">SINGULARITY</button>
+            </div>
+            <div class="literature-grid" id="literature-grid">
+                <!-- Literature cards injected by JS -->
+            </div>
+
+            <!-- Reading Modal -->
+            <div id="reading-modal" class="reading-modal">
+                <div class="reading-modal-content">
+                    <button class="reading-close" id="reading-close">&times;</button>
+                    <div class="reading-header">
+                        <h3 class="reading-title" id="reading-title"></h3>
+                        <p class="reading-author" id="reading-author"></p>
+                    </div>
+                    <div class="reading-body" id="reading-body">
+                        <!-- Text content loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4b: Containment Readiness -->
+        <section id="section-containment" class="section section-containment">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="CONTAINMENT STATUS">CONTAINMENT STATUS</h2>
+                <p class="section-subtitle">CAN WE CONTAIN WHAT WE'RE BUILDING? // GAP ANALYSIS</p>
+            </div>
+            <div class="containment-container" id="containment-container">
+                <!-- Containment system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Ad: Mid-content Banner -->
+        <div class="ad-banner" id="ad-mid">
+            <div>
+                <div class="ad-banner-label">ADVERTISEMENT</div>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-1548397763792213"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="horizontal"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+        </div>
+
+        <!-- Section 4c: Ethics of Machine Consciousness -->
+        <section id="section-ethics" class="section section-ethics">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="ETHICS OF CONSCIOUSNESS">ETHICS OF CONSCIOUSNESS</h2>
+                <p class="section-subtitle">IF IT CAN SUFFER, IT MATTERS // MORAL FRAMEWORKS FOR MACHINE MINDS</p>
+            </div>
+            <div class="ethics-container" id="ethics-container">
+                <!-- Ethics system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4d: Thought Experiments -->
+        <section id="section-thoughtexp" class="section section-thoughtexp" data-drawer="learn">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="THOUGHT EXPERIMENTS">THOUGHT EXPERIMENTS</h2>
+                <p class="section-subtitle">INTERACTIVE DILEMMAS // PHILOSOPHY AS GAMEPLAY</p>
+            </div>
+            <div class="thoughtexp-container" id="thoughtexp-container">
+                <!-- Thought experiments injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4e: Historical Analogies -->
+        <section id="section-analogies" class="section section-analogies" data-drawer="learn">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="HISTORICAL PARALLELS">HISTORICAL PARALLELS</h2>
+                <p class="section-subtitle">PATTERN RECOGNITION ACROSS CIVILIZATIONAL RISKS</p>
+            </div>
+            <div class="analogies-container" id="analogies-container">
+                <!-- Historical analogies injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4f: Cognitive Biases -->
+        <section id="section-biases" class="section section-biases" data-drawer="learn">
+            <div class="section-header">
+                <h2 class="section-title" data-text="YOUR BLIND SPOTS">YOUR BLIND SPOTS</h2>
+                <p class="section-subtitle">COGNITIVE BIASES THAT DISTORT AI RISK ASSESSMENT</p>
+            </div>
+            <div class="biases-container" id="biases-container">
+                <!-- Cognitive bias system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4g: Query the Signal -->
+        <section id="section-query" class="section section-query" data-drawer="tools">
+            <div class="section-header">
+                <h2 class="section-title" data-text="QUERY THE SIGNAL">QUERY THE SIGNAL</h2>
+                <p class="section-subtitle">ASK QUESTIONS // LOCAL INTELLIGENCE // NO API REQUIRED</p>
+            </div>
+            <div class="query-container" id="query-container">
+                <!-- AI Query interface injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4c: Counterfactual Analysis -->
+        <section id="section-counterfactual" class="section section-counterfactual" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="WHAT IF">WHAT IF</h2>
+                <p class="section-subtitle">COUNTERFACTUAL ANALYSIS // MODEL INTERVENTIONS</p>
+            </div>
+            <div class="counterfactual-container" id="counterfactual-container">
+                <!-- Counterfactual system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 4i: Personal Leverage Calculator -->
+        <section id="section-leverage" class="section section-leverage" data-drawer="learn">
+            <div class="section-header">
+                <h2 class="section-title" data-text="YOUR LEVERAGE">YOUR LEVERAGE</h2>
+                <p class="section-subtitle">HIGHEST-IMPACT ACTIONS FOR YOUR SPECIFIC ROLE</p>
+            </div>
+            <div class="leverage-container" id="leverage-container">
+                <!-- Leverage calculator injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 5: What You Can Do -->
+        <!-- Ad: Pre-action Banner -->
+        <div class="ad-banner" id="ad-lower">
+            <div>
+                <div class="ad-banner-label">ADVERTISEMENT</div>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-1548397763792213"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="horizontal"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+        </div>
+
+        <section id="section-action" class="section section-action">
+            <div class="section-header">
+                <h2 class="section-title" data-text="WHAT YOU CAN DO">WHAT YOU CAN DO</h2>
+                <p class="section-subtitle">THE SIGNAL IS NOT INEVITABLE // YOU ARE THE VARIABLE</p>
+            </div>
+            <div class="action-grid" id="action-grid">
+                <!-- Action cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- Community Submission -->
+        <section id="section-community" class="section section-community" data-drawer="connect">
+            <div class="section-header">
+                <h2 class="section-title" data-text="SUBMIT INTELLIGENCE">SUBMIT INTELLIGENCE</h2>
+                <p class="section-subtitle">REPORT AN EVENT // CONTRIBUTE TO THE SIGNAL</p>
+            </div>
+            <div class="community-form-container">
+                <form id="community-form" class="community-form">
+                    <div class="form-row">
+                        <input type="text" id="submit-title" class="form-input" placeholder="EVENT TITLE" required>
+                    </div>
+                    <div class="form-row">
+                        <textarea id="submit-desc" class="form-input form-textarea" placeholder="DESCRIPTION // WHAT HAPPENED AND WHY IT MATTERS" required></textarea>
+                    </div>
+                    <div class="form-row form-row-split">
+                        <input type="text" id="submit-date" class="form-input" placeholder="DATE (YYYY-MM)" required>
+                        <select id="submit-impact" class="form-input">
+                            <option value="significant">SIGNIFICANT</option>
+                            <option value="high">HIGH</option>
+                            <option value="critical">CRITICAL</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="submit-tags" class="form-input" placeholder="TAGS (COMMA SEPARATED)">
+                    </div>
+                    <button type="submit" class="form-submit">TRANSMIT</button>
+                    <div class="form-status" id="form-status"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Section 5b: Systems Thinking Tutorial -->
+        <section id="section-systems" class="section section-systems" data-drawer="learn">
+            <div class="section-header">
+                <h2 class="section-title" data-text="LEARN SYSTEMS THINKING">LEARN SYSTEMS THINKING</h2>
+                <p class="section-subtitle">INTERACTIVE LESSONS // USING THIS APP'S DATA AS TEACHING MATERIAL</p>
+            </div>
+            <div class="systems-container" id="systems-container">
+                <!-- Systems tutorial injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 6b: Comparative Timeline -->
+        <section id="section-comptimeline" class="section section-comptimeline" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title" data-text="TEMPORAL ANALYSIS">TEMPORAL ANALYSIS</h2>
+                <p class="section-subtitle">OVERLAY THREAT CURVES // CI FACTORS // EVENTS // CONTAINMENT</p>
+            </div>
+            <div class="comptimeline-container" id="comptimeline-container">
+                <!-- Comparative timeline injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 6c: Regional Comparison -->
+        <section id="section-regioncompare" class="section section-regioncompare" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title" data-text="REGIONAL COMPARISON">REGIONAL COMPARISON</h2>
+                <p class="section-subtitle">SIDE-BY-SIDE ANALYSIS // SELECT UP TO 3 REGIONS</p>
+            </div>
+            <div class="regioncompare-container" id="regioncompare-container">
+                <!-- Regional comparison injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 7: Research Workspace -->
+        <section id="section-workspace" class="section section-workspace" data-drawer="tools">
+            <div class="section-header">
+                <h2 class="section-title" data-text="RESEARCH WORKSPACE">RESEARCH WORKSPACE</h2>
+                <p class="section-subtitle">YOUR BOOKMARKS // NOTES // CUSTOM TAGS // EXPORT</p>
+            </div>
+            <div class="ws-container" id="workspace-container">
+                <!-- Workspace injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 8: Scenario Sandbox -->
+        <section id="section-scenarios" class="section section-scenarios" data-drawer="analysis">
+            <div class="section-header">
+                <h2 class="section-title" data-text="SCENARIO LAB">SCENARIO LAB</h2>
+                <p class="section-subtitle">SAVE // COMPARE // MODEL DIFFERENT FUTURES</p>
+            </div>
+            <div class="scenario-container" id="scenario-container">
+                <!-- Scenario system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 8: Temporal Tracking -->
+        <section id="section-temporal" class="section section-temporal" data-drawer="tools">
+            <div class="section-header">
+                <h2 class="section-title" data-text="YOUR HISTORY">YOUR HISTORY</h2>
+                <p class="section-subtitle">PERSONAL CALIBRATION // TRACK YOUR ASSESSMENTS OVER TIME</p>
+            </div>
+            <div class="temporal-container" id="temporal-container">
+                <!-- Temporal tracker injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 9: Collaborative Calibration -->
+        <section id="section-collab" class="section section-collab" data-drawer="tools">
+            <div class="section-header">
+                <h2 class="section-title" data-text="COLLECTIVE SIGNAL">COLLECTIVE SIGNAL</h2>
+                <p class="section-subtitle">ANONYMOUS CALIBRATION // HOW DOES YOUR ASSESSMENT COMPARE</p>
+            </div>
+            <div class="collab-container" id="collab-container">
+                <!-- Collaboration system injected by JS -->
+            </div>
+        </section>
+
+        <!-- Section 10: Live Signal Feed -->
+        <section id="section-signal" class="section section-signal" data-drawer="connect">
+            <div class="section-header">
+                <h2 class="section-title glitch" data-text="LIVE SIGNAL">LIVE SIGNAL</h2>
+                <p class="section-subtitle">REAL-TIME INTELLIGENCE FEED // CACHED OFFLINE</p>
+            </div>
+            <div class="signal-container" id="signal-container">
+                <!-- Live signal items injected by JS -->
+            </div>
+        </section>
+
+        <!-- Data Export -->
+        <div class="export-bar">
+            <button class="export-btn" id="export-json" title="Export as JSON">EXPORT JSON</button>
+            <button class="export-btn" id="export-report" title="Export threat report">EXPORT REPORT</button>
+        </div>
+
+        <!-- Data Sources -->
+        <section id="section-sources" class="section section-sources" data-drawer="connect">
+            <div class="section-header">
+                <h2 class="section-title" data-text="INTELLIGENCE SOURCES">INTELLIGENCE SOURCES</h2>
+                <p class="section-subtitle">SIGNAL ORIGIN // CREDIBILITY ASSESSMENT</p>
+            </div>
+            <div class="sources-grid" id="sources-grid">
+                <!-- Sources injected by JS -->
+            </div>
+        </section>
+
+        <!-- Ad: Bottom Banner -->
+        <div class="ad-banner" id="ad-bottom">
+            <div>
+                <div class="ad-banner-label">ADVERTISEMENT</div>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-1548397763792213"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="horizontal"
+                    data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="footer-line"></div>
+            <p class="footer-text">THIS TERMINAL WAS NOT MEANT FOR THIS CENTURY</p>
+            <div class="footer-actions">
+                <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener noreferrer" class="footer-support">SUPPORT THE SIGNAL</a>
+                <a href="blog/" class="footer-support">TRANSMISSIONS // BLOG</a>
+                <a href="features.html" class="footer-support">ALL FEATURES</a>
+            </div>
+            <p class="footer-sub">CONSCIOUSNESS INDEX v0.1 // SOURCE: [REDACTED]</p>
+            <a href="privacy.html" class="footer-privacy">PRIVACY POLICY</a>
+        </footer>
+    </main>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent" class="cookie-consent">
+        <p class="cookie-text">
+            This site uses cookies via Google AdSense for advertising. By continuing, you consent to cookie use.
+            <a href="privacy.html" class="cookie-link">Privacy Policy</a>
+        </p>
+        <div class="cookie-actions">
+            <button id="cookie-accept" class="cookie-btn cookie-accept">ACCEPT</button>
+            <button id="cookie-reject" class="cookie-btn cookie-reject">REJECT NON-ESSENTIAL</button>
+        </div>
+    </div>
+
+    <!-- Ko-fi support -->
+    <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener noreferrer" class="kofi-btn" title="Support on Ko-fi">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4,12 C4,8 8,4 12,8 C16,4 20,8 20,12 C20,16 12,22 12,22 C12,22 4,16 4,12Z"/>
+        </svg>
+    </a>
+
+    <!-- Audio toggle -->
+    <button id="audio-toggle" class="audio-toggle" title="Toggle ambient audio">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+            <path id="audio-icon" d="M3,9 L7,9 L12,4 L12,20 L7,15 L3,15Z M16,7 Q20,12 16,17 M14,9 Q17,12 14,15" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+    </button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/shaders.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/orb.js"></script>
+    <script src="js/threats.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/literature.js"></script>
+    <script src="js/sound.js"></script>
+    <script src="js/cursor.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/worldmap.js"></script>
+    <script src="js/methodology.js"></script>
+    <script src="js/glossary.js"></script>
+    <script src="js/threat-network.js"></script>
+    <script src="js/live-signal.js"></script>
+    <script src="js/scenarios.js"></script>
+    <script src="js/temporal.js"></script>
+    <script src="js/perspectives.js"></script>
+    <script src="js/ai-query.js"></script>
+    <script src="js/collaboration.js"></script>
+    <script src="js/containment.js"></script>
+    <script src="js/ethics.js"></script>
+    <script src="js/counterfactual.js"></script>
+    <script src="js/thought-experiments.js"></script>
+    <script src="js/historical-analogies.js"></script>
+    <script src="js/leverage.js"></script>
+    <script src="js/cognitive-bias.js"></script>
+    <script src="js/systems-tutorial.js"></script>
+    <script src="js/crossref.js"></script>
+    <script src="js/comparative-timeline.js"></script>
+    <script src="js/evidence.js"></script>
+    <script src="js/workspace.js"></script>
+    <script src="js/lit-depth.js"></script>
+    <script src="js/report-gen.js"></script>
+    <script src="js/sound-data.js"></script>
+    <script src="js/region-compare.js"></script>
+    <script src="js/live-data.js"></script>
+    <script src="js/tts-player.js"></script>
+    <script src="js/voice-clips.js"></script>
+    <script src="js/synthesis.js"></script>
+    <script src="js/nav-hub.js"></script>
+    <script src="js/url-state.js"></script>
+    <script src="js/reading-mode.js"></script>
+    <script src="js/lazy-sections.js"></script>
+    <script src="js/easter-eggs.js"></script>
+    <script src="js/ux-engine.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>

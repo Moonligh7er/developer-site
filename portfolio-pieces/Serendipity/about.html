@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>About — Moonlit Social Labs | Serendipity</title>
+  <meta name="description" content="Meet the team behind Serendipity — the privacy-first proximity social discovery app built on the Tavern Protocol. Learn about our mission to reconnect the physical world.">
+  <meta name="keywords" content="serendipity app, moonlit social labs, tavern protocol, proximity social discovery, about, team, mission">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/about">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/about">
+  <meta property="og:title" content="About — Moonlit Social Labs | Serendipity">
+  <meta property="og:description" content="We're building the social graph of the physical world. Learn about the mission, the protocol, and the principles behind Serendipity.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About — Moonlit Social Labs | Serendipity">
+  <meta name="twitter:description" content="We're building the social graph of the physical world.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- AdSense placeholder -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--ember);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ember); }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 100px 0 60px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--ember); }
+
+    /* ─── Sections ─── */
+    .section { padding: 60px 0; }
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--ember);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .section-body {
+      font-size: 17px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 720px;
+    }
+    .section-body.center { margin: 0 auto; text-align: center; }
+
+    /* ─── Principles Grid ─── */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-top: 16px;
+    }
+    .principle-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .principle-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .principle-card h3 .ember { color: var(--ember); }
+    .principle-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Org Section ─── */
+    .org-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      margin-top: 20px;
+    }
+    .org-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .org-section p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 680px;
+    }
+
+    /* ─── Links Row ─── */
+    .links-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .links-row a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+      background: var(--card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .links-row a:hover { transform: translateY(-2px); opacity: 0.9; }
+    .links-row a.ember-link { background: var(--ember); color: var(--void); border-color: var(--ember); }
+
+    /* ─── AdSense ─── */
+    .ad-slot {
+      text-align: center;
+      padding: 24px 0;
+      min-height: 90px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 60px 0 40px; }
+      .section { padding: 40px 0; }
+      .org-section { padding: 32px 24px; }
+      .nav-links { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Serendipity</a>
+      <div class="nav-links">
+        <a href="/">App</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about" class="active">About</a>
+        <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>We're building the <span>social graph</span><br>of the physical world.</h1>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Our Mission</p>
+      <p class="section-body">
+        Every day, you share physical space with people who could become collaborators, mentors, friends, co-conspirators. But modern life has made us invisible to each other. Screens, headphones, social norms — all conspiring to keep brilliant people from finding each other.
+      </p>
+      <br>
+      <p class="section-body">
+        We're building the antidote.
+      </p>
+    </div>
+  </section>
+
+  <!-- The Tavern Protocol -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">The Tavern Protocol</p>
+      <h2 class="section-title">An open standard for human discovery</h2>
+      <p class="section-body">
+        Serendipity is built on the Tavern Protocol — an open, privacy-first specification for proximity-based human discovery. Any device can implement it. No company owns it. The protocol treats physical space like a game lobby, and the mesh finds the synchronicities.
+      </p>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Principles</p>
+      <h2 class="section-title">What we believe</h2>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <h3><span class="ember">Privacy</span> is architecture, not policy</h3>
+          <p>We can't track you because the system makes tracking architecturally impossible. Your location never leaves your device. Beacon IDs rotate every 15 minutes. There is no central database to breach.</p>
+        </div>
+        <div class="principle-card">
+          <h3><span class="ember">Encounter-based,</span> not search-based</h3>
+          <p>You don't browse. The mesh finds you. Serendipity doesn't give you a catalog of people to pick from. It waits for the right person to walk into range, then whispers.</p>
+        </div>
+        <div class="principle-card">
+          <h3>The <span class="ember">science</span> is real</h3>
+          <p>27 psychological frameworks, all validated, all computed on-device. Interests, skills, communication style, chronotype, attachment patterns, values — the resonance engine sees what small talk can't.</p>
+        </div>
+        <div class="principle-card">
+          <h3><span class="ember">Safety</span> is the foundation</h3>
+          <p>Buddy beacons, boundaries, check-ins, trust scoring. You control who sees what. You can go invisible in one tap. Safety isn't a feature — it's the architecture everything else is built on.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Slot -->
+  <div class="ad-slot">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- Moonlit Social Labs -->
+  <section class="section">
+    <div class="container">
+      <div class="org-section">
+        <p class="section-label">Moonlit Social Labs</p>
+        <h2>Building invisible technology for visible connection</h2>
+        <p>
+          We believe the next great social technology won't be another feed to scroll. It'll be invisible — running in your pocket, noticing what you can't, and whispering when someone worth meeting is nearby.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore Links -->
+  <section class="section">
+    <div class="container">
+      <p class="section-label">Explore</p>
+      <div class="links-row">
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/personality-science">Personality Science</a>
+        <a href="/protocol-explorer">Protocol Explorer</a>
+        <a href="https://ko-fi.com/moonlitsociallabs" class="ember-link">Support on Ko-fi</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Ko-fi</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Feedback & Feature Requests | Serendipity</title>
+  <meta name="description" content="Help shape the future of Serendipity. Submit feedback, report bugs, or request features. We're in active development and every voice matters.">
+  <meta name="keywords" content="serendipity feedback, serendipity feature request, serendipity bug report, proximity social app feedback">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/feedback">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/feedback">
+  <meta property="og:title" content="Feedback & Feature Requests | Serendipity">
+  <meta property="og:description" content="Help shape the future of Serendipity. Submit feedback, report bugs, or request features. We're in active development and every voice matters.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app/feedback">
+  <meta name="twitter:title" content="Feedback & Feature Requests | Serendipity">
+  <meta name="twitter:description" content="Help shape the future of Serendipity. Submit feedback, report bugs, or request features. Every voice matters.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Feedback & Feature Requests | Serendipity",
+    "description": "Help shape the future of Serendipity. Submit feedback, report bugs, or request features. We're in active development and every voice matters.",
+    "url": "https://serendipity.app/feedback",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Serendipity",
+      "url": "https://serendipity.app"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://serendipity.app"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Feedback",
+          "item": "https://serendipity.app/feedback"
+        }
+      ]
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.15);
+      --ember-glow-soft: rgba(245, 158, 11, 0.06);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-tertiary: #94A3B8;
+      --text-muted: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10B981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --green: #22C55E;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--ember); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.85; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Navigation ─── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .nav-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span { color: var(--ember); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a.active { color: var(--ember); }
+    .nav-dev-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green) !important;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: auto;
+    }
+    .nav-dev-link:hover { opacity: 0.85; color: var(--green) !important; }
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 6px rgba(34,197,94,0.6);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 4px rgba(34,197,94,0.4); }
+      50% { box-shadow: 0 0 12px rgba(34,197,94,0.8); }
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { color: var(--ember); font-style: normal; }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── Tabs ─── */
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .tab-btn {
+      padding: 10px 28px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--text-primary);
+    }
+    .tab-btn.active {
+      background: var(--ember);
+      color: var(--void);
+      border-color: var(--ember);
+    }
+
+    /* ─── Form Card ─── */
+    .form-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      margin: 0 auto 60px;
+      transition: border-color 0.3s;
+    }
+    .form-card:focus-within {
+      border-color: rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 40px var(--ember-glow-soft);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group .hint {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-input:focus {
+      border-color: var(--ember);
+      box-shadow: 0 0 0 3px var(--ember-glow);
+    }
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%2394A3B8'%3E%3Cpath d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    select.form-input option {
+      background: var(--card);
+      color: var(--text-primary);
+    }
+    textarea.form-input {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* ─── Radio Group ─── */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .radio-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .radio-label:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .radio-label input[type="radio"] {
+      accent-color: var(--ember);
+      width: 16px;
+      height: 16px;
+    }
+    .radio-label:has(input:checked) {
+      border-color: var(--ember);
+      background: var(--ember-glow-soft);
+      color: var(--text-primary);
+    }
+
+    /* ─── Submit Button ─── */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--ember);
+      color: var(--void);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--ember-glow);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ─── Success Message ─── */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+    .success-message.visible {
+      display: block;
+      animation: fadeInUp 0.5s ease;
+    }
+    .success-check {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: var(--success-glow);
+      border: 2px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: scaleIn 0.4s ease;
+    }
+    .success-check svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--success);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .success-check svg path {
+      stroke-dasharray: 40;
+      stroke-dashoffset: 40;
+      animation: drawCheck 0.5s 0.3s ease forwards;
+    }
+    .success-message h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--success);
+    }
+    .success-message p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .success-message .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .success-message .back-link:hover {
+      border-color: var(--ember);
+      color: var(--text-primary);
+      opacity: 1;
+    }
+
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes scaleIn {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* ─── Priorities Section ─── */
+    .priorities-section {
+      padding: 60px 0 80px;
+    }
+    .priorities-section h2 {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .priorities-section h2 span { color: var(--ember); }
+    .priorities-sub {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+    .priorities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .priority-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .priority-card:hover {
+      border-color: rgba(245, 158, 11, 0.2);
+      transform: translateY(-2px);
+    }
+    .priority-icon {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .priority-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+    .priority-card p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+    .priorities-cta {
+      text-align: center;
+      margin-top: 32px;
+    }
+    .priorities-cta a {
+      color: var(--ember);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .priorities-cta a:hover { text-decoration: underline; }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+    .footer-links a {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ─── Tab Panel ─── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── Animations ─── */
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    .fade-in-d1 { animation-delay: 0.15s; }
+    .fade-in-d2 { animation-delay: 0.3s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      .hero { padding: 60px 0 40px; }
+      .form-card { padding: 24px; margin-bottom: 40px; }
+      .tab-container { gap: 6px; }
+      .tab-btn { padding: 8px 18px; font-size: 14px; }
+      .radio-group { flex-direction: column; }
+      .nav-links { gap: 12px; }
+      .nav-dev-link span:last-child { display: none; }
+      .priorities-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand"><span>S</span>erendipity</a>
+    <div class="nav-links">
+      <a href="/">App</a>
+      <a href="/features">Features</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/feedback" class="nav-dev-link">
+        <span class="pulse-dot"></span>
+        <span>Active Development</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="fade-in">Help Build the <em>Mesh</em></h1>
+      <p class="fade-in fade-in-d1">Serendipity is in active development. Your feedback shapes what gets built next. Every bug report, every feature idea, every thought matters.</p>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section>
+    <div class="container">
+
+      <!-- Tabs -->
+      <div class="tab-container fade-in fade-in-d2">
+        <button class="tab-btn active" data-tab="feedback" type="button">Feedback</button>
+        <button class="tab-btn" data-tab="feature" type="button">Feature Request</button>
+      </div>
+
+      <!-- Form Card -->
+      <div class="form-card fade-in fade-in-d2">
+
+        <!-- Feedback Form -->
+        <div class="tab-panel active" id="panel-feedback">
+          <form id="feedbackForm">
+            <input type="hidden" name="_source" value="website">
+            <input type="hidden" name="_type" value="feedback">
+
+            <div class="form-group">
+              <label for="fb-category">Category</label>
+              <select class="form-input" id="fb-category" name="category" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="Bug Report">Bug Report</option>
+                <option value="Performance Issue">Performance Issue</option>
+                <option value="UI/UX Feedback">UI/UX Feedback</option>
+                <option value="Privacy Concern">Privacy Concern</option>
+                <option value="General Feedback">General Feedback</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fb-subject">Subject</label>
+              <input class="form-input" type="text" id="fb-subject" name="subject" placeholder="Brief summary" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fb-message">Message</label>
+              <textarea class="form-input" id="fb-message" name="message" placeholder="Tell us what's on your mind..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="fb-email">Email <span class="hint">Optional — so we can follow up</span></label>
+              <input class="form-input" type="email" id="fb-email" name="email" placeholder="you@example.com">
+            </div>
+
+            <button type="submit" class="btn-submit">Send Feedback</button>
+          </form>
+
+          <div class="success-message" id="feedback-success">
+            <div class="success-check">
+              <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3>Thank You!</h3>
+            <p>Your feedback has been received.<br>We read every submission.</p>
+            <a href="/feedback" class="back-link">Submit another</a>
+          </div>
+        </div>
+
+        <!-- Feature Request Form -->
+        <div class="tab-panel" id="panel-feature">
+          <form id="featureForm">
+            <input type="hidden" name="_source" value="website">
+            <input type="hidden" name="_type" value="feature_request">
+
+            <div class="form-group">
+              <label for="fr-category">Category</label>
+              <select class="form-input" id="fr-category" name="category" required>
+                <option value="" disabled selected>Select a category</option>
+                <option value="New Feature">New Feature</option>
+                <option value="Enhancement">Enhancement</option>
+                <option value="Integration">Integration</option>
+                <option value="Protocol Improvement">Protocol Improvement</option>
+                <option value="Wearable/Hardware">Wearable/Hardware</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="fr-title">Title</label>
+              <input class="form-input" type="text" id="fr-title" name="title" placeholder="What would you like to see?" required>
+            </div>
+
+            <div class="form-group">
+              <label for="fr-description">Description</label>
+              <textarea class="form-input" id="fr-description" name="description" placeholder="Describe the feature in detail" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Priority</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="priority" value="Nice to have" checked>
+                  Nice to have
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="priority" value="Would use regularly">
+                  Would use regularly
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="priority" value="Critical for me">
+                  Critical for me
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fr-usecase">Use Case <span class="hint">Optional — how would you use this?</span></label>
+              <textarea class="form-input" id="fr-usecase" name="use_case" placeholder="Describe how you'd use this feature..." style="min-height:80px;"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="fr-email">Email <span class="hint">Optional — so we can follow up</span></label>
+              <input class="form-input" type="email" id="fr-email" name="email" placeholder="you@example.com">
+            </div>
+
+            <button type="submit" class="btn-submit">Submit Request</button>
+          </form>
+
+          <div class="success-message" id="feature-success">
+            <div class="success-check">
+              <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h3>Thank You!</h3>
+            <p>Your feature request has been received.<br>We read every submission.</p>
+            <a href="/feedback" class="back-link">Submit another</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- What We're Working On -->
+  <section class="priorities-section">
+    <div class="container">
+      <h2>What We're <span>Working On</span></h2>
+      <p class="priorities-sub">Current development priorities shaping the mesh.</p>
+      <div class="priorities-grid">
+        <div class="priority-card">
+          <span class="priority-icon">&#x1F4E1;</span>
+          <h3>BLE Mesh Networking</h3>
+          <p>Reliable Bluetooth Low Energy beacon system with rotating IDs and multi-hop relay for dense environments.</p>
+        </div>
+        <div class="priority-card">
+          <span class="priority-icon">&#x1F9E0;</span>
+          <h3>Resonance Engine v2</h3>
+          <p>27-framework personality matching that runs entirely on-device. No server ever sees your profile.</p>
+        </div>
+        <div class="priority-card">
+          <span class="priority-icon">&#x1F512;</span>
+          <h3>Zero-Knowledge Architecture</h3>
+          <p>End-to-end encrypted handshakes, rotating beacon IDs every 15 minutes, and location data that never leaves your device.</p>
+        </div>
+        <div class="priority-card">
+          <span class="priority-icon">&#x1F3AD;</span>
+          <h3>Glyph Reputation System</h3>
+          <p>Visual, non-numeric reputation through contextual glyphs. No stars, no reviews — just earned symbols of trust.</p>
+        </div>
+      </div>
+      <div class="priorities-cta">
+        <a href="/features">Explore all features &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Moonlit Social Labs</a>
+        <a href="/protocol-explorer">Tavern Protocol</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs. Built on the Tavern Protocol.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Tab Switching ───
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // ─── Form Submission ───
+    async function handleSubmit(form, successId) {
+      const btn = form.querySelector('.btn-submit');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((v, k) => { data[k] = v; });
+
+        const res = await fetch('https://formspree.io/f/xlgopjvd', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById(successId).classList.add('visible');
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        alert('Something went wrong. Please try again.');
+      }
+    }
+
+    document.getElementById('feedbackForm').addEventListener('submit', e => {
+      e.preventDefault();
+      handleSubmit(e.target, 'feedback-success');
+    });
+
+    document.getElementById('featureForm').addEventListener('submit', e => {
+      e.preventDefault();
+      handleSubmit(e.target, 'feature-success');
+    });
+  </script>
+
+</body>
+</html>

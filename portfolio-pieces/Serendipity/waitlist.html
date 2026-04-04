@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Join the Waitlist — Serendipity | Proximity Social Discovery</title>
+  <meta name="description" content="Join thousands waiting for Serendipity, the privacy-first proximity social discovery app. Sign up for early access in your city and be first to enter the mesh.">
+  <meta name="keywords" content="serendipity app waitlist, proximity social app early access, bluetooth social discovery signup, tavern protocol beta, find people nearby app">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/waitlist">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/waitlist">
+  <meta property="og:title" content="Join the Waitlist — Serendipity | Proximity Social Discovery">
+  <meta property="og:description" content="Join thousands waiting for Serendipity, the privacy-first proximity social discovery app. Sign up for early access in your city.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app/waitlist">
+  <meta name="twitter:title" content="Join the Waitlist — Serendipity | Proximity Social Discovery">
+  <meta name="twitter:description" content="Join thousands waiting for Serendipity. Privacy-first proximity social discovery. Sign up for early access in your city.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- AdSense Placeholder -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- Structured Data: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Serendipity",
+    "url": "https://serendipity.app",
+    "description": "Privacy-first proximity social discovery app. Uses Bluetooth to find compatible people nearby based on shared interests, skills, and energy.",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "iOS, Android",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/PreOrder"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Serendipity?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Serendipity is a proximity-based social discovery app that uses Bluetooth Low Energy to find compatible people within 50 meters. It matches you based on shared interests, skills, and energy — not photos or profiles. Think of it as a radar for like-minded people in your physical space."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does Serendipity protect my privacy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Serendipity uses a zero-knowledge architecture. Your location never leaves your device. All communications are end-to-end encrypted using X25519 key exchange, and your beacon ID rotates every 15 minutes to prevent tracking. No central server ever knows where you are or who you've encountered."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "When does Serendipity launch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Serendipity is currently in active development. Waitlist members receive early access before the public launch, priority placement in the mesh, and the opportunity to lock in Founder pricing at $99.99 for lifetime access to all features. Limited to first 1,000 users."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Serendipity free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The core experience is always free (Wanderer tier with 3 pings per day). Premium tiers unlock extended range, full resonance breakdowns, mesh statistics, and more: Signal at $4.99/mo or $39.99/year (save 33%), Resonance at $9.99/mo or $79.99/year (save 33%), or Founder at $99.99 one-time for lifetime access. Limited to first 1,000 users."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What cities is Serendipity available in?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Serendipity launches everywhere simultaneously — it works anywhere two devices running the app are within Bluetooth range. The waitlist city leaderboard shows where early demand is strongest, and cities with more signups will have a denser mesh from day one."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.15);
+      --ember-glow-soft: rgba(245, 158, 11, 0.06);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-tertiary: #94A3B8;
+      --text-muted: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10B981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --signal: #3B82F6;
+      --mystic: #8B5CF6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--ember); text-decoration: none; transition: opacity 0.2s; }
+    a:hover { opacity: 0.85; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Navigation ─── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .nav-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span { color: var(--ember); }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a.active { color: var(--ember); }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .hero-icon {
+      font-size: 56px;
+      display: block;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    h1 span { color: var(--ember); }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 12px;
+      line-height: 1.5;
+    }
+    .hero-counter {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      margin-bottom: 40px;
+    }
+    .hero-counter strong {
+      color: var(--ember);
+      font-weight: 700;
+    }
+
+    /* ─── Signup Form ─── */
+    .signup-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 520px;
+      margin: 0 auto 60px;
+      transition: border-color 0.3s;
+    }
+    .signup-card:focus-within {
+      border-color: rgba(245, 158, 11, 0.3);
+      box-shadow: 0 0 40px var(--ember-glow-soft);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-input:focus {
+      border-color: var(--ember);
+      box-shadow: 0 0 0 3px var(--ember-glow);
+    }
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+    select.form-input {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='%2394A3B8'%3E%3Cpath d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    select.form-input option {
+      background: var(--card);
+      color: var(--text-primary);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--ember);
+      color: var(--void);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px var(--ember-glow);
+    }
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ─── Success Message ─── */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+    .success-message.visible {
+      display: block;
+      animation: fadeInUp 0.5s ease;
+    }
+    .success-icon {
+      font-size: 48px;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .success-message h3 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: var(--success);
+    }
+    .success-message p {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .success-position {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 20px;
+      background: var(--success-glow);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 8px;
+      color: var(--success);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* ─── Confetti ─── */
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      animation: confettiFall 3s ease-out forwards;
+    }
+    @keyframes confettiFall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ─── City Leaderboard ─── */
+    .section { padding: 60px 0; }
+    .section-title {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+    .leaderboard {
+      max-width: 560px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      transition: border-color 0.2s;
+    }
+    .leaderboard-item:hover {
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+    .leaderboard-rank {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-muted);
+      min-width: 28px;
+      text-align: center;
+    }
+    .leaderboard-item:nth-child(1) .leaderboard-rank { color: var(--ember); font-size: 18px; }
+    .leaderboard-item:nth-child(2) .leaderboard-rank { color: var(--text-secondary); font-size: 16px; }
+    .leaderboard-item:nth-child(3) .leaderboard-rank { color: #CD7F32; font-size: 16px; }
+    .leaderboard-city {
+      flex: 1;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .leaderboard-bar-wrap {
+      flex: 2;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .leaderboard-bar {
+      height: 100%;
+      background: var(--ember);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+    .leaderboard-count {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ember);
+      min-width: 50px;
+      text-align: right;
+    }
+
+    /* ─── Benefits ─── */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .benefit-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .benefit-card:hover {
+      border-color: rgba(245, 158, 11, 0.2);
+      transform: translateY(-2px);
+    }
+    .benefit-icon {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .benefit-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .benefit-card p {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* ─── FAQ ─── */
+    .faq-list {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .faq-item:hover {
+      border-color: rgba(245, 158, 11, 0.15);
+    }
+    .faq-question {
+      width: 100%;
+      padding: 18px 20px;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .faq-question::after {
+      content: '+';
+      font-size: 20px;
+      color: var(--text-muted);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .faq-item.open .faq-question::after {
+      transform: rotate(45deg);
+      color: var(--ember);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding: 0 20px 18px;
+    }
+    .faq-answer p {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      line-height: 1.7;
+    }
+    .faq-answer a {
+      color: var(--ember);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ─── Cross Links ─── */
+    .cross-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 40px 0;
+    }
+    .cross-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .cross-link:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      color: var(--ember);
+      transform: translateY(-1px);
+      opacity: 1;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+    .footer-links a {
+      color: var(--text-tertiary);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-primary); }
+
+    /* ─── Animations ─── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    .fade-in-d1 { animation-delay: 0.1s; }
+    .fade-in-d2 { animation-delay: 0.2s; }
+    .fade-in-d3 { animation-delay: 0.3s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 640px) {
+      .hero { padding: 60px 0 40px; }
+      .signup-card { padding: 28px 20px; margin-bottom: 40px; }
+      .leaderboard-bar-wrap { display: none; }
+      .benefits-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .benefit-card { padding: 20px 16px; }
+      .cross-links { gap: 10px; }
+      .cross-link { padding: 10px 16px; font-size: 13px; }
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 13px; }
+    }
+    @media (max-width: 400px) {
+      .benefits-grid { grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="/" class="nav-brand"><span>S</span>erendipity</a>
+    <div class="nav-links">
+      <a href="/blog">Blog</a>
+      <a href="/protocol-explorer">Protocol</a>
+      <a href="/waitlist" class="active">Waitlist</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <span class="hero-icon">&#x1F30A;</span>
+      <h1 class="fade-in">The Mesh Is <span>Coming</span></h1>
+      <p class="hero-sub fade-in fade-in-d1">Join the people waiting to discover who's nearby.</p>
+      <p class="hero-counter fade-in fade-in-d2">
+        <strong id="totalCounter">0</strong> people on the waitlist across <strong id="cityCount">0</strong> cities
+      </p>
+    </div>
+  </section>
+
+  <!-- Signup Form -->
+  <section>
+    <div class="container">
+      <div class="signup-card fade-in fade-in-d2" id="signupCard">
+        <form id="waitlistForm">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="city">Your City</label>
+            <select id="city" class="form-input" required>
+              <option value="" disabled selected>Select your city</option>
+              <option value="Atlanta">Atlanta</option>
+              <option value="Austin">Austin</option>
+              <option value="Baltimore">Baltimore</option>
+              <option value="Boston">Boston</option>
+              <option value="Charlotte">Charlotte</option>
+              <option value="Chicago">Chicago</option>
+              <option value="Columbus">Columbus</option>
+              <option value="Dallas">Dallas</option>
+              <option value="Denver">Denver</option>
+              <option value="Detroit">Detroit</option>
+              <option value="Houston">Houston</option>
+              <option value="Indianapolis">Indianapolis</option>
+              <option value="Jacksonville">Jacksonville</option>
+              <option value="Las Vegas">Las Vegas</option>
+              <option value="Los Angeles">Los Angeles</option>
+              <option value="Memphis">Memphis</option>
+              <option value="Miami">Miami</option>
+              <option value="Milwaukee">Milwaukee</option>
+              <option value="Minneapolis">Minneapolis</option>
+              <option value="Nashville">Nashville</option>
+              <option value="New York">New York</option>
+              <option value="Philadelphia">Philadelphia</option>
+              <option value="Phoenix">Phoenix</option>
+              <option value="Portland">Portland</option>
+              <option value="San Antonio">San Antonio</option>
+              <option value="San Diego">San Diego</option>
+              <option value="San Francisco">San Francisco</option>
+              <option value="San Jose">San Jose</option>
+              <option value="Seattle">Seattle</option>
+              <option value="Washington DC">Washington DC</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">Join the Waitlist</button>
+        </form>
+        <div class="success-message" id="successMessage">
+          <span class="success-icon">&#x2728;</span>
+          <h3>You're In</h3>
+          <p>Welcome to the mesh. We'll notify you the moment Serendipity opens in your area.</p>
+          <div class="success-position" id="positionBadge"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- City Leaderboard -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">City Leaderboard</h2>
+      <p class="section-sub">Cities with the most signups get the densest mesh on day one.</p>
+      <div class="leaderboard" id="leaderboard"></div>
+    </div>
+  </section>
+
+  <!-- What You'll Get -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">What You'll Get</h2>
+      <p class="section-sub">Waitlist members unlock exclusive benefits at launch.</p>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <span class="benefit-icon">&#x1F511;</span>
+          <h3>Early Access</h3>
+          <p>Be among the first to activate the mesh in your city before the public launch.</p>
+        </div>
+        <div class="benefit-card">
+          <span class="benefit-icon">&#x1F4B0;</span>
+          <h3>Founder Pricing</h3>
+          <p>Lock in $99.99 lifetime access to every feature, forever. Limited to first 1,000 users.</p>
+        </div>
+        <div class="benefit-card">
+          <span class="benefit-icon">&#x1F4E1;</span>
+          <h3>Protocol Input</h3>
+          <p>Shape the Tavern Protocol. Your feedback directly influences the specification.</p>
+        </div>
+        <div class="benefit-card">
+          <span class="benefit-icon">&#x26A1;</span>
+          <h3>Priority Routing</h3>
+          <p>Your beacon gets priority in mesh routing, meaning faster and broader discovery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">What is Serendipity?</button>
+          <div class="faq-answer">
+            <p>Serendipity is a proximity-based social discovery app that uses Bluetooth Low Energy to find compatible people within 50 meters. It matches you based on shared interests, skills, and energy — not photos or profiles. Think of it as a radar for like-minded people in your physical space. <a href="/protocol-explorer">Explore the protocol</a>.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">How does it protect my privacy?</button>
+          <div class="faq-answer">
+            <p>Zero-knowledge architecture means your location never leaves your device. All communications are end-to-end encrypted using X25519 key exchange, and your beacon ID rotates every 15 minutes to prevent tracking. No central server ever knows where you are. <a href="/blog/zero-knowledge-social-app-rotating-beacons">Read more about our privacy architecture</a>.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">When does it launch?</button>
+          <div class="faq-answer">
+            <p>Serendipity is currently in active development. Waitlist members receive early access before the public launch, priority placement in the mesh, and the opportunity to lock in Founder pricing at $99.99 for lifetime access to all features. Limited to first 1,000 users.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">Is it free?</button>
+          <div class="faq-answer">
+            <p>The core experience is always free (Wanderer tier with 3 pings per day). Premium tiers unlock extended range, full resonance breakdowns, mesh statistics, and more: Signal at $4.99/mo or $39.99/year (save 33%), Resonance at $9.99/mo or $79.99/year (save 33%), or Founder at $99.99 one-time for lifetime access. Limited to first 1,000 users.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">What cities is it available in?</button>
+          <div class="faq-answer">
+            <p>Serendipity launches everywhere simultaneously — it works anywhere two devices running the app are within Bluetooth range. The city leaderboard above shows where early demand is strongest. Cities with more signups will have a denser mesh from day one.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cross-Links -->
+  <section>
+    <div class="container">
+      <div class="cross-links">
+        <a href="/protocol-explorer" class="cross-link">&#x1F50D; How it works</a>
+        <a href="/resonance-calculator" class="cross-link">&#x1F4CA; Test your resonance</a>
+        <a href="/blog" class="cross-link">&#x1F4DD; Read our blog</a>
+        <a href="/blog/zero-knowledge-social-app-rotating-beacons" class="cross-link">&#x1F512; Privacy architecture</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Moonlit Social Labs</a>
+        <a href="/protocol">Tavern Protocol Spec</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs. Built on the Tavern Protocol.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Seed Data ───
+    const SEED_CITIES = {
+      'New York': 1891,
+      'San Francisco': 1203,
+      'Los Angeles': 1045,
+      'Austin': 847,
+      'Chicago': 782,
+      'Seattle': 734,
+      'Portland': 623,
+      'Denver': 589,
+      'Miami': 521,
+      'Boston': 498,
+      'Nashville': 467,
+      'Atlanta': 412,
+      'Washington DC': 398,
+      'Philadelphia': 356,
+      'San Diego': 334,
+      'Dallas': 312,
+      'Minneapolis': 287,
+      'Phoenix': 265,
+      'Detroit': 234,
+      'Houston': 221,
+      'Columbus': 198,
+      'Charlotte': 187,
+      'San Jose': 176,
+      'San Antonio': 165,
+      'Jacksonville': 143,
+      'Indianapolis': 132,
+      'Memphis': 121,
+      'Milwaukee': 114,
+      'Las Vegas': 108,
+      'Baltimore': 97
+    };
+
+    // ─── localStorage Helpers ───
+    function getCityCounts() {
+      const stored = localStorage.getItem('serendipity_waitlist_cities');
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          // Merge with seed data (keep higher values)
+          const merged = { ...SEED_CITIES };
+          for (const [city, count] of Object.entries(parsed)) {
+            merged[city] = Math.max(merged[city] || 0, count);
+          }
+          return merged;
+        } catch (e) {
+          return { ...SEED_CITIES };
+        }
+      }
+      return { ...SEED_CITIES };
+    }
+
+    function saveCityCounts(counts) {
+      localStorage.setItem('serendipity_waitlist_cities', JSON.stringify(counts));
+    }
+
+    function getEmails() {
+      const stored = localStorage.getItem('serendipity_waitlist_emails');
+      try { return stored ? JSON.parse(stored) : []; } catch (e) { return []; }
+    }
+
+    function saveEmail(email, city) {
+      const emails = getEmails();
+      emails.push({ email, city, timestamp: Date.now() });
+      localStorage.setItem('serendipity_waitlist_emails', JSON.stringify(emails));
+    }
+
+    function hasAlreadySignedUp(email) {
+      return getEmails().some(e => e.email === email);
+    }
+
+    // ─── Render Functions ───
+    function getTotalCount(counts) {
+      return Object.values(counts).reduce((a, b) => a + b, 0);
+    }
+
+    function animateCounter(el, target) {
+      let current = 0;
+      const duration = 1500;
+      const step = target / (duration / 16);
+      function tick() {
+        current = Math.min(current + step, target);
+        el.textContent = Math.floor(current).toLocaleString();
+        if (current < target) requestAnimationFrame(tick);
+      }
+      tick();
+    }
+
+    function renderLeaderboard(counts) {
+      const sorted = Object.entries(counts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+      const maxCount = sorted[0]?.[1] || 1;
+      const board = document.getElementById('leaderboard');
+      board.innerHTML = '';
+
+      sorted.forEach(([city, count], i) => {
+        const pct = (count / maxCount * 100).toFixed(1);
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        item.innerHTML = `
+          <span class="leaderboard-rank">#${i + 1}</span>
+          <span class="leaderboard-city">${city}</span>
+          <div class="leaderboard-bar-wrap">
+            <div class="leaderboard-bar" style="width: ${pct}%"></div>
+          </div>
+          <span class="leaderboard-count">${count.toLocaleString()}</span>
+        `;
+        board.appendChild(item);
+      });
+    }
+
+    function updateCounters(counts) {
+      const total = getTotalCount(counts);
+      const cityCount = Object.keys(counts).filter(c => counts[c] > 0).length;
+      animateCounter(document.getElementById('totalCounter'), total);
+      document.getElementById('cityCount').textContent = cityCount;
+    }
+
+    // ─── Confetti ───
+    function spawnConfetti() {
+      const container = document.createElement('div');
+      container.className = 'confetti-container';
+      document.body.appendChild(container);
+      const colors = ['#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EF4444', '#F1F5F9'];
+
+      for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.top = -10 + 'px';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 0.8 + 's';
+        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+        piece.style.width = (4 + Math.random() * 8) + 'px';
+        piece.style.height = (4 + Math.random() * 8) + 'px';
+        container.appendChild(piece);
+      }
+
+      setTimeout(() => container.remove(), 4000);
+    }
+
+    // ─── Form Submission ───
+    document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const city = document.getElementById('city').value;
+      const btn = document.getElementById('submitBtn');
+
+      if (!email || !city) return;
+
+      if (hasAlreadySignedUp(email)) {
+        btn.textContent = 'Already on the list!';
+        btn.disabled = true;
+        setTimeout(() => { btn.textContent = 'Join the Waitlist'; btn.disabled = false; }, 2000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      setTimeout(() => {
+        // Save
+        saveEmail(email, city);
+        const counts = getCityCounts();
+        counts[city] = (counts[city] || 0) + 1;
+        saveCityCounts(counts);
+
+        // Calculate position
+        const totalCount = getTotalCount(counts);
+
+        // Show success
+        document.getElementById('waitlistForm').style.display = 'none';
+        const success = document.getElementById('successMessage');
+        success.classList.add('visible');
+        document.getElementById('positionBadge').textContent = `#${totalCount.toLocaleString()} on the waitlist`;
+
+        // Confetti
+        spawnConfetti();
+
+        // Update page
+        updateCounters(counts);
+        renderLeaderboard(counts);
+      }, 600);
+    });
+
+    // ─── FAQ Toggle ───
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      // Toggle clicked
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // ─── Init ───
+    (function init() {
+      const counts = getCityCounts();
+      updateCounters(counts);
+      renderLeaderboard(counts);
+    })();
+  </script>
+
+</body>
+</html>

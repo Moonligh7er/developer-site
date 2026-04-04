@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Protocol Explorer — How the Tavern Protocol Works | Serendipity</title>
+  <meta name="description" content="Step through the Tavern Protocol handshake flow. Watch BLE beacon discovery, X25519 key exchange, encrypted messaging, and mutual consent — all visualized in real time.">
+  <meta name="keywords" content="tavern protocol explorer, how bluetooth social apps work, BLE handshake visualization, encrypted social protocol, X25519 key exchange demo, privacy social app architecture">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/protocol-explorer">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/protocol-explorer">
+  <meta property="og:title" content="Protocol Explorer — How the Tavern Protocol Works">
+  <meta property="og:description" content="Step through the Tavern Protocol handshake flow. Watch BLE beacon discovery, X25519 key exchange, encrypted messaging, and mutual consent — all visualized in real time.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app/protocol-explorer">
+  <meta name="twitter:title" content="Protocol Explorer — How the Tavern Protocol Works">
+  <meta name="twitter:description" content="Step through the Tavern Protocol handshake flow. Watch BLE beacon discovery, X25519 key exchange, and mutual consent — all visualized.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Serendipity Protocol Explorer",
+    "description": "Interactive visualization of the Tavern Protocol handshake flow, encryption demo, and beacon ID rotation used by the Serendipity proximity social app.",
+    "url": "https://serendipity.app/protocol-explorer",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web",
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Interactive handshake flow visualization",
+      "Simulated XSalsa20-Poly1305 encryption demo",
+      "Beacon ID rotation visualization",
+      "Privacy architecture breakdown"
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245,158,11,0.1);
+      --ember-dim: rgba(245,158,11,0.3);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-tertiary: #94A3B8;
+      --text-muted: #475569;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(245,158,11,0.3);
+      --success: #10B981;
+      --success-dim: rgba(16,185,129,0.15);
+      --signal: #3B82F6;
+      --signal-dim: rgba(59,130,246,0.15);
+      --danger: #EF4444;
+      --danger-dim: rgba(239,68,68,0.15);
+      --mystic: #8B5CF6;
+      --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    nav .container { display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { color: var(--ember); font-weight: 800; font-size: 18px; text-decoration: none; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: var(--text-tertiary); text-decoration: none; font-size: 14px; font-weight: 500; }
+    .nav-links a:hover { color: var(--ember); }
+
+    /* Ad Banner */
+    .ad-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; margin: 24px 0; min-height: 90px; display: flex; align-items: center; justify-content: center; }
+    .ad-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 64px 0 48px; }
+    .hero h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 12px; }
+    .hero h1 span { color: var(--ember); }
+    .hero p { font-size: 18px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; }
+
+    /* Sections */
+    .section { padding: 48px 0; }
+    .section-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .section-title span { color: var(--ember); }
+    .section-subtitle { font-size: 15px; color: var(--text-tertiary); margin-bottom: 32px; }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    /* Handshake Stepper */
+    .stepper-controls {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .step-indicator {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .step-indicator.active {
+      border-color: var(--ember);
+      color: var(--ember);
+      background: var(--ember-glow);
+    }
+    .step-indicator.completed {
+      border-color: var(--success);
+      color: var(--success);
+      background: var(--success-dim);
+    }
+
+    .handshake-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      min-height: 240px;
+      position: relative;
+      margin: 24px 0;
+    }
+
+    .device {
+      width: 120px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .device-icon {
+      width: 64px;
+      height: 100px;
+      border: 3px solid var(--text-muted);
+      border-radius: 12px;
+      margin: 0 auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      transition: all 0.5s;
+      background: var(--surface);
+      position: relative;
+    }
+    .device-icon::after {
+      content: '';
+      width: 20px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--text-muted);
+      position: absolute;
+      bottom: 8px;
+      transition: background 0.5s;
+    }
+    .device.active .device-icon {
+      border-color: var(--ember);
+      box-shadow: 0 0 24px var(--ember-dim);
+    }
+    .device.active .device-icon::after { background: var(--ember); }
+    .device.success .device-icon {
+      border-color: var(--success);
+      box-shadow: 0 0 24px var(--success-dim);
+    }
+    .device-label { font-size: 14px; font-weight: 700; color: var(--text-secondary); }
+
+    .beacon-id {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--mystic);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+      transition: opacity 0.3s;
+      min-height: 16px;
+    }
+
+    .arrow-area {
+      flex: 1;
+      max-width: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+    .arrow-line {
+      height: 3px;
+      width: 100%;
+      background: var(--border);
+      border-radius: 2px;
+      position: relative;
+      transition: background 0.5s;
+    }
+    .arrow-line.active { background: var(--ember); }
+    .arrow-line.bidirectional { background: var(--success); }
+
+    .arrow-line::before,
+    .arrow-line::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0; height: 0;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .arrow-line.right::after {
+      right: -2px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid var(--ember);
+      opacity: 1;
+    }
+    .arrow-line.left::before {
+      left: -2px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 10px solid var(--ember);
+      opacity: 1;
+    }
+    .arrow-line.bidirectional::before {
+      left: -2px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 10px solid var(--success);
+      opacity: 1;
+    }
+    .arrow-line.bidirectional::after {
+      right: -2px;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-left: 10px solid var(--success);
+      opacity: 1;
+    }
+
+    .arrow-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ember);
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .step-description {
+      text-align: center;
+      padding: 20px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .step-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      color: var(--ember);
+    }
+    .step-text { font-size: 14px; color: var(--text-secondary); }
+
+    .step-detail {
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--mystic);
+      background: var(--void);
+      padding: 10px 16px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .step-nav {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn:hover { border-color: var(--ember); color: var(--ember); }
+    .btn-primary {
+      background: var(--ember);
+      color: var(--void);
+      border-color: var(--ember);
+    }
+    .btn-primary:hover { background: #D97706; border-color: #D97706; color: var(--void); }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn:disabled:hover { border-color: var(--border); color: var(--text-primary); }
+
+    /* Transmission cards */
+    .transmission-cards {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .tx-card {
+      background: var(--void);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.5s;
+    }
+    .tx-card.visible { opacity: 1; transform: translateY(0); }
+    .tx-card strong { color: var(--ember); }
+
+    /* Distance indicator */
+    .distance-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--success);
+      font-weight: 600;
+    }
+    .distance-bar {
+      width: 120px;
+      height: 6px;
+      background: var(--surface);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .distance-fill {
+      height: 100%;
+      background: var(--success);
+      border-radius: 3px;
+      width: 70%;
+      transition: width 1s;
+    }
+
+    /* Lock icon */
+    .lock-icon {
+      font-size: 24px;
+      transition: all 0.5s;
+      display: block;
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    /* Encryption Demo */
+    .crypto-demo { display: flex; flex-direction: column; gap: 16px; }
+
+    .crypto-input-group {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+    .crypto-input-group input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .crypto-input-group input:focus { border-color: var(--ember); }
+
+    .crypto-output {
+      background: var(--void);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: none;
+    }
+    .crypto-output.visible { display: block; }
+
+    .crypto-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .crypto-row:last-child { margin-bottom: 0; }
+
+    .crypto-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      min-width: 100px;
+      padding-top: 2px;
+    }
+    .crypto-value {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--success);
+      word-break: break-all;
+      line-height: 1.5;
+    }
+    .crypto-value.ciphertext { color: var(--danger); }
+    .crypto-value.plaintext { color: var(--success); }
+    .crypto-value.nonce { color: var(--mystic); }
+    .crypto-value.key { color: var(--signal); }
+
+    .crypto-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 12px;
+      padding: 12px;
+      background: var(--surface);
+      border-radius: 8px;
+      border-left: 3px solid var(--ember);
+    }
+
+    /* Beacon Rotation */
+    .beacon-rotation-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .beacon-display {
+      font-family: var(--mono);
+      font-size: clamp(18px, 4vw, 28px);
+      font-weight: 700;
+      color: var(--ember);
+      letter-spacing: 2px;
+      padding: 20px 32px;
+      background: var(--void);
+      border: 2px solid var(--ember-dim);
+      border-radius: 12px;
+      transition: opacity 0.3s;
+      text-align: center;
+    }
+
+    .beacon-formula {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .formula-part {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .formula-part.key { color: var(--signal); }
+    .formula-part.epoch { color: var(--mystic); }
+    .formula-part.hash { color: var(--text-muted); }
+    .formula-part.result { color: var(--ember); }
+    .formula-op { color: var(--text-muted); font-weight: 700; }
+
+    .epoch-counter {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .epoch-value {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--mystic);
+    }
+
+    .beacon-explanation {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      text-align: center;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    .rotation-progress {
+      width: 200px;
+      height: 4px;
+      background: var(--surface);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .rotation-fill {
+      height: 100%;
+      background: var(--ember);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Privacy Table */
+    .privacy-table-wrap { overflow-x: auto; }
+
+    .privacy-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 14px;
+    }
+    .privacy-table th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .privacy-table th:first-child { border-radius: 8px 0 0 0; }
+    .privacy-table th:last-child { border-radius: 0 8px 0 0; }
+
+    .privacy-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .privacy-table tr:last-child td { border-bottom: none; }
+    .privacy-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+    .privacy-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+    .privacy-table tbody tr {
+      transition: background 0.2s;
+    }
+    .privacy-table tbody tr:hover {
+      background: var(--ember-glow);
+    }
+    .privacy-table tbody tr:hover td { border-bottom-color: var(--ember-dim); }
+
+    .privacy-table td:first-child {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .cell-safe {
+      color: var(--success);
+      font-weight: 600;
+    }
+    .cell-amber {
+      color: var(--ember);
+      font-weight: 600;
+    }
+    .cell-icon { margin-right: 6px; }
+
+    /* Cross-links */
+    .cross-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 48px;
+      padding-bottom: 64px;
+    }
+    .cross-link {
+      display: block;
+      text-decoration: none;
+      padding: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .cross-link:hover { border-color: var(--ember); transform: translateY(-2px); }
+    .cross-link-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--ember);
+      margin-bottom: 6px;
+    }
+    .cross-link-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 32px 0; text-align: center; color: var(--text-muted); font-size: 13px; }
+    footer a { color: var(--text-tertiary); text-decoration: none; margin: 0 12px; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { margin-bottom: 12px; }
+
+    /* Pulse animation */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .pulsing { animation: pulse 2s ease-in-out infinite; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: 12px; }
+      .handshake-diagram { flex-direction: column; gap: 12px; }
+      .arrow-area { max-width: none; width: 60px; transform: rotate(90deg); }
+      .device { width: 100px; }
+      .device-icon { width: 56px; height: 84px; }
+      .crypto-input-group { flex-direction: column; }
+      .crypto-row { flex-direction: column; gap: 4px; }
+      .crypto-label { min-width: auto; }
+      .cross-links { grid-template-columns: 1fr; }
+      .card { padding: 20px; }
+      .section { padding: 32px 0; }
+      .beacon-formula { font-size: 10px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-brand">Serendipity</a>
+      <div class="nav-links">
+        <a href="/">App</a>
+        <a href="/blog">Blog</a>
+        <a href="/protocol-explorer" style="color:var(--ember)">Protocol</a>
+        <a href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- AdSense Top Banner -->
+  <div class="container">
+    <div class="ad-banner">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <h1>The <span>Tavern Protocol</span><br>Explorer</h1>
+      <p>Step through the handshake flow, watch encryption in action, and see how beacon IDs rotate to keep you private.</p>
+    </div>
+  </section>
+
+  <!-- Section 1: Handshake Flow Stepper -->
+  <section class="section" id="handshake">
+    <div class="container">
+      <h2 class="section-title">Handshake <span>Flow</span></h2>
+      <p class="section-subtitle">Click through each step to see how two devices discover and connect.</p>
+
+      <div class="card">
+        <div class="stepper-controls" id="stepperControls">
+          <div class="step-indicator active" data-step="0">1</div>
+          <div class="step-indicator" data-step="1">2</div>
+          <div class="step-indicator" data-step="2">3</div>
+          <div class="step-indicator" data-step="3">4</div>
+          <div class="step-indicator" data-step="4">5</div>
+          <div class="step-indicator" data-step="5">6</div>
+        </div>
+
+        <div class="handshake-diagram" id="handshakeDiagram">
+          <div class="device" id="deviceA">
+            <div class="device-icon">A</div>
+            <div class="device-label">Device A</div>
+            <div class="beacon-id" id="beaconA">--</div>
+          </div>
+          <div class="arrow-area" id="arrowArea">
+            <div class="arrow-label" id="arrowLabel"></div>
+            <div class="arrow-line" id="arrowLine"></div>
+          </div>
+          <div class="device" id="deviceB">
+            <div class="device-icon">B</div>
+            <div class="device-label">Device B</div>
+            <div class="beacon-id" id="beaconB">--</div>
+          </div>
+        </div>
+
+        <div id="stepExtra"></div>
+
+        <div class="step-description" id="stepDescription">
+          <div class="step-title" id="stepTitle">IDLE</div>
+          <div class="step-text" id="stepText">Loading...</div>
+        </div>
+
+        <div class="step-nav">
+          <button class="btn" id="prevBtn" disabled>Previous</button>
+          <button class="btn btn-primary" id="nextBtn">Next Step</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Encryption Demo -->
+  <section class="section" id="encryption">
+    <div class="container">
+      <h2 class="section-title">Live <span>Encryption</span> Demo</h2>
+      <p class="section-subtitle">Type a message and watch it get encrypted and decrypted.</p>
+
+      <div class="card">
+        <div class="crypto-demo">
+          <div class="crypto-input-group">
+            <input type="text" id="cryptoInput" placeholder="Type a secret message..." maxlength="200" autocomplete="off">
+            <button class="btn btn-primary" id="encryptBtn">Encrypt</button>
+            <button class="btn" id="decryptBtn" disabled>Decrypt</button>
+          </div>
+
+          <div class="crypto-output" id="cryptoOutput">
+            <div class="crypto-row">
+              <div class="crypto-label">Plaintext</div>
+              <div class="crypto-value plaintext" id="cryptoPlaintext"></div>
+            </div>
+            <div class="crypto-row">
+              <div class="crypto-label">Shared Key</div>
+              <div class="crypto-value key" id="cryptoKey"></div>
+            </div>
+            <div class="crypto-row">
+              <div class="crypto-label">Nonce</div>
+              <div class="crypto-value nonce" id="cryptoNonce"></div>
+            </div>
+            <div class="crypto-row">
+              <div class="crypto-label">Ciphertext</div>
+              <div class="crypto-value ciphertext" id="cryptoCipher"></div>
+            </div>
+            <div class="crypto-row" id="decryptedRow" style="display:none">
+              <div class="crypto-label">Decrypted</div>
+              <div class="crypto-value plaintext" id="cryptoDecrypted"></div>
+            </div>
+          </div>
+
+          <div class="crypto-note">
+            This is a visualization. Real encryption uses libsodium with X25519-derived shared secrets and XSalsa20-Poly1305 authenticated encryption.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Beacon ID Rotation -->
+  <section class="section" id="beacon-rotation">
+    <div class="container">
+      <h2 class="section-title">Beacon ID <span>Rotation</span></h2>
+      <p class="section-subtitle">Watch your identifier change. No one can link your old ID to your new one.</p>
+
+      <div class="card">
+        <div class="beacon-rotation-visual">
+          <div class="beacon-display" id="beaconDisplay">A3F7 1B9E 4C82 D056</div>
+
+          <div class="rotation-progress">
+            <div class="rotation-fill" id="rotationFill"></div>
+          </div>
+
+          <div class="beacon-formula">
+            <div class="formula-part key" id="formulaKey">pk: 7a2f...e1c3</div>
+            <span class="formula-op">+</span>
+            <div class="formula-part epoch" id="formulaEpoch">epoch: 184209</div>
+            <span class="formula-op">&rarr;</span>
+            <div class="formula-part hash">SHA-256</div>
+            <span class="formula-op">&rarr;</span>
+            <div class="formula-part result" id="formulaResult">beacon_id</div>
+          </div>
+
+          <div class="epoch-counter">
+            <span>Current Epoch:</span>
+            <span class="epoch-value" id="epochValue">184209</span>
+          </div>
+
+          <p class="beacon-explanation">
+            Every 15 minutes, your beacon ID changes. It is derived from your public key and the current epoch number via SHA-256. No one can link your old ID to your new one without knowing your key.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Privacy Architecture Table -->
+  <section class="section" id="privacy">
+    <div class="container">
+      <h2 class="section-title">Privacy <span>Architecture</span></h2>
+      <p class="section-subtitle">Where your data lives and where it never goes.</p>
+
+      <div class="card">
+        <div class="privacy-table-wrap">
+          <table class="privacy-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Your Phone</th>
+                <th>Relay Server</th>
+                <th>Our Database</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GPS Location</td>
+                <td class="cell-amber"><span class="cell-icon">&#9888;</span>Temp only</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Never</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Never</td>
+              </tr>
+              <tr>
+                <td>Full Profile</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Yes</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Never</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Never</td>
+              </tr>
+              <tr>
+                <td>Messages</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Yes</td>
+                <td class="cell-amber"><span class="cell-icon">&#128274;</span>Encrypted</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Never</td>
+              </tr>
+              <tr>
+                <td>Encounters</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Yes</td>
+                <td class="cell-amber"><span class="cell-icon">&#9203;</span>Ephemeral</td>
+                <td class="cell-amber"><span class="cell-icon">&#128279;</span>Beacon IDs only</td>
+              </tr>
+              <tr>
+                <td>Glyphs</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Yes</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>No</td>
+                <td class="cell-amber"><span class="cell-icon">&#128123;</span>Anonymous</td>
+              </tr>
+              <tr>
+                <td>Identity</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>Yes</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>No</td>
+                <td class="cell-safe"><span class="cell-icon">&#10003;</span>No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Mid-page Banner -->
+  <div class="container">
+    <div class="ad-banner">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </div>
+
+  <!-- Cross-links -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Dive <span>Deeper</span></h2>
+      <div class="cross-links">
+        <a href="/protocol" class="cross-link">
+          <div class="cross-link-label">Specification</div>
+          <div class="cross-link-title">Read the full Tavern Protocol specification</div>
+        </a>
+        <a href="/blog/how-bluetooth-low-energy-works-social-apps" class="cross-link">
+          <div class="cross-link-label">Blog</div>
+          <div class="cross-link-title">How BLE advertising works</div>
+        </a>
+        <a href="/blog/zero-knowledge-social-app-rotating-beacons" class="cross-link">
+          <div class="cross-link-label">Deep Dive</div>
+          <div class="cross-link-title">Zero-knowledge architecture deep dive</div>
+        </a>
+        <a href="/blog/on-device-resonance-matching" class="cross-link">
+          <div class="cross-link-label">Technical</div>
+          <div class="cross-link-title">On-device resonance matching</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Moonlit Social Labs</a>
+        <a href="/protocol">Tavern Protocol Spec</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs. Built on the Tavern Protocol.</p>
+    </div>
+  </footer>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // =====================
+    // Utility functions
+    // =====================
+    function randomHex(len) {
+      var chars = '0123456789ABCDEF';
+      var result = '';
+      for (var i = 0; i < len; i++) {
+        result += chars[Math.floor(Math.random() * 16)];
+      }
+      return result;
+    }
+
+    function formatBeaconId(hex) {
+      return hex.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function simpleXorEncrypt(text, key) {
+      var result = [];
+      for (var i = 0; i < text.length; i++) {
+        result.push(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+      }
+      return result.map(function(b) {
+        return ('0' + b.toString(16)).slice(-2);
+      }).join('');
+    }
+
+    function simpleXorDecrypt(hex, key) {
+      var bytes = [];
+      for (var i = 0; i < hex.length; i += 2) {
+        bytes.push(parseInt(hex.substr(i, 2), 16));
+      }
+      var result = '';
+      for (var i = 0; i < bytes.length; i++) {
+        result += String.fromCharCode(bytes[i] ^ key.charCodeAt(i % key.length));
+      }
+      return result;
+    }
+
+    // =====================
+    // Section 1: Handshake Stepper
+    // =====================
+    var currentStep = 0;
+    var beaconAId = randomHex(16);
+    var beaconBId = randomHex(16);
+    var beaconRotateInterval;
+
+    var steps = [
+      {
+        title: 'IDLE',
+        text: 'Device A and Device B are in range. A\'s beacon detects B\'s fingerprint. Both broadcast rotating beacon IDs.',
+        arrowClass: '',
+        arrowLabel: '',
+        deviceAClass: '',
+        deviceBClass: '',
+        detail: null,
+        showBeacons: true,
+        rotateBeacons: true
+      },
+      {
+        title: 'PING',
+        text: 'A computes quick resonance from bloom filter. Score: 67. Threshold met. A sends encrypted PING.',
+        arrowClass: 'active right',
+        arrowLabel: 'PING (encrypted)',
+        deviceAClass: 'active',
+        deviceBClass: '',
+        detail: 'resonance_score: 67 / 100  |  threshold: 50',
+        showBeacons: true,
+        rotateBeacons: false
+      },
+      {
+        title: 'ACK',
+        text: 'B sees resonance score (but NOT A\'s identity or transmissions). B acknowledges the ping.',
+        arrowClass: 'active left',
+        arrowLabel: 'ACK',
+        deviceAClass: '',
+        deviceBClass: 'active',
+        detail: 'ack: true  |  identity: hidden  |  transmissions: sealed',
+        showBeacons: true,
+        rotateBeacons: false
+      },
+      {
+        title: 'HANDSHAKE',
+        text: 'Both parties exchange X25519 public keys. Shared secret derived. Transmissions revealed.',
+        arrowClass: 'bidirectional',
+        arrowLabel: 'X25519 Key Exchange',
+        deviceAClass: 'active',
+        deviceBClass: 'active',
+        detail: null,
+        showBeacons: false,
+        rotateBeacons: false,
+        showLock: true,
+        showTransmissions: true
+      },
+      {
+        title: 'ENCOUNTER',
+        text: 'Encounter active. Proximity tracking enabled. Ephemeral chat channel available.',
+        arrowClass: 'bidirectional',
+        arrowLabel: 'Encrypted Channel',
+        deviceAClass: 'active',
+        deviceBClass: 'active',
+        detail: null,
+        showBeacons: false,
+        rotateBeacons: false,
+        showDistance: true
+      },
+      {
+        title: 'COMPLETE',
+        text: 'Encounter complete. Glyphs exchanged. Beacon IDs rotate. No trace remains.',
+        arrowClass: '',
+        arrowLabel: '',
+        deviceAClass: 'success',
+        deviceBClass: 'success',
+        detail: null,
+        showBeacons: true,
+        rotateBeacons: false,
+        showComplete: true
+      }
+    ];
+
+    var stepperControls = document.getElementById('stepperControls');
+    var indicators = stepperControls.querySelectorAll('.step-indicator');
+    var deviceA = document.getElementById('deviceA');
+    var deviceB = document.getElementById('deviceB');
+    var arrowArea = document.getElementById('arrowArea');
+    var arrowLine = document.getElementById('arrowLine');
+    var arrowLabel = document.getElementById('arrowLabel');
+    var beaconAEl = document.getElementById('beaconA');
+    var beaconBEl = document.getElementById('beaconB');
+    var stepTitle = document.getElementById('stepTitle');
+    var stepText = document.getElementById('stepText');
+    var stepExtra = document.getElementById('stepExtra');
+    var prevBtn = document.getElementById('prevBtn');
+    var nextBtn = document.getElementById('nextBtn');
+
+    function renderStep(idx) {
+      var s = steps[idx];
+      currentStep = idx;
+
+      // Indicators
+      indicators.forEach(function(ind, i) {
+        ind.className = 'step-indicator';
+        if (i < idx) ind.classList.add('completed');
+        if (i === idx) ind.classList.add('active');
+      });
+
+      // Devices
+      deviceA.className = 'device' + (s.deviceAClass ? ' ' + s.deviceAClass : '');
+      deviceB.className = 'device' + (s.deviceBClass ? ' ' + s.deviceBClass : '');
+
+      // Arrow
+      arrowLine.className = 'arrow-line' + (s.arrowClass ? ' ' + s.arrowClass : '');
+      arrowLabel.textContent = s.arrowLabel;
+
+      // Beacons
+      if (s.showBeacons) {
+        beaconAEl.style.display = '';
+        beaconBEl.style.display = '';
+        if (s.rotateBeacons) {
+          startBeaconRotation();
+        } else {
+          stopBeaconRotation();
+          beaconAEl.textContent = formatBeaconId(beaconAId).toLowerCase();
+          beaconBEl.textContent = formatBeaconId(beaconBId).toLowerCase();
+        }
+      } else {
+        beaconAEl.style.display = 'none';
+        beaconBEl.style.display = 'none';
+        stopBeaconRotation();
+      }
+
+      // Complete step: rotate to new beacons
+      if (s.showComplete) {
+        beaconAId = randomHex(16);
+        beaconBId = randomHex(16);
+        beaconAEl.textContent = formatBeaconId(beaconAId).toLowerCase();
+        beaconBEl.textContent = formatBeaconId(beaconBId).toLowerCase();
+      }
+
+      // Description
+      stepTitle.textContent = s.title;
+      stepText.textContent = s.text;
+
+      // Extra content
+      var extraHTML = '';
+      if (s.detail) {
+        extraHTML += '<div class="step-detail">' + s.detail + '</div>';
+      }
+      if (s.showLock) {
+        extraHTML += '<div class="lock-icon fade-in">&#128275;</div>';
+      }
+      if (s.showTransmissions) {
+        extraHTML += '<div class="transmission-cards">';
+        extraHTML += '<div class="tx-card visible"><strong>A\'s transmissions:</strong> Music, Hiking, JavaScript</div>';
+        extraHTML += '<div class="tx-card visible"><strong>B\'s transmissions:</strong> Guitar, Trails, TypeScript</div>';
+        extraHTML += '</div>';
+      }
+      if (s.showDistance) {
+        extraHTML += '<div class="distance-indicator fade-in">';
+        extraHTML += '<span>~12m apart</span>';
+        extraHTML += '<div class="distance-bar"><div class="distance-fill"></div></div>';
+        extraHTML += '<span>Signal: Strong</span>';
+        extraHTML += '</div>';
+      }
+      if (s.showComplete) {
+        extraHTML += '<div style="text-align:center;margin-top:12px;font-size:32px" class="fade-in">&#10004;</div>';
+        extraHTML += '<div style="text-align:center;margin-top:8px;font-size:13px;color:var(--success)">Glyphs exchanged. New beacon IDs assigned.</div>';
+      }
+      stepExtra.innerHTML = extraHTML;
+
+      // Nav buttons
+      prevBtn.disabled = idx === 0;
+      if (idx === steps.length - 1) {
+        nextBtn.textContent = 'Restart';
+      } else {
+        nextBtn.textContent = 'Next Step';
+      }
+    }
+
+    function startBeaconRotation() {
+      stopBeaconRotation();
+      function rotate() {
+        beaconAId = randomHex(16);
+        beaconBId = randomHex(16);
+        beaconAEl.style.opacity = '0';
+        beaconBEl.style.opacity = '0';
+        setTimeout(function() {
+          beaconAEl.textContent = formatBeaconId(beaconAId).toLowerCase();
+          beaconBEl.textContent = formatBeaconId(beaconBId).toLowerCase();
+          beaconAEl.style.opacity = '1';
+          beaconBEl.style.opacity = '1';
+        }, 300);
+      }
+      rotate();
+      beaconRotateInterval = setInterval(rotate, 3000);
+    }
+
+    function stopBeaconRotation() {
+      if (beaconRotateInterval) {
+        clearInterval(beaconRotateInterval);
+        beaconRotateInterval = null;
+      }
+    }
+
+    nextBtn.addEventListener('click', function() {
+      if (currentStep === steps.length - 1) {
+        renderStep(0);
+      } else {
+        renderStep(currentStep + 1);
+      }
+    });
+
+    prevBtn.addEventListener('click', function() {
+      if (currentStep > 0) renderStep(currentStep - 1);
+    });
+
+    indicators.forEach(function(ind) {
+      ind.addEventListener('click', function() {
+        renderStep(parseInt(this.getAttribute('data-step')));
+      });
+    });
+
+    renderStep(0);
+
+    // =====================
+    // Section 2: Encryption Demo
+    // =====================
+    var cryptoInput = document.getElementById('cryptoInput');
+    var encryptBtn = document.getElementById('encryptBtn');
+    var decryptBtn = document.getElementById('decryptBtn');
+    var cryptoOutput = document.getElementById('cryptoOutput');
+    var cryptoPlaintext = document.getElementById('cryptoPlaintext');
+    var cryptoKey = document.getElementById('cryptoKey');
+    var cryptoNonce = document.getElementById('cryptoNonce');
+    var cryptoCipher = document.getElementById('cryptoCipher');
+    var cryptoDecrypted = document.getElementById('cryptoDecrypted');
+    var decryptedRow = document.getElementById('decryptedRow');
+
+    var currentSharedKey = randomHex(64);
+    var currentNonce = randomHex(48);
+    var currentCipherHex = '';
+    var currentPlain = '';
+
+    encryptBtn.addEventListener('click', function() {
+      var plain = cryptoInput.value.trim();
+      if (!plain) return;
+
+      currentPlain = plain;
+      currentSharedKey = randomHex(64);
+      currentNonce = randomHex(48);
+      currentCipherHex = simpleXorEncrypt(plain, currentSharedKey);
+
+      cryptoPlaintext.textContent = '"' + plain + '"';
+      cryptoKey.textContent = currentSharedKey.substring(0, 16) + '...' + currentSharedKey.substring(48);
+      cryptoNonce.textContent = currentNonce;
+      cryptoCipher.textContent = currentCipherHex;
+      decryptedRow.style.display = 'none';
+      cryptoOutput.classList.add('visible');
+      decryptBtn.disabled = false;
+    });
+
+    decryptBtn.addEventListener('click', function() {
+      if (!currentCipherHex) return;
+      var decrypted = simpleXorDecrypt(currentCipherHex, currentSharedKey);
+      cryptoDecrypted.textContent = '"' + decrypted + '"';
+      decryptedRow.style.display = '';
+    });
+
+    // =====================
+    // Section 3: Beacon ID Rotation
+    // =====================
+    var beaconDisplay = document.getElementById('beaconDisplay');
+    var rotationFill = document.getElementById('rotationFill');
+    var formulaKey = document.getElementById('formulaKey');
+    var formulaEpoch = document.getElementById('formulaEpoch');
+    var formulaResult = document.getElementById('formulaResult');
+    var epochValue = document.getElementById('epochValue');
+
+    var epoch = 184209;
+    var publicKeyPartial = '7a2f...e1c3';
+    var rotationDuration = 3000; // 3s for demo (represents 15 min)
+    var rotationStart = Date.now();
+
+    function updateBeaconRotation() {
+      var elapsed = Date.now() - rotationStart;
+      var progress = Math.min((elapsed / rotationDuration) * 100, 100);
+      rotationFill.style.width = progress + '%';
+
+      if (elapsed >= rotationDuration) {
+        epoch++;
+        rotationStart = Date.now();
+
+        var newBeacon = randomHex(16);
+        publicKeyPartial = randomHex(4).toLowerCase() + '...' + randomHex(4).toLowerCase();
+
+        beaconDisplay.style.opacity = '0';
+        setTimeout(function() {
+          beaconDisplay.textContent = formatBeaconId(newBeacon);
+          formulaKey.textContent = 'pk: ' + publicKeyPartial;
+          formulaEpoch.textContent = 'epoch: ' + epoch;
+          formulaResult.textContent = formatBeaconId(newBeacon).toLowerCase();
+          epochValue.textContent = epoch;
+          beaconDisplay.style.opacity = '1';
+        }, 300);
+      }
+
+      requestAnimationFrame(updateBeaconRotation);
+    }
+
+    requestAnimationFrame(updateBeaconRotation);
+
+  })();
+  </script>
+
+</body>
+</html>

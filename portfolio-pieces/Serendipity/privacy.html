@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Privacy Policy | Serendipity</title>
+  <meta name="description" content="Serendipity's privacy policy. Your location never leaves your device. All matching happens on-phone. End-to-end encrypted. Zero-knowledge architecture.">
+  <meta name="keywords" content="serendipity privacy policy, privacy-first social app, zero-knowledge architecture, end-to-end encrypted social, bluetooth privacy, on-device matching">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/privacy">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app/privacy">
+  <meta property="og:title" content="Privacy Policy | Serendipity">
+  <meta property="og:description" content="Serendipity's privacy policy. Your location never leaves your device. All matching happens on-phone. End-to-end encrypted. Zero-knowledge architecture.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Privacy Policy | Serendipity">
+  <meta name="twitter:description" content="Serendipity's privacy policy. Your location never leaves your device. All matching happens on-phone. End-to-end encrypted. Zero-knowledge architecture.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Privacy Policy | Serendipity",
+    "description": "Serendipity's privacy policy. Your location never leaves your device. All matching happens on-phone. End-to-end encrypted. Zero-knowledge architecture.",
+    "url": "https://serendipity.app/privacy",
+    "inLanguage": "en",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Serendipity",
+      "url": "https://serendipity.app"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs"
+    },
+    "dateModified": "2026-04-01"
+  }
+  </script>
+
+  <!-- AdSense placeholder -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --green: #22C55E;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--ember);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--ember); }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      padding: 100px 0 60px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--ember); }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ─── Glance Card ─── */
+    .glance-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+    .glance-card h2 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      color: var(--ember);
+      text-align: center;
+    }
+    .glance-list {
+      list-style: none;
+      display: grid;
+      gap: 16px;
+    }
+    .glance-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .glance-check {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      background: rgba(34, 197, 94, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .glance-check svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: var(--green);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .glance-list strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    /* ─── Policy Sections ─── */
+    .policy { padding: 0 0 60px; }
+    .policy-meta {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+
+    .policy-section {
+      margin-bottom: 48px;
+    }
+    .policy-section h2 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 80px;
+    }
+    .policy-section h2 a {
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .policy-section h2 a:hover {
+      color: var(--ember);
+    }
+    .policy-section h2 .section-num {
+      color: var(--ember);
+      margin-right: 8px;
+    }
+    .policy-section h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 24px 0 12px;
+      color: var(--text-primary);
+    }
+    .policy-section p, .policy-section li {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+    .policy-section ul {
+      list-style: none;
+      margin: 12px 0;
+    }
+    .policy-section ul li {
+      padding-left: 20px;
+      position: relative;
+      margin-bottom: 6px;
+    }
+    .policy-section ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ember);
+    }
+
+    /* ─── Tables ─── */
+    .policy-table-wrap {
+      overflow-x: auto;
+      margin: 16px 0 24px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .policy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      min-width: 600px;
+    }
+    .policy-table thead {
+      background: var(--ember);
+    }
+    .policy-table thead th {
+      color: var(--void);
+      font-weight: 700;
+      text-align: left;
+      padding: 14px 18px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .policy-table tbody tr {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+    }
+    .policy-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    .policy-table tbody tr:hover {
+      background: var(--surface);
+    }
+    .policy-table td {
+      padding: 14px 18px;
+      color: var(--text-secondary);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .policy-table td:first-child {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .td-no {
+      color: var(--green) !important;
+      font-weight: 600 !important;
+    }
+    .td-yes {
+      color: var(--ember) !important;
+      font-weight: 600 !important;
+    }
+
+    /* ─── Not Collected Card ─── */
+    .not-collected {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-top: 20px;
+    }
+    .not-collected h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+    .not-collected-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .not-collected-grid span {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    /* ─── Rights Grid ─── */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .rights-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+    .rights-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ember);
+      margin-bottom: 10px;
+    }
+    .rights-card ul {
+      list-style: none;
+      margin: 0;
+    }
+    .rights-card ul li {
+      padding-left: 20px;
+      position: relative;
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+    .rights-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--ember);
+    }
+
+    /* ─── AdSense ─── */
+    .ad-slot {
+      text-align: center;
+      padding: 24px 0;
+      min-height: 90px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 60px 0 40px; }
+      .glance-card { padding: 28px 20px; }
+      .policy-section h2 { font-size: 20px; }
+      .rights-grid { grid-template-columns: 1fr; }
+      .nav-links { gap: 16px; }
+      .not-collected-grid span { font-size: 12px; padding: 5px 10px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Serendipity</a>
+      <div class="nav-links">
+        <a href="/">App</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy" class="active">Privacy</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Privacy <span>Policy</span></h1>
+      <p class="hero-sub">Your data stays yours. By design, not by promise.</p>
+    </div>
+  </section>
+
+  <!-- Privacy at a Glance -->
+  <div class="container">
+    <div class="glance-card">
+      <h2>Privacy at a Glance</h2>
+      <ul class="glance-list">
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Your location:</strong> NEVER leaves your device</span>
+        </li>
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Your profile:</strong> NEVER leaves your device</span>
+        </li>
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Your personality:</strong> NEVER leaves your device</span>
+        </li>
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Messages:</strong> End-to-end encrypted</span>
+        </li>
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Beacon IDs:</strong> Rotate every 15 minutes</span>
+        </li>
+        <li>
+          <span class="glance-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>We cannot track you:</strong> Architecturally impossible</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Full Policy -->
+  <div class="container policy">
+
+    <p class="policy-meta">Last updated: April 2026 &nbsp;|&nbsp; Data Controller: Moonlit Social Labs</p>
+
+    <!-- Overview -->
+    <div class="policy-section" id="overview">
+      <h2><a href="#overview">Overview</a></h2>
+      <p>Serendipity is a proximity-based social discovery platform committed to privacy. Our core principle: <strong>your location never leaves your device.</strong> All proximity computation happens on-device using Bluetooth Low Energy (BLE). There is no central server that knows where you are, who you met, or what you said.</p>
+    </div>
+
+    <!-- 1. Data We Collect -->
+    <div class="policy-section" id="data-we-collect">
+      <h2><a href="#data-we-collect"><span class="section-num">1.</span> Data We Collect</a></h2>
+
+      <h3 id="data-you-provide">1.1 Data You Provide</h3>
+      <div class="policy-table-wrap">
+        <table class="policy-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Purpose</th>
+              <th>Stored Where</th>
+              <th>Sent to Server</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Alias</td>
+              <td>Display name</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Interests &amp; depth</td>
+              <td>Resonance matching</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Skills &amp; flags</td>
+              <td>Skill complementarity</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Communication style</td>
+              <td>Conversation compatibility</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Transmission</td>
+              <td>Real-time broadcast</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Birth chart (optional)</td>
+              <td>Synastry matching</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Birth year</td>
+              <td>Age verification</td>
+              <td>Device only</td>
+              <td class="td-no">No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 id="data-automatic">1.2 Data Collected Automatically</h3>
+      <div class="policy-table-wrap">
+        <table class="policy-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Purpose</th>
+              <th>Stored Where</th>
+              <th>Sent to Server</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bluetooth beacon IDs</td>
+              <td>Proximity detection</td>
+              <td>Device, ephemeral (rotates 15 min)</td>
+              <td class="td-no">No</td>
+            </tr>
+            <tr>
+              <td>Location coordinates</td>
+              <td>BLE estimation</td>
+              <td>Device, real-time only (not stored)</td>
+              <td class="td-no">Never</td>
+            </tr>
+            <tr>
+              <td>Encounter records</td>
+              <td>History</td>
+              <td>Device only</td>
+              <td class="td-yes">Anonymized beacon IDs only</td>
+            </tr>
+            <tr>
+              <td>Glyphs</td>
+              <td>Reputation</td>
+              <td>Device + server (anonymized)</td>
+              <td class="td-yes">Yes (anonymized)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="not-collected">
+        <h3>1.3 Data We Do NOT Collect</h3>
+        <div class="not-collected-grid">
+          <span>Real name</span>
+          <span>Email</span>
+          <span>Phone number</span>
+          <span>Photos</span>
+          <span>GPS history</span>
+          <span>Contacts</span>
+          <span>Browsing history</span>
+          <span>Advertising identifiers</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. How We Use Your Data -->
+    <div class="policy-section" id="how-we-use">
+      <h2><a href="#how-we-use"><span class="section-num">2.</span> How We Use Your Data</a></h2>
+      <ul>
+        <li>On-device resonance matching</li>
+        <li>Encounter facilitation</li>
+        <li>Glyph accumulation</li>
+        <li>Age verification</li>
+      </ul>
+    </div>
+
+    <!-- 3. Sensitive Data -->
+    <div class="policy-section" id="sensitive-data">
+      <h2><a href="#sensitive-data"><span class="section-num">3.</span> Sensitive Data</a></h2>
+      <p>Birth chart data is treated as GDPR Article 9 special category data. It is entirely optional, stored on-device only, never transmitted to any server, and can be removed at any time from your profile settings.</p>
+    </div>
+
+    <!-- 4. Data Sharing -->
+    <div class="policy-section" id="data-sharing">
+      <h2><a href="#data-sharing"><span class="section-num">4.</span> Data Sharing</a></h2>
+      <p>We never sell or rent your data. Data may be shared only in these limited contexts:</p>
+      <ul>
+        <li><strong>Device-to-device:</strong> End-to-end encrypted via the Tavern Protocol</li>
+        <li><strong>Relay server:</strong> Encrypted payloads only, auto-deleted after 60 seconds</li>
+        <li><strong>Anonymized analytics:</strong> Aggregate, non-identifying usage patterns</li>
+        <li><strong>Legal requirements:</strong> Only when compelled by law</li>
+      </ul>
+    </div>
+
+    <!-- 5. Data Retention -->
+    <div class="policy-section" id="data-retention">
+      <h2><a href="#data-retention"><span class="section-num">5.</span> Data Retention</a></h2>
+      <div class="policy-table-wrap">
+        <table class="policy-table">
+          <thead>
+            <tr>
+              <th>Data Type</th>
+              <th>Retention Period</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Profile</td>
+              <td>Until you delete it</td>
+            </tr>
+            <tr>
+              <td>Encounters</td>
+              <td>Configurable: 7 days to unlimited</td>
+            </tr>
+            <tr>
+              <td>Glyphs</td>
+              <td>Permanent (anonymized)</td>
+            </tr>
+            <tr>
+              <td>Beacon IDs</td>
+              <td>15-minute rotation</td>
+            </tr>
+            <tr>
+              <td>Encryption keys</td>
+              <td>15-minute rotation</td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td>Not stored</td>
+            </tr>
+            <tr>
+              <td>Relay messages</td>
+              <td>60 seconds</td>
+            </tr>
+            <tr>
+              <td>Chat messages</td>
+              <td>24 &ndash; 72 hours</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. Your Rights -->
+    <div class="policy-section" id="your-rights">
+      <h2><a href="#your-rights"><span class="section-num">6.</span> Your Rights</a></h2>
+      <div class="rights-grid">
+        <div class="rights-card">
+          <h4>GDPR Rights</h4>
+          <ul>
+            <li>Right of access</li>
+            <li>Right to rectification</li>
+            <li>Right to erasure</li>
+            <li>Right to data portability</li>
+            <li>Right to object</li>
+            <li>Right to restrict processing</li>
+          </ul>
+        </div>
+        <div class="rights-card">
+          <h4>CCPA Rights</h4>
+          <ul>
+            <li>Right to know</li>
+            <li>Right to delete</li>
+            <li>Right to non-discrimination</li>
+          </ul>
+        </div>
+        <div class="rights-card">
+          <h4>All Users</h4>
+          <ul>
+            <li>Export all your data</li>
+            <li>Delete your account</li>
+            <li>Disable BLE broadcasting</li>
+            <li>Enable ghost mode</li>
+            <li>Remove birth chart</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad Slot -->
+    <div class="ad-slot">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- 7. Security -->
+    <div class="policy-section" id="security">
+      <h2><a href="#security"><span class="section-num">7.</span> Security</a></h2>
+      <ul>
+        <li><strong>End-to-end encryption:</strong> X25519 key exchange + XSalsa20-Poly1305 authenticated encryption</li>
+        <li><strong>Rotating identifiers:</strong> Beacon IDs and keys rotate every 15 minutes</li>
+        <li><strong>On-device computation:</strong> All matching and analysis happens on your phone</li>
+        <li><strong>No central location database:</strong> There is nothing to breach</li>
+      </ul>
+    </div>
+
+    <!-- 8. Children -->
+    <div class="policy-section" id="children">
+      <h2><a href="#children"><span class="section-num">8.</span> Children</a></h2>
+      <p>Serendipity is not intended for users under the age of 17. Age is verified during onboarding via birth year. We do not knowingly collect data from minors.</p>
+    </div>
+
+    <!-- 9. International Transfers -->
+    <div class="policy-section" id="international-transfers">
+      <h2><a href="#international-transfers"><span class="section-num">9.</span> International Transfers</a></h2>
+      <p>For non-US users, where applicable data transfers occur, we rely on Standard Contractual Clauses (SCCs) to ensure adequate protection under GDPR.</p>
+    </div>
+
+    <!-- 10. Changes -->
+    <div class="policy-section" id="changes">
+      <h2><a href="#changes"><span class="section-num">10.</span> Changes to This Policy</a></h2>
+      <p>If we make material changes to this privacy policy, you will be notified via an in-app notification before the changes take effect.</p>
+    </div>
+
+    <!-- 11. Contact -->
+    <div class="policy-section" id="contact">
+      <h2><a href="#contact"><span class="section-num">11.</span> Contact</a></h2>
+      <p>For privacy-related inquiries, please contact us at <a href="mailto:privacy@moonlitsociallabs.com" style="color: var(--ember); text-decoration: underline;">privacy@moonlitsociallabs.com</a></p>
+    </div>
+
+    <!-- 12. DPIA -->
+    <div class="policy-section" id="dpia">
+      <h2><a href="#dpia"><span class="section-num">12.</span> Data Protection Impact Assessment</a></h2>
+      <p>A DPIA has been conducted for Serendipity. The assessment concluded that the privacy-by-design architecture &mdash; with on-device computation, rotating identifiers, end-to-end encryption, and zero central data collection &mdash; provides adequate protection for all categories of processed data.</p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/features">Features</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Ko-fi</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs</p>
+    </div>
+  </footer>
+
+</body>
+</html>

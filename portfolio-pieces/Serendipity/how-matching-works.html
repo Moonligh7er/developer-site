@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>How Matching Works — From Bluetooth to Deep Connection | Serendipity</title>
+  <meta name="description" content="A visual guide to how Serendipity discovers compatible people nearby. From BLE beacon detection through resonance scoring, personality matching, cognitive compatibility, and progressive depth layers.">
+  <meta name="keywords" content="how proximity matching works, bluetooth social matching explained, resonance scoring algorithm, personality compatible matching, how serendipity app works, proximity social discovery explained, BLE social matching pipeline">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app/how-matching-works">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://serendipity.app/how-matching-works">
+  <meta property="og:title" content="How Matching Works — From Bluetooth to Deep Connection | Serendipity">
+  <meta property="og:description" content="A visual guide to how Serendipity discovers compatible people nearby. From BLE beacon detection through resonance scoring, personality matching, cognitive compatibility, and progressive depth layers.">
+  <meta property="og:image" content="https://serendipity.app/og-how-matching.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app/how-matching-works">
+  <meta name="twitter:title" content="How Matching Works — From Bluetooth to Deep Connection | Serendipity">
+  <meta name="twitter:description" content="A visual guide to how Serendipity discovers compatible people nearby. From BLE beacon detection through resonance scoring, personality matching, and progressive depth layers.">
+  <meta name="twitter:image" content="https://serendipity.app/og-how-matching.png">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How Matching Works — From Bluetooth to Deep Connection",
+    "description": "A visual guide to how Serendipity discovers compatible people nearby. From BLE beacon detection through resonance scoring, personality matching, cognitive compatibility, and progressive depth layers.",
+    "url": "https://serendipity.app/how-matching-works",
+    "image": "https://serendipity.app/og-how-matching.png",
+    "datePublished": "2026-04-03",
+    "dateModified": "2026-04-03",
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://serendipity.app/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://serendipity.app/how-matching-works"
+    }
+  }
+  </script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --text-primary: #F1F5F9;
+      --text-secondary: #CBD5E1;
+      --text-muted: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10B981;
+      --signal: #3B82F6;
+      --mystic: #8B5CF6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--ember); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Nav ─── */
+    nav {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .nav-brand:hover { text-decoration: none; color: var(--ember); }
+    .nav-brand span { color: var(--ember); }
+    .nav-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+    .nav-links a { color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; }
+    .nav-links a:hover { color: var(--ember); text-decoration: none; }
+
+    /* ─── Hero ─── */
+    .page-hero {
+      text-align: center;
+      padding: 80px 0 60px;
+    }
+    .page-hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    .page-hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── Pipeline Steps ─── */
+    .pipeline-step {
+      padding: 80px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pipeline-step:last-of-type { border-bottom: none; }
+
+    .step-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .step-layout.reversed .step-text { order: 2; }
+    .step-layout.reversed .step-visual { order: 1; }
+
+    .step-number-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--ember-glow);
+      border: 2px solid var(--ember);
+      color: var(--ember);
+      font-weight: 900;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .step-text h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .step-text p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .step-note {
+      display: inline-block;
+      background: var(--surface);
+      border-left: 3px solid var(--ember);
+      padding: 10px 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-radius: 0 8px 8px 0;
+      margin-top: 8px;
+    }
+    .step-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ─── Visuals (CSS-drawn) ─── */
+    .step-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+    }
+
+    .visual-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* Visual 1: Beacon */
+    .beacon-visual {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+    }
+    .phone-icon {
+      width: 56px;
+      height: 90px;
+      border: 3px solid var(--text-muted);
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .phone-icon::after {
+      content: '';
+      width: 20px;
+      height: 3px;
+      background: var(--text-muted);
+      position: absolute;
+      top: 8px;
+      border-radius: 2px;
+    }
+    .phone-icon .screen {
+      width: 36px;
+      height: 50px;
+      background: var(--surface);
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+    .wave-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .wave {
+      height: 3px;
+      border-radius: 3px;
+      background: var(--ember);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .wave:nth-child(1) { width: 30%; animation-delay: 0s; }
+    .wave:nth-child(2) { width: 55%; animation-delay: 0.3s; }
+    .wave:nth-child(3) { width: 80%; animation-delay: 0.6s; }
+    .wave:nth-child(4) { width: 55%; animation-delay: 0.9s; }
+    .wave:nth-child(5) { width: 30%; animation-delay: 1.2s; }
+    .wave-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+      text-align: center;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Visual 2: Funnel */
+    .funnel-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .funnel-top {
+      width: 100%;
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .funnel-top strong { color: var(--text-primary); font-size: 20px; display: block; }
+    .funnel-shape {
+      width: 0;
+      height: 0;
+      border-left: 80px solid transparent;
+      border-right: 80px solid transparent;
+      border-top: 60px solid var(--ember-glow);
+      position: relative;
+    }
+    .funnel-shape::after {
+      content: 'Bloom + Bitmaps';
+      position: absolute;
+      top: -38px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: var(--ember);
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .funnel-arrow {
+      width: 2px;
+      height: 20px;
+      background: var(--ember);
+    }
+    .funnel-bottom {
+      width: 60%;
+      background: var(--ember-glow);
+      border: 1px solid var(--ember);
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--ember);
+      font-weight: 700;
+    }
+    .funnel-bottom strong { font-size: 20px; display: block; }
+    .funnel-speed {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+    }
+
+    /* Visual 3: Dimension Bars */
+    .dim-bars { display: flex; flex-direction: column; gap: 12px; }
+    .dim-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .dim-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      width: 110px;
+      flex-shrink: 0;
+      text-align: right;
+    }
+    .dim-track {
+      flex: 1;
+      height: 10px;
+      background: var(--surface);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .dim-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 1s ease;
+    }
+    .dim-score {
+      font-size: 12px;
+      color: var(--text-muted);
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    /* Visual 4: Pentagon + Circumplex */
+    .personality-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .pentagon-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+    }
+    .pentagon-bg, .pentagon-data {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .pentagon-label {
+      position: absolute;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .pentagon-label.top { top: -4px; left: 50%; transform: translateX(-50%); }
+    .pentagon-label.top-right { top: 30%; right: -16px; }
+    .pentagon-label.bottom-right { bottom: 12%; right: -8px; }
+    .pentagon-label.bottom-left { bottom: 12%; left: -8px; }
+    .pentagon-label.top-left { top: 30%; left: -20px; }
+
+    .circumplex {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .circumplex-inner {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px dashed var(--mystic);
+      opacity: 0.6;
+    }
+    .circumplex-dot {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ember);
+    }
+    .circumplex-label {
+      position: absolute;
+      font-size: 9px;
+      color: var(--text-tertiary);
+    }
+
+    /* Visual 5: Brain silhouettes */
+    .brain-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      position: relative;
+    }
+    .brain-shape {
+      width: 80px;
+      height: 90px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      border: 2px solid var(--text-muted);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 10px;
+    }
+    .brain-shape.left { border-color: var(--signal); }
+    .brain-shape.right { border-color: var(--mystic); }
+    .brain-line {
+      width: 100%;
+      height: 2px;
+      border-radius: 1px;
+      margin: 3px 0;
+      opacity: 0.5;
+    }
+    .brain-shape.left .brain-line { background: var(--signal); }
+    .brain-shape.right .brain-line { background: var(--mystic); }
+    .brain-threads {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .thread {
+      height: 2px;
+      border-radius: 1px;
+      animation: threadPulse 3s ease-in-out infinite;
+    }
+    .thread:nth-child(1) { width: 40px; background: var(--ember); animation-delay: 0s; }
+    .thread:nth-child(2) { width: 30px; background: var(--success); animation-delay: 0.5s; }
+    .thread:nth-child(3) { width: 50px; background: var(--mystic); animation-delay: 1s; }
+    .thread:nth-child(4) { width: 35px; background: var(--signal); animation-delay: 1.5s; }
+    @keyframes threadPulse {
+      0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+      50% { opacity: 1; transform: scaleX(1); }
+    }
+    .brain-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 6px;
+    }
+
+    /* Visual 6: Layered prediction */
+    .prediction-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .pred-layer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--surface);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    .pred-icon {
+      font-size: 16px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .pred-label { color: var(--text-muted); flex: 1; }
+    .pred-value { color: var(--ember); font-weight: 700; font-size: 14px; }
+    .pred-equals {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--ember);
+      padding: 4px 0;
+    }
+    .pred-result {
+      background: var(--ember-glow);
+      border: 1px solid var(--ember);
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--ember);
+      font-size: 15px;
+    }
+
+    /* Visual 7: Concentric circles */
+    .depth-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .depth-circles {
+      position: relative;
+      width: 260px;
+      height: 260px;
+    }
+    .depth-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .depth-ring.ring-5 {
+      width: 260px; height: 260px;
+      top: 0; left: 0;
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.04);
+    }
+    .depth-ring.ring-4 {
+      width: 210px; height: 210px;
+      top: 25px; left: 25px;
+      border-color: var(--ember);
+      background: rgba(245, 158, 11, 0.04);
+    }
+    .depth-ring.ring-3 {
+      width: 160px; height: 160px;
+      top: 50px; left: 50px;
+      border-color: var(--mystic);
+      background: rgba(139, 92, 246, 0.04);
+    }
+    .depth-ring.ring-2 {
+      width: 110px; height: 110px;
+      top: 75px; left: 75px;
+      border-color: var(--signal);
+      background: rgba(59, 130, 246, 0.04);
+    }
+    .depth-ring.ring-1 {
+      width: 60px; height: 60px;
+      top: 100px; left: 100px;
+      border-color: var(--text-muted);
+      background: rgba(148, 163, 184, 0.08);
+    }
+    .depth-ring-label {
+      position: absolute;
+      font-size: 9px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ring-5 .depth-ring-label { bottom: -18px; left: 50%; transform: translateX(-50%); color: var(--success); }
+    .ring-4 .depth-ring-label { bottom: -18px; left: 50%; transform: translateX(-50%); color: var(--ember); }
+    .ring-3 .depth-ring-label { bottom: -18px; left: 50%; transform: translateX(-50%); color: var(--mystic); }
+    .ring-2 .depth-ring-label { bottom: -18px; left: 50%; transform: translateX(-50%); color: var(--signal); }
+    .ring-1 .depth-ring-label { color: var(--text-muted); font-size: 8px; text-align: center; position: static; }
+
+    /* Visual 8: Shadow mirror */
+    .shadow-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .silhouettes {
+      position: relative;
+      width: 160px;
+      height: 180px;
+    }
+    .silhouette {
+      width: 100px;
+      height: 140px;
+      border-radius: 50px 50px 30px 30px;
+      position: absolute;
+      top: 20px;
+    }
+    .silhouette.projected {
+      left: 0;
+      background: rgba(59, 130, 246, 0.15);
+      border: 2px solid var(--signal);
+    }
+    .silhouette.perceived {
+      right: 0;
+      background: rgba(245, 158, 11, 0.15);
+      border: 2px solid var(--ember);
+    }
+    .silhouette-head {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .projected .silhouette-head { background: rgba(59, 130, 246, 0.3); border: 2px solid var(--signal); }
+    .perceived .silhouette-head { background: rgba(245, 158, 11, 0.3); border: 2px solid var(--ember); }
+    .gap-zone {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 100px;
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gap-label {
+      font-size: 9px;
+      color: var(--mystic);
+      font-weight: 700;
+      writing-mode: vertical-rl;
+    }
+    .shadow-legend {
+      display: flex;
+      gap: 20px;
+      font-size: 11px;
+    }
+    .shadow-legend span { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* Visual 9: Collective mesh */
+    .mesh-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .mesh-devices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      max-width: 240px;
+    }
+    .mesh-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--text-tertiary);
+      animation: meshPulse 2s ease-in-out infinite;
+    }
+    .mesh-dot:nth-child(odd) { animation-delay: 0.5s; }
+    .mesh-dot:nth-child(3n) { animation-delay: 1s; }
+    @keyframes meshPulse {
+      0%, 100% { border-color: var(--text-tertiary); }
+      50% { border-color: var(--ember); }
+    }
+    .mesh-arrow-down {
+      width: 2px;
+      height: 30px;
+      background: linear-gradient(to bottom, var(--ember), transparent);
+      position: relative;
+    }
+    .mesh-arrow-down::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: -3px;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 6px solid var(--ember);
+    }
+    .mesh-noise-label {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+    .mesh-shield {
+      width: 50px;
+      height: 60px;
+      border: 3px solid var(--success);
+      border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--success);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .mesh-aggregate {
+      width: 80px;
+      height: 40px;
+      border: 2px solid var(--ember);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: var(--ember);
+      font-weight: 700;
+      background: var(--ember-glow);
+    }
+
+    /* ─── Final CTA ─── */
+    .final-cta {
+      text-align: center;
+      padding: 100px 0 80px;
+    }
+    .final-cta h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 900;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+    .final-cta h2 em {
+      font-style: normal;
+      color: var(--ember);
+    }
+    .final-cta .tagline {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .cta:hover { transform: translateY(-2px); opacity: 0.9; text-decoration: none; }
+    .cta-primary { background: var(--ember); color: var(--void); }
+    .cta-secondary { background: var(--card); color: var(--text-primary); border: 1px solid var(--border); }
+    .cta-tertiary { background: transparent; color: var(--ember); border: 1px solid var(--ember); }
+
+    /* ─── Ad Placeholders ─── */
+    .ad-slot {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      margin: 40px auto;
+      max-width: 728px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a { color: var(--text-muted); text-decoration: none; }
+    footer a:hover { color: var(--ember); }
+    .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .step-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .step-layout.reversed .step-text { order: 1; }
+      .step-layout.reversed .step-visual { order: 2; }
+      .pipeline-step { padding: 48px 0; }
+      .page-hero { padding: 60px 0 40px; }
+      .final-cta { padding: 60px 0 48px; }
+      .nav-links { gap: 16px; }
+      .depth-circles {
+        width: 220px;
+        height: 220px;
+      }
+      .depth-ring.ring-5 { width: 220px; height: 220px; }
+      .depth-ring.ring-4 { width: 175px; height: 175px; top: 22px; left: 22px; }
+      .depth-ring.ring-3 { width: 130px; height: 130px; top: 45px; left: 45px; }
+      .depth-ring.ring-2 { width: 85px; height: 85px; top: 67px; left: 67px; }
+      .depth-ring.ring-1 { width: 45px; height: 45px; top: 87px; left: 87px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .cta-row { flex-direction: column; align-items: center; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-brand">&#9672; <span>Serendipity</span></a>
+      <div class="nav-links">
+        <a href="/resonance-calculator">Resonance Calculator</a>
+        <a href="/protocol-explorer">Protocol</a>
+        <a href="/personality-science">Personality Science</a>
+        <a href="/blog">Blog</a>
+        <a href="/waitlist">Waitlist</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>How Matching Works:<br><em>From Bluetooth to Deep Connection</em></h1>
+      <p>Nine layers of intelligence turn a Bluetooth signal into a meaningful human encounter. Here is every step of the pipeline, from the first radio pulse to the Shadow Mirror.</p>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder 1 -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense: leaderboard top -->
+      <span>Ad Placeholder (728x90)</span>
+    </div>
+  </div>
+
+  <!-- Step 1: Beacon Detection -->
+  <section class="pipeline-step" id="step-1-beacon-detection">
+    <div class="container">
+      <div class="step-layout">
+        <div class="step-text">
+          <div class="step-number-badge">1</div>
+          <h2>Beacon Detection</h2>
+          <p>Your phone continuously broadcasts a Bluetooth Low Energy beacon containing a rotating cryptographic identifier. No name, no photo, no location coordinates are ever attached to this signal. It is a pure presence pulse that says nothing more than "a Serendipity user is nearby."</p>
+          <p>Other devices running Serendipity detect this beacon within a range of 10 to 200 meters, depending on your subscription tier and power settings. The scanning happens in the background with minimal battery impact, using the same BLE advertising channels that fitness trackers and AirTags use.</p>
+          <div class="step-note">Beacon IDs rotate every 15 minutes. Even if someone intercepts the signal, they cannot track your movement across time or space.</div>
+          <a class="step-link" href="/blog/how-bluetooth-low-energy-works-social-apps">How BLE powers social apps &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="beacon-visual">
+              <div class="phone-icon"><div class="screen"></div></div>
+              <div class="wave-container">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave-label">BLE 5.0 &middot; Rotating ID &middot; 10-200m</div>
+              </div>
+              <div class="phone-icon"><div class="screen"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 2: Quick Resonance -->
+  <section class="pipeline-step" id="step-2-quick-resonance">
+    <div class="container">
+      <div class="step-layout reversed">
+        <div class="step-text">
+          <div class="step-number-badge">2</div>
+          <h2>Quick Resonance (Pre-Filter)</h2>
+          <p>Before any meaningful data is exchanged, your device performs a lightning-fast pre-filter using a compact 34-byte fingerprint embedded in the beacon payload. This fingerprint contains three components: a Bloom filter encoding your top interest categories, a seek/offer bitmap indicating what you are looking for and what you can provide, and an energy compatibility byte reflecting your current interaction mode.</p>
+          <p>The Bloom filter checks for interest overlap in constant time. The seek/offer bitmaps are cross-matched so your "seeking" bits align with their "offering" bits and vice versa. Devices that fall below the minimum threshold are silently discarded before any handshake occurs.</p>
+          <div class="step-note">This entire pre-filter runs in under 10 milliseconds. Most nearby devices are filtered out before consuming any meaningful battery or bandwidth.</div>
+          <a class="step-link" href="/blog/on-device-resonance-matching">On-device resonance matching &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="funnel-visual">
+              <div class="funnel-top">Nearby Beacons<strong>100</strong></div>
+              <div class="funnel-shape"></div>
+              <div class="funnel-arrow"></div>
+              <div class="funnel-bottom">Pass Threshold<strong>12</strong></div>
+              <div class="funnel-speed">&lt; 10ms per check</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 3: Full Resonance Scoring -->
+  <section class="pipeline-step" id="step-3-full-resonance">
+    <div class="container">
+      <div class="step-layout">
+        <div class="step-text">
+          <div class="step-number-badge">3</div>
+          <h2>Full Resonance Scoring</h2>
+          <p>Once a device passes the pre-filter, an encrypted handshake establishes a temporary session. Both devices exchange their full transmission payloads and compute a multi-dimensional resonance score entirely on-device. No server is involved. Six dimensions are evaluated:</p>
+          <p><strong>Interest Overlap</strong> measures how many domains, topics, and curiosities you share. <strong>Skill Complementarity</strong> checks whether your abilities fill gaps in each other's needs. <strong>Problem Alignment</strong> identifies if you are working on similar challenges. <strong>Communication Style</strong> assesses energy, depth preference, and conversational bandwidth. <strong>Transmission Match</strong> evaluates how well your current broadcasting state aligns with theirs. <strong>Synastry</strong>, if both users opt in, adds an astrological compatibility layer for those who value it.</p>
+          <div class="step-note">Each dimension is scored 0-100. The composite score is a weighted average tuned by your personal history of which dimensions predict good encounters for you.</div>
+          <a class="step-link" href="/blog/on-device-resonance-matching">Resonance scoring deep-dive &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="dim-bars">
+              <div class="dim-bar-row">
+                <span class="dim-label">Interest Overlap</span>
+                <div class="dim-track"><div class="dim-fill" style="width:82%;background:var(--ember)"></div></div>
+                <span class="dim-score">82</span>
+              </div>
+              <div class="dim-bar-row">
+                <span class="dim-label">Skill Complement</span>
+                <div class="dim-track"><div class="dim-fill" style="width:71%;background:var(--signal)"></div></div>
+                <span class="dim-score">71</span>
+              </div>
+              <div class="dim-bar-row">
+                <span class="dim-label">Problem Alignment</span>
+                <div class="dim-track"><div class="dim-fill" style="width:64%;background:var(--mystic)"></div></div>
+                <span class="dim-score">64</span>
+              </div>
+              <div class="dim-bar-row">
+                <span class="dim-label">Communication</span>
+                <div class="dim-track"><div class="dim-fill" style="width:90%;background:var(--success)"></div></div>
+                <span class="dim-score">90</span>
+              </div>
+              <div class="dim-bar-row">
+                <span class="dim-label">Transmission</span>
+                <div class="dim-track"><div class="dim-fill" style="width:58%;background:var(--ember)"></div></div>
+                <span class="dim-score">58</span>
+              </div>
+              <div class="dim-bar-row">
+                <span class="dim-label">Synastry</span>
+                <div class="dim-track"><div class="dim-fill" style="width:45%;background:var(--mystic);opacity:0.6"></div></div>
+                <span class="dim-score" style="opacity:0.6">45</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder 2 -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense: mid-content -->
+      <span>Ad Placeholder (728x90)</span>
+    </div>
+  </div>
+
+  <!-- Step 4: Personality Compatibility -->
+  <section class="pipeline-step" id="step-4-personality">
+    <div class="container">
+      <div class="step-layout reversed">
+        <div class="step-text">
+          <div class="step-number-badge">4</div>
+          <h2>Personality Compatibility</h2>
+          <p>Beyond surface-level interests, Serendipity builds a behavioral personality model that deepens over time. The Big Five personality traits (openness, conscientiousness, extraversion, agreeableness, neuroticism) are inferred from your behavioral patterns within the app: how you respond to encounters, when you are active, how you craft your transmissions, and what types of connections you sustain.</p>
+          <p>Schwartz human values are inferred from your exchange orientation, the problems you prioritize, and the glyphs you choose to leave for others. Attachment style (secure, anxious, avoidant, or disorganized) is modeled from your approach and avoidance patterns across encounters. Critically, none of this is ever asked directly. There are no personality quizzes. Every signal is inferred from natural behavior so the model reflects who you actually are, not who you think you are.</p>
+          <a class="step-link" href="/personality-science">Explore personality science &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="personality-visual">
+              <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:4px;font-weight:600">BIG FIVE PROFILE</div>
+              <div class="pentagon-container">
+                <svg viewBox="0 0 200 200" width="180" height="180">
+                  <!-- Outer pentagon -->
+                  <polygon points="100,15 185,75 155,170 45,170 15,75" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                  <!-- Mid pentagon -->
+                  <polygon points="100,45 155,85 138,145 62,145 45,85" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                  <!-- Inner pentagon -->
+                  <polygon points="100,75 125,95 118,120 82,120 75,95" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                  <!-- Data polygon -->
+                  <polygon points="100,25 170,78 140,158 55,140 30,72" fill="rgba(245,158,11,0.12)" stroke="#F59E0B" stroke-width="2"/>
+                  <!-- Dots -->
+                  <circle cx="100" cy="25" r="3" fill="#F59E0B"/>
+                  <circle cx="170" cy="78" r="3" fill="#F59E0B"/>
+                  <circle cx="140" cy="158" r="3" fill="#F59E0B"/>
+                  <circle cx="55" cy="140" r="3" fill="#F59E0B"/>
+                  <circle cx="30" cy="72" r="3" fill="#F59E0B"/>
+                </svg>
+                <span class="pentagon-label top">Openness</span>
+                <span class="pentagon-label top-right">Consc.</span>
+                <span class="pentagon-label bottom-right">Extrav.</span>
+                <span class="pentagon-label bottom-left">Agree.</span>
+                <span class="pentagon-label top-left">Stabil.</span>
+              </div>
+              <div style="font-size:11px;color:var(--text-tertiary);font-weight:600">SCHWARTZ VALUES</div>
+              <div class="circumplex">
+                <div class="circumplex-inner"></div>
+                <div class="circumplex-dot" style="top:12px;left:50%"></div>
+                <div class="circumplex-dot" style="top:30%;right:8px;background:var(--mystic)"></div>
+                <div class="circumplex-dot" style="bottom:20%;right:15%;background:var(--signal)"></div>
+                <div class="circumplex-dot" style="bottom:10px;left:40%"></div>
+                <span class="circumplex-label" style="top:-14px;left:50%;transform:translateX(-50%)">Self-Transcendence</span>
+                <span class="circumplex-label" style="bottom:-14px;left:50%;transform:translateX(-50%)">Self-Enhancement</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 5: Cognitive Resonance -->
+  <section class="pipeline-step" id="step-5-cognitive-resonance">
+    <div class="container">
+      <div class="step-layout">
+        <div class="step-text">
+          <div class="step-number-badge">5</div>
+          <h2>Cognitive Resonance</h2>
+          <p>Personality tells you who someone is. Cognitive resonance tells you how they think. Serendipity models four thinking-style dimensions: convergent vs. divergent thinking, abstract vs. concrete reasoning, integrative complexity (how many perspectives they naturally hold), and epistemic style (how they form and update beliefs).</p>
+          <p>These dimensions are inferred from text analysis of your transmissions and behavioral patterns across encounters. Two people with complementary cognitive styles often produce the most generative conversations, so the matching engine does not simply seek similarity. It optimizes for productive friction where it matters and alignment where it helps.</p>
+          <a class="step-link" href="/personality-science">Cognitive science behind matching &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="brain-visual">
+              <div>
+                <div class="brain-shape left">
+                  <div class="brain-line" style="width:80%"></div>
+                  <div class="brain-line" style="width:60%"></div>
+                  <div class="brain-line" style="width:90%"></div>
+                  <div class="brain-line" style="width:50%"></div>
+                </div>
+                <div class="brain-label">You</div>
+              </div>
+              <div class="brain-threads">
+                <div class="thread"></div>
+                <div class="thread"></div>
+                <div class="thread"></div>
+                <div class="thread"></div>
+              </div>
+              <div>
+                <div class="brain-shape right">
+                  <div class="brain-line" style="width:50%"></div>
+                  <div class="brain-line" style="width:85%"></div>
+                  <div class="brain-line" style="width:40%"></div>
+                  <div class="brain-line" style="width:75%"></div>
+                </div>
+                <div class="brain-label">Them</div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:10px;color:var(--text-tertiary)">
+              <span>Convergent</span>
+              <span>Abstract</span>
+              <span>Integrative</span>
+              <span>Epistemic</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 6: Encounter Quality Prediction -->
+  <section class="pipeline-step" id="step-6-encounter-quality">
+    <div class="container">
+      <div class="step-layout reversed">
+        <div class="step-text">
+          <div class="step-number-badge">6</div>
+          <h2>Encounter Quality Prediction</h2>
+          <p>Raw compatibility is not enough. A 95% match at 2 AM when you are exhausted is not a good encounter. Serendipity layers contextual intelligence on top of the resonance score to predict actual encounter quality. Factors include time of day and your historical engagement patterns, zone quality (how previous encounters in this location went for you), relationship depth if you have met before, and estimated fatigue level from session activity.</p>
+          <p>The final prediction blends personality alignment, cognitive compatibility, values resonance, and these real-time contextual signals into a single encounter quality estimate. The system optimizes for encounters you will be glad you had, not just people who look good on paper.</p>
+          <a class="step-link" href="/protocol-explorer">Explore the protocol &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="prediction-visual">
+              <div class="pred-layer">
+                <span class="pred-icon">&#9670;</span>
+                <span class="pred-label">Resonance Score</span>
+                <span class="pred-value">78</span>
+              </div>
+              <div class="pred-layer">
+                <span class="pred-icon">&#9200;</span>
+                <span class="pred-label">Time Context</span>
+                <span class="pred-value">+6</span>
+              </div>
+              <div class="pred-layer">
+                <span class="pred-icon">&#9873;</span>
+                <span class="pred-label">Zone Quality</span>
+                <span class="pred-value">+4</span>
+              </div>
+              <div class="pred-layer">
+                <span class="pred-icon">&#9829;</span>
+                <span class="pred-label">Relationship Depth</span>
+                <span class="pred-value">+8</span>
+              </div>
+              <div class="pred-layer">
+                <span class="pred-icon">&#9788;</span>
+                <span class="pred-label">Fatigue Adjust</span>
+                <span class="pred-value">-3</span>
+              </div>
+              <div class="pred-equals">=</div>
+              <div class="pred-result">Predicted Quality: 93</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder 3 -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense: mid-content 2 -->
+      <span>Ad Placeholder (728x90)</span>
+    </div>
+  </div>
+
+  <!-- Step 7: Progressive Depth Layers -->
+  <section class="pipeline-step" id="step-7-progressive-depth">
+    <div class="container">
+      <div class="step-layout">
+        <div class="step-text">
+          <div class="step-number-badge">7</div>
+          <h2>Progressive Depth Layers</h2>
+          <p>Trust is not binary. It develops across multiple encounters, and Serendipity mirrors this reality with five progressive depth layers. Each layer reveals more nuanced personality insights and deeper compatibility analysis as you build genuine rapport with someone over time.</p>
+          <p><strong>Surface</strong> (gray) reveals basic interest overlap and energy compatibility from the very first ping. <strong>Context</strong> (blue) unlocks after a mutual acknowledgment, showing communication style and skill alignment. <strong>Character</strong> (purple) emerges after 2-3 encounters, surfacing Big Five personality data and values alignment. <strong>Shadow</strong> (amber) activates after 5+ encounters, revealing projected vs. perceived self and blind spots reframed as strengths. <strong>Resonance History</strong> (green) is the deepest layer, showing full encounter history patterns and the evolution of your connection over time.</p>
+          <a class="step-link" href="/protocol-explorer">Progressive depth in the protocol &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="depth-visual">
+              <div class="depth-circles">
+                <div class="depth-ring ring-5"><span class="depth-ring-label">Resonance History</span></div>
+                <div class="depth-ring ring-4"><span class="depth-ring-label">Shadow</span></div>
+                <div class="depth-ring ring-3"><span class="depth-ring-label">Character</span></div>
+                <div class="depth-ring ring-2"><span class="depth-ring-label">Context</span></div>
+                <div class="depth-ring ring-1"><span class="depth-ring-label">Surface</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 8: The Shadow Mirror -->
+  <section class="pipeline-step" id="step-8-shadow-mirror">
+    <div class="container">
+      <div class="step-layout reversed">
+        <div class="step-text">
+          <div class="step-number-badge">8</div>
+          <h2>The Shadow Mirror</h2>
+          <p>After five or more encounters with different people, the Shadow Profile activates. This is one of Serendipity's most distinctive features. It compares two images of you: the self you project through your transmissions, behavior patterns, and glyph choices, and the self others experience, as captured through the glyphs they leave for you and the encounter patterns that emerge.</p>
+          <p>The gap between these two images is where the deepest insights live. Hidden strengths you did not know you had. Blind spots that, reframed constructively, become growth edges. The Shadow Mirror never judges. It illuminates. And because it is built from aggregate patterns, no single encounter or person can distort it.</p>
+          <a class="step-link" href="/personality-science">Shadow psychology in Serendipity &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="shadow-visual">
+              <div class="silhouettes">
+                <div class="silhouette projected">
+                  <div class="silhouette-head"></div>
+                </div>
+                <div class="gap-zone">
+                  <span class="gap-label">INSIGHT GAP</span>
+                </div>
+                <div class="silhouette perceived">
+                  <div class="silhouette-head"></div>
+                </div>
+              </div>
+              <div class="shadow-legend">
+                <span><span class="legend-dot" style="background:var(--signal)"></span> Projected Self</span>
+                <span><span class="legend-dot" style="background:var(--ember)"></span> Perceived Self</span>
+                <span><span class="legend-dot" style="background:var(--mystic)"></span> Growth Edge</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 9: Collective Intelligence -->
+  <section class="pipeline-step" id="step-9-collective-intelligence">
+    <div class="container">
+      <div class="step-layout">
+        <div class="step-text">
+          <div class="step-number-badge">9</div>
+          <h2>Collective Intelligence</h2>
+          <p>The mesh learns collectively while protecting every individual. Using differential privacy, each device contributes noise-injected data to aggregate models: zone quality scores that help identify great spots for encounters, glyph effectiveness rankings that surface which reputation signals carry the most meaning, and dimension importance rankings that tune the resonance engine over time.</p>
+          <p>Every data point is injected with calibrated statistical noise before it leaves your device. The aggregate patterns become clear at scale, but no individual contribution can be reverse-engineered or traced back to a specific person. The result is a system that gets smarter for everyone without anyone sacrificing their privacy.</p>
+          <div class="step-note">Differential privacy with epsilon = 1.0 guarantees plausible deniability for every data point.</div>
+          <a class="step-link" href="/blog/zero-knowledge-social-app-rotating-beacons">Zero-knowledge architecture &#8594;</a>
+        </div>
+        <div class="step-visual">
+          <div class="visual-card">
+            <div class="mesh-visual">
+              <div class="mesh-devices">
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+                <div class="mesh-dot"></div>
+              </div>
+              <div class="mesh-noise-label">+ noise injection per device</div>
+              <div class="mesh-arrow-down"></div>
+              <div class="mesh-shield">&#9681;</div>
+              <div class="mesh-arrow-down"></div>
+              <div class="mesh-aggregate">AGGREGATE</div>
+              <div style="font-size:11px;color:var(--text-tertiary);margin-top:8px;text-align:center">No individual identifiable &middot; &#949; = 1.0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder 4 -->
+  <div class="container">
+    <div class="ad-slot">
+      <!-- AdSense: bottom content -->
+      <span>Ad Placeholder (728x90)</span>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Nine layers of intelligence.<br><em>Zero data on our servers.</em><br>All on your phone.</h2>
+      <p class="tagline">The most sophisticated social matching engine ever built, running entirely on your device.</p>
+      <div class="cta-row">
+        <a href="/waitlist" class="cta cta-primary">Join the Waitlist</a>
+        <a href="/resonance-calculator" class="cta cta-secondary">Test Your Resonance</a>
+        <a href="/protocol-explorer" class="cta cta-tertiary">Explore the Protocol</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Moonlit Social Labs</a>
+        <a href="/protocol">Tavern Protocol Spec</a>
+      </div>
+      <p>&copy; 2026 Moonlit Social Labs. Built on the Tavern Protocol.</p>
+    </div>
+  </footer>
+
+  <!-- Smooth scroll + animation on scroll -->
+  <script>
+    // Animate dimension bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          const fills = entry.target.querySelectorAll('.dim-fill');
+          fills.forEach(fill => {
+            const w = fill.style.width;
+            fill.style.width = '0%';
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                fill.style.width = w;
+              });
+            });
+          });
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.pipeline-step').forEach(step => {
+      observer.observe(step);
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

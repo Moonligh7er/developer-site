@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synapse Protocol — Your Community Has Already Agreed. They Just Don't Know It Yet.</title>
+<meta name="description" content="Free AI-powered platform that reveals the 70% agreement hidden beneath every civic debate. Government accountability. Community consensus. Policy alignment. Used by municipalities, advocates, and researchers.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --void: #050508; --void-light: #0a0a12; --cyan: #00f0ff; --violet: #a855f7;
+  --amber: #f0c040; --rose: #f43f5e; --emerald: #10b981;
+  --text: #e8e8f0; --text-dim: #8888a8; --text-faint: #555570;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--void); color: var(--text); font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace; line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { color: var(--cyan); text-decoration: none; transition: opacity 0.3s; }
+a:hover { opacity: 0.8; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ═══════ HERO ═══════ */
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,240,255,0.03) 0%, transparent 70%); }
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.hero-tag { font-size: 10px; letter-spacing: 0.5em; color: var(--text-faint); margin-bottom: 32px; display: block; }
+.hero h1 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 200; line-height: 1.2; margin-bottom: 24px; }
+.hero h1 em { font-style: normal; color: var(--cyan); text-shadow: 0 0 40px rgba(0,240,255,0.15); }
+.hero-sub { font-size: 15px; color: var(--text-dim); max-width: 600px; margin: 0 auto 48px; line-height: 1.8; }
+.hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-block; padding: 14px 36px; font-size: 10px; letter-spacing: 0.3em; font-family: inherit; border: 1px solid; cursor: pointer; transition: all 0.5s; text-transform: uppercase; }
+.btn-primary { border-color: rgba(0,240,255,0.4); color: var(--cyan); background: rgba(0,240,255,0.03); }
+.btn-primary:hover { background: rgba(0,240,255,0.08); border-color: rgba(0,240,255,0.7); }
+.btn-secondary { border-color: rgba(255,255,255,0.1); color: var(--text-dim); background: transparent; }
+.btn-secondary:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+
+/* ═══════ PROOF BAR ═══════ */
+.proof { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03); }
+.proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 24px; text-align: center; }
+.proof-num { font-size: 28px; font-weight: 200; }
+.proof-label { font-size: 8px; letter-spacing: 0.3em; color: var(--text-faint); margin-top: 4px; }
+
+/* ═══════ SECTIONS ═══════ */
+section { padding: 100px 0; }
+.section-tag { font-size: 10px; letter-spacing: 0.5em; color: var(--text-faint); margin-bottom: 16px; display: block; }
+.section-title { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 200; margin-bottom: 16px; line-height: 1.3; }
+.section-sub { font-size: 14px; color: var(--text-dim); max-width: 600px; margin-bottom: 48px; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,240,255,0.1), transparent); margin: 0; }
+
+/* ═══════ PROBLEM ═══════ */
+.problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.problem-card { padding: 32px; border: 1px solid rgba(255,255,255,0.04); border-radius: 2px; background: var(--void-light); }
+.problem-card h3 { font-size: 14px; font-weight: 400; margin-bottom: 4px; }
+.problem-card .source { font-size: 9px; letter-spacing: 0.2em; color: var(--text-faint); margin-bottom: 12px; }
+.problem-card p { font-size: 12px; color: var(--text-dim); }
+
+/* ═══════ INSIGHT ═══════ */
+.insight { padding: 80px 0; text-align: center; position: relative; }
+.insight::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(168,85,247,0.03) 0%, transparent 60%); }
+.insight blockquote { font-size: clamp(1rem, 3vw, 1.4rem); font-weight: 200; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+.insight blockquote em { font-style: normal; color: var(--violet); }
+.insight .example { font-size: 12px; color: var(--text-dim); max-width: 550px; margin: 24px auto 0; }
+
+/* ═══════ HOW IT WORKS ═══════ */
+.steps { counter-reset: step; }
+.step { display: grid; grid-template-columns: 80px 1fr; gap: 32px; margin-bottom: 56px; align-items: start; }
+.step-num { font-size: 48px; font-weight: 100; line-height: 1; }
+.step h3 { font-size: 16px; font-weight: 400; margin-bottom: 4px; }
+.step .step-sub { font-size: 10px; letter-spacing: 0.2em; color: var(--text-faint); margin-bottom: 12px; }
+.step p { font-size: 13px; color: var(--text-dim); }
+.step .detail { font-size: 11px; color: var(--text-faint); font-style: italic; margin-top: 8px; padding: 12px; border-left: 2px solid rgba(0,240,255,0.1); background: rgba(0,240,255,0.01); }
+
+/* ═══════ AUDIENCE CARDS ═══════ */
+.audience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.audience-card { padding: 32px; border: 1px solid rgba(255,255,255,0.04); border-radius: 2px; background: var(--void-light); transition: border-color 0.5s; }
+.audience-card:hover { border-color: rgba(0,240,255,0.15); }
+.audience-card h3 { font-size: 14px; margin-bottom: 6px; }
+.audience-card .role { font-size: 9px; letter-spacing: 0.2em; margin-bottom: 12px; }
+.audience-card ul { list-style: none; }
+.audience-card li { font-size: 12px; color: var(--text-dim); padding: 4px 0; padding-left: 16px; position: relative; }
+.audience-card li::before { content: '◇'; position: absolute; left: 0; font-size: 8px; }
+
+/* ═══════ FEATURE HIGHLIGHT ═══════ */
+.feature-highlight { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.fh-card { padding: 20px; border: 1px solid rgba(255,255,255,0.03); border-radius: 2px; }
+.fh-card h4 { font-size: 12px; margin-bottom: 6px; }
+.fh-card p { font-size: 11px; color: var(--text-faint); }
+
+/* ═══════ SOCIAL PROOF ═══════ */
+.testimonial { padding: 48px; border: 1px solid rgba(255,255,255,0.04); border-radius: 2px; text-align: center; margin: 40px 0; background: var(--void-light); }
+.testimonial blockquote { font-size: 14px; color: var(--text-dim); font-style: italic; max-width: 500px; margin: 0 auto 16px; }
+.testimonial cite { font-size: 10px; color: var(--text-faint); letter-spacing: 0.15em; }
+
+/* ═══════ PRICING ═══════ */
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.price-card { padding: 32px; border: 1px solid rgba(255,255,255,0.04); border-radius: 2px; text-align: center; }
+.price-card.featured { border-color: rgba(0,240,255,0.2); background: rgba(0,240,255,0.02); }
+.price-amount { font-size: 36px; font-weight: 200; margin: 12px 0 4px; }
+.price-period { font-size: 10px; color: var(--text-faint); letter-spacing: 0.15em; }
+.price-card h3 { font-size: 12px; letter-spacing: 0.3em; }
+.price-features { list-style: none; margin: 20px 0; text-align: left; }
+.price-features li { font-size: 11px; color: var(--text-dim); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.price-features li::before { content: '✓ '; color: var(--emerald); }
+
+/* ═══════ FINAL CTA ═══════ */
+.final-cta { padding: 120px 0; text-align: center; position: relative; }
+.final-cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at bottom, rgba(0,240,255,0.04) 0%, transparent 60%); }
+.final-cta h2 { font-size: clamp(1.5rem, 5vw, 3rem); font-weight: 200; margin-bottom: 16px; position: relative; z-index: 1; }
+.final-cta p { font-size: 14px; color: var(--text-dim); max-width: 500px; margin: 0 auto 40px; position: relative; z-index: 1; }
+
+/* ═══════ FOOTER ═══════ */
+.mini-footer { padding: 40px 0; border-top: 1px solid rgba(255,255,255,0.03); text-align: center; font-size: 10px; color: var(--text-faint); letter-spacing: 0.3em; }
+
+/* ═══════ RESPONSIVE ═══════ */
+@media (max-width: 640px) {
+  .step { grid-template-columns: 1fr; }
+  .step-num { font-size: 32px; }
+  .hero-cta { flex-direction: column; align-items: center; }
+  .btn { width: 100%; max-width: 300px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">CIVIC INFRASTRUCTURE FOR THE 21ST CENTURY</span>
+    <h1>Your community has already <em>agreed</em>.<br>They just don&rsquo;t know it yet.</h1>
+    <p class="hero-sub">Beneath every heated debate, there&rsquo;s a consensus hiding in plain sight. Synapse uses AI-mediated conversations to find it &mdash; then gives you the tools to make your government act on it.</p>
+    <div class="hero-cta">
+      <a href="/participate" class="btn btn-primary">PARTICIPATE FREE</a>
+      <a href="/features" class="btn btn-secondary">SEE ALL FEATURES</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PROOF BAR ═══════ -->
+<div class="proof">
+  <div class="container">
+    <div class="proof-grid">
+      <div><div class="proof-num" style="color:var(--cyan)">45+</div><div class="proof-label">FEATURES</div></div>
+      <div><div class="proof-num" style="color:var(--violet)">57</div><div class="proof-label">ENGINE MODULES</div></div>
+      <div><div class="proof-num" style="color:var(--emerald)">100%</div><div class="proof-label">OFFLINE-CAPABLE</div></div>
+      <div><div class="proof-num" style="color:var(--amber)">$0</div><div class="proof-label">FOR COMMUNITIES</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ THE PROBLEM ═══════ -->
+<section>
+  <div class="container">
+    <span class="section-tag">THE PROBLEM</span>
+    <h2 class="section-title">Every tool you&rsquo;re using is <span style="color:var(--rose)">architecturally broken</span></h2>
+    <p class="section-sub">They capture noise and call it signal.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <h3 style="color:var(--rose)">Social Media</h3>
+        <div class="source">ENGAGEMENT THROUGH CONFLICT</div>
+        <p>Algorithms surface the most divisive 30% of opinion because outrage drives clicks. The 70% of latent agreement is invisible.</p>
+      </div>
+      <div class="problem-card">
+        <h3 style="color:var(--amber)">Surveys &amp; Polls</h3>
+        <div class="source">LOW-FIDELITY SIGNAL</div>
+        <p>A thumbs-up, a 1&ndash;5 rating, a yes/no vote. These flatten the richness of human values into noise. A &ldquo;No&rdquo; could mean a dozen different things.</p>
+      </div>
+      <div class="problem-card">
+        <h3 style="color:var(--violet)">Town Halls</h3>
+        <div class="source">ACCESS-BIASED TESTIMONY</div>
+        <p>Biased toward people with time, confidence, and access. The loudest voice wins, not the most representative one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ THE INSIGHT ═══════ -->
+<section class="insight">
+  <div class="container">
+    <blockquote>&ldquo;Most disagreements are actually <em>the same underlying need</em> expressed through different cultural vocabularies.&rdquo;</blockquote>
+    <p class="example">&ldquo;Defund the police&rdquo; and &ldquo;Back the blue&rdquo; both contain people who want safe neighborhoods with accountable public servants. Synapse finds that signal.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ HOW IT WORKS ═══════ -->
+<section>
+  <div class="container">
+    <span class="section-tag">HOW IT WORKS</span>
+    <h2 class="section-title">Three transformations. <span style="color:var(--cyan)">One consensus.</span></h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num" style="color:var(--cyan)">01</div>
+        <div>
+          <h3>The Interview</h3>
+          <div class="step-sub" style="color:var(--cyan)">HIGH-FIDELITY SIGNAL CAPTURE</div>
+          <p>Users converse with an AI mediator trained in Motivational Interviewing and Nonviolent Communication. No surveys. No polls. A real conversation that extracts underlying values &mdash; not just surface positions. Cognitive biases are detected and gently counteracted in real time.</p>
+          <div class="detail">A &ldquo;No&rdquo; on a bike lane becomes: &ldquo;Supports cycling infrastructure conditionally. Requires: parking mitigation. Core value: economic vitality.&rdquo;</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="color:var(--violet)">02</div>
+        <div>
+          <h3>The Synthesis</h3>
+          <div class="step-sub" style="color:var(--violet)">CONSENSUS CRYSTALLIZATION</div>
+          <p>Thousands of interviews are processed through semantic clustering &mdash; grouping responses not by for/against, but by underlying value similarity. The algorithm finds what people agree on when you look at values instead of vocabulary. Bayesian confidence scoring tells you exactly how certain each finding is.</p>
+          <div class="detail">A policy simulator lets officials compose proposals and see predicted support shift in real time. &ldquo;Add a trial period: +28%. Add parking alternatives: +25%.&rdquo;</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="color:var(--amber)">03</div>
+        <div>
+          <h3>The Action</h3>
+          <div class="step-sub" style="color:var(--amber)">ACCOUNTABILITY &amp; ADVOCACY</div>
+          <p>The output isn&rsquo;t a report that sits on a shelf. It&rsquo;s a living system: testimony scripts for council meetings, petition generators, FOIA request letters, governance scorecards, campaign finance correlation, voter guides, and real-time monitoring alerts. From insight to action in one platform.</p>
+          <div class="detail">Every artifact is auto-generated from your data with copy/download buttons. Walk into a public hearing with a data-backed testimony script and counter-arguments ready.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ WHO IT'S FOR ═══════ -->
+<section>
+  <div class="container">
+    <span class="section-tag">WHO IT&rsquo;S FOR</span>
+    <h2 class="section-title">Five audiences. <span style="color:var(--violet)">One platform.</span></h2>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <h3 style="color:var(--cyan)">Community Members</h3>
+        <div class="role" style="color:var(--cyan)">YOUR VOICE, ACTUALLY HEARD</div>
+        <ul>
+          <li>5-minute AI conversation (not a survey)</li>
+          <li>See your values mapped in real time</li>
+          <li>Discover you share values with your &ldquo;opponents&rdquo;</li>
+          <li>Voice input &mdash; just talk</li>
+          <li>Works offline, saves automatically</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h3 style="color:var(--amber)">Advocates &amp; Organizers</h3>
+        <div class="role" style="color:var(--amber)">FROM INSIGHT TO ACTION</div>
+        <ul>
+          <li>Auto-generated testimony, petitions, FOIA requests</li>
+          <li>Coalition builder finds natural allies</li>
+          <li>Power mapping: who to talk to, what to say</li>
+          <li>Campaign finance &ldquo;follow the money&rdquo; analysis</li>
+          <li>Canvassing plans targeting underrepresented areas</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h3 style="color:var(--violet)">Elected Officials</h3>
+        <div class="role" style="color:var(--violet)">KNOW WHAT YOUR CONSTITUENTS ACTUALLY WANT</div>
+        <ul>
+          <li>Policy simulator: test proposals before committing</li>
+          <li>Ask the data questions in plain English</li>
+          <li>Comparative precedent: what other cities did</li>
+          <li>Budget alignment: are you spending where they care?</li>
+          <li>Build trust with transparent, auditable process</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h3 style="color:var(--emerald)">Journalists &amp; Researchers</h3>
+        <div class="role" style="color:var(--emerald)">DATA YOU CAN TRUST</div>
+        <ul>
+          <li>Every finding is cryptographically auditable</li>
+          <li>Bayesian confidence intervals, not just percentages</li>
+          <li>Media narrative gap analysis (your coverage vs reality)</li>
+          <li>Export: JSON, Markdown, GeoJSON</li>
+          <li>Methodology grounded in peer-reviewed science</li>
+        </ul>
+      </div>
+      <div class="audience-card">
+        <h3 style="color:var(--rose)">Municipal Administrators</h3>
+        <div class="role" style="color:var(--rose)">THE INFRASTRUCTURE LAYER</div>
+        <ul>
+          <li>Admin panel for data entry (officials, budgets, records)</li>
+          <li>AI-assisted issue framing (bias detection before you start)</li>
+          <li>Outcome tracking: did the decision work?</li>
+          <li>Cross-community intelligence from similar cities</li>
+          <li>API for integration with existing systems</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ ACCOUNTABILITY HIGHLIGHT ═══════ -->
+<section>
+  <div class="container">
+    <span class="section-tag">ACCOUNTABILITY ENGINE</span>
+    <h2 class="section-title">20 modules. <span style="color:var(--rose)">Zero hiding.</span></h2>
+    <p class="section-sub">The most comprehensive government accountability toolkit ever built into a civic platform.</p>
+    <div class="feature-highlight">
+      <div class="fh-card"><h4 style="color:var(--rose)">Representation Scoring</h4><p>Grade every official against community consensus</p></div>
+      <div class="fh-card"><h4 style="color:var(--amber)">Budget Alignment</h4><p>Compare spending to community priorities</p></div>
+      <div class="fh-card"><h4 style="color:var(--rose)">Campaign Finance</h4><p>Correlate donations with voting patterns</p></div>
+      <div class="fh-card"><h4 style="color:var(--violet)">Transparency Scoring</h4><p>7-dimension governance process quality</p></div>
+      <div class="fh-card"><h4 style="color:var(--cyan)">Policy Simulator</h4><p>Test proposals against predicted support</p></div>
+      <div class="fh-card"><h4 style="color:var(--emerald)">Outcome Tracking</h4><p>Did the prediction come true?</p></div>
+      <div class="fh-card"><h4 style="color:var(--amber)">Electoral Guides</h4><p>Non-partisan candidate alignment</p></div>
+      <div class="fh-card"><h4 style="color:var(--rose)">Corporate Accountability</h4><p>Track promises vs delivery</p></div>
+      <div class="fh-card"><h4 style="color:var(--violet)">Media Gap Analysis</h4><p>When coverage doesn&rsquo;t match reality</p></div>
+      <div class="fh-card"><h4 style="color:var(--cyan)">FOIA Generator</h4><p>State-specific records requests</p></div>
+      <div class="fh-card"><h4 style="color:var(--emerald)">Rights Mapping</h4><p>Legal frameworks behind consensus</p></div>
+      <div class="fh-card"><h4 style="color:var(--amber)">Predictive Model</h4><p>Who will vote against constituents?</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ SCIENCE ═══════ -->
+<section>
+  <div class="container">
+    <span class="section-tag">THE SCIENCE</span>
+    <h2 class="section-title">Not vibes. <span style="color:var(--emerald)">Peer-reviewed methodology.</span></h2>
+    <p class="section-sub">Every module is grounded in established research.</p>
+    <div class="feature-highlight">
+      <div class="fh-card"><h4>Motivational Interviewing</h4><p>1,500+ clinical trials. The gold standard for eliciting authentic self-disclosure.</p></div>
+      <div class="fh-card"><h4>Schwartz Value Theory</h4><p>Validated cross-culturally in 82 countries. 10 universal value types.</p></div>
+      <div class="fh-card"><h4>Bayesian Statistics</h4><p>Credible intervals, not p-values. You know exactly how certain each finding is.</p></div>
+      <div class="fh-card"><h4>Toulmin Argumentation</h4><p>Distinguishes value disagreements from factual ones. Different problems, different solutions.</p></div>
+      <div class="fh-card"><h4>DBSCAN Clustering</h4><p>Finds natural group boundaries without imposing structure. No pre-specified number of clusters.</p></div>
+      <div class="fh-card"><h4>Deliberative Polling</h4><p>Fishkin&rsquo;s methodology: show people opposing views, then re-assess. Consensus improves.</p></div>
+      <div class="fh-card"><h4>Discourse Quality Index</h4><p>Steiner&rsquo;s DQI. The gold standard for measuring deliberation quality.</p></div>
+      <div class="fh-card"><h4>Merkle Tree Provenance</h4><p>Cryptographic audit trail. Every finding is mathematically verifiable.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ PRICING ═══════ -->
+<section id="pricing">
+  <div class="container">
+    <span class="section-tag">PRICING</span>
+    <h2 class="section-title">Free for communities. <span style="color:var(--cyan)">Scales with impact.</span></h2>
+    <div class="pricing-grid">
+      <div class="price-card featured">
+        <h3 style="color:var(--cyan)">COMMUNITY</h3>
+        <div class="price-amount" style="color:var(--cyan)">Free</div>
+        <div class="price-period">FOREVER</div>
+        <ul class="price-features">
+          <li>AI-mediated interviews</li>
+          <li>Consensus synthesis dashboard</li>
+          <li>Full advocacy toolkit</li>
+          <li>Accountability tracking</li>
+          <li>Policy simulator</li>
+          <li>Up to 500 perspectives per issue</li>
+          <li>Offline-first, works anywhere</li>
+        </ul>
+        <a href="/participate" class="btn btn-primary" style="width:100%;text-align:center">GET STARTED</a>
+      </div>
+      <div class="price-card">
+        <h3 style="color:var(--violet)">MUNICIPAL</h3>
+        <div class="price-amount" style="color:var(--violet)">$2,500</div>
+        <div class="price-period">PER MONTH</div>
+        <ul class="price-features">
+          <li>Everything in Community</li>
+          <li>Unlimited perspectives</li>
+          <li>Admin panel &amp; data management</li>
+          <li>API access</li>
+          <li>Priority support</li>
+          <li>Governance scorecard</li>
+          <li>Cross-community intelligence</li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary" style="width:100%;text-align:center">CONTACT SALES</a>
+      </div>
+      <div class="price-card">
+        <h3 style="color:var(--amber)">ENTERPRISE</h3>
+        <div class="price-amount" style="color:var(--amber)">Custom</div>
+        <div class="price-period">LET&rsquo;S TALK</div>
+        <ul class="price-features">
+          <li>Everything in Municipal</li>
+          <li>Multi-jurisdiction support</li>
+          <li>Custom integrations (GIS, CRM)</li>
+          <li>Dedicated account manager</li>
+          <li>SLA &amp; uptime guarantee</li>
+          <li>White-label option</li>
+          <li>On-premise deployment available</li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary" style="width:100%;text-align:center">CONTACT SALES</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════ FINAL CTA ═══════ -->
+<section class="final-cta">
+  <div class="container">
+    <h2>The question isn&rsquo;t whether your community agrees.<br><span style="color:var(--cyan)">It&rsquo;s whether anyone has bothered to ask.</span></h2>
+    <p>Start listening. Start holding power accountable. Start building the infrastructure for agreement.</p>
+    <div class="hero-cta">
+      <a href="/participate" class="btn btn-primary">PARTICIPATE NOW</a>
+      <a href="/s/features" class="btn btn-secondary">EXPLORE FEATURES</a>
+      <a href="/demo" class="btn btn-secondary">WATCH THE DEMO</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="mini-footer">
+  <div class="container">
+    CONSENSUAL REALITY PROTOCOL // SYNAPSE v0.1.0 // MOONLIT SOCIAL LABS
+    <br><br>
+    <a href="/" style="color:var(--text-faint)">Home</a> &nbsp;&middot;&nbsp;
+    <a href="/s/features" style="color:var(--text-faint)">Features</a> &nbsp;&middot;&nbsp;
+    <a href="/s/about" style="color:var(--text-faint)">About</a> &nbsp;&middot;&nbsp;
+    <a href="/docs" style="color:var(--text-faint)">API</a> &nbsp;&middot;&nbsp;
+    <a href="/s/privacy" style="color:var(--text-faint)">Privacy</a> &nbsp;&middot;&nbsp;
+    <a href="/s/terms" style="color:var(--text-faint)">Terms</a> &nbsp;&middot;&nbsp;
+    <a href="https://ko-fi.com/moonlitsociallabs" style="color:var(--amber)" target="_blank" rel="noopener">Support on Ko-fi</a>
+  </div>
+</footer>
+
+</body>
+</html>

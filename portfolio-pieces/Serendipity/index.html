@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary SEO -->
+  <title>Serendipity – Discover Compatible People Nearby | Bluetooth Proximity Social App</title>
+  <meta name="description" content="Serendipity finds compatible people within 50 meters using Bluetooth. No swiping, no profiles. Just real-world encounters based on shared interests, skills, and energy. Privacy-first, end-to-end encrypted.">
+  <meta name="keywords" content="proximity social app, bluetooth social discovery, meet people nearby, find collaborators, networking app, privacy social app, encrypted social, BLE mesh, local meetup, serendipity app, tavern protocol, find like-minded people, nearby interests, social mesh">
+  <meta name="author" content="Moonlit Social Labs">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://serendipity.app">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://serendipity.app">
+  <meta property="og:title" content="Serendipity – Discover Compatible People Nearby">
+  <meta property="og:description" content="Your city is full of brilliant people. Stop being ghosts to each other. Bluetooth-powered proximity discovery with end-to-end encryption.">
+  <meta property="og:image" content="https://serendipity.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Serendipity">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://serendipity.app">
+  <meta name="twitter:title" content="Serendipity – Discover Compatible People Nearby">
+  <meta name="twitter:description" content="Bluetooth-powered proximity social discovery. No swiping. No profiles. Just real encounters with people who share your wavelength.">
+  <meta name="twitter:image" content="https://serendipity.app/og-image.png">
+
+  <!-- App Links -->
+  <meta property="al:ios:app_store_id" content="YOUR_APP_STORE_ID">
+  <meta property="al:ios:url" content="serendipity://">
+  <meta property="al:ios:app_name" content="Serendipity">
+  <meta property="al:android:package" content="com.serendipity.tavern">
+  <meta property="al:android:url" content="serendipity://">
+  <meta property="al:android:app_name" content="Serendipity">
+  <meta property="al:web:url" content="https://serendipity.app">
+
+  <!-- Smart App Banner (iOS Safari) -->
+  <meta name="apple-itunes-app" content="app-id=YOUR_APP_STORE_ID">
+
+  <!-- Theme -->
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="msapplication-TileColor" content="#0A0A0F">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobileApplication",
+    "name": "Serendipity",
+    "alternateName": "Serendipity - Nearby Minds",
+    "description": "Privacy-first proximity social discovery app. Uses Bluetooth to find compatible people within 50 meters based on shared interests, skills, and energy.",
+    "url": "https://serendipity.app",
+    "applicationCategory": "SocialNetworkingApplication",
+    "operatingSystem": "iOS, Android",
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "name": "Wanderer (Free)"
+      },
+      {
+        "@type": "Offer",
+        "price": "4.99",
+        "priceCurrency": "USD",
+        "name": "Signal",
+        "description": "100m range, full resonance breakdown, mesh statistics"
+      },
+      {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "name": "Resonance",
+        "description": "200m range, mesh graph, group detection, priority routing"
+      },
+      {
+        "@type": "Offer",
+        "price": "99.99",
+        "priceCurrency": "USD",
+        "name": "Founder (Lifetime)",
+        "description": "All features, forever. Limited to first 1,000 users."
+      }
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "Moonlit Social Labs",
+      "url": "https://ko-fi.com/moonlitsociallabs"
+    },
+    "featureList": [
+      "Bluetooth proximity detection within 50m",
+      "Multi-dimensional resonance matching",
+      "End-to-end encrypted communications",
+      "Zero-knowledge proximity (location never leaves device)",
+      "Glyph reputation system",
+      "Ephemeral chat channels",
+      "Group resonance detection",
+      "Personal mesh graph visualization",
+      "Adaptive power management"
+    ],
+    "screenshot": "https://serendipity.app/screenshots/mesh-radar.png"
+  }
+  </script>
+
+  <!-- FAQ Structured Data (boosts search snippets) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does Serendipity find people near me?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Serendipity uses Bluetooth Low Energy (BLE) to detect nearby devices running the app within 50 meters. It compares your transmission (interests, skills, energy) with nearby users and computes a multi-dimensional resonance score entirely on your device. No location data is ever sent to a server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Serendipity private and secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Serendipity uses a zero-knowledge architecture: your location never leaves your device, all communications are end-to-end encrypted using X25519 key exchange, and your beacon ID rotates every 15 minutes to prevent tracking. No central server ever knows where you are."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Serendipity a dating app?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Serendipity is a proximity-based social discovery app for finding collaborators, mentors, study partners, conversation partners, and like-minded people. It matches based on interests, skills, and intellectual compatibility — not photos or demographics."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Tavern Protocol?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Tavern Protocol is an open, decentralized specification for proximity-based human discovery. It defines how devices broadcast encrypted transmission fingerprints, compute compatibility on-device, and facilitate mutual encounters — all without a central server knowing your location."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does Serendipity cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The core experience is free forever (Wanderer tier with 3 pings per day). Premium tiers unlock extended range, full resonance breakdowns, mesh statistics, and more: Signal at $4.99/mo or $39.99/year (save 33%), Resonance at $9.99/mo or $79.99/year (save 33%), or Founder at $99.99 one-time for lifetime access. Limited to first 1,000 users."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --void: #0A0A0F;
+      --surface: #14141E;
+      --card: #1E1E2E;
+      --ember: #F59E0B;
+      --ember-glow: rgba(245, 158, 11, 0.1);
+      --ember-bright: #FBBF24;
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-tertiary: #475569;
+      --border: rgba(255, 255, 255, 0.06);
+      --success: #10B981;
+      --signal: #3B82F6;
+      --mystic: #8B5CF6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--void);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    .container-narrow { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── Fade-in Animations ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span { color: var(--ember); }
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ember); }
+    .nav-cta {
+      background: var(--ember);
+      color: var(--void) !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 700 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 160px 0 120px;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Radar Pulse */
+    .radar-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: 800px;
+      pointer-events: none;
+    }
+    .radar-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      border: 1px solid var(--ember);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+      animation: radar-pulse 4s cubic-bezier(0, 0.4, 0.6, 1) infinite;
+    }
+    .radar-ring:nth-child(1) { animation-delay: 0s; }
+    .radar-ring:nth-child(2) { animation-delay: 1s; }
+    .radar-ring:nth-child(3) { animation-delay: 2s; }
+    .radar-ring:nth-child(4) { animation-delay: 3s; }
+
+    @keyframes radar-pulse {
+      0% {
+        width: 0;
+        height: 0;
+        opacity: 0.35;
+        transform: translate(-50%, -50%) scale(0);
+      }
+      100% {
+        width: 800px;
+        height: 800px;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5.5vw, 58px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.15;
+      margin-bottom: 28px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--ember);
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 48px;
+      line-height: 1.7;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 18px 36px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .cta:hover { transform: translateY(-2px); }
+    .cta-primary {
+      background: var(--ember);
+      color: var(--void);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.15);
+    }
+    .cta-primary:hover {
+      box-shadow: 0 0 60px rgba(245, 158, 11, 0.25);
+    }
+    .cta-secondary {
+      background: var(--card);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .cta-secondary:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* ─── Sections ─── */
+    .section {
+      padding: 120px 0;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+    .section-center {
+      text-align: center;
+    }
+    .section-center .section-subtitle {
+      margin: 0 auto;
+    }
+
+    /* ─── Problem ─── */
+    .problem-section {
+      background: linear-gradient(180deg, var(--void) 0%, var(--surface) 50%, var(--void) 100%);
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin: 60px 0;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      display: block;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 900;
+      color: var(--ember);
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .problem-quote {
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-primary);
+      font-style: italic;
+      line-height: 1.6;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .problem-quote em {
+      font-style: normal;
+      color: var(--ember);
+    }
+
+    /* ─── How It Works ─── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 48px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--ember), var(--ember), transparent);
+      opacity: 0.2;
+    }
+    .step {
+      text-align: center;
+      position: relative;
+    }
+    .step-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 36px;
+      position: relative;
+      z-index: 2;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .step:hover .step-icon {
+      border-color: var(--ember);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.1);
+    }
+    .step-number {
+      position: absolute;
+      top: -8px;
+      right: -4px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--ember);
+      color: var(--void);
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+    }
+    .step h3 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── Feature Stories ─── */
+    .feature-story {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-bottom: 120px;
+    }
+    .feature-story:last-child { margin-bottom: 0; }
+    .feature-story.reversed { direction: rtl; }
+    .feature-story.reversed > * { direction: ltr; }
+    .feature-story-visual {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-story-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--ember-glow) 0%, transparent 70%);
+      opacity: 0.5;
+    }
+    .visual-icon {
+      font-size: 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .feature-story-text .section-label { margin-bottom: 12px; }
+    .feature-story-title {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .feature-story-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .feature-tag {
+      display: inline-block;
+      background: var(--ember-glow);
+      color: var(--ember);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 6px;
+      margin-top: 16px;
+    }
+
+    /* ─── Depth Layers ─── */
+    .depth-layers {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 48px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .depth-layer {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .depth-layer:first-child { border-radius: 16px 16px 0 0; }
+    .depth-layer:last-child { border-radius: 0 0 16px 16px; }
+    .depth-layer:hover {
+      border-color: var(--ember);
+      background: rgba(245, 158, 11, 0.03);
+    }
+    .depth-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--ember-glow);
+      color: var(--ember);
+      font-weight: 800;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .depth-name {
+      font-weight: 700;
+      font-size: 15px;
+      min-width: 100px;
+    }
+    .depth-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Science ─── */
+    .science-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 48px;
+    }
+    .science-tag {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .science-tag:hover {
+      color: var(--ember);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    /* ─── Persona Cards ─── */
+    .persona-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .persona-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .persona-card:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-4px);
+    }
+    .persona-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .persona-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .persona-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ─── Pricing ─── */
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+    }
+    .tier {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .tier:hover {
+      transform: translateY(-4px);
+    }
+    .tier-popular {
+      border-color: var(--mystic);
+      border-width: 2px;
+      position: relative;
+      background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, var(--card) 100%);
+    }
+    .tier-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--mystic);
+      color: white;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+    .tier-founder {
+      border-color: var(--ember);
+      border-width: 2px;
+      position: relative;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, var(--card) 100%);
+    }
+    .tier-founder-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ember);
+      color: var(--void);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+    .tier-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .tier-price {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--ember);
+      line-height: 1.1;
+    }
+    .tier-period {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .tier-features {
+      list-style: none;
+      text-align: left;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .tier-features li {
+      padding: 5px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .tier-features li::before {
+      content: "\2713";
+      color: var(--ember);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ─── Final CTA ─── */
+    .final-cta {
+      text-align: center;
+      padding: 120px 0 140px;
+      position: relative;
+      overflow: hidden;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .final-cta-title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .final-cta-sub {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+      max-width: 520px;
+      margin: 0 auto 20px;
+      position: relative;
+    }
+    .waitlist-form input {
+      flex: 1;
+      padding: 16px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .waitlist-form input:focus {
+      border-color: var(--ember);
+    }
+    .waitlist-form input::placeholder {
+      color: var(--text-tertiary);
+    }
+    .waitlist-form button {
+      padding: 16px 28px;
+      background: var(--ember);
+      color: var(--void);
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .waitlist-form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(245, 158, 11, 0.2);
+    }
+    .waitlist-counter {
+      font-size: 14px;
+      color: var(--text-tertiary);
+      position: relative;
+    }
+    .waitlist-counter span {
+      color: var(--ember);
+      font-weight: 700;
+    }
+    .waitlist-success {
+      display: none;
+      color: var(--success);
+      font-weight: 600;
+      font-size: 15px;
+      margin-top: 12px;
+      position: relative;
+    }
+
+    /* ─── AdSense Placeholder ─── */
+    .ad-slot {
+      max-width: 728px;
+      margin: 0 auto;
+      padding: 20px 0;
+      text-align: center;
+      min-height: 90px;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 14px;
+    }
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--ember); }
+    .footer-links {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      color: var(--text-tertiary);
+    }
+
+    /* ─── Divider ─── */
+    .section-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--ember);
+      margin: 0 auto 40px;
+      opacity: 0.4;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .steps::before { display: none; }
+      .feature-story { grid-template-columns: 1fr; gap: 40px; }
+      .feature-story.reversed { direction: ltr; }
+      .pricing { grid-template-columns: repeat(2, 1fr); }
+      .persona-grid { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 120px 0 80px; min-height: auto; }
+      .section { padding: 80px 0; }
+      .cta-row { flex-direction: column; align-items: center; }
+      .steps { grid-template-columns: 1fr; max-width: 320px; margin-left: auto; margin-right: auto; }
+      .pricing { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: 1fr; gap: 32px; }
+      .nav-links { display: none; }
+      .waitlist-form { flex-direction: column; }
+      .depth-layer { flex-direction: column; text-align: center; gap: 8px; }
+      .depth-name { min-width: auto; }
+      .feature-story-visual { aspect-ratio: auto; padding: 40px; min-height: 200px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="/" class="nav-brand"><span>S</span>erendipity</a>
+      <div class="nav-links">
+        <a href="/features">Features</a>
+        <a href="/how-matching-works">Matching</a>
+        <a href="/about">About</a>
+        <a href="/blog">Blog</a>
+        <a href="/waitlist" class="nav-cta">Join Waitlist</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ Section 1: Hero ═══ -->
+  <section class="hero">
+    <div class="radar-container" aria-hidden="true">
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+      <div class="radar-ring"></div>
+    </div>
+    <div class="hero-content container">
+      <h1 class="reveal">Your city is full of people who could <em>change your life.</em><br>You walk past them every day.</h1>
+      <p class="hero-sub reveal reveal-delay-1">Serendipity uses Bluetooth to detect compatible people nearby — and tells you when someone who shares your interests, matches your thinking style, or complements your skills is sitting three tables away. No profiles. No swiping. No surveillance. Just the oldest form of human connection, finally given the technology it deserves.</p>
+      <div class="cta-row reveal reveal-delay-2">
+        <a href="/waitlist" class="cta cta-primary">Join the Waitlist</a>
+        <a href="#how-it-works" class="cta cta-secondary">See How It Works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Section 2: The Problem ═══ -->
+  <section class="section problem-section">
+    <div class="container section-center">
+      <span class="section-label reveal">The Disconnect</span>
+      <h2 class="section-title reveal">You're surrounded by people.<br>Connected to none.</h2>
+
+      <div class="stat-grid reveal">
+        <div class="stat">
+          <span class="stat-number">58%</span>
+          <span class="stat-label">of adults describe themselves as lonely, even in cities of millions</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">73%</span>
+          <span class="stat-label">decline in time spent at "third places" since 1999</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">1 in 4</span>
+          <span class="stat-label">people have zero close friends — double the rate from 1990</span>
+        </div>
+      </div>
+
+      <p class="problem-quote reveal">The person who could become your cofounder, your mentor, your closest friend — they were in the same cafe as you <em>last Tuesday.</em> Neither of you knew.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Section 3: How It Works ═══ -->
+  <section class="section" id="how-it-works">
+    <div class="container section-center">
+      <span class="section-label reveal">How It Works</span>
+      <h2 class="section-title reveal">Four moments between<br>strangers and connection.</h2>
+      <p class="section-subtitle reveal" style="margin: 0 auto;">No accounts to fill out. No algorithms watching what you click. Just physics, proximity, and math running quietly on your phone.</p>
+
+      <div class="steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-icon">
+            <span class="step-number">1</span>
+            &#9672;
+          </div>
+          <h3>Broadcast your signal</h3>
+          <p>Set your transmission — what you're working on, what you're curious about, what kind of connection you're seeking. It updates as you do.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-icon">
+            <span class="step-number">2</span>
+            &#9681;
+          </div>
+          <h3>The mesh listens</h3>
+          <p>Bluetooth Low Energy detects compatible people within range. Resonance is scored across 27 dimensions — entirely on your device. No server ever sees the data.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-icon">
+            <span class="step-number">3</span>
+            &#10023;
+          </div>
+          <h3>A ping in your pocket</h3>
+          <p>When someone resonates, you both feel it — a haptic pulse whose intensity matches the connection strength. A whisper from the mesh.</p>
+        </div>
+        <div class="step reveal reveal-delay-4">
+          <div class="step-icon">
+            <span class="step-number">4</span>
+            &#9673;
+          </div>
+          <h3>The encounter unfolds</h3>
+          <p>Mutual handshake. Transmissions revealed. Meet, talk, discover. When it's over, exchange glyphs — one word that captures what the encounter meant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Section 4: What Makes This Different ═══ -->
+  <section class="section" style="background: linear-gradient(180deg, var(--void) 0%, var(--surface) 100%);">
+    <div class="container">
+      <div class="section-center" style="margin-bottom: 100px;">
+        <span class="section-label reveal">What Makes This Different</span>
+        <h2 class="section-title reveal">Not a social app.<br>A perception upgrade.</h2>
+      </div>
+
+      <!-- Story 1: Psychological Frameworks -->
+      <div class="feature-story reveal">
+        <div class="feature-story-visual">
+          <span class="visual-icon">&#9670;</span>
+        </div>
+        <div class="feature-story-text">
+          <span class="section-label">Resonance Engine</span>
+          <h3 class="feature-story-title">27 psychological frameworks.<br>Zero data on our servers.</h3>
+          <p class="feature-story-desc">Big Five personality. Schwartz Values. Jungian cognitive functions. Attachment theory. Kegan developmental stages. All inferred from behavior patterns, all computed on your phone. The result is a resonance score that captures something dating apps and LinkedIn have never even attempted: whether two people will actually <em>matter</em> to each other.</p>
+          <a href="/personality-science" class="feature-tag">Explore the science &#8594;</a>
+        </div>
+      </div>
+
+      <!-- Story 2: Behavioral Fingerprinting -->
+      <div class="feature-story reversed reveal">
+        <div class="feature-story-visual">
+          <span class="visual-icon">&#11043;</span>
+        </div>
+        <div class="feature-story-text">
+          <span class="section-label">Shadow Profiles</span>
+          <h3 class="feature-story-title">It learns who you actually are, not who you say you are.</h3>
+          <p class="feature-story-desc">Most apps ask you to describe yourself. But people are unreliable narrators of their own personalities. Serendipity watches how you interact — which pings you respond to, which glyphs you leave, when your engagement deepens — and builds a behavioral fingerprint that reveals the real you. Including the parts you haven't met yet.</p>
+          <a href="/how-matching-works" class="feature-tag">How matching works &#8594;</a>
+        </div>
+      </div>
+
+      <!-- Story 3: Progressive Depth -->
+      <div class="feature-story reveal">
+        <div class="feature-story-visual" style="padding: 24px;">
+          <div style="width: 100%; position: relative; z-index: 1;">
+            <div class="depth-layers" style="margin-top: 0;">
+              <div class="depth-layer">
+                <span class="depth-number">1</span>
+                <span class="depth-name">Surface</span>
+                <span class="depth-desc">Interests, topics, current project</span>
+              </div>
+              <div class="depth-layer">
+                <span class="depth-number">2</span>
+                <span class="depth-name">Context</span>
+                <span class="depth-desc">Skills, experience, domain expertise</span>
+              </div>
+              <div class="depth-layer">
+                <span class="depth-number">3</span>
+                <span class="depth-name">Character</span>
+                <span class="depth-desc">Values, thinking style, communication</span>
+              </div>
+              <div class="depth-layer">
+                <span class="depth-number">4</span>
+                <span class="depth-name">Shadow</span>
+                <span class="depth-desc">Behavioral patterns, growth edges</span>
+              </div>
+              <div class="depth-layer">
+                <span class="depth-number">5</span>
+                <span class="depth-name">Resonance</span>
+                <span class="depth-desc">History, encounter outcomes, glyph patterns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="feature-story-text">
+          <span class="section-label">Progressive Depth</span>
+          <h3 class="feature-story-title">The deeper you go, the more it reveals.</h3>
+          <p class="feature-story-desc">Serendipity doesn't dump your personality on a screen. It unfolds in layers — Surface, Context, Character, Shadow, and Resonance History. Each encounter, each glyph, each pattern of engagement unlocks new dimensions. The app grows with you because it's measuring <em>you</em> growing.</p>
+          <a href="/how-connection-works" class="feature-tag">How connection deepens &#8594;</a>
+        </div>
+      </div>
+
+      <!-- Story 4: Prediction -->
+      <div class="feature-story reversed reveal">
+        <div class="feature-story-visual">
+          <span class="visual-icon">&#10024;</span>
+        </div>
+        <div class="feature-story-text">
+          <span class="section-label">Encounter Quality</span>
+          <h3 class="feature-story-title">It predicts the encounters that will matter.</h3>
+          <p class="feature-story-desc">Not just "you have things in common." Serendipity models flow states, broaden-and-build cascading, and encounter quality trajectories to predict which meetings will actually change the shape of your week. Over time, it learns the difference between someone you'd enjoy coffee with and someone who could alter the course of your life.</p>
+          <a href="/resonance-calculator" class="feature-tag">Try the resonance calculator &#8594;</a>
+        </div>
+      </div>
+
+      <!-- Story 5: Safety Architecture -->
+      <div class="feature-story reveal">
+        <div class="feature-story-visual">
+          <span class="visual-icon">&#9678;</span>
+        </div>
+        <div class="feature-story-text">
+          <span class="section-label">Zero-Knowledge Architecture</span>
+          <h3 class="feature-story-title">Safety isn't a feature. It's the architecture.</h3>
+          <p class="feature-story-desc">Beacon IDs rotate every 15 minutes. All resonance scoring happens on-device. End-to-end encryption means we can't read your data even if compelled. Buddy beacons let a trusted friend monitor encounters. Boundary normalization makes it feel natural to say "not right now." This isn't privacy theater — it's privacy engineering.</p>
+          <a href="/privacy" class="feature-tag">Read the privacy architecture &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Section 5: The Science ═══ -->
+  <section class="section" style="background: linear-gradient(180deg, var(--surface) 0%, var(--void) 100%);">
+    <div class="container section-center">
+      <span class="section-label reveal">The Foundation</span>
+      <h2 class="section-title reveal">Grounded in 50+ years<br>of validated research.</h2>
+      <p class="section-subtitle reveal" style="margin: 0 auto;">Every dimension of the resonance engine maps to peer-reviewed psychological research. This isn't astrology. (Well, there's also optional astrology.)</p>
+
+      <div class="science-grid reveal">
+        <span class="science-tag">Big Five Personality</span>
+        <span class="science-tag">Schwartz Values Theory</span>
+        <span class="science-tag">Attachment Theory</span>
+        <span class="science-tag">Jungian Cognitive Functions</span>
+        <span class="science-tag">Polyvagal Theory</span>
+        <span class="science-tag">Flow Theory</span>
+        <span class="science-tag">Broaden-and-Build</span>
+        <span class="science-tag">Kegan Development</span>
+        <span class="science-tag">Self-Determination Theory</span>
+        <span class="science-tag">Interpersonal Circumplex</span>
+        <span class="science-tag">Cognitive Load Theory</span>
+        <span class="science-tag">Social Identity Theory</span>
+        <span class="science-tag">Complementarity Hypothesis</span>
+        <span class="science-tag">Optimal Distinctiveness</span>
+        <span class="science-tag">Synastry (optional)</span>
+      </div>
+
+      <div style="margin-top: 40px;" class="reveal">
+        <a href="/personality-science" class="cta cta-secondary">Explore the Science &#8594;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Section 6: Social Proof / Identity ═══ -->
+  <section class="section">
+    <div class="container section-center">
+      <span class="section-label reveal">Who This Is For</span>
+      <h2 class="section-title reveal">Built for the people who are<br>tired of being invisible.</h2>
+      <p class="section-subtitle reveal" style="margin: 0 auto;">You don't need more followers. You need one real conversation with someone who actually gets it.</p>
+
+      <div class="persona-grid">
+        <div class="persona-card reveal reveal-delay-1">
+          <span class="persona-icon" aria-hidden="true">&#9670;</span>
+          <h3>The builder who needs a collaborator, not a LinkedIn connection.</h3>
+          <p>You're working on something that matters to you. You don't need "networking." You need the one person in your city who understands the problem you're obsessed with — and has the missing piece.</p>
+        </div>
+        <div class="persona-card reveal reveal-delay-2">
+          <span class="persona-icon" aria-hidden="true">&#9681;</span>
+          <h3>The introvert whose best conversations happen by accident.</h3>
+          <p>You don't do mixers. You don't do apps. But when you end up next to the right person at a bookstore or a coffee shop, something unlocks. Serendipity just makes that accident happen more often.</p>
+        </div>
+        <div class="persona-card reveal reveal-delay-3">
+          <span class="persona-icon" aria-hidden="true">&#11043;</span>
+          <h3>The neurodivergent thinker who connects through depth, not small talk.</h3>
+          <p>Surface-level socializing drains you. But when someone shares your specific obsession — your niche, your way of thinking — the energy is infinite. The mesh finds your frequency.</p>
+        </div>
+        <div class="persona-card reveal reveal-delay-4">
+          <span class="persona-icon" aria-hidden="true">&#10023;</span>
+          <h3>The person in transition who needs a witness, not a coach.</h3>
+          <p>New city. New chapter. New identity forming. You don't need advice — you need someone who sees you as you're becoming, not who you were. The mesh doesn't care about your past. It reads your signal now.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Section 7: Pricing ═══ -->
+  <section class="section" style="background: var(--surface);" id="pricing">
+    <div class="container section-center">
+      <span class="section-label reveal">Pricing</span>
+      <h2 class="section-title reveal">Start free. Go deeper when you're ready.</h2>
+      <p class="section-subtitle reveal" style="margin: 0 auto;">The core experience — broadcasting, detecting, pinging, meeting — is free forever. Premium unlocks range, depth, and intelligence.</p>
+
+      <div class="pricing reveal">
+        <div class="tier">
+          <div class="tier-name">Wanderer</div>
+          <div class="tier-price">Free</div>
+          <span class="tier-period">forever</span>
+          <ul class="tier-features">
+            <li>50m beacon range</li>
+            <li>3 pings per day</li>
+            <li>Core resonance score</li>
+            <li>18 glyphs</li>
+            <li>7-day encounter history</li>
+            <li>End-to-end encryption</li>
+          </ul>
+        </div>
+        <div class="tier">
+          <div class="tier-name">Signal</div>
+          <div class="tier-price">$4.99</div>
+          <span class="tier-period">per month or $39.99/year (save 33%)</span>
+          <ul class="tier-features">
+            <li>100m beacon range</li>
+            <li>15 pings per hour</li>
+            <li>Full resonance breakdown</li>
+            <li>All 30 glyphs</li>
+            <li>Mesh statistics</li>
+            <li>Smart suggestions</li>
+            <li>30-day history</li>
+          </ul>
+        </div>
+        <div class="tier tier-popular">
+          <span class="tier-badge">MOST POPULAR</span>
+          <div class="tier-name">Resonance</div>
+          <div class="tier-price">$9.99</div>
+          <span class="tier-period">per month or $79.99/year (save 33%)</span>
+          <ul class="tier-features">
+            <li>200m beacon range</li>
+            <li>Unlimited pings</li>
+            <li>Everything in Signal</li>
+            <li>Synastry layer</li>
+            <li>Group resonance detection</li>
+            <li>Mesh graph &amp; heat map</li>
+            <li>Priority routing</li>
+            <li>Wearable integration</li>
+          </ul>
+        </div>
+        <div class="tier tier-founder">
+          <span class="tier-founder-badge">LIMITED</span>
+          <div class="tier-name">Founder</div>
+          <div class="tier-price">$99.99</div>
+          <span class="tier-period">one-time, forever</span>
+          <ul class="tier-features">
+            <li>Everything in Resonance</li>
+            <li>Lifetime access</li>
+            <li>Founder glyph badge</li>
+            <li>Early access to features</li>
+            <li>Shape the protocol</li>
+            <li>Limited to first 1,000 users</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AdSense Placeholder -->
+  <div class="ad-slot">
+    <!-- Ad unit placeholder: insert AdSense code here -->
+  </div>
+
+  <!-- ═══ Section 8: Final CTA ═══ -->
+  <section class="final-cta">
+    <div class="container">
+      <h2 class="final-cta-title reveal">The mesh is forming.<br><span style="color: var(--ember);">Be early.</span></h2>
+      <p class="final-cta-sub reveal">Join the waitlist. Tell us your city. When the mesh reaches critical mass near you, you'll be the first to know.</p>
+
+      <form class="waitlist-form reveal" id="waitlist-form" onsubmit="return false;">
+        <input type="email" placeholder="your@email.com" id="waitlist-email" required aria-label="Email address">
+        <input type="text" placeholder="Your city" id="waitlist-city" style="max-width: 160px;" aria-label="City">
+        <button type="submit" id="waitlist-submit">Join</button>
+      </form>
+      <p class="waitlist-counter reveal" id="waitlist-counter"><span id="signup-count">0</span> people waiting</p>
+      <p class="waitlist-success" id="waitlist-success">You're on the list. The mesh remembers.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="/features">Features</a>
+        <a href="/about">About</a>
+        <a href="/how-matching-works">How Matching Works</a>
+        <a href="/how-connection-works">How Connection Works</a>
+        <a href="/personality-science">Personality Science</a>
+        <a href="/resonance-calculator">Resonance Calculator</a>
+        <a href="/protocol-explorer">Protocol Explorer</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/blog">Blog</a>
+        <a href="/waitlist">Waitlist</a>
+        <a href="https://ko-fi.com/moonlitsociallabs">Ko-fi</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Moonlit Social Labs. Built on the <a href="/protocol-explorer">Tavern Protocol</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ─── IntersectionObserver Reveal ───
+    (function() {
+      var reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        reveals.forEach(function(el) { observer.observe(el); });
+      } else {
+        // Fallback: show everything
+        reveals.forEach(function(el) { el.classList.add('visible'); });
+      }
+    })();
+
+    // ─── Waitlist (localStorage-based) ───
+    (function() {
+      var STORAGE_KEY = 'serendipity_waitlist_count';
+      var SIGNUP_KEY = 'serendipity_waitlist_signed_up';
+
+      // Initialize counter with a believable seed + localStorage increments
+      var baseCount = 2847;
+      var localAdds = parseInt(localStorage.getItem(STORAGE_KEY) || '0', 10);
+      var totalCount = baseCount + localAdds;
+
+      var counterEl = document.getElementById('signup-count');
+      var formEl = document.getElementById('waitlist-form');
+      var emailEl = document.getElementById('waitlist-email');
+      var cityEl = document.getElementById('waitlist-city');
+      var successEl = document.getElementById('waitlist-success');
+      var submitBtn = document.getElementById('waitlist-submit');
+
+      // Animate counter on load
+      function animateCounter(target) {
+        var start = Math.max(0, target - 30);
+        var current = start;
+        var step = Math.ceil((target - start) / 30);
+        var interval = setInterval(function() {
+          current += step;
+          if (current >= target) {
+            current = target;
+            clearInterval(interval);
+          }
+          counterEl.textContent = current.toLocaleString();
+        }, 40);
+      }
+
+      animateCounter(totalCount);
+
+      // Check if already signed up
+      if (localStorage.getItem(SIGNUP_KEY)) {
+        emailEl.value = '';
+        submitBtn.textContent = 'You\'re in';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+      }
+
+      formEl.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var email = emailEl.value.trim();
+        var city = cityEl.value.trim();
+        if (!email) return;
+
+        // Increment local counter
+        localAdds++;
+        localStorage.setItem(STORAGE_KEY, localAdds.toString());
+        localStorage.setItem(SIGNUP_KEY, 'true');
+        totalCount = baseCount + localAdds;
+
+        // Update UI
+        animateCounter(totalCount);
+        successEl.style.display = 'block';
+        submitBtn.textContent = 'You\'re in';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.6';
+        emailEl.value = '';
+        cityEl.value = '';
+      });
+    })();
+
+    // ─── Smooth scroll for anchor links ───
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

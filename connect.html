@@ -78,6 +78,7 @@
         <button class="tab" data-target="contact">Contact</button>
         <button class="tab" data-target="collab">Collaborate</button>
         <button class="tab" data-target="partner">Partner</button>
+        <button class="tab" data-target="invest">Invest</button>
       </div>
 
       <!-- SOCIAL -->
@@ -278,6 +279,101 @@
               <textarea id="partner-message" name="message" placeholder="Describe the partnership opportunity..." required></textarea>
             </div>
             <button type="submit" class="btn btn--primary">Send Proposal</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- INVEST -->
+      <div class="tab-content" id="invest">
+        <div class="reveal">
+          <p class="heading-md mb-4">Fund the signal.</p>
+          <p class="text-body mb-2">
+            A solo developer shipping a thirteen-application constellation &mdash; OSINT,
+            AI safety, civic tech, behavioral science, creative tools, and more &mdash; all
+            built on a shared architecture and a coherent philosophy. Each product is a
+            standalone investment opportunity. The ecosystem is the multiplier.
+          </p>
+          <p class="text-body text-dim mb-4">
+            Angel checks, pre-seed, seed rounds, revenue-based financing, and grant
+            introductions all welcome. I'll send a data room and a walkthrough for any
+            serious conversation.
+          </p>
+
+          <div class="card-grid mb-4" style="max-width: 700px;">
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Individual Product</p>
+              <p class="card__desc" style="margin-bottom: 0;">Back a single flagship &mdash; Deep-Scry, MythoLink, Filament, AI Consciousness Tracker, PsyStat, and more are each ready for their own round.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Portfolio Thesis</p>
+              <p class="card__desc" style="margin-bottom: 0;">Invest in the constellation. Shared infrastructure, cross-product data flywheels, and a single operator with range.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Angel &middot; Pre-Seed</p>
+              <p class="card__desc" style="margin-bottom: 0;">Small early checks with high conviction. Direct line to the builder. No middle layer.</p>
+            </div>
+            <div class="card" style="padding: 1.5rem;">
+              <p class="card__category">Grants &middot; Research</p>
+              <p class="card__desc" style="margin-bottom: 0;">Several projects align with AI safety, civic tech, and public-interest research grant themes. Intros welcome.</p>
+            </div>
+          </div>
+
+          <form class="connect-form" action="https://formspree.io/f/xqeyngwv" method="POST">
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="_subject" value="Investment inquiry from developer site">
+            <input type="hidden" name="_next" value="https://moonligh7er.github.io/developer-site/thanks.html">
+            <input type="hidden" name="form_type" value="investment">
+            <div class="form-group">
+              <label for="invest-name">Identifier</label>
+              <input type="text" id="invest-name" name="name" placeholder="Your name" autocomplete="name" required>
+            </div>
+            <div class="form-group">
+              <label for="invest-firm">Firm / Fund</label>
+              <input type="text" id="invest-firm" name="firm" placeholder="Fund, syndicate, or solo angel">
+            </div>
+            <div class="form-group">
+              <label for="invest-email">Return Frequency</label>
+              <input type="email" id="invest-email" name="email" placeholder="your@email.com" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+              <label for="invest-stage">Check Stage</label>
+              <select id="invest-stage" name="stage">
+                <option value="">Select stage...</option>
+                <option value="friends-family">Friends &amp; Family</option>
+                <option value="angel">Angel</option>
+                <option value="pre-seed">Pre-Seed</option>
+                <option value="seed">Seed</option>
+                <option value="series-a">Series A</option>
+                <option value="revenue-based">Revenue-Based</option>
+                <option value="grant">Grant / Non-Dilutive</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="invest-interest">Primary Interest</label>
+              <select id="invest-interest" name="interest">
+                <option value="">Select focus...</option>
+                <option value="single-product">Single Product</option>
+                <option value="portfolio-thesis">Portfolio Thesis</option>
+                <option value="ai-safety">AI Safety / AI Consciousness Tracker</option>
+                <option value="osint">OSINT / Deep-Scry</option>
+                <option value="influence">Influence Ops / Filament</option>
+                <option value="civic-tech">Civic Tech / CivicSense &middot; Faultline</option>
+                <option value="research">Research Tools / PsyStat &middot; MythoLink</option>
+                <option value="lifestyle">Lifestyle / Entropic Tarot &middot; Entheo &middot; AstroDeep</option>
+                <option value="education">Education / StudyBreak &middot; Forked Tongue</option>
+                <option value="exploring">Just exploring</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="invest-check">Typical Check Size (optional)</label>
+              <input type="text" id="invest-check" name="check_size" placeholder="$25k, $100k, $500k+, etc.">
+            </div>
+            <div class="form-group">
+              <label for="invest-message">Thesis &amp; Questions</label>
+              <textarea id="invest-message" name="message" placeholder="What caught your attention? What would you want to see in a data room?" required></textarea>
+            </div>
+            <button type="submit" class="btn btn--primary">Send Transmission</button>
           </form>
         </div>
       </div>

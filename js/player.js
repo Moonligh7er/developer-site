@@ -5,11 +5,17 @@
 
 (function () {
   const TRACKS = [
-    { title: 'Three Moons on the Shore', file: 'music/Three_Moons_on_the_Shore_2026-03-25T065841.mp3' },
-    { title: 'Within Arms Reach', file: 'music/Within_Arms_Reach_2026-03-25T070230.mp3' },
-    { title: 'C Minor Forever', file: 'music/C_Minor_Forever_2026-03-25T065518.mp3' },
-    { title: 'Neon Rain Ascendant', file: 'music/Neon_Rain_Ascendant_2026-03-25T192536.mp3' },
-    { title: 'Interdimensional Beach Party', file: 'music/Interdimensional_Beach_Party_2026-03-25T065641.mp3' }
+    { title: 'Three Moons on the Shore', file: 'music/Three_Moons_on_the_Shore.mp3' },
+    { title: 'Within Network Reach', file: 'music/Within_Network_Reach_2026-03-25T070230.mp3' },
+    { title: 'C Minor Forever', file: 'music/C_Minor_Forever.mp3' },
+    { title: 'Convergence in C Minor', file: 'music/Convergence_in_C_Minor.mp3' },
+    { title: 'Neon Rain Ascendant', file: 'music/Neon_Rain_Ascendant.mp3' },
+    { title: 'Neon Consciousness', file: 'music/Neon_Consciousness.mp3' },
+    { title: 'Neon Decay', file: 'music/Neon_Decay.mp3' },
+    { title: 'Interdimensional Beach Party', file: 'music/Interdimensional_Beach_Party.mp3' },
+    { title: 'Miami Rooftop', file: 'music/Miami_Rooftop.mp3' },
+    { title: 'Adjacent Spacetime', file: 'music/Adjacent_Spacetime.mp3' },
+    { title: 'The Muse Has Teeth', file: 'music/The_Muse_Has_Teeth.mp3' }
   ];
 
   const STORAGE_KEY = 'msl_player';

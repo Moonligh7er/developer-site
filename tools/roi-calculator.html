@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free ROI Calculator — Return on Investment & CAGR | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate total return, annualized return (CAGR), and profit on any investment. Simple inputs, clear output.">
+  <meta name="keywords" content="ROI calculator, return on investment calculator, CAGR calculator, annualized return calculator, investment return calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/roi-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free ROI Calculator — Return on Investment & CAGR",
+    "description": "Calculate total return, annualized return (CAGR), and profit on any investment. Simple inputs, clear output.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/roi-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free ROI Calculator — Return on Investment & CAGR">
+  <meta property="og:description" content="Calculate total return, annualized return (CAGR), and profit on any investment. Simple inputs, clear output.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/roi-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free ROI Calculator — Return on Investment & CAGR">
+  <meta name="twitter:description" content="Calculate total return, annualized return (CAGR), and profit on any investment. Simple inputs, clear output.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+
+    /* ── Hero ── */
+    .calc-hero {
+      text-align: center;
+      padding: 1.5rem 0 0.75rem;
+    }
+    .calc-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .calc-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0;
+    }
+    .calc-hero .text-body {
+      margin: 1.5rem auto 0;
+      text-align: center;
+      max-width: 55ch;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* ── Ad containers ── */
+    .ad-container {
+      max-width: 900px;
+      margin: 1rem auto;
+      text-align: center;
+      min-height: 90px;
+    }
+
+    /* ── Tab bar ── */
+    .calc-tabs {
+      max-width: 900px;
+      margin: 0 auto 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .calc-tab {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+    }
+    .calc-tab:hover {
+      border-color: var(--border-glow);
+      color: var(--text-primary);
+    }
+    .calc-tab.active {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: var(--teal-glow);
+      box-shadow: 0 0 12px var(--teal-dim);
+    }
+
+    /* ── Calculator panels ── */
+    .calc-panels {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .calc-panel {
+      display: none;
+    }
+    .calc-panel.active {
+      display: block;
+    }
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .calc-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Inputs ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .form-group input,
+    .form-group select {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0.65rem 0.85rem;
+      transition: border-color 0.25s ease;
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+    .form-group input::placeholder {
+      color: var(--text-dim);
+    }
+    .form-group select option {
+      background: var(--deep);
+      color: var(--text-primary);
+    }
+
+    /* ── Buttons ── */
+    .calc-btn {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid var(--teal);
+      color: var(--teal);
+      padding: 0.75rem 2rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .calc-btn:hover {
+      background: var(--teal-glow);
+      box-shadow: 0 0 20px var(--teal-dim);
+      color: var(--text-bright);
+    }
+    .calc-btn-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .calc-btn--secondary {
+      border-color: var(--border-glow);
+      color: var(--text-secondary);
+    }
+    .calc-btn--secondary:hover {
+      border-color: var(--violet);
+      color: var(--violet);
+      background: var(--violet-glow);
+      box-shadow: 0 0 20px var(--violet-dim);
+    }
+
+    /* ── Results ── */
+    .calc-results {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+    .calc-results.visible {
+      display: block;
+    }
+    .calc-results h4 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .result-row:last-child {
+      border-bottom: none;
+    }
+    .result-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .result-value {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text-bright);
+      font-weight: 500;
+    }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+
+    /* ── Growth table ── */
+    .growth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    .growth-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-glow);
+    }
+    .growth-table td {
+      padding: 0.4rem 0.75rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+    .growth-table tr:hover td {
+      background: var(--teal-glow);
+    }
+    .growth-table-wrap {
+      max-height: 360px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+    .growth-table-wrap::-webkit-scrollbar {
+      width: 6px;
+    }
+    .growth-table-wrap::-webkit-scrollbar-track {
+      background: var(--deep);
+    }
+    .growth-table-wrap::-webkit-scrollbar-thumb {
+      background: var(--border-glow);
+    }
+
+    /* ── Error ── */
+    .calc-error {
+      color: var(--rose);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .calc-error.visible {
+      display: block;
+    }
+
+    /* ── Debt rows ── */
+    .debt-rows { margin-bottom: 1rem; }
+    .debt-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      align-items: end;
+    }
+    .debt-row .remove-debt {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--rose);
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .debt-row .remove-debt:hover {
+      background: rgba(196, 74, 138, 0.15);
+      border-color: var(--rose);
+    }
+
+    /* ── Tax bracket table ── */
+    .bracket-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+    .bracket-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border-glow);
+    }
+    .bracket-table td {
+      padding: 0.4rem 0.75rem;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Subheading ── */
+    .calc-subhead {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    /* ── Toggle switch for savings mode ── */
+    .mode-toggle {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+    }
+    .mode-toggle button {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.2rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .mode-toggle button.active {
+      background: var(--violet-glow);
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+    .mode-toggle button:first-child {
+      border-right: none;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .calc-tabs { gap: 0.35rem; }
+      .calc-tab { font-size: 0.6rem; padding: 0.5rem 0.65rem; }
+      .calc-card { padding: 1.25rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .debt-row { grid-template-columns: 1fr; }
+    }
+  
+    /* Standalone page layout */
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-panel { display: block !important; }
+    .calc-breadcrumb {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-breadcrumb a:hover { color: var(--text-bright); }
+    .calc-other {
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .calc-other__title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .calc-other__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.5rem;
+    }
+    .calc-other__link {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .calc-other__link:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Roi Calculator</p>
+      <div class="calc-panel" id="panel-roi" role="tabpanel">
+        <div class="calc-card">
+          <h3>Investment Return (ROI) Calculator</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="roi-initial">Initial Investment ($)</label>
+              <input type="number" id="roi-initial" placeholder="10000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="roi-final">Final Value ($)</label>
+              <input type="number" id="roi-final" placeholder="25000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="roi-years">Time Period (Years)</label>
+              <input type="number" id="roi-years" placeholder="5" min="0" step="any">
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button class="calc-btn" onclick="calcROI()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('roi')">Clear</button>
+          </div>
+          <div class="calc-error" id="roi-error"></div>
+          <div class="calc-results" id="roi-results">
+            <h4>Results</h4>
+            <div id="roi-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <aside class="calc-other">
+    <p class="calc-other__title">Also Available &mdash; 8 Other Calculators</p>
+    <div class="calc-other__grid">
+      <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest Calculator</a>
+      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan Mortgage Calculator</a>
+      <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff Calculator</a>
+      <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal Calculator</a>
+      <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax Calculator</a>
+      <a href="fire-calculator.html" class="calc-other__link">Fire Calculator</a>
+      <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle Calculator</a>
+      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto Dca Calculator</a>
+    </div>
+  </aside>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container" style="margin-top:2rem;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script src="financial-calculators-core.js"></script>
+</body>
+</html>

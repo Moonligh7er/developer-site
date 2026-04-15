@@ -616,31 +616,60 @@
     .ev-compare { overflow-x: auto; margin: 1rem 0 1.5rem; }
     .ev-compare__table {
       width: 100%;
+      min-width: 780px;
       border-collapse: collapse;
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.68rem;
     }
     .ev-compare__table th,
     .ev-compare__table td {
       border: 1px solid var(--border);
-      padding: 0.6rem 0.8rem;
+      padding: 0.55rem 0.7rem;
       text-align: left;
       color: var(--text-secondary);
+      vertical-align: top;
     }
     .ev-compare__table th {
       background: var(--void);
       color: var(--text-bright);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
     }
-    .ev-compare__table td:first-child { color: var(--text-dim); }
+    .ev-compare__table td:first-child,
+    .ev-compare__table th:first-child {
+      color: var(--text-dim);
+      font-weight: 500;
+      background: var(--void);
+    }
     .ev-compare__table td strong { color: var(--rose); }
     .ev-compare__table code {
       background: var(--void);
       padding: 0.1rem 0.3rem;
       color: var(--violet);
+      font-size: 0.92em;
     }
+    /* Highlight "this tool" column (col 4 of 5) */
+    .ev-compare__table th:nth-child(4),
+    .ev-compare__table td:nth-child(4) {
+      background: rgba(0, 212, 170, 0.04);
+      border-left: 1px solid var(--teal-dim);
+      border-right: 1px solid var(--teal-dim);
+    }
+    .ev-compare__table th:nth-child(4) { color: var(--teal); }
+    .ev-compare__table th:nth-child(5) { color: var(--violet); }
+    .ev-compare__col-sub {
+      display: block;
+      font-size: 0.55rem;
+      font-weight: 400;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      text-transform: none;
+      margin-top: 0.2rem;
+    }
+    .ev-compare__yes { color: #22c55e; font-weight: 500; }
+    .ev-compare__no { color: var(--rose); font-weight: 500; }
+    .ev-compare__ok { color: var(--amber); }
 
     @media (max-width: 600px) {
       .ev-quality { grid-template-columns: 1fr; }
@@ -946,24 +975,145 @@
         </div>
 
         <h3 class="ev-explain__h3">Side-by-side comparison</h3>
+        <p class="ev-explain__p">Each column adds a layer of protection over the previous one. All four of the non-<code>Math.random()</code> options are cryptographically secure in practice &mdash; the later columns are defense in depth for paranoid and high-stakes use cases.</p>
         <div class="ev-compare">
           <table class="ev-compare__table">
             <thead>
               <tr>
                 <th></th>
-                <th><code>Math.random()</code></th>
-                <th>This tool</th>
+                <th><code>Math.random()</code><span class="ev-compare__col-sub">JavaScript PRNG</span></th>
+                <th><code>crypto.<wbr>getRandomValues()</code><span class="ev-compare__col-sub">Browser CSPRNG (OS entropy)</span></th>
+                <th>CSPRNG + 1 entropy source<span class="ev-compare__col-sub">This tool &mdash; mouse / touch</span></th>
+                <th>CSPRNG + 3 entropy sources<span class="ev-compare__col-sub">Entropic Tarot &mdash; mouse + mic noise + cam noise</span></th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Source</td><td>Math formula + seed</td><td>OS CSPRNG &oplus; SHA-256 of mouse entropy</td></tr>
-              <tr><td>Predictable if seed known?</td><td>Yes &mdash; every output</td><td>No &mdash; no seed exists</td></tr>
-              <tr><td>Replayable?</td><td>Yes</td><td>No &mdash; OS pool changes every call</td></tr>
-              <tr><td>Forward secrecy?</td><td>No</td><td>Yes &mdash; key rotates after every use</td></tr>
-              <tr><td>Good enough for a game</td><td>Yes</td><td>Yes (overkill)</td></tr>
-              <tr><td>Good enough for a password</td><td><strong>No</strong></td><td>Yes</td></tr>
-              <tr><td>Good enough for a crypto key</td><td><strong>No</strong></td><td>Yes</td></tr>
-              <tr><td>Good enough for high-stakes fair drawings</td><td><strong>No</strong></td><td>Yes</td></tr>
+              <tr>
+                <td>Core source</td>
+                <td>Math formula + predictable seed</td>
+                <td>OS entropy pool (hardware noise, interrupt jitter, RDRAND)</td>
+                <td>OS CSPRNG XOR SHA-256 of mouse/touch pool</td>
+                <td>OS CSPRNG XOR SHA-256 of mouse + microphone dark noise + camera dark noise</td>
+              </tr>
+              <tr>
+                <td>Deterministic?</td>
+                <td><span class="ev-compare__no">Yes</span> &mdash; identical output if seed is known</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; OS pool re-seeds from hardware continuously</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; both layers must be predicted</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; all four layers must be predicted</td>
+              </tr>
+              <tr>
+                <td>Replayable?</td>
+                <td><span class="ev-compare__no">Yes</span> &mdash; same seed = same sequence</td>
+                <td><span class="ev-compare__yes">No</span></td>
+                <td><span class="ev-compare__yes">No</span> &mdash; mouse trajectory never repeats</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; physical environment never repeats</td>
+              </tr>
+              <tr>
+                <td>Predictable from observation of prior output?</td>
+                <td><span class="ev-compare__no">Yes</span> &mdash; a few samples reveal the seed</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; pool is one-way hashed forward</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; key rotates after every call</td>
+                <td><span class="ev-compare__yes">No</span> &mdash; multiple independent pools rotate</td>
+              </tr>
+              <tr>
+                <td>Number of independent sources of entropy</td>
+                <td>0 (it's a recipe)</td>
+                <td>1 (OS pool &mdash; many sub-sources but one interface)</td>
+                <td>2 (OS pool + user motion)</td>
+                <td>4 (OS pool + motion + mic noise + cam noise)</td>
+              </tr>
+              <tr>
+                <td>Survives a catastrophic CSPRNG flaw?</td>
+                <td>N/A &mdash; no CSPRNG</td>
+                <td><span class="ev-compare__no">No</span> &mdash; single point of failure</td>
+                <td><span class="ev-compare__ok">Partially</span> &mdash; user motion still adds unpredictability</td>
+                <td><span class="ev-compare__yes">Yes</span> &mdash; three physical sources remain</td>
+              </tr>
+              <tr>
+                <td>Survives a catastrophic hardware RNG flaw (e.g. RDRAND backdoor)?</td>
+                <td>N/A</td>
+                <td><span class="ev-compare__ok">Depends</span> &mdash; OS pool mixes other sources, usually OK</td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span> (strongest)</td>
+              </tr>
+              <tr>
+                <td>Forward secrecy (observing now leaks nothing about the past)?</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Backward secrecy (compromising state now reveals nothing about future)?</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__yes">Yes</span> &mdash; OS reseeds</td>
+                <td><span class="ev-compare__yes">Yes</span> &mdash; key rotates + reseeds</td>
+                <td><span class="ev-compare__yes">Yes</span> (strongest)</td>
+              </tr>
+              <tr>
+                <td>Requires user permission?</td>
+                <td>No</td>
+                <td>No</td>
+                <td>No (passive mouse events)</td>
+                <td><span class="ev-compare__ok">Yes</span> &mdash; mic and camera need explicit allow</td>
+              </tr>
+              <tr>
+                <td>Works headless / no user motion?</td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__ok">Degrades</span> &mdash; falls back to CSPRNG alone</td>
+                <td><span class="ev-compare__ok">Degrades</span> &mdash; falls back to CSPRNG alone</td>
+              </tr>
+              <tr>
+                <td>Statistical quality (Chi-square, NIST SP 800-22)</td>
+                <td>Passes basic tests, fails cryptographic tests</td>
+                <td>Passes all standard randomness tests</td>
+                <td>Passes all standard randomness tests</td>
+                <td>Passes all standard randomness tests</td>
+              </tr>
+              <tr>
+                <td>Good enough for games &amp; UI animations</td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span> (overkill)</td>
+                <td><span class="ev-compare__yes">Yes</span> (overkill)</td>
+                <td><span class="ev-compare__yes">Yes</span> (absurd overkill)</td>
+              </tr>
+              <tr>
+                <td>Good enough for passwords / session tokens</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Good enough for cryptographic keys</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+              </tr>
+              <tr>
+                <td>Good enough for high-stakes fair drawings (lottery, gambling, auditable randomness)</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__ok">Yes, but not auditable</span></td>
+                <td><span class="ev-compare__yes">Yes</span></td>
+                <td><span class="ev-compare__yes">Yes, with visual audit trail</span></td>
+              </tr>
+              <tr>
+                <td>Good enough for nation-state adversaries</td>
+                <td><span class="ev-compare__no">No</span></td>
+                <td><span class="ev-compare__ok">Usually</span> &mdash; depends on OS &amp; hardware trust</td>
+                <td><span class="ev-compare__yes">Yes</span> &mdash; defense in depth</td>
+                <td><span class="ev-compare__yes">Yes</span> &mdash; highest assurance</td>
+              </tr>
+              <tr>
+                <td>Typical callers / examples</td>
+                <td>Games, UI animations, JS tutorials</td>
+                <td>Most web apps, banks, SSL/TLS, cloud SDKs</td>
+                <td>This tool, privacy-focused password managers</td>
+                <td>Entropic Tarot, high-assurance key generation, HSMs</td>
+              </tr>
             </tbody>
           </table>
         </div>

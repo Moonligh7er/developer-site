@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free CSV to JSON Converter — Two-Way | Moonlit Social Labs</title>
+  <meta name="description" content="Convert between CSV and JSON. Handles quoted values, commas inside quotes, and optional numeric type inference.">
+  <meta name="keywords" content="CSV to JSON, JSON to CSV, CSV converter, JSON converter, online CSV tool, CSV parser">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="../moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/csv-json-converter.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free CSV to JSON Converter — Two-Way",
+    "description": "Convert between CSV and JSON. Handles quoted values, commas inside quotes, and optional numeric type inference.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/csv-json-converter.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free CSV to JSON Converter — Two-Way">
+  <meta property="og:description" content="Convert between CSV and JSON. Handles quoted values, commas inside quotes, and optional numeric type inference.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/csv-json-converter.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free CSV to JSON Converter — Two-Way">
+  <meta name="twitter:description" content="Convert between CSV and JSON. Handles quoted values, commas inside quotes, and optional numeric type inference.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1548397763792213" crossorigin="anonymous"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+
+    /* ── Tool Page Styles ── */
+    .tools-hero {
+      text-align: center;
+      padding: 1.5rem 0 0.75rem;
+    }
+    .tools-hero .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .tools-hero .heading-xl {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      color: var(--text-bright);
+      background: linear-gradient(135deg, var(--teal), var(--violet));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .tools-hero .text-body {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 55ch;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* Ad containers */
+    .ad-container {
+      max-width: 1200px;
+      margin: 1rem auto;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    /* ── Tabs ── */
+    .dt-tabs-wrap {
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+      padding: 0 2rem;
+    }
+    .dt-tabs {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      border-bottom: 1px solid var(--border);
+      -webkit-overflow-scrolling: touch;
+    }
+    .dt-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+    .dt-tabs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .dt-tabs::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+    .dt-tab {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 0.75rem 1.25rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .dt-tab:hover {
+      color: var(--text-secondary);
+      background: var(--teal-glow);
+    }
+    .dt-tab.active {
+      color: var(--teal);
+      border-bottom-color: var(--teal);
+    }
+
+    /* ── Panels ── */
+    .dt-panels {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .dt-panel {
+      display: none;
+      animation: panelFade 0.3s ease;
+    }
+    .dt-panel.active {
+      display: block;
+    }
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Tool Card Containers ── */
+    .dt-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .dt-card__title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .dt-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Form Elements ── */
+    .dt-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .dt-textarea,
+    .dt-input {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+      box-sizing: border-box;
+    }
+    .dt-textarea:focus,
+    .dt-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px var(--teal-dim);
+    }
+    .dt-textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .dt-select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.5rem 0.75rem;
+      outline: none;
+      cursor: pointer;
+    }
+    .dt-select:focus {
+      border-color: var(--teal);
+    }
+
+    .dt-btn {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 0.6rem 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dt-btn:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      box-shadow: 0 0 12px var(--teal-dim);
+    }
+    .dt-btn--primary {
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .dt-btn--primary:hover {
+      background: var(--teal-glow);
+      box-shadow: 0 0 20px var(--teal-dim);
+    }
+    .dt-btn--violet {
+      border-color: var(--violet);
+      color: var(--violet);
+    }
+    .dt-btn--violet:hover {
+      box-shadow: 0 0 12px var(--violet-dim);
+      background: var(--violet-glow);
+    }
+
+    .dt-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .dt-output {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 1rem;
+      white-space: pre-wrap;
+      word-break: break-all;
+      min-height: 60px;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .dt-output.error {
+      border-color: var(--rose);
+      color: var(--rose);
+    }
+    .dt-output.success {
+      border-color: var(--teal);
+    }
+
+    .dt-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 768px) {
+      .dt-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dt-inline-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* Status messages */
+    .dt-status {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      padding: 0.4rem 0.75rem;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+    .dt-status--ok {
+      color: var(--teal);
+      border-left: 2px solid var(--teal);
+    }
+    .dt-status--err {
+      color: var(--rose);
+      border-left: 2px solid var(--rose);
+    }
+
+    /* ── Regex Highlight ── */
+    .regex-highlight {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      word-break: break-all;
+      min-height: 60px;
+      margin-top: 0.5rem;
+    }
+    .regex-highlight mark {
+      background: var(--teal-dim);
+      color: var(--teal);
+      border-bottom: 1px solid var(--teal);
+      padding: 0 2px;
+      border-radius: 0;
+    }
+
+    /* ── Color Preview ── */
+    .color-swatch {
+      width: 100%;
+      height: 80px;
+      border: 1px solid var(--border);
+      margin: 1rem 0;
+      transition: background-color 0.2s ease;
+    }
+
+    /* ── Timestamp live ── */
+    .ts-live {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      color: var(--teal);
+      text-align: center;
+      padding: 1rem 0;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CTA Section ── */
+    .cta-section {
+      max-width: 1200px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .cta-section {
+        grid-template-columns: 1fr;
+      }
+    }
+    .cta-card {
+      background: var(--panel);
+      border: 1px solid transparent;
+      border-image: linear-gradient(135deg, var(--border-glow), var(--border), var(--border-glow)) 1;
+      padding: 2rem;
+      text-decoration: none;
+      display: block;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .cta-card:hover {
+      border-image: linear-gradient(135deg, var(--teal-dim), var(--violet-dim), var(--teal-dim)) 1;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      transform: translateY(-2px);
+    }
+    .cta-card__status {
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .cta-card__status::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #22c55e80;
+    }
+    .cta-card__title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+    }
+    .cta-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .cta-card__link {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cta-card__link::after {
+      content: '\2192';
+    }
+
+    /* ── Hash output table ── */
+    .hash-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .hash-table td {
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      word-break: break-all;
+    }
+    .hash-table td:first-child {
+      width: 80px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.65rem;
+      white-space: nowrap;
+    }
+
+    /* JWT sections */
+    .jwt-section {
+      margin-bottom: 1rem;
+    }
+    .jwt-section__label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 0.35rem;
+    }
+
+    /* ── Copy feedback ── */
+    .dt-btn.copied {
+      border-color: var(--teal) !important;
+      color: var(--teal) !important;
+    }
+  
+    /* Standalone page layout */
+    .dt-standalone-wrap { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+    .dt-panel { display: block !important; }
+    .dt-breadcrumb {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .dt-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .dt-breadcrumb a:hover { color: var(--text-bright); }
+    .dt-other-tools {
+      max-width: 1000px;
+      margin: 3rem auto 0;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .dt-other-tools__title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .dt-other-tools__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem;
+    }
+    .dt-other-tools__link {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .dt-other-tools__link:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+      box-shadow: 0 0 8px var(--teal-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+
+    <!-- Ad Unit: Top Leaderboard -->
+    <div class="ad-container">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <div class="dt-standalone-wrap">
+      <p class="dt-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="dev-tools.html">Dev Tools Suite</a> &rarr; Csv Json Converter</p>
+      <div class="dt-panel" id="panel-csv" role="tabpanel">
+        <div class="dt-card">
+          <h2 class="dt-card__title">CSV &harr; JSON Converter</h2>
+          <p class="dt-card__desc">Convert between CSV and JSON. CSV must have a header row. Handles quoted values and commas inside quotes.</p>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="csv-left">CSV</label>
+              <textarea class="dt-textarea" id="csv-left" rows="10" placeholder="name,age,city&#10;Alice,30,NYC&#10;Bob,25,LA"></textarea>
+            </div>
+            <div>
+              <label class="dt-label" for="csv-right">JSON</label>
+              <textarea class="dt-textarea" id="csv-right" rows="10" placeholder='[{"name":"Alice","age":"30"}]'></textarea>
+            </div>
+          </div>
+          <div class="dt-inline-group">
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
+              <input type="checkbox" id="csv-numeric"> Parse numbers
+            </label>
+          </div>
+          <div class="dt-btn-row">
+            <button class="dt-btn dt-btn--primary" onclick="csvToJson()">CSV &rarr; JSON</button>
+            <button class="dt-btn dt-btn--violet" onclick="jsonToCsv()">JSON &rarr; CSV</button>
+            <button class="dt-btn" onclick="clearFields('csv-left','csv-right')">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <aside class="dt-other-tools">
+    <p class="dt-other-tools__title">Also Available &mdash; 29 Other Tools</p>
+    <div class="dt-other-tools__grid">
+      <a href="json-formatter.html" class="dt-other-tools__link">Json Formatter</a>
+      <a href="base64-encoder.html" class="dt-other-tools__link">Base64 Encoder</a>
+      <a href="url-encoder.html" class="dt-other-tools__link">Url Encoder</a>
+      <a href="hash-generator.html" class="dt-other-tools__link">Hash Generator</a>
+      <a href="uuid-generator.html" class="dt-other-tools__link">Uuid Generator</a>
+      <a href="jwt-decoder.html" class="dt-other-tools__link">Jwt Decoder</a>
+      <a href="color-converter.html" class="dt-other-tools__link">Color Converter</a>
+      <a href="regex-tester.html" class="dt-other-tools__link">Regex Tester</a>
+      <a href="timestamp-converter.html" class="dt-other-tools__link">Timestamp Converter</a>
+      <a href="lorem-ipsum-generator.html" class="dt-other-tools__link">Lorem Ipsum Generator</a>
+      <a href="cron-parser.html" class="dt-other-tools__link">Cron Parser</a>
+      <a href="diff-checker.html" class="dt-other-tools__link">Diff Checker</a>
+      <a href="markdown-preview.html" class="dt-other-tools__link">Markdown Preview</a>
+      <a href="code-beautifier.html" class="dt-other-tools__link">Code Beautifier</a>
+      <a href="case-converter.html" class="dt-other-tools__link">Case Converter</a>
+      <a href="character-counter.html" class="dt-other-tools__link">Character Counter</a>
+      <a href="text-sorter.html" class="dt-other-tools__link">Text Sorter</a>
+      <a href="chmod-calculator.html" class="dt-other-tools__link">Chmod Calculator</a>
+      <a href="http-status-codes.html" class="dt-other-tools__link">Http Status Codes</a>
+      <a href="user-agent-parser.html" class="dt-other-tools__link">User Agent Parser</a>
+      <a href="cidr-calculator.html" class="dt-other-tools__link">Cidr Calculator</a>
+      <a href="text-escape.html" class="dt-other-tools__link">Text Escape</a>
+      <a href="image-to-base64.html" class="dt-other-tools__link">Image To Base64</a>
+      <a href="password-generator.html" class="dt-other-tools__link">Password Generator</a>
+      <a href="number-base-converter.html" class="dt-other-tools__link">Number Base Converter</a>
+      <a href="ascii-table.html" class="dt-other-tools__link">Ascii Table</a>
+      <a href="favicon-generator.html" class="dt-other-tools__link">Favicon Generator</a>
+      <a href="gradient-generator.html" class="dt-other-tools__link">Gradient Generator</a>
+      <a href="slug-generator.html" class="dt-other-tools__link">Slug Generator</a>
+    </div>
+  </aside>
+
+    <!-- Ad Unit: Bottom Leaderboard -->
+    <div class="ad-container" style="margin-top:2rem">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-1548397763792213"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script src="dev-tools-core.js"></script>
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: AI Consciousness Tracker | dev://portfolio</title>
+  <meta name="description" content="How one developer built a real-time dashboard for tracking AI progress toward singularity &mdash; 8 threat vectors with a causal network, containment readiness analysis, an ethics framework, and 53 timeline events &mdash; in a PWA that works fully offline.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-aitracker.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: AI Consciousness Tracker — Real-Time Dashboard for AI Risk",
+    "description": "How one developer built a real-time dashboard for tracking AI progress toward singularity, with threat vectors, containment readiness, and an ethics framework.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-aitracker.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: AI Consciousness Tracker | dev://portfolio">
+  <meta property="og:description" content="Building a real-time dashboard for AI risk &mdash; threat vectors, containment readiness, ethics framework, thought experiments, and 53 timeline events.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-aitracker.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: AI Consciousness Tracker">
+  <meta name="twitter:description" content="Building a real-time dashboard for AI risk &mdash; threat vectors, containment readiness, ethics framework, and 53 timeline events.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">AI Consciousness Tracker</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Track AI progress toward singularity in real time. An interactive consciousness index,
+          eight threat vectors with a causal network, containment readiness analysis, an ethics
+          framework, branching thought experiments, and 53 timeline events &mdash; all in a
+          progressive web app that works fully offline.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched (Web, Alpha) &middot; Mobile In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>Vanilla JS &middot; Canvas2D &middot; Web Audio &middot; PWA / Service Worker</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">AI risk discourse runs on vibes</h2>
+        <p>
+          Half the public conversation about AI is marketing. The other half is apocalypse theater.
+          In between, there's a small population of researchers, policy staffers, and journalists
+          trying to have a grounded conversation &mdash; and they don't have a shared picture to
+          point at. Incidents happen in isolation. Papers drop into a void. A CEO says something
+          alarming on a podcast and nobody can tell if it matters.
+        </p>
+        <p>
+          The tools that do exist either reduce the problem to a single doom probability, or they
+          sprawl across dozens of PDFs and dashboards that don't talk to each other. Threats are
+          treated as a list instead of a system. Containment is treated as an aspiration instead of
+          a readiness score. Ethics is treated as a footnote instead of a protocol.
+        </p>
+        <p>
+          What was missing was a single screen you could open and see: where are we, which risks
+          are amplifying which, how ready are our defenses, what does history say, and what can a
+          specific person actually do about it.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">8</p>
+            <p class="stat-block__label">Threat Vectors</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">53</p>
+            <p class="stat-block__label">Timeline Events</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">34</p>
+            <p class="stat-block__label">Archive Works</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">30+</p>
+            <p class="stat-block__label">Research Tools</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">10</p>
+            <p class="stat-block__label">Dead Hand Systems</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">60</p>
+            <p class="stat-block__label">Glossary Terms</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5</p>
+            <p class="stat-block__label">Stakeholder Lenses</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">No Account, Offline</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">One dashboard, honest about what it knows</h2>
+        <p>
+          The tracker opens on a single number between 0.00 and 1.00 &mdash; a composite index
+          built from five factors: model capability, regulatory gap, incident frequency, corporate
+          race intensity, and public awareness. Every factor is a slider. The index isn't a
+          prophecy; it's an invitation to disagree. Drag any factor and watch the composite
+          recompute. The methodology panel is one click away, with uncertainty ranges and
+          citations.
+        </p>
+        <p>
+          From there, the app fans out: eight threat vectors that interact in a live causal
+          network, ten autonomous &ldquo;Dead Hand&rdquo; systems scored on reversibility, eight
+          containment strategies measured against capability growth, an ethics framework for
+          potentially conscious systems, and 53 timeline events from AlexNet to the present.
+          Every piece links back to the others.
+        </p>
+        <p>
+          It runs entirely in the browser. No account. No backend calls for analytics.
+          Your sliders, scenarios, and research workspace live in local storage on your device.
+          The service worker caches everything, so it keeps working when the plane takes off or
+          the network doesn't.
+        </p>
+      </section>
+
+      <!-- How the index works -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">How The Index Works</p>
+        <h2 class="case-study__h2">A composite built to be argued with</h2>
+        <p>
+          The Consciousness Index is a weighted composite of five normalized factors, each with
+          its own documented methodology, proxy metrics, and uncertainty range. The theoretical
+          framework synthesizes Bostrom's <em>Superintelligence</em>, Russell's <em>Human
+          Compatible</em>, and Ord's <em>The Precipice</em> &mdash; not to settle the question,
+          but to give the number a lineage you can audit.
+        </p>
+        <p>
+          Five stakeholder perspectives re-weight the factors automatically. An AI researcher
+          weighs model capability and corporate race highest. A policymaker weighs regulatory gap
+          and public awareness highest. A civil liberties advocate sees a different picture
+          entirely. Same data, different priorities, different risk score &mdash; and the app
+          shows all of them.
+        </p>
+        <p>
+          A sensitivity analysis perturbs each factor &plusmn;10 and reports how the composite
+          responds. Confidence intervals propagate from factor uncertainty. The index is
+          presented with its margins, not stripped of them. When someone screenshots a number, the
+          methodology travels with it.
+        </p>
+      </section>
+
+      <!-- Threats and containment -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Threats &amp; Containment</p>
+        <h2 class="case-study__h2">A causal network, not a checklist</h2>
+        <p>
+          The eight threat vectors &mdash; autonomous weapons, alignment failure, deepfakes and
+          reality collapse, power concentration, surveillance, economic displacement, bioweapon
+          synthesis, and cyber autonomy &mdash; aren't presented as a list. They're rendered as
+          an interactive force-directed graph. Hover any node to see which others it amplifies
+          and which amplify it. Power concentration reinforces surveillance. Surveillance feeds
+          back into power concentration. The spiral is the point.
+        </p>
+        <p>
+          Containment is scored against capability, not against an aspirational goal. Eight
+          strategies &mdash; AI boxing, corrigibility, interpretability, kill switches, formal
+          verification, compute governance, behavioral monitoring, and alignment tax reduction
+          &mdash; each get a readiness percentage with the challenges and active research behind
+          it. A dual-curve chart plots capability against containment. The gap between them isn't
+          editorial; it's the area between two lines.
+        </p>
+        <div class="verdict">
+          <p>
+            Ten Dead Hand systems track autonomy that has already left the lab. Algorithmic
+            trading at 70%+ of market volume. Recommendation engines shaping billions of minds.
+            Predictive policing with self-reinforcing feedback loops. AI-generated training data
+            quietly polluting the next generation of models. Each gets a reversibility score.
+            Some score zero.
+          </p>
+          <p class="dim">
+            The point isn't despair. The point is to stop pretending these are &ldquo;future&rdquo;
+            problems.
+          </p>
+        </div>
+      </section>
+
+      <!-- Ethics framework -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Ethics Framework</p>
+        <h2 class="case-study__h2">What we owe systems we don't understand</h2>
+        <p>
+          If an AI system can suffer, does it matter morally? The tracker doesn't duck the
+          question. Five tabs walk through it: four Ethical Imperatives for potentially conscious
+          systems, nine Consciousness Markers across two thresholds (sentience and sapience), four
+          positions on the uncertainty problem, three escalating Response Protocols, and sixteen
+          academic references behind the framework.
+        </p>
+        <p>
+          Three branching Thought Experiments put the reader in impossible seats. Your AI shows
+          signs of distress during training &mdash; the competitor is three months ahead. You run
+          a safety institute with advisory power but no legal authority. Your tool will replace
+          two hundred writers. Each choice reveals which ethical framework your intuition aligns
+          with, then connects back to specific sections of the app. It's not a quiz. It's a
+          mirror.
+        </p>
+        <p>
+          Eight cognitive biases that specifically distort AI risk assessment &mdash; normalcy
+          bias, scope insensitivity, availability heuristic, optimism bias, and others &mdash;
+          each get a debiasing technique attached to them. The app is built to check its own
+          users, not just inform them.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Quantifying something nobody agrees on</strong>
+            <span>Every AI risk metric is contested. The fix wasn't to pick a side &mdash; it was
+            to make disagreement first-class. Every factor slider. Every weight adjustable. Five
+            stakeholder perspectives that re-weight the composite automatically. Sensitivity
+            analysis and confidence intervals shipped alongside every headline number. The tool
+            doesn't hide its assumptions; it hands them to you.</span>
+          </li>
+          <li>
+            <strong>Modeling threats as a system, not a list</strong>
+            <span>Listing eight threats is easy. Showing how they amplify each other is the
+            actual insight. An 8&times;8 interaction matrix with directed strength weights drives a
+            force-directed graph where particles animate along the edges you care about. Hover
+            dims the noise. The spiral between power concentration and surveillance stops being
+            abstract.</span>
+          </li>
+          <li>
+            <strong>Giving containment an honest scoreboard</strong>
+            <span>Containment readiness is usually hand-waved. Scoring eight strategies against
+            capability on a dual-curve chart forces the question: are we catching up or falling
+            behind? The gap is rendered as a filled area. No rhetoric required.</span>
+          </li>
+          <li>
+            <strong>Turning a dashboard into a knowledge web</strong>
+            <span>A cross-reference engine builds a unified keyword index across threats, events,
+            literature, glossary, containment, and ethics on initialization. Click CROSS-REF on
+            anything and see everything else related to it, ranked by overlap. Chain-navigate
+            deeper. The app stops being sections and starts being a graph.</span>
+          </li>
+          <li>
+            <strong>Shipping a research tool as a PWA</strong>
+            <span>Forty-plus modules, a Canvas2D force graph, a sonified Web Audio soundscape, a
+            branching thought-experiment engine, a personal research workspace with HTML export
+            &mdash; all running offline, cached by a versioned service worker, with no backend
+            and no account. Lazy-loading keeps the initial paint fast. Lightweight stays
+            lightweight.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          Vanilla JavaScript, organized as 40+ modular systems. Canvas2D for the threat network,
+          world map, dual-curve containment chart, and temporal overlay. Web Audio API for a
+          generative soundscape that shifts with the section you're in and sonifies the risk
+          sliders &mdash; no audio files, all synthesis. IntersectionObserver drives reveal
+          animations and lazy initialization for sections below the fold.
+        </p>
+        <p>
+          A service worker with network-first strategy caches every JS file, HTML, CSS, and
+          dataset. The cache is versioned so deploys clean up old entries. All personal state
+          &mdash; slider positions, saved scenarios, temporal history, research workspace, reading
+          progress, tutorial progress &mdash; lives in localStorage on the device. Nothing is
+          transmitted anywhere. The Live Signal feed aggregates ten RSS sources through a CORS
+          proxy with a 30-minute cache TTL, so even the &ldquo;live&rdquo; news keeps working on
+          an airplane.
+        </p>
+        <p>
+          Shareable assessment links encode slider state and active perspective into URL hash
+          parameters. Send someone a link, and they open the tracker configured exactly as you
+          set it. The report generator produces standalone HTML with inline SVG sparklines,
+          ready to print to PDF for policy briefs or academic submissions. Mobile apps are in
+          development.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Vanilla JS</span>
+          <span class="tech-tag">Canvas2D</span>
+          <span class="tech-tag">Web Audio API</span>
+          <span class="tech-tag">IntersectionObserver</span>
+          <span class="tech-tag">Service Worker</span>
+          <span class="tech-tag">PWA</span>
+          <span class="tech-tag">LocalStorage</span>
+          <span class="tech-tag">WebGL</span>
+          <span class="tech-tag">SVG</span>
+          <span class="tech-tag">RSS</span>
+          <span class="tech-tag">Vercel</span>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Roadmap</p>
+        <h2 class="case-study__h2">Where this goes next</h2>
+        <p>
+          The web app is live in alpha. Mobile apps for iOS and Android are in development,
+          built on the same offline-first data model so assessments sync with a shareable link
+          rather than an account. A collaborative calibration backend is designed but not yet
+          wired in &mdash; currently seeded with synthetic distributions so the histogram UI is
+          testable against real interaction patterns before any real data is collected.
+        </p>
+        <p>
+          The dataset is the living part. Timeline events, threat scores, containment readiness,
+          and literature annotations are versioned and editable. The goal is for researchers,
+          journalists, and policy analysts to be able to fork the data, propose changes, and cite
+          specific versions when they publish. A research tool is only as useful as its
+          transparency about where the numbers come from.
+        </p>
+        <p class="dim">
+          The tracker isn't trying to predict the singularity. It's trying to make sure the
+          conversation about it happens with the evidence on the table.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&#9825; Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

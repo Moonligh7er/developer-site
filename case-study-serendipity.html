@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Serendipity | dev://portfolio</title>
+  <meta name="description" content="How one developer built a Bluetooth-powered proximity social app that matches compatible people within 50 meters using over 30 psychological frameworks — computed locally, never transmitted.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-serendipity.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Serendipity — Bluetooth-Powered Social Discovery",
+    "description": "How one developer built a proximity social discovery app using over 30 psychological frameworks, computed entirely on-device, with zero-knowledge architecture.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-serendipity.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Serendipity | dev://portfolio">
+  <meta property="og:description" content="Bluetooth-powered social discovery. Over 30 psychological frameworks, computed locally, never transmitted.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-serendipity.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Serendipity">
+  <meta name="twitter:description" content="Bluetooth-powered social discovery. Over 30 psychological frameworks, computed locally, never transmitted.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Serendipity</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Bluetooth-powered social discovery. Matches compatible people within 50 meters
+          using over 30 psychological frameworks of resonance &mdash; computed locally,
+          never transmitted. Real encounters instead of swipe theater. Built for builders,
+          introverts, and neurodivergent thinkers.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched to Web &middot; Alpha</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>BLE &middot; On-Device ML &middot; X25519 &middot; Mobile (in development)</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">An epidemic of loneliness in cities of millions</h2>
+        <p>
+          The US Surgeon General called it an epidemic. More than half of adults describe
+          themselves as lonely. One in four have zero close friends &mdash; double the rate
+          from 1990. Time spent at "third places" &mdash; the cafes, bookstores, and bars
+          where strangers used to become friends &mdash; has collapsed. And the apps built
+          to solve this have made it worse.
+        </p>
+        <p>
+          Dating apps reduce human compatibility to a photo and a swipe. LinkedIn reduces
+          it to a job title. Algorithmic feeds reward performance, not presence. The
+          person who could become your cofounder, your mentor, your closest friend was
+          in the same cafe as you last Tuesday. Neither of you knew.
+        </p>
+        <p>
+          The technology to fix this has existed for a decade. Bluetooth Low Energy in
+          every pocket. Enough compute power on a mid-range phone to run real psychological
+          models locally. What didn't exist was the will to build something that respects
+          the user instead of farming them.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">30+</p>
+            <p class="stat-block__label">Psychological Frameworks</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">50m</p>
+            <p class="stat-block__label">Proximity Range</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">6</p>
+            <p class="stat-block__label">Feature Categories</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5</p>
+            <p class="stat-block__label">Depth Layers</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">15 min</p>
+            <p class="stat-block__label">Beacon ID Rotation</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">0</p>
+            <p class="stat-block__label">Location Data Transmitted</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">E2EE</p>
+            <p class="stat-block__label">All Communication</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier, Forever</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">Proximity, not profiles</h2>
+        <p>
+          Serendipity inverts the social app. No profile to curate. No photos to rank.
+          No feed to scroll. You set a transmission &mdash; what you're working on, what
+          you're curious about, what kind of connection you're seeking &mdash; and your
+          phone broadcasts an encrypted fingerprint over Bluetooth Low Energy. Other
+          phones running the app within 50 meters do the same.
+        </p>
+        <p>
+          When two transmissions resonate, both devices compute it at the same time,
+          independently, on-device. If the score clears the threshold, you each feel a
+          haptic pulse. Look up. They're across the room. You decide what happens next.
+        </p>
+        <p>
+          This is the oldest form of human connection &mdash; being in the same place at
+          the same time &mdash; finally given the technology it deserves. Real encounters
+          instead of swipe theater. Chemistry instead of curation.
+        </p>
+      </section>
+
+      <!-- How Matching Works -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">How Matching Works</p>
+        <h2 class="case-study__h2">Over 30 frameworks. None of your data on our servers.</h2>
+        <p>
+          The resonance engine draws on over 30 psychological frameworks that span fifty
+          years of validated research. Big Five personality. Schwartz values theory.
+          Jungian cognitive functions. Attachment theory. Kegan developmental stages.
+          Polyvagal theory. Flow theory. Broaden-and-build. Self-determination theory.
+          Interpersonal circumplex. Complementarity hypothesis. Optional astrology for
+          the synastry-curious.
+        </p>
+        <p>
+          Most apps ask you to describe yourself. People are unreliable narrators of
+          their own personalities. Serendipity also watches how you actually engage
+          &mdash; which pings you respond to, which glyphs you leave, when your attention
+          deepens &mdash; and builds a behavioral fingerprint that reveals the parts of
+          you that don't fit neatly into a bio.
+        </p>
+        <p>
+          Every inference happens on your phone. Every comparison happens on your phone.
+          The server never sees your personality, your location, or who you met. The
+          math runs where you are.
+        </p>
+      </section>
+
+      <!-- Privacy as Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Privacy as Architecture</p>
+        <h2 class="case-study__h2">Safety isn't a feature &mdash; it's the foundation</h2>
+        <p>
+          Beacon IDs rotate every fifteen minutes so no one can follow a device across a
+          city. Resonance scoring happens on-device, so the server has nothing worth
+          subpoenaing. Communications use X25519 key exchange for end-to-end encryption
+          &mdash; meaning Moonlit Social Labs can't read your messages even if compelled.
+          Metadata gets stripped before anything leaves the device.
+        </p>
+        <p>
+          A buddy beacon lets a trusted friend monitor encounters in real time. Boundary
+          normalization makes "not right now" feel natural instead of confrontational.
+          The glyph reputation system surfaces signal without storing a surveillance
+          record. Every one of these decisions sits in the architecture, not in a privacy
+          policy that could quietly change next quarter.
+        </p>
+        <div class="verdict">
+          <p>
+            The design rule is simple. If a feature requires the server to know where you
+            are, who you are, or who you met, the feature doesn't ship.
+          </p>
+          <p class="dim">
+            Privacy engineering. Not privacy theater.
+          </p>
+        </div>
+      </section>
+
+      <!-- Progressive Disclosure -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Progressive Disclosure</p>
+        <h2 class="case-study__h2">Five layers, earned over time</h2>
+        <p>
+          Serendipity doesn't dump your personality on a screen. It unfolds in five
+          layers: Surface (interests, current project), Context (skills, domain
+          expertise), Character (values, thinking style, communication), Shadow
+          (behavioral patterns, growth edges), and Resonance History (glyph patterns,
+          encounter outcomes). Each layer is revealed only as two people choose to go
+          deeper, and only to each other.
+        </p>
+        <p>
+          The app grows with you because it's measuring you growing. A connection made
+          at the Surface layer looks different six months later at the Character layer,
+          because by then the behavioral fingerprint has been sharpened by a hundred
+          small interactions neither of you had to think about.
+        </p>
+        <p>
+          Progressive disclosure is also a safety mechanism. Strangers don't need access
+          to your shadow the first time they're in your range. Depth is earned in a way
+          that mirrors how humans already decide who gets to see more of them.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>BLE mesh that survives mobile background mode</strong>
+            <span>iOS and Android both aggressively kill Bluetooth activity when an app is
+            backgrounded. Building a proximity experience that keeps detecting, scoring,
+            and pinging while the phone is in a pocket &mdash; without draining the
+            battery in an afternoon &mdash; meant designing a duty-cycled scanning
+            strategy that negotiates between radio wake-ups, OS-level constraints, and
+            the user's reasonable expectation that their phone still works tomorrow.</span>
+          </li>
+          <li>
+            <strong>On-device personality modeling without melting the battery</strong>
+            <span>Over 30 psychological frameworks, inferred from behavior, compared across
+            every nearby transmission, in real time, on consumer hardware. The whole thing
+            has to stay within a thermal and energy envelope that doesn't announce itself
+            to the user. The win was making the expensive computation lazy and the cheap
+            screening aggressive &mdash; most candidates never make it to the full scoring
+            pass.</span>
+          </li>
+          <li>
+            <strong>Rotating beacon IDs without losing connection continuity</strong>
+            <span>The privacy requirement says every device reshuffles its identifier on a
+            fifteen-minute clock. The usability requirement says an in-progress encounter
+            shouldn't suddenly forget who it was talking to. Threading that needle meant a
+            handoff protocol that preserves an ephemeral session identity across rotations
+            without ever exposing a long-lived one to the network.</span>
+          </li>
+          <li>
+            <strong>Privacy-preserving safety infrastructure</strong>
+            <span>Buddy beacons, boundary normalization, glyph reputation, and panic flows
+            all have to work without a central server that knows who is where. A platform
+            that treats abuse as a real problem normally leans on a surveillance stack to
+            catch it. Building equivalent protections with zero server-side visibility
+            into location or identity is the research problem, not the feature list.</span>
+          </li>
+          <li>
+            <strong>Accessibility-first UX for neurodivergent thinkers</strong>
+            <span>The target user is someone whose best conversations happen when small
+            talk isn't the price of admission &mdash; the introvert, the neurodivergent
+            builder, the person in transition. That shapes every micro-interaction. Haptic
+            intensity scaled to resonance strength. Progressive disclosure that never
+            demands a bio. Consent prompts phrased so "not right now" carries no social
+            cost. Design decisions as accessibility engineering.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          Bluetooth Low Energy as the discovery layer. Every device broadcasts an
+          encrypted transmission fingerprint with a rotating beacon ID. Every device
+          runs the resonance engine locally, so the comparison never leaves the phone.
+          Communications use X25519 for key exchange and end-to-end encryption; the
+          server is a relay, not a reader.
+        </p>
+        <p>
+          The whole system is specified as an open protocol &mdash; the Tavern Protocol
+          &mdash; so proximity-based human discovery can outlive any one app. Adaptive
+          power management handles the battery story. Haptic feedback scaled to
+          resonance strength handles the notification story. A glyph system handles the
+          reputation story without needing a surveillance log. The web experience is
+          live in alpha; mobile apps are in development.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Bluetooth LE</span>
+          <span class="tech-tag">On-Device ML</span>
+          <span class="tech-tag">X25519</span>
+          <span class="tech-tag">E2E Encryption</span>
+          <span class="tech-tag">Zero-Knowledge</span>
+          <span class="tech-tag">Tavern Protocol</span>
+          <span class="tech-tag">Rotating Beacons</span>
+          <span class="tech-tag">Haptics</span>
+          <span class="tech-tag">Adaptive Power</span>
+          <span class="tech-tag">iOS</span>
+          <span class="tech-tag">Android</span>
+          <span class="tech-tag">Web Alpha</span>
+        </div>
+      </section>
+
+      <!-- Verdict -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Verdict</p>
+        <h2 class="case-study__h2">The anti-swipe</h2>
+        <p>
+          Serendipity is a bet that people are hungry for something every existing
+          social app has trained them to forget: that the most important encounters of
+          their life are likely to happen within arm's reach of someone they don't know
+          yet. Not in a feed. Not in a DM. In a room. With signal.
+        </p>
+        <p>
+          The platforms that profit from attention will never build this. The economics
+          don't work when the product is a two-minute conversation that happens offline.
+          So it had to be built by someone who thinks the loneliness epidemic is a
+          design failure, not a market opportunity.
+        </p>
+        <p class="dim">
+          Launched to web. Mobile in development. The mesh is forming &mdash; the only
+          question is whether you're broadcasting.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

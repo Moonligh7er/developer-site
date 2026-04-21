@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Forked Tongue | dev://portfolio</title>
+  <meta name="description" content="How one developer built an AI language learning platform where you chat with friends who actually speak the language — voice chat, cultural immersion, 3D brain visualization, seven languages.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-forkedtongue.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Forked Tongue — AI Language Learning Through Conversation",
+    "description": "How one developer built an AI language learning platform where you chat with friends who actually speak the language.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-forkedtongue.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Forked Tongue | dev://portfolio">
+  <meta property="og:description" content="Building an AI language learning platform where you chat with friends who actually speak the language.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-forkedtongue.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Forked Tongue">
+  <meta name="twitter:description" content="Building an AI language learning platform where you chat with friends who actually speak the language.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Forked Tongue</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Not a teacher. Not a chatbot. A friend who happens to speak the language you want to
+          learn. Voice chat, cultural immersion, and a 3D neural network that lights up as
+          your brain rewires itself around a new tongue.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched to Web, In Alpha &middot; Mobile In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React 19 &middot; Expo SDK 52 &middot; Express &middot; PostgreSQL &middot; Claude</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Language apps teach you words. They don't teach you language.</h2>
+        <p>
+          Duolingo can teach you that "the cat is on the table." Cool. Now order ramen in
+          Shinjuku. The gap between a vocabulary drill and a real conversation is the entire
+          distance between studying a language and speaking one &mdash; and most apps refuse
+          to cross it.
+        </p>
+        <p>
+          You can study for months and still freeze when a real person talks to you. The problem
+          isn't effort. It's architecture. Flashcards train recall. Conversations train fluency.
+          Those are different wiring jobs, and no amount of flashcards will finish the second one.
+        </p>
+        <p>
+          Language isn't a vocabulary list. It's relationships, jokes, cultural in-jokes, the
+          rhythm of how a real speaker hedges and interrupts and teases. That can't be gamified
+          into a streak. It can only be practiced with something that behaves like a person.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">16</p>
+            <p class="stat-block__label">AI Characters</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">8</p>
+            <p class="stat-block__label">Languages</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">15</p>
+            <p class="stat-block__label">Prompt Layers</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">10</p>
+            <p class="stat-block__label">External Services</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">4</p>
+            <p class="stat-block__label">Conversation Modes</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Apps in Monorepo</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier Voice</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">~90%</p>
+            <p class="stat-block__label">Prompt Cache Savings</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">Give the student a friend, not a curriculum</h2>
+        <p>
+          Forked Tongue is 16 AI characters across 8 languages &mdash; Korean, Japanese, Spanish,
+          Portuguese, Mandarin, Cantonese, American English, British English. Joon and Soeun in
+          Seoul. Ren and Hina in Tokyo. Diego and Valentina in Mexico City. Each one has a
+          backstory, a city, a personality, opinions, and a way of speaking that is specifically
+          theirs.
+        </p>
+        <p>
+          They text you first. No placement test. No curriculum. You figure it out together,
+          the same way you would if a real person you just met started talking to you in their
+          language. The AI adapts to how you learn, remembers your weaknesses, and adjusts
+          difficulty in real time.
+        </p>
+        <p>
+          Voice chat runs on-device for free users &mdash; Kokoro TTS in the browser, Web Speech
+          API for input, zero cost, zero latency trip to a vendor. Premium users get ElevenLabs
+          voices that are lifelike enough to forget you're talking to a model. Speak. Listen.
+          Feel it.
+        </p>
+      </section>
+
+      <!-- How conversations work -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">How Conversations Work</p>
+        <h2 class="case-study__h2">15 layers of context, rebuilt every message</h2>
+        <p>
+          Every message you send triggers a dynamic prompt assembly from 15 distinct sources.
+          The character's persona and speaking style. The conversation mode you picked &mdash;
+          Chill, Nudge, Immersion, or Tutor &mdash; which controls correction density and how
+          much target language versus English gets mixed in. A summary of the conversation so
+          far. Cross-session character memory, so the character "remembers" you.
+        </p>
+        <p>
+          On top of that: a pronunciation profile specific to your native-language-to-target-language
+          pair. Past correction discoveries &mdash; your recurring error patterns. Teaching
+          strategies that have worked for you before. Emotional state guidance that detects
+          frustration or confidence and adjusts encouragement accordingly. Cross-user difficulty
+          patterns that flag universally hard concepts.
+        </p>
+        <p>
+          Layered in probabilistically: a 10% chance of an immersion moment (brief full-target-language
+          burst, memory-personalized), a 5% chance of a contextual scenario ("let's pretend you're
+          ordering at a cafe"), a 20% chance of an active recall challenge on something you
+          learned earlier. The randomness is the point. Real conversations aren't scheduled.
+        </p>
+        <p>
+          All of it is stitched together and sent to Claude, which streams back token-by-token
+          over WebSocket. Prompt caching cuts repeated-prefix costs by roughly 90%, which is the
+          only reason giving every free user unlimited access to this much context is
+          economically survivable.
+        </p>
+      </section>
+
+      <!-- Cultural immersion -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Cultural Immersion</p>
+        <h2 class="case-study__h2">Mistakes, songs, and proverbs that sound unhinged</h2>
+        <p>
+          The characters make mistakes in English &mdash; on purpose. The same mistakes a real
+          Korean, Japanese, or Spanish speaker would actually make. When you catch them, you
+          earn points. You're not being tested. You're catching your friend slipping up, which
+          is exactly the social dynamic that makes language stick.
+        </p>
+        <p>
+          They break into K-pop songs mid-conversation. Translate menus with way too much
+          enthusiasm. Teach you proverbs that sound absolutely unhinged when translated literally
+          ("even a monkey can fall from a tree"). These moments are randomized and
+          memory-personalized. They're the reason you'll remember a word six months later.
+        </p>
+        <p>
+          Your progress renders as a 3D neural network visualization. Nodes light up as concepts
+          are learned. Weak areas glow red. Mastery spreads like electricity through a graph of
+          your own mind. It's a visualization that maps to real learning state, not a XP bar with
+          confetti.
+        </p>
+        <div class="verdict">
+          <p>
+            Buddies also know each other. Joon in Seoul and Ren in Tokyo are friends. Put them
+            in a conversation together and Korean and Japanese bounce off each other &mdash;
+            while you learn both at once. Spanish and Portuguese. Mandarin and Cantonese. American
+            and British English. Dual-language immersion that uses linguistic similarity as a
+            teaching tool instead of fighting it.
+          </p>
+          <p class="dim">
+            Learn through relationship, not curriculum. That's the design philosophy.
+          </p>
+        </div>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Building a per-user linguistic model that actually adapts</strong>
+            <span>The Linguistic Neural Network is a custom engine that maps what a user knows,
+            finds gaps, and drives adaptive difficulty per message. Not a static curriculum &mdash;
+            a live graph of competence and weakness that the conversation layer reads from and
+            writes to every turn. Weak nodes, error-prone concepts, and suggested practice targets
+            all feed back into the next prompt.</span>
+          </li>
+          <li>
+            <strong>Assembling 15 prompt layers on every request without falling over</strong>
+            <span>Character persona. Mode instructions. Adaptive fragment. Conversation memory.
+            Character memory. Language triangulation across the user's other languages. Teaching
+            notes. Linguistic insights. Cross-user patterns. Pronunciation profile. Emotional state.
+            Immersion trigger. Scenario suggestion. Active recall. Content filter. All composed
+            in order, all cached intelligently, all shipped before the user notices latency.</span>
+          </li>
+          <li>
+            <strong>Free-tier voice that costs the platform nothing</strong>
+            <span>Premium voice uses ElevenLabs and Deepgram. Free voice has to cost zero. Solution:
+            Kokoro TTS running as in-browser WASM for output, Web Speech API for input. On-device.
+            Private. No network round-trip to a paid vendor. The free tier is actually usable
+            instead of being a paywall in disguise.</span>
+          </li>
+          <li>
+            <strong>One codebase, three deliverables</strong>
+            <span>A monorepo shared across an Express API, a React 19 + Vite 6 web app, and an
+            Expo SDK 52 React Native mobile app. Characters, types, AI wrappers, and the LNN
+            engine live in shared packages. Web and mobile both consume the same character
+            definitions and the same conversation engine, so a new feature lands everywhere at
+            once instead of three times.</span>
+          </li>
+          <li>
+            <strong>Subscription plumbing across web, iOS, and Android</strong>
+            <span>Stripe for web credit-card subscriptions. RevenueCat wrapping Apple StoreKit and
+            Google Play Billing for mobile. Webhook verification on both sides, unified subscription
+            state in Postgres, and a tier model (Free / Plus / Premium) that gates message counts,
+            scenarios, and premium voice independently of platform.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          A TypeScript monorepo managed with npm workspaces. The API is Express on Node 20,
+          talking to PostgreSQL 17 via Prisma 6. Redis 7 handles rate limiting, token blacklisting,
+          teaching-notes cache, pronunciation profiles, and cross-user pattern caching. REST
+          endpoints for everything transactional. WebSocket for streaming conversation tokens in
+          real time.
+        </p>
+        <p>
+          The web app is React 19 on Vite 6, a client-side SPA. The mobile app is Expo SDK 52 on
+          React Native 0.76, managed workflow. Shared packages hold the 16 character definitions
+          and system prompts, the Claude / ElevenLabs / Deepgram wrappers, the common type
+          library, and the LNN engine itself &mdash; so the phone app and the web app run the same
+          brain.
+        </p>
+        <p>
+          Claude Haiku 4.5 handles the bulk of conversational turns with aggressive prompt caching.
+          Sonnet 4.6 is reserved for vision, scenario generation, and complex correction analysis.
+          ElevenLabs (multilingual v2) and Deepgram (Nova-2) serve premium voice. Stripe handles
+          web billing, RevenueCat handles mobile IAP. AdSense and AdMob serve free-tier ads.
+          Deployed through Docker Compose in dev; production hosting is live on the web.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React 19</span>
+          <span class="tech-tag">Vite 6</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Expo SDK 52</span>
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">Express</span>
+          <span class="tech-tag">Node 20</span>
+          <span class="tech-tag">PostgreSQL 17</span>
+          <span class="tech-tag">Prisma 6</span>
+          <span class="tech-tag">Redis 7</span>
+          <span class="tech-tag">WebSocket</span>
+          <span class="tech-tag">Claude</span>
+          <span class="tech-tag">ElevenLabs</span>
+          <span class="tech-tag">Deepgram</span>
+          <span class="tech-tag">Stripe</span>
+          <span class="tech-tag">RevenueCat</span>
+          <span class="tech-tag">Docker</span>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Roadmap</p>
+        <h2 class="case-study__h2">Launched on web, mobile next</h2>
+        <p>
+          Forked Tongue is live at <span class="highlight">forked-tongue.vercel.app</span> in
+          alpha. All 16 characters, all 8 languages, the free tier, the pricing ladder, the
+          voice pipeline, the brain visualization &mdash; all of it ships now, on the web, in
+          a browser, no download required.
+        </p>
+        <p>
+          The Expo build is in development for iOS and Android distribution. Same characters.
+          Same conversation engine. Same LNN driving adaptation. The mobile app is a different
+          surface, not a different product &mdash; which is the whole point of the shared-packages
+          monorepo architecture.
+        </p>
+        <p class="dim">
+          Pick a language. Someone will text you. In their language. No placement test, no setup.
+          You'll figure it out together. That's what a friend does.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

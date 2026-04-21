@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Civic Filament | dev://portfolio</title>
+  <meta name="description" content="How one developer built an AI-powered civic platform that reveals the 70% agreement hidden beneath every debate — with vote alignment scoring, campaign finance correlation, FOIA generators, and a predictive model for who will vote against their constituents.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-civicfilament.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Civic Filament — Consensus, Accountability, and Moneyball for Democracy",
+    "description": "Building an AI-powered platform that surfaces latent community consensus and holds elected officials measurably accountable to it.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-civicfilament.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Civic Filament | dev://portfolio">
+  <meta property="og:description" content="Building an AI-powered platform that surfaces latent community consensus and holds elected officials measurably accountable to it.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-civicfilament.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Civic Filament">
+  <meta name="twitter:description" content="Building an AI-powered platform that surfaces latent community consensus and holds elected officials measurably accountable to it.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Civic Filament</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Your community has already agreed. They just don't know it yet. An AI-powered
+          platform that reveals the 70% agreement hiding beneath every civic debate &mdash;
+          then gives you the tools to make your government act on it.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched (Web Alpha) &middot; Mobile In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>React &middot; Claude API &middot; PWA &middot; IndexedDB</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Every civic listening tool is architecturally broken</h2>
+        <p>
+          Social media algorithms surface the most divisive 30% of opinion because outrage
+          drives clicks. The 70% of latent agreement is invisible by design. Surveys flatten
+          the richness of human values into a thumbs-up or a 1&ndash;5 rating &mdash; a "no"
+          could mean a dozen different things, and nobody is asked which one. Town halls
+          are biased toward people with time, confidence, and access. The loudest voice
+          wins, not the most representative one.
+        </p>
+        <p>
+          Meanwhile, the accountability infrastructure that's supposed to pressure elected
+          officials into responsiveness barely exists. Campaign finance filings live in one
+          database. Vote records live in another. Budget line items live in a third.
+          Newspaper coverage lives in a fourth. By the time a concerned citizen
+          cross-references them, the hearing is over and the vote is taken.
+        </p>
+        <p>
+          The result: governments routinely vote against supermajority consensus while
+          claiming to represent "a divided community." The disagreement is manufactured.
+          The data to expose it exists. It's just scattered across incompatible systems
+          that nobody is paid to connect.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">45+</p>
+            <p class="stat-block__label">Features</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">6</p>
+            <p class="stat-block__label">Categories</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">10</p>
+            <p class="stat-block__label">Universal Value Types</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">16D</p>
+            <p class="stat-block__label">Value Embeddings</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">8</p>
+            <p class="stat-block__label">Bias Types Detected</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">7</p>
+            <p class="stat-block__label">Transparency Dimensions</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">13</p>
+            <p class="stat-block__label">Accountability Events</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">For Communities</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">High-fidelity listening, then hard accountability</h2>
+        <p>
+          Civic Filament replaces the survey with a conversation. An AI mediator trained
+          in Motivational Interviewing and Nonviolent Communication conducts adaptive
+          3&ndash;7 turn interviews, extracting underlying values instead of surface
+          positions. Eight cognitive biases &mdash; status quo, availability, anchoring,
+          NIMBY, loss aversion, confirmation, bandwagon, zero-sum &mdash; are detected in
+          real time and gently counteracted. A "no" on a bike lane becomes: supports
+          cycling infrastructure conditionally, requires parking mitigation, core value
+          is economic vitality.
+        </p>
+        <p>
+          Thousands of those conversations are then clustered not by for/against but by
+          value similarity. Schwartz's 10 universal value types mapped into 16-dimensional
+          embeddings. DBSCAN clustering to find natural group boundaries without
+          pre-specifying how many groups exist. Bayesian confidence intervals on every
+          finding, so you know exactly how certain each claim is.
+        </p>
+        <p>
+          The output isn't a report that sits on a shelf. It's a living accountability
+          layer: vote alignment scoring, campaign finance correlation, budget-value
+          alignment, transparency grading, FOIA generators for 5 state templates plus
+          federal, governance scorecards, and a predictive model for who will vote
+          against their constituents. Insight becomes pressure. Pressure becomes change.
+        </p>
+      </section>
+
+      <!-- Listening at scale -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Listening at Scale</p>
+        <h2 class="case-study__h2">The AI that listens harder than humans can</h2>
+        <p>
+          Most disagreements are the same underlying need expressed through different
+          cultural vocabularies. "Defund the police" and "Back the blue" both contain
+          people who want safe neighborhoods with accountable public servants. The
+          language is incompatible. The values aren't. Finding that signal at community
+          scale is the core problem Civic Filament solves.
+        </p>
+        <p>
+          As participants talk, a live panel renders their emerging values with growing
+          confidence bars. Parallel model calls extract values in real time; a separate
+          verification pass runs the extraction three times at different settings, and
+          if the results disagree, the finding is flagged as ambiguous rather than
+          reported as fact. The Discourse Quality Index scores each conversation across
+          five dimensions &mdash; higher-quality conversations carry more weight in the
+          synthesis.
+        </p>
+        <p>
+          After the interview, each participant is shown someone who appears to disagree
+          with them but shares their underlying values. Position divergence times value
+          overlap equals an empathy score; an AI-generated narrative bridge explains
+          what the two people actually have in common. Polarization is a product of
+          the tools we use to measure it. Better tools produce less of it.
+        </p>
+      </section>
+
+      <!-- Holding power accountable -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Holding Power Accountable</p>
+        <h2 class="case-study__h2">Moneyball for democracy</h2>
+        <p>
+          Once consensus is measured, every vote an official takes can be scored against
+          it. Representation Alignment produces a civic credit score: "Council Member X
+          aligned 34% across 6 issues." Not partisan &mdash; just data. Promise-keeping
+          is tracked through a 13-event, 6-phase accountability timeline that logs drift
+          between what was committed to and what was delivered, and flags skipped phases
+          automatically.
+        </p>
+        <p>
+          Campaign Finance Correlation runs Pearson correlation between donation amounts
+          and vote-against-consensus rate. "Officials receiving over $5K from real estate
+          voted against housing consensus 83% of the time." Budget-Value Alignment maps
+          line items to community priorities and surfaces the gaps: "94% consensus on
+          safety, 8% of budget." Transparency Scoring grades governance process quality
+          across 7 dimensions and detects potential open meetings law violations.
+        </p>
+        <p>
+          The Predictive Model is the piece that unnerves people. A logistic regression
+          trained on donations, tenure, prior alignment, absenteeism, and committee
+          assignments predicts which officials will vote against their constituents
+          before the vote happens. Outcomes are logged back in and the model recalibrates.
+          Over time it gets more accurate &mdash; which is exactly the point.
+        </p>
+        <div class="verdict">
+          <p>
+            When the newspaper says "divided" but the data shows 82% agreement, that gap
+            is now measurable. When an official accepts $5K from a developer and then
+            votes against the housing consensus, that pattern is now priced. When a
+            promised 15% affordable-units commitment is delivered as 8%, the
+            enforceability-weighted score updates automatically.
+          </p>
+          <p class="dim">
+            Make manufactured disagreement expensive. That's the design philosophy.
+          </p>
+        </div>
+      </section>
+
+      <!-- From insight to action -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">From Insight to Action</p>
+        <h2 class="case-study__h2">The advocacy toolkit, auto-generated</h2>
+        <p>
+          A report nobody reads changes nothing. Civic Filament turns the consensus
+          dataset into the artifacts organizers actually use: 2-minute and 5-minute
+          testimony scripts pre-filled with community data and counter-argument rebuttals,
+          complete legal petitions where every demand cites a specific agreement
+          percentage, state-specific FOIA requests across 5 state templates plus federal
+          (with appeal letters if denied), and one-click regulatory comments backed by
+          thousands of interviews.
+        </p>
+        <p>
+          The Policy Simulator lets an elected official drag conditions into a proposal
+          and watch predicted support shift in real time. "Add a trial period: +28%.
+          Add parking mitigation: +25%." A Pareto frontier optimizer surfaces the
+          cheapest path to a supermajority. Coalition Builder identifies which
+          organizations share underlying values and drafts shared platform statements
+          natural alliances can sign. Power Mapping names the decision-makers, what
+          influences them, and what to say.
+        </p>
+        <p>
+          Rights-Based Mapping ties consensus to 7 legal frameworks &mdash; ADA, Fair
+          Housing, Civil Rights, EPA Environmental Justice, UDHR, and two more. Legal
+          teeth, not just moral mandate. And an 11-event-type monitoring rule engine
+          fires alerts when tracked issues appear on agendas, votes happen, or deadlines
+          approach. The watchdog never sleeps because the watchdog is software.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>Counterfactual re-clustering on live data</strong>
+            <span>"What if we only counted people within 2 blocks? What if we weighted
+            by Discourse Quality Index minimum? What if we excluded the last 30 days?"
+            Every counterfactual re-runs the full DBSCAN clustering on a filtered and
+            weighted subset of perspectives, then regenerates consensus statements and
+            Bayesian confidence intervals on the fly. Making that interactive &mdash; not
+            a 15-minute batch job &mdash; required careful incremental clustering,
+            memoized embeddings, and the discipline to treat the synthesis as a
+            queryable object rather than a static output.</span>
+          </li>
+          <li>
+            <strong>Real-time consensus formation over SSE</strong>
+            <span>Watching consensus crystallize live is the feature that sells the
+            product, and it's also a distributed state problem dressed as a UI
+            animation. Server-Sent Events stream four event types &mdash;
+            perspective_added, consensus_changed, gap_closed, threshold_crossed &mdash;
+            with a 30-second heartbeat, while the clustering engine decides which
+            incoming perspectives actually move a cluster boundary enough to rebroadcast.
+            Get it wrong and every interview retriggers the whole dashboard.</span>
+          </li>
+          <li>
+            <strong>Bias-adjusted AI-mediated interviews</strong>
+            <span>The mediator has to ask open-ended questions, detect eight cognitive
+            bias patterns in real time, adapt its system prompt to gently counteract
+            them, and adjust confidence weights accordingly (floor 0.5 so nothing is
+            ever fully dismissed). The adaptive 3&ndash;7 turn interview has to know
+            when it has enough signal and stop &mdash; because a bored participant is
+            a noisy participant. Knowledge Gap Steering then pushes future interviews
+            toward the parts of value-space the synthesis hasn't sampled yet.</span>
+          </li>
+          <li>
+            <strong>Cryptographic provenance via Merkle trees</strong>
+            <span>Every finding has to be mathematically auditable. Journalists,
+            researchers, and opposing counsel all need to be able to verify that the
+            "82% agreement" claim is backed by actual interview hashes that weren't
+            tampered with after the fact. Building a Merkle-tree audit trail over a
+            live synthesis that's constantly ingesting new perspectives &mdash; while
+            keeping individual responses privacy-preserving &mdash; is a genuinely
+            non-obvious architecture problem.</span>
+          </li>
+          <li>
+            <strong>Offline-first IndexedDB sync across a multi-stage pipeline</strong>
+            <span>Communities without reliable internet still need the platform. Every
+            interview, every local consensus snapshot, every advocacy artifact has to
+            persist to IndexedDB and reconcile with the server when connectivity
+            returns &mdash; without losing perspectives, double-counting them, or
+            corrupting the Merkle provenance chain. Anonymous session tokens in
+            localStorage plus full-state IndexedDB persistence after each message
+            is the easy part. The hard part is merge semantics.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it's built</h2>
+        <p>
+          React frontend shipped as a Progressive Web App &mdash; installable on phone,
+          works offline, no app store required. Claude (Sonnet for the mediator, Haiku
+          for parallel value extraction and natural-language querying) handles the
+          AI surface. IndexedDB for local persistence, localStorage for anonymous
+          session tokens, the Web Speech API for voice input with graceful fallback on
+          unsupported browsers.
+        </p>
+        <p>
+          The synthesis engine runs 16-dimensional value embeddings through DBSCAN
+          clustering, layered with Bayesian Beta-Binomial confidence scoring and
+          incremental re-clustering for new perspectives. Server-Sent Events push live
+          dashboard updates. Haversine distance and Gaussian proximity weighting power
+          the spatial intelligence layer; GeoJSON export feeds city GIS systems
+          directly. A full REST API exposes JSON, Markdown, and GeoJSON exports for
+          researchers and integrators.
+        </p>
+        <p>
+          The methodology itself is the architecture's north star: Motivational
+          Interviewing (OARS), Nonviolent Communication, Schwartz Value Theory, Steiner's
+          Discourse Quality Index, Toulmin Argumentation, Fishkin's Deliberative Polling,
+          Bayesian credible intervals instead of p-values, and Merkle-tree cryptographic
+          provenance. Not vibes. Peer-reviewed methods, implemented and shipped.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">PWA</span>
+          <span class="tech-tag">Claude API</span>
+          <span class="tech-tag">IndexedDB</span>
+          <span class="tech-tag">Server-Sent Events</span>
+          <span class="tech-tag">DBSCAN</span>
+          <span class="tech-tag">Bayesian Stats</span>
+          <span class="tech-tag">Merkle Trees</span>
+          <span class="tech-tag">Web Speech API</span>
+          <span class="tech-tag">GeoJSON</span>
+          <span class="tech-tag">Framer Motion</span>
+          <span class="tech-tag">REST API</span>
+        </div>
+      </section>
+
+      <!-- Verdict / Philosophy -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Verdict</p>
+        <h2 class="case-study__h2">The question isn't whether your community agrees</h2>
+        <p>
+          It's whether anyone has bothered to ask &mdash; with a tool built to actually
+          hear the answer, at a price communities can afford, on infrastructure that
+          works in a church basement with no wifi. Civic Filament is free forever for
+          communities because the people doing accountability work shouldn't have to
+          outbid the people they're holding accountable.
+        </p>
+        <p>
+          The platform launched to the web in alpha. Mobile apps are in development.
+          Every finding is cryptographically auditable, every piece of methodology is
+          published, every artifact is exportable. There are no proprietary black boxes
+          between a community and the claims being made on its behalf.
+        </p>
+        <p class="dim">
+          The disagreement was manufactured. The consensus was always there. Civic
+          Filament is the infrastructure for surfacing it &mdash; and for making sure
+          the people elected to represent it actually do.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&hearts; Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

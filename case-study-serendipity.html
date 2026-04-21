@@ -213,6 +213,10 @@
             <p class="stat-block__label">Psychological Frameworks</p>
           </div>
           <div class="stat-block">
+            <p class="stat-block__number">49</p>
+            <p class="stat-block__label">Service Modules</p>
+          </div>
+          <div class="stat-block">
             <p class="stat-block__number">50m</p>
             <p class="stat-block__label">Proximity Range</p>
           </div>
@@ -288,7 +292,10 @@
         <p>
           Every inference happens on your phone. Every comparison happens on your phone.
           The server never sees your personality, your location, or who you met. The
-          math runs where you are.
+          math runs where you are. The frameworks themselves sit on top of a broader
+          on-device services layer &mdash; proximity, signaling, safety, memory, surfacing,
+          and monetization all isolated into their own modules, so the resonance engine
+          stays a single focused responsibility rather than a tangled monolith.
         </p>
       </section>
 
@@ -394,6 +401,16 @@
             demands a bio. Consent prompts phrased so "not right now" carries no social
             cost. Design decisions as accessibility engineering.</span>
           </li>
+          <li>
+            <strong>Relay fallback without giving the server anything worth having</strong>
+            <span>Bluetooth LE is unreliable &mdash; iOS backgrounds it, crowds attenuate
+            it, and two phones across a noisy bar might miss each other even at two
+            meters. A WebSocket relay fills the gap for edge cases. The hard part is
+            making a server useful without making it trustworthy: the relay carries
+            sealed traffic between ephemeral beacon IDs, can't decrypt a single byte,
+            can't correlate sessions across rotations, and has nothing to hand over
+            under subpoena except encrypted bytes it couldn't read anyway.</span>
+          </li>
         </ul>
       </section>
 
@@ -426,6 +443,8 @@
           <span class="tech-tag">Rotating Beacons</span>
           <span class="tech-tag">Haptics</span>
           <span class="tech-tag">Adaptive Power</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">PostgreSQL</span>
           <span class="tech-tag">iOS</span>
           <span class="tech-tag">Android</span>
           <span class="tech-tag">Web Alpha</span>

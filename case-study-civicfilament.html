@@ -172,7 +172,7 @@
           then gives you the tools to make your government act on it.
         </p>
         <div class="case-study__meta">
-          <div>Status <span>Launched (Web Alpha) &middot; Mobile In Development</span></div>
+          <div>Status <span>Launched (Web Alpha) &middot; Native iOS + Android Scaffolded</span></div>
           <div>Role <span>Solo Developer</span></div>
           <div>Stack <span>React &middot; Claude API &middot; PWA &middot; IndexedDB</span></div>
         </div>
@@ -324,6 +324,14 @@
           across 7 dimensions and detects potential open meetings law violations.
         </p>
         <p>
+          The correlations aren't abstract &mdash; they run against real data. OpenStates
+          for legislator records and vote histories. FEC and OpenSecrets for federal
+          campaign finance. ProPublica for congressional behavior. Municipal Socrata and
+          ArcGIS portals for budget line items and local vote records. The platform is
+          only as sharp as the feeds behind it, which is why the feeds are first-class
+          infrastructure, not a footnote.
+        </p>
+        <p>
           The Predictive Model is the piece that unnerves people. A logistic regression
           trained on donations, tenure, prior alignment, absenteeism, and committee
           assignments predicts which officials will vote against their constituents
@@ -440,11 +448,17 @@
         <h2 class="case-study__h2">How it's built</h2>
         <p>
           React frontend shipped as a Progressive Web App &mdash; installable on phone,
-          works offline, no app store required. Claude (Sonnet for the mediator, Haiku
-          for parallel value extraction and natural-language querying) handles the
-          AI surface. IndexedDB for local persistence, localStorage for anonymous
-          session tokens, the Web Speech API for voice input with graceful fallback on
-          unsupported browsers.
+          works offline, no app store required. Native iOS and Android builds are
+          scaffolded through Capacitor, with Xcode and Android Studio projects ready to
+          ship; the web and mobile surfaces share the same consensus engine, the same
+          methodology, the same Merkle-backed audit trail. Claude (Sonnet for the
+          mediator, Haiku for parallel value extraction and natural-language querying)
+          handles the AI surface. IndexedDB for local persistence, Supabase Auth for
+          verified accounts on top of anonymous session tokens. The Web Speech API
+          handles voice input with graceful fallback; a self-hosted Kokoro TTS endpoint
+          reads content aloud for participants who can't read comfortably, have visual
+          impairment, or come from oral traditions. Participation shouldn't require
+          literacy.
         </p>
         <p>
           The synthesis engine runs 16-dimensional value embeddings through DBSCAN
@@ -472,6 +486,12 @@
           <span class="tech-tag">Bayesian Stats</span>
           <span class="tech-tag">Merkle Trees</span>
           <span class="tech-tag">Web Speech API</span>
+          <span class="tech-tag">Kokoro TTS</span>
+          <span class="tech-tag">Capacitor</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">OpenStates</span>
+          <span class="tech-tag">FEC API</span>
+          <span class="tech-tag">OpenSecrets</span>
           <span class="tech-tag">GeoJSON</span>
           <span class="tech-tag">Framer Motion</span>
           <span class="tech-tag">REST API</span>
@@ -490,10 +510,11 @@
           outbid the people they're holding accountable.
         </p>
         <p>
-          The platform launched to the web in alpha. Mobile apps are in development.
-          Every finding is cryptographically auditable, every piece of methodology is
-          published, every artifact is exportable. There are no proprietary black boxes
-          between a community and the claims being made on its behalf.
+          The platform launched to the web in alpha. Native iOS and Android builds
+          are scaffolded through Capacitor and ready to ship. Every finding is
+          cryptographically auditable, every piece of methodology is published, every
+          artifact is exportable. There are no proprietary black boxes between a
+          community and the claims being made on its behalf.
         </p>
         <p class="dim">
           The disagreement was manufactured. The consensus was always there. Civic

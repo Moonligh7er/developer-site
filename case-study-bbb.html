@@ -352,13 +352,14 @@
           knowledge management for a moving target.
         </p>
         <p>
-          Onboarding training is the first venue-level layer in production.
+          Onboarding training was the first venue-level layer in production.
           A new hire&apos;s first two weeks &mdash; the period where most
           inconsistency originates &mdash; can be standardized against
           the same source of truth the rest of the program uses. Expanded
           training modules (technique drills, certification paths,
           well-defined progression from barback to lead) are in active
-          development.
+          development. Menu engineering analytics ship next to it as the
+          second in-production layer, treated below in its own section.
         </p>
         <p>
           Floor plan management is roadmapped as the next venue feature.
@@ -370,6 +371,47 @@
           plan tools the way a bartender or floor manager actually uses
           them, not the way a pre-2010 enterprise software contract
           assumed they would.
+        </p>
+      </section>
+
+      <!-- The Bar Model -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Bar Model</p>
+        <h2 class="case-study__h2">Beyond the 1982 baseline</h2>
+        <p>
+          The textbook tool for menu profitability is the Kasavana &amp;
+          Smith 4-quadrant matrix &mdash; Star, Plowhorse, Puzzle, Dog
+          &mdash; published in 1982 and faithfully reimplemented by almost
+          every menu-engineering product since. The canonical version is
+          real and useful, and it stays available here as a toggle for
+          like-for-like industry comparison. It also has limitations the
+          textbook never modeled: a single global threshold pool makes a
+          $3 shot and a $24 craft cocktail compete in the same statistical
+          comparison, snapshot-only data hides whether a Star is rising
+          or peaking, there&apos;s no signal for the regular who orders
+          the same drink every Thursday, and items with too few orders
+          to be reliable get classified anyway with no warning that the
+          quadrant is unreliable.
+        </p>
+        <p>
+          The BBB Bar Model adds four bar-context refinements alongside
+          the canonical model: per-category thresholds so cocktails,
+          shots, beer, and wine only compete within their own group; a
+          28-day rolling trend velocity that distinguishes a peaking
+          Star from a still-climbing one; a regulars-favorite flag for
+          items where 30% or more of orders come from customers with
+          three or more distinct visit dates &mdash; an item that looks
+          like a Dog in raw numbers but anchors loyalty gets a tooltip
+          warning against cutting it; and a low-confidence flag for
+          items beneath ten orders in the analysis window. An optional
+          toggle switches the profit axis from margin percentage to
+          contribution per minute of prep labor &mdash; useful where a
+          menu mixes fast pours with batched cocktails, off by default
+          elsewhere because most cocktail prep times cluster tightly
+          enough that labor weighting adds noise rather than signal.
+          The point isn&apos;t to abandon a 44-year-old standard. It&apos;s
+          to honor it by naming what it does and doesn&apos;t model,
+          and shipping the parts the bar context actually needs.
         </p>
       </section>
 

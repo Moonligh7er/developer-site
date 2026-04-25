@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: Bartender's Black Book | dev://portfolio</title>
+  <meta name="description" content="From a barback&apos;s first night behind the stick to a venue-level bar program: 181 cocktails from the canon, 44 data points each, voice-activated, and built so a Friday-night service doesn&apos;t become a public test.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-bbb.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: Bartender's Black Book — The Canon, Behind the Bar",
+    "description": "From barback to bartender to bar program: 181 cocktails from the canon, 44 data points each, voice-activated, built so a Friday night service doesn't become a public test.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-bbb.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: Bartender's Black Book | dev://portfolio">
+  <meta property="og:description" content="The canon, behind the bar: 181 cocktails, 44 data points each, voice-activated, built for Friday-night service.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-bbb.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: Bartender's Black Book">
+  <meta name="twitter:description" content="The canon, behind the bar: 181 cocktails, 44 data points each, voice-activated.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">Bartender's Black Book</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          The canon, behind the bar. 181 cocktails from the published masters,
+          44 data points each, voice-activated, and built so a barback&apos;s
+          first night doesn&apos;t have to be a public test.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched (Web Alpha) &middot; Android In Development &middot; iOS Roadmapped</span></div>
+          <div>Role <span>Solo Developer (and bartender)</span></div>
+          <div>Stack <span>React &middot; Capacitor &middot; Supabase &middot; Drizzle &middot; Claude API</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">Working bars run on knowledge they can&apos;t look up</h2>
+        <p>
+          Friday night service. Ten servers, ten drinks each on every order.
+          A barback gets promoted to the well with no formal training and
+          finds out, in real time, that he doesn&apos;t know how to make
+          half of what&apos;s being called. He needs the answer immediately.
+          He cannot be seen searching for it. The venue is paying him to
+          look like the answer. That&apos;s the floor where the idea began.
+        </p>
+        <p>
+          The fallback was the canon &mdash; <em>Death &amp; Co</em>,
+          <em>Smuggler&apos;s Cove</em>, the <em>Dead Rabbit Drinks Manual</em>
+          &mdash; the same library a serious bar program owner keeps in the
+          office, the same shelf I&apos;d later find in the back of a
+          celebrated tiki bar. The information exists. It&apos;s just bound,
+          paginated, scattered across multiple volumes, and built for
+          studying, not for a Friday at eleven.
+        </p>
+        <p>
+          The other half of the problem is institutional. A well-liked spot
+          where I worked had a recipe binder where roughly half the recipes
+          were wrong, and the bartenders working from it made the same drinks
+          differently. Recipes aren&apos;t copyrightable &mdash; they&apos;re
+          facts &mdash; which means the canon is freely available and
+          freely getting butchered. A working bar needs a single source of
+          truth. Most don&apos;t have one.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">181</p>
+            <p class="stat-block__label">Curated Recipes</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">44</p>
+            <p class="stat-block__label">Data Points Per Recipe</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Canonical Source Texts</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">1</p>
+            <p class="stat-block__label">Source of Truth</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Target Surfaces (Web/iOS/Android)</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">~90%</p>
+            <p class="stat-block__label">AI Cost Savings via Caching</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">5+</p>
+            <p class="stat-block__label">Venue Types Informing Design</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">The canon, queryable, at the speed of service</h2>
+        <p>
+          Bartender&apos;s Black Book takes 181 recipes from the published
+          masters and structures every one of them across 44 data points:
+          spec, glassware, ice format, garnish, build method, technique
+          notes, balance profile, lineage, common mistakes, substitutions,
+          and the rest of the working bartender&apos;s mental model.
+          Most cocktail apps store eight to ten data points and call it
+          a database. Forty-four is the difference between a recipe and
+          a reference.
+        </p>
+        <p>
+          The interface is engineered for the heat. Voice activation is
+          designed for subtle invocation &mdash; no obvious wake word,
+          no &quot;Hey app&quot; broadcast, no breaking the front-of-house
+          illusion. A bartender mid-build can ask a question without the
+          guest at the rail noticing the lookup happened. The answer
+          arrives in the time it takes to reach for a jigger.
+        </p>
+        <p>
+          Every recipe is curated from the canon, not generated, not
+          crowdsourced. The published masters spent careers refining
+          these specs. Bartender&apos;s Black Book treats their work
+          with the respect that&apos;s missing from the average bar
+          binder. Original recipes &mdash; from Moonlit Mixology &amp;
+          Events Co., the bar-program spin-off that emerged from this
+          work &mdash; are roadmapped for a separate publication later.
+        </p>
+      </section>
+
+      <!-- Built on the Canon -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Built on the Canon</p>
+        <h2 class="case-study__h2">Curation as the moat</h2>
+        <p>
+          Most bartender apps lean on user-generated content. Recipes
+          uploaded by anyone, rated by anyone, with no vetting and no
+          provenance. The result is a dataset that mirrors the binder
+          problem: a hundred Negroni variations from a hundred contributors,
+          half of them subtly wrong, all of them claiming authority.
+        </p>
+        <p>
+          The 181 recipes here come from the canon &mdash; the same
+          published works any serious bar program owner already trusts.
+          Each recipe is sourced, structured, and consistent. The depth
+          of the 44-point schema means the app can answer questions a
+          recipe alone can&apos;t: <em>what&apos;s the balance profile</em>,
+          <em>what technique does this need</em>, <em>what historical
+          variation am I being asked for here</em>. Sourced facts cited
+          to their masters. Not opinions claiming to be facts.
+        </p>
+      </section>
+
+      <!-- Designed for the Heat -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Designed for the Heat</p>
+        <h2 class="case-study__h2">Stage presence is part of the spec</h2>
+        <p>
+          The original problem was as much social as technical. A
+          bartender visibly searching for a recipe is a bartender losing
+          the room. The app&apos;s primary lookup paths are designed to
+          be invisible: subtle voice triggers, single-tap retrieval,
+          screen-off audio response when needed. The performative side
+          of the bar &mdash; the eye contact, the patter, the apparent
+          ease &mdash; is preserved.
+        </p>
+        <p>
+          Every interaction is built around the constraint of working
+          service. No multi-step wizards. No quizzes between you and the
+          recipe. No tutorials interrupting at 11pm on a Friday. The
+          fastest path from question to answer wins. The second-fastest
+          path is unacceptable.
+        </p>
+        <div class="verdict">
+          <p>
+            Cocktails are facts. Facts can&apos;t be copyrighted. Looking
+            up a Vesper at 11pm on a Friday isn&apos;t cheating &mdash;
+            it&apos;s hospitality. The app is built so that lookup
+            doesn&apos;t cost the bartender the room.
+          </p>
+          <p class="dim">
+            The canon, made queryable. That&apos;s the design philosophy.
+          </p>
+        </div>
+      </section>
+
+      <!-- From Bartender to Bar Program -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">From Bartender to Bar Program</p>
+        <h2 class="case-study__h2">Built behind the stick, designed for the venue</h2>
+        <p>
+          The product began as a single-bartender reference, but every
+          feature roadmapped from here was sketched while working
+          actual service across actual venue types &mdash; high-volume
+          casino bars, upscale restaurants, brewery floors, craft beer
+          and wine programs, themed entertainment venues. Each venue type
+          surfaces a different shape of the same underlying problem:
+          knowledge management for a moving target.
+        </p>
+        <p>
+          Onboarding training is the first venue-level layer in production.
+          A new hire&apos;s first two weeks &mdash; the period where most
+          inconsistency originates &mdash; can be standardized against
+          the same source of truth the rest of the program uses. Expanded
+          training modules (technique drills, certification paths,
+          well-defined progression from barback to lead) are in active
+          development.
+        </p>
+        <p>
+          Floor plan management is roadmapped as the next venue feature.
+          The tools that ship with most POS systems are built by people
+          who&apos;ve never run a Friday-night service &mdash; tables that
+          can&apos;t be split, sections that can&apos;t be rebalanced
+          without a manager override, layouts that don&apos;t survive a
+          private event. The opportunity is straightforward: design floor
+          plan tools the way a bartender or floor manager actually uses
+          them, not the way a pre-2010 enterprise software contract
+          assumed they would.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>A 44-data-point schema that doesn&apos;t become a
+            data-entry hellscape</strong>
+            <span>Most cocktail databases are shallow because depth is
+            expensive to maintain. Modeling 44 fields per recipe required
+            a schema that supports semantic queries (<em>find me the
+            balance-profile sibling of this drink</em>) without making
+            curation prohibitive. The win was treating the recipe object
+            as a knowledge artifact, not a row &mdash; with structured
+            citations, technique linkage, and lineage relationships built
+            into the data model from day one.</span>
+          </li>
+          <li>
+            <strong>Voice that survives a working bar</strong>
+            <span>A bar is the worst possible acoustic environment for
+            voice input. Music, ambient noise, multi-person conversations,
+            hard surfaces, and a bartender who can&apos;t use a wake word
+            without breaking the social contract with the guest at the
+            rail. The system has to listen on demand &mdash; not always &mdash;
+            and respond on a timeline that&apos;s shorter than the time
+            it takes to free a hand. The UX target is &quot;the lookup
+            happens and nobody notices.&quot;</span>
+          </li>
+          <li>
+            <strong>Recipe consistency as a first-class platform feature</strong>
+            <span>The institutional problem &mdash; same drink built
+            differently by different bartenders &mdash; is solved by
+            making the canonical spec the path of least resistance.
+            Team menus inherit the canon. House favorites layer on top.
+            Modifications are tracked separately rather than mutating
+            the canonical record. The data model is the discipline.</span>
+          </li>
+          <li>
+            <strong>Cross-platform shipping with a one-developer budget</strong>
+            <span>Web alpha live, Android in active development, iOS
+            scheduled to follow. Capacitor was the deliberate architecture
+            choice: a single React codebase that ships to web, iOS, and
+            Android with native shells around it, so every feature lands
+            on every surface without three implementations of the same
+            screen. The trade-off is real (some platform-specific work
+            remains), but the alternative was shipping three apps and
+            maintaining one.</span>
+          </li>
+          <li>
+            <strong>AI cost discipline so the free tier is actually free</strong>
+            <span>An AI-augmented reference can easily run a model call
+            on every query, which would force a paywall to keep the lights
+            on. The platform pairs prompt caching with a server-side
+            response cache (identical Claude calls never hit the API),
+            cutting the variable cost roughly 90 percent. Free working
+            bartenders shouldn&apos;t be subsidizing the architecture
+            of the cheap-to-run version.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it&apos;s built</h2>
+        <p>
+          React frontend, shipped to web, iOS, and Android via Capacitor.
+          Supabase for Postgres, auth, and storage; Drizzle as the type-safe
+          query layer over a relational schema with first-class support
+          for recipes, ingredients, collections, team menus, and house
+          favorites. The data model is the platform &mdash; everything
+          else is a way to read it.
+        </p>
+        <p>
+          Anthropic Claude provides the language layer for natural-question
+          retrieval and structured reasoning over the recipe corpus.
+          Prompt caching plus a server-side response cache keep AI
+          variable cost under control, which is the only reason the
+          free tier survives sustained usage. Kokoro TTS handles voice
+          output without sending audio off-device-where-possible to a
+          paid vendor. Stripe and RevenueCat handle web and mobile
+          monetization respectively. PostHog handles analytics, Sentry
+          handles errors, Formspree handles contact.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">Capacitor</span>
+          <span class="tech-tag">Supabase</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Drizzle ORM</span>
+          <span class="tech-tag">Anthropic Claude</span>
+          <span class="tech-tag">Kokoro TTS</span>
+          <span class="tech-tag">Stripe</span>
+          <span class="tech-tag">RevenueCat</span>
+          <span class="tech-tag">PostHog</span>
+          <span class="tech-tag">Sentry</span>
+          <span class="tech-tag">Railway</span>
+        </div>
+      </section>
+
+      <!-- Roadmap / Verdict -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Roadmap</p>
+        <h2 class="case-study__h2">From reference to bar program</h2>
+        <p>
+          Web alpha is live. Android is in active development. iOS is
+          on the roadmap, scheduled to follow. The product trajectory
+          tracks the founder&apos;s own progression through the
+          industry: from individual bartender tool, to onboarding-training
+          layer for new hires, to venue-level program tools (floor plans,
+          expanded training, inventory), to a publishable house
+          collection of original specs from the spin-off bar program.
+        </p>
+        <p>
+          The audience expands the same way. Working bartenders first.
+          Bar managers and program owners next, with the venue-level
+          features. Hospitality educators after that, as the training
+          layer matures. Each layer is built by someone who actually
+          worked the floor that requires it &mdash; which is the asset
+          the rest of the category isn&apos;t shipping with.
+        </p>
+        <p class="dim">
+          A bar runs on knowledge. Most of that knowledge is published.
+          Almost none of it is queryable at the speed a working service
+          actually requires. Bartender&apos;s Black Book is the version
+          I needed on my first night and didn&apos;t have. It&apos;s
+          live now.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&#9825; Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

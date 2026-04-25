@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Study: DreamSeek | dev://portfolio</title>
+  <meta name="description" content="A research-grade dream interpretation engine built at the intersection of psychology, depth tradition, and the moment of waking. Twelve traditions treated as overlapping lenses, ~100 analysis operations per dream, and a sister translation project to surface the texts the canon left behind.">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/svg+xml" href="moonlit-logo.svg">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-dreamseek.html">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Case Study: DreamSeek — Dreams as Communications, Not Content",
+    "description": "Twelve interpretive traditions as overlapping lenses, captured at the moment of waking, structured as a relationship rather than a lookup.",
+    "author": {"@type": "Person", "name": "Michael Wylde"},
+    "url": "https://moonligh7er.github.io/developer-site/case-study-dreamseek.html",
+    "image": "https://moonligh7er.github.io/developer-site/og-image.png"
+  }
+  </script>
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Case Study: DreamSeek | dev://portfolio">
+  <meta property="og:description" content="Twelve traditions treated as overlapping lenses. ~100 analysis operations per dream. A research-grade instrument for taking the unconscious seriously.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-dreamseek.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Case Study: DreamSeek">
+  <meta name="twitter:description" content="Dreams as communications, not content. Twelve traditions as lenses, captured at the moment of waking.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="alternate" type="application/rss+xml" title="Moonlit Social Labs RSS" href="feed.xml">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" href="js/effects.js" as="script">
+  <link rel="preload" href="js/main.js" as="script">
+  <style>
+    .case-study { max-width: 800px; margin: 0 auto; }
+    .case-study__header { padding: 6rem 0 3rem; }
+    .case-study__meta {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 1.5rem;
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .case-study__meta span { color: var(--text-secondary); }
+    .case-study__section { padding: 3rem 0; }
+    .case-study__section + .case-study__section { border-top: 1px solid var(--border); }
+    .case-study__section-label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .case-study__section-label::before { content: '//'; color: var(--text-dim); }
+    .case-study__h2 {
+      font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 300; color: var(--text-bright); margin-bottom: 1.5rem;
+    }
+    .case-study p { font-size: 1rem; line-height: 1.75; color: var(--text-primary); margin-bottom: 1.25rem; max-width: 65ch; }
+    .case-study p:last-child { margin-bottom: 0; }
+    .case-study .highlight { color: var(--teal); }
+    .case-study .dim { color: var(--text-dim); }
+
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem; margin: 2rem 0;
+    }
+    .stat-block {
+      border: 1px solid var(--border); padding: 1.25rem;
+      background: var(--surface);
+    }
+    .stat-block__number {
+      font-family: var(--font-display); font-size: 1.8rem;
+      font-weight: 300; color: var(--teal); line-height: 1;
+    }
+    .stat-block__label {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-dim); margin-top: 0.5rem;
+    }
+
+    .challenge-list { list-style: none; display: flex; flex-direction: column; gap: 1.5rem; margin: 2rem 0; }
+    .challenge-list li { padding-left: 1.5rem; position: relative; }
+    .challenge-list li::before {
+      content: '\25B8'; position: absolute; left: 0;
+      color: var(--violet); font-size: 0.8rem;
+    }
+    .challenge-list li strong {
+      display: block; font-family: var(--font-display);
+      font-weight: 400; color: var(--text-bright); margin-bottom: 0.25rem;
+    }
+    .challenge-list li span { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .verdict {
+      border: 1px solid var(--border); padding: 2rem;
+      background: var(--surface); margin: 2rem 0;
+      position: relative;
+    }
+    .verdict::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--teal), var(--violet), var(--amber));
+    }
+    .verdict p { color: var(--text-secondary); }
+    .verdict p:first-of-type { color: var(--text-primary); }
+
+    .tech-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+    .tech-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border); color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-secondary); margin-top: 3rem;
+      transition: gap var(--transition-fast);
+    }
+    .back-link:hover { gap: 0.75rem; color: var(--teal); }
+    .back-link::before { content: '\2190'; }
+
+    @media (max-width: 768px) {
+      .case-study__header { padding: 5rem 0 2rem; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-study__meta { gap: 1rem; }
+    }
+  </style>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="index.html" class="nav__logo"><img src="moonlit-logo.svg" alt="Moonlit Social Labs" class="nav__logo-img"><span class="logo-accent">dev</span>://portfolio</a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="index.html" class="nav__link">Home</a></li>
+      <li><a href="portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="free-tools.html" class="nav__link">Tools</a></li>
+      <li><a href="about.html" class="nav__link">About</a></li>
+      <li><a href="lab.html" class="nav__link">Lab</a></li>
+      <li><a href="connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <article class="case-study container">
+
+      <header class="case-study__header reveal">
+        <p class="label">Case Study</p>
+        <h1 class="heading-xl glitch">DreamSeek</h1>
+        <p class="text-body mt-2" style="max-width: 55ch;">
+          Most dream apps are dream-dictionary slop. DreamSeek is the
+          opposite: a research-grade interpretation engine drawing on
+          twelve overlapping traditions, captured at the moment of
+          waking, structured so the dream is treated as a relationship
+          rather than a lookup.
+        </p>
+        <div class="case-study__meta">
+          <div>Status <span>Launched (Web Alpha) &middot; Native Mobile In Development</span></div>
+          <div>Role <span>Solo Developer</span></div>
+          <div>Stack <span>Expo &middot; React Native &middot; Postgres &middot; Prisma &middot; Claude API</span></div>
+        </div>
+      </header>
+
+      <!-- The Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Problem</p>
+        <h2 class="case-study__h2">A category error dressed as a market</h2>
+        <p>
+          The dream app market is mostly dream-dictionary content disguised
+          as software. <em>Dreaming of water means anxiety. Dreaming of
+          falling means insecurity.</em> The format is reductive in a way
+          that working analysts and serious lay practitioners have spent
+          a century explicitly arguing against. There&apos;s an entire
+          shelf of clinical and academic literature on why a single-symbol
+          gloss is the wrong primitive &mdash; and almost none of it is
+          built into the apps people actually use.
+        </p>
+        <p>
+          DreamSeek&apos;s design stance was shaped at the intersection
+          of three frames: a psychology major&apos;s training in academic
+          dream research, a Jungian&apos;s habit of treating the unconscious
+          as an interlocutor, and a brief work-study with a traditionally
+          trained Native medicine teacher. Across all three, one
+          conviction recurs: dreams are communications, and treating them
+          as content to be consumed instead of as relationships to be
+          entered is the category error the rest of the market is built on.
+        </p>
+        <p>
+          The serious alternative &mdash; cracking open Jung, James
+          Hillman, Ann Faraday, the depth-psychology lineage, the
+          alchemical and Hermetic symbolic systems, the contemporary
+          neuroscience of sleep, the 19th-century French dream science
+          that pre-figured Freud &mdash; is real and it works. It also
+          requires reading half a library, owning a translator&apos;s
+          shelf, and having two free hours after waking up. Most people
+          have access to none of those, and the apps that could deliver
+          them at the right scale and the right time don&apos;t exist.
+        </p>
+      </section>
+
+      <!-- By the Numbers -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">By the Numbers</p>
+        <div class="stat-grid">
+          <div class="stat-block">
+            <p class="stat-block__number">12</p>
+            <p class="stat-block__label">Interpretive Traditions</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">~100</p>
+            <p class="stat-block__label">Analysis Operations Per Dream</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">2</p>
+            <p class="stat-block__label">Capture Modes (Quick &amp; Deep)</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">E2E</p>
+            <p class="stat-block__label">Encrypted Dream Content</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">3</p>
+            <p class="stat-block__label">Surfaces (Web &middot; iOS &middot; Android)</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">$0</p>
+            <p class="stat-block__label">Free Tier</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">1</p>
+            <p class="stat-block__label">Sister Project Spawned</p>
+          </div>
+          <div class="stat-block">
+            <p class="stat-block__number">100+</p>
+            <p class="stat-block__label">Yrs of Untranslated Canon Targeted</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Solution -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Solution</p>
+        <h2 class="case-study__h2">Twelve traditions, layered as lenses, on the dream you just had</h2>
+        <p>
+          DreamSeek runs roughly a hundred analysis operations across
+          twelve interpretive traditions every time a dream is logged.
+          Each tradition is treated as a lens, not as the answer. Where
+          the lenses agree, the synthesis is high-confidence. Where they
+          disagree, the disagreement itself is informative &mdash; and
+          surfaced, not papered over. The user reads a layered
+          interpretation that names which lens is producing which
+          observation, and what to do with it.
+        </p>
+        <p>
+          Capture is mobile-first because the moment of waking is when
+          dreams are most accessible and least retrievable, in that
+          order. A quick capture mode preserves the trace before it
+          fades. A deep capture mode invites the dreamer to add the
+          felt sense, the affective tone, the residue, the figures,
+          the spatial geography &mdash; all of which the engine then
+          reads. The friction is calibrated for 3:47am, not for noon.
+        </p>
+        <p>
+          Every dream is encrypted at rest and stays the dreamer&apos;s
+          property in every architectural sense. Dreams are diaries the
+          dreamer didn&apos;t choose. The system is designed so the
+          intimacy is held with the same seriousness it was offered with.
+        </p>
+      </section>
+
+      <!-- The Lenses -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Lenses</p>
+        <h2 class="case-study__h2">Twelve traditions, treated as twelve overlapping instruments</h2>
+        <p>
+          The interpretive stack leans heavily on the depth-psychological
+          lineage and its symbolic adjuncts. Jungian analytical psychology
+          for archetypal pattern, complex theory, and individuation arc.
+          Object relations (Winnicott, Klein) for the relational dynamics
+          between dream figures and the dreamer. Archetypal psychology in
+          the Hillman lineage for image-as-soul rather than image-as-symptom.
+          Contemporary cognitive neuroscience of sleep and dreaming for
+          the physiological substrate. Hermetic Qabalah and alchemical
+          symbolism as structural correspondence systems &mdash; not as
+          religious doctrine but as the symbolic vocabularies the modern
+          depth-psychological tradition explicitly inherited from.
+        </p>
+        <p>
+          The full twelve include the 19th-century French dream science
+          tradition that pre-figured all of this &mdash; Maury&apos;s
+          1865 <em>Le sommeil et les rêves</em>, Saint-Denys&apos; 1867
+          <em>Les rêves et les moyens de les diriger</em>, the work of
+          Pierre Janet, Yves Delage&apos;s <em>Le Rêve</em> &mdash; texts
+          which have been substantially out of reach for English-only
+          readers for more than a century. That gap is what spawned the
+          sister project described below.
+        </p>
+        <p>
+          The synthesis layer is the actual product. Twelve traditions
+          can&apos;t blur into a soup &mdash; each is preserved as the
+          distinct lens it is, and synthesis is an explicit final step
+          rather than the default. Reading the output should feel like
+          reading a letter from your own psyche, with marginalia from
+          twelve different scholars, not like reading a horoscope.
+        </p>
+      </section>
+
+      <!-- Captured at the Moment of Waking -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Captured at the Moment of Waking</p>
+        <h2 class="case-study__h2">Calibrated for 3:47am, not for noon</h2>
+        <p>
+          A dream that isn&apos;t captured within minutes is mostly gone.
+          Most dream-journaling tools are built like productivity apps,
+          which means they implicitly assume a desk, a clear head, and
+          a schedule &mdash; the exact opposite of the conditions in
+          which dreams are actually accessible. DreamSeek is built for
+          the body that just woke up.
+        </p>
+        <p>
+          Quick capture is voice-first, eyes-half-shut compatible, and
+          finishes in under thirty seconds. Just enough to anchor the
+          trace. Deep capture is invited later, with prompts pulled
+          from the engine&apos;s analytical needs &mdash; the felt
+          sense, the affective tone, the figures, the geography, the
+          residual emotion at waking. The dreamer is filling out
+          structured fields without realizing the structure is
+          itself an interpretive instrument.
+        </p>
+        <p>
+          The longitudinal layer is where the engine compounds. A single
+          dream is one signal. A series of dreams over weeks is a
+          conversation the psyche is having with itself, and the engine
+          is built to read the conversation, not just the sentences.
+          Dream series analysis &mdash; recurring figures, evolving
+          motifs, archetypal arcs across time &mdash; is first-class.
+        </p>
+        <div class="verdict">
+          <p>
+            Dreams are communications, not content. Treat them like a
+            relationship and they will teach you. Treat them like a
+            lookup and they will resent you. The whole engine is built
+            on that distinction.
+          </p>
+          <p class="dim">
+            A research-grade instrument for taking the unconscious seriously.
+            That&apos;s the design philosophy.
+          </p>
+        </div>
+      </section>
+
+      <!-- The Translation Problem -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Translation Problem</p>
+        <h2 class="case-study__h2">Half the canon hasn&apos;t been translated</h2>
+        <p>
+          Building a research-grade dream interpretation engine surfaced
+          a problem the larger field has been quietly carrying for a
+          hundred and fifty years: most of the foundational texts
+          aren&apos;t available in English. Maury&apos;s 1865 <em>Le
+          sommeil et les rêves</em>, Saint-Denys&apos; 1867 <em>Les rêves
+          et les moyens de les diriger</em>, the corpus of Pierre
+          Janet&apos;s work on dissociation and dream content, Yves
+          Delage&apos;s <em>Le Rêve</em> &mdash; canonical, cited
+          forward by Freud and Jung, and substantially untranslated.
+          German precursors and Arabic and Egyptian dream-temple
+          materials are even further behind.
+        </p>
+        <p>
+          DreamSeek can&apos;t responsibly cite a tradition whose source
+          texts the user can&apos;t verify. Treating the canon as a
+          black box defeats the entire claim of being research-grade.
+          So a parallel project was started: a reading and translation
+          workbench for public-domain dream-science texts in languages
+          most users don&apos;t read &mdash; with confidence visualization,
+          alternative-rendering surfacing, and reader-side annotation.
+          The translation isn&apos;t presented as final. It&apos;s
+          presented with its uncertainty visible, which is the only
+          honest way to translate philosophical and scientific prose
+          a century-and-a-half old.
+        </p>
+        <p>
+          The current working slice is the 19th-century French
+          dream-science anthology. German texts, Arabic dream-tradition
+          materials, and Egyptian dream-temple records are on the
+          roadmap, in some cases requiring licensing in addition to
+          translation. The dream interpretation engine and the
+          translation workbench will eventually share infrastructure,
+          but they are deliberately separate products: each serves an
+          audience the other doesn&apos;t.
+        </p>
+      </section>
+
+      <!-- The Hard Parts -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">The Hard Parts</p>
+        <h2 class="case-study__h2">What made this difficult</h2>
+        <ul class="challenge-list">
+          <li>
+            <strong>~100 analysis operations without fatiguing the dreamer</strong>
+            <span>The engine runs roughly a hundred operations per
+            dream &mdash; archetypal scoring, complex detection, figure
+            relation analysis, motif tracking, alchemical-stage mapping,
+            symbolic correspondence checks, neuroscientific contextualization,
+            longitudinal pattern matching, and a dozen more. Surfacing
+            that depth as a readable, layered narrative &mdash; rather
+            than a forensic report &mdash; is the core UX problem.
+            Reading the output should feel like a long letter from a
+            patient analyst, not like a dashboard.</span>
+          </li>
+          <li>
+            <strong>Cross-tradition synthesis without dilution</strong>
+            <span>Twelve traditions can&apos;t blur into a soup. Each
+            is structured as its own lens with its own vocabulary, its
+            own primitives, and its own confidence model. Synthesis is
+            an explicit final step that names which lenses contributed
+            which observations &mdash; preserving disagreement when it
+            exists, rather than averaging it away. The data model treats
+            each tradition as a first-class subsystem, not as a tag.</span>
+          </li>
+          <li>
+            <strong>Wake-time capture UX for a body that just woke up</strong>
+            <span>The capture flow has to work in the dark, with one
+            eye open, voice-first, in under thirty seconds, while the
+            dream is still loading-bearing and unfading. Most journaling
+            apps are built for productive daytime users; almost none of
+            their assumptions transfer. Building a flow that&apos;s
+            actually frictionless at 3:47am required treating the moment
+            of waking as the primary platform constraint, not as an
+            edge case.</span>
+          </li>
+          <li>
+            <strong>Privacy architecture for the most intimate possible content</strong>
+            <span>Dreams are not chosen content. The dreamer didn&apos;t
+            decide what to confess. That makes the privacy bar higher
+            than for any other category of personal app. Column-level
+            encryption of dream content, application-layer encryption
+            before the database sees anything, isolation between dream
+            content and the analytical surface, and deliberate limits
+            on what the AI layer is permitted to retain &mdash; all of
+            it is non-negotiable architecture, not a checklist item.</span>
+          </li>
+          <li>
+            <strong>An entire untranslated canon as a build-time blocker</strong>
+            <span>Half of the canonical dream-science texts aren&apos;t
+            available in English. A serious instrument can&apos;t cite
+            a tradition whose primary sources the user can&apos;t verify.
+            Solving this responsibly required spawning a sister project
+            &mdash; a reading and translation workbench with confidence
+            visualization, alternative-rendering surfacing, and
+            reader-participation in disambiguation &mdash; rather than
+            asking users to trust an opaque AI translation. Building a
+            translation app to support a dream app was not in the
+            original plan. It is now.</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Architecture -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Architecture</p>
+        <h2 class="case-study__h2">How it&apos;s built</h2>
+        <p>
+          Expo and React Native through expo-router give a single
+          TypeScript codebase that ships to web, iOS, and Android &mdash;
+          the same screens, the same flows, the same data model on every
+          surface. NativeWind for styling, React Native Reanimated for
+          the longitudinal series visualizations. Backend is a Node
+          service in TypeScript, with shared types between client and
+          server so the analytical contract can&apos;t drift.
+        </p>
+        <p>
+          Persistence is PostgreSQL with Prisma as the ORM. Dream content
+          is encrypted at the application layer before it ever reaches
+          the database; Redis handles session state and caching. The
+          analytical pipeline composes Claude calls behind a structured
+          set of tradition-specific prompts &mdash; every operation
+          narrowly scoped, every output schema-validated &mdash; and
+          response caching keeps cost discipline tight enough that the
+          free tier survives sustained use.
+        </p>
+        <div class="tech-tags">
+          <span class="tech-tag">Expo</span>
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">expo-router</span>
+          <span class="tech-tag">NativeWind</span>
+          <span class="tech-tag">Reanimated</span>
+          <span class="tech-tag">Node</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Prisma</span>
+          <span class="tech-tag">Redis</span>
+          <span class="tech-tag">Claude API</span>
+          <span class="tech-tag">App-Layer Encryption</span>
+        </div>
+      </section>
+
+      <!-- Roadmap -->
+      <section class="case-study__section reveal">
+        <p class="case-study__section-label">Roadmap</p>
+        <h2 class="case-study__h2">From single dream to evolving instrument</h2>
+        <p>
+          Web alpha is live. Native iOS and Android builds are in
+          development through Expo, with the wake-time capture experience
+          as the priority surface. The engine&apos;s longitudinal layer
+          &mdash; dream series analysis, recurring-figure tracking,
+          motif-evolution detection &mdash; sharpens with every dream
+          a user logs, which means the product gets better the longer
+          it&apos;s used.
+        </p>
+        <p>
+          The translation workbench advances in parallel. The 19th-century
+          French anthology is the working slice. German precursors are
+          next, then Arabic and Egyptian dream-tradition materials where
+          licensing allows. As each canon comes online, the interpretation
+          engine gains a new layer of citable depth.
+        </p>
+        <p class="dim">
+          Most dream apps treat the unconscious like a content library.
+          DreamSeek treats it like a correspondent. The instrument is
+          live now. The conversation can begin.
+        </p>
+      </section>
+
+      <a href="portfolio.html" class="back-link">Back to Portfolio</a>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&#9825; Support on Ko-fi</a></p>
+    <p class="footer__text">
+      <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
+      <span class="footer-accent">&#9671;</span>
+    </p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+  </footer>
+
+  <script src="js/effects.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/player.js"></script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

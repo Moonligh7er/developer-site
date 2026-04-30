@@ -749,10 +749,11 @@
       <div class="ev-quality__card">
         <div class="ev-quality__title">Chi-Square Uniformity</div>
         <div id="chi-value" class="ev-quality__value" style="font-size:0.8rem;">
-          <span id="chi-dot" class="ev-chi-indicator good"></span>
+          <span id="chi-dot" class="ev-chi-indicator"></span>
           <span id="chi-num">--</span>
         </div>
-        <div id="chi-verdict" class="ev-quality__sub">Generate data to test</div>
+        <div id="chi-verdict" class="ev-quality__sub">Click "Quick test" or generate data</div>
+        <button id="chi-quick-test" type="button" onclick="runQuickChiTest()" style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:0.3rem 0.6rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;">Run Quick Test</button>
       </div>
     </section>
 
@@ -1504,6 +1505,8 @@
 
     function updateQualityDisplay() {
       if (bitHistory.length === 0) return;
+
+      // ── Bit-level frequency (always shown) ──
       let zeros = 0, ones = 0;
       for (let i = 0; i < bitHistory.length; i++) {
         if (bitHistory[i] === 0) zeros++; else ones++;
@@ -1516,41 +1519,93 @@
       document.getElementById('bit-bar-one').style.width = onePct + '%';
       document.getElementById('bit-ratio').textContent = 'Ratio: ' + zeroPct + '% / ' + onePct + '% (' + total + ' bits)';
 
-      // Chi-square on byte-level distribution (256 bins)
-      if (bitHistory.length >= 2048) {
-        // Reconstruct bytes from bits
-        const byteCount = Math.floor(bitHistory.length / 8);
-        const observed = new Array(256).fill(0);
-        for (let i = 0; i < byteCount; i++) {
-          let byteVal = 0;
-          for (let b = 0; b < 8; b++) {
-            byteVal = (byteVal << 1) | bitHistory[i * 8 + b];
-          }
-          observed[byteVal]++;
+      // ── Chi-square uniformity ──
+      // Two-tier strategy:
+      //   < 16 bytes:  insufficient data, show progress
+      //   16–1280 bytes: 16-bin nibble test (df=15, valid from ~16 bytes)
+      //   ≥ 1280 bytes: 256-bin byte test (df=255, valid when expected ≥ 5/bin)
+      // 95% CI bounds:
+      //   df=15:  7.26 (lower) ↔ 25.00 (upper), expected ~15
+      //   df=255: 219.04 (lower) ↔ 293.25 (upper), expected ~255
+      const numEl = document.getElementById('chi-num');
+      const dot = document.getElementById('chi-dot');
+      const verdict = document.getElementById('chi-verdict');
+      const totalBytes = Math.floor(bitHistory.length / 8);
+
+      if (totalBytes < 16) {
+        numEl.textContent = '--';
+        dot.className = 'ev-chi-indicator';
+        verdict.textContent = 'Sampling… ' + totalBytes + '/16 bytes minimum';
+        return;
+      }
+
+      // Reconstruct bytes from bits once
+      const bytes = new Array(totalBytes);
+      for (let i = 0; i < totalBytes; i++) {
+        let b = 0;
+        for (let bit = 0; bit < 8; bit++) {
+          b = (b << 1) | bitHistory[i * 8 + bit];
         }
-        const expected = byteCount / 256;
+        bytes[i] = b;
+      }
+
+      if (totalBytes < 1280) {
+        // Nibble-level chi² (16 bins, df=15)
+        const observed = new Array(16).fill(0);
+        for (let i = 0; i < totalBytes; i++) {
+          observed[(bytes[i] >> 4) & 0xF]++;
+          observed[bytes[i] & 0xF]++;
+        }
+        const expected = (totalBytes * 2) / 16;
+        let chi2 = 0;
+        for (let i = 0; i < 16; i++) {
+          const diff = observed[i] - expected;
+          chi2 += (diff * diff) / expected;
+        }
+        chi2 = Math.round(chi2 * 100) / 100;
+        numEl.textContent = chi2.toFixed(2);
+        if (chi2 >= 7.26 && chi2 <= 25.00) {
+          dot.className = 'ev-chi-indicator good';
+          verdict.textContent = 'Uniform · χ²(15 df) · ' + totalBytes + ' bytes';
+        } else if (chi2 >= 4.60 && chi2 <= 32.80) {
+          dot.className = 'ev-chi-indicator warning';
+          verdict.textContent = 'Marginal · χ²(15 df) · ' + totalBytes + ' bytes';
+        } else {
+          dot.className = 'ev-chi-indicator poor';
+          verdict.textContent = 'Outside expected range · ' + totalBytes + ' bytes';
+        }
+      } else {
+        // Byte-level chi² (256 bins, df=255)
+        const observed = new Array(256).fill(0);
+        for (let i = 0; i < totalBytes; i++) observed[bytes[i]]++;
+        const expected = totalBytes / 256;
         let chi2 = 0;
         for (let i = 0; i < 256; i++) {
           const diff = observed[i] - expected;
           chi2 += (diff * diff) / expected;
         }
         chi2 = Math.round(chi2 * 100) / 100;
-        document.getElementById('chi-num').textContent = chi2.toFixed(2);
-        const dot = document.getElementById('chi-dot');
-        const verdict = document.getElementById('chi-verdict');
-        // For 255 df, expected chi2 ~ 255. Good range roughly 200-310
-        if (chi2 >= 190 && chi2 <= 320) {
+        numEl.textContent = chi2.toFixed(2);
+        if (chi2 >= 219.04 && chi2 <= 293.25) {
           dot.className = 'ev-chi-indicator good';
-          verdict.textContent = 'Good uniformity (expected ~255 for 255 df)';
-        } else if (chi2 >= 150 && chi2 <= 380) {
+          verdict.textContent = 'Uniform · χ²(255 df) · ' + totalBytes + ' bytes';
+        } else if (chi2 >= 200 && chi2 <= 320) {
           dot.className = 'ev-chi-indicator warning';
-          verdict.textContent = 'Marginal (' + byteCount + ' bytes sampled)';
+          verdict.textContent = 'Marginal · χ²(255 df) · ' + totalBytes + ' bytes';
         } else {
           dot.className = 'ev-chi-indicator poor';
-          verdict.textContent = 'Unusual — sample more data';
+          verdict.textContent = 'Outside expected range · ' + totalBytes + ' bytes';
         }
       }
     }
+
+    // Quick test: sample enough bytes to give a statistically meaningful
+    // reading immediately, without making the user click generators 64+ times.
+    window.runQuickChiTest = function() {
+      const buf = new Uint8Array(2048); // → 256-bin byte test, expected 8/bin
+      secureFill(buf);
+      trackBits(buf);
+    };
 
     /* =========================================================
        GENERATORS

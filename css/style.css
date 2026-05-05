@@ -4,6 +4,23 @@
    cyberpunk undertones, dimensional ambiguity
    ============================================ */
 
+/* --- Ad container: collapse when empty / unfilled (prevents reserved gap) --- */
+.ad-container ins.adsbygoogle { min-height: 0 !important; }
+/* AdSense: hide if explicitly unfilled */
+.ad-container:has(ins[data-ad-status="unfilled"]) {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+/* Empty container with no rendered child = hide (collapses placeholder until ads.js fills it) */
+.ad-container:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+
 /* --- Minimum Font Size --- */
 *, *::before, *::after {
   font-size: max(inherit, 12px);
@@ -608,6 +625,17 @@ body::before {
   font-weight: 400;
   color: var(--text-bright);
   margin-bottom: 0.5rem;
+}
+
+.card__tagline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: -0.25rem;
+  margin-bottom: 0.75rem;
+  font-style: italic;
 }
 
 .card__desc {

@@ -10,7 +10,7 @@ class DigitalRain {
     this.ctx = canvas.getContext('2d');
     this.columns = [];
     this.fontSize = 10;
-    this.chars = '01アイウエオカキクケコ◇◆△▽○●□■♦♢∞∅∆∇⊕⊗'.split('');
+    this.chars = '01'.split('');
     this.resize();
     this.init();
 

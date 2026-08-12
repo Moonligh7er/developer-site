@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio | Michael Wylde — Apps, Tools &amp; Case Studies</title>
-  <meta name="description" content="Full-stack developer portfolio: 11+ applications spanning AI, OSINT, cybersecurity, education, and web development. Case studies included.">
+  <title>Portfolio | Michael Wylde â€” Apps, Tools &amp; Case Studies</title>
+  <meta name="description" content="Full-stack developer portfolio: 23 applications spanning AI, OSINT, cybersecurity, education, and web development. Case studies included.">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/portfolio.html">
@@ -12,15 +12,15 @@
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Portfolio — Michael Wylde",
-    "description": "Full-stack developer portfolio: 11+ applications spanning AI, OSINT, cybersecurity, education, and web development.",
+    "name": "Portfolio â€” Michael Wylde",
+    "description": "Full-stack developer portfolio: 23 applications spanning AI, OSINT, cybersecurity, education, and web development.",
     "url": "https://moonligh7er.github.io/developer-site/portfolio.html",
     "author": {"@type": "Person", "name": "Michael Wylde"}
   }
   </script>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Portfolio | Michael Wylde — Apps, Tools & Case Studies">
-  <meta property="og:description" content="Full-stack developer portfolio: 11+ applications spanning AI, OSINT, cybersecurity, education, and web development.">
+  <meta property="og:title" content="Portfolio | Michael Wylde â€” Apps, Tools & Case Studies">
+  <meta property="og:description" content="Full-stack developer portfolio: 23 applications spanning AI, OSINT, cybersecurity, education, and web development.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/portfolio.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preload" href="js/effects.js" as="script">
   <link rel="preload" href="js/main.js" as="script">
+  <style>.card.filtered-out { display: none; }</style>
 <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
   <script>
@@ -74,7 +75,7 @@
 
     <section class="section container" style="padding-top: 0;">
       <!-- Tabs -->
-      <div class="tabs" data-tabs="portfolio">
+      <div class="tabs" data-filter="portfolio">
         <button class="tab active" data-target="all">All</button>
         <button class="tab" data-target="intelligence">Intelligence & Research</button>
         <button class="tab" data-target="lifestyle">Lifestyle & Utility</button>
@@ -90,11 +91,11 @@
       <div class="tab-content active" id="all">
         <div class="card-grid stagger">
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="intelligence">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Intelligence &middot; OSINT</div>
             <h3 class="card__title">Deep-Scry</h3>
-            <p class="card__desc">The world's most comprehensive open-source intelligence platform. 90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and court-ready evidence packaging. Sees everything. Proves everything.</p>
+            <p class="card__desc">The world's most comprehensive open-source intelligence platform. 90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and cryptographically verifiable evidence exports (SHA-256 + HMAC + RFC 3161 timestamps). Sees everything. Proves the chain.</p>
             <div class="card__tags">
               <span class="tag">OSINT</span>
               <span class="tag">AI/NLP</span>
@@ -114,7 +115,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="intelligence">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Research &middot; Knowledge</div>
             <h3 class="card__title">TheoLink</h3>
@@ -138,11 +139,11 @@
           </div>
           </div>
 
-          <div class="card card--rose">
+          <div class="card card--rose" data-category="intelligence">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Research &middot; Science</div>
             <h3 class="card__title">PsyStat</h3>
-            <p class="card__desc">The future of behavioral science research. Statistical analysis platform purpose-built for psychology — from study design to publication-ready output. Makes the invisible measurable.</p>
+            <p class="card__desc">The future of behavioral science research. Statistical analysis platform purpose-built for psychology â€” from study design to publication-ready output. Makes the invisible measurable.</p>
             <div class="card__tags">
               <span class="tag">Data Science</span>
               <span class="tag">Statistics</span>
@@ -161,7 +162,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Science</div>
             <h3 class="card__title">AstroDeep</h3>
@@ -184,11 +185,11 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Divination</div>
             <h3 class="card__title">Entropic Tarot</h3>
-            <p class="card__desc">Quantum divination through sacred randomness. The first tarot app powered by true physical entropy — your device's sensors create genuinely unpredictable readings no algorithm can replicate. Bank-grade cryptography meets ancient wisdom.</p>
+            <p class="card__desc">Quantum divination through sacred randomness. The first tarot app powered by true physical entropy â€” your device's sensors create genuinely unpredictable readings no algorithm can replicate. Bank-grade cryptography meets ancient wisdom.</p>
             <div class="card__tags">
               <span class="tag">Entropy</span>
               <span class="tag">Cryptography</span>
@@ -208,11 +209,11 @@
           </div>
           </div>
 
-          <div class="card card--amber">
+          <div class="card card--amber" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Utility</div>
             <h3 class="card__title">Service Well</h3>
-            <p class="card__desc">181 recipes. 44 data points each. AI-powered pairing, floor plan management, menu engineering, training systems, and inventory — the only app that knows your bar as well as you do. Zero bullshit.</p>
+            <p class="card__desc">181 recipes. 44 data points each. AI-powered pairing, floor plan management, menu engineering, training systems, and inventory â€” the only app that knows your bar as well as you do. Zero bullshit.</p>
             <div class="card__tags">
               <span class="tag">Mobile</span>
               <span class="tag">AI</span>
@@ -231,11 +232,11 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="productivity">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Productivity &middot; Education</div>
             <h3 class="card__title">StudyBreak</h3>
-            <p class="card__desc">65+ features that replace Quizlet, Anki, Notion, and Google Calendar — powered by AI that actually reads your course materials. The last study app you'll ever download.</p>
+            <p class="card__desc">65+ features that replace Quizlet, Anki, Notion, and Google Calendar â€” powered by AI that actually reads your course materials. The last study app you'll ever download.</p>
             <div class="card__tags">
               <span class="tag">Education</span>
               <span class="tag">AI</span>
@@ -254,16 +255,16 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="devtools">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Developer &middot; Security</div>
             <h3 class="card__title">Dagda</h3>
-            <p class="card__desc">AI-powered cybersecurity command platform. 640 security tools across 9 operational modes. One AI that understands them all. Watches, hunts, traps, and fights. Named after the Celtic god of knowledge.</p>
+            <p class="card__desc">AI-powered cybersecurity command platform. Hundreds of security tools across 9 operational modes. One AI that understands them all. Watches, hunts, traps, and fights. Named after the Celtic god of knowledge.</p>
             <div class="card__tags">
               <span class="tag">Cybersecurity</span>
               <span class="tag">AI</span>
               <span class="tag">Automation</span>
-              <span class="tag">640 Tools</span>
+              <span class="tag">500+ Tools</span>
             </div>
             <div class="card__footer">
             <div class="card__platforms">
@@ -274,7 +275,7 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="devtools">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Developer &middot; Productivity</div>
             <h3 class="card__title">Thought+Form</h3>
@@ -294,7 +295,7 @@
           </div>
           </div>
 
-          <div class="card card--rose">
+          <div class="card card--rose" data-category="webdev">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Dev &middot; Satire</div>
             <h3 class="card__title">Dystopian Daily News</h3>
@@ -317,7 +318,7 @@
           </div>
           </div>
 
-          <div class="card card--amber">
+          <div class="card card--amber" data-category="webdev">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Dev &middot; Business</div>
             <h3 class="card__title">Eclipse Events</h3>
@@ -336,7 +337,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="webdev">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Dev &middot; Events</div>
             <h3 class="card__title">Moonlit Events</h3>
@@ -356,7 +357,7 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="webgames">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Games &middot; Horror</div>
             <h3 class="card__title">DreadMaze</h3>
@@ -376,11 +377,11 @@
           </div>
           </div>
 
-          <div class="card card--rose">
+          <div class="card card--rose" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Consciousness</div>
             <h3 class="card__title">Entheo</h3>
-            <p class="card__desc">The divine within. A consciousness exploration companion bridging ancient wisdom and future technology. Journaling, AI analysis, session management, integration support, sacred practices, breathwork, and dream journaling — unified in one tool.</p>
+            <p class="card__desc">The divine within. A consciousness exploration companion bridging ancient wisdom and future technology. Journaling, AI analysis, session management, integration support, sacred practices, breathwork, and dream journaling â€” unified in one tool.</p>
             <div class="card__tags">
               <span class="tag">Consciousness</span>
               <span class="tag">AI</span>
@@ -399,7 +400,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="intelligence">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Intelligence &middot; Influence</div>
             <h3 class="card__title">Filament: Persuasion Lab</h3>
@@ -423,11 +424,11 @@
           </div>
           </div>
 
-          <div class="card card--amber">
+          <div class="card card--amber" data-category="community">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Community &middot; Civic Tech</div>
             <h3 class="card__title">Fault Line</h3>
-            <p class="card__desc">Citizens photograph potholes, broken streetlights, and other hazards. AI verifies the issue, then auto-escalates to authorities once community reports cross a threshold. Public response tracking, legal demand letters, and infrastructure grades turn individual complaints into collective pressure that makes inaction costly.</p>
+            <p class="card__desc">Citizens photograph potholes, broken streetlights, and other hazards. AI verifies the issue, then auto-escalates to authorities once community reports cross a threshold. Public response tracking, statutory demand letter templates you send yourself, and infrastructure grades turn individual complaints into collective pressure that makes inaction costly.</p>
             <div class="card__tags">
               <span class="tag">Civic Tech</span>
               <span class="tag">Accountability</span>
@@ -447,7 +448,7 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="productivity">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Education &middot; Language</div>
             <h3 class="card__title">Forked Tongue</h3>
@@ -471,7 +472,7 @@
           </div>
           </div>
 
-          <div class="card card--rose">
+          <div class="card card--rose" data-category="webdev">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Dev &middot; AI Safety</div>
             <h3 class="card__title">AI Consciousness Tracker</h3>
@@ -495,7 +496,7 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="community">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Community &middot; Civic Tech</div>
             <h3 class="card__title">Civic Filament</h3>
@@ -519,7 +520,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Social</div>
             <h3 class="card__title">SynchroCity</h3>
@@ -544,7 +545,7 @@
           </div>
           </div>
 
-          <div class="card card--violet">
+          <div class="card card--violet" data-category="lifestyle">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Lifestyle &middot; Psychology</div>
             <h3 class="card__title">DreamSeek</h3>
@@ -568,7 +569,7 @@
           </div>
           </div>
 
-          <div class="card card--teal">
+          <div class="card card--teal" data-category="webdev">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Web Dev &middot; Intelligence</div>
             <h3 class="card__title">UFO Nexus</h3>
@@ -591,7 +592,7 @@
           </div>
           </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">SoundVerse</h3>
@@ -599,7 +600,7 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">Pressure Points</h3>
@@ -607,7 +608,7 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">Grappler's Black Book</h3>
@@ -615,7 +616,7 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">Epistemic</h3>
@@ -623,7 +624,7 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">Cybermancy</h3>
@@ -631,7 +632,7 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--teal" style="opacity: 0.5;">
+          <div class="card card--teal" style="opacity: 0.5;" data-category="unknown">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Unknown &middot; Coming Soon</div>
             <h3 class="card__title">Glyph</h3>
@@ -639,11 +640,11 @@
             <div class="card__tags"><span class="tag">Coming Soon</span></div>
             </div>
 
-          <div class="card card--rose">
+          <div class="card card--rose" data-category="devtools">
             <span class="card__status-top">Active Development</span>
             <div class="card__category">Privacy &middot; Security</div>
             <h3 class="card__title">ShadeSense</h3>
-            <p class="card__desc">Your data is being bought, sold, and profiled by 4,000+ companies. Shade scans 101+ data brokers, auto-generates legal removal requests, and makes you disappear.</p>
+            <p class="card__desc">Your data is being bought, sold, and profiled by 4,000+ companies. Shade scans 101+ data brokers, generates jurisdiction-aware removal request templates you send yourself, and helps you disappear.</p>
             <div class="card__tags">
               <span class="tag">Privacy</span>
               <span class="tag">Data Removal</span>
@@ -665,483 +666,6 @@
         </div>
       </div>
 
-      <!-- INTELLIGENCE & RESEARCH -->
-      <div class="tab-content" id="intelligence">
-        <div class="card-grid stagger">
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Intelligence &middot; OSINT</div>
-            <h3 class="card__title">Deep-Scry</h3>
-            <p class="card__desc">90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and court-ready evidence packaging.</p>
-            <div class="card__tags"><span class="tag">OSINT</span><span class="tag">AI/NLP</span><span class="tag">3D Viz</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://deep-seer.onrender.com" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-deepseer.html" class="card__link">Case Study</a>
-              <a href="portfolio-pieces/DeepSeer/blog/index.html" class="card__link">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Research &middot; Knowledge</div>
-            <h3 class="card__title">TheoLink</h3>
-            <p class="card__desc">83 research tools across 12 categories. 22 sacred texts, 14 traditions, AI with 4 reasoning modes, evidence chains, and structural analysis.</p>
-            <div class="card__tags"><span class="tag">Knowledge Graph</span><span class="tag">AI</span><span class="tag">Research</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://TheoLink.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-archive.html" class="card__link">Case Study</a>
-                          <a href="https://the-archive-web.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--rose">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Research &middot; Science</div>
-            <h3 class="card__title">PsyStat</h3>
-            <p class="card__desc">Statistical analysis platform purpose-built for behavioral science — study design to publication-ready output.</p>
-            <div class="card__tags"><span class="tag">Data Science</span><span class="tag">Statistics</span><span class="tag">Research</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://psystat-nexus.vercel.app/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-psystat.html" class="card__link">Case Study</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Intelligence &middot; Influence</div>
-            <h3 class="card__title">Filament: Persuasion Lab</h3>
-            <p class="card__desc">Persuasion intelligence platform. Teaches influence, detects manipulation, and provides tools to design and counter influence operations. 9 categories, 47 tools.</p>
-            <div class="card__tags"><span class="tag">Influence Ops</span><span class="tag">OSINT</span><span class="tag">AI</span><span class="tag">Strategy</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://filament-web.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-filament.html" class="card__link">Case Study</a>
-                          <a href="https://filament-web.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- LIFESTYLE & UTILITY -->
-      <div class="tab-content" id="lifestyle">
-        <div class="card-grid stagger">
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Science</div>
-            <h3 class="card__title">AstroDeep</h3>
-            <p class="card__desc">55+ statistical engines, Granger causality, adversarial steel-man arguments, personal effect size library, falsification engine, blind testing, and three competing systems.</p>
-            <div class="card__tags"><span class="tag">Statistics</span><span class="tag">AI</span><span class="tag">Computation</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://astro-deep.pages.dev/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-astrodeep.html" class="card__link">Case Study</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Divination</div>
-            <h3 class="card__title">Entropic Tarot</h3>
-            <p class="card__desc">Quantum divination through sacred randomness. True physical entropy from your device's sensors. No algorithm can replicate these readings.</p>
-            <div class="card__tags"><span class="tag">Entropy</span><span class="tag">Cryptography</span><span class="tag">Tarot</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://entropic-tarot-production.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-entropic.html" class="card__link">Case Study</a>
-              <a href="https://entropic-tarot-production.up.railway.app/blog/" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--amber">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Utility</div>
-            <h3 class="card__title">Service Well</h3>
-            <p class="card__desc">181 recipes, 44 data points each. AI pairing, floor plans, menu engineering, training, and inventory management.</p>
-            <div class="card__tags"><span class="tag">Mobile</span><span class="tag">AI</span><span class="tag">Hospitality</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://bartenders-black-book-production.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-bbb.html" class="card__link">Case Study</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--rose">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Consciousness</div>
-            <h3 class="card__title">Entheo</h3>
-            <p class="card__desc">Consciousness exploration companion. Journaling, AI analysis, session management, integration support, sacred practices, breathwork, and dream journaling.</p>
-            <div class="card__tags"><span class="tag">Consciousness</span><span class="tag">AI</span><span class="tag">Wellness</span><span class="tag">Integration</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://entheo-eosin.vercel.app/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="portfolio-pieces/Entheo/blog/index.html" class="card__link">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Social</div>
-            <h3 class="card__title">SynchroCity</h3>
-            <p class="card__tagline">Digital Serendipity</p>
-            <p class="card__desc">Bluetooth proximity discovery using 46 frameworks of psychological resonance, all computed on-device. Privacy-first social for people who want real encounters instead of swipe theater.</p>
-            <div class="card__tags"><span class="tag">BLE Mesh</span><span class="tag">Mobile</span><span class="tag">Privacy-First</span><span class="tag">On-Device</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://serendipity-landing-jet.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-serendipity.html" class="card__link">Case Study</a>
-              <a href="https://serendipity-landing-jet.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Lifestyle &middot; Psychology</div>
-            <h3 class="card__title">DreamSeek</h3>
-            <p class="card__desc">Dream interpretation across 12 traditions (Jungian, mystical, neuroscientific). ~100 analysis operations per dream, then synthesis across all frames. Rigorous, not dream-dictionary.</p>
-            <div class="card__tags"><span class="tag">Dream Analysis</span><span class="tag">AI</span><span class="tag">Psychology</span><span class="tag">Mobile</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://dreamseek-web.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-dreamseek.html" class="card__link">Case Study</a>
-              <a href="https://dreamseek-web.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PRODUCTIVITY -->
-      <div class="tab-content" id="productivity">
-        <div class="card-grid stagger">
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Productivity &middot; Education</div>
-            <h3 class="card__title">StudyBreak</h3>
-            <p class="card__desc">65+ features replacing Quizlet, Anki, Notion, and Google Calendar. AI that reads your course materials.</p>
-            <div class="card__tags"><span class="tag">Education</span><span class="tag">AI</span><span class="tag">Mobile</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://study-break-0bi1.onrender.com/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-studybreak.html" class="card__link">Case Study</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Education &middot; Language</div>
-            <h3 class="card__title">Forked Tongue</h3>
-            <p class="card__desc">AI language learning. Chat with friends who speak Korean, Japanese, Spanish, Portuguese, Mandarin, Cantonese. Voice, cultural immersion, 3D brain visualization.</p>
-            <div class="card__tags"><span class="tag">Language</span><span class="tag">AI</span><span class="tag">Voice</span><span class="tag">Mobile</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://forked-tongue.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-forkedtongue.html" class="card__link">Case Study</a>
-              <a href="portfolio-pieces/ForkedTongue/blog/index.html" class="card__link">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WEB DEV -->
-      <div class="tab-content" id="webdev">
-        <div class="card-grid stagger">
-          <div class="card card--rose">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Dev &middot; Satire</div>
-            <h3 class="card__title">Dystopian Daily News</h3>
-            <p class="card__desc">A satirical news site for the timeline we're all living in. Because sometimes the most honest journalism is the kind that admits it's fiction.</p>
-            <div class="card__tags"><span class="tag">Web</span><span class="tag">Satire</span><span class="tag">Editorial</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://dystopiandailynews.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-ddn.html" class="card__link">Case Study</a>
-              <a href="https://instagram.com/dystopian_daily_news" class="card__link" target="_blank" rel="noopener">Instagram</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--amber">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Dev &middot; Business</div>
-            <h3 class="card__title">Eclipse Events</h3>
-            <p class="card__desc">Landing site for a New England mobile bartending and event staffing service. Refined cocktail programs, themed events, and an experience worth remembering.</p>
-            <div class="card__tags"><span class="tag">Web</span><span class="tag">Business</span><span class="tag">Hospitality</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Web App</span></span>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-          </div>
-          </div>
-          <div class="card card--violet">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Dev &middot; Events</div>
-            <h3 class="card__title">Moonlit Events</h3>
-            <p class="card__desc">Events, shows, and bookings portal for Moonlit Social Labs. Live performances, collective events, and collaborative bookings under one roof.</p>
-            <div class="card__tags"><span class="tag">Web</span><span class="tag">Events</span><span class="tag">Music</span><span class="tag">Bookings</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://moonlit-events.vercel.app/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-          </div>
-          </div>
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Dev &middot; Intelligence</div>
-            <h3 class="card__title">UFO Nexus</h3>
-            <p class="card__desc">UAP intelligence platform. Aggregates and structures unidentified anomalous phenomena reports for researchers, analysts, and the merely curious. Evidence-based home for incidents that mainstream channels usually flatten.</p>
-            <div class="card__tags"><span class="tag">Web</span><span class="tag">UAP</span><span class="tag">Research</span><span class="tag">Data</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://ufo-nexus.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="https://ufo-nexus.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--rose">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Dev &middot; AI Safety</div>
-            <h3 class="card__title">AI Consciousness Tracker</h3>
-            <p class="card__desc">Track AI progress toward singularity. Consciousness index, 8 threat vectors, containment readiness, ethics framework, and 53 timeline events.</p>
-            <div class="card__tags"><span class="tag">AI Safety</span><span class="tag">Risk Analysis</span><span class="tag">Dashboard</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://ai-consciousness-tracker.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-aitracker.html" class="card__link">Case Study</a>
-              <a href="https://ai-consciousness-tracker.vercel.app/blog/" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WEB GAMES -->
-      <div class="tab-content" id="webgames">
-        <div class="card-grid stagger">
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Web Games &middot; Horror</div>
-            <h3 class="card__title">DreadMaze</h3>
-            <p class="card__desc">Procedurally-generated horror mazes with fog of war, Weeping Angel statues, 3 mythological bosses, and 8-player multiplayer. 24 maps with sacred geometry layouts. Free in your browser. Find the center. Try not to look away.</p>
-            <div class="card__tags"><span class="tag">Browser Game</span><span class="tag">Procedural</span><span class="tag">Multiplayer</span><span class="tag">Horror</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://hedgemazeclient-production.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Play Web Game</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- COMMUNITY -->
-      <div class="tab-content" id="community">
-        <div class="card-grid stagger">
-          <div class="card card--amber">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Community &middot; Civic Tech</div>
-            <h3 class="card__title">Fault Line</h3>
-            <p class="card__desc">Citizens photograph hazards. AI verifies, then auto-escalates to authorities once community reports cross a threshold. Public response tracking and infrastructure grades make inaction costly.</p>
-            <div class="card__tags"><span class="tag">Civic Tech</span><span class="tag">Accountability</span><span class="tag">Infrastructure</span><span class="tag">Community</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://moonligh7er.github.io/FaultLine/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-fixthisfaster.html" class="card__link">Case Study</a>
-              <a href="https://moonligh7er.github.io/FaultLine/blog.html" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Community &middot; Civic Tech</div>
-            <h3 class="card__title">Civic Filament</h3>
-            <p class="card__desc">AI-powered platform revealing the 70% agreement hidden beneath every civic debate. Government accountability, consensus mapping, and policy alignment.</p>
-            <div class="card__tags"><span class="tag">Civic Tech</span><span class="tag">AI</span><span class="tag">Consensus</span><span class="tag">Policy</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://synapse-chi-khaki.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="case-study-civicfilament.html" class="card__link">Case Study</a>
-              <a href="https://synapse-chi-khaki.vercel.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DEV & SECURITY TOOLS -->
-      <div class="tab-content" id="devtools">
-        <div class="card-grid stagger">
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Developer &middot; Security</div>
-            <h3 class="card__title">Dagda</h3>
-            <p class="card__desc">AI-powered cybersecurity command platform. 640 security tools across 9 operational modes. Watches, hunts, traps, fights.</p>
-            <div class="card__tags"><span class="tag">Cybersecurity</span><span class="tag">AI</span><span class="tag">640 Tools</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Web App</span></span>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-          </div>
-          </div>
-          <div class="card card--teal">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Developer &middot; Productivity</div>
-            <h3 class="card__title">Thought+Form</h3>
-            <p class="card__desc">44 interconnected modules. AI-powered intelligence. Zero context switching. Replaces your entire tool stack.</p>
-            <div class="card__tags"><span class="tag">Dev Tools</span><span class="tag">AI</span><span class="tag">44 Modules</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Web App</span></span>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-          </div>
-          </div>
-          <div class="card card--rose">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Privacy &middot; Security</div>
-            <h3 class="card__title">ShadeSense</h3>
-            <p class="card__desc">Scans 101+ data brokers, auto-generates legal removal requests, makes you disappear. Your data is being profiled by 4,000+ companies.</p>
-            <div class="card__tags"><span class="tag">Privacy</span><span class="tag">Data Removal</span><span class="tag">Legal</span><span class="tag">Security</span></div>
-            <div class="card__footer">
-            <div class="card__platforms">
-              <a href="https://shadesense.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-              <span class="card__platform"><span class="card__platform-label">Android</span></span>
-              <span class="card__platform"><span class="card__platform-label">Apple</span></span>
-            </div>
-            <div class="card__extras">
-              <a href="https://shadesense.up.railway.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- UNKNOWN -->
-      <div class="tab-content" id="unknown">
-        <div class="card-grid stagger">
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">SoundVerse</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">Pressure Points</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">Grappler's Black Book</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">Epistemic</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">Cybermancy</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-          <div class="card card--teal" style="opacity: 0.5;">
-            <span class="card__status-top">Active Development</span>
-            <div class="card__category">Unknown &middot; Coming Soon</div>
-            <h3 class="card__title">Glyph</h3>
-            <p class="card__desc">Details materializing. Signal incoming.</p>
-            <div class="card__tags"><span class="tag">Coming Soon</span></div>
-            </div>
-        </div>
-      </div>
 
     </section>
 
@@ -1149,7 +673,7 @@
     <div class="divider"></div>
     <section class="section container" style="text-align: center;">
       <div class="reveal">
-        <p class="heading-sm text-dim coord-display">β:117.4.203.89</p>
+        <p class="heading-sm text-dim coord-display">Î²:117.4.203.89</p>
         <p class="heading-md mt-2">More signals incoming.</p>
         <p class="text-body mt-2" style="margin: 1rem auto 0; text-align: center; color: var(--text-dim);">
           Additional projects are in various stages of materialization across adjacent timelines.
@@ -1159,17 +683,45 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
+    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">â™¡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">Â·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
   </footer>
 
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
   <script src="js/player.js"></script>
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <script>
+    (function () {
+      const container = document.querySelector('.tabs[data-filter="portfolio"]');
+      if (!container) return;
+      const tabs = container.querySelectorAll('.tab');
+      const cards = document.querySelectorAll('#all .card[data-category]');
+
+      function apply(target) {
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.target === target));
+        cards.forEach(card => {
+          const match = target === 'all' || card.dataset.category === target;
+          card.classList.toggle('filtered-out', !match);
+        });
+      }
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.target;
+          apply(target);
+          history.replaceState(null, '', `#${target}`);
+        });
+      });
+
+      const hash = window.location.hash.slice(1);
+      const validTargets = Array.from(tabs).map(t => t.dataset.target);
+      if (hash && validTargets.includes(hash)) apply(hash);
+    })();
+  </script>
 </body>
 </html>

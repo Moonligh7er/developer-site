@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DAGDA — AI-Powered Cybersecurity Command Platform</title>
-<meta name="description" content="514 security tools. 8 operational modes. One AI that understands them all. Dagda is the cybersecurity command platform that watches, hunts, traps, and fights.">
+<meta name="description" content="Hundreds of security tools. 9 operational modes. One AI that understands them all. Dagda is the cybersecurity command platform that watches, hunts, traps, and fights.">
 <link rel="canonical" href="https://moonligh7er.github.io/developer-site/Dagda.html">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Dagda","applicationCategory":"Cybersecurity Platform","description":"514 security tools across 8 operational modes. AI-powered cybersecurity command platform.","author":{"@type":"Person","name":"Michael Wylde"},"operatingSystem":"Web"}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Dagda","applicationCategory":"Cybersecurity Platform","description":"Hundreds of security tools across 9 operational modes. AI-powered cybersecurity command platform.","author":{"@type":"Person","name":"Michael Wylde"},"operatingSystem":"Web"}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -641,7 +641,7 @@ a:hover { color: #33e8be; }
         <div class="hero-eyebrow">&gt; DAGDA v1.0 // KALI LINUX PURPLE</div>
         <h1>Your AI Doesn't Just Monitor Your Network. It Defends It.</h1>
         <p class="hero-sub">
-          514 security tools. 8 operational modes. One AI that understands them all.
+          Hundreds of security tools. 9 operational modes. One AI that understands them all.
           Dagda is the cybersecurity command platform that watches, hunts, traps, and
           fights &mdash; with safeguards that cannot be overridden.
         </p>
@@ -674,7 +674,7 @@ a:hover { color: #33e8be; }
   <div class="container">
     <div class="stats-grid reveal" id="stats-section">
       <div class="stat-item">
-        <div class="stat-number" data-target="514">0</div>
+        <div class="stat-number" data-target="500" data-suffix="+">0</div>
         <div class="stat-label">Tools</div>
       </div>
       <div class="stat-item">
@@ -686,7 +686,7 @@ a:hover { color: #33e8be; }
         <div class="stat-label">Tests</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" data-target="8">0</div>
+        <div class="stat-number" data-target="9">0</div>
         <div class="stat-label">Modes</div>
       </div>
       <div class="stat-item">
@@ -748,7 +748,7 @@ a:hover { color: #33e8be; }
       <div class="pillar reveal">
         <h3>AI That Acts</h3>
         <p>Claude API primary, Ollama offline fallback. Not a chatbot &mdash; an autonomous agent
-           with 514 tools, a knowledge graph, Bayesian threat networks, and temporal correlation.
+           with hundreds of tools, a knowledge graph, Bayesian threat networks, and temporal correlation.
            Distributed Crow agents extend its reach across your fleet. It doesn't just alert you. It defends you.</p>
       </div>
       <div class="pillar reveal">
@@ -1343,7 +1343,7 @@ a:hover { color: #33e8be; }
       </div>
       <div class="vs-block reveal">
         <h3>vs. AI Security Chatbots</h3>
-        <p>They wrap an LLM around a few API calls. Dagda has 514 tools, a Rust-enforced permission
+        <p>They wrap an LLM around a few API calls. Dagda has hundreds of tools, a Rust-enforced permission
            gate, scope-locked targeting, hash-chained audit logs, and 8 unbreakable guardrails.
            This isn't AI for security theater. This is AI for professionals who understand the stakes.</p>
       </div>
@@ -1411,8 +1411,8 @@ a:hover { color: #33e8be; }
         <h3>Community Edition</h3>
         <div class="price">Free <span>/ AGPL-3.0</span></div>
         <ul class="price-features">
-          <li>All 514 tools across 50 categories</li>
-          <li>All 8 operational modes</li>
+          <li>500+ tools across 50 categories</li>
+          <li>All 9 operational modes</li>
           <li>Full 5-tier safeguard system</li>
           <li>TUI + Web Dashboard</li>
           <li>Claude API + Ollama (bring your key)</li>
@@ -1512,6 +1512,7 @@ const statsObserver = new IntersectionObserver((entries) => {
       statsCounted = true;
       document.querySelectorAll('.stat-number').forEach(el => {
         const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
         const duration = 2000;
         const start = performance.now();
         const animate = (now) => {
@@ -1519,9 +1520,9 @@ const statsObserver = new IntersectionObserver((entries) => {
           const progress = Math.min(elapsed / duration, 1);
           // easeOutQuad
           const eased = 1 - (1 - progress) * (1 - progress);
-          el.textContent = Math.floor(eased * target);
+          el.textContent = Math.floor(eased * target) + suffix;
           if (progress < 1) requestAnimationFrame(animate);
-          else el.textContent = target;
+          else el.textContent = target + suffix;
         };
         requestAnimationFrame(animate);
       });

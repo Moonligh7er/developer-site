@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reading the Absence: What Missing Data Tells Intelligence Analysts — Deep Seer Blog</title>
+<title>Reading the Absence: What Missing Data Tells Intelligence Analysts — Deep-Scry Blog</title>
 <meta name="description" content="The principle that absence of expected data is itself a signal. How traffic disappearances, AIS blackouts, and flight rerouting reveal more than the data itself.">
 <meta name="keywords" content="absence of data, intelligence analysis, OSINT, signal analysis, missing data, military operations, GPS jamming, baseline modeling">
 <meta name="robots" content="index, follow">
@@ -13,7 +13,7 @@
 <meta property="og:description" content="The hole in the map IS the signal. How traffic disappearances, AIS gaps, and reporting silences reveal more than the data itself.">
 <meta property="og:url" content="https://deepseer.io/blog/reading-the-absence">
 <meta property="og:image" content="https://deepseer.io/icons/og-image.png">
-<meta property="og:site_name" content="Deep Seer">
+<meta property="og:site_name" content="Deep-Scry">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Reading the Absence: What Missing Data Tells Intelligence Analysts">
 <meta name="twitter:description" content="The hole in the map IS the signal. How traffic disappearances, AIS gaps, and reporting silences reveal more than the data itself.">
@@ -30,12 +30,12 @@
   "dateModified": "2026-03-14",
   "author": {
     "@type": "Organization",
-    "name": "Deep Seer Team",
+    "name": "Deep-Scry Team",
     "url": "https://deepseer.io"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Deep Seer",
+    "name": "Deep-Scry",
     "url": "https://deepseer.io",
     "logo": "https://deepseer.io/icons/icon-512.png"
   },
@@ -80,7 +80,7 @@ a:hover{text-decoration:underline}
 <body>
 
 <div class="nav">
-  <a href="../index.html" class="brand">Deep Seer</a>
+  <a href="../index.html" class="brand">Deep-Scry</a>
   <a href="/landing">Home</a>
   <a href="../features.html">Features</a>
   <a href="/blog" style="color:#fff">Blog</a>
@@ -91,7 +91,7 @@ a:hover{text-decoration:underline}
 <article class="article">
   <span class="category">Security</span>
   <h1>Reading the Absence: What Missing Data Tells Intelligence Analysts</h1>
-  <div class="meta">Mar 14, 2026 &middot; 11 min read &middot; Deep Seer Team</div>
+  <div class="meta">Mar 14, 2026 &middot; 11 min read &middot; Deep-Scry Team</div>
 
   <p>In 1943, the statistician Abraham Wald was asked by the US military to analyze bomber aircraft returning from missions over Europe. The military wanted to add armor to the planes but needed to know where. They showed Wald the bullet hole distribution on returning aircraft: heavy damage to the fuselage, light damage to the engines. The obvious conclusion was to armor the fuselage. Wald's actual recommendation was the opposite: armor the engines. The planes with engine damage weren't in the sample — they hadn't come back.</p>
 
@@ -101,7 +101,7 @@ a:hover{text-decoration:underline}
 
   <p>Absence is only meaningful relative to an expectation. If you don't know how many AIS-equipped vessels normally transit the Strait of Hormuz on a Tuesday, you can't detect that today's count is 40% below normal. If you don't know the typical flight density over eastern Poland, a sudden void means nothing to you.</p>
 
-  <p>Building baselines is the prerequisite for all absence detection. This means collecting data continuously, computing statistical distributions by time of day, day of week, and season, and establishing what "normal" looks like for every geographic cell and data type you monitor. In Deep Seer, we persist historical data to PostgreSQL and compute rolling baselines that allow the system to flag anomalous drops automatically.</p>
+  <p>Building baselines is the prerequisite for all absence detection. This means collecting data continuously, computing statistical distributions by time of day, day of week, and season, and establishing what "normal" looks like for every geographic cell and data type you monitor. In Deep-Scry, we persist historical data to PostgreSQL and compute rolling baselines that allow the system to flag anomalous drops automatically.</p>
 
   <p>The baseline must account for known patterns. Maritime traffic drops during monsoon season in the Indian Ocean. Flight density decreases on Christmas Day. AIS coverage is inherently sparser in the South Pacific than in the English Channel. These aren't absences — they're expected variations. The signal lives in the deviation from the pattern.</p>
 
@@ -159,13 +159,13 @@ a:hover{text-decoration:underline}
 
   <p>Reading the absence requires a specific analytical discipline: you must continuously ask "what should be here that isn't?" This is the inverse of the normal analytical process, which focuses on what IS present. It demands knowledge of baselines, patterns, and norms that can only come from sustained monitoring over time.</p>
 
-  <p>Platforms like Deep Seer make this possible by aggregating multiple data layers — AIS, ADS-B, traffic feeds, environmental sensors — into a single view where baselines are computed automatically and deviations are flagged. But the technology is the enabler, not the answer. The analytical judgment about what an absence means still requires the human understanding of context, motive, and consequence.</p>
+  <p>Platforms like Deep-Scry make this possible by aggregating multiple data layers — AIS, ADS-B, traffic feeds, environmental sensors — into a single view where baselines are computed automatically and deviations are flagged. But the technology is the enabler, not the answer. The analytical judgment about what an absence means still requires the human understanding of context, motive, and consequence.</p>
 
   <blockquote>The hole in the map is the signal. The empty space in the data is the story. The vessel that should be there but isn't, the flight that should exist but doesn't, the report that should have been filed but wasn't — these absences are the starting points of the most important investigations.</blockquote>
 </article>
 
 <div class="footer">
-  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p>&copy; 2026 Deep-Scry. All rights reserved.</p>
   <p><a href="../index.html">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="../features.html">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a></p>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Causal Inference Methods for Geospatial OSINT Data — Deep Seer Blog</title>
+<title>Causal Inference Methods for Geospatial OSINT Data — Deep-Scry Blog</title>
 <meta name="description" content="Move beyond correlation to establish causation in intelligence analysis. Granger causality, difference-in-differences, regression discontinuity, and synthetic control methods applied to OSINT data.">
 <meta name="keywords" content="causal inference, OSINT, Granger causality, difference-in-differences, regression discontinuity, synthetic control, geospatial intelligence, statistical methods">
 <meta name="robots" content="index, follow">
@@ -13,7 +13,7 @@
 <meta property="og:description" content="Move beyond correlation to establish causation. Four statistical methods applied to intelligence data with real OSINT examples.">
 <meta property="og:url" content="https://deepseer.io/blog/causal-inference-geospatial-osint">
 <meta property="og:image" content="https://deepseer.io/icons/og-image.png">
-<meta property="og:site_name" content="Deep Seer">
+<meta property="og:site_name" content="Deep-Scry">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Causal Inference Methods for Geospatial OSINT Data">
 <meta name="twitter:description" content="Move beyond correlation to establish causation with four statistical methods applied to intelligence data.">
@@ -30,12 +30,12 @@
   "dateModified": "2026-03-28",
   "author": {
     "@type": "Organization",
-    "name": "Deep Seer Team",
+    "name": "Deep-Scry Team",
     "url": "https://deepseer.io"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Deep Seer",
+    "name": "Deep-Scry",
     "url": "https://deepseer.io",
     "logo": "https://deepseer.io/icons/icon-512.png"
   },
@@ -80,7 +80,7 @@ a:hover{text-decoration:underline}
 <body>
 
 <div class="nav">
-  <a href="../index.html" class="brand">Deep Seer</a>
+  <a href="../index.html" class="brand">Deep-Scry</a>
   <a href="/landing">Home</a>
   <a href="../features.html">Features</a>
   <a href="/blog" style="color:#fff">Blog</a>
@@ -91,7 +91,7 @@ a:hover{text-decoration:underline}
 <article class="article">
   <span class="category">Technical</span>
   <h1>Causal Inference Methods for Geospatial OSINT Data</h1>
-  <div class="meta">Mar 28, 2026 &middot; 12 min read &middot; Deep Seer Team</div>
+  <div class="meta">Mar 28, 2026 &middot; 12 min read &middot; Deep-Scry Team</div>
 
   <p>An analyst discovers that counties with more EPA-registered polluting facilities have higher rates of childhood asthma. A journalist finds that congressional districts whose representatives received energy industry donations are more likely to have weakened environmental regulations. A researcher notices that regions where fishing enforcement patrols decreased saw an increase in illegal trawling activity.</p>
 
@@ -113,7 +113,7 @@ a:hover{text-decoration:underline}
 
   <p>Consider a county where an industrial facility increases toxic releases over a two-year period. Monthly air quality measurements (from EPA monitoring stations or PurpleAir sensors) provide the X time series. Emergency room admissions for respiratory conditions (from public health datasets) provide the Y time series. A Granger causality test with lags of 1-6 months asks: do elevated pollution readings in month T predict elevated ER admissions in months T+1 through T+6, beyond what the ER admission history alone would predict?</p>
 
-  <p>In Deep Seer, we use this approach in our TemporalRegressionEngine to assess whether changes in environmental conditions — pollution spikes, water quality degradation, permit violations — predict downstream health outcomes in nearby populations.</p>
+  <p>In Deep-Scry, we use this approach in our TemporalRegressionEngine to assess whether changes in environmental conditions — pollution spikes, water quality degradation, permit violations — predict downstream health outcomes in nearby populations.</p>
 
   <h3>When It Fails</h3>
 
@@ -129,7 +129,7 @@ a:hover{text-decoration:underline}
 
   <p>Suppose a state tightens emissions regulations for chemical plants. The treatment group is facilities in that state; the control group is comparable facilities in neighboring states that didn't change their regulations. Measure toxic releases (from EPA TRI data) before and after the regulation change for both groups. The DiD estimate tells you how much the regulation reduced emissions beyond whatever trend was already happening industry-wide.</p>
 
-  <p>This method is directly implemented in Deep Seer's RegulatoryDeltaEngine, which tracks regulatory changes from Regulations.gov and correlates them with measurable outcomes in our environmental and compliance datasets. When a rule change occurs, the system automatically identifies treatment and control groups and estimates the causal effect.</p>
+  <p>This method is directly implemented in Deep-Scry's RegulatoryDeltaEngine, which tracks regulatory changes from Regulations.gov and correlates them with measurable outcomes in our environmental and compliance datasets. When a rule change occurs, the system automatically identifies treatment and control groups and estimates the causal effect.</p>
 
   <h3>When It Fails</h3>
 
@@ -147,7 +147,7 @@ a:hover{text-decoration:underline}
 
   <p>An RD design compares facilities just above and just below these thresholds. Do facilities that barely trigger TRI reporting requirements show different behavior than facilities just below the threshold? If reporting requirements have a causal effect on behavior (the "spotlight effect"), you'll see a discontinuous jump in outcomes right at the cutoff.</p>
 
-  <p>This is what Deep Seer's CounterfactualEngine explores: given a threshold-based intervention, what is the observable difference on either side of the threshold, and is it statistically distinguishable from the background variation?</p>
+  <p>This is what Deep-Scry's CounterfactualEngine explores: given a threshold-based intervention, what is the observable difference on either side of the threshold, and is it statistically distinguishable from the background variation?</p>
 
   <h3>When It Fails</h3>
 
@@ -165,7 +165,7 @@ a:hover{text-decoration:underline}
 
   <p>After conflict onset, the gap between the actual region's population/economic indicators and the synthetic control's trajectory estimates the causal impact of the conflict. This approach has been used by researchers studying the economic impact of the Syrian civil war, the displacement effects of the Rohingya crisis, and the economic consequences of the Russia-Ukraine conflict on neighboring countries.</p>
 
-  <p>Deep Seer implements this in its CounterfactualEngine, which allows analysts to select a region and event, and the system automatically constructs a synthetic control from comparable regions to estimate what would have happened in the absence of the event.</p>
+  <p>Deep-Scry implements this in its CounterfactualEngine, which allows analysts to select a region and event, and the system automatically constructs a synthetic control from comparable regions to estimate what would have happened in the absence of the event.</p>
 
   <h3>When It Fails</h3>
 
@@ -190,7 +190,7 @@ a:hover{text-decoration:underline}
 </article>
 
 <div class="footer">
-  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p>&copy; 2026 Deep-Scry. All rights reserved.</p>
   <p><a href="../index.html">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="../features.html">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a></p>
 </div>
 

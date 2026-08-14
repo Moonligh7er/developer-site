@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to Detect GPS Spoofing Using Commercial Flight Data — Deep Seer Blog</title>
+<title>How to Detect GPS Spoofing Using Commercial Flight Data — Deep-Scry Blog</title>
 <meta name="description" content="ADS-B navigation integrity values from commercial aircraft can reveal GPS interference zones in real-time. Learn how NIC and NACp values expose jamming and spoofing.">
 <meta name="keywords" content="GPS spoofing, GPS jamming, ADS-B, NIC, NACp, flight data, OSINT, aviation security, electronic warfare">
 <meta name="robots" content="index, follow">
@@ -13,7 +13,7 @@
 <meta property="og:description" content="ADS-B navigation integrity values from commercial aircraft reveal GPS interference zones in real-time. Here's how to read the signals.">
 <meta property="og:url" content="https://deepseer.io/blog/detect-gps-spoofing-flight-data">
 <meta property="og:image" content="https://deepseer.io/icons/og-image.png">
-<meta property="og:site_name" content="Deep Seer">
+<meta property="og:site_name" content="Deep-Scry">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How to Detect GPS Spoofing Using Commercial Flight Data">
 <meta name="twitter:description" content="ADS-B navigation integrity values from commercial aircraft reveal GPS interference zones in real-time.">
@@ -30,12 +30,12 @@
   "dateModified": "2026-03-21",
   "author": {
     "@type": "Organization",
-    "name": "Deep Seer Team",
+    "name": "Deep-Scry Team",
     "url": "https://deepseer.io"
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Deep Seer",
+    "name": "Deep-Scry",
     "url": "https://deepseer.io",
     "logo": "https://deepseer.io/icons/icon-512.png"
   },
@@ -80,7 +80,7 @@ a:hover{text-decoration:underline}
 <body>
 
 <div class="nav">
-  <a href="../index.html" class="brand">Deep Seer</a>
+  <a href="../index.html" class="brand">Deep-Scry</a>
   <a href="/landing">Home</a>
   <a href="../features.html">Features</a>
   <a href="/blog" style="color:#fff">Blog</a>
@@ -91,7 +91,7 @@ a:hover{text-decoration:underline}
 <article class="article">
   <span class="category">Security</span>
   <h1>How to Detect GPS Spoofing Using Commercial Flight Data</h1>
-  <div class="meta">Mar 21, 2026 &middot; 9 min read &middot; Deep Seer Team</div>
+  <div class="meta">Mar 21, 2026 &middot; 9 min read &middot; Deep-Scry Team</div>
 
   <p>Every commercial aircraft equipped with ADS-B Out broadcasts its GPS-derived position to the world. But embedded in that broadcast are two fields that most flight tracking enthusiasts never look at: NIC (Navigation Integrity Category) and NACp (Navigation Accuracy Category - Position). These values are the aircraft's self-assessment of how much it trusts its own GPS fix. When those values drop, it means the aircraft's navigation system is detecting a problem. And when multiple aircraft in the same geographic area simultaneously report low NIC/NACp values, you've found a GPS interference zone.</p>
 
@@ -156,9 +156,9 @@ a:hover{text-decoration:underline}
 
   <p><strong>Coverage modeling.</strong> By collecting interference reports over time and overlaying terrain data, you can model the effective coverage area of a jammer. Mountains block line-of-sight to jammers; valleys create shadow zones. The pattern of affected and unaffected aircraft paths reveals the terrain interaction.</p>
 
-  <h2>How Deep Seer Aggregates Confidence Data</h2>
+  <h2>How Deep-Scry Aggregates Confidence Data</h2>
 
-  <p>In Deep Seer, we ingest flight data from the OpenSky Network with integrity fields included. Each aircraft position is stored with its NIC and NACp values. The system computes a rolling geographic heatmap of navigation confidence: areas where the average NIC value drops below a threshold are highlighted on the globe, giving analysts an immediate visual of where GPS interference is active.</p>
+  <p>In Deep-Scry, we ingest flight data from the OpenSky Network with integrity fields included. Each aircraft position is stored with its NIC and NACp values. The system computes a rolling geographic heatmap of navigation confidence: areas where the average NIC value drops below a threshold are highlighted on the globe, giving analysts an immediate visual of where GPS interference is active.</p>
 
   <p>This data layer can be combined with other feeds for richer analysis. Overlay maritime AIS data to see if ships in the same area are reporting position anomalies. Cross-reference with conflict event databases to correlate interference with military activity. Layer in NOTAM data to identify officially acknowledged interference zones versus unreported ones.</p>
 
@@ -168,7 +168,7 @@ a:hover{text-decoration:underline}
 </article>
 
 <div class="footer">
-  <p>&copy; 2026 Deep Seer. All rights reserved.</p>
+  <p>&copy; 2026 Deep-Scry. All rights reserved.</p>
   <p><a href="../index.html">Launch App</a> &middot; <a href="/landing">Home</a> &middot; <a href="../features.html">Features</a> &middot; <a href="/blog">Blog</a> &middot; <a href="../terms.html">Terms</a> &middot; <a href="../privacy.html">Privacy</a></p>
 </div>
 

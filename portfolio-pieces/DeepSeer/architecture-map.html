@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deep Seer — Architecture Map</title>
+<title>Deep-Scry — Architecture Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -152,7 +152,7 @@
 <!-- ═══ HEADER ═══ -->
 <header class="header">
   <div>
-    <h1><span>Deep Seer</span> Architecture Map</h1>
+    <h1><span>Deep-Scry</span> Architecture Map</h1>
     <div class="subtitle">For Developers Only &mdash; Contains no real credentials</div>
   </div>
   <div class="tab-bar">
@@ -200,7 +200,7 @@
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>Deep Seer has <strong>three main parts</strong> that work together:</p>
+      <p>Deep-Scry has <strong>three main parts</strong> that work together:</p>
       <ul>
         <li><strong>The Website (Client)</strong> &mdash; What users see and interact with. It runs a 3D globe, shows data layers (flights, ships, earthquakes, etc.), and lets users build investigations. Built with React and rendered in the browser.</li>
         <li><strong>The Server (Backend)</strong> &mdash; The brain. It fetches data from 90+ sources, manages user accounts, runs AI analysis, talks to the database, and pushes real-time updates to the browser over WebSockets.</li>
@@ -420,7 +420,7 @@ Studio:      npx prisma studio            # visual DB browser at localhost:5555<
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>Deep Seer uses <strong>Anthropic's Claude AI</strong> for intelligent analysis. Think of it as an AI analyst that can read data, summarize situations, and answer questions about investigations.</p>
+      <p>Deep-Scry uses <strong>Anthropic's Claude AI</strong> for intelligent analysis. Think of it as an AI analyst that can read data, summarize situations, and answer questions about investigations.</p>
       <p>It powers:</p>
       <ul>
         <li><strong>Chat analysis:</strong> Ask questions about your investigation data in natural language</li>
@@ -550,7 +550,7 @@ VITE_SENTRY_DSN=https://examplePublicKey@o123456.ingest.sentry.io/7654321</pre>
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>The centerpiece of Deep Seer is a <strong>3D globe</strong> powered by CesiumJS &mdash; the same technology used by NASA, NOAA, and the US military for geospatial visualization.</p>
+      <p>The centerpiece of Deep-Scry is a <strong>3D globe</strong> powered by CesiumJS &mdash; the same technology used by NASA, NOAA, and the US military for geospatial visualization.</p>
       <p>The globe renders satellite imagery, terrain, 3D buildings, and all the data layers (flights, ships, cameras, environmental data). <strong>Cesium Ion</strong> is a companion cloud service that provides high-resolution terrain data and satellite imagery tiles.</p>
       <p>The app also includes custom <strong>visual effects</strong> (shaders): CRT monitor, Night Vision, FLIR thermal, Matrix rain, Anime style, Surveillance mode, and Crisis mode.</p>
       <dl class="info-grid">
@@ -656,7 +656,7 @@ GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"..."}</pre>
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>Deep Seer pulls data from <strong>90+ external sources</strong> to create a comprehensive intelligence picture. Most are free government or open-data APIs. The server fetches, normalizes, and pushes data to the browser in real time.</p>
+      <p>Deep-Scry pulls data from <strong>90+ external sources</strong> to create a comprehensive intelligence picture. Most are free government or open-data APIs. The server fetches, normalizes, and pushes data to the browser in real time.</p>
       <p>Data sources are organized by category below. Each one has a dedicated "adapter" on the server that handles fetching, parsing, and error recovery.</p>
     </div>
     <div class="tech-content">
@@ -885,7 +885,7 @@ GOOGLE_SERVICE_ACCOUNT_KEY={"type":"service_account","project_id":"..."}</pre>
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>Deep Seer uses industry-standard security practices:</p>
+      <p>Deep-Scry uses industry-standard security practices:</p>
       <ul>
         <li><strong>Passwords:</strong> Never stored in plain text. Hashed with bcrypt (12 rounds) so even if the database leaks, passwords are safe.</li>
         <li><strong>Login tokens:</strong> Short-lived (15 minutes), automatically refreshed. If a token is stolen, it expires quickly.</li>
@@ -940,7 +940,7 @@ X-XSS-Protection: 0  (CSP handles this now)</pre>
   </div>
   <div class="section-body">
     <div class="plain-content">
-      <p>Here is what it costs to run Deep Seer at different scales. "Dev" is just you testing locally. "Production" is a small team with real users. "Enterprise" is full-scale with all premium features enabled.</p>
+      <p>Here is what it costs to run Deep-Scry at different scales. "Dev" is just you testing locally. "Production" is a small team with real users. "Enterprise" is full-scale with all premium features enabled.</p>
     </div>
     <div class="tech-content">
       <p>All prices in USD. Estimates based on typical usage patterns as of 2026. Actual costs vary with traffic.</p>

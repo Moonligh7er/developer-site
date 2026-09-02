@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entheo Architecture Map</title>
+<title>Spirit Lodge Architecture Map</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -98,7 +98,7 @@ tr:hover td { background: rgba(0,212,200,0.03); }
 <div id="tab-plain" class="tab-content active">
 
 <h2>How This App Is Built</h2>
-<p style="color:#A8A4B4; margin-bottom:20px;">Entheo is split into three pieces that work together: a website, a server (the "brain"), and a mobile app. Here's what each part does and what outside services they talk to.</p>
+<p style="color:#A8A4B4; margin-bottom:20px;">Spirit Lodge is split into three pieces that work together: a website, a server (the "brain"), and a mobile app. Here's what each part does and what outside services they talk to.</p>
 
 <div class="arch-grid">
   <div class="arch-box">
@@ -325,7 +325,7 @@ tr:hover td { background: rgba(0,212,200,0.03); }
     <tr><td>generateInsights()</td><td class="mono">sonnet / opus*</td><td>600</td><td>30d of: moods, microdose logs, dreams, sessions, integration entries, body patterns</td><td>3-5 insight strings</td><td>Cached 24h only</td></tr>
     <tr><td>updateAIProfile()</td><td class="mono">claude-sonnet-4-6</td><td>1000</td><td>90d of: moods, dreams, sessions, integration. Builds on existing profile.</td><td>Structured JSON profile</td><td>User.aiProfile (refreshed every 7d)</td></tr>
     <tr><td>Chat companion</td><td class="mono">sonnet / opus*</td><td>800</td><td>AI profile, recent moods, body patterns, session context, last 20 messages</td><td>Free-text reply</td><td>ChatMessage table</td></tr>
-    <tr><td>Entheo Patterns</td><td class="mono">claude-sonnet-4-6</td><td>1500</td><td>Anonymous aggregates across 10 data domains (mood&times;substance, mood&times;moon, dream themes, body regions, integration practices, session outcomes, etc.) with k-anonymity (min 10 users/cohort)</td><td>Cross-domain pattern synthesis tagged as validating-indigenous, validating-Western, or novel</td><td>Cached</td></tr>
+    <tr><td>Spirit Lodge Patterns</td><td class="mono">claude-sonnet-4-6</td><td>1500</td><td>Anonymous aggregates across 10 data domains (mood&times;substance, mood&times;moon, dream themes, body regions, integration practices, session outcomes, etc.) with k-anonymity (min 10 users/cohort)</td><td>Cross-domain pattern synthesis tagged as validating-indigenous, validating-Western, or novel</td><td>Cached</td></tr>
   </tbody>
 </table>
 <p style="color:#6A6678; font-size:11px; margin-top:4px;">* Opus for Premium tier, Sonnet for Plus tier</p>

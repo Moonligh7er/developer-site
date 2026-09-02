@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PsyStat - Architecture & Services Map</title>
+<title>PsyStat Lab - Architecture & Services Map</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -96,7 +96,7 @@ footer a{margin:0 12px}
 <div class="container">
 
 <header>
-  <h1>PsyStat &mdash; Architecture &amp; Services Map</h1>
+  <h1>PsyStat Lab &mdash; Architecture &amp; Services Map</h1>
   <p>Complete technical reference for developers and maintainers</p>
 </header>
 
@@ -109,7 +109,7 @@ footer a{margin:0 12px}
 <section>
 <h2><span class="num">1</span> Architecture Diagram</h2>
 <div class="plain">
-  <p style="color:var(--text2);margin-bottom:16px">How the pieces of PsyStat connect: users access the app from any device, the app talks to two backend services (Supabase for user accounts and data, Railway for running statistics and AI).</p>
+  <p style="color:var(--text2);margin-bottom:16px">How the pieces of PsyStat Lab connect: users access the app from any device, the app talks to two backend services (Supabase for user accounts and data, Railway for running statistics and AI).</p>
 </div>
 <div class="tech">
   <p style="color:var(--text2);margin-bottom:16px">Three-tier architecture: Expo/React Native universal client communicates via REST to a FastAPI backend on Railway and directly to Supabase (auth, Postgres, storage). The backend calls the Anthropic API for AI features. JWT tokens from Supabase authenticate all protected requests.</p>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Inflation Calculator &mdash; Purchasing Power Over Time | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta name="keywords" content="inflation calculator, purchasing power calculator, dollar value over time, future value inflation, inflation impact calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/inflation-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Inflation Calculator &mdash; Purchasing Power Over Time",
+    "description": "Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/inflation-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Inflation Calculator &mdash; Purchasing Power Over Time">
+  <meta property="og:description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/inflation-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Inflation Calculator &mdash; Purchasing Power Over Time">
+  <meta name="twitter:description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-breadcrumb a:hover { color: var(--text-bright); }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h3, .calc-card h1 { font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; transition: all 0.25s ease; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); background: transparent; box-shadow: 0 0 20px var(--violet-dim); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
+    .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
+    .growth-table-wrap { max-height: 360px; overflow-y: auto; margin-top: 1rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Inflation Calculator</p>
+
+      <div class="calc-card">
+        <h1>Inflation Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter a dollar amount and a number of years to see how inflation erodes purchasing power. Works both ways: what today's money will be worth later, or what a past amount would be worth today.</p>
+
+        <div class="form-grid">
+  <div class="form-group"><label for="amount">Amount ($)</label><input type="number" id="amount" placeholder="10000" min="0" step="any"></div>
+  <div class="form-group"><label for="years">Number of Years</label><input type="number" id="years" placeholder="20" min="1" step="1"></div>
+  <div class="form-group"><label for="rate">Annual Inflation Rate (%)</label><input type="number" id="rate" placeholder="3" min="0" step="any"></div>
+  <div class="form-group"><label for="direction">Direction</label>
+    <select id="direction">
+      <option value="forward">Future value (today &rarr; N years from now)</option>
+      <option value="backward">Past value (amount N years ago &rarr; today)</option>
+    </select>
+  </div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Result</h4><div id="out-main"></div><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Year-by-Year</p><div class="growth-table-wrap" id="out-table"></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How inflation math works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Inflation compounds. If prices rise 3% per year, then after <em>n</em> years the same basket of goods costs <code style="font-family:var(--font-mono);color:var(--teal);">(1.03)<sup>n</sup></code> times as much. To find future value at inflation rate <em>r</em>: <code style="font-family:var(--font-mono);color:var(--teal);">FV = PV &middot; (1+r)<sup>n</sup></code>. To find what a past dollar is worth today: <code style="font-family:var(--font-mono);color:var(--teal);">Now = Then &middot; (1+r)<sup>n</sup></code>. To find the present-day purchasing power of a future dollar: divide instead of multiply.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Historical US inflation averages</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Long-run US CPI inflation has averaged roughly 2.5&ndash;3.5% per year over the last century, with wide variation: 13%+ during the 1979&ndash;1981 spike, near 0% during 2009, and 6%+ in 2021&ndash;2022. The Federal Reserve targets 2% inflation as monetary policy. For long-horizon planning, 2.5&ndash;3% is a reasonable default assumption.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why 3% matters more than it sounds</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">At 3% inflation, a dollar loses roughly half its purchasing power every 24 years. That means $100k of retirement savings at age 40 is worth ~$50k in today&apos;s purchasing power by age 64 even if the nominal balance doesn&apos;t change. Inflation is why cash-under-the-mattress is a losing strategy over long horizons.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Finance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="loan-mortgage-calculator.html" class="calc-other__link">Mortgage Calculator</a>
+        <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest</a>
+        <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff</a>
+        <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal</a>
+        <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
+        <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax</a>
+        <a href="fire-calculator.html" class="calc-other__link">FIRE Calculator</a>
+        <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle</a>
+        <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA</a>
+        <a href="auto-loan-calculator.html" class="calc-other__link">Auto Loan</a>
+        <a href="retirement-401k-calculator.html" class="calc-other__link">Retirement / 401(k)</a>
+        <a href="inflation-calculator.html" class="calc-other__link">Inflation</a>
+        <a href="rent-vs-buy-calculator.html" class="calc-other__link">Rent vs. Buy</a>
+        <a href="income-tax-bracket-calculator.html" class="calc-other__link">Tax Bracket (Federal)</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
+      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
+      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
+      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
+      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
+      function hideErr() { document.getElementById('err').classList.remove('visible'); }
+      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
+      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+
+      function calc() {
+  hideErr();
+  const amt=n('amount'), yrs=n('years'), rate=(n('rate')||0)/100, dir=s('direction');
+  if (amt===null||amt<=0) return showErr('Enter a valid amount.');
+  if (yrs===null||yrs<=0) return showErr('Enter a valid number of years.');
+  const factor = Math.pow(1+rate, yrs);
+  let result, lossOrGain;
+  if (dir === 'forward') {
+    // Future nominal is amt * factor, but "purchasing power of $amt in N years" is amt / factor
+    // Show BOTH: what you need in N years to match today's purchasing power, and what $amt today will be worth then
+    const equivFuture = amt * factor;
+    const purchasingPower = amt / factor;
+    set('out-main', row('$'+fmtMoney(amt).slice(1)+' today &rarr; equivalent purchasing power in '+yrs+' years', fmtMoneyR(equivFuture), 'teal') +
+      row('$'+fmtMoney(amt).slice(1)+' in '+yrs+' years &rarr; worth in today&apos;s dollars', fmtMoneyR(purchasingPower), 'violet'));
+    const loss = amt - purchasingPower;
+    let h = '';
+    h += row('Compounded inflation factor', factor.toFixed(3)+'x');
+    h += row('Purchasing power lost', fmtMoneyR(loss), 'rose');
+    h += row('Purchasing power retained', fmtPct((purchasingPower/amt)*100), 'amber');
+    set('out-totals', h);
+  } else {
+    const now = amt * factor;
+    set('out-main', row('$'+fmtMoney(amt).slice(1)+' from '+yrs+' years ago &rarr; today', fmtMoneyR(now), 'teal'));
+    let h = '';
+    h += row('Compounded inflation factor', factor.toFixed(3)+'x');
+    h += row('Increase', fmtMoneyR(now - amt), 'amber');
+    set('out-totals', h);
+  }
+  let t = '<table class="growth-table"><thead><tr><th>Year</th><th>Cumulative Factor</th><th>' + (dir==='forward'?'Equivalent Value':'Value Today')+'</th></tr></thead><tbody>';
+  for (let y=1; y<=yrs; y++) {
+    const f = Math.pow(1+rate, y);
+    const v = dir==='forward' ? amt*f : amt*f;
+    t += '<tr><td>'+y+'</td><td>'+f.toFixed(3)+'x</td><td>'+fmtMoneyR(v)+'</td></tr>';
+  }
+  t += '</tbody></table>';
+  set('out-table', t);
+  document.getElementById('results').classList.add('visible');
+}
+
+      window.calc = calc;
+      window.clearForm = function() {
+        ['amount','years','rate'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

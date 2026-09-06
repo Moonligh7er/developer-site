@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Word Counter with Readability Scores (Flesch) | Moonlit Social Labs</title>
+  <meta name="description" content="Count words, characters, sentences, paragraphs, and reading time. Includes Flesch reading ease + Flesch-Kincaid grade level and top keyword density. Live as you type.">
+  <meta name="keywords" content="word counter, character counter, reading time calculator, Flesch reading ease, Flesch-Kincaid grade, keyword density">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/word-counter.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Word Counter with Readability Scores (Flesch)",
+    "description": "Count words, characters, sentences, paragraphs, and reading time. Includes Flesch reading ease + Flesch-Kincaid grade level and top keyword density. Live as you type.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/word-counter.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Word Counter with Readability Scores (Flesch)">
+  <meta property="og:description" content="Count words, characters, sentences, paragraphs, and reading time. Includes Flesch reading ease + Flesch-Kincaid grade level and top keyword density. Live as you type.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/word-counter.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Word Counter with Readability Scores (Flesch)">
+  <meta name="twitter:description" content="Count words, characters, sentences, paragraphs, and reading time. Includes Flesch reading ease + Flesch-Kincaid grade level and top keyword density. Live as you type.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select, .form-group textarea { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group textarea { min-height: 200px; font-family: var(--font-mono); resize: vertical; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .mode-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+    .mode-tab.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Text Tools &rarr; Word Counter</p>
+
+      <div class="calc-card">
+        <h1>Word Counter</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Live word count, character count (with/without spaces), sentence count, paragraph count, estimated reading time, keyword density, and Flesch reading-ease + Flesch-Kincaid grade-level scores. All computation happens as you type.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <div class="form-group">
+  <label for="text">Paste or type your text</label>
+  <textarea id="text" placeholder="Start typing or paste your text here..." aria-label="Text to analyze"></textarea>
+</div>
+<div class="calc-results visible" id="results" aria-live="polite">
+  <h4>Basic Counts</h4>
+  <div id="out-basic"></div>
+  <p class="calc-subhead">Readability</p>
+  <div id="out-readability"></div>
+  <p class="calc-subhead">Top Keywords</p>
+  <div id="out-keywords"></div>
+</div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The metrics explained</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Words</strong> are counted by splitting on whitespace after collapsing extra spaces. <strong>Characters (with spaces)</strong> is the total length; <strong>without spaces</strong> excludes all whitespace including tabs and newlines. <strong>Sentences</strong> are counted by splitting on <code style="color:var(--teal);">.!?</code> followed by whitespace or end-of-text; abbreviations may cause slight overcounts. <strong>Paragraphs</strong> are separated by blank lines.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Reading and speaking time</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Reading time uses 238 words per minute (standard adult silent-reading speed for prose). Speaking time uses 150 wpm (typical presentation pace). Technical content and audiobook narration are usually slower; conversational speech is faster.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Flesch reading ease and Flesch-Kincaid grade</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Flesch Reading Ease</strong> = 206.835 &minus; 1.015 × (words/sentences) &minus; 84.6 × (syllables/words). Higher is easier. Scores: 90-100 very easy (5th grade), 60-70 plain English (8-9th grade), 30-50 college level, 0-30 college-graduate/professional. <strong>Flesch-Kincaid Grade</strong> = 0.39 × (words/sentences) + 11.8 × (syllables/words) &minus; 15.59. Approximates US school grade level required.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Syllable counting uses vowel-cluster heuristics (with adjustments for silent E and common word endings). It&apos;s ~85% accurate for standard English; specialized/technical vocabulary throws it off.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Keyword density</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Top 10 most-frequent non-stopword terms in your text, with counts and percentage of total words. Stopwords (common words like &ldquo;the&rdquo;, &ldquo;a&rdquo;, &ldquo;of&rdquo;) are filtered out. Useful for SEO content editing and spotting overused words.</p>
+</section>
+    </div>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Text Tools</p>
+      <div class="calc-other__grid"><a href="word-counter.html" class="calc-other__link">Word Counter</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+
+      const STOPWORDS = new Set('a an the and or but of in on at to for with by from as is are was were be been being have has had do does did will would should could may might must can shall this that these those i you he she it we they me him her us them my your his its our their what which who whom whose when where why how not no nor so than too very just also into over under about above below between through if then else so'.split(' '));
+function countSyllables(word){
+  word = word.toLowerCase().replace(/[^a-z]/g,'');
+  if (word.length<=3) return word.length ? 1 : 0;
+  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
+  const m = word.match(/[aeiouy]{1,2}/g);
+  return m ? m.length : 1;
+}
+function analyze(){
+  const t = document.getElementById('text').value;
+  const chars = t.length;
+  const charsNoSpace = t.replace(/\s/g,'').length;
+  const wordsArr = t.trim() ? t.trim().split(/\s+/) : [];
+  const words = wordsArr.length;
+  const sentences = t.trim() ? (t.match(/[.!?]+(?=\s|$)/g) || []).length || 1 : 0;
+  const paragraphs = t.trim() ? t.split(/\n\s*\n/).filter(p=>p.trim()).length : 0;
+  const readMin = words / 238;
+  const speakMin = words / 150;
+  let syl = 0;
+  for (const w of wordsArr) syl += countSyllables(w);
+  const fleschEase = words>0 && sentences>0 ? 206.835 - 1.015*(words/sentences) - 84.6*(syl/words) : 0;
+  const fkGrade = words>0 && sentences>0 ? 0.39*(words/sentences) + 11.8*(syl/words) - 15.59 : 0;
+
+  let basic = '';
+  basic += row('Words', words.toLocaleString(), 'teal');
+  basic += row('Characters (with spaces)', chars.toLocaleString());
+  basic += row('Characters (no spaces)', charsNoSpace.toLocaleString());
+  basic += row('Sentences', sentences.toLocaleString());
+  basic += row('Paragraphs', paragraphs.toLocaleString());
+  basic += row('Syllables (estimated)', syl.toLocaleString());
+  basic += row('Reading time', readMin < 1 ? '<1 min' : Math.round(readMin) + ' min', 'violet');
+  basic += row('Speaking time', speakMin < 1 ? '<1 min' : Math.round(speakMin) + ' min', 'violet');
+  set('out-basic', basic);
+
+  let easeLabel = '';
+  if (fleschEase >= 90) easeLabel = 'Very easy (5th grade)';
+  else if (fleschEase >= 80) easeLabel = 'Easy (6th grade)';
+  else if (fleschEase >= 70) easeLabel = 'Fairly easy (7th grade)';
+  else if (fleschEase >= 60) easeLabel = 'Plain English (8-9th grade)';
+  else if (fleschEase >= 50) easeLabel = 'Fairly difficult (10-12th grade)';
+  else if (fleschEase >= 30) easeLabel = 'Difficult (college)';
+  else easeLabel = 'Very difficult (college graduate)';
+
+  let read = '';
+  read += row('Flesch reading ease', words>0 ? fleschEase.toFixed(1) + ' (' + easeLabel + ')' : '—', 'teal');
+  read += row('Flesch-Kincaid grade level', words>0 ? fkGrade.toFixed(1) : '—', 'violet');
+  read += row('Avg. words per sentence', sentences>0 ? (words/sentences).toFixed(1) : '—');
+  read += row('Avg. syllables per word', words>0 ? (syl/words).toFixed(2) : '—');
+  set('out-readability', read);
+
+  // Keyword density
+  const freq = {};
+  for (const w of wordsArr) {
+    const clean = w.toLowerCase().replace(/[^a-z]/g,'');
+    if (!clean || clean.length < 3 || STOPWORDS.has(clean)) continue;
+    freq[clean] = (freq[clean]||0) + 1;
+  }
+  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  let kw = '';
+  if (sorted.length === 0) {
+    kw = '<p style="color:var(--text-dim);font-size:0.85rem;">Type text to see keyword frequency.</p>';
+  } else {
+    for (const [word, count] of sorted) {
+      const pct = (count / words * 100).toFixed(1);
+      kw += row(word, count + ' (' + pct + '%)');
+    }
+  }
+  set('out-keywords', kw);
+}
+document.getElementById('text').addEventListener('input', analyze);
+analyze();
+
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

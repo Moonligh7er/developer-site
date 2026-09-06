@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Image Resizer (Dimensions, Percentage, or Target File Size) | Moonlit Social Labs</title>
+  <meta name="description" content="Resize images by pixel dimensions, percentage, or target file size (iterative quality search). Aspect ratio lock and common presets.">
+  <meta name="keywords" content="image resizer, resize image, image dimensions changer, target file size resizer, image scaler">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/image-resizer.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Image Resizer (Dimensions, Percentage, or Target File Size)",
+    "description": "Resize images by pixel dimensions, percentage, or target file size (iterative quality search). Aspect ratio lock and common presets.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/image-resizer.html",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Image Resizer (Dimensions, Percentage, or Target File Size)">
+  <meta property="og:description" content="Resize images by pixel dimensions, percentage, or target file size (iterative quality search). Aspect ratio lock and common presets.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/image-resizer.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Image Resizer (Dimensions, Percentage, or Target File Size)">
+  <meta name="twitter:description" content="Resize images by pixel dimensions, percentage, or target file size (iterative quality search). Aspect ratio lock and common presets.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .file-drop { border: 2px dashed var(--border); padding: 2rem; text-align: center; margin: 1rem 0; cursor: pointer; transition: border-color 0.2s; }
+    .file-drop:hover, .file-drop.dragover { border-color: var(--teal); background: var(--teal-glow); }
+    .file-drop p { color: var(--text-dim); font-family: var(--font-mono); font-size: 0.85rem; }
+    .preview-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 600px) { .preview-wrap { grid-template-columns: 1fr; } }
+    .preview-box { padding: 1rem; border: 1px solid var(--border); background: var(--deep); text-align: center; }
+    .preview-box h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .preview-box canvas, .preview-box img { max-width: 100%; height: auto; display: block; margin: 0 auto; border: 1px solid var(--border); }
+    .preview-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
+    input[type=range] { width: 100%; }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Image Tools &rarr; Image Resizer</p>
+
+      <div class="calc-card">
+        <h1>Image Resizer</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Resize by pixel dimensions, percentage, or target file size. Target-size mode iteratively adjusts quality to hit your desired KB. Aspect-ratio lock on by default; common presets for Instagram, Full HD, etc.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Files stay in your browser.</strong> Everything on this page &mdash; loading, processing, encoding &mdash; runs locally. Your images are never uploaded to any server. Re-encoding also strips EXIF metadata (camera model, GPS coordinates), which is a privacy win.</div>
+        <div class="file-drop" id="drop" tabindex="0" role="button" aria-label="Choose image">
+  <p><strong style="color:var(--teal);">Click here or drop an image</strong></p>
+  <input type="file" id="file" accept="image/*" style="display:none;">
+</div>
+<div class="form-grid">
+  <div class="form-group">
+    <label for="mode">Resize Mode</label>
+    <select id="mode">
+      <option value="dims">Pixel dimensions</option>
+      <option value="pct">Percentage</option>
+      <option value="target">Target file size (KB)</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="preset">Preset</label>
+    <select id="preset">
+      <option value="">-- None --</option>
+      <option value="1920x1080">Full HD 1920×1080</option>
+      <option value="1280x720">HD 1280×720</option>
+      <option value="1080x1080">Instagram square 1080×1080</option>
+      <option value="1080x1350">Instagram portrait 1080×1350</option>
+      <option value="1920x1005">Twitter/X header 1920×1005</option>
+      <option value="1200x630">Open Graph 1200×630</option>
+      <option value="800x600">Web thumbnail 800×600</option>
+    </select>
+  </div>
+</div>
+<div class="form-grid" id="dims-fields">
+  <div class="form-group"><label for="width">Width (px)</label><input type="number" id="width" min="1" step="1"></div>
+  <div class="form-group"><label for="height">Height (px)</label><input type="number" id="height" min="1" step="1"></div>
+  <div class="form-group"><label><input type="checkbox" id="lockAspect" checked> Lock aspect ratio</label></div>
+</div>
+<div class="form-grid" id="pct-fields" style="display:none;">
+  <div class="form-group"><label for="pct">Percentage (%)</label><input type="number" id="pct" value="50" min="1" max="500" step="1"></div>
+</div>
+<div class="form-grid" id="target-fields" style="display:none;">
+  <div class="form-group"><label for="targetKB">Target Size (KB)</label><input type="number" id="targetKB" value="200" min="1" step="1"></div>
+  <div class="form-group"><label for="targetFmt">Format</label>
+    <select id="targetFmt"><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select>
+  </div>
+</div>
+<div class="calc-btn-row">
+  <button class="calc-btn" onclick="doResize()">Resize</button>
+</div>
+        <div class="calc-error" id="err"></div>
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Result</h4>
+<div class="preview-wrap">
+  <div class="preview-box"><h5>Original</h5><canvas id="orig-canvas"></canvas><p class="preview-meta" id="orig-meta"></p></div>
+  <div class="preview-box"><h5>Resized</h5><canvas id="res-canvas"></canvas><p class="preview-meta" id="res-meta"></p></div>
+</div>
+<div id="stats"></div>
+<div class="calc-btn-row" style="margin-top:1rem;">
+  <button class="calc-btn" onclick="doDownload()">Download Resized</button>
+</div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Three modes, one use case each</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Pixel dimensions:</strong> when you need an exact width or height. Aspect-ratio lock (on by default) keeps the image from stretching &mdash; the other dimension is computed automatically. Presets cover the most common cases (Full HD, Instagram, OG image sizes).</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Percentage:</strong> when you want &ldquo;half the size&rdquo; without doing math. 50% = each dimension halved (image is 1/4 the pixel count).</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Target file size:</strong> when you have a hard file-size limit (email attachment, upload cap, avatar image). The tool iteratively adjusts JPG/WebP quality (binary search) to land within ±10% of your target. Only works for lossy formats; a target-size PNG would require quantization.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Upscaling caveats</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Making an image larger than its original resolution doesn&apos;t add detail &mdash; it invents pixels via interpolation. Browsers use bilinear or bicubic interpolation for Canvas resizing, which is fine for modest upscales (1.5-2×) but visibly blurry beyond that. For serious upscaling use a neural network tool (Real-ESRGAN, waifu2x); those are not in-browser.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Quality drops with each re-save</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Every time you re-save a JPG or WebP, you re-apply lossy compression. Resize once from your original; if you need multiple sizes, resize the original separately each time rather than resizing an already-resized copy.</p>
+</section>
+    </div>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Image Tools</p>
+      <div class="calc-other__grid">
+        <a href="image-compressor.html" class="calc-other__link">Compressor</a>
+        <a href="image-converter.html" class="calc-other__link">Format Converter</a>
+        <a href="image-resizer.html" class="calc-other__link">Resizer</a>
+        <a href="image-cropper.html" class="calc-other__link">Cropper</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      
+// Shared image utilities. Files never leave the browser.
+async function loadImage(file){
+  // createImageBitmap with imageOrientation:'from-image' respects EXIF rotation on iOS/Android photos
+  try {
+    return await createImageBitmap(file, { imageOrientation: 'from-image' });
+  } catch(e) {
+    // Fallback: HTMLImageElement (won't fix EXIF but works)
+    return await new Promise((res, rej) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => { URL.revokeObjectURL(url); res(img); };
+      img.onerror = rej;
+      img.src = url;
+    });
+  }
+}
+function bytesToHuman(b){
+  if (b < 1024) return b + ' B';
+  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+  return (b/(1024*1024)).toFixed(2) + ' MB';
+}
+function detectAvifSupport(){
+  return new Promise(res => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 2;
+    if (!c.toBlob) return res(false);
+    c.toBlob(b => res(!!b && b.type === 'image/avif'), 'image/avif');
+    setTimeout(()=>res(false), 500);
+  });
+}
+function downloadBlob(blob, name){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
+function extFromType(type){ return type.split('/')[1].replace('jpeg','jpg'); }
+
+
+      const err = document.getElementById('err');
+      const results = document.getElementById('results');
+      function showErr(m){ err.textContent = m; err.classList.add('visible'); results.classList.remove('visible'); }
+      function hideErr(){ err.classList.remove('visible'); }
+      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
+      function row(label,value,cls){ cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+
+      let currentImage = null, currentBlob = null;
+const drop = document.getElementById('drop'), fileInput = document.getElementById('file');
+drop.addEventListener('click', () => fileInput.click());
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); });
+
+document.getElementById('mode').addEventListener('change', ()=>{
+  const m = document.getElementById('mode').value;
+  document.getElementById('dims-fields').style.display = m==='dims' ? '' : 'none';
+  document.getElementById('pct-fields').style.display = m==='pct' ? '' : 'none';
+  document.getElementById('target-fields').style.display = m==='target' ? '' : 'none';
+});
+document.getElementById('preset').addEventListener('change', ()=>{
+  const v = document.getElementById('preset').value;
+  if (!v) return;
+  const [w,h] = v.split('x').map(Number);
+  document.getElementById('mode').value = 'dims';
+  document.getElementById('mode').dispatchEvent(new Event('change'));
+  document.getElementById('lockAspect').checked = false;
+  document.getElementById('width').value = w;
+  document.getElementById('height').value = h;
+});
+document.getElementById('width').addEventListener('input', ()=>{
+  if (!currentImage || !document.getElementById('lockAspect').checked) return;
+  const w = parseFloat(document.getElementById('width').value);
+  if (w > 0) document.getElementById('height').value = Math.round(w * currentImage.height / currentImage.width);
+});
+document.getElementById('height').addEventListener('input', ()=>{
+  if (!currentImage || !document.getElementById('lockAspect').checked) return;
+  const h = parseFloat(document.getElementById('height').value);
+  if (h > 0) document.getElementById('width').value = Math.round(h * currentImage.width / currentImage.height);
+});
+
+async function handle(file){
+  hideErr();
+  if (!file.type.startsWith('image/')) return showErr('Please choose an image.');
+  if (file.size > 50*1024*1024) return showErr('File exceeds 50MB.');
+  try {
+    currentImage = await loadImage(file);
+    currentImage._origName = file.name;
+    currentImage._origSize = file.size;
+    currentImage._origType = file.type;
+    drawOrig();
+    document.getElementById('width').value = currentImage.width;
+    document.getElementById('height').value = currentImage.height;
+    results.classList.add('visible');
+    set('res-meta', 'Click Resize to process');
+  } catch(e) { showErr('Could not load: ' + e.message); }
+}
+function drawOrig(){
+  const c = document.getElementById('orig-canvas');
+  const maxDim = 400;
+  const scale = Math.min(1, maxDim / Math.max(currentImage.width, currentImage.height));
+  c.width = currentImage.width * scale; c.height = currentImage.height * scale;
+  c.getContext('2d').drawImage(currentImage, 0, 0, c.width, c.height);
+  set('orig-meta', currentImage._origName + '<br>' + currentImage.width + '×' + currentImage.height + ' &middot; ' + bytesToHuman(currentImage._origSize));
+}
+async function resizeToBlob(w, h, format, quality){
+  const oc = document.createElement('canvas');
+  oc.width = w; oc.height = h;
+  const ctx = oc.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(currentImage, 0, 0, w, h);
+  return await new Promise(res => oc.toBlob(res, format, quality));
+}
+window.doResize = async function(){
+  if (!currentImage) return showErr('Load an image first.');
+  const mode = document.getElementById('mode').value;
+  let w, h, format = currentImage._origType.includes('png') ? 'image/png' : 'image/jpeg', quality = 0.92;
+  if (mode === 'dims') {
+    w = parseInt(document.getElementById('width').value, 10);
+    h = parseInt(document.getElementById('height').value, 10);
+    if (!w || !h || w<=0 || h<=0) return showErr('Enter width and height.');
+  } else if (mode === 'pct') {
+    const p = parseInt(document.getElementById('pct').value, 10) / 100;
+    if (!p || p<=0) return showErr('Enter a percentage.');
+    w = Math.round(currentImage.width * p);
+    h = Math.round(currentImage.height * p);
+  } else {
+    // target size — iterative quality search
+    const targetKB = parseInt(document.getElementById('targetKB').value, 10);
+    if (!targetKB || targetKB<=0) return showErr('Enter target KB.');
+    format = document.getElementById('targetFmt').value;
+    w = currentImage.width; h = currentImage.height;
+    // Binary search on quality between 0.1 and 1.0
+    let lo = 0.1, hi = 1.0, bestBlob = null;
+    for (let i=0; i<8; i++) {
+      const q = (lo + hi) / 2;
+      const b = await resizeToBlob(w, h, format, q);
+      if (!b) break;
+      const kb = b.size / 1024;
+      if (kb > targetKB) hi = q;
+      else { lo = q; bestBlob = b; }
+    }
+    // If even quality 0.1 too big, reduce dimensions
+    if (!bestBlob) {
+      let scale = 1;
+      while (scale > 0.1) {
+        scale *= 0.8;
+        const b = await resizeToBlob(Math.round(w*scale), Math.round(h*scale), format, 0.85);
+        if (b && b.size/1024 <= targetKB) { bestBlob = b; break; }
+      }
+    }
+    if (bestBlob) {
+      currentBlob = bestBlob;
+      await showResult(bestBlob);
+    } else {
+      showErr('Could not hit target size — try a higher target or accept smaller quality.');
+    }
+    return;
+  }
+  currentBlob = await resizeToBlob(w, h, format, quality);
+  if (!currentBlob) return showErr('Resize failed.');
+  await showResult(currentBlob);
+};
+async function showResult(blob){
+  const bm = await createImageBitmap(blob);
+  const c = document.getElementById('res-canvas');
+  const maxDim = 400;
+  const scale = Math.min(1, maxDim / Math.max(bm.width, bm.height));
+  c.width = bm.width * scale; c.height = bm.height * scale;
+  c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height);
+  set('res-meta', bm.width + '×' + bm.height + '<br>' + bytesToHuman(blob.size));
+  set('stats', row('Original size', bytesToHuman(currentImage._origSize)) + row('Resized', bm.width + '×' + bm.height + ' &middot; ' + bytesToHuman(blob.size), 'teal'));
+}
+window.doDownload = function(){
+  if (!currentBlob) return showErr('Resize first.');
+  const base = stripExt(currentImage._origName);
+  downloadBlob(currentBlob, base + '-resized.' + extFromType(currentBlob.type));
+};
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Wheel Spinner / Random Picker (Shareable) | Moonlit Social Labs</title>
+  <meta name="description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta name="keywords" content="wheel spinner, random picker, random name picker, wheel of names, spinner wheel">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/wheel-spinner.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Wheel Spinner / Random Picker (Shareable)",
+    "description": "Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/wheel-spinner.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Wheel Spinner / Random Picker (Shareable)">
+  <meta property="og:description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/wheel-spinner.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Wheel Spinner / Random Picker (Shareable)">
+  <meta name="twitter:description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select, .form-group textarea { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group textarea { min-height: 200px; font-family: var(--font-mono); resize: vertical; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .mode-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+    .mode-tab.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .wheel-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+    @media (max-width: 800px) { .wheel-wrap { grid-template-columns: 1fr; } }
+    .wheel-canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+    .wheel-controls textarea { min-height: 200px; }
+    .winner-panel { padding: 1rem; margin-top: 1rem; border: 1px solid var(--teal); background: var(--teal-glow); text-align: center; }
+    .winner-panel h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Everyday &rarr; Wheel Spinner / Random Picker</p>
+
+      <div class="calc-card">
+        <h1>Wheel Spinner / Random Picker</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Add entries, spin the wheel, get a random pick. Optional remove-winner mode for elimination-style picking. Share your entry list via URL &mdash; entries are encoded in the hash, nothing hits any server.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <div class="wheel-wrap">
+  <div>
+    <canvas id="wheel" class="wheel-canvas" width="400" height="400"></canvas>
+    <div class="calc-btn-row" style="justify-content:center;margin-top:1rem;">
+      <button class="calc-btn" onclick="spin()">Spin</button>
+      <button class="calc-btn calc-btn--secondary" onclick="shareLink()">Copy Share Link</button>
+    </div>
+    <div id="winner-panel" class="winner-panel" style="display:none;">
+      <h3 id="winner-name"></h3>
+      <div style="display:flex;gap:0.5rem;justify-content:center;">
+        <button class="calc-btn calc-btn--secondary" onclick="removeWinner()">Remove Winner</button>
+        <button class="calc-btn calc-btn--secondary" onclick="closeWinner()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="wheel-controls">
+    <div class="form-group">
+      <label for="entries">Entries (one per line)</label>
+      <textarea id="entries" placeholder="Alice&#10;Bob&#10;Charlie&#10;Dana"></textarea>
+      <span class="hint">Or paste a comma/newline-separated list</span>
+    </div>
+    <div class="calc-btn-row">
+      <button class="calc-btn calc-btn--secondary" onclick="loadEntries()">Update Wheel</button>
+      <button class="calc-btn calc-btn--secondary" onclick="shuffleEntries()">Shuffle</button>
+    </div>
+  </div>
+</div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Sharing via URL</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Click &ldquo;Copy Share Link&rdquo; to get a URL that encodes your entry list in the URL hash (the part after #). When someone opens the link, the entries are decoded from the URL and loaded automatically. Nothing is sent to any server &mdash; the entries live only in the URL and only ever hit the recipient&apos;s browser.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Remove-winner mode</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">After a spin, click &ldquo;Remove Winner&rdquo; to drop the picked entry from the list. Useful for tournament brackets, ordered picks, or elimination games. Refresh the page or paste your original list to start over.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Randomness</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Winner selection uses <code style="color:var(--teal);">Math.random()</code>, which is a pseudorandom number generator suitable for casual use but not cryptographically secure &mdash; don&apos;t use this to pick a Bitcoin private key or anything similarly consequential. For fairness in casual applications (name draws, chore rotation, etc.) it&apos;s more than good enough.</p>
+</section>
+    </div>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Everyday Calculators</p>
+      <div class="calc-other__grid">
+        <a href="percentage-calculator.html" class="calc-other__link">Percentage</a>
+        <a href="age-calculator.html" class="calc-other__link">Age</a>
+        <a href="date-duration-calculator.html" class="calc-other__link">Date Duration</a>
+        <a href="gpa-calculator.html" class="calc-other__link">GPA</a>
+        <a href="timezone-meeting-planner.html" class="calc-other__link">Time Zone Meeting</a>
+        <a href="wheel-spinner.html" class="calc-other__link">Wheel Spinner</a>
+        <a href="word-counter.html" class="calc-other__link">Word Counter</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+
+      let entries = [];
+let angle = 0;
+let spinning = false;
+const COLORS = ['#00d4aa','#8b5cf6','#f59e0b','#c44a8a','#22c55e','#3b82f6','#ec4899','#eab308'];
+
+function loadEntries(){
+  const raw = document.getElementById('entries').value;
+  entries = raw.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);
+  drawWheel();
+  syncHash();
+}
+function drawWheel(){
+  const c = document.getElementById('wheel');
+  const ctx = c.getContext('2d');
+  const cx = c.width/2, cy = c.height/2, r = Math.min(cx,cy) - 10;
+  ctx.clearRect(0,0,c.width,c.height);
+  if (entries.length === 0) {
+    ctx.fillStyle = '#1a1a30';
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#7a7a90';
+    ctx.font = '14px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('Add entries →', cx, cy);
+    return;
+  }
+  const slice = (Math.PI*2) / entries.length;
+  for (let i=0;i<entries.length;i++) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, angle + i*slice, angle + (i+1)*slice);
+    ctx.closePath();
+    ctx.fillStyle = COLORS[i % COLORS.length];
+    ctx.fill();
+    ctx.strokeStyle = '#07070d';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // Label
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle + i*slice + slice/2);
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#07070d';
+    ctx.font = 'bold 12px monospace';
+    const label = entries[i].length > 20 ? entries[i].slice(0,18)+'…' : entries[i];
+    ctx.fillText(label, r - 12, 0);
+    ctx.restore();
+  }
+  // Center hub
+  ctx.beginPath(); ctx.arc(cx,cy,15,0,Math.PI*2);
+  ctx.fillStyle = '#07070d'; ctx.fill();
+  ctx.strokeStyle = '#00d4aa'; ctx.lineWidth = 2; ctx.stroke();
+  // Pointer (top)
+  ctx.beginPath();
+  ctx.moveTo(cx-12, 8); ctx.lineTo(cx+12, 8); ctx.lineTo(cx, 32); ctx.closePath();
+  ctx.fillStyle = '#00d4aa'; ctx.fill();
+}
+window.spin = function(){
+  if (spinning || entries.length === 0) return;
+  spinning = true;
+  const target = 6*Math.PI + Math.random() * Math.PI * 2; // 3+ full rotations
+  const duration = 4000;
+  const start = performance.now();
+  const startAngle = angle;
+  function step(now) {
+    const t = Math.min(1, (now - start)/duration);
+    const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+    angle = startAngle + target * eased;
+    drawWheel();
+    if (t < 1) requestAnimationFrame(step);
+    else {
+      spinning = false;
+      // Determine winner: pointer is at top (angle = -pi/2 in canvas). Compute which slice.
+      const slice = (Math.PI*2) / entries.length;
+      // Reduce angle mod 2pi
+      const a = ((-angle - Math.PI*1.5) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+      const idx = Math.floor(a / slice) % entries.length;
+      showWinner(entries[idx]);
+    }
+  }
+  requestAnimationFrame(step);
+};
+let currentWinner = null;
+function showWinner(name){
+  currentWinner = name;
+  document.getElementById('winner-name').textContent = name;
+  document.getElementById('winner-panel').style.display = '';
+}
+window.closeWinner = function(){ document.getElementById('winner-panel').style.display = 'none'; };
+window.removeWinner = function(){
+  if (!currentWinner) return;
+  const idx = entries.indexOf(currentWinner);
+  if (idx >= 0) entries.splice(idx, 1);
+  document.getElementById('entries').value = entries.join('\n');
+  drawWheel();
+  syncHash();
+  closeWinner();
+};
+window.shuffleEntries = function(){
+  for (let i=entries.length-1;i>0;i--) { const j = Math.floor(Math.random()*(i+1)); [entries[i],entries[j]]=[entries[j],entries[i]]; }
+  document.getElementById('entries').value = entries.join('\n');
+  drawWheel();
+};
+function syncHash(){
+  if (entries.length === 0) { history.replaceState(null,'',location.pathname); return; }
+  const encoded = btoa(unescape(encodeURIComponent(entries.join('|'))));
+  history.replaceState(null, '', '#e=' + encoded);
+}
+window.shareLink = function(){
+  syncHash();
+  navigator.clipboard.writeText(location.href).then(()=>{
+    alert('Share link copied — recipients see the same entry list.');
+  });
+};
+function loadHash(){
+  const h = location.hash;
+  if (h.startsWith('#e=')) {
+    try {
+      const decoded = decodeURIComponent(escape(atob(h.slice(3))));
+      entries = decoded.split('|').filter(Boolean);
+      document.getElementById('entries').value = entries.join('\n');
+    } catch(e) {}
+  }
+}
+loadHash();
+if (entries.length === 0) {
+  document.getElementById('entries').value = 'Alice\nBob\nCharlie\nDana';
+  loadEntries();
+} else {
+  drawWheel();
+}
+
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free QR Code Generator (URL / WiFi / vCard / Logo Overlay) | Moonlit Social Labs</title>
+  <meta name="description" content="Generate QR codes for URLs, text, WiFi credentials, vCards, and email. Custom colors, error correction, center logo overlay, PNG + SVG download. All in your browser.">
+  <meta name="keywords" content="qr code generator, wifi qr code, vcard qr code, url qr code, custom qr code, qr code with logo">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/qr-code-generator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free QR Code Generator",
+    "description": "Generate QR codes for URLs, text, WiFi credentials, vCards, and email with custom colors and center logo overlay.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/qr-code-generator.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free QR Code Generator">
+  <meta property="og:description" content="Generate QR codes for URLs, text, WiFi credentials, vCards. Custom colors, logo overlay, PNG + SVG.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/qr-code-generator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free QR Code Generator">
+  <meta name="twitter:description" content="URLs, WiFi, vCards, custom colors, logo overlay.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select, .form-group textarea { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .form-group input[type=color] { padding: 0.2rem; height: 42px; cursor: pointer; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .qr-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 1rem 0; align-items: start; }
+    @media (max-width: 800px) { .qr-wrap { grid-template-columns: 1fr; } }
+    .qr-preview { padding: 1.5rem; background: var(--deep); border: 1px solid var(--border); text-align: center; }
+    .qr-preview canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+    .mode-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+    .mode-tab.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+    .contrast-warn { padding: 0.5rem 0.75rem; margin: 0.5rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.08); color: var(--amber); font-size: 0.8rem; font-family: var(--font-mono); display: none; }
+    .contrast-warn.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; QR Code Generator</p>
+
+      <div class="calc-card">
+        <h1>QR Code Generator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1rem;">Generate QR codes for URLs, plain text, WiFi credentials, vCards, and email links. Custom colors, error correction level, optional center logo overlay, PNG + SVG downloads.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Fully in your browser.</strong> Nothing is uploaded &mdash; not the content you encode, not the logo you add, nothing.</div>
+
+        <div class="mode-tabs">
+          <button class="mode-tab active" data-mode="url">URL</button>
+          <button class="mode-tab" data-mode="text">Plain Text</button>
+          <button class="mode-tab" data-mode="wifi">WiFi</button>
+          <button class="mode-tab" data-mode="vcard">vCard</button>
+          <button class="mode-tab" data-mode="email">Email</button>
+        </div>
+
+        <div class="mode-panel active" id="mode-url">
+          <div class="form-group"><label for="urlInput">URL</label><input type="url" id="urlInput" placeholder="https://example.com" value="https://moonligh7er.github.io/developer-site/"></div>
+        </div>
+        <div class="mode-panel" id="mode-text">
+          <div class="form-group"><label for="textInput">Text</label><textarea id="textInput" placeholder="Any text up to about 2900 characters"></textarea></div>
+        </div>
+        <div class="mode-panel" id="mode-wifi">
+          <div class="form-grid">
+            <div class="form-group"><label for="wifiSsid">Network Name (SSID)</label><input type="text" id="wifiSsid" placeholder="MyWiFi"></div>
+            <div class="form-group"><label for="wifiPass">Password</label><input type="text" id="wifiPass" placeholder="password123"></div>
+            <div class="form-group"><label for="wifiEnc">Encryption</label>
+              <select id="wifiEnc"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">None</option></select>
+            </div>
+            <div class="form-group"><label><input type="checkbox" id="wifiHidden"> Hidden network</label></div>
+          </div>
+        </div>
+        <div class="mode-panel" id="mode-vcard">
+          <div class="form-grid">
+            <div class="form-group"><label for="vcName">Full Name</label><input type="text" id="vcName" placeholder="Michael Wylde"></div>
+            <div class="form-group"><label for="vcOrg">Organization</label><input type="text" id="vcOrg" placeholder="Moonlit Social Labs"></div>
+            <div class="form-group"><label for="vcTitle">Title</label><input type="text" id="vcTitle" placeholder="Founder"></div>
+            <div class="form-group"><label for="vcPhone">Phone</label><input type="tel" id="vcPhone" placeholder="+1-555-123-4567"></div>
+            <div class="form-group"><label for="vcEmail">Email</label><input type="email" id="vcEmail" placeholder="you@example.com"></div>
+            <div class="form-group"><label for="vcUrl">Website</label><input type="url" id="vcUrl" placeholder="https://example.com"></div>
+          </div>
+        </div>
+        <div class="mode-panel" id="mode-email">
+          <div class="form-grid">
+            <div class="form-group"><label for="emTo">To</label><input type="email" id="emTo" placeholder="you@example.com"></div>
+            <div class="form-group"><label for="emSubj">Subject</label><input type="text" id="emSubj"></div>
+          </div>
+          <div class="form-group"><label for="emBody">Body</label><textarea id="emBody"></textarea></div>
+        </div>
+
+        <p class="calc-subhead">Appearance</p>
+        <div class="form-grid">
+          <div class="form-group"><label for="size">Size (pixels)</label><input type="number" id="size" value="512" min="128" max="2048" step="1"></div>
+          <div class="form-group"><label for="ecLevel">Error Correction</label>
+            <select id="ecLevel">
+              <option value="L">Low (7% recovery)</option>
+              <option value="M" selected>Medium (15% recovery)</option>
+              <option value="Q">Quartile (25% recovery)</option>
+              <option value="H">High (30% recovery)</option>
+            </select>
+            <span class="hint">Higher = more scannable when damaged/covered by logo</span>
+          </div>
+          <div class="form-group"><label for="fgColor">Foreground</label><input type="color" id="fgColor" value="#000000"></div>
+          <div class="form-group"><label for="bgColor">Background</label><input type="color" id="bgColor" value="#ffffff"></div>
+        </div>
+        <div class="contrast-warn" id="contrastWarn">⚠ Low contrast between foreground and background — scanners may struggle. Use dark foreground on light background for reliability.</div>
+
+        <p class="calc-subhead">Logo Overlay (Optional)</p>
+        <div class="form-grid">
+          <div class="form-group"><label for="logoFile">Logo Image</label><input type="file" id="logoFile" accept="image/*"><span class="hint">Placed in center, ~20% of QR size. Auto-bumps EC to H.</span></div>
+          <div class="form-group"><label for="logoSize">Logo Size (%)</label><input type="number" id="logoSize" value="20" min="10" max="30" step="1"></div>
+        </div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="generate()">Generate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="downloadPNG()">Download PNG</button>
+          <button class="calc-btn calc-btn--secondary" onclick="downloadSVG()">Download SVG</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="qr-preview">
+          <canvas id="qrCanvas"></canvas>
+          <p id="qr-meta" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-dim);margin-top:1rem;"></p>
+        </div>
+      </div>
+
+      <section class="calc-card">
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Error correction levels</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">QR codes have four error-correction levels (Reed-Solomon coding). Higher levels use more of the code&apos;s data capacity for recovery bits, so the code holds less information at the same size &mdash; but it survives more damage and lower-quality scans.</p>
+        <ul style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;padding-left:1.5rem;">
+          <li><strong>L (Low):</strong> ~7% of data can be recovered if damaged. Use for pristine screen QR codes with no logo.</li>
+          <li><strong>M (Medium):</strong> ~15%. Default choice for most cases.</li>
+          <li><strong>Q (Quartile):</strong> ~25%. Print QR codes exposed to wear.</li>
+          <li><strong>H (High):</strong> ~30%. Required when overlaying a center logo &mdash; the logo covers part of the code, and the EC bits reconstruct it.</li>
+        </ul>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Center logos</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Adding a center logo covers ~15-25% of the code&apos;s data area. This is only reliably scannable at error-correction level H (30% recovery). This tool automatically bumps EC to H when you add a logo. Keep logo size ≤ 20-25% of the QR&apos;s width; larger logos may not scan on older phone cameras.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Content types + capacity</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The QR spec supports numeric-only, alphanumeric, byte, and Kanji modes. This tool uses byte mode for everything, which handles Unicode. Maximum capacity in byte mode with H-level EC is ~1273 characters; with L-level EC it&apos;s ~2953. Larger content means denser (harder to scan) codes &mdash; keep URLs short with a URL shortener if you&apos;re near the limit.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Formats supported</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;"><strong>URL:</strong> any http/https link. <strong>WiFi:</strong> encodes as <code style="color:var(--teal);">WIFI:T:WPA;S:name;P:pass;;</code> &mdash; phone scans join the network directly on iOS 11+ and Android 10+. <strong>vCard:</strong> exports as vCard 3.0. Scans open the phone contact-add flow. <strong>Email:</strong> encodes as a mailto: URI with subject + body pre-filled.</p>
+      </section>
+    </div>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script src="lib/qrcode-generator.js"></script>
+  <script>
+    (function() {
+      let logoImage = null;
+      let currentQR = null;
+      const err = document.getElementById('err');
+      function showErr(m){ err.textContent = m; err.classList.add('visible'); }
+      function hideErr(){ err.classList.remove('visible'); }
+      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
+
+      document.querySelectorAll('.mode-tab').forEach(t => t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        document.querySelectorAll('.mode-panel').forEach(x => x.classList.remove('active'));
+        document.getElementById('mode-' + t.dataset.mode).classList.add('active');
+      }));
+
+      document.getElementById('logoFile').addEventListener('change', async e => {
+        if (!e.target.files[0]) { logoImage = null; return; }
+        try {
+          logoImage = await createImageBitmap(e.target.files[0]);
+          // Auto-bump EC to H
+          document.getElementById('ecLevel').value = 'H';
+        } catch(err) { showErr('Could not load logo: ' + err.message); }
+      });
+
+      function getContent(){
+        const mode = document.querySelector('.mode-tab.active').dataset.mode;
+        if (mode === 'url') return document.getElementById('urlInput').value;
+        if (mode === 'text') return document.getElementById('textInput').value;
+        if (mode === 'wifi') {
+          const ssid = document.getElementById('wifiSsid').value;
+          const pass = document.getElementById('wifiPass').value;
+          const enc = document.getElementById('wifiEnc').value;
+          const hidden = document.getElementById('wifiHidden').checked;
+          if (!ssid) return '';
+          const esc = s => s.replace(/([\\";,:])/g,'\\\\$1');
+          let s = 'WIFI:';
+          s += 'T:' + enc + ';';
+          s += 'S:' + esc(ssid) + ';';
+          if (enc !== 'nopass') s += 'P:' + esc(pass) + ';';
+          if (hidden) s += 'H:true;';
+          s += ';';
+          return s;
+        }
+        if (mode === 'vcard') {
+          const n = document.getElementById('vcName').value;
+          if (!n) return '';
+          let s = 'BEGIN:VCARD\r\nVERSION:3.0\r\n';
+          s += 'FN:' + n + '\r\n';
+          const parts = n.split(' ');
+          if (parts.length >= 2) s += 'N:' + parts.slice(1).join(' ') + ';' + parts[0] + ';;;\r\n';
+          const org = document.getElementById('vcOrg').value; if (org) s += 'ORG:' + org + '\r\n';
+          const t = document.getElementById('vcTitle').value; if (t) s += 'TITLE:' + t + '\r\n';
+          const p = document.getElementById('vcPhone').value; if (p) s += 'TEL:' + p + '\r\n';
+          const e = document.getElementById('vcEmail').value; if (e) s += 'EMAIL:' + e + '\r\n';
+          const u = document.getElementById('vcUrl').value; if (u) s += 'URL:' + u + '\r\n';
+          s += 'END:VCARD';
+          return s;
+        }
+        if (mode === 'email') {
+          const to = document.getElementById('emTo').value;
+          const subj = document.getElementById('emSubj').value;
+          const body = document.getElementById('emBody').value;
+          if (!to) return '';
+          let url = 'mailto:' + encodeURIComponent(to);
+          const params = [];
+          if (subj) params.push('subject=' + encodeURIComponent(subj));
+          if (body) params.push('body=' + encodeURIComponent(body));
+          if (params.length) url += '?' + params.join('&');
+          return url;
+        }
+        return '';
+      }
+
+      function contrastRatio(fg, bg){
+        // WCAG relative luminance
+        function lum(hex){
+          const rgb = [1,3,5].map(i => parseInt(hex.substr(i,2),16)/255);
+          return rgb.map(v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4))
+            .reduce((s,v,i) => s + v * [0.2126,0.7152,0.0722][i], 0);
+        }
+        const l1 = lum(fg), l2 = lum(bg);
+        return (Math.max(l1,l2) + 0.05) / (Math.min(l1,l2) + 0.05);
+      }
+
+      window.generate = function(){
+        hideErr();
+        const content = getContent();
+        if (!content) return showErr('Enter content to encode.');
+        const ec = document.getElementById('ecLevel').value;
+        const size = parseInt(document.getElementById('size').value, 10) || 512;
+        const fg = document.getElementById('fgColor').value;
+        const bg = document.getElementById('bgColor').value;
+        // Contrast warning
+        const cr = contrastRatio(fg, bg);
+        document.getElementById('contrastWarn').classList.toggle('visible', cr < 3);
+
+        // Pick smallest QR version that fits — start with typeNumber 0 (auto)
+        try {
+          const qr = qrcode(0, ec);
+          qr.addData(content);
+          qr.make();
+          currentQR = { qr, size, fg, bg, content, ec };
+          renderCanvas();
+        } catch(e) {
+          showErr('QR generation failed: ' + e.message + ' (content may be too long)');
+        }
+      };
+
+      function renderCanvas(){
+        if (!currentQR) return;
+        const { qr, size, fg, bg } = currentQR;
+        const c = document.getElementById('qrCanvas');
+        c.width = size; c.height = size;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, size, size);
+        const modules = qr.getModuleCount();
+        const cell = size / modules;
+        ctx.fillStyle = fg;
+        for (let r=0; r<modules; r++) {
+          for (let ct=0; ct<modules; ct++) {
+            if (qr.isDark(r, ct)) {
+              ctx.fillRect(ct*cell, r*cell, cell + 0.5, cell + 0.5);
+            }
+          }
+        }
+        // Logo overlay
+        if (logoImage) {
+          const lPct = parseInt(document.getElementById('logoSize').value, 10) / 100;
+          const lSize = size * lPct;
+          const lx = (size - lSize) / 2;
+          // White background box for logo readability
+          const pad = lSize * 0.08;
+          ctx.fillStyle = bg;
+          ctx.fillRect(lx - pad, lx - pad, lSize + 2*pad, lSize + 2*pad);
+          ctx.drawImage(logoImage, lx, lx, lSize, lSize);
+        }
+        set('qr-meta', 'Version ' + qr.getTypeNumber() + ' &middot; ' + modules + '×' + modules + ' modules &middot; EC level ' + currentQR.ec + ' &middot; ' + currentQR.content.length + ' chars');
+      }
+
+      window.downloadPNG = function(){
+        if (!currentQR) return showErr('Generate a QR code first.');
+        const c = document.getElementById('qrCanvas');
+        c.toBlob(blob => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = 'qrcode.png';
+          document.body.appendChild(a); a.click();
+          document.body.removeChild(a);
+          setTimeout(()=>URL.revokeObjectURL(url), 1000);
+        }, 'image/png');
+      };
+      window.downloadSVG = function(){
+        if (!currentQR) return showErr('Generate a QR code first.');
+        const { qr, size, fg, bg } = currentQR;
+        const modules = qr.getModuleCount();
+        const cell = size / modules;
+        let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="100%" height="100%" fill="' + bg + '"/><g fill="' + fg + '">';
+        for (let r=0; r<modules; r++) {
+          for (let ct=0; ct<modules; ct++) {
+            if (qr.isDark(r, ct)) svg += '<rect x="' + (ct*cell).toFixed(2) + '" y="' + (r*cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+          }
+        }
+        svg += '</g></svg>';
+        const blob = new Blob([svg], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'qrcode.svg';
+        document.body.appendChild(a); a.click();
+        document.body.removeChild(a);
+        setTimeout(()=>URL.revokeObjectURL(url), 1000);
+      };
+
+      // Initial generate
+      generate();
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

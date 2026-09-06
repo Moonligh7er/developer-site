@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free GPA Calculator (4.0 Scale, Weighted, Cumulative) | Moonlit Social Labs</title>
+  <meta name="description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta name="keywords" content="GPA calculator, weighted GPA calculator, cumulative GPA calculator, 4.0 scale GPA, high school GPA calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/gpa-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free GPA Calculator (4.0 Scale, Weighted, Cumulative)",
+    "description": "GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/gpa-calculator.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free GPA Calculator (4.0 Scale, Weighted, Cumulative)">
+  <meta property="og:description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/gpa-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free GPA Calculator (4.0 Scale, Weighted, Cumulative)">
+  <meta name="twitter:description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select, .form-group textarea { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group textarea { min-height: 200px; font-family: var(--font-mono); resize: vertical; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .mode-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+    .mode-tab.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .gpa-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: end; }
+    .gpa-row input, .gpa-row select { padding: 0.5rem 0.65rem; font-size: 0.85rem; }
+    .gpa-row .rm { background: transparent; border: 1px solid var(--border); color: var(--rose); width: 32px; height: 32px; cursor: pointer; font-family: var(--font-mono); }
+    .gpa-row .rm:hover { border-color: var(--rose); }
+    @media (max-width: 600px) { .gpa-row { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Everyday &rarr; GPA Calculator</p>
+
+      <div class="calc-card">
+        <h1>GPA Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Calculate GPA on the standard 4.0 scale from courses with credit hours and letter grades. Toggle weighted mode for honors/AP courses (+0.5) or AP-only bump. Cumulative mode adds prior GPA + prior credits.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p class="calc-subhead">Courses</p>
+<div id="gpa-list"></div>
+<button class="calc-btn calc-btn--secondary" onclick="addRow()" style="margin-bottom:1rem;">+ Add Course</button>
+
+<p class="calc-subhead">Options</p>
+<div class="form-grid">
+  <div class="form-group">
+    <label><input type="checkbox" id="weighted"> Weighted mode (honors/AP +0.5/+1.0)</label>
+  </div>
+</div>
+
+<p class="calc-subhead">Cumulative (Optional)</p>
+<div class="form-grid">
+  <div class="form-group"><label for="priorGpa">Prior Cumulative GPA</label><input type="number" id="priorGpa" placeholder="3.5" min="0" max="4.5" step="0.01"></div>
+  <div class="form-group"><label for="priorCredits">Prior Total Credits</label><input type="number" id="priorCredits" placeholder="45" min="0" step="0.5"></div>
+</div>
+
+<div class="calc-btn-row">
+  <button class="calc-btn" onclick="calc()">Calculate</button>
+  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear All</button>
+</div>
+<div class="calc-error" id="err"></div>
+
+<div class="calc-results" id="results" aria-live="polite">
+  <h4>GPA</h4>
+  <div id="out"></div>
+</div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">4.0 scale grade points</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A: 4.0 &middot; A−: 3.7 &middot; B+: 3.3 &middot; B: 3.0 &middot; B−: 2.7 &middot; C+: 2.3 &middot; C: 2.0 &middot; C−: 1.7 &middot; D+: 1.3 &middot; D: 1.0 &middot; D−: 0.7 &middot; F: 0.0</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">GPA is a credit-weighted average: sum of (grade points × credits) divided by sum of credits. A single-credit course affects your GPA less than a four-credit course with the same grade.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Weighted GPA</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Many US high schools bump honors courses by +0.5 and AP/IB courses by +1.0 &mdash; so an A in AP Chemistry is worth 5.0 instead of 4.0. This inflates GPAs above 4.0. Colleges usually re-calculate an <em>unweighted</em> GPA from your transcript, so weighted GPA is primarily useful for class rank at high schools that use it.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Cumulative mode</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">If you enter a prior cumulative GPA and prior credits, the tool combines them with the current semester&apos;s courses to give you a new cumulative GPA. Formula: (prior GPA × prior credits + current GPA × current credits) / (prior credits + current credits).</p>
+</section>
+    </div>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Everyday Calculators</p>
+      <div class="calc-other__grid">
+        <a href="percentage-calculator.html" class="calc-other__link">Percentage</a>
+        <a href="age-calculator.html" class="calc-other__link">Age</a>
+        <a href="date-duration-calculator.html" class="calc-other__link">Date Duration</a>
+        <a href="gpa-calculator.html" class="calc-other__link">GPA</a>
+        <a href="timezone-meeting-planner.html" class="calc-other__link">Time Zone Meeting</a>
+        <a href="wheel-spinner.html" class="calc-other__link">Wheel Spinner</a>
+        <a href="word-counter.html" class="calc-other__link">Word Counter</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+
+      const GRADES = {"A":4.0,"A-":3.7,"B+":3.3,"B":3.0,"B-":2.7,"C+":2.3,"C":2.0,"C-":1.7,"D+":1.3,"D":1.0,"D-":0.7,"F":0.0};
+let rowIdx = 0;
+window.addRow = function(){
+  const el = document.getElementById('gpa-list');
+  const div = document.createElement('div');
+  div.className = 'gpa-row';
+  const idx = rowIdx++;
+  let opts = '<option value="">--</option>';
+  for (const g of Object.keys(GRADES)) opts += '<option value="'+g+'">'+g+'</option>';
+  div.innerHTML = '<input type="text" placeholder="Course name" data-role="name">' +
+                  '<input type="number" placeholder="Credits" min="0" step="0.5" data-role="cr">' +
+                  '<select data-role="gr">'+opts+'</select>' +
+                  '<select data-role="type"><option value="reg">Regular</option><option value="hon">Honors +0.5</option><option value="ap">AP/IB +1.0</option></select>' +
+                  '<button class="rm" onclick="this.parentNode.remove()" title="Remove">&times;</button>';
+  el.appendChild(div);
+};
+// Seed 4 rows
+for (let i=0;i<4;i++) addRow();
+
+window.calc = function(){
+  hideErr();
+  const rows = document.querySelectorAll('.gpa-row');
+  const weighted = document.getElementById('weighted').checked;
+  let totalPts = 0, totalCr = 0, courseCount = 0;
+  for (const r of rows) {
+    const cr = parseFloat(r.querySelector('[data-role=cr]').value);
+    const g = r.querySelector('[data-role=gr]').value;
+    if (!g || isNaN(cr) || cr <= 0) continue;
+    let pts = GRADES[g];
+    if (weighted) {
+      const t = r.querySelector('[data-role=type]').value;
+      if (t === 'hon') pts += 0.5;
+      else if (t === 'ap') pts += 1.0;
+    }
+    totalPts += pts * cr;
+    totalCr += cr;
+    courseCount++;
+  }
+  if (courseCount === 0) return showErr('Add at least one course with grade + credits.');
+  const currGpa = totalPts / totalCr;
+
+  const priorGpa = n('priorGpa'), priorCr = n('priorCredits');
+  let cumGpa = null, cumCr = null;
+  if (priorGpa !== null && priorCr !== null && priorCr > 0) {
+    const cumPts = priorGpa * priorCr + totalPts;
+    cumCr = priorCr + totalCr;
+    cumGpa = cumPts / cumCr;
+  }
+
+  let out = '';
+  out += row('This term GPA', currGpa.toFixed(3), 'teal');
+  out += row('Term credits', totalCr + ' credits');
+  out += row('Courses counted', courseCount);
+  if (weighted) out += row('Mode', 'Weighted (honors +0.5, AP +1.0)', 'violet');
+  if (cumGpa !== null) {
+    out += row('New cumulative GPA', cumGpa.toFixed(3), 'teal');
+    out += row('New total credits', cumCr);
+  }
+  set('out', out);
+  document.getElementById('results').classList.add('visible');
+};
+window.clearForm = function(){
+  document.getElementById('gpa-list').innerHTML = '';
+  for (let i=0;i<4;i++) addRow();
+  document.getElementById('weighted').checked = false;
+  ['priorGpa','priorCredits'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  hideErr(); document.getElementById('results').classList.remove('visible');
+};
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

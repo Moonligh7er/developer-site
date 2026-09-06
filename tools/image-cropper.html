@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Image Cropper (Freeform + Fixed Ratios, Touch-Friendly) | Moonlit Social Labs</title>
+  <meta name="description" content="Crop images with freeform selection or fixed ratios (1:1, 4:3, 16:9, passport). Drag handles, touch-friendly for mobile. All in your browser.">
+  <meta name="keywords" content="image cropper, crop image online, image crop tool, square image cropper, photo cropper">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/image-cropper.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Image Cropper (Freeform + Fixed Ratios, Touch-Friendly)",
+    "description": "Crop images with freeform selection or fixed ratios (1:1, 4:3, 16:9, passport). Drag handles, touch-friendly for mobile. All in your browser.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/image-cropper.html",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Image Cropper (Freeform + Fixed Ratios, Touch-Friendly)">
+  <meta property="og:description" content="Crop images with freeform selection or fixed ratios (1:1, 4:3, 16:9, passport). Drag handles, touch-friendly for mobile. All in your browser.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/image-cropper.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Image Cropper (Freeform + Fixed Ratios, Touch-Friendly)">
+  <meta name="twitter:description" content="Crop images with freeform selection or fixed ratios (1:1, 4:3, 16:9, passport). Drag handles, touch-friendly for mobile. All in your browser.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .file-drop { border: 2px dashed var(--border); padding: 2rem; text-align: center; margin: 1rem 0; cursor: pointer; transition: border-color 0.2s; }
+    .file-drop:hover, .file-drop.dragover { border-color: var(--teal); background: var(--teal-glow); }
+    .file-drop p { color: var(--text-dim); font-family: var(--font-mono); font-size: 0.85rem; }
+    .preview-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 600px) { .preview-wrap { grid-template-columns: 1fr; } }
+    .preview-box { padding: 1rem; border: 1px solid var(--border); background: var(--deep); text-align: center; }
+    .preview-box h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .preview-box canvas, .preview-box img { max-width: 100%; height: auto; display: block; margin: 0 auto; border: 1px solid var(--border); }
+    .preview-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
+    input[type=range] { width: 100%; }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .crop-wrap { position: relative; margin: 1rem 0; overflow: auto; max-width: 100%; border: 1px solid var(--border); background: #000; touch-action: none; }
+    .crop-canvas { display: block; }
+    .crop-selection { position: absolute; border: 2px dashed var(--teal); background: rgba(0, 212, 170, 0.1); pointer-events: none; box-sizing: border-box; }
+    .crop-handles { position: absolute; pointer-events: none; }
+    .crop-handle { position: absolute; width: 14px; height: 14px; background: var(--teal); border: 2px solid var(--deep); border-radius: 50%; pointer-events: auto; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Image Tools &rarr; Image Cropper</p>
+
+      <div class="calc-card">
+        <h1>Image Cropper</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Crop images with a draggable selection box. Freeform or fixed ratio (1:1, 4:3, 16:9, passport 2×2"). Touch-optimized for phone use. Download the cropped result as PNG.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Files stay in your browser.</strong> Everything on this page &mdash; loading, processing, encoding &mdash; runs locally. Your images are never uploaded to any server. Re-encoding also strips EXIF metadata (camera model, GPS coordinates), which is a privacy win.</div>
+        <div class="file-drop" id="drop" tabindex="0" role="button" aria-label="Choose image">
+  <p><strong style="color:var(--teal);">Click here or drop an image</strong></p>
+  <input type="file" id="file" accept="image/*" style="display:none;">
+</div>
+<div class="form-grid">
+  <div class="form-group">
+    <label for="ratio">Aspect Ratio</label>
+    <select id="ratio">
+      <option value="0">Freeform</option>
+      <option value="1">1:1 (square)</option>
+      <option value="1.333">4:3</option>
+      <option value="1.777">16:9</option>
+      <option value="0.5625">9:16 (vertical video)</option>
+      <option value="0.6667">2:3</option>
+      <option value="1">2×2" passport</option>
+    </select>
+  </div>
+</div>
+        <div class="calc-error" id="err"></div>
+        <div class="calc-results" id="results" aria-live="polite">
+          <div class="crop-wrap" id="crop-wrap">
+  <canvas class="crop-canvas" id="crop-canvas"></canvas>
+  <div class="crop-selection" id="sel"></div>
+</div>
+<div id="crop-meta"></div>
+<div class="calc-btn-row" style="margin-top:1rem;">
+  <button class="calc-btn" onclick="doCrop()">Crop &amp; Download</button>
+</div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Using the cropper</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Drop or choose an image. A selection box appears in the middle. Drag the box to move it, drag the corner handles to resize. If you set an aspect ratio, dragging any handle keeps that ratio. Click Crop &amp; Download to save the cropped region as PNG (lossless).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common ratios</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>1:1 square</strong> for Instagram feed posts and most profile photos. <strong>4:3</strong> traditional photo, TV. <strong>16:9</strong> HD video, YouTube thumbnails, laptop screens. <strong>9:16</strong> vertical for TikTok, Instagram Reels/Stories, mobile-first video. <strong>2:3</strong> classic portrait aspect for print. <strong>2×2 inch passport</strong>: technically requires specific dimensions in pixels for print quality (600×600 @ 300 DPI is standard for US passport); this preset just enforces the 1:1 aspect &mdash; you&apos;ll want to resize afterwards to hit the exact pixel spec.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Touch support</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Handles are 14px targets sized for finger use. Drag anywhere inside the selection to reposition; drag a corner handle to resize. If the image is bigger than the viewport, scroll around inside the wrap frame.</p>
+</section>
+    </div>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Image Tools</p>
+      <div class="calc-other__grid">
+        <a href="image-compressor.html" class="calc-other__link">Compressor</a>
+        <a href="image-converter.html" class="calc-other__link">Format Converter</a>
+        <a href="image-resizer.html" class="calc-other__link">Resizer</a>
+        <a href="image-cropper.html" class="calc-other__link">Cropper</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      
+// Shared image utilities. Files never leave the browser.
+async function loadImage(file){
+  // createImageBitmap with imageOrientation:'from-image' respects EXIF rotation on iOS/Android photos
+  try {
+    return await createImageBitmap(file, { imageOrientation: 'from-image' });
+  } catch(e) {
+    // Fallback: HTMLImageElement (won't fix EXIF but works)
+    return await new Promise((res, rej) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => { URL.revokeObjectURL(url); res(img); };
+      img.onerror = rej;
+      img.src = url;
+    });
+  }
+}
+function bytesToHuman(b){
+  if (b < 1024) return b + ' B';
+  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
+  return (b/(1024*1024)).toFixed(2) + ' MB';
+}
+function detectAvifSupport(){
+  return new Promise(res => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 2;
+    if (!c.toBlob) return res(false);
+    c.toBlob(b => res(!!b && b.type === 'image/avif'), 'image/avif');
+    setTimeout(()=>res(false), 500);
+  });
+}
+function downloadBlob(blob, name){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
+function extFromType(type){ return type.split('/')[1].replace('jpeg','jpg'); }
+
+
+      const err = document.getElementById('err');
+      const results = document.getElementById('results');
+      function showErr(m){ err.textContent = m; err.classList.add('visible'); results.classList.remove('visible'); }
+      function hideErr(){ err.classList.remove('visible'); }
+      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
+      function row(label,value,cls){ cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+
+      let currentImage = null, imgScale = 1;
+let sel = { x: 100, y: 100, w: 200, h: 200 };
+let dragMode = null, dragStart = null;
+const drop = document.getElementById('drop'), fileInput = document.getElementById('file');
+const canvas = document.getElementById('crop-canvas'), selEl = document.getElementById('sel');
+const wrap = document.getElementById('crop-wrap');
+drop.addEventListener('click', () => fileInput.click());
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); });
+
+async function handle(file){
+  hideErr();
+  if (!file.type.startsWith('image/')) return showErr('Please choose an image.');
+  if (file.size > 50*1024*1024) return showErr('File exceeds 50MB.');
+  try {
+    currentImage = await loadImage(file);
+    currentImage._origName = file.name;
+    drawImage();
+    results.classList.add('visible');
+    setupHandles();
+  } catch(e) { showErr('Could not load: ' + e.message); }
+}
+function drawImage(){
+  const maxW = Math.min(900, window.innerWidth - 100);
+  imgScale = Math.min(1, maxW / currentImage.width);
+  canvas.width = currentImage.width * imgScale;
+  canvas.height = currentImage.height * imgScale;
+  canvas.getContext('2d').drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+  // Reset selection to center 50%
+  sel.w = canvas.width * 0.5; sel.h = canvas.height * 0.5;
+  sel.x = (canvas.width - sel.w) / 2; sel.y = (canvas.height - sel.h) / 2;
+  applyRatio();
+  updateSel();
+}
+function updateSel(){
+  selEl.style.left = sel.x + 'px'; selEl.style.top = sel.y + 'px';
+  selEl.style.width = sel.w + 'px'; selEl.style.height = sel.h + 'px';
+  document.getElementById('crop-meta').innerHTML = row('Selection', Math.round(sel.w/imgScale) + '×' + Math.round(sel.h/imgScale) + ' px');
+}
+function applyRatio(){
+  const r = parseFloat(document.getElementById('ratio').value);
+  if (r > 0) sel.h = sel.w / r;
+}
+document.getElementById('ratio').addEventListener('change', () => { applyRatio(); updateSel(); });
+
+function setupHandles(){
+  // Corner handles as absolutely positioned children of wrap
+  wrap.querySelectorAll('.crop-handle').forEach(e=>e.remove());
+  const handles = ['nw','ne','sw','se'];
+  for (const pos of handles) {
+    const h = document.createElement('div');
+    h.className = 'crop-handle'; h.dataset.pos = pos;
+    h.style.zIndex = 10;
+    wrap.appendChild(h);
+    h.addEventListener('pointerdown', e => startDrag(e, pos));
+  }
+  positionHandles();
+  selEl.style.pointerEvents = 'auto';
+  selEl.style.cursor = 'move';
+  selEl.addEventListener('pointerdown', e => startDrag(e, 'move'));
+  window.addEventListener('pointermove', doDrag);
+  window.addEventListener('pointerup', endDrag);
+}
+function positionHandles(){
+  wrap.querySelectorAll('.crop-handle').forEach(h=>{
+    const p = h.dataset.pos;
+    const cx = p.includes('e') ? sel.x + sel.w : sel.x;
+    const cy = p.includes('s') ? sel.y + sel.h : sel.y;
+    h.style.left = (cx - 7) + 'px';
+    h.style.top = (cy - 7) + 'px';
+  });
+}
+function startDrag(e, mode){
+  e.preventDefault();
+  dragMode = mode;
+  const rect = wrap.getBoundingClientRect();
+  dragStart = { x: e.clientX - rect.left, y: e.clientY - rect.top, sel: {...sel} };
+  e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId);
+}
+function doDrag(e){
+  if (!dragMode) return;
+  const rect = wrap.getBoundingClientRect();
+  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+  const dx = cx - dragStart.x, dy = cy - dragStart.y;
+  const r = parseFloat(document.getElementById('ratio').value);
+  if (dragMode === 'move') {
+    sel.x = Math.max(0, Math.min(canvas.width - sel.w, dragStart.sel.x + dx));
+    sel.y = Math.max(0, Math.min(canvas.height - sel.h, dragStart.sel.y + dy));
+  } else {
+    // Corner resize
+    let nx = dragStart.sel.x, ny = dragStart.sel.y, nw = dragStart.sel.w, nh = dragStart.sel.h;
+    if (dragMode.includes('e')) nw = Math.max(20, dragStart.sel.w + dx);
+    if (dragMode.includes('w')) { nw = Math.max(20, dragStart.sel.w - dx); nx = dragStart.sel.x + dx; }
+    if (dragMode.includes('s')) nh = Math.max(20, dragStart.sel.h + dy);
+    if (dragMode.includes('n')) { nh = Math.max(20, dragStart.sel.h - dy); ny = dragStart.sel.y + dy; }
+    if (r > 0) {
+      // Enforce ratio — derive one from the other
+      nh = nw / r;
+      if (dragMode.includes('n')) ny = dragStart.sel.y + dragStart.sel.h - nh;
+    }
+    // Constrain to canvas
+    if (nx < 0) { nw += nx; nx = 0; }
+    if (ny < 0) { nh += ny; ny = 0; }
+    if (nx + nw > canvas.width) nw = canvas.width - nx;
+    if (ny + nh > canvas.height) nh = canvas.height - ny;
+    if (r > 0) nh = nw / r;
+    sel = { x: nx, y: ny, w: nw, h: nh };
+  }
+  updateSel(); positionHandles();
+}
+function endDrag(){ dragMode = null; }
+
+window.doCrop = function(){
+  if (!currentImage) return showErr('Load an image first.');
+  const sx = sel.x / imgScale, sy = sel.y / imgScale;
+  const sw = sel.w / imgScale, sh = sel.h / imgScale;
+  const oc = document.createElement('canvas');
+  oc.width = Math.round(sw); oc.height = Math.round(sh);
+  oc.getContext('2d').drawImage(currentImage, sx, sy, sw, sh, 0, 0, sw, sh);
+  oc.toBlob(blob => {
+    if (!blob) return showErr('Crop failed.');
+    const base = stripExt(currentImage._origName);
+    downloadBlob(blob, base + '-cropped.png');
+  }, 'image/png');
+};
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

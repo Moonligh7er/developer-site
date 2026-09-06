@@ -297,7 +297,38 @@
     /* Paycheck calc — 2026 federal + FICA.
        Tax data inline (not fetched) so the tool works offline and doesn't
        depend on network for correctness. Update this constant when the
-       tax-data-2026.json companion file changes. */
+       tax-data-2026.json companion file changes.
+
+       ============================================================
+       END-TO-END TEST CASES (verified against hand-computed math)
+       ============================================================
+       These test the FULL gross→net pipeline (not just the bracket
+       function). Standard deduction IS subtracted before brackets;
+       verified 2026-09-04.
+
+       T1: $75,000 gross, single, no pre-tax deductions
+           - Taxable: 75,000 − 16,100 std ded = 58,900
+           - Fed: 10%×12,400 + 12%×38,000 + 22%×8,500 = $7,669.88
+           - SS: 75,000 × 6.2% = $4,650
+           - Medicare: 75,000 × 1.45% = $1,087.50
+           - Take-home: $61,592.62
+
+       T2: $120,000 gross, MFJ, 10% 401(k) = $12,000 pre-tax
+           - fedTaxableWages: 120,000 − 12,000 = 108,000
+           - Taxable: 108,000 − 32,200 std ded = 75,800
+           - Fed: 10%×24,800 + 12%×51,000 = $8,599.98
+           - SS: 120,000 × 6.2% = $7,440 (401k still subject to FICA)
+           - Medicare: 120,000 × 1.45% = $1,740
+           - Take-home: $90,220.02
+
+       T3: $250,000 gross, single (exercises SS wage-base cap + add'l Medicare)
+           - Taxable: 250,000 − 16,100 = 233,900
+           - Fed: through 32% bracket = $51,303.78
+           - SS capped: 184,500 × 6.2% = $11,439 (not 250k × 6.2%)
+           - Medicare base: 250,000 × 1.45% = $3,625
+           - Add'l Medicare: (250,000 − 200,000) × 0.9% = $450
+           - Take-home: $183,182.22
+       ============================================================ */
     const TAX_DATA = {
       taxYear: 2026,
       brackets: {

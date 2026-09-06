@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Auto Insurance Coverage Recommender (All 50 States) | Moonlit Social Labs</title>
+  <meta name="description" content="See your state minimum auto insurance requirements alongside commonly recommended coverage limits. Framework for the 100/300/100 vs. state-minimum decision.">
+  <meta name="keywords" content="auto insurance coverage calculator, state minimum auto insurance, recommended auto insurance limits, 100/300/100 auto insurance">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/auto-insurance-coverage-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Auto Insurance Coverage Recommender (All 50 States)",
+    "description": "See your state minimum auto insurance requirements alongside commonly recommended coverage limits. Framework for the 100/300/100 vs. state-minimum decision.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/auto-insurance-coverage-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Auto Insurance Coverage Recommender (All 50 States)">
+  <meta property="og:description" content="See your state minimum auto insurance requirements alongside commonly recommended coverage limits. Framework for the 100/300/100 vs. state-minimum decision.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/auto-insurance-coverage-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Auto Insurance Coverage Recommender (All 50 States)">
+  <meta name="twitter:description" content="See your state minimum auto insurance requirements alongside commonly recommended coverage limits. Framework for the 100/300/100 vs. state-minimum decision.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
+    .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Finance</a> &rarr; Auto Insurance Coverage Recommender</p>
+
+      <div class="calc-card">
+        <h1>Auto Insurance Coverage Recommender</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Select your state to see the legal minimum liability requirements alongside commonly recommended coverage levels. Includes framework guidance on comprehensive/collision, uninsured motorist, and umbrella policy decisions. <strong>Not a premium estimator</strong> &mdash; premium varies too much by driver profile to give useful single-number estimates without carrier data.</p>
+
+        <div class="form-grid">
+  <div class="form-group"><label for="state">Your State</label>
+    <select id="state">
+      <option value="">-- Select state --</option>
+    </select>
+  </div>
+  <div class="form-group"><label for="vehicleValue">Vehicle Current Value ($)</label><input type="number" id="vehicleValue" placeholder="20000" min="0" step="any"><span class="hint">For comprehensive/collision decision</span></div>
+  <div class="form-group"><label for="netWorth">Net Worth ($)</label><input type="number" id="netWorth" placeholder="100000" min="0" step="any"><span class="hint">Assets minus debts; drives liability + umbrella</span></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Your State</h4><div id="out-state"></div><p class="calc-subhead">Recommended Coverage</p><div id="out-recommend"></div><p class="calc-subhead">Decision Framework</p><div id="out-framework"></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Why not a premium estimator?</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Published state-average premiums vary ±50%+ by driver profile (age, credit score, prior claims, ZIP code, coverage limits, vehicle). Any single-number &ldquo;your premium is $X&rdquo; estimate without your specific inputs is misleading &mdash; you&apos;ll compare it to your real quote, find them wildly different, and either overpay because the estimate primed you high or underinsure because it primed you low. Get 3&ndash;5 actual quotes from real carriers instead. Progressive, GEICO, State Farm, and USAA (if eligible) are usually good starting points, plus a local independent broker who can quote multiple regional carriers.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Read the 25/50/25 notation</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Liability is written as three numbers in thousands: <strong>bodily injury per person / bodily injury per accident / property damage per accident</strong>. 25/50/25 means $25k max per injured person, $50k max total bodily injury per accident, $25k max property damage per accident. State minimums are legal-to-drive limits, not adequate-to-protect-your-assets limits.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why 100/300/100 is the common recommendation</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A moderately serious accident with hospitalization can easily exceed state minimums; when liability judgment exceeds your policy limits, plaintiffs come after your personal assets. 100/300/100 covers most non-catastrophic scenarios. For net worth above ~$300k, consider even higher limits or an umbrella policy ($1M+ coverage typically $150&ndash;$300/yr) that stacks on top of auto and homeowners liability.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Comprehensive + collision decision</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Rule of thumb: if your vehicle is worth less than 10× your annual comp+collision premium (plus deductible), drop those coverages. On a $3,000 car with $500/yr comp+collision and $1,000 deductible, you&apos;re paying $500/yr to protect against a $2,000 loss &mdash; poor economics. On a $30k car those same coverages are usually worth keeping. This calculator suggests based on vehicle value, but the answer depends on your specific quotes.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Insurance Estimate</strong>Educational estimate only &mdash; not insurance advice or a quote. Actual needs and premiums vary; consult a licensed agent. State minimums shown are current as of 2026-09-04 &mdash; verify with your state DMV for the most current requirements. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Insurance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="life-insurance-needs-calculator.html" class="calc-other__link">Life Insurance Needs</a>
+        <a href="term-vs-whole-life-calculator.html" class="calc-other__link">Term vs. Whole Life</a>
+        <a href="disability-insurance-calculator.html" class="calc-other__link">Disability Insurance</a>
+        <a href="auto-insurance-coverage-calculator.html" class="calc-other__link">Auto Insurance Coverage</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+
+      const STATES = {
+  "AL":{n:"Alabama",bi:25,ba:50,pd:25,pip:false,um:false},
+  "AK":{n:"Alaska",bi:50,ba:100,pd:25,pip:false,um:false},
+  "AZ":{n:"Arizona",bi:25,ba:50,pd:15,pip:false,um:false},
+  "AR":{n:"Arkansas",bi:25,ba:50,pd:25,pip:false,um:false},
+  "CA":{n:"California",bi:30,ba:60,pd:15,pip:false,um:false,note:"Raised from 15/30/5 in 2025"},
+  "CO":{n:"Colorado",bi:25,ba:50,pd:15,pip:false,um:false},
+  "CT":{n:"Connecticut",bi:25,ba:50,pd:25,pip:false,um:true},
+  "DE":{n:"Delaware",bi:25,ba:50,pd:10,pip:true,um:false},
+  "DC":{n:"D.C.",bi:25,ba:50,pd:10,pip:false,um:true},
+  "FL":{n:"Florida",bi:0,ba:0,pd:10,pip:true,um:false,note:"PIP-only; no bodily injury liability required"},
+  "GA":{n:"Georgia",bi:25,ba:50,pd:25,pip:false,um:false},
+  "HI":{n:"Hawaii",bi:20,ba:40,pd:10,pip:true,um:false,note:"Rising to 40/80/20"},
+  "ID":{n:"Idaho",bi:25,ba:50,pd:15,pip:false,um:false},
+  "IL":{n:"Illinois",bi:25,ba:50,pd:20,pip:false,um:true},
+  "IN":{n:"Indiana",bi:25,ba:50,pd:25,pip:false,um:true},
+  "IA":{n:"Iowa",bi:20,ba:40,pd:15,pip:false,um:false},
+  "KS":{n:"Kansas",bi:25,ba:50,pd:25,pip:true,um:true},
+  "KY":{n:"Kentucky",bi:25,ba:50,pd:25,pip:false,um:false},
+  "LA":{n:"Louisiana",bi:15,ba:30,pd:25,pip:false,um:false},
+  "ME":{n:"Maine",bi:50,ba:100,pd:25,pip:false,um:true},
+  "MD":{n:"Maryland",bi:30,ba:60,pd:15,pip:false,um:true},
+  "MA":{n:"Massachusetts",bi:25,ba:50,pd:30,pip:true,um:true},
+  "MI":{n:"Michigan",bi:50,ba:100,pd:10,pip:true,um:false},
+  "MN":{n:"Minnesota",bi:30,ba:60,pd:10,pip:true,um:true},
+  "MS":{n:"Mississippi",bi:25,ba:50,pd:25,pip:false,um:false},
+  "MO":{n:"Missouri",bi:25,ba:50,pd:25,pip:false,um:true},
+  "MT":{n:"Montana",bi:25,ba:50,pd:20,pip:false,um:false},
+  "NE":{n:"Nebraska",bi:25,ba:50,pd:25,pip:false,um:true},
+  "NV":{n:"Nevada",bi:25,ba:50,pd:20,pip:false,um:false},
+  "NH":{n:"New Hampshire",bi:25,ba:50,pd:25,pip:false,um:true,note:"Insurance not mandatory but drivers remain liable"},
+  "NJ":{n:"New Jersey",bi:35,ba:70,pd:25,pip:true,um:true,note:"Raised to 35/70/25 on Jan 1, 2026"},
+  "NM":{n:"New Mexico",bi:25,ba:50,pd:10,pip:false,um:false},
+  "NY":{n:"New York",bi:25,ba:50,pd:10,pip:true,um:true},
+  "NC":{n:"North Carolina",bi:50,ba:100,pd:50,pip:false,um:true,note:"Raised from 30/60/25 in 2025"},
+  "ND":{n:"North Dakota",bi:25,ba:50,pd:25,pip:true,um:true},
+  "OH":{n:"Ohio",bi:25,ba:50,pd:25,pip:false,um:false},
+  "OK":{n:"Oklahoma",bi:25,ba:50,pd:25,pip:false,um:false},
+  "OR":{n:"Oregon",bi:25,ba:50,pd:20,pip:true,um:true},
+  "PA":{n:"Pennsylvania",bi:15,ba:30,pd:5,pip:true,um:false,note:"Lowest property damage minimum in the US"},
+  "RI":{n:"Rhode Island",bi:25,ba:50,pd:25,pip:false,um:false},
+  "SC":{n:"South Carolina",bi:25,ba:50,pd:25,pip:false,um:true},
+  "SD":{n:"South Dakota",bi:25,ba:50,pd:25,pip:false,um:true},
+  "TN":{n:"Tennessee",bi:25,ba:50,pd:25,pip:false,um:false},
+  "TX":{n:"Texas",bi:30,ba:60,pd:25,pip:false,um:false},
+  "UT":{n:"Utah",bi:30,ba:65,pd:25,pip:true,um:true,note:"Raised from 25/65/15 in 2025"},
+  "VT":{n:"Vermont",bi:25,ba:50,pd:10,pip:false,um:true},
+  "VA":{n:"Virginia",bi:50,ba:100,pd:25,pip:false,um:true,note:"Raised from 30/60/20 in 2025"},
+  "WA":{n:"Washington",bi:25,ba:50,pd:10,pip:false,um:false},
+  "WV":{n:"West Virginia",bi:25,ba:50,pd:25,pip:false,um:true},
+  "WI":{n:"Wisconsin",bi:25,ba:50,pd:10,pip:false,um:true},
+  "WY":{n:"Wyoming",bi:25,ba:50,pd:20,pip:false,um:false}
+};
+
+// Populate state dropdown
+(function() {
+  const sel = document.getElementById('state');
+  const codes = Object.keys(STATES).sort();
+  for (const c of codes) {
+    const o = document.createElement('option');
+    o.value = c;
+    o.textContent = STATES[c].n + ' (' + c + ')';
+    sel.appendChild(o);
+  }
+})();
+
+function calc(){
+  hideErr();
+  const code = s('state');
+  const vv = n('vehicleValue');
+  const nw = n('netWorth')||0;
+  if (!code) return showErr('Select your state.');
+  const st = STATES[code];
+
+  let stHtml = '';
+  const minLiability = st.bi + '/' + st.ba + '/' + st.pd;
+  stHtml += row('State', st.n);
+  stHtml += row('Minimum bodily injury (per person)', '$' + st.bi + ',000', 'amber');
+  stHtml += row('Minimum bodily injury (per accident)', '$' + st.ba + ',000', 'amber');
+  stHtml += row('Minimum property damage', '$' + st.pd + ',000', 'amber');
+  stHtml += row('Standard liability notation', minLiability + ' ($ thousands)', 'amber');
+  stHtml += row('Personal Injury Protection (PIP) required', st.pip ? 'Yes' : 'No');
+  stHtml += row('Uninsured/underinsured motorist required', st.um ? 'Yes' : 'No');
+  if (st.note) stHtml += row('Note', st.note, 'violet');
+  set('out-state', stHtml);
+
+  // Recommended coverage based on net worth
+  let recLiability = '100/300/100';
+  let recReason = 'Common baseline for households with normal net worth';
+  if (nw >= 500000) {
+    recLiability = '250/500/100 + $1M umbrella';
+    recReason = 'Net worth ≥ $500k — umbrella policy strongly recommended';
+  } else if (nw >= 250000) {
+    recLiability = '100/300/100 + consider $1M umbrella';
+    recReason = 'Net worth ≥ $250k — umbrella becomes cost-effective (~$150-300/yr)';
+  } else if (nw >= 100000) {
+    recLiability = '100/300/100';
+    recReason = 'Standard recommendation for typical households';
+  } else if (nw > 0) {
+    recLiability = '50/100/50 minimum, 100/300/100 preferred';
+    recReason = 'Even limited assets benefit from higher liability';
+  }
+  let recHtml = '';
+  recHtml += row('Suggested liability', recLiability, 'teal');
+  recHtml += row('Reasoning', recReason);
+  recHtml += row('Uninsured motorist (UM)', 'Match your liability limits');
+  recHtml += row('Medical payments (MedPay)', '$5k–$10k common; helps with deductibles + rider coverage');
+  set('out-recommend', recHtml);
+
+  // Comp/collision framework
+  let fHtml = '';
+  if (vv && vv > 0) {
+    if (vv < 3000) {
+      fHtml += row('Comprehensive + Collision', 'Consider dropping — vehicle value too low', 'amber');
+      fHtml += row('Reasoning', 'Below ~$3k, comp+collision premium often exceeds economical loss coverage');
+    } else if (vv < 8000) {
+      fHtml += row('Comprehensive + Collision', 'Marginal — evaluate premium vs. deductible', 'amber');
+      fHtml += row('Rule of thumb', 'Drop if annual premium > 10% of vehicle value');
+    } else {
+      fHtml += row('Comprehensive + Collision', 'Keep — vehicle value warrants it', 'teal');
+      fHtml += row('Consider $500-$1000 deductible', 'to lower premium while keeping coverage');
+    }
+  }
+  if (nw >= 250000) {
+    fHtml += row('Umbrella policy', 'Recommended — $1M coverage typically $150-$300/yr', 'teal');
+  } else if (nw >= 100000) {
+    fHtml += row('Umbrella policy', 'Optional — reassess when net worth reaches $250k+');
+  }
+  fHtml += row('Get real quotes from', 'Multiple carriers via independent broker + direct writers (Progressive/GEICO/State Farm)');
+  set('out-framework', fHtml);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['vehicleValue','netWorth'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('state').value='';
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

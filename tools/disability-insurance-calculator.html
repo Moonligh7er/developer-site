@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Disability Insurance Needs Calculator | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate the monthly disability insurance gap after employer LTD coverage and other income. Uses the 60-70% income replacement convention as reference.">
+  <meta name="keywords" content="disability insurance calculator, LTD needs calculator, disability income calculator, long term disability calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/disability-insurance-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Disability Insurance Needs Calculator",
+    "description": "Calculate the monthly disability insurance gap after employer LTD coverage and other income. Uses the 60-70% income replacement convention as reference.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/disability-insurance-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Disability Insurance Needs Calculator">
+  <meta property="og:description" content="Calculate the monthly disability insurance gap after employer LTD coverage and other income. Uses the 60-70% income replacement convention as reference.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/disability-insurance-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Disability Insurance Needs Calculator">
+  <meta name="twitter:description" content="Calculate the monthly disability insurance gap after employer LTD coverage and other income. Uses the 60-70% income replacement convention as reference.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
+    .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Finance</a> &rarr; Disability Insurance Needs</p>
+
+      <div class="calc-card">
+        <h1>Disability Insurance Needs</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Calculate the monthly disability insurance coverage gap between your existing employer LTD and the 60&ndash;70% income replacement most planners recommend.</p>
+
+        <p class="calc-subhead">Income &amp; Expenses</p>
+<div class="form-grid">
+  <div class="form-group"><label for="income">Gross Monthly Income ($)</label><input type="number" id="income" placeholder="8000" min="0" step="any"></div>
+  <div class="form-group"><label for="expenses">Essential Monthly Expenses ($)</label><input type="number" id="expenses" placeholder="5500" min="0" step="any"><span class="hint">Rent/mortgage, food, utilities, minimums</span></div>
+  <div class="form-group"><label for="target">Target Replacement (%)</label><input type="number" id="target" value="65" min="0" max="100" step="any"><span class="hint">Convention: 60-70% of gross</span></div>
+</div>
+<p class="calc-subhead">Existing Coverage</p>
+<div class="form-grid">
+  <div class="form-group"><label for="ltdPct">Employer LTD Coverage (% of income)</label><input type="number" id="ltdPct" placeholder="60" min="0" max="100" step="any"><span class="hint">Group LTD typically covers 50-70%</span></div>
+  <div class="form-group"><label for="ltdCap">Employer LTD Monthly Cap ($)</label><input type="number" id="ltdCap" placeholder="10000" min="0" step="any"><span class="hint">Many group policies cap the monthly benefit</span></div>
+  <div class="form-group"><label for="ltdTaxed">Is Employer LTD Taxable?</label>
+    <select id="ltdTaxed">
+      <option value="yes">Yes (employer paid premium)</option>
+      <option value="no">No (you paid premium with after-tax dollars)</option>
+    </select>
+  </div>
+  <div class="form-group"><label for="otherIncome">Other Monthly Income if Disabled ($)</label><input type="number" id="otherIncome" placeholder="0" min="0" step="any"><span class="hint">Spouse income, SSDI est, investment income</span></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Coverage Gap</h4><div id="out-headline"></div><p class="calc-subhead">Breakdown</p><div id="out-detail"></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The 60&ndash;70% convention</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Financial planners typically recommend replacing 60&ndash;70% of pre-disability gross income. Why not 100%? Two reasons: private disability policies almost never sell coverage above 60&ndash;70% of income (moral hazard &mdash; if you got paid the same disabled as working, the incentive to return to work weakens), and being disabled typically reduces work-related expenses (commuting, business clothes, work meals) so you need less than 100%.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Group LTD gotchas</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">If your employer pays the LTD premium, benefits are typically <strong>taxable</strong> to you. That 60% policy becomes ~42&ndash;48% net-of-tax. If you pay the premium yourself with after-tax dollars (or via a &ldquo;gross-up&rdquo; election), benefits are tax-free &mdash; effectively giving you the full stated coverage. This calculator applies a rough 30% tax haircut when you mark employer LTD as taxable.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Also watch for: <strong>caps</strong> (group policies commonly cap monthly benefit around $10&ndash;$15k regardless of income &mdash; a real problem for high earners), <strong>own-occupation vs. any-occupation</strong> definitions (own-occ pays if you can&apos;t do <em>your</em> job; any-occ requires you to be unable to do <em>any</em> job you&apos;re qualified for &mdash; much harder to collect on), and <strong>elimination periods</strong> (waiting period before benefits start, typically 90&ndash;180 days).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Supplementing group LTD</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Individual disability insurance stacks on top of group coverage. It&apos;s typically own-occupation, non-cancellable, and portable (follows you between employers). Premiums are age- and health-underwritten &mdash; buy young if you can. Physicians and other high earners often need individual coverage to reach the 60% replacement figure given group caps.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Insurance Estimate</strong>Educational estimate only &mdash; not insurance advice or a quote. Actual needs and premiums vary; consult a licensed agent. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Insurance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="life-insurance-needs-calculator.html" class="calc-other__link">Life Insurance Needs</a>
+        <a href="term-vs-whole-life-calculator.html" class="calc-other__link">Term vs. Whole Life</a>
+        <a href="disability-insurance-calculator.html" class="calc-other__link">Disability Insurance</a>
+        <a href="auto-insurance-coverage-calculator.html" class="calc-other__link">Auto Insurance Coverage</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+
+      function calc(){
+  hideErr();
+  const income=n('income'), exp=n('expenses')||0, target=(n('target')||65)/100;
+  const ltdPct=(n('ltdPct')||0)/100, ltdCap=n('ltdCap')||Infinity, taxed=s('ltdTaxed'), other=n('otherIncome')||0;
+  if (!income||income<=0) return showErr('Enter monthly income.');
+
+  const targetIncome = income * target;
+  let ltdGross = Math.min(income * ltdPct, ltdCap);
+  const ltdNet = taxed === 'yes' ? ltdGross * 0.70 : ltdGross; // ~30% tax haircut if taxable
+  const totalReplaced = ltdNet + other;
+  const gap = Math.max(0, targetIncome - totalReplaced);
+  const gapVsExpenses = Math.max(0, exp - totalReplaced);
+
+  set('out-headline',
+    row('Monthly income target (' + (target*100).toFixed(0) + '%)', money(targetIncome), 'teal') +
+    row('Current replacement (LTD + other)', money(totalReplaced)) +
+    row('Monthly coverage gap', money(gap), gap > 0 ? 'rose' : 'teal') +
+    (exp > 0 ? row('Gap vs. essential expenses', money(gapVsExpenses), gapVsExpenses > 0 ? 'rose' : 'teal') : '')
+  );
+
+  let h = '';
+  h += row('Gross monthly income', money(income));
+  h += row('Employer LTD (' + (ltdPct*100).toFixed(0) + '%)', money(income * ltdPct));
+  if (ltdCap < Infinity && income * ltdPct > ltdCap) h += row('LTD capped at', money(ltdCap), 'amber');
+  h += row('LTD after tax adjustment', money(ltdNet));
+  if (other > 0) h += row('Other income while disabled', money(other));
+  h += row('Total monthly replacement', money(totalReplaced));
+  h += row('60&ndash;70% target range', money(income*0.6) + ' – ' + money(income*0.7));
+  set('out-detail', h);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['income','expenses','ltdCap','otherIncome'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('target').value='65';document.getElementById('ltdPct').value='';document.getElementById('ltdTaxed').value='yes';
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

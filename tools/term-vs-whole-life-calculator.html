@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Term vs. Whole Life Insurance Comparison Calculator | Moonlit Social Labs</title>
+  <meta name="description" content="Compare term life + invest the difference vs. whole life cash value over any horizon. See the crossover point and what happens to premiums after term expiration.">
+  <meta name="keywords" content="term vs whole life calculator, buy term invest the difference calculator, whole life cash value calculator, permanent life insurance comparison">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/term-vs-whole-life-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Term vs. Whole Life Insurance Comparison Calculator",
+    "description": "Compare term life + invest the difference vs. whole life cash value over any horizon. See the crossover point and what happens to premiums after term expiration.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/term-vs-whole-life-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Term vs. Whole Life Insurance Comparison Calculator">
+  <meta property="og:description" content="Compare term life + invest the difference vs. whole life cash value over any horizon. See the crossover point and what happens to premiums after term expiration.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/term-vs-whole-life-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Term vs. Whole Life Insurance Comparison Calculator">
+  <meta name="twitter:description" content="Compare term life + invest the difference vs. whole life cash value over any horizon. See the crossover point and what happens to premiums after term expiration.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
+    .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Finance</a> &rarr; Term vs. Whole Life Comparison</p>
+
+      <div class="calc-card">
+        <h1>Term vs. Whole Life Comparison</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A comparison framework: buy term life and invest the premium difference vs. buy whole life with cash value accumulation. Enter your quotes (or use illustrative placeholders) and see how the two paths compare.</p>
+
+        <p class="calc-subhead">Coverage &amp; Horizon</p>
+<div class="form-grid">
+  <div class="form-group"><label for="age">Current Age</label><input type="number" id="age" placeholder="35" min="0" step="1"></div>
+  <div class="form-group"><label for="coverage">Coverage Amount ($)</label><input type="number" id="coverage" placeholder="500000" min="0" step="any"></div>
+  <div class="form-group"><label for="termYears">Term Length (yrs)</label><input type="number" id="termYears" value="30" min="1" step="1"></div>
+</div>
+<p class="calc-subhead">Premiums (Get Real Quotes)</p>
+<div class="form-grid">
+  <div class="form-group"><label for="termPremium">Term Premium ($/month)</label><input type="number" id="termPremium" placeholder="30" min="0" step="any"><span class="hint">Illustrative; get actual quotes</span></div>
+  <div class="form-group"><label for="wholePremium">Whole Life Premium ($/month)</label><input type="number" id="wholePremium" placeholder="450" min="0" step="any"><span class="hint">Whole life usually 10-15× term</span></div>
+</div>
+<p class="calc-subhead">Assumptions</p>
+<div class="form-grid">
+  <div class="form-group"><label for="investReturn">Invested Return (%/yr)</label><input type="number" id="investReturn" value="7" min="0" step="any"><span class="hint">Long-run stock market ~7% real, ~10% nominal</span></div>
+  <div class="form-group"><label for="wholeGrowth">Whole Life Cash Value Growth (%/yr)</label><input type="number" id="wholeGrowth" value="4" min="0" step="any"><span class="hint">Typical dividend-paying whole: 3-5%</span></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Comparison at Term End</h4><div id="out-headline"></div><p class="calc-subhead">Path Details</p><div class="compare-grid"><div class="compare-col"><h5>Term + Invest the Difference</h5><div id="out-term"></div></div><div class="compare-col"><h5>Whole Life</h5><div id="out-whole"></div></div></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The comparison, honestly</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Whole life bundles a death benefit with a savings/investment component (cash value) that grows at guaranteed + dividend rates. Term life is pure insurance for a defined period with no cash value. The classic Buy-Term-Invest-The-Difference (BTID) argument: term costs 10&ndash;15× less per dollar of coverage, so if you invest the premium difference in low-cost index funds at market returns, you end the term with substantially more money than whole life&apos;s cash value.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The math heavily favors BTID <em>when the buyer actually invests the difference</em>. In practice most people don&apos;t &mdash; whole life is behavioral commitment device dressed as an investment product. If you know you&apos;ll spend the premium savings instead of investing them, whole life may end up with more assets. This calculator assumes you invest the full difference.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When each product genuinely fits</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Term:</strong> temporary needs (mortgage payoff, income replacement while raising kids), young families with limited budget, anyone who wants insurance decoupled from investment decisions. <strong>Whole life:</strong> estate planning at high net worth (permanent coverage for estate liquidity), business buy-sell agreements, disciplined savers who value the forced-savings mechanism and tax-deferred cash value growth, or anyone with income too high for other tax-advantaged accounts (rare).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What happens after term expires</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">A term policy just ends. If you still need coverage, you buy new (much more expensive at older ages) or convert to permanent (typically an option in the first 5&ndash;10 years). Whole life continues for life as long as premiums are paid. This calculator stops at the end of the term &mdash; it does not model what you do next.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Insurance Estimate</strong>Educational estimate only &mdash; not insurance advice or a quote. Actual needs and premiums vary; consult a licensed agent. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Insurance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="life-insurance-needs-calculator.html" class="calc-other__link">Life Insurance Needs</a>
+        <a href="term-vs-whole-life-calculator.html" class="calc-other__link">Term vs. Whole Life</a>
+        <a href="disability-insurance-calculator.html" class="calc-other__link">Disability Insurance</a>
+        <a href="auto-insurance-coverage-calculator.html" class="calc-other__link">Auto Insurance Coverage</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+
+      function calc(){
+  hideErr();
+  const age=n('age')||35, cov=n('coverage'), yr=n('termYears'), tp=n('termPremium'), wp=n('wholePremium');
+  const rInv=(n('investReturn')||0)/100, rWhole=(n('wholeGrowth')||0)/100;
+  if (!cov||cov<=0) return showErr('Enter coverage amount.');
+  if (!yr||yr<=0) return showErr('Enter term length.');
+  if (tp===null||wp===null) return showErr('Enter both premium amounts.');
+
+  const months = yr * 12;
+  const diffMonthly = wp - tp; // extra $ per month to invest under BTID
+  const rInvMonthly = Math.pow(1+rInv, 1/12) - 1;
+  const rWholeMonthly = Math.pow(1+rWhole, 1/12) - 1;
+
+  // BTID: invest the difference every month at market return
+  let btidValue = 0;
+  for (let m=0; m<months; m++) {
+    btidValue = (btidValue + diffMonthly) * (1 + rInvMonthly);
+  }
+  const termTotalPaid = tp * months;
+  const btidTotalPaid = wp * months; // same total outflow as whole life
+  const btidNet = btidValue; // portfolio value at end of term
+
+  // Whole life: cash value grows from premium contributions (approx — actual is much messier)
+  // Simplified: assume ~60% of premium goes to cash value (typical dividend-paying whole after early years)
+  let cv = 0;
+  for (let m=0; m<months; m++) {
+    cv = (cv + wp * 0.60) * (1 + rWholeMonthly);
+  }
+  const wholeTotalPaid = wp * months;
+
+  // Headline: which has more assets at end of term
+  const btidBetter = btidNet > cv;
+  set('out-headline',
+    row('BTID portfolio value at year ' + yr, money(btidNet), btidBetter ? 'teal' : 'rose') +
+    row('Whole life cash value at year ' + yr, money(cv), btidBetter ? 'rose' : 'teal') +
+    row('Difference', money(Math.abs(btidNet - cv)) + ' (' + (btidBetter ? 'BTID ahead' : 'Whole life ahead') + ')', btidBetter ? 'teal' : 'violet') +
+    row('Age at term end', (age + yr) + ' years old')
+  );
+
+  let term = '';
+  term += row('Term premium', moneyC(tp) + '/month');
+  term += row('Total term premiums paid', money(termTotalPaid));
+  term += row('Extra invested (whole - term)', moneyC(diffMonthly) + '/month');
+  term += row('Total invested over ' + yr + ' yrs', money(diffMonthly * months));
+  term += row('Portfolio at ' + (rInv*100).toFixed(1) + '% return', money(btidValue), 'teal');
+  term += row('Death benefit during term', money(cov));
+  term += row('Death benefit after term', 'None (unless renewed)');
+  set('out-term', term);
+
+  let whole = '';
+  whole += row('Whole life premium', moneyC(wp) + '/month');
+  whole += row('Total premiums paid', money(wholeTotalPaid));
+  whole += row('Est. cash value (simplified)', money(cv), 'teal');
+  whole += row('Death benefit', money(cov) + ' (permanent)');
+  whole += row('Cash value assumption', '~60% of premium at ' + (rWhole*100).toFixed(1) + '% growth');
+  whole += row('Note', 'Actual whole life values vary by carrier/policy');
+  set('out-whole', whole);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['age','coverage','termPremium','wholePremium'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('termYears').value='30';document.getElementById('investReturn').value='7';document.getElementById('wholeGrowth').value='4';
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

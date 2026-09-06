@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Macro Split Calculator (Protein / Carbs / Fat) | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate daily grams of protein, carbs, and fat from your calorie target. Balanced, higher-protein, low-carb, and custom presets.">
+  <meta name="keywords" content="macro calculator, macronutrient calculator, protein carb fat calculator, macro split calculator, IIFYM calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/macro-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Macro Split Calculator (Protein / Carbs / Fat)",
+    "description": "Calculate daily grams of protein, carbs, and fat from your calorie target. Balanced, higher-protein, low-carb, and custom presets.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/macro-calculator.html",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Macro Split Calculator (Protein / Carbs / Fat)">
+  <meta property="og:description" content="Calculate daily grams of protein, carbs, and fat from your calorie target. Balanced, higher-protein, low-carb, and custom presets.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/macro-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Macro Split Calculator (Protein / Carbs / Fat)">
+  <meta name="twitter:description" content="Calculate daily grams of protein, carbs, and fat from your calorie target. Balanced, higher-protein, low-carb, and custom presets.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
+    .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+    .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Health & Fitness &rarr; Macro Split Calculator</p>
+
+      <div class="calc-card">
+        <h1>Macro Split Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your daily calorie target (from the <a href="calorie-tdee-calculator.html" style="color:var(--teal);">TDEE calculator</a> or your own) and pick a macro preset to see grams per macro per day. Presets are common conventions, not prescriptions.</p>
+
+        <div class="form-grid">
+  <div class="form-group"><label for="calories">Daily Calorie Target</label><input type="number" id="calories" placeholder="2200" min="0" step="1"></div>
+  <div class="form-group"><label for="preset">Macro Preset</label>
+    <select id="preset">
+      <option value="balanced">Balanced (30P / 40C / 30F)</option>
+      <option value="highProtein">Higher-Protein (40P / 35C / 25F)</option>
+      <option value="lowCarb">Low-Carb (35P / 20C / 45F)</option>
+      <option value="endurance">Endurance (25P / 55C / 20F)</option>
+      <option value="custom">Custom</option>
+    </select>
+  </div>
+</div>
+<div class="form-grid" id="custom-fields" style="display:none;">
+  <div class="form-group"><label for="pPct">Protein (%)</label><input type="number" id="pPct" value="30" min="0" max="100" step="any"></div>
+  <div class="form-group"><label for="cPct">Carbs (%)</label><input type="number" id="cPct" value="40" min="0" max="100" step="any"></div>
+  <div class="form-group"><label for="fPct">Fat (%)</label><input type="number" id="fPct" value="30" min="0" max="100" step="any"><span class="hint">Must sum to 100</span></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Daily Macros</h4><div id="out-main"></div><p class="calc-subhead">Per-Meal Split (4 meals)</p><div id="out-meals"></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Macro basics</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Calories from each macro: protein and carbs = 4 kcal/g, fat = 9 kcal/g. So a 30/40/30 split on 2,000 kcal gives 150g protein (600 kcal), 200g carbs (800 kcal), 67g fat (600 kcal).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When each preset fits</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Balanced 30/40/30:</strong> general-purpose maintenance or slow recomp, most people. <strong>Higher-protein 40/35/25:</strong> weight loss (preserves lean mass during a deficit) or hypertrophy training. <strong>Low-carb 35/20/45:</strong> keto-adjacent, ketogenic diets, or people who feel better on lower carbs. <strong>Endurance 25/55/20:</strong> athletes doing 8+ hours/week of cardio &mdash; glycogen replenishment matters. These are common conventions, not prescriptions; individual needs vary.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Protein per pound of bodyweight</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">A common lifter&apos;s target is 0.8&ndash;1.0g protein per lb of bodyweight. Higher-end research (Morton et al., meta-analysis) puts the ceiling around 1.6g/kg (~0.73g/lb) for muscle building &mdash; beyond that, extra protein doesn&apos;t add muscle gains, though it can help satiety during a cut. If your macro split gives you significantly more or less than your bodyweight-based target, use custom mode to dial in the exact grams.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Health Info Only</strong>For general information only &mdash; not medical advice, diagnosis, or treatment. Consult a healthcare provider. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Health & Fitness Tools</p>
+      <div class="calc-other__grid">
+        <a href="bmi-calculator.html" class="calc-other__link">BMI</a>
+        <a href="calorie-tdee-calculator.html" class="calc-other__link">Calorie / TDEE</a>
+        <a href="macro-calculator.html" class="calc-other__link">Macro Split</a>
+        <a href="bmr-calculator.html" class="calc-other__link">BMR</a>
+        <a href="body-fat-navy-calculator.html" class="calc-other__link">Body Fat (Navy)</a>
+        <a href="ideal-weight-calculator.html" class="calc-other__link">Ideal Weight</a>
+        <a href="water-intake-calculator.html" class="calc-other__link">Water Intake</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+
+      document.getElementById('preset').addEventListener('change', function() {
+  document.getElementById('custom-fields').style.display = this.value==='custom' ? '' : 'none';
+});
+
+const PRESETS = {
+  balanced: [30,40,30],
+  highProtein: [40,35,25],
+  lowCarb: [35,20,45],
+  endurance: [25,55,20]
+};
+
+function calc(){
+  hideErr();
+  const cal = n('calories');
+  if (!cal||cal<=0) return showErr('Enter calorie target.');
+  const preset = s('preset');
+  let p, c, f;
+  if (preset === 'custom') {
+    p = n('pPct')||0; c = n('cPct')||0; f = n('fPct')||0;
+    if (Math.abs(p+c+f - 100) > 1) return showErr('Custom percentages must sum to 100.');
+  } else {
+    [p,c,f] = PRESETS[preset];
+  }
+  const pG = (cal * p/100) / 4;
+  const cG = (cal * c/100) / 4;
+  const fG = (cal * f/100) / 9;
+
+  let main = '';
+  main += row('Protein', Math.round(pG) + 'g (' + Math.round(cal*p/100) + ' kcal, ' + p + '%)', 'teal');
+  main += row('Carbohydrates', Math.round(cG) + 'g (' + Math.round(cal*c/100) + ' kcal, ' + c + '%)', 'violet');
+  main += row('Fat', Math.round(fG) + 'g (' + Math.round(cal*f/100) + ' kcal, ' + f + '%)', 'amber');
+  main += row('Total calories', cal + ' kcal');
+  set('out-main', main);
+
+  let meals = '';
+  meals += row('Protein per meal', Math.round(pG/4) + 'g × 4 meals');
+  meals += row('Carbs per meal', Math.round(cG/4) + 'g × 4 meals');
+  meals += row('Fat per meal', Math.round(fG/4) + 'g × 4 meals');
+  meals += row('Calories per meal', Math.round(cal/4) + ' kcal × 4 meals');
+  set('out-meals', meals);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['calories','pPct','cPct','fPct'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('preset').value='balanced';document.getElementById('custom-fields').style.display='none';
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Loan & Mortgage Payment Calculator | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate monthly payment, total interest, and total cost for any loan or mortgage. Includes yearly amortization summary.">
-  <meta name="keywords" content="mortgage calculator, loan calculator, mortgage payment calculator, amortization calculator, monthly payment calculator, home loan calculator">
+  <title>Free Mortgage Calculator with PITI, PMI &amp; Extra Payments | Moonlit Social Labs</title>
+  <meta name="description" content="Full mortgage calculator: principal, interest, property tax, insurance, PMI, and extra monthly payments. Yearly amortization table. Runs entirely in your browser.">
+  <meta name="keywords" content="mortgage calculator, PITI calculator, PMI calculator, extra payment mortgage calculator, home loan calculator, amortization calculator, monthly payment calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/loan-mortgage-calculator.html">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Loan & Mortgage Payment Calculator",
-    "description": "Calculate monthly payment, total interest, and total cost for any loan or mortgage. Includes yearly amortization summary.",
+    "name": "Free Mortgage Calculator with PITI, PMI & Extra Payments",
+    "description": "Full mortgage calculator: principal, interest, property tax, insurance, PMI, and extra monthly payments. Yearly amortization table.",
     "url": "https://moonligh7er.github.io/developer-site/tools/loan-mortgage-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Free Loan & Mortgage Payment Calculator">
-  <meta property="og:description" content="Calculate monthly payment, total interest, and total cost for any loan or mortgage. Includes yearly amortization summary.">
+  <meta property="og:title" content="Free Mortgage Calculator with PITI, PMI &amp; Extra Payments">
+  <meta property="og:description" content="Full mortgage calculator: principal, interest, property tax, insurance, PMI, and extra monthly payments.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/loan-mortgage-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Loan & Mortgage Payment Calculator">
-  <meta name="twitter:description" content="Calculate monthly payment, total interest, and total cost for any loan or mortgage. Includes yearly amortization summary.">
+  <meta name="twitter:title" content="Free Mortgage Calculator with PITI, PMI &amp; Extra Payments">
+  <meta name="twitter:description" content="Full mortgage calculator: principal, interest, property tax, insurance, PMI, and extra monthly payments.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -509,14 +509,27 @@
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Loan Mortgage Calculator</p>
       <div class="calc-panel" id="panel-loan" role="tabpanel">
         <div class="calc-card">
-          <h3>Loan / Mortgage Payment Calculator</h3>
+          <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:400;color:var(--text-bright);margin-bottom:0.75rem;">Mortgage Calculator</h1>
+          <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Full PITI + PMI + extra-payment calculator. Enter your home price and down payment (or a loan amount directly) and see the true monthly cost of ownership plus how much interest an extra monthly payment saves.</p>
+
+          <p class="calc-subhead">Loan Basics</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ln-amount">Loan Amount ($)</label>
-              <input type="number" id="ln-amount" placeholder="250000" min="0" step="any">
+              <label for="ln-home-price">Home Price ($)</label>
+              <input type="number" id="ln-home-price" placeholder="400000" min="0" step="any" aria-describedby="ln-home-price-help">
+              <span id="ln-home-price-help" style="font-size:0.7rem;color:var(--text-dim);">Optional. Used for PMI + down-payment calc.</span>
             </div>
             <div class="form-group">
-              <label for="ln-rate">Interest Rate (%)</label>
+              <label for="ln-down-payment">Down Payment ($)</label>
+              <input type="number" id="ln-down-payment" placeholder="80000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ln-amount">Loan Amount ($)</label>
+              <input type="number" id="ln-amount" placeholder="320000" min="0" step="any" aria-describedby="ln-amount-help">
+              <span id="ln-amount-help" style="font-size:0.7rem;color:var(--text-dim);">Auto-fills if you enter home price + down payment.</span>
+            </div>
+            <div class="form-group">
+              <label for="ln-rate">Interest Rate (% APR)</label>
               <input type="number" id="ln-rate" placeholder="6.5" min="0" step="any">
             </div>
             <div class="form-group">
@@ -524,18 +537,66 @@
               <input type="number" id="ln-term" placeholder="30" min="1" step="1">
             </div>
           </div>
+
+          <p class="calc-subhead">Taxes, Insurance &amp; PMI (Optional)</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ln-tax-annual">Property Tax ($/year)</label>
+              <input type="number" id="ln-tax-annual" placeholder="4800" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ln-ins-annual">Homeowners Insurance ($/year)</label>
+              <input type="number" id="ln-ins-annual" placeholder="1500" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ln-pmi-rate">PMI Rate (%/year)</label>
+              <input type="number" id="ln-pmi-rate" placeholder="0.55" min="0" step="any" aria-describedby="ln-pmi-help">
+              <span id="ln-pmi-help" style="font-size:0.7rem;color:var(--text-dim);">Applied while loan balance &gt; 80% of home price. Set to 0 to disable.</span>
+            </div>
+          </div>
+
+          <p class="calc-subhead">Extra Payment (Optional)</p>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ln-extra">Extra Monthly Payment ($)</label>
+              <input type="number" id="ln-extra" placeholder="200" min="0" step="any" aria-describedby="ln-extra-help">
+              <span id="ln-extra-help" style="font-size:0.7rem;color:var(--text-dim);">Applied to principal every month. Shows months + interest saved.</span>
+            </div>
+          </div>
+
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcLoan()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('loan')">Clear</button>
+            <button class="calc-btn" onclick="calcMortgage()">Calculate</button>
+            <button class="calc-btn calc-btn--secondary" onclick="clearMortgage()">Clear</button>
           </div>
           <div class="calc-error" id="ln-error"></div>
-          <div class="calc-results" id="ln-results">
-            <h4>Results</h4>
-            <div id="ln-output"></div>
+          <div class="calc-results" id="ln-results" aria-live="polite">
+            <h4>Monthly Payment (PITI + PMI)</h4>
+            <div id="ln-output-monthly"></div>
+            <p class="calc-subhead">Loan Totals</p>
+            <div id="ln-output-totals"></div>
+            <div id="ln-output-extra"></div>
             <p class="calc-subhead">Amortization Summary (Yearly)</p>
             <div class="growth-table-wrap" id="ln-table-wrap"></div>
           </div>
         </div>
+
+        <!-- Supporting content for SEO + user education -->
+        <section class="calc-card" style="margin-top:2rem;">
+          <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this calculator works</h2>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The monthly principal-and-interest payment comes from the standard amortization formula: <code style="font-family:var(--font-mono);color:var(--teal);">M = P &middot; r(1+r)<sup>n</sup> / ((1+r)<sup>n</sup> &minus; 1)</code>, where <em>P</em> is the loan amount, <em>r</em> is the monthly interest rate (APR / 12), and <em>n</em> is the total number of payments (years &times; 12). This is the same formula every US mortgage lender uses.</p>
+
+          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What is PITI?</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">PITI stands for <strong>P</strong>rincipal, <strong>I</strong>nterest, <strong>T</strong>axes, and <strong>I</strong>nsurance &mdash; the four components of a typical monthly mortgage payment when your lender collects taxes and insurance in escrow. Property tax and homeowners insurance are annualized amounts divided by 12 and added to your monthly principal-and-interest payment. Most lenders qualify you against your total PITI, not just P&amp;I.</p>
+
+          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What is PMI?</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Private Mortgage Insurance protects the lender when you borrow more than 80% of the home&apos;s value (i.e., you put less than 20% down). PMI is typically 0.3% to 1.5% of the original loan amount per year, paid monthly. Federal law generally requires lenders to cancel PMI automatically once your loan balance reaches 78% of the original home price, or on request at 80%. This calculator drops PMI once the amortized balance crosses the 80% threshold.</p>
+
+          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Do extra payments really help?</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">On a 30-year fixed mortgage at typical rates, an extra $100&ndash;$200 per month applied to principal can shave several years off the term and tens of thousands off total interest &mdash; because interest is charged on the remaining balance, so faster principal reduction compounds. This calculator shows exactly how many months you save and how much interest disappears at whatever extra amount you enter.</p>
+
+          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not include</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">HOA fees, closing costs, points, adjustable-rate resets, prepayment penalties, escrow shortages, and lender-specific fees are not modeled. The output is a clean baseline; a real Loan Estimate from a lender will differ. This is a planning tool, not a quote.</p>
+        </section>
       </div>
     </div>
 
@@ -555,11 +616,21 @@
 
     <!-- Ad Unit: Bottom Leaderboard -->
     <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+  <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+</aside>
   </main>
 
   <footer class="footer">
     <p class="footer__text">
       <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
     </p>
   </footer>
 
@@ -567,6 +638,200 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script src="financial-calculators-core.js"></script>
+  <script>
+    /* Enhanced mortgage calc — PITI + PMI + extra payments.
+       Overrides the basic calcLoan() from the shared core JS on this page only. */
+    (function () {
+      function n(id) {
+        const el = document.getElementById(id);
+        if (!el || el.value === '') return null;
+        const v = parseFloat(el.value);
+        return isNaN(v) ? null : v;
+      }
+      function fmtMoney(x) {
+        if (!isFinite(x)) return '$0.00';
+        return '$' + x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      function fmtInt(x) { return Math.round(x).toLocaleString('en-US'); }
+      function showErr(msg) {
+        const e = document.getElementById('ln-error');
+        e.textContent = msg;
+        e.classList.add('visible');
+        document.getElementById('ln-results').classList.remove('visible');
+      }
+      function hideErr() {
+        document.getElementById('ln-error').classList.remove('visible');
+      }
+      function row(label, value, cls) {
+        cls = cls ? ' result-value--' + cls : '';
+        return '<div class="result-row"><span class="result-label">' + label + '</span>' +
+               '<span class="result-value' + cls + '">' + value + '</span></div>';
+      }
+
+      /* Standard amortization: monthly P&I */
+      function monthlyPI(P, rMonthly, n) {
+        if (rMonthly === 0) return P / n;
+        return P * (rMonthly * Math.pow(1 + rMonthly, n)) / (Math.pow(1 + rMonthly, n) - 1);
+      }
+
+      /* Amortize with optional extra monthly payment and optional PMI.
+         Returns totals + a per-year summary.
+         pmiMonthlyBase = monthly PMI when active; homePriceForPmiDropoff = null to disable PMI drop-off. */
+      function amortize(P, rMonthly, nMonths, monthlyPay, extraMonthly, pmiMonthlyBase, pmi80Threshold) {
+        let balance = P;
+        let totalInterest = 0;
+        let totalPmi = 0;
+        let months = 0;
+        const yearly = [];
+        let yearP = 0, yearI = 0, yearPmi = 0;
+
+        while (balance > 0.005 && months < nMonths) {
+          const intPmt = balance * rMonthly;
+          let prinPmt = monthlyPay - intPmt;
+          if (prinPmt < 0) prinPmt = 0; // negative-amortization guard
+          const extra = extraMonthly || 0;
+          const totalPrin = Math.min(balance, prinPmt + extra);
+
+          balance -= totalPrin;
+          totalInterest += intPmt;
+          yearI += intPmt;
+          yearP += totalPrin;
+
+          const pmiActive = pmi80Threshold !== null && balance > pmi80Threshold;
+          const pmiThisMonth = pmiActive ? pmiMonthlyBase : 0;
+          totalPmi += pmiThisMonth;
+          yearPmi += pmiThisMonth;
+
+          months++;
+          if (months % 12 === 0 || balance < 0.005) {
+            yearly.push({
+              year: Math.ceil(months / 12),
+              principal: yearP,
+              interest: yearI,
+              pmi: yearPmi,
+              balance: balance < 0.005 ? 0 : balance,
+            });
+            yearP = 0; yearI = 0; yearPmi = 0;
+          }
+        }
+        return { totalInterest, totalPmi, months, yearly };
+      }
+
+      window.calcMortgage = function () {
+        hideErr();
+        let homePrice = n('ln-home-price');
+        const downPayment = n('ln-down-payment');
+        let loanAmt = n('ln-amount');
+        const rate = n('ln-rate');
+        const years = n('ln-term');
+        const taxAnnual = n('ln-tax-annual') || 0;
+        const insAnnual = n('ln-ins-annual') || 0;
+        const pmiRate = n('ln-pmi-rate') || 0;
+        const extra = n('ln-extra') || 0;
+
+        // Auto-derive loan amount if user gave home price + down payment
+        if (loanAmt === null && homePrice !== null && downPayment !== null) {
+          loanAmt = Math.max(0, homePrice - downPayment);
+        }
+        // Auto-derive home price if user gave loan amount + down payment
+        if (homePrice === null && loanAmt !== null && downPayment !== null) {
+          homePrice = loanAmt + downPayment;
+        }
+
+        if (loanAmt === null || loanAmt <= 0) return showErr('Enter a loan amount, or a home price + down payment.');
+        if (rate === null || rate < 0) return showErr('Enter a valid interest rate.');
+        if (years === null || years <= 0) return showErr('Enter a valid term in years.');
+
+        const rMonthly = (rate / 100) / 12;
+        const nMonths = Math.round(years * 12);
+        const piMonthly = monthlyPI(loanAmt, rMonthly, nMonths);
+
+        // PMI logic: only if home price known + LTV > 80% + rate > 0
+        let pmiMonthly = 0;
+        let pmi80Threshold = null;
+        if (homePrice && homePrice > 0 && pmiRate > 0 && loanAmt / homePrice > 0.80) {
+          pmiMonthly = (pmiRate / 100) * loanAmt / 12;
+          pmi80Threshold = homePrice * 0.80;
+        }
+
+        const taxMonthly = taxAnnual / 12;
+        const insMonthly = insAnnual / 12;
+        const totalMonthly = piMonthly + taxMonthly + insMonthly + pmiMonthly;
+
+        /* Monthly breakdown */
+        let monthlyHtml = '';
+        monthlyHtml += row('Principal &amp; Interest', fmtMoney(piMonthly), 'teal');
+        if (taxMonthly > 0) monthlyHtml += row('Property Tax', fmtMoney(taxMonthly));
+        if (insMonthly > 0) monthlyHtml += row('Homeowners Insurance', fmtMoney(insMonthly));
+        if (pmiMonthly > 0) monthlyHtml += row('PMI (until 80% LTV)', fmtMoney(pmiMonthly), 'amber');
+        monthlyHtml += row('<strong>Total Monthly Payment</strong>', '<strong>' + fmtMoney(totalMonthly) + '</strong>', 'violet');
+        document.getElementById('ln-output-monthly').innerHTML = monthlyHtml;
+
+        /* Amortize baseline (no extra) */
+        const base = amortize(loanAmt, rMonthly, nMonths, piMonthly, 0, pmiMonthly, pmi80Threshold);
+        const baseTotalPaid = piMonthly * base.months + base.totalPmi + (taxMonthly + insMonthly) * base.months;
+
+        /* Amortize with extra payment */
+        const withExtra = extra > 0
+          ? amortize(loanAmt, rMonthly, nMonths, piMonthly, extra, pmiMonthly, pmi80Threshold)
+          : base;
+
+        const totalPaidLifetime = piMonthly * withExtra.months + withExtra.totalPmi + (taxMonthly + insMonthly) * withExtra.months + extra * withExtra.months;
+
+        /* Totals block */
+        let totalsHtml = '';
+        totalsHtml += row('Loan Amount', fmtMoney(loanAmt));
+        if (homePrice) {
+          const ltv = ((loanAmt / homePrice) * 100).toFixed(1);
+          totalsHtml += row('Home Price', fmtMoney(homePrice));
+          totalsHtml += row('Loan-to-Value (LTV)', ltv + '%', ltv > 80 ? 'amber' : 'teal');
+        }
+        totalsHtml += row('Total Interest Paid', fmtMoney(withExtra.totalInterest), 'rose');
+        if (withExtra.totalPmi > 0) totalsHtml += row('Total PMI Paid', fmtMoney(withExtra.totalPmi), 'amber');
+        totalsHtml += row('Payoff Time', Math.floor(withExtra.months / 12) + ' yrs ' + (withExtra.months % 12) + ' mo');
+        totalsHtml += row('Total of All Payments', fmtMoney(totalPaidLifetime));
+        document.getElementById('ln-output-totals').innerHTML = totalsHtml;
+
+        /* Extra payment savings */
+        const extraHtml = document.getElementById('ln-output-extra');
+        if (extra > 0 && base.months > withExtra.months) {
+          const monthsSaved = base.months - withExtra.months;
+          const interestSaved = base.totalInterest - withExtra.totalInterest;
+          let e = '<p class="calc-subhead">Extra Payment Impact</p>';
+          e += row('Extra Payment Per Month', fmtMoney(extra), 'violet');
+          e += row('Months Saved', fmtInt(monthsSaved) + ' months (' + (monthsSaved / 12).toFixed(1) + ' yrs)', 'teal');
+          e += row('Interest Saved', fmtMoney(interestSaved), 'teal');
+          extraHtml.innerHTML = e;
+        } else {
+          extraHtml.innerHTML = '';
+        }
+
+        /* Yearly table */
+        let tbl = '<table class="growth-table"><thead><tr><th>Year</th><th>Principal</th><th>Interest</th>';
+        if (withExtra.totalPmi > 0) tbl += '<th>PMI</th>';
+        tbl += '<th>Balance</th></tr></thead><tbody>';
+        for (const y of withExtra.yearly) {
+          tbl += '<tr><td>' + y.year + '</td><td>' + fmtMoney(y.principal) + '</td><td>' + fmtMoney(y.interest) + '</td>';
+          if (withExtra.totalPmi > 0) tbl += '<td>' + fmtMoney(y.pmi) + '</td>';
+          tbl += '<td>' + fmtMoney(y.balance) + '</td></tr>';
+        }
+        tbl += '</tbody></table>';
+        document.getElementById('ln-table-wrap').innerHTML = tbl;
+
+        document.getElementById('ln-results').classList.add('visible');
+      };
+
+      window.clearMortgage = function () {
+        ['ln-home-price','ln-down-payment','ln-amount','ln-rate','ln-term',
+         'ln-tax-annual','ln-ins-annual','ln-pmi-rate','ln-extra'].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (el) el.value = '';
+        });
+        hideErr();
+        document.getElementById('ln-results').classList.remove('visible');
+      };
+    })();
+  </script>
   <script defer src="../js/ads.js"></script>
 </body>
 </html>

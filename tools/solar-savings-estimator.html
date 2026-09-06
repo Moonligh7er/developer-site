@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Solar Savings Estimator (Honest Range) | Moonlit Social Labs</title>
+  <meta name="description" content="Estimate solar panel system size, cost, payback period, and 25-year savings based on your state, monthly bill, and electricity rate. Uses NREL state averages. 2026 federal credit reflects OBBBA termination.">
+  <meta name="keywords" content="solar savings calculator, solar panel cost calculator, solar payback period, residential solar estimator, solar ROI calculator, home solar cost">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/solar-savings-estimator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Solar Savings Estimator",
+    "description": "Free tool to estimate residential solar system size, upfront cost, payback period, and 25-year savings using NREL-derived state peak-sun-hour data. Federal credit status reflects the 2025 OBBBA termination of IRC §25D.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/solar-savings-estimator.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Solar Savings Estimator (Honest Range)">
+  <meta property="og:description" content="Estimate solar system size, cost, payback, and 25-year savings for your state. Uses NREL data. 2026 federal credit is 0% (OBBBA sunset).">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/solar-savings-estimator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Solar Savings Estimator">
+  <meta name="twitter:description" content="Estimate solar system size, cost, payback, and 25-year savings for your state.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 1000px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.7rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-card h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin: 0 0 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+
+    .data-vintage {
+      display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      background: rgba(0,212,170,0.05); border-left: 2px solid var(--teal, #00d4aa);
+      padding: 0.6rem 0.9rem; margin: 0 0 1rem;
+    }
+    .data-vintage strong { color: var(--teal, #00d4aa); text-transform: uppercase; letter-spacing: 0.15em; }
+    .data-vintage span { color: var(--text-secondary); }
+
+    .federal-alert {
+      background: rgba(212,160,32,0.05); border-left: 3px solid var(--amber, #d4a020);
+      padding: 0.9rem 1rem; margin: 0 0 1.25rem;
+      font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); line-height: 1.6;
+    }
+    .federal-alert strong { color: var(--amber, #d4a020); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 0.35rem; font-size: 0.7rem; }
+    .federal-alert a { color: var(--teal); }
+
+    .rate-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .rate-layout { grid-template-columns: 1fr; } }
+
+    .form-section { border: 1px solid var(--border); padding: 1.25rem; }
+    .form-section h3 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin: 0 0 0.9rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.8rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select {
+      font-family: var(--font-mono); font-size: 0.9rem;
+      background: var(--deep); border: 1px solid var(--border); color: var(--text-primary);
+      padding: 0.55rem 0.8rem; outline: none; width: 100%; box-sizing: border-box;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.65rem; color: var(--text-dim); font-family: var(--font-mono); }
+    .input-inline { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .input-inline .form-group { margin-bottom: 0; }
+
+    .result-block { background: var(--panel); border: 1px solid var(--teal-dim); padding: 1.25rem; margin-bottom: 1rem; text-align: center; }
+    .result-block .lbl { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); }
+    .result-block .big { font-family: var(--font-display); font-size: 1.8rem; color: var(--teal); font-weight: 400; margin: 0.4rem 0; }
+    .result-block .range { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); }
+    .result-block.emph .big { font-size: 2.3rem; color: #22c55e; }
+
+    .rate-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem; }
+    .rate-mini { background: var(--panel); border: 1px solid var(--border); padding: 0.85rem; text-align: center; }
+    .rate-mini .num { font-family: var(--font-display); font-size: 1.4rem; color: var(--text-bright); }
+    .rate-mini .lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.2rem; }
+    .rate-mini .range { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-top: 0.15rem; }
+
+    .method-note {
+      background: rgba(0,212,170,0.04); border-left: 2px solid var(--teal);
+      padding: 0.75rem 1rem; margin: 1rem 0 0; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; font-family: var(--font-mono);
+    }
+    .method-note strong { color: var(--teal); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.68rem; display: block; margin-bottom: 0.25rem; }
+
+    .disclaimer {
+      padding: 0.9rem 1rem; margin: 1.25rem 0 0;
+      border: 1px dashed var(--border); background: transparent;
+      color: var(--text-dim); font-size: 0.78rem; font-family: var(--font-mono); line-height: 1.65;
+    }
+    .disclaimer strong { color: var(--amber, #d4a020); }
+    .disclaimer a { color: var(--teal); }
+
+    .content-section { max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.4rem; color: var(--text-bright); margin: 2rem 0 0.75rem; }
+    .content-section h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--text-primary); margin: 1.5rem 0 0.5rem; }
+    .content-section p, .content-section li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .content-section a { color: var(--teal); }
+
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Solar Savings Estimator</p>
+
+      <div class="calc-card">
+        <h1>Solar Savings Estimator</h1>
+        <p class="calc-intro">Rough-order-of-magnitude estimate of system size, upfront cost, payback period, and 25-year savings &mdash; an <strong>honest range machine</strong>, not a precision quote. Uses NREL-derived state peak-sun-hours and EIA electricity rates. Every output is a range because too many variables (roof orientation, shading, equipment quality, local utility) are unknown until an installer visits.</p>
+
+        <div class="data-vintage">
+          <strong>Data as of</strong><span id="vintage-date">loading...</span>
+          <strong style="margin-left:auto">Get 3+ installer quotes before deciding</strong>
+        </div>
+
+        <div class="federal-alert" id="federal-alert">
+          <strong>Federal credit &mdash; loading...</strong>
+          <span id="federal-alert-body">Loading current status...</span>
+        </div>
+
+        <div class="rate-layout">
+          <!-- LEFT: Inputs -->
+          <div>
+            <div class="form-section">
+              <h3>Your situation</h3>
+              <div class="form-group">
+                <label for="state">State</label>
+                <select id="state"></select>
+                <span class="hint">Sets defaults for peak sun hours & electricity rate.</span>
+              </div>
+              <div class="form-group">
+                <label for="bill">Average monthly electric bill ($)</label>
+                <input type="number" id="bill" value="180" min="0" step="10">
+              </div>
+              <div class="form-group">
+                <label for="rate">Electricity rate (¢/kWh)</label>
+                <input type="number" id="rate" value="16.5" min="0" step="0.1">
+                <span class="hint">Auto-populated from state average; check your actual bill.</span>
+              </div>
+              <div class="form-group">
+                <label for="psh">Peak sun hours/day</label>
+                <input type="number" id="psh" value="4.5" min="0" step="0.1">
+                <span class="hint">Annual state average; auto-populated. Roof orientation & shading can shift this ±20-30%.</span>
+              </div>
+            </div>
+
+            <div class="form-section" style="margin-top:1rem;">
+              <h3>System assumptions</h3>
+              <div class="form-group">
+                <label for="cost-per-watt">Installed cost ($/watt)</label>
+                <input type="number" id="cost-per-watt" value="3.10" min="0" step="0.10">
+                <span class="hint">US residential average pre-incentive. Simple roofs lower, complex higher.</span>
+              </div>
+              <div class="form-group">
+                <label for="offset-pct">Bill offset target %</label>
+                <input type="number" id="offset-pct" value="100" min="10" max="150">
+                <span class="hint">100% means fully covering current usage. Consider 80&ndash;95% to avoid oversizing.</span>
+              </div>
+            </div>
+
+            <div class="form-section" style="margin-top:1rem;">
+              <h3>Incentives</h3>
+              <div class="form-group">
+                <label for="fed-credit">Federal tax credit %</label>
+                <input type="number" id="fed-credit" value="0" min="0" max="30" step="1">
+                <span class="hint">Default 0% for 2026+ (IRC §25D terminated). Override if new legislation applies.</span>
+              </div>
+              <div class="form-group">
+                <label for="state-incentive">Estimated state/utility incentive ($)</label>
+                <input type="number" id="state-incentive" value="0" min="0" step="100">
+                <span class="hint">Rebates, credits, SRECs. Look yours up at <a href="https://www.dsireusa.org/" target="_blank" rel="noopener" style="color:var(--teal);">DSIREUSA.org</a>.</span>
+              </div>
+            </div>
+
+            <div class="form-section" style="margin-top:1rem;">
+              <h3>Long-term assumptions</h3>
+              <div class="input-inline">
+                <div class="form-group">
+                  <label for="rate-inflation">Rate inflation %/yr</label>
+                  <input type="number" id="rate-inflation" value="3.0" min="0" max="10" step="0.1">
+                </div>
+                <div class="form-group">
+                  <label for="degrade">Panel degrade %/yr</label>
+                  <input type="number" id="degrade" value="0.5" min="0" max="2" step="0.1">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Outputs -->
+          <div>
+            <div class="rate-mini-grid">
+              <div class="rate-mini">
+                <div class="num" id="sys-size">0 kW</div>
+                <div class="lbl">System Size</div>
+                <div class="range" id="sys-size-range">&mdash;</div>
+              </div>
+              <div class="rate-mini">
+                <div class="num" id="annual-prod">0 kWh</div>
+                <div class="lbl">Annual Production</div>
+                <div class="range" id="annual-prod-range">&mdash;</div>
+              </div>
+            </div>
+
+            <div class="result-block">
+              <div class="lbl">Upfront Cost (After Incentives)</div>
+              <div class="big" id="net-cost">$0</div>
+              <div class="range" id="net-cost-range">&mdash;</div>
+            </div>
+
+            <div class="result-block">
+              <div class="lbl">Payback Period</div>
+              <div class="big" id="payback">— years</div>
+              <div class="range" id="payback-range">&mdash;</div>
+            </div>
+
+            <div class="result-block emph">
+              <div class="lbl">25-Year Net Savings</div>
+              <div class="big" id="savings-25">$0</div>
+              <div class="range" id="savings-25-range">&mdash;</div>
+            </div>
+
+            <div class="method-note">
+              <strong>Ranges shown</strong>
+              Low/high account for &plusmn;15% production variance (roof orientation, shading, weather years), &plusmn;10% install-cost variance, and rate-inflation uncertainty. Actual results can fall outside this range on either end.
+            </div>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          <strong>Rough estimate based on state averages.</strong> Actual production depends on your roof pitch, azimuth (south-facing best), shading (trees, chimneys, neighboring buildings), panel/inverter equipment, local utility net-metering rules, and time-of-use rate structure. Payback assumes constant rate inflation and steady panel degradation &mdash; neither is guaranteed. <strong>Get multiple professional quotes</strong> and verify current federal, state, and utility incentives at <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS.gov</a> and <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIREUSA.org</a>. This is educational, not financial or engineering advice.
+        </p>
+      </div>
+    </div>
+
+    <div class="ad-container" data-ad-slot="mid"></div>
+
+    <!-- ===================== SEO CONTENT ===================== -->
+    <section class="content-section">
+      <h2>What changed for residential solar in 2026</h2>
+      <p>The 30% federal Residential Clean Energy Credit (IRC §25D) that homeowners relied on from 2022&ndash;2025 was <strong>terminated for property placed in service after December 31, 2025</strong> by the One Big Beautiful Bill Act, signed in 2025. This is a real and material change: a $25,000 system that would have received a $7,500 federal tax credit in December 2025 receives $0 federal credit in January 2026 and later, unless new legislation restores it.</p>
+      <p>Any tool, calculator, article, or salesperson still quoting a 30% federal credit for a 2026 installation is out of date. Verify at <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS.gov</a> before signing anything.</p>
+
+      <h3>What still applies in 2026</h3>
+      <ul>
+        <li><strong>State tax credits</strong> vary widely. New York, Massachusetts, Maryland, South Carolina, and others have their own credits. Check <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIREUSA.org</a> by state.</li>
+        <li><strong>Utility rebates</strong> exist in many service territories, sometimes only for specific equipment or income brackets.</li>
+        <li><strong>Net metering</strong> rules determine what you&rsquo;re paid for excess production. California&rsquo;s NEM 3.0, for example, dramatically lowered export credits &mdash; changing the payback math even for identical hardware.</li>
+        <li><strong>SRECs (Solar Renewable Energy Credits)</strong> are tradable in some Northeast/Mid-Atlantic states, adding another income stream.</li>
+      </ul>
+
+      <h3>Why this calculator is a range, not a number</h3>
+      <p>Solar is one of the most assumption-laden purchases a homeowner makes. Roof orientation shifts production ±25%. A single mature oak tree on the south side can drop output 30%. Two identical systems in the same ZIP code can differ 20% in annual output due to microclimate alone. Panel quality varies. Inverter reliability varies. Your utility&rsquo;s net-metering policy can change during the payback period. Rate inflation is not a straight line.</p>
+      <p>Any calculator that hands you a single confident number is lying to you. Ours doesn&rsquo;t. Use the range as a sanity check &mdash; if an installer&rsquo;s bid falls wildly outside these ranges, ask why.</p>
+
+      <h3>Data sources</h3>
+      <ul>
+        <li>Peak sun hours: <a href="https://www.nrel.gov/gis/solar-resource-maps.html" target="_blank" rel="noopener">NREL state solar resource maps</a>.</li>
+        <li>Electricity rates: <a href="https://www.eia.gov/electricity/monthly/" target="_blank" rel="noopener">EIA Electric Power Monthly</a> (state residential averages).</li>
+        <li>Federal credit status: <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS Residential Clean Energy Credit page</a>.</li>
+        <li>State/utility incentives: <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIRE database</a>.</li>
+        <li>Install cost reference: <a href="https://www.nrel.gov/solar/market-research-analysis/solar-installed-system-cost.html" target="_blank" rel="noopener">NREL installed cost data</a>.</li>
+      </ul>
+
+      <h3>Related tools</h3>
+      <ul>
+        <li><a href="btu-hvac-calculator.html">BTU/HVAC Calculator</a> &mdash; size heating/cooling before considering solar.</li>
+        <li><a href="mortgage-calculator.html">Mortgage Calculator</a> &mdash; compare cash vs. financed system payback.</li>
+        <li><a href="compound-interest-calculator.html">Compound Interest Calculator</a> &mdash; what the same money invested elsewhere might earn.</li>
+      </ul>
+    </section>
+
+    <div class="calc-other">
+      <p class="calc-other__title">More Free Tools</p>
+      <div class="calc-other__grid">
+        <a href="../free-tools.html" class="calc-other__link">All Free Tools</a>
+        <a href="btu-hvac-calculator.html" class="calc-other__link">BTU/HVAC Calc</a>
+        <a href="mortgage-calculator.html" class="calc-other__link">Mortgage Calc</a>
+        <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest</a>
+        <a href="freelance-rate-calculator.html" class="calc-other__link">Freelance Rate</a>
+      </div>
+    </div>
+
+    <div class="ad-container" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs&trade;</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;"><a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a></p>
+    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    let DATA = null;
+    let userOverrode = { rate: false, psh: false, costPerWatt: false, fedCredit: false };
+
+    const el = id => document.getElementById(id);
+    const num = id => parseFloat(el(id).value) || 0;
+
+    function fmtMoney(n) {
+      if (!isFinite(n)) return '$0';
+      if (Math.abs(n) < 1000) return '$' + Math.round(n).toLocaleString();
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+    function fmtKw(n) { return n.toFixed(1) + ' kW'; }
+    function fmtKwh(n) { return Math.round(n).toLocaleString('en-US') + ' kWh'; }
+    function fmtYears(n) {
+      if (!isFinite(n) || n < 0 || n > 100) return '> 25 yrs';
+      return n.toFixed(1) + ' yrs';
+    }
+
+    function populateStates() {
+      const sel = el('state');
+      const states = Object.entries(DATA.states).sort((a,b) => a[1].name.localeCompare(b[1].name));
+      states.forEach(([code, s]) => {
+        const o = document.createElement('option');
+        o.value = code;
+        o.textContent = s.name;
+        o.dataset.psh = s.peak_sun_hours;
+        o.dataset.rate = s.electricity_rate_cents;
+        sel.appendChild(o);
+      });
+      sel.value = 'CA';
+    }
+
+    function applyStateDefaults() {
+      const sel = el('state');
+      const opt = sel.selectedOptions[0];
+      if (!opt) return;
+      if (!userOverrode.rate) el('rate').value = opt.dataset.rate;
+      if (!userOverrode.psh)  el('psh').value  = opt.dataset.psh;
+    }
+
+    function calc() {
+      if (!DATA) return;
+      const bill = num('bill');
+      const rate = num('rate');  // cents/kWh
+      const psh  = num('psh');
+      const cpw  = num('cost-per-watt');
+      const offsetPct = num('offset-pct') / 100;
+      const fedCredit = num('fed-credit') / 100;
+      const stateInc = num('state-incentive');
+      const rateInf = num('rate-inflation') / 100;
+      const degrade = num('degrade') / 100;
+
+      if (rate <= 0 || psh <= 0 || bill <= 0) return;
+
+      // Monthly kWh used = bill / (rate/100)
+      const monthlyKwh = bill / (rate / 100);
+      const annualKwh = monthlyKwh * 12;
+      const kwhToOffset = annualKwh * offsetPct;
+
+      // Production per kW installed per year = psh * 365 * derate (0.86 typical)
+      const derate = DATA.defaults.typical_efficiency_derate;
+      const kwhPerKwPerYear = psh * 365 * derate;
+
+      // System size
+      const systemKw = kwhToOffset / kwhPerKwPerYear;
+      const annualProduction = systemKw * kwhPerKwPerYear;
+
+      // Ranges: ±15% production, ±10% cost
+      const prodLow = annualProduction * 0.85;
+      const prodHigh = annualProduction * 1.15;
+      const systemKwLow = kwhToOffset / (kwhPerKwPerYear * 1.15);
+      const systemKwHigh = kwhToOffset / (kwhPerKwPerYear * 0.85);
+
+      // Cost
+      const grossCost = systemKw * 1000 * cpw;
+      const grossCostLow = systemKw * 1000 * cpw * 0.90;
+      const grossCostHigh = systemKw * 1000 * cpw * 1.10;
+
+      const fedRebate = grossCost * fedCredit;
+      const netCost = grossCost - fedRebate - stateInc;
+      const netCostLow = grossCostLow - grossCostLow * fedCredit - stateInc;
+      const netCostHigh = grossCostHigh - grossCostHigh * fedCredit - stateInc;
+
+      // 25-year savings with rate inflation + degradation
+      function twentyFiveYearSavings(prod, cost, rateInflationAnnual) {
+        let cumSavings = 0;
+        let currentProd = prod;
+        let currentRate = rate / 100; // $/kWh
+        for (let y = 0; y < 25; y++) {
+          const yearSavings = currentProd * currentRate;
+          cumSavings += yearSavings;
+          currentProd *= (1 - degrade);
+          currentRate *= (1 + rateInflationAnnual);
+        }
+        return cumSavings - cost;
+      }
+      const savings25 = twentyFiveYearSavings(annualProduction, netCost, rateInf);
+      const savings25Low = twentyFiveYearSavings(prodLow, netCostHigh, Math.max(0, rateInf - 0.01));
+      const savings25High = twentyFiveYearSavings(prodHigh, netCostLow, rateInf + 0.01);
+
+      // Payback (simple, first-year savings basis with 3yr rate inflation avg)
+      function paybackYears(prod, cost) {
+        let cum = 0;
+        let currentProd = prod;
+        let currentRate = rate / 100;
+        for (let y = 0; y < 100; y++) {
+          const yearSavings = currentProd * currentRate;
+          if (cum + yearSavings >= cost) {
+            return y + (cost - cum) / yearSavings;
+          }
+          cum += yearSavings;
+          currentProd *= (1 - degrade);
+          currentRate *= (1 + rateInf);
+        }
+        return 100;
+      }
+      const payback = paybackYears(annualProduction, netCost);
+      const paybackLow = paybackYears(prodHigh, netCostLow);   // best case = shorter
+      const paybackHigh = paybackYears(prodLow, netCostHigh);  // worst case = longer
+
+      // Render
+      el('sys-size').textContent = fmtKw(systemKw);
+      el('sys-size-range').textContent = 'range: ' + fmtKw(systemKwLow) + ' – ' + fmtKw(systemKwHigh);
+      el('annual-prod').textContent = fmtKwh(annualProduction);
+      el('annual-prod-range').textContent = 'range: ' + fmtKwh(prodLow) + ' – ' + fmtKwh(prodHigh);
+      el('net-cost').textContent = fmtMoney(netCost);
+      el('net-cost-range').textContent = 'range: ' + fmtMoney(netCostLow) + ' – ' + fmtMoney(netCostHigh);
+      el('payback').textContent = fmtYears(payback);
+      el('payback-range').textContent = 'range: ' + fmtYears(paybackLow) + ' – ' + fmtYears(paybackHigh);
+      el('savings-25').textContent = fmtMoney(savings25);
+      el('savings-25-range').textContent = 'range: ' + fmtMoney(savings25Low) + ' – ' + fmtMoney(savings25High);
+    }
+
+    // Boot
+    fetch('solar-defaults.json', { cache: 'no-cache' })
+      .then(r => r.json())
+      .then(data => {
+        DATA = data;
+        el('vintage-date').textContent = data.retrieved;
+        // Federal alert
+        const fc = data.defaults.federal_credit_pct_2026;
+        if (fc === 0) {
+          el('federal-alert').querySelector('strong').textContent = 'Federal Credit: 0% for 2026 installs';
+          el('federal-alert-body').innerHTML = data.defaults.federal_credit_note +
+            ' Any tool showing a default 30% credit is out of date. ' +
+            '<a href="' + data.sources.federal_credit_status + '" target="_blank" rel="noopener">Verify at IRS.gov</a>.';
+        } else {
+          el('federal-alert').querySelector('strong').textContent = 'Federal Credit: ' + fc + '%';
+          el('federal-alert-body').innerHTML = data.defaults.federal_credit_note +
+            ' <a href="' + data.sources.federal_credit_status + '" target="_blank" rel="noopener">Verify at IRS.gov</a>.';
+        }
+        el('cost-per-watt').value = data.defaults.system_cost_per_watt.toFixed(2);
+        el('rate-inflation').value = data.defaults.electricity_rate_inflation_annual_pct.toFixed(1);
+        el('degrade').value = data.defaults.system_degradation_annual_pct.toFixed(1);
+        populateStates();
+        applyStateDefaults();
+        calc();
+      })
+      .catch(err => {
+        el('vintage-date').textContent = 'ERROR loading defaults';
+        el('federal-alert-body').textContent = 'Failed to load defaults. Refresh the page.';
+      });
+
+    // Wire up events
+    el('state').addEventListener('change', () => { userOverrode.rate = false; userOverrode.psh = false; applyStateDefaults(); calc(); });
+    el('bill').addEventListener('input', calc);
+    el('rate').addEventListener('input', () => { userOverrode.rate = true; calc(); });
+    el('psh').addEventListener('input', () => { userOverrode.psh = true; calc(); });
+    el('cost-per-watt').addEventListener('input', calc);
+    el('offset-pct').addEventListener('input', calc);
+    el('fed-credit').addEventListener('input', calc);
+    el('state-incentive').addEventListener('input', calc);
+    el('rate-inflation').addEventListener('input', calc);
+    el('degrade').addEventListener('input', calc);
+  })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

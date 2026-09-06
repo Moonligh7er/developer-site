@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free LLM Token Counter &amp; API Cost Calculator (32 Models) | Moonlit Social Labs</title>
+  <meta name="description" content="Count tokens and compare monthly API costs across Claude, GPT, Gemini, Grok, and DeepSeek. Live pricing table with source URLs. No signup, 100% client-side.">
+  <meta name="keywords" content="LLM token counter, API cost calculator, Claude vs GPT pricing, Gemini cost, OpenAI pricing calculator, LLM pricing comparison, token counter tool">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/llm-cost-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "LLM Token Counter &amp; API Cost Calculator",
+    "description": "Free tool to count LLM tokens and compare monthly API costs across 32 models (Anthropic, OpenAI, Google, xAI, DeepSeek).",
+    "url": "https://moonligh7er.github.io/developer-site/tools/llm-cost-calculator.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="LLM Token Counter &amp; API Cost Calculator (32 Models)">
+  <meta property="og:description" content="Count tokens and compare monthly API costs across Claude, GPT, Gemini, Grok, and DeepSeek. Live pricing table with source URLs.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/llm-cost-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LLM Token Counter &amp; API Cost Calculator">
+  <meta name="twitter:description" content="Compare monthly API costs across 32 LLM models. Live pricing table with source URLs.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.7rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-card h2 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 400; color: var(--text-bright); margin: 0 0 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+
+    .data-vintage {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+      background: rgba(0,212,170,0.05); border-left: 2px solid var(--teal, #00d4aa);
+      padding: 0.6rem 0.9rem; margin: 0 0 1rem;
+    }
+    .data-vintage strong { color: var(--teal, #00d4aa); text-transform: uppercase; letter-spacing: 0.15em; }
+    .data-vintage span { color: var(--text-secondary); }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.9rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select, .form-group textarea {
+      font-family: var(--font-mono); font-size: 0.9rem;
+      background: var(--deep); border: 1px solid var(--border); color: var(--text-primary);
+      padding: 0.6rem 0.8rem; outline: none; width: 100%; box-sizing: border-box;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim);
+    }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); font-family: var(--font-mono); }
+
+    #token-input { min-height: 180px; resize: vertical; line-height: 1.5; }
+
+    .token-summary {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem; margin: 1rem 0;
+    }
+    .token-stat {
+      background: var(--panel); border: 1px solid var(--border);
+      padding: 1rem; text-align: center;
+    }
+    .token-stat .num { font-family: var(--font-display); font-size: 1.5rem; color: var(--teal); font-weight: 400; display: block; }
+    .token-stat .lbl { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.3rem; display: block; }
+
+    .token-family {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.6rem; margin-top: 1rem;
+    }
+    .token-family__row {
+      background: var(--panel); border: 1px solid var(--border);
+      padding: 0.7rem 0.9rem;
+    }
+    .token-family__row .fam { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.12em; }
+    .token-family__row .val { font-family: var(--font-display); font-size: 1.15rem; color: var(--text-bright); margin-top: 0.2rem; }
+    .token-family__row .val::before { content: '\2248 '; color: var(--amber, #d4a020); font-size: 0.9rem; }
+
+    .calc-inputs {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem 1rem;
+    }
+    .calc-inputs .form-group { margin-bottom: 0; }
+
+    .compare-table-wrap { overflow-x: auto; margin-top: 1rem; border: 1px solid var(--border); }
+    .compare-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem; }
+    .compare-table thead { background: var(--deep); }
+    .compare-table th {
+      text-align: left; padding: 0.75rem 0.9rem;
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim); border-bottom: 1px solid var(--border);
+      cursor: pointer; user-select: none; white-space: nowrap;
+    }
+    .compare-table th:hover { color: var(--teal); }
+    .compare-table th.sort-asc::after { content: ' \25B2'; color: var(--teal); }
+    .compare-table th.sort-desc::after { content: ' \25BC'; color: var(--teal); }
+    .compare-table th.num, .compare-table td.num { text-align: right; }
+    .compare-table td {
+      padding: 0.7rem 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.03);
+      color: var(--text-secondary);
+    }
+    .compare-table tr:hover td { background: rgba(0,212,170,0.03); color: var(--text-primary); }
+    .compare-table .prov { color: var(--violet); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .compare-table .model-name { color: var(--text-bright); font-weight: 500; }
+    .compare-table .cost { color: var(--teal); font-weight: 500; }
+    .compare-table .cheap { color: #22c55e; }
+    .compare-table .exp { color: var(--rose); }
+    .compare-table .ctx { color: var(--text-dim); font-size: 0.72rem; }
+
+    .disclaimer {
+      padding: 0.9rem 1rem; margin: 1.25rem 0 0;
+      border: 1px dashed var(--border); background: transparent;
+      color: var(--text-dim); font-size: 0.78rem; font-family: var(--font-mono); line-height: 1.6;
+    }
+    .disclaimer strong { color: var(--amber, #d4a020); }
+
+    .method-note {
+      background: rgba(212,160,32,0.05); border-left: 2px solid var(--amber, #d4a020);
+      padding: 0.8rem 1rem; margin: 1rem 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6;
+    }
+    .method-note strong { color: var(--amber, #d4a020); text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; }
+    .method-note code { background: var(--deep); padding: 0.1rem 0.35rem; color: var(--teal); font-size: 0.85em; }
+
+    .content-section { max-width: 900px; margin: 3rem auto; padding: 0 1.5rem; }
+    .content-section h2 { font-family: var(--font-display); font-size: 1.4rem; color: var(--text-bright); margin: 2rem 0 0.75rem; }
+    .content-section h3 { font-family: var(--font-display); font-size: 1.05rem; color: var(--text-primary); margin: 1.5rem 0 0.5rem; }
+    .content-section p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 0.75rem; }
+    .content-section ul { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; padding-left: 1.25rem; }
+    .content-section a { color: var(--teal); }
+
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+
+    @media (max-width: 700px) {
+      .calc-card { padding: 1.25rem; }
+      .compare-table { font-size: 0.7rem; }
+      .compare-table th, .compare-table td { padding: 0.55rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; LLM Token Counter &amp; Cost Calculator</p>
+
+      <div class="calc-card">
+        <h1>LLM Token Counter &amp; API Cost Calculator</h1>
+        <p class="calc-intro">Estimate token counts and compare monthly API costs across 32 models from Anthropic, OpenAI, Google, xAI, and DeepSeek. Live prices sourced directly from each provider &mdash; not from training data.</p>
+
+        <div class="data-vintage">
+          <strong>Prices as of</strong><span id="vintage-date">loading...</span>
+          <strong style="margin-left:auto">Verify with provider before committing</strong>
+        </div>
+
+        <div class="method-note">
+          <strong>Honest token counting</strong><br>
+          Character and word counts are exact. Token counts are <strong>estimates</strong> because tokenizers differ per model family and only OpenAI publishes theirs (<code>tiktoken</code>). This tool uses per-family chars-per-token heuristics tuned to published averages. For byte-exact OpenAI counts use <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener" style="color:var(--teal);">OpenAI&rsquo;s official tokenizer</a>.
+        </div>
+
+        <!-- ===================== TOKEN COUNTER ===================== -->
+        <h2>1. Count tokens</h2>
+        <div class="form-group">
+          <label for="token-input">Paste text to analyze</label>
+          <textarea id="token-input" placeholder="Paste a prompt, document, code snippet, or any text..."></textarea>
+        </div>
+
+        <div class="token-summary">
+          <div class="token-stat"><span class="num" id="stat-chars">0</span><span class="lbl">Characters</span></div>
+          <div class="token-stat"><span class="num" id="stat-words">0</span><span class="lbl">Words</span></div>
+          <div class="token-stat"><span class="num" id="stat-lines">0</span><span class="lbl">Lines</span></div>
+          <div class="token-stat"><span class="num" id="stat-bytes">0</span><span class="lbl">UTF-8 Bytes</span></div>
+        </div>
+
+        <div class="token-family">
+          <div class="token-family__row"><div class="fam">OpenAI (cl100k / o200k)</div><div class="val" id="tok-openai">0</div></div>
+          <div class="token-family__row"><div class="fam">Anthropic Claude</div><div class="val" id="tok-anthropic">0</div></div>
+          <div class="token-family__row"><div class="fam">Google Gemini</div><div class="val" id="tok-google">0</div></div>
+          <div class="token-family__row"><div class="fam">xAI Grok</div><div class="val" id="tok-xai">0</div></div>
+          <div class="token-family__row"><div class="fam">DeepSeek</div><div class="val" id="tok-deepseek">0</div></div>
+        </div>
+      </div>
+
+      <!-- ===================== COST CALCULATOR ===================== -->
+      <div class="calc-card">
+        <h2>2. Compare monthly costs</h2>
+        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">Enter your expected per-request tokens and request volume. Uses the token counts above as defaults, or override manually.</p>
+
+        <div class="calc-inputs">
+          <div class="form-group">
+            <label for="in-tokens">Input tokens / request</label>
+            <input type="number" id="in-tokens" value="1000" min="0" step="100">
+            <span class="hint">use "Count tokens" above to autofill</span>
+          </div>
+          <div class="form-group">
+            <label for="out-tokens">Output tokens / request</label>
+            <input type="number" id="out-tokens" value="500" min="0" step="100">
+          </div>
+          <div class="form-group">
+            <label for="requests">Requests / month</label>
+            <input type="number" id="requests" value="10000" min="0" step="1000">
+          </div>
+          <div class="form-group">
+            <label for="cache-pct">Cached input %</label>
+            <input type="number" id="cache-pct" value="0" min="0" max="100" step="5">
+            <span class="hint">e.g. 80% if reusing system prompts</span>
+          </div>
+        </div>
+
+        <div class="compare-table-wrap">
+          <table class="compare-table" id="compare-table">
+            <thead>
+              <tr>
+                <th data-sort="provider">Provider</th>
+                <th data-sort="name">Model</th>
+                <th data-sort="input" class="num">Input $/MTok</th>
+                <th data-sort="output" class="num">Output $/MTok</th>
+                <th data-sort="cached_input" class="num">Cached $/MTok</th>
+                <th data-sort="context" class="num">Context</th>
+                <th data-sort="monthly" class="num sort-asc">Monthly $</th>
+              </tr>
+            </thead>
+            <tbody id="compare-body"></tbody>
+          </table>
+        </div>
+
+        <p class="disclaimer">
+          <strong>Verify before committing.</strong> Pricing changes frequently and varies by tier, region, and features (batch discounts, priority tiers, volume commits). Some providers list off-peak or promotional rates &mdash; peak/standard-tier rates may be higher. Cached-input pricing applies only to reused prefixes; write-time cache costs are omitted for readability. This tool is a planning aid, not a bill.
+        </p>
+      </div>
+
+      <div class="ad-container" data-ad-slot="mid"></div>
+
+      <!-- ===================== REFERENCE TABLE ===================== -->
+      <div class="calc-card">
+        <h2>3. Model reference</h2>
+        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">All 32 models tracked. Sort by any column. Click any provider name for its official pricing page.</p>
+        <div id="sources-list" style="margin-bottom:1rem;"></div>
+        <div class="compare-table-wrap">
+          <table class="compare-table" id="ref-table">
+            <thead>
+              <tr>
+                <th data-sort="provider" class="sort-asc">Provider</th>
+                <th data-sort="family">Family</th>
+                <th data-sort="name">Model</th>
+                <th data-sort="input" class="num">Input</th>
+                <th data-sort="output" class="num">Output</th>
+                <th data-sort="cached_input" class="num">Cached</th>
+                <th data-sort="context" class="num">Context</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="ref-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SEO CONTENT ===================== -->
+    <section class="content-section">
+      <h2>How to estimate LLM API costs before you commit</h2>
+      <p>Model pricing shifts monthly, tokenizers differ per family, and every provider prices things a little differently &mdash; per-million tokens vs. per-thousand, cached vs. fresh input, batch vs. real-time. This tool gives you an apples-to-apples monthly-cost view across the current lineup without you memorizing anyone&rsquo;s pricing page.</p>
+
+      <h3>Why token counts are estimates (and why that&rsquo;s honest)</h3>
+      <p>Only OpenAI publishes their tokenizer (<code>tiktoken</code>). Anthropic, Google, and xAI keep theirs private. Every &ldquo;Claude token counter&rdquo; tool you see online is estimating, whether they admit it or not. Common heuristics: chars-per-token ~4 for English on GPT models, ~3.5 for Claude, ~4 for Gemini. Real content varies with language, code density, and punctuation. Treat estimates as within &plusmn;15%.</p>
+
+      <h3>What matters more than exact token counts</h3>
+      <ul>
+        <li><strong>Input/output ratio.</strong> Chat apps skew toward long inputs, short outputs. Code assistants flip that. Output tokens are usually 2&ndash;10x the price of input.</li>
+        <li><strong>Cached input.</strong> Reusing system prompts across requests can drop input costs 80%+ on models that support it. Anthropic, OpenAI, and Google all publish cache rates; xAI and DeepSeek partial support.</li>
+        <li><strong>Context window matters for the workload, not the pricing tier.</strong> Bigger context isn&rsquo;t inherently more expensive per token, but some providers charge more for prompts above certain thresholds (Google: &gt;200k, xAI: &gt;200k). Watch the notes column.</li>
+        <li><strong>Batch discounts.</strong> Not shown here because they aren&rsquo;t consistently published; typically 50% off for offline batch workloads (OpenAI, Anthropic). Ask before committing to a big batch job.</li>
+      </ul>
+
+      <h3>Data source and freshness</h3>
+      <p>Prices are pulled from each provider&rsquo;s own pricing page and stored in <code>llm-pricing.json</code> with per-entry source URLs. Retrieval date is shown prominently at the top of the tool. We aim to refresh quarterly &mdash; if you spot a stale figure, the source URL is one click away. Never trust an LLM-generated pricing summary (including one from us) without verifying against the provider&rsquo;s page.</p>
+
+      <h3>Related tools</h3>
+      <ul>
+        <li><a href="api-directory.html">API Directory (500+ public APIs)</a> &mdash; browse other developer APIs beyond LLMs.</li>
+        <li><a href="dev-tools.html">Developer Tools Suite</a> &mdash; JSON, JWT, regex, and more.</li>
+        <li><a href="freelance-rate-calculator.html">Freelance Rate Calculator</a> &mdash; work out what your billable rate needs to be to make LLM API spend sustainable.</li>
+      </ul>
+    </section>
+
+    <div class="calc-other">
+      <p class="calc-other__title">More Free Tools</p>
+      <div class="calc-other__grid">
+        <a href="../free-tools.html" class="calc-other__link">All Free Tools</a>
+        <a href="api-directory.html" class="calc-other__link">API Directory</a>
+        <a href="dev-tools.html" class="calc-other__link">Dev Tools Suite</a>
+        <a href="freelance-rate-calculator.html" class="calc-other__link">Freelance Rate Calc</a>
+        <a href="regex-architect.html" class="calc-other__link">Regex Architect</a>
+        <a href="currency-converter.html" class="calc-other__link">Currency Converter</a>
+      </div>
+    </div>
+
+    <div class="ad-container" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs&trade;</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;"><a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
+    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // ------- Per-family chars-per-token heuristics (English text) -------
+    // Sources: OpenAI cookbook (~4), Anthropic docs (~3.5 with tokenizer variance),
+    // Google Vertex docs (~4 for text), general BPE observations.
+    const CHARS_PER_TOKEN = {
+      openai:    4.0,
+      anthropic: 3.5,
+      google:    4.0,
+      xai:       4.0,
+      deepseek:  3.6
+    };
+
+    function estimateTokens(text, family) {
+      if (!text) return 0;
+      const cpt = CHARS_PER_TOKEN[family] || 4.0;
+      // Blend chars/cpt with words*1.3 to reduce error on very-short strings
+      const chars = text.length;
+      const words = (text.trim().match(/\S+/g) || []).length;
+      const byChars = chars / cpt;
+      const byWords = words * (family === 'anthropic' ? 1.45 : 1.3);
+      return Math.max(byChars, byWords);
+    }
+
+    function fmt(n, dp) {
+      if (!isFinite(n)) return '—';
+      dp = (dp === undefined) ? 0 : dp;
+      return n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+    }
+    function fmtMoney(n) {
+      if (!isFinite(n)) return '—';
+      if (n < 0.01) return '$' + n.toFixed(4);
+      if (n < 10) return '$' + n.toFixed(2);
+      if (n < 1000) return '$' + n.toFixed(2);
+      return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    }
+    function fmtCtx(n) {
+      if (!n) return '—';
+      if (n >= 1000000) return (n/1000000) + 'M';
+      if (n >= 1000) return (n/1000) + 'k';
+      return String(n);
+    }
+
+    let PRICING = null;
+    let currentSort = { table: 'compare', key: 'monthly', dir: 'asc' };
+    let refSort = { key: 'provider', dir: 'asc' };
+
+    // ------- Token counter -------
+    const tokenInput = document.getElementById('token-input');
+    function updateTokenCounts() {
+      const text = tokenInput.value;
+      const chars = text.length;
+      const words = (text.trim().match(/\S+/g) || []).length;
+      const lines = text ? text.split('\n').length : 0;
+      const bytes = new Blob([text]).size;
+      document.getElementById('stat-chars').textContent = fmt(chars);
+      document.getElementById('stat-words').textContent = fmt(words);
+      document.getElementById('stat-lines').textContent = fmt(lines);
+      document.getElementById('stat-bytes').textContent = fmt(bytes);
+      const openai = Math.round(estimateTokens(text, 'openai'));
+      document.getElementById('tok-openai').textContent = fmt(openai);
+      document.getElementById('tok-anthropic').textContent = fmt(Math.round(estimateTokens(text, 'anthropic')));
+      document.getElementById('tok-google').textContent = fmt(Math.round(estimateTokens(text, 'google')));
+      document.getElementById('tok-xai').textContent = fmt(Math.round(estimateTokens(text, 'xai')));
+      document.getElementById('tok-deepseek').textContent = fmt(Math.round(estimateTokens(text, 'deepseek')));
+      // Autofill input-tokens field if user hasn't manually touched it recently
+      const inField = document.getElementById('in-tokens');
+      if (!inField.dataset.userSet && text.trim().length > 0) {
+        inField.value = openai;
+        renderCompareTable();
+      }
+    }
+    tokenInput.addEventListener('input', updateTokenCounts);
+    document.getElementById('in-tokens').addEventListener('input', function() { this.dataset.userSet = '1'; renderCompareTable(); });
+    document.getElementById('out-tokens').addEventListener('input', renderCompareTable);
+    document.getElementById('requests').addEventListener('input', renderCompareTable);
+    document.getElementById('cache-pct').addEventListener('input', renderCompareTable);
+
+    // ------- Cost calculation -------
+    function monthlyCost(m) {
+      const inTok  = parseFloat(document.getElementById('in-tokens').value)  || 0;
+      const outTok = parseFloat(document.getElementById('out-tokens').value) || 0;
+      const req    = parseFloat(document.getElementById('requests').value)   || 0;
+      const cachePct = Math.min(100, Math.max(0, parseFloat(document.getElementById('cache-pct').value) || 0)) / 100;
+
+      const cachedTokens = inTok * cachePct;
+      const freshTokens  = inTok - cachedTokens;
+
+      const cachedRate = (m.cached_input != null) ? m.cached_input : m.input;
+      const totalInputCost = (freshTokens * m.input + cachedTokens * cachedRate) / 1e6;
+      const totalOutputCost = (outTok * m.output) / 1e6;
+      const perRequest = totalInputCost + totalOutputCost;
+      return perRequest * req;
+    }
+
+    // ------- Compare table -------
+    function renderCompareTable() {
+      if (!PRICING) return;
+      const body = document.getElementById('compare-body');
+      const rows = PRICING.models.map(m => ({ m: m, monthly: monthlyCost(m) }));
+
+      const sortKey = currentSort.key;
+      const dir = currentSort.dir === 'asc' ? 1 : -1;
+      rows.sort((a, b) => {
+        let av, bv;
+        if (sortKey === 'monthly') { av = a.monthly; bv = b.monthly; }
+        else if (sortKey === 'context' || sortKey === 'input' || sortKey === 'output' || sortKey === 'cached_input') {
+          av = a.m[sortKey] || 0; bv = b.m[sortKey] || 0;
+        } else { av = (a.m[sortKey] || '').toString().toLowerCase(); bv = (b.m[sortKey] || '').toString().toLowerCase(); }
+        if (av < bv) return -1 * dir;
+        if (av > bv) return  1 * dir;
+        return 0;
+      });
+
+      const minCost = Math.min(...rows.map(r => r.monthly));
+      const maxCost = Math.max(...rows.map(r => r.monthly));
+
+      body.innerHTML = rows.map(r => {
+        const m = r.m;
+        const costClass = (r.monthly === minCost) ? 'cost cheap' : (r.monthly === maxCost) ? 'cost exp' : 'cost';
+        const cachedDisp = (m.cached_input != null) ? '$' + m.cached_input.toFixed(3) : '—';
+        return `<tr>
+          <td class="prov">${escapeHtml(m.provider)}</td>
+          <td class="model-name">${escapeHtml(m.name)}</td>
+          <td class="num">$${m.input.toFixed(2)}</td>
+          <td class="num">$${m.output.toFixed(2)}</td>
+          <td class="num">${cachedDisp}</td>
+          <td class="num ctx">${fmtCtx(m.context)}</td>
+          <td class="num ${costClass}">${fmtMoney(r.monthly)}</td>
+        </tr>`;
+      }).join('');
+
+      // Update sort indicators
+      document.querySelectorAll('#compare-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === sortKey) th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+      });
+    }
+
+    // ------- Reference table -------
+    function renderRefTable() {
+      if (!PRICING) return;
+      const body = document.getElementById('ref-body');
+      const rows = PRICING.models.slice();
+      const sortKey = refSort.key;
+      const dir = refSort.dir === 'asc' ? 1 : -1;
+      rows.sort((a, b) => {
+        let av, bv;
+        if (['input','output','cached_input','context'].includes(sortKey)) {
+          av = a[sortKey] || 0; bv = b[sortKey] || 0;
+        } else {
+          av = (a[sortKey] || '').toString().toLowerCase();
+          bv = (b[sortKey] || '').toString().toLowerCase();
+        }
+        if (av < bv) return -1 * dir;
+        if (av > bv) return  1 * dir;
+        return 0;
+      });
+
+      body.innerHTML = rows.map(m => {
+        const cached = (m.cached_input != null) ? '$' + m.cached_input.toFixed(3) : '—';
+        return `<tr>
+          <td class="prov">${escapeHtml(m.provider)}</td>
+          <td>${escapeHtml(m.family || '')}</td>
+          <td class="model-name">${escapeHtml(m.name)}</td>
+          <td class="num">$${m.input.toFixed(2)}</td>
+          <td class="num">$${m.output.toFixed(2)}</td>
+          <td class="num">${cached}</td>
+          <td class="num ctx">${fmtCtx(m.context)}</td>
+          <td style="font-size:0.72rem;color:var(--text-dim);">${escapeHtml(m.notes || '')}</td>
+        </tr>`;
+      }).join('');
+
+      document.querySelectorAll('#ref-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === sortKey) th.classList.add(refSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // Sort click handlers
+    document.querySelectorAll('#compare-table th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.sort;
+        if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+        else { currentSort.key = key; currentSort.dir = (key === 'monthly' || key === 'input' || key === 'output' || key === 'cached_input' || key === 'context') ? 'asc' : 'asc'; }
+        renderCompareTable();
+      });
+    });
+    document.querySelectorAll('#ref-table th').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.sort;
+        if (refSort.key === key) refSort.dir = refSort.dir === 'asc' ? 'desc' : 'asc';
+        else { refSort.key = key; refSort.dir = 'asc'; }
+        renderRefTable();
+      });
+    });
+
+    // ------- Load pricing data -------
+    fetch('llm-pricing.json', { cache: 'no-cache' })
+      .then(r => r.json())
+      .then(data => {
+        PRICING = data;
+        document.getElementById('vintage-date').textContent = data.retrieved + ' (' + data.models.length + ' models)';
+        // Render source list
+        const srcHtml = Object.entries(data.sources).map(([provider, url]) =>
+          `<a href="${url}" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--teal);text-decoration:none;margin-right:1.25rem;">${provider} pricing &rarr;</a>`
+        ).join('');
+        document.getElementById('sources-list').innerHTML = srcHtml;
+        renderCompareTable();
+        renderRefTable();
+      })
+      .catch(err => {
+        document.getElementById('vintage-date').textContent = 'ERROR loading pricing data';
+        document.getElementById('compare-body').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--rose);">Failed to load pricing data. Refresh the page.</td></tr>';
+      });
+
+    updateTokenCounts();
+  })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

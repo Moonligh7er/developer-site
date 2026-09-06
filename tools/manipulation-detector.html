@@ -835,7 +835,14 @@
       'restructuring', 'letting go', 'passed away', 'neutralize', 'pacification',
       'regime change', 'kinetic action', 'ethnic cleansing', 'alternative facts',
       'economically disadvantaged', 'pre-owned', 'negative growth', 'friendly fire',
-      'strategic withdrawal', 'correctional facility'
+      'strategic withdrawal', 'correctional facility',
+      // Corporate speak / layoff euphemisms
+      'letting you go', 'restructuring efforts', 'going forward', 'workforce optimization',
+      'headcount reduction', 'reduction in force', 'streamlining operations',
+      'operational efficiency', 'align resources', 'realignment', 'transition period',
+      'parting ways', 'moving in a different direction', 'no longer with the company',
+      'synergies', 'synergy', 'circle back', 'take offline', 'value add',
+      'right-size', 'rightsizing', 'delayering', 'flattening the organization'
     ];
 
     // 2. Certainty / Absolutism — all-or-nothing, sweeping claims
@@ -867,6 +874,14 @@
       'shocking', 'exposed', 'devastating', 'terrifying', 'horrifying', 'outrageous',
       'unbelievable', 'mind-blowing', 'game-changing', 'life-changing',
       'revolutionary', 'miracle',
+      // Clickbait triggers
+      "you won't believe", 'you wont believe', 'will amaze', 'will shock',
+      'blow your mind', 'jaw-dropping', 'jaw dropping', 'the truth about',
+      'what happened next', 'number one reason', 'number 1 reason',
+      'gone wrong', 'gone viral', 'the one thing', 'one weird trick',
+      'doctors hate', 'they hate this', 'insane truth', 'hidden truth',
+      'shocking truth', 'nobody talks about', 'no one talks about',
+      'never seen before', 'the real reason',
       // Loaded language (Filament: Loaded Language)
       'evil', 'wicked', 'vile', 'disgusting', 'repulsive', 'sickening',
       'stupid', 'idiotic', 'moronic', 'brainless', 'clueless', 'ignorant',
@@ -931,6 +946,20 @@
       'law and order', 'silent majority', 'real Americans', 'real America',
       'coastal elites', 'hard-working Americans', 'urban', 'inner city',
       'thugs', 'illegals', 'invasion',
+      // Immigration / border dog whistles
+      'flooding our', 'overrun by', 'overwhelmed by', 'invasion of',
+      'anchor babies', 'chain migration', 'border crisis',
+      'the caravan', 'strain on our resources', 'our communities',
+      // Modern political dog whistles
+      'the swamp', 'drain the swamp', 'woke agenda', 'woke ideology',
+      'woke mob', 'the woke left', 'radical left', 'radical right',
+      'gender ideology', 'critical race theory in schools',
+      'grooming', 'groomers', 'traditional marriage',
+      'protect our children', 'save the children',
+      'the great replacement', 'demographic change',
+      // Populist framing
+      'the people versus', 'the swamp creatures', 'career politicians',
+      'washington insiders', 'ivory tower',
       // Us-vs-them framing (Filament: In-Group/Out-Group, Divide and Conquer, Wedge Issues)
       'those people', 'these people', 'people like them', 'our way of life',
       'true patriots', 'the enemy', 'the other side', 'us versus them',
@@ -971,7 +1000,22 @@
       'risk-free', 'no obligation', 'money-back guarantee', 'nothing to lose',
       'what have you got to lose', 'try it free', 'cancel anytime',
       'limited edition', 'members only', 'invitation only', 'apply now',
-      'spots are filling up', 'register before', 'early bird'
+      'spots are filling up', 'register before', 'early bird',
+      // Sales pressure
+      'flash sale', 'today only', 'ends tonight', 'ends today',
+      'ends at midnight', 'this weekend only', 'countdown', 'clock is ticking',
+      'off original price', 'off regular price', 'save big', 'huge savings',
+      'unbeatable price', 'lowest price ever', 'best deal ever',
+      'you deserve this', 'treat yourself', 'invest in yourself',
+      'ready to level up', 'level up your life', 'transform your life',
+      'change your life forever', "you can't afford to miss", 'game changer',
+      // MLM / hustle culture
+      'join the movement', 'be your own boss', 'financial freedom',
+      'passive income stream', 'six figures', 'seven figures',
+      'work from anywhere', 'the 9-5 grind', 'quit your 9-5',
+      'live your best life', 'unlock your potential', 'reach your goals',
+      'serious inquiries only', 'action-takers only', 'not for everyone',
+      'DM me for details', 'link in bio', 'ask me how'
     ];
 
     // 7. Control / Coercion Phrases — interpersonal manipulation
@@ -1203,34 +1247,36 @@
     function computeOverallScore(cats, wc) {
       if (wc === 0) return 0;
 
-      // Density per 100 words, capped, then normalized to 0-100
+      // Density per 100 words, capped, then normalized to 0-100 per category
       function densityScore(count, cap) {
         return (Math.min((count / wc) * 100, cap) / cap) * 100;
       }
 
-      var scores = {
-        hedge:      densityScore(cats.hedge, 12),
-        certainty:  densityScore(cats.certainty, 12),
-        emotional:  densityScore(cats.emotional, 8),
-        fallacy:    densityScore(cats.fallacy, 5),
-        propaganda: densityScore(cats.propaganda, 6),
-        urgency:    densityScore(cats.urgency, 8),
-        control:    densityScore(cats.control, 4)
-      };
+      var raw = [
+        densityScore(cats.hedge, 10),
+        densityScore(cats.certainty, 10),
+        densityScore(cats.emotional, 8),
+        densityScore(cats.fallacy, 5),
+        densityScore(cats.propaganda, 6),
+        densityScore(cats.urgency, 8),
+        densityScore(cats.control, 4)
+      ];
 
-      // Weighted combination
-      var raw = (scores.hedge * 0.08) + (scores.certainty * 0.10) + (scores.emotional * 0.22) +
-                (scores.fallacy * 0.20) + (scores.propaganda * 0.18) + (scores.urgency * 0.10) +
-                (scores.control * 0.12);
+      // Sort descending — highest category dominates the score,
+      // with reinforcement from additional active categories.
+      // This lets single-vector manipulation (e.g. pure sales pitch)
+      // score meaningfully instead of being diluted across 7 weights.
+      var sorted = raw.slice().sort(function(a, b) { return b - a; });
+      var weights = [0.55, 0.22, 0.12, 0.06, 0.03, 0.015, 0.005];
+      var score = 0;
+      for (var i = 0; i < sorted.length; i++) score += sorted[i] * weights[i];
 
-      // Boost if multiple categories active
-      var active = 0;
-      for (var k in cats) { if (cats[k] > 0) active++; }
-      if (active >= 4) raw *= 1.12;
-      if (active >= 5) raw *= 1.10;
-      if (active >= 6) raw *= 1.08;
+      // Multi-vector manipulation boost
+      var active = raw.filter(function(s) { return s > 0; }).length;
+      if (active >= 3) score *= 1.10;
+      if (active >= 5) score *= 1.08;
 
-      return Math.min(100, Math.max(0, Math.round(raw)));
+      return Math.min(100, Math.max(0, Math.round(score)));
     }
 
     function getVerdict(score) {

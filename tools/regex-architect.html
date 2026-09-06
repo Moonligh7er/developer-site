@@ -438,6 +438,48 @@
       color: var(--text-dim);
     }
 
+    /* ── AI-unavailable notice ── */
+    .ai-notice {
+      max-width: 900px;
+      margin: 0 auto 1.5rem;
+      padding: 1rem 1.25rem;
+      background: rgba(212,160,32,0.06);
+      border: 1px solid rgba(212,160,32,0.25);
+      border-left: 2px solid var(--amber, #d4a020);
+      position: relative;
+    }
+    .ai-notice__header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .ai-notice__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--amber, #d4a020);
+      box-shadow: 0 0 8px rgba(212,160,32,0.6);
+      animation: amberpulse 2s ease-in-out infinite;
+    }
+    @keyframes amberpulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .ai-notice__title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber, #d4a020);
+    }
+    .ai-notice__body {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .rx-input-wrap {
@@ -447,6 +489,7 @@
       .rx-prompt { display: none; }
       .rx-flags { flex-wrap: wrap; gap: 0.75rem; }
       .rx-cheat__grid { grid-template-columns: 1fr; }
+      .ai-notice { margin-left: 1rem; margin-right: 1rem; }
     }
   </style>
 </head>
@@ -478,6 +521,15 @@
 
     <!-- Ad Unit: Top Leaderboard -->
     <div class="ad-container" data-ad-slot="top"></div>
+
+    <!-- AI Notice -->
+    <div class="ai-notice">
+      <div class="ai-notice__header">
+        <span class="ai-notice__dot"></span>
+        <span class="ai-notice__title">Demo Mode &mdash; AI Unavailable</span>
+      </div>
+      <p class="ai-notice__body">This demo matches your query against 35+ built-in patterns via keyword lookup. The AI-augmented version (freeform natural-language generation for arbitrary patterns) is temporarily offline. If your request doesn't map to a known pattern, try the quick-tag buttons or the cheat sheet below.</p>
+    </div>
 
     <!-- Terminal -->
     <div class="rx-terminal">

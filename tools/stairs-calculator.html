@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Stair Calculator (Rise, Run, Stringer) | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta name="keywords" content="stair calculator, stair stringer calculator, rise run calculator, staircase calculator, step calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/stairs-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Stair Calculator (Rise, Run, Stringer)",
+    "description": "Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/stairs-calculator.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Stair Calculator (Rise, Run, Stringer)">
+  <meta property="og:description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/stairs-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Stair Calculator (Rise, Run, Stringer)">
+  <meta name="twitter:description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; Stair Calculator</p>
+
+      <div class="calc-card">
+        <h1>Stair Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter total rise (floor-to-floor height) and get step count, riser height, tread depth, total run, and stringer length. Common comfort ranges shown for reference &mdash; verify against your local building code.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="units">Units</label>
+            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
+              <option value="imperial">Imperial (ft, in, cu yd)</option>
+              <option value="metric">Metric (m, cm, m³)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+  <div class="form-group"><label for="rise">Total Rise (in or cm)</label><input type="number" id="rise" placeholder="108" min="0" step="any"><span class="hint">Floor-to-floor height (e.g., 108" = 9 ft)</span></div>
+  <div class="form-group"><label for="targetRiser">Target Riser Height (in or cm)</label><input type="number" id="targetRiser" placeholder="7.5" min="0" step="any"><span class="hint">Common comfort range: 7"-7¾"</span></div>
+  <div class="form-group"><label for="tread">Tread Depth (in or cm)</label><input type="number" id="tread" placeholder="11" min="0" step="any"><span class="hint">Common: 10"-11½"</span></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Materials Needed</h4>
+          <div id="out-main"></div>
+          
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How stair math works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Step count is total rise divided by target riser height, rounded to a whole number. Actual riser height is then total rise ÷ step count &mdash; it will rarely equal your target exactly because it has to divide evenly. Total run is step count minus 1 (there&apos;s no tread on the top landing) multiplied by tread depth. Stringer length is the hypotenuse: <code style="font-family:var(--font-mono);color:var(--teal);">√(rise² + run²)</code>.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common comfort ranges (verify your local code)</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The most-cited residential rules of thumb: <strong>riser 7&ndash;7¾"</strong>, <strong>tread 10&ndash;11½"</strong>, <strong>2R+T = 24&ndash;25"</strong> as an ergonomic guideline. IRC (International Residential Code) commonly cited as max 7¾" riser and min 10" tread for residential. Commercial codes are stricter. Uniformity matters more than the exact number &mdash; every step in a flight must be within 3/8" of every other step or people trip.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>This calculator does not verify code compliance.</strong> Codes vary by jurisdiction, use type (residential vs. commercial), and code adoption year. Check with your local building department or a licensed contractor before construction.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What&apos;s not included</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Landings, headroom clearance, handrail requirements, nosing dimensions, stringer material selection or span, structural attachment. Geometry only.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Geometry only &mdash; does not verify code compliance. Common comfort ranges shown are guidelines, not code.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Construction Calculators</p>
+      <div class="calc-other__grid">
+        <a href="construction-calculators.html" class="calc-other__link">Suite (6 originals)</a>
+        <a href="drywall-calculator.html" class="calc-other__link">Drywall</a>
+        <a href="tile-calculator.html" class="calc-other__link">Tile</a>
+        <a href="gravel-calculator.html" class="calc-other__link">Gravel</a>
+        <a href="mulch-calculator.html" class="calc-other__link">Mulch</a>
+        <a href="roofing-calculator.html" class="calc-other__link">Roofing / Shingles</a>
+        <a href="deck-calculator.html" class="calc-other__link">Deck Materials</a>
+        <a href="stairs-calculator.html" class="calc-other__link">Stairs (Rise/Run)</a>
+        <a href="asphalt-calculator.html" class="calc-other__link">Asphalt</a>
+        <a href="insulation-r-value-calculator.html" class="calc-other__link">Insulation R-Value</a>
+        <a href="btu-hvac-calculator.html" class="calc-other__link">BTU / HVAC Sizing</a>
+        <a href="sod-calculator.html" class="calc-other__link">Sod</a>
+        <a href="retaining-wall-calculator.html" class="calc-other__link">Retaining Wall</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function ceil(x){return Math.ceil(x);}
+function ceilRound(x, step){return Math.ceil(x/step)*step;}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+// Unit conversions
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
+function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
+function lengthUnitLabel(){return isMetric()?'m':'ft';}
+function weightUnitLabel(){return isMetric()?'kg':'lb';}
+
+      function calc(){
+  hideErr();
+  const rise=n('rise'), target=n('targetRiser'), tread=n('tread');
+  if (!rise||!target||!tread||rise<=0||target<=0||tread<=0) return showErr('Enter total rise, target riser, and tread depth.');
+  const riseIn = isMetric() ? rise/IN_TO_CM : rise;
+  const targetIn = isMetric() ? target/IN_TO_CM : target;
+  const treadIn = isMetric() ? tread/IN_TO_CM : tread;
+  const stepCount = Math.round(riseIn / targetIn);
+  if (stepCount < 1) return showErr('Rise too small vs. target riser height.');
+  const actualRiser = riseIn / stepCount;
+  const totalRun = (stepCount - 1) * treadIn;
+  const stringerLen = Math.sqrt(riseIn*riseIn + totalRun*totalRun);
+  const twoRplusT = 2*actualRiser + treadIn;
+  const inRange = actualRiser >= 7 && actualRiser <= 7.75 && treadIn >= 10 && treadIn <= 11.5;
+  let h = '';
+  h += row('Number of steps (risers)', stepCount+' steps', 'teal');
+  h += row('Actual riser height', actualRiser.toFixed(2)+'" ('+(actualRiser*IN_TO_CM).toFixed(1)+' cm)', 'teal');
+  h += row('Tread depth', treadIn.toFixed(2)+'" ('+(treadIn*IN_TO_CM).toFixed(1)+' cm)');
+  h += row('Total run (horizontal)', totalRun.toFixed(1)+'" ('+(totalRun*IN_TO_CM/100).toFixed(2)+' m)', 'violet');
+  h += row('Stringer length (hypotenuse)', stringerLen.toFixed(1)+'" ('+(stringerLen*IN_TO_CM/100).toFixed(2)+' m)', 'violet');
+  h += row('2R + T formula', twoRplusT.toFixed(2)+'" (comfort range 24-25")');
+  h += row('Common code range check', inRange ? 'Within common range' : 'Outside common range — verify local code', inRange ? 'teal' : 'amber');
+  set('out-main', h);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['rise','targetRiser','tread'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

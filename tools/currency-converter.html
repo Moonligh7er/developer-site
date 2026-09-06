@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Currency Converter (ECB Reference Rates) | Moonlit Social Labs</title>
+  <meta name="description" content="Convert between 30+ world currencies using ECB reference rates via the Frankfurter API. Rates cached in your browser. No signup, no key.">
+  <meta name="keywords" content="currency converter, exchange rate calculator, ECB rates, USD to EUR, currency conversion tool, foreign exchange calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/currency-converter.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Currency Converter (ECB Reference Rates)",
+    "description": "Convert between 30+ world currencies using ECB reference rates via the Frankfurter API.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/currency-converter.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Currency Converter (ECB Reference Rates)">
+  <meta property="og:description" content="Convert between 30+ world currencies using ECB reference rates. No signup, no key.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/currency-converter.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Currency Converter (ECB Reference Rates)">
+  <meta name="twitter:description" content="Convert between 30+ world currencies using ECB reference rates.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.frankfurter.dev" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .conv-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: end; margin: 1.5rem 0; }
+    .conv-swap { font-family: var(--font-mono); font-size: 1.5rem; background: transparent; border: 1px solid var(--border); color: var(--teal); width: 44px; height: 44px; cursor: pointer; transition: all 0.2s; align-self: end; margin-bottom: 0.4rem; }
+    .conv-swap:hover { border-color: var(--teal); box-shadow: 0 0 12px var(--teal-dim); }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .conv-result { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; text-align: center; margin: 1.5rem 0; }
+    .conv-result .amount-out { font-family: var(--font-display); font-size: 2.2rem; color: var(--teal); font-weight: 400; margin-bottom: 0.5rem; word-break: break-all; }
+    .conv-result .rate-line { font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); }
+    .conv-result .rate-date { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin-top: 0.5rem; letter-spacing: 0.1em; }
+    .conv-status { font-family: var(--font-mono); font-size: 0.75rem; padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--border); }
+    .conv-status.err { border-color: var(--rose); color: var(--rose); background: rgba(196, 74, 138, 0.05); }
+    .conv-status.warn { border-color: var(--amber); color: var(--amber); background: rgba(245, 158, 11, 0.05); }
+    .conv-status.info { border-color: var(--teal); color: var(--teal); background: transparent; }
+    .conv-quick { margin-top: 1rem; }
+    .conv-quick__title { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; }
+    .conv-quick__grid { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .conv-quick__btn { font-family: var(--font-mono); font-size: 0.7rem; padding: 0.4rem 0.7rem; border: 1px solid var(--border); background: transparent; color: var(--text-secondary); cursor: pointer; transition: all 0.2s; }
+    .conv-quick__btn:hover { border-color: var(--teal); color: var(--teal); }
+    .privacy-note { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px dashed var(--border); background: transparent; color: var(--text-dim); font-size: 0.75rem; font-family: var(--font-mono); line-height: 1.5; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .conv-row { grid-template-columns: 1fr; } .conv-swap { transform: rotate(90deg); } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Currency Converter</p>
+
+      <div class="calc-card">
+        <h1>Currency Converter</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1rem;">Convert between 30+ world currencies using European Central Bank reference rates. Rates are cached in your browser and update once per business day.</p>
+
+        <div class="privacy-note">This tool fetches exchange rates from Frankfurter (api.frankfurter.dev), which relays ECB data. Only the currency pair is sent to that endpoint &mdash; your amount and any other input stays in your browser. This is the only tool on the site that phones out; every other calculator is fully offline.</div>
+
+        <div id="load-status" class="conv-status info">Loading current rates from ECB via Frankfurter&hellip;</div>
+
+        <div class="conv-row">
+          <div class="form-group">
+            <label for="amt-from">Amount</label>
+            <input type="number" id="amt-from" value="100" min="0" step="any">
+          </div>
+          <button class="conv-swap" id="swap" title="Swap currencies" aria-label="Swap from and to currencies">&harr;</button>
+          <div class="form-group">
+            <label for="amt-to">Converted</label>
+            <input type="number" id="amt-to" value="" step="any" placeholder="&mdash;">
+          </div>
+        </div>
+
+        <div class="conv-row">
+          <div class="form-group">
+            <label for="from">From</label>
+            <select id="from"></select>
+          </div>
+          <div style="width:44px;"></div>
+          <div class="form-group">
+            <label for="to">To</label>
+            <select id="to"></select>
+          </div>
+        </div>
+
+        <div class="conv-result" id="result" aria-live="polite">
+          <div class="amount-out" id="result-amt">&mdash;</div>
+          <div class="rate-line" id="result-rate">&nbsp;</div>
+          <div class="rate-date" id="result-date">&nbsp;</div>
+        </div>
+
+        <div class="conv-quick">
+          <p class="conv-quick__title">Popular pairs</p>
+          <div class="conv-quick__grid" id="quick-pairs"></div>
+        </div>
+      </div>
+
+      <section class="calc-card">
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this converter works</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">On page load, the tool fetches ECB reference rates for the day from the free, no-key <a href="https://frankfurter.dev" target="_blank" rel="noopener" style="color:var(--teal);">Frankfurter API</a>. All 30+ currencies are pulled at once relative to the euro, then any conversion is computed as a cross-rate through EUR &mdash; USD &rarr; GBP means USD &rarr; EUR &rarr; GBP in one step. Rates are cached in your browser&apos;s localStorage; if the API is unreachable on a later visit, the tool falls back to the cache and shows the date of the cached rates. If there&apos;s no cache and the fetch fails, the tool tells you rather than showing a wrong number.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why ECB reference rates</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The European Central Bank publishes daily reference rates around 16:00 CET on business days. These are widely used as a neutral, transparent midpoint. They are <em>not</em> live interbank rates &mdash; those tick moment to moment &mdash; and they are <em>not</em> what your bank or card network will actually give you. Your bank adds a spread (often 1-3%) plus fees. Wise, Revolut, and most online transfer services publish their own live rates that differ slightly from ECB.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When ECB rates don&apos;t apply</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Weekends and ECB holidays &mdash; there&apos;s no new rate. Frankfurter returns the last business-day rate; the &ldquo;as of&rdquo; date in the result panel tells you exactly which day&apos;s rate is being used.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this converter does not do</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Real-time interbank rates, cryptocurrency, exotic currencies not on ECB&apos;s list (~30 majors), historical charts, or predictions. If you need those, use a broker or a service like Wise. If you&apos;re just checking &ldquo;roughly how much is 500 dollars in yen,&rdquo; this is the right tool.</p>
+      </section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Reference Only</strong>Reference rates for information only &mdash; not a quote. Banks and card networks apply their own rates and fees. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Finance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="paycheck-calculator.html" class="calc-other__link">Paycheck</a>
+        <a href="loan-mortgage-calculator.html" class="calc-other__link">Mortgage</a>
+        <a href="auto-loan-calculator.html" class="calc-other__link">Auto Loan</a>
+        <a href="retirement-401k-calculator.html" class="calc-other__link">Retirement</a>
+        <a href="income-tax-bracket-calculator.html" class="calc-other__link">Tax Bracket</a>
+        <a href="inflation-calculator.html" class="calc-other__link">Inflation</a>
+        <a href="rent-vs-buy-calculator.html" class="calc-other__link">Rent vs. Buy</a>
+        <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest</a>
+        <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff</a>
+        <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax</a>
+        <a href="fire-calculator.html" class="calc-other__link">FIRE</a>
+        <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal</a>
+        <a href="roi-calculator.html" class="calc-other__link">ROI</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      const API = 'https://api.frankfurter.dev/v1/latest';
+      const CACHE_KEY = 'msl_fx_cache_v1';
+      const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours - ECB updates daily, this is generous
+      const CURRENCY_NAMES = {
+        AUD:'Australian Dollar', BRL:'Brazilian Real', CAD:'Canadian Dollar', CHF:'Swiss Franc',
+        CNY:'Chinese Yuan', CZK:'Czech Koruna', DKK:'Danish Krone', EUR:'Euro',
+        GBP:'British Pound', HKD:'Hong Kong Dollar', HUF:'Hungarian Forint', IDR:'Indonesian Rupiah',
+        ILS:'Israeli Shekel', INR:'Indian Rupee', ISK:'Icelandic Krona', JPY:'Japanese Yen',
+        KRW:'South Korean Won', MXN:'Mexican Peso', MYR:'Malaysian Ringgit', NOK:'Norwegian Krone',
+        NZD:'New Zealand Dollar', PHP:'Philippine Peso', PLN:'Polish Zloty', RON:'Romanian Leu',
+        SEK:'Swedish Krona', SGD:'Singapore Dollar', THB:'Thai Baht', TRY:'Turkish Lira',
+        USD:'US Dollar', ZAR:'South African Rand'
+      };
+      const POPULAR_PAIRS = [['USD','EUR'],['USD','GBP'],['USD','JPY'],['USD','CAD'],['EUR','GBP'],['GBP','USD'],['USD','MXN'],['USD','INR']];
+
+      const el = id => document.getElementById(id);
+      let ratesData = null; // { base: 'EUR', date: 'YYYY-MM-DD', rates: {CCY: number}, fetchedAt: ms, offline: bool }
+
+      function setStatus(msg, kind) {
+        const s = el('load-status');
+        s.textContent = msg;
+        s.className = 'conv-status ' + (kind || 'info');
+        s.style.display = msg ? 'block' : 'none';
+      }
+      function saveCache(d) {
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(d)); } catch(e) {}
+      }
+      function loadCache() {
+        try {
+          const raw = localStorage.getItem(CACHE_KEY);
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch(e) { return null; }
+      }
+
+      async function fetchRates() {
+        setStatus('Loading current rates from ECB via Frankfurter…', 'info');
+        try {
+          const r = await fetch(API, { cache: 'no-cache' });
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          const j = await r.json();
+          // Normalize: ensure base currency (EUR) is in the rates map with value 1
+          if (j.base && j.rates && !j.rates[j.base]) j.rates[j.base] = 1;
+          const data = { base: j.base, date: j.date, rates: j.rates, fetchedAt: Date.now(), offline: false };
+          saveCache(data);
+          ratesData = data;
+          setStatus('', 'info');
+        } catch (err) {
+          const cached = loadCache();
+          if (cached && cached.rates) {
+            cached.offline = true;
+            ratesData = cached;
+            setStatus('Live rates unavailable; using cached rates from ' + cached.date + '.', 'warn');
+          } else {
+            ratesData = null;
+            setStatus('Could not load exchange rates. Check your connection and try again.', 'err');
+          }
+        }
+        populate();
+        convert();
+      }
+
+      function populate() {
+        if (!ratesData) return;
+        const fromSel = el('from'), toSel = el('to');
+        const currencies = Object.keys(ratesData.rates).sort();
+        fromSel.innerHTML = ''; toSel.innerHTML = '';
+        for (const c of currencies) {
+          const label = c + ' — ' + (CURRENCY_NAMES[c] || c);
+          const o1 = document.createElement('option'); o1.value = c; o1.textContent = label; fromSel.appendChild(o1);
+          const o2 = document.createElement('option'); o2.value = c; o2.textContent = label; toSel.appendChild(o2);
+        }
+        fromSel.value = 'USD';
+        toSel.value = 'EUR';
+
+        // Popular pairs quick buttons
+        const q = el('quick-pairs');
+        q.innerHTML = '';
+        for (const [f, t] of POPULAR_PAIRS) {
+          if (!ratesData.rates[f] || !ratesData.rates[t]) continue;
+          const b = document.createElement('button');
+          b.className = 'conv-quick__btn';
+          b.textContent = f + ' → ' + t;
+          b.addEventListener('click', () => { fromSel.value = f; toSel.value = t; convert(); });
+          q.appendChild(b);
+        }
+      }
+
+      // Cross-rate through the base currency (EUR): 1 unit of FROM = rates[TO] / rates[FROM] units of TO
+      function crossRate(from, to) {
+        if (!ratesData || !ratesData.rates[from] || !ratesData.rates[to]) return null;
+        return ratesData.rates[to] / ratesData.rates[from];
+      }
+
+      function fmt(num, dp) {
+        if (!isFinite(num)) return '—';
+        return num.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+
+      function convert(direction) {
+        if (!ratesData) return;
+        const from = el('from').value, to = el('to').value;
+        const rate = crossRate(from, to);
+        if (rate === null) { el('result-amt').textContent = '—'; el('result-rate').textContent = 'Rate unavailable for this pair.'; return; }
+
+        // Direction: 'reverse' means user typed in the TO field
+        if (direction === 'reverse') {
+          const amt = parseFloat(el('amt-to').value);
+          if (isNaN(amt)) return;
+          el('amt-from').value = (amt / rate).toFixed(4);
+          el('result-amt').textContent = fmt(amt, 2) + ' ' + to;
+        } else {
+          const amt = parseFloat(el('amt-from').value);
+          if (isNaN(amt)) return;
+          const out = amt * rate;
+          el('amt-to').value = out.toFixed(4);
+          el('result-amt').textContent = fmt(out, 2) + ' ' + to;
+        }
+
+        el('result-rate').textContent = '1 ' + from + ' = ' + fmt(rate, 4) + ' ' + to;
+        const dateSuffix = ratesData.offline ? ' (offline / cached)' : '';
+        el('result-date').textContent = 'ECB reference rate as of ' + ratesData.date + dateSuffix;
+      }
+
+      // Event wiring
+      el('amt-from').addEventListener('input', () => convert('forward'));
+      el('amt-to').addEventListener('input', () => convert('reverse'));
+      el('from').addEventListener('change', () => convert('forward'));
+      el('to').addEventListener('change', () => convert('forward'));
+      el('swap').addEventListener('click', () => {
+        const f = el('from').value, t = el('to').value;
+        el('from').value = t; el('to').value = f;
+        convert('forward');
+      });
+
+      // Boot
+      const cached = loadCache();
+      if (cached && (Date.now() - cached.fetchedAt) < CACHE_TTL_MS) {
+        ratesData = cached;
+        setStatus('', 'info');
+        populate();
+        convert();
+        // Still refresh in background for next visit
+        fetch(API, { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).then(j => {
+          if (j && j.rates) {
+            if (j.base && !j.rates[j.base]) j.rates[j.base] = 1;
+            saveCache({ base: j.base, date: j.date, rates: j.rates, fetchedAt: Date.now(), offline: false });
+          }
+        }).catch(() => {});
+      } else {
+        fetchRates();
+      }
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

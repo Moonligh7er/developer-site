@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Paycheck / Take-Home Pay Calculator (2026 Federal) | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate your federal take-home pay for 2026. Handles gross pay, pay frequency, filing status, pre-tax deductions (401k, HSA, health), FICA, and Social Security wage base. Full support for the 9 US states with no income tax.">
+  <meta name="keywords" content="paycheck calculator, take home pay calculator, 2026 paycheck calculator, federal withholding calculator, FICA calculator, take home calculator, salary calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/paycheck-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Paycheck / Take-Home Pay Calculator (2026 Federal)",
+    "description": "Calculate your federal take-home pay for 2026. Full support for the 9 US states with no income tax.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/paycheck-calculator.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Paycheck Calculator (2026 Federal)">
+  <meta property="og:description" content="Federal take-home pay for 2026. Handles 401k, HSA, health premiums, FICA. Full support for the 9 no-income-tax states.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/paycheck-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Paycheck Calculator (2026 Federal)">
+  <meta name="twitter:description" content="Federal take-home pay for 2026. Handles pre-tax deductions and FICA.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="preload" href="../js/effects.js" as="script">
+  <link rel="preload" href="../js/main.js" as="script">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .tax-year-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--amber); color: var(--amber); margin-bottom: 1rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); box-shadow: 0 0 20px var(--violet-dim); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .state-notice { padding: 0.75rem 1rem; margin: 0.75rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; display: none; }
+    .state-notice.visible { display: block; }
+    .breakdown-bar { display: flex; height: 24px; margin: 1rem 0; border: 1px solid var(--border); overflow: hidden; }
+    .breakdown-bar div { display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 0.7rem; color: var(--deep); font-weight: 600; overflow: hidden; white-space: nowrap; }
+    .roadmap-note { padding: 0.75rem 1rem; margin-top: 1.5rem; border: 1px dashed var(--border); background: transparent; color: var(--text-dim); font-size: 0.8rem; font-family: var(--font-mono); }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Paycheck Calculator</p>
+
+      <div class="calc-card">
+        <span class="tax-year-badge">Tax Year 2026 &middot; Federal + FICA</span>
+        <h1>Paycheck / Take-Home Pay Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your gross pay and see what actually hits your bank account. Handles pay frequency, pre-tax deductions (401(k), HSA, health premiums), Social Security cap, and the additional Medicare tax on high earners. Full state support for the 9 US states with no income tax; other states are federal-only until state modules land (see roadmap below).</p>
+
+        <p class="calc-subhead">Your Pay</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="freq">Pay Frequency</label>
+            <select id="freq">
+              <option value="annual">Annual salary</option>
+              <option value="monthly">Monthly</option>
+              <option value="semimonthly">Semi-Monthly (24/yr)</option>
+              <option value="biweekly">Bi-Weekly (26/yr)</option>
+              <option value="weekly">Weekly (52/yr)</option>
+              <option value="hourly">Hourly + hours</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="gross">Gross Pay ($)</label>
+            <input type="number" id="gross" placeholder="75000" min="0" step="any">
+          </div>
+          <div class="form-group" id="hourly-group" style="display:none;">
+            <label for="hours">Hours per Week</label>
+            <input type="number" id="hours" placeholder="40" min="0" step="any">
+          </div>
+        </div>
+
+        <p class="calc-subhead">Filing &amp; Location</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="filing">Filing Status</label>
+            <select id="filing">
+              <option value="single">Single</option>
+              <option value="mfj">Married Filing Jointly</option>
+              <option value="mfs">Married Filing Separately</option>
+              <option value="hoh">Head of Household</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <select id="state">
+              <option value="none">-- Federal only --</option>
+              <option value="AK">Alaska (no income tax)</option>
+              <option value="FL">Florida (no income tax)</option>
+              <option value="NV">Nevada (no income tax)</option>
+              <option value="NH">New Hampshire (no wage tax)</option>
+              <option value="SD">South Dakota (no income tax)</option>
+              <option value="TN">Tennessee (no income tax)</option>
+              <option value="TX">Texas (no income tax)</option>
+              <option value="WA">Washington (no wage tax)</option>
+              <option value="WY">Wyoming (no income tax)</option>
+              <option value="OTHER">Other state (has income tax &mdash; not yet supported)</option>
+            </select>
+          </div>
+        </div>
+        <div class="state-notice" id="state-notice"></div>
+
+        <p class="calc-subhead">Pre-Tax Deductions (Annual)</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="k401-pct">401(k) Contribution (%)</label>
+            <input type="number" id="k401-pct" placeholder="10" min="0" max="100" step="any">
+            <span class="hint">% of gross pay, pre-tax</span>
+          </div>
+          <div class="form-group">
+            <label for="k401-dollar">401(k) Contribution ($/yr)</label>
+            <input type="number" id="k401-dollar" placeholder="0" min="0" step="any">
+            <span class="hint">Or specify dollar amount instead</span>
+          </div>
+          <div class="form-group">
+            <label for="hsa">HSA / FSA Annual ($)</label>
+            <input type="number" id="hsa" placeholder="0" min="0" step="any">
+          </div>
+          <div class="form-group">
+            <label for="health">Health Premiums Annual ($)</label>
+            <input type="number" id="health" placeholder="0" min="0" step="any">
+          </div>
+        </div>
+
+        <p class="calc-subhead">Post-Tax Deductions (Annual)</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="posttax">Other Post-Tax Deductions ($)</label>
+            <input type="number" id="posttax" placeholder="0" min="0" step="any">
+            <span class="hint">Roth 401(k), garnishments, etc.</span>
+          </div>
+        </div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Take-Home Pay</h4>
+          <div id="out-headline"></div>
+          <div class="breakdown-bar" id="out-bar"></div>
+          <p class="calc-subhead">Annual Breakdown</p>
+          <div id="out-annual"></div>
+          <p class="calc-subhead">Per-Paycheck</p>
+          <div id="out-perpay"></div>
+          <p class="calc-subhead">Tax Rates</p>
+          <div id="out-rates"></div>
+        </div>
+
+        <div class="roadmap-note"><strong>Roadmap:</strong> All-state support coming. Currently: federal + FICA for everyone, plus full computation for the 9 no-income-tax states. State income tax modules will be added incrementally.</div>
+      </div>
+
+      <section class="calc-card">
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this calculator works</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This calculator uses the <strong>annualized method</strong> that most payroll systems use for federal withholding. Your gross pay is annualized to a full-year figure. Pre-tax deductions (401(k), HSA, health premiums) reduce taxable wages before federal income tax and, for HSA and health, also before FICA. The standard deduction for your filing status is subtracted to get taxable income, which is run through the 2026 IRS brackets. FICA (Social Security 6.2% up to the $184,500 wage base + Medicare 1.45%) is calculated on gross wages minus HSA and health premium contributions. Additional Medicare tax (0.9%) kicks in above $200k single / $250k MFJ / $125k MFS.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2026 tax data</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Federal brackets come from <a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf" target="_blank" rel="noopener" style="color:var(--teal);">IRS Rev. Proc. 2025-32</a> (issued October 2025). The Social Security wage base for 2026 is $184,500 per the <a href="https://www.ssa.gov" target="_blank" rel="noopener" style="color:var(--teal);">SSA COLA announcement</a>. The One Big Beautiful Bill Act (OBBBA) of 2025 made the seven-bracket structure permanent and gave the bottom two brackets a larger inflation adjustment than the top five &mdash; that&apos;s already baked into the 2026 figures.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The nine no-income-tax states</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming do not tax wage income. NH taxes interest and dividends only (fully phased out for wages as of 2025), and WA has a capital gains tax on high earners but no wage tax. If you live in one of these states, this calculator is complete for your federal + state situation. Other states apply state income tax on top of what this calculator shows &mdash; use with awareness of that gap until state modules ship.</p>
+
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not include</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">State income tax (except the 9 no-tax states), local/city tax (NYC, Philadelphia, etc.), disability tax (CA SDI, NJ, NY), specific W-4 elections (additional withholding, dependents, credits), the child tax credit and other credits, itemized deductions, AMT, or benefits like commuter pre-tax. This is a working estimate of the biggest three (federal income tax + Social Security + Medicare), not a substitute for a payroll statement or a tax preparer.</p>
+      </section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Based on 2026 published federal rates; your actual withholding depends on your W-4 elections and any state/local taxes.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Finance Calculators</p>
+      <div class="calc-other__grid">
+        <a href="loan-mortgage-calculator.html" class="calc-other__link">Mortgage Calculator</a>
+        <a href="auto-loan-calculator.html" class="calc-other__link">Auto Loan</a>
+        <a href="retirement-401k-calculator.html" class="calc-other__link">Retirement / 401(k)</a>
+        <a href="income-tax-bracket-calculator.html" class="calc-other__link">Tax Bracket</a>
+        <a href="inflation-calculator.html" class="calc-other__link">Inflation</a>
+        <a href="rent-vs-buy-calculator.html" class="calc-other__link">Rent vs. Buy</a>
+        <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest</a>
+        <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff</a>
+        <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax</a>
+        <a href="fire-calculator.html" class="calc-other__link">FIRE Calculator</a>
+        <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal</a>
+        <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
+        <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle</a>
+        <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    /* Paycheck calc — 2026 federal + FICA.
+       Tax data inline (not fetched) so the tool works offline and doesn't
+       depend on network for correctness. Update this constant when the
+       tax-data-2026.json companion file changes. */
+    const TAX_DATA = {
+      taxYear: 2026,
+      brackets: {
+        single:  [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[640601,0.37]],
+        mfj:     [[0,0.10],[24801,0.12],[100801,0.22],[211401,0.24],[403551,0.32],[512451,0.35],[768701,0.37]],
+        mfs:     [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[384351,0.37]],
+        hoh:     [[0,0.10],[17701,0.12],[67451,0.22],[105701,0.24],[201776,0.32],[256201,0.35],[640601,0.37]]
+      },
+      standardDeduction: { single: 16100, mfj: 32200, mfs: 16100, hoh: 24150 },
+      fica: {
+        ssRate: 0.062,
+        ssWageBase: 184500,
+        medicareRate: 0.0145,
+        addlMedicareRate: 0.009,
+        addlMedicareThreshold: { single: 200000, mfj: 250000, mfs: 125000, hoh: 200000 }
+      }
+    };
+    const NO_TAX_STATES = new Set(['AK','FL','NV','NH','SD','TN','TX','WA','WY']);
+    const PAY_PERIODS = { annual:1, monthly:12, semimonthly:24, biweekly:26, weekly:52, hourly:52 };
+
+    (function() {
+      const el = id => document.getElementById(id);
+      const n = id => { const e=el(id); if(!e||e.value==='')return null; const v=parseFloat(e.value); return isNaN(v)?null:v; };
+      const s = id => { const e=el(id); return e?e.value:''; };
+      const money = x => '$'+Math.round(x).toLocaleString('en-US');
+      const moneyC = x => '$'+x.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+      const pct = x => x.toFixed(2)+'%';
+      const set = (id,html) => { const e=el(id); if(e)e.innerHTML=html; };
+      const showErr = msg => { const e=el('err'); e.textContent=msg; e.classList.add('visible'); el('results').classList.remove('visible'); };
+      const hideErr = () => el('err').classList.remove('visible');
+      const row = (label, value, cls) => `<div class="result-row"><span class="result-label">${label}</span><span class="result-value${cls?' result-value--'+cls:''}">${value}</span></div>`;
+
+      // Federal income tax from taxable income (progressive brackets)
+      function federalTax(taxable, filing) {
+        const br = TAX_DATA.brackets[filing];
+        let tax = 0, marginal = br[0][1];
+        for (let i=0; i<br.length; i++) {
+          const lo = br[i][0], hi = i+1<br.length?br[i+1][0]:Infinity;
+          if (taxable <= lo) break;
+          tax += (Math.min(taxable, hi) - lo) * br[i][1];
+          marginal = br[i][1];
+        }
+        return { tax, marginal };
+      }
+
+      // Frequency handling
+      function annualize() {
+        const freq = s('freq');
+        const g = n('gross');
+        if (g === null || g <= 0) return null;
+        if (freq === 'hourly') {
+          const h = n('hours');
+          if (h === null || h <= 0) return null;
+          return g * h * 52; // hourly * hrs/wk * 52
+        }
+        return g * (PAY_PERIODS[freq] || 1);
+      }
+
+      // State notice update
+      el('state').addEventListener('change', function() {
+        const v = this.value;
+        const notice = el('state-notice');
+        if (v === 'OTHER') {
+          notice.textContent = 'State income tax for this state is not yet supported. Results below are federal + FICA only — you will owe additional state (and possibly local) tax on top of this figure.';
+          notice.classList.add('visible');
+        } else if (NO_TAX_STATES.has(v)) {
+          const name = this.options[this.selectedIndex].text;
+          notice.textContent = name.replace(/\s*\(.*\)$/,'') + ' has no wage income tax, so results below are complete for your federal + state situation.';
+          notice.classList.add('visible');
+        } else {
+          notice.classList.remove('visible');
+        }
+      });
+
+      // Frequency toggle for hourly
+      el('freq').addEventListener('change', function() {
+        el('hourly-group').style.display = this.value === 'hourly' ? '' : 'none';
+      });
+
+      window.calc = function() {
+        hideErr();
+        const annualGross = annualize();
+        if (annualGross === null) return showErr('Enter valid gross pay (and hours if hourly).');
+        const filing = s('filing');
+
+        // Pre-tax deductions (annual)
+        let k401 = 0;
+        const k401Pct = n('k401-pct') || 0;
+        const k401Dol = n('k401-dollar') || 0;
+        if (k401Pct > 0) k401 = annualGross * (k401Pct/100);
+        else if (k401Dol > 0) k401 = k401Dol;
+        const hsa = n('hsa') || 0;
+        const health = n('health') || 0;
+        const posttax = n('posttax') || 0;
+
+        // Federal income taxable wages: gross - all pre-tax
+        const fedTaxableWages = Math.max(0, annualGross - k401 - hsa - health);
+        // Standard deduction (assumes taking standard, not itemized)
+        const stdDed = TAX_DATA.standardDeduction[filing];
+        const taxableIncome = Math.max(0, fedTaxableWages - stdDed);
+        const { tax: fedTax, marginal } = federalTax(taxableIncome, filing);
+
+        // FICA wages: gross - HSA - health (401(k) still subject to FICA)
+        const ficaWages = Math.max(0, annualGross - hsa - health);
+        const ss = Math.min(ficaWages, TAX_DATA.fica.ssWageBase) * TAX_DATA.fica.ssRate;
+        const medicareBase = ficaWages * TAX_DATA.fica.medicareRate;
+        const addlThresh = TAX_DATA.fica.addlMedicareThreshold[filing];
+        const addlMedicare = Math.max(0, ficaWages - addlThresh) * TAX_DATA.fica.addlMedicareRate;
+        const medicare = medicareBase + addlMedicare;
+
+        // Total annual withholding + take-home
+        const totalTax = fedTax + ss + medicare;
+        const annualTakeHome = annualGross - k401 - hsa - health - totalTax - posttax;
+        const effective = annualGross > 0 ? ((fedTax / annualGross) * 100) : 0;
+
+        // Per-paycheck
+        const freq = s('freq');
+        const periods = PAY_PERIODS[freq] || 1;
+        const perPay = {
+          gross: annualGross / periods,
+          k401: k401 / periods,
+          hsa: hsa / periods,
+          health: health / periods,
+          fed: fedTax / periods,
+          ss: ss / periods,
+          medicare: medicare / periods,
+          posttax: posttax / periods,
+          takeHome: annualTakeHome / periods
+        };
+
+        // Headline
+        set('out-headline',
+          row('Annual take-home', money(annualTakeHome), 'teal') +
+          row('Per paycheck (' + freq + ')', moneyC(perPay.takeHome), 'violet')
+        );
+
+        // Breakdown bar
+        const takeHomePct = Math.max(0, annualTakeHome / annualGross * 100);
+        const fedPct = fedTax / annualGross * 100;
+        const ficaPct = (ss + medicare) / annualGross * 100;
+        const preTaxPct = (k401 + hsa + health) / annualGross * 100;
+        const postTaxPct = posttax / annualGross * 100;
+        let bar = '';
+        if (takeHomePct > 0) bar += `<div style="width:${takeHomePct}%;background:var(--teal);">${takeHomePct>8?'Take-home '+takeHomePct.toFixed(0)+'%':''}</div>`;
+        if (fedPct > 0) bar += `<div style="width:${fedPct}%;background:var(--rose);">${fedPct>5?'Fed '+fedPct.toFixed(0)+'%':''}</div>`;
+        if (ficaPct > 0) bar += `<div style="width:${ficaPct}%;background:var(--amber);">${ficaPct>5?'FICA '+ficaPct.toFixed(0)+'%':''}</div>`;
+        if (preTaxPct > 0) bar += `<div style="width:${preTaxPct}%;background:var(--violet);">${preTaxPct>5?'Pre-tax '+preTaxPct.toFixed(0)+'%':''}</div>`;
+        if (postTaxPct > 0) bar += `<div style="width:${postTaxPct}%;background:#666;">${postTaxPct>5?'Post-tax '+postTaxPct.toFixed(0)+'%':''}</div>`;
+        set('out-bar', bar);
+
+        // Annual breakdown
+        let ann = '';
+        ann += row('Gross pay', money(annualGross));
+        if (k401 > 0) ann += row('&minus; 401(k) contribution', money(k401), 'violet');
+        if (hsa > 0) ann += row('&minus; HSA / FSA', money(hsa), 'violet');
+        if (health > 0) ann += row('&minus; Health premiums', money(health), 'violet');
+        ann += row('&minus; Federal income tax', money(fedTax), 'rose');
+        ann += row('&minus; Social Security (6.2%, capped)', money(ss), 'rose');
+        ann += row('&minus; Medicare (1.45% + add\'l)', money(medicare), 'rose');
+        if (posttax > 0) ann += row('&minus; Other post-tax', money(posttax));
+        ann += row('<strong>= Annual take-home</strong>', '<strong>' + money(annualTakeHome) + '</strong>', 'teal');
+        set('out-annual', ann);
+
+        // Per-paycheck breakdown
+        let pp = '';
+        pp += row('Gross per paycheck', moneyC(perPay.gross));
+        if (k401 > 0) pp += row('401(k)', moneyC(perPay.k401), 'violet');
+        pp += row('Federal income tax', moneyC(perPay.fed), 'rose');
+        pp += row('Social Security', moneyC(perPay.ss), 'rose');
+        pp += row('Medicare', moneyC(perPay.medicare), 'rose');
+        pp += row('<strong>Take-home per paycheck</strong>', '<strong>' + moneyC(perPay.takeHome) + '</strong>', 'teal');
+        pp += row('Paychecks per year', periods + '');
+        set('out-perpay', pp);
+
+        // Rates
+        set('out-rates',
+          row('Federal marginal rate', pct(marginal*100), 'amber') +
+          row('Federal effective rate', pct(effective), 'teal') +
+          row('Take-home % of gross', pct(takeHomePct), 'violet')
+        );
+
+        el('results').classList.add('visible');
+      };
+
+      window.clearForm = function() {
+        ['gross','hours','k401-pct','k401-dollar','hsa','health','posttax'].forEach(id => {
+          const e = el(id); if (e) e.value = '';
+        });
+        el('freq').value = 'annual';
+        el('filing').value = 'single';
+        el('state').value = 'none';
+        el('hourly-group').style.display = 'none';
+        el('state-notice').classList.remove('visible');
+        hideErr();
+        el('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Retaining Wall Block Calculator (Blocks, Caps, Base) | Moonlit Social Labs</title>
+  <meta name="description" content="Calculate retaining wall blocks, cap blocks, and gravel backfill from wall length × height and block size.">
+  <meta name="keywords" content="retaining wall calculator, retaining wall block calculator, landscape block calculator, retaining wall base calculator">
+  <meta name="theme-color" content="#07070d">
+  <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
+  <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/retaining-wall-calculator.html">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Free Retaining Wall Block Calculator (Blocks, Caps, Base)",
+    "description": "Calculate retaining wall blocks, cap blocks, and gravel backfill from wall length × height and block size.",
+    "url": "https://moonligh7er.github.io/developer-site/tools/retaining-wall-calculator.html",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "author": {"@type": "Person", "name": "Michael Wylde"}
+  }
+  </script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Moonlit Social Labs">
+  <meta property="og:title" content="Free Retaining Wall Block Calculator (Blocks, Caps, Base)">
+  <meta property="og:description" content="Calculate retaining wall blocks, cap blocks, and gravel backfill from wall length × height and block size.">
+  <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/retaining-wall-calculator.html">
+  <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Retaining Wall Block Calculator (Blocks, Caps, Base)">
+  <meta name="twitter:description" content="Calculate retaining wall blocks, cap blocks, and gravel backfill from wall length × height and block size.">
+  <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-SJBEYXVKZ1');
+  </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+  <style>
+    .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
+    .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
+    .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
+    .calc-results.visible { display: block; }
+    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-secondary); }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value--teal { color: var(--teal); }
+    .result-value--violet { color: var(--violet); }
+    .result-value--amber { color: var(--amber); }
+    .result-value--rose { color: var(--rose); }
+    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+    .calc-error.visible { display: block; }
+    .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
+    .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+    .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page-transition"></div>
+  <div class="page-loader"></div>
+  <a href="#main-content" class="skip-link">Skip to content</a>
+  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+
+  <nav class="nav" role="navigation" aria-label="Main">
+    <a href="../index.html" class="nav__logo">
+      <img src="../img/moonlit-logo.png" alt="Moonlit Social Labs" class="nav__logo-img">
+      <span class="logo-accent">dev</span>://portfolio
+    </a>
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">[=]</button>
+    <ul class="nav__links">
+      <li><a href="../index.html" class="nav__link">Home</a></li>
+      <li><a href="../portfolio.html" class="nav__link">Portfolio</a></li>
+      <li><a href="../free-tools.html" class="nav__link active">Free Tools</a></li>
+      <li><a href="../about.html" class="nav__link">About</a></li>
+      <li><a href="../lab.html" class="nav__link">Lab</a></li>
+      <li><a href="../connect.html" class="nav__link">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page" id="main-content">
+    <div class="ad-container" data-ad-slot="top"></div>
+
+    <div class="calc-standalone-wrap">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; Retaining Wall Block Calculator</p>
+
+      <div class="calc-card">
+        <h1>Retaining Wall Block Calculator</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter wall length and height plus block dimensions to get block count, cap blocks, and gravel backfill volume.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="units">Units</label>
+            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
+              <option value="imperial">Imperial (ft, in, cu yd)</option>
+              <option value="metric">Metric (m, cm, m³)</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="calc-subhead">Wall</p>
+<div class="form-grid">
+  <div class="form-group"><label for="wallLen">Wall Length (ft or m)</label><input type="number" id="wallLen" placeholder="20" min="0" step="any"></div>
+  <div class="form-group"><label for="wallH">Wall Height (in or cm)</label><input type="number" id="wallH" placeholder="24" min="0" step="any"></div>
+</div>
+<p class="calc-subhead">Block Size</p>
+<div class="form-grid">
+  <div class="form-group"><label for="blockL">Block Length (in or cm)</label><input type="number" id="blockL" placeholder="12" min="0" step="any"></div>
+  <div class="form-group"><label for="blockH">Block Height (in or cm)</label><input type="number" id="blockH" placeholder="4" min="0" step="any"></div>
+  <div class="form-group"><label for="waste">Waste Factor (%)</label><input type="number" id="waste" value="5" min="0" step="any"></div>
+</div>
+
+        <div class="calc-btn-row">
+          <button class="calc-btn" onclick="calc()">Calculate</button>
+          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        </div>
+        <div class="calc-error" id="err"></div>
+
+        <div class="calc-results" id="results" aria-live="polite">
+          <h4>Materials Needed</h4>
+          <div id="out-main"></div>
+          
+        </div>
+      </div>
+
+      <section class="calc-card">
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How to estimate wall blocks</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Block count = (wall length ÷ block length) × (wall height ÷ block height). This calculator adds a small waste factor for cuts at corners and ends. Cap blocks run one course on top: (wall length ÷ cap block length), typically the same length as the wall blocks. Gravel backfill fills the 6&ndash;12" space behind the wall for drainage &mdash; standard practice is 6" of ¾" clean crushed stone.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Height limits and engineering</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Retaining walls above roughly 3&ndash;4 feet commonly require engineering and permits.</strong> The exact threshold varies by jurisdiction &mdash; some require permits above 30 inches, some above 4 feet, and slopes above the wall or surcharge loads (driveways, buildings near the top) trigger stricter requirements everywhere. Above threshold, walls typically need engineered geogrid reinforcement, deeper footings, and inspection. Check your local building department before starting.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The base is the wall</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">The single most important part of a retaining wall is the base &mdash; a level, well-compacted trench of ¾" crushed gravel, typically 6&ndash;8" deep, extending 6" wider than the wall on each side. Skipping this step or building on native soil is how walls lean, crack, and fail. This calculator estimates blocks and backfill but does not size the base or footing &mdash; use manufacturer install guides or a landscape engineer.</p>
+</section>
+    </div>
+
+    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Block count only. Walls above roughly 3-4 feet commonly require engineering and permits &mdash; verify with your local building department.</p>
+    </aside>
+
+    <aside class="calc-other">
+      <p class="calc-other__title">Also Available &mdash; Other Construction Calculators</p>
+      <div class="calc-other__grid">
+        <a href="construction-calculators.html" class="calc-other__link">Suite (6 originals)</a>
+        <a href="drywall-calculator.html" class="calc-other__link">Drywall</a>
+        <a href="tile-calculator.html" class="calc-other__link">Tile</a>
+        <a href="gravel-calculator.html" class="calc-other__link">Gravel</a>
+        <a href="mulch-calculator.html" class="calc-other__link">Mulch</a>
+        <a href="roofing-calculator.html" class="calc-other__link">Roofing / Shingles</a>
+        <a href="deck-calculator.html" class="calc-other__link">Deck Materials</a>
+        <a href="stairs-calculator.html" class="calc-other__link">Stairs (Rise/Run)</a>
+        <a href="asphalt-calculator.html" class="calc-other__link">Asphalt</a>
+        <a href="insulation-r-value-calculator.html" class="calc-other__link">Insulation R-Value</a>
+        <a href="btu-hvac-calculator.html" class="calc-other__link">BTU / HVAC Sizing</a>
+        <a href="sod-calculator.html" class="calc-other__link">Sod</a>
+        <a href="retaining-wall-calculator.html" class="calc-other__link">Retaining Wall</a>
+      </div>
+    </aside>
+
+    <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__text">
+      <span class="footer-accent">Moonlit Social Labs</span> &mdash; architecture for the signal-seekers
+    </p>
+    <p style="text-align:center;margin-top:0.5rem;">
+      <a href="../privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a>
+      <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span>
+      <a href="../disclaimer.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Tool Disclaimers</a>
+    </p>
+  </footer>
+
+  <script src="../js/effects.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/player.js"></script>
+  <script>
+    (function() {
+      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
+function s(id){const e=document.getElementById(id);return e?e.value:'';}
+function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
+function ceil(x){return Math.ceil(x);}
+function ceilRound(x, step){return Math.ceil(x/step)*step;}
+function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
+function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
+function hideErr(){document.getElementById('err').classList.remove('visible');}
+function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+// Unit conversions
+const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
+function isMetric(){return document.getElementById('units')?.value==='metric';}
+function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
+function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
+function lengthUnitLabel(){return isMetric()?'m':'ft';}
+function weightUnitLabel(){return isMetric()?'kg':'lb';}
+
+      function calc(){
+  hideErr();
+  const wL=n('wallLen'), wH=n('wallH'), bL=n('blockL'), bH=n('blockH'), wf=(n('waste')||0)/100;
+  if (!wL||!wH||!bL||!bH||wL<=0||wH<=0||bL<=0||bH<=0) return showErr('Enter wall + block dimensions.');
+  const wallLenIn = isMetric() ? wL*100/IN_TO_CM : wL*12;
+  const wallHIn = isMetric() ? wH/IN_TO_CM : wH;
+  const blockLIn = isMetric() ? bL/IN_TO_CM : bL;
+  const blockHIn = isMetric() ? bH/IN_TO_CM : bH;
+  const blocksPerCourse = ceil(wallLenIn / blockLIn);
+  const courses = ceil(wallHIn / blockHIn);
+  const totalBlocks = ceil(blocksPerCourse * courses * (1+wf));
+  const capBlocks = blocksPerCourse;
+  // Gravel backfill: 6" thick behind wall length, full wall height
+  const wallLenFt = isMetric() ? wL/FT_TO_M : wL;
+  const wallHFt = isMetric() ? wH/IN_TO_CM/12 : wH/12;
+  const backfillCuFt = wallLenFt * wallHFt * 0.5; // 6" = 0.5 ft
+  const backfillCuYd = backfillCuFt / 27;
+  // Also base: 6" deep, 12" wider than wall
+  const baseCuFt = wallLenFt * 1 * 0.5;
+  const baseCuYd = baseCuFt / 27;
+  const heightFt = wallHFt;
+  const permitFlag = heightFt >= 3;
+  let h = '';
+  h += row('Wall blocks (with waste)', totalBlocks+' blocks', 'teal');
+  h += row('Cap blocks (top course)', capBlocks+' cap blocks', 'teal');
+  h += row('Blocks per course', blocksPerCourse+' × '+courses+' courses');
+  h += row('Backfill gravel (6" behind wall)', fmt(backfillCuYd,2)+' yd³', 'violet');
+  h += row('Base gravel (6" deep, 12" wider than wall)', fmt(baseCuYd,2)+' yd³', 'violet');
+  h += row('Wall height', heightFt.toFixed(2)+' ft ('+(heightFt*FT_TO_M).toFixed(2)+' m)');
+  if (permitFlag) {
+    h += row('Height flag', 'Wall ≥ 3 ft — check local permit / engineering requirements', 'amber');
+  }
+  set('out-main', h);
+  document.getElementById('results').classList.add('visible');
+}
+      window.calc = calc;
+      window.clearForm = function() {
+        ['wallLen','wallH','blockL','blockH'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('waste').value='5';
+        hideErr();
+        document.getElementById('results').classList.remove('visible');
+      };
+    })();
+  </script>
+  <script defer src="../js/ads.js"></script>
+</body>
+</html>

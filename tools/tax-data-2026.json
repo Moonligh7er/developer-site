@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "taxYear": 2026,
+    "sourceFederal": "IRS Rev. Proc. 2025-32 (issued October 2025) via Tax Foundation aggregation",
+    "sourceFederalUrl": "https://taxfoundation.org/data/all/federal/2026-tax-brackets/",
+    "sourceSSA": "Social Security Administration 2026 COLA announcement (October 2025) via Journal of Accountancy / Mercer Advisors",
+    "sourceSSAUrl": "https://www.thetaxadviser.com/news/2025/oct/social-security-wage-base-and-cola-announced-for-2026/",
+    "retrieved": "2026-09-04",
+    "note": "MFS lower brackets are identical to Single by IRS convention; MFS top bracket = MFJ / 2. MFS standard deduction = Single by convention."
+  },
+  "brackets": {
+    "single":  [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[640601,0.37]],
+    "mfj":     [[0,0.10],[24801,0.12],[100801,0.22],[211401,0.24],[403551,0.32],[512451,0.35],[768701,0.37]],
+    "mfs":     [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[384351,0.37]],
+    "hoh":     [[0,0.10],[17701,0.12],[67451,0.22],[105701,0.24],[201776,0.32],[256201,0.35],[640601,0.37]]
+  },
+  "standardDeduction": {
+    "single": 16100,
+    "mfj":    32200,
+    "mfs":    16100,
+    "hoh":    24150
+  },
+  "fica": {
+    "socialSecurityRate": 0.062,
+    "socialSecurityWageBase": 184500,
+    "medicareRate": 0.0145,
+    "additionalMedicareRate": 0.009,
+    "additionalMedicareThreshold": {
+      "single": 200000,
+      "mfj":    250000,
+      "mfs":    125000,
+      "hoh":    200000
+    }
+  },
+  "noStateIncomeTaxStates": ["AK","FL","NV","NH","SD","TN","TX","WA","WY"],
+  "noStateIncomeTaxStatesNote": "New Hampshire taxes interest/dividends only, not wages (fully phased out for wages). Washington has a capital gains tax on high earners but no wage income tax."
+}

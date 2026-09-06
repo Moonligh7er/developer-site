@@ -882,10 +882,32 @@
       'barbaric', 'savage', 'brutal', 'ruthless', 'merciless', 'heartless',
       'radical', 'extremist', 'fanatic', 'militant', 'tyrannical',
       'infuriating', 'enraging', 'gut-wrenching',
+      // Personal insults / character attacks
+      'ugly', 'hideous', 'gross', 'nasty', 'foul', 'obese', 'fat',
+      'bitch', 'bitches', 'asshole', 'assholes', 'jerk', 'jerks',
+      'loser', 'losers', 'moron', 'morons', 'imbecile', 'imbeciles',
+      'dumb', 'dumbass', 'dumbasses', 'douche', 'douchebag', 'douchebags',
+      'scumbag', 'scumbags', 'piece of shit', 'pieces of shit',
+      'garbage', 'trash', 'fool', 'fools', 'buffoon', 'buffoons',
+      'freak', 'freaks', 'weirdo', 'weirdos', 'creep', 'creeps',
+      'punk', 'punks', 'clown', 'clowns', 'joke of a', 'nobody',
+      'liar', 'liars', 'phony', 'phonies', 'fraud', 'frauds',
+      'fake', 'faker', 'hypocrite', 'hypocrites', 'coward', 'cowards',
+      'weakling', 'weaklings', 'snake', 'rat', 'snitch',
+      'hag', 'shrew', 'brute', 'ape', 'pig',
       // Dehumanizing language
       'vermin', 'cockroaches', 'thugs', 'monsters',
       'predators', 'parasites', 'scum', 'filth',
       'infestation', 'plague', 'cancer',
+      // Violence / destruction verbs (rhetoric of harm)
+      'eviscerate', 'eviscerated', 'destroy', 'destroyed', 'crush', 'crushed',
+      'annihilate', 'annihilated', 'obliterate', 'obliterated',
+      'demolish', 'demolished', 'gut', 'gutted', 'dismantle', 'dismantled',
+      'decimate', 'decimated', 'devastate', 'devastated',
+      'ruin', 'ruined', 'wipe out', 'wiped out', 'take down',
+      'take out', 'burn to the ground', 'tear apart', 'rip apart',
+      'shred', 'shredded', 'lynch', 'string up', 'hang them',
+      'purge', 'purged', 'exterminate', 'eliminate the',
       // Manufactured outrage (Filament: Manufactured Outrage)
       'slap in the face', 'war on', 'attack on', 'assault on',
       'stab in the back', 'betrayal', 'betrayed'
@@ -916,7 +938,14 @@
       'anti-American', 'un-American', 'traitor', 'traitors',
       // Fear mongering (Filament: Fear Mongering, Rally Around the Flag)
       'under siege', 'under attack', 'ticking time bomb',
-      'existential threat', 'national security threat'
+      'existential threat', 'national security threat',
+      // Ideological class framing (dog-whistles for group-based rhetoric)
+      'proletariat', 'bourgeoisie', 'the ruling class', 'the working class',
+      'class warfare', 'class enemy', 'class enemies', 'the masses',
+      'the establishment', 'the regime', 'the elite class',
+      'oppressor class', 'oppressed class', 'the parasites',
+      'the takers', 'the makers', 'the productive class',
+      'the unwashed', 'the peasants', 'the mob', 'the rabble'
     ];
 
     // 6. Urgency / Pressure / FOMO — time pressure, scarcity, dark patterns
@@ -993,6 +1022,10 @@
     const FALLACY_PATTERNS = [
       // Ad hominem (Filament: Ad Hominem)
       { pattern: /\b(you('re| are) (just|only|nothing|merely)|what (do|would) you know|typical .{1,20}(supporter|believer|fan)|people like you|of course (he|she|they) would say|consider the source)\b/gi, label: 'Ad Hominem' },
+      // Ad hominem — direct insult (you're a/an X, tolerates missing apostrophe)
+      { pattern: /\b(you('?re| are)|(he|she|they)('?s| is| are)) (a |an |so |such (a|an) |just (a|an) |really (a|an) |absolutely (a|an) |completely (a|an) |nothing but (a|an) )?(ugly|stupid|dumb|idiot|idiotic|moron|moronic|imbecile|imbecilic|loser|fool|foolish|pathetic|worthless|useless|garbage|trash|bitch|asshole|douche|douchebag|weakling|coward|cowardly|clown|joke|hypocrite|hypocritical|fraud|phony|liar|snake|rat|creep|creepy|freak|freakish|weirdo|hag|shrew|brute|ape|pig|scumbag|piece of shit|monster|monstrous|animal|thug|nazi|fascist|communist|racist|sexist|bigot|bigoted)\b/gi, label: 'Ad Hominem (Direct Insult)' },
+      // Non sequitur — insult followed by "and as a result / therefore / so"
+      { pattern: /\b(ugly|stupid|dumb|idiot|moron|loser|fool|pathetic|worthless|garbage|trash|bitch|asshole|clown|hypocrite|liar|coward|weirdo)\b[^.!?]{0,60}\b(and (as a result|therefore|thus|so)|so (they|he|she) should|therefore (they|he|she)|which is why (they|he|she))\b/gi, label: 'Non Sequitur (Insult -> Consequence)' },
       // Straw man (Filament: Straw Man)
       { pattern: /\b(so (you('re| are) saying|what you('re| are) really saying)|in other words.{0,20}(you think|you believe|you want)|that('s| is) like saying|nobody (is saying|said|believes))\b/gi, label: 'Straw Man' },
       // Appeal to authority (Filament: Authority)

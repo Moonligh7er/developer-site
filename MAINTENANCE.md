@@ -117,3 +117,18 @@ Any tool that describes tax rules, credits, or legal thresholds inline in its SE
 ## Ownership
 
 Solo — maintained by Michael Wylde (moonligh7er). If handing off, this document is the source of truth; do not trust an LLM's summary of pricing/tax/credit state without verifying against the source URLs listed here.
+
+---
+
+## `tools/lib/persuasion-detector.js` — Manipulation Detector engine (first-party bundle)
+
+**Used by:** `tools/manipulation-detector.html`
+**Source of truth:** `packages/shared/src/detector.ts` in the Filament: Persuasion Lab repo (`C:\Users\moonl\Desktop\App Development\Filament-Persuasion`). Do not edit the bundle by hand.
+**Rebuild whenever the engine changes:**
+```
+node packages/shared/scripts/build-standalone-detector.js "C:\Users\moonl\Desktop\Web Development\Developer Site\tools\lib\persuasion-detector.js"
+```
+Then run `node packages/shared/scripts/detector-smoke.js` in that repo (calibration samples must stay in band) and commit both repos.
+**Cadence:** none by date — rebuild on engine change. Quarterly: re-run the six example buttons on the page and confirm the bribe example still scores in the "severe" band and the council report scores 0.
+**Pending-entry links:** the page keeps a small `PENDING` set of technique ids whose encyclopedia entries are not yet published (they link to the encyclopedia index instead of a 404). When the Persuasion Lab batches that contain those ids ship, remove them from `PENDING`.
+**AI deep scan:** switched off via `AI_MODE.enabled = false` in the page. To switch on: fund the API, add `https://moonligh7er.github.io` to `CORS_ORIGINS` on the Persuasion Lab API host, flip the flag. No key lives in this page; the endpoint is anonymous and IP-limited to 3 scans/day.

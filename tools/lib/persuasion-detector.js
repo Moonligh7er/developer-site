@@ -31,9 +31,9 @@ const BUCKET_META = {
     propaganda: { label: 'Propaganda & Othering', description: 'Us-versus-them framing, dehumanization, conspiracy frames, thought-terminating clichés, glittering generalities.', color: '#e63946' },
     coercion: { label: 'Threats & Coercion', description: 'Conditional threats, bribes, ultimatums, reward withdrawal, and directive pressure — influence by force rather than reasons.', color: '#ff4d6d' },
     abuse: { label: 'Gaslighting & Control', description: 'Reality denial, blame reversal, minimization, isolation, guilt and obligation — the language of coercive control.', color: '#4cc9f0' },
-    deception: { label: 'Evasion & Weasel Language', description: 'Unattributed claims, non-denial denials, agentless euphemism, secrecy requests, and unearned certainty.', color: '#d4a020' },
+    deception: { label: 'Evasion, Weasel Language & Deceptive Design', description: 'Unattributed claims, non-denial denials, agentless euphemism, secrecy requests, unearned certainty, and dark patterns in checkout and subscription copy (confirmshaming, hidden fees, hard-to-cancel terms).', color: '#d4a020' },
     scam: { label: 'Scam & Social Engineering', description: 'Account alerts, prizes, payment-method demands, remote-access requests, romance-plus-money patterns.', color: '#ff9f1c' },
-    engagement: { label: 'Clickbait & Engagement Bait', description: 'Curiosity gaps, share-before-deleted, like-if-you-agree, MLM recruitment language.', color: '#2ec4b6' },
+    engagement: { label: 'Clickbait & Engagement Bait', description: 'Curiosity gaps, share-before-deleted, like-if-you-agree, MLM recruitment language, streak and referral pressure.', color: '#2ec4b6' },
 };
 // ─────────────────────────────────────────────────────────────────────────────
 // Helpers

@@ -504,7 +504,7 @@
 
     function techLink(h) {
       if (PENDING[h.techniqueId]) return '<a class="tech__link tech__link--pending" href="' + ENCYCLOPEDIA + '" target="_blank" rel="noopener" title="Entry in preparation">Encyclopedia &rarr;</a>';
-      var playbook = h.countermeasureId ? '<a class="tech__link" href="https://filament-web.vercel.app/defenses#' + esc(h.countermeasureId) + '" target="_blank" rel="noopener">Defense Playbook &rarr;</a> ' : '';
+      var playbook = h.countermeasureId ? '<a class="tech__link" href="https://filament-web.vercel.app/defenses/' + esc(h.countermeasureId) + '" target="_blank" rel="noopener">Defense Playbook &rarr;</a> ' : '';
       return playbook + '<a class="tech__link" href="' + ENCYCLOPEDIA + esc(h.techniqueId) + '" target="_blank" rel="noopener">Read the entry &rarr;</a>';
     }
 

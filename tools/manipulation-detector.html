@@ -259,7 +259,7 @@
         <span class="ai-notice__dot ai-notice__dot--amber" style="margin-left:0.75rem;"></span>
         <span class="ai-notice__title ai-notice__title--amber">AI deep scan &mdash; not yet switched on</span>
       </div>
-      <p class="ai-notice__body">Nothing you paste leaves this page. The engine is the same rule set that powers <strong>Filament: Persuasion Lab</strong>: it detects <em>structure</em> (if-you-don&rsquo;t/I-will threats, pay-then-do bribes, ultimatums) as well as vocabulary, weighs each hit by how harmful the technique is, and reports its own confidence. Honest hedging (&ldquo;perhaps&rdquo;, &ldquo;to the best of my knowledge&rdquo;) is never counted against a writer. The AI deep scan, which reads context and omission, will call Persuasion Lab&rsquo;s analysis service once it is funded.</p>
+      <p class="ai-notice__body">Nothing you paste leaves this page. The engine is the same rule set that powers <strong>Civic Filament: Persuasion Lab</strong>: it detects <em>structure</em> (if-you-don&rsquo;t/I-will threats, pay-then-do bribes, ultimatums) as well as vocabulary, weighs each hit by how harmful the technique is, and reports its own confidence. Honest hedging (&ldquo;perhaps&rdquo;, &ldquo;to the best of my knowledge&rdquo;) is never counted against a writer. The AI deep scan, which reads context and omission, will call Persuasion Lab&rsquo;s analysis service once it is funded.</p>
       <details>
         <summary>What a pattern engine cannot see &darr;</summary>
         <ul class="ai-notice__list" id="cannot-see-list"></ul>
@@ -362,7 +362,7 @@
       </div><!-- /results-panel -->
     </div><!-- /tool-container -->
 
-    <!-- CTA for Filament: Persuasion Lab -->
+    <!-- CTA for Civic Filament: Persuasion Lab -->
     <section style="max-width:700px;margin:3rem auto;padding:0 2rem;">
       <div style="background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--rose),var(--violet));"></div>
@@ -370,7 +370,7 @@
           <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e80;"></span>
           <span style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);">Active Development</span>
         </div>
-        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Filament: Persuasion Lab</h3>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Civic Filament&trade;: Persuasion Lab</h3>
         <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">The full platform: an encyclopedia of hundreds of persuasion and manipulation techniques with harm classes, citations and defenses; AI analysis that reads context; roleplay to practice resisting pressure; and campaign tools with an ethics layer built in.</p>
         <a href="https://filament-web.vercel.app/" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);">Open Persuasion Lab &rarr;</a>
       </div>
@@ -391,7 +391,7 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
 
-  <!-- Detection engine: built from packages/shared/src/detector.ts in the Filament: Persuasion Lab repo.
+  <!-- Detection engine: built from packages/shared/src/detector.ts in the Civic Filament: Persuasion Lab repo.
        Rebuild with: node packages/shared/scripts/build-standalone-detector.js "<this site>/tools/lib/persuasion-detector.js" -->
   <script src="lib/persuasion-detector.js"></script>
 
@@ -644,7 +644,7 @@
             el('ai-status').textContent = (x.body && (x.body.message || x.body.error)) || ('Deep scan unavailable (HTTP ' + x.status + ').');
             return;
           }
-          el('ai-status').textContent = 'Contextual analysis by Claude via Filament: Persuasion Lab. Treat as a second opinion, not a verdict.';
+          el('ai-status').textContent = 'Contextual analysis by Claude via Civic Filament: Persuasion Lab. Treat as a second opinion, not a verdict.';
           renderAiResult(x.body.data);
         })
         .catch(function () { el('ai-status').textContent = 'Deep scan unavailable right now. The pattern results above still stand.'; });

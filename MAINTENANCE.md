@@ -123,7 +123,7 @@ Solo — maintained by Michael Wylde (moonligh7er). If handing off, this documen
 ## `tools/lib/persuasion-detector.js` — Manipulation Detector engine (first-party bundle)
 
 **Used by:** `tools/manipulation-detector.html`
-**Source of truth:** `packages/shared/src/detector.ts` in the Filament: Persuasion Lab repo (`C:\Users\moonl\Desktop\App Development\Filament-Persuasion`). Do not edit the bundle by hand.
+**Source of truth:** `packages/shared/src/detector.ts` in the Civic Filament: Persuasion Lab repo (`C:\Users\moonl\Desktop\App Development\Filament-Persuasion`). Do not edit the bundle by hand.
 **Rebuild whenever the engine changes:**
 ```
 node packages/shared/scripts/build-standalone-detector.js "C:\Users\moonl\Desktop\Web Development\Developer Site\tools\lib\persuasion-detector.js"

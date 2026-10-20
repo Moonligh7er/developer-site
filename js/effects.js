@@ -147,9 +147,13 @@ function initPageTransition() {
     }
   }
 
-  window.addEventListener('load', revealPage);
+  // Reveal as soon as the document is parsed (this runs on DOMContentLoaded),
+  // rather than waiting on images and third-party scripts to finish loading.
+  // Reading a layout value first commits the opaque starting state, so the fade still plays.
+  if (overlay) void overlay.offsetHeight;
+  revealPage();
 
-  // Handle bfcache (back/forward navigation) — load event doesn't fire
+  // Handle bfcache (back/forward navigation) — the overlay was left covering the page
   window.addEventListener('pageshow', (e) => {
     if (e.persisted) {
       revealPage();
@@ -158,8 +162,10 @@ function initPageTransition() {
 
   // Intercept internal navigation for smooth exit
   document.addEventListener('click', (e) => {
+    // Leave new-tab / new-window / download gestures to the browser
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const link = e.target.closest('a[href]');
-    if (!link) return;
+    if (!link || link.hasAttribute('download')) return;
     const href = link.getAttribute('href');
     // Only intercept local page links
     if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || link.target === '_blank') return;
@@ -175,13 +181,16 @@ function initPageTransition() {
 // --- Initialize all effects ---
 function initEffects() {
   initPageTransition();
+  initScrollReveal();
+
+  // Ambient motion is decoration; skip it for people who've asked their OS for less
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const rainCanvas = document.getElementById('rain-canvas');
   if (rainCanvas) {
     new DigitalRain(rainCanvas);
   }
 
-  initScrollReveal();
   initGlitchEffects();
   initCursorGlow();
 }

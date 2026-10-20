@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Study: AstroDeep | dev://portfolio</title>
-  <meta name="description" content="How I built a citizen science platform that treats astrology as a testable hypothesis — with 55+ statistical engines, a falsification report, and the intellectual honesty to prove itself wrong.">
+  <meta name="description" content="How I built a citizen science platform that treats astrology as a testable hypothesis — with 55+ statistical engines and a falsification report designed to show where it might be wrong.">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-astrodeep.html">
@@ -158,14 +158,6 @@
       .case-study__meta { gap: 1rem; }
     }
   </style>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -195,9 +187,9 @@
         <p class="label">Case Study</p>
         <h1 class="heading-xl glitch">AstroDeep</h1>
         <p class="text-body mt-2" style="max-width: 55ch;">
-          The first astrology app built to prove itself wrong. A citizen science platform
-          with <span class="highlight">55+ statistical engines</span>, a falsification report,
-          and the intellectual honesty to show you what the data actually says.
+          An astrology app built to test itself &mdash; including the possibility that it's wrong.
+          A citizen science platform with <span class="highlight">55+ statistical engines</span>,
+          a falsification report, and a commitment to showing you what the data actually says.
         </p>
         <div class="case-study__meta">
           <div>Status <span>In Development</span></div>
@@ -213,12 +205,12 @@
         <p class="case-study__section-label">The Question</p>
         <h2 class="case-study__h2">What if you actually tested it?</h2>
         <p>
-          Astrology has 4,000 years of tradition and zero controlled trials. Its critics
-          dismiss it without testing it. Its believers accept it without questioning it. Both
-          sides are intellectually lazy.
+          Astrology has 4,000 years of tradition and remarkably few controlled trials. Many
+          critics dismiss it without testing it. Many believers accept it without questioning
+          it. Neither posture gets anyone closer to an answer.
         </p>
         <p>
-          I wanted to build the instrument that could actually answer the question:
+          I wanted to build an instrument that could help answer the question:
           <em class="highlight">do astrological models predict personality and mood better than chance?</em>
           Not with opinion. With data. With blind tests. With pre-registered predictions
           and falsification reports that explicitly show you where the theory breaks down.
@@ -280,9 +272,9 @@
             <p class="layer__tag">Established &mdash; Strong Evidence</p>
             <p class="layer__title">Layer 1: Photoperiod Imprinting</p>
             <p class="layer__desc">
-              Birth season's day length permanently calibrates the suprachiasmatic nucleus &mdash;
-              imprinting dopamine, serotonin, and melatonin systems. Predicts chronotype,
-              seasonal sensitivity, and mood patterns. Replicated in Nature Neuroscience
+              Birth season's day length appears to calibrate the suprachiasmatic nucleus &mdash;
+              imprinting dopamine, serotonin, and melatonin systems. Linked to chronotype,
+              seasonal sensitivity, and mood patterns. Shown in mice in Nature Neuroscience
               (Ciarleglio et al., 2011). This is real biology that happens to align with the
               tropical zodiac calendar.
             </p>
@@ -293,8 +285,8 @@
             <p class="layer__desc">
               Different ecliptic sectors face different galactic radiation levels. Sidereal
               position indicates which sector at birth. Could influence radiation exposure
-              and immune programming. No direct evidence yet, but the mechanism is testable
-              and physically real.
+              and immune programming. No direct evidence yet, but the mechanism is physically
+              plausible and testable.
             </p>
           </div>
           <div class="layer layer--correlational">
@@ -308,7 +300,7 @@
           </div>
         </div>
         <p class="dim">
-          Every analysis in the app is tagged with its evidence grade. The user always knows
+          Every analysis in the app is tagged with its evidence grade, so the user can see
           what's established science, what's plausible speculation, and what's pure tradition.
         </p>
       </section>
@@ -329,7 +321,7 @@
             <strong>Multiple testing correction at scale</strong>
             <span>Each user can generate 60+ statistical tests (12 signs &times; 5 personality traits).
             Without correction, you'd expect ~3 false positives by chance alone. Benjamini-Hochberg
-            FDR control across all categories prevents the app from lying to users with
+            FDR control across all categories is there to keep the app from showing users
             noise dressed up as signal.</span>
           </li>
           <li>
@@ -343,8 +335,8 @@
             <strong>Small-N time series analysis</strong>
             <span>Users have 20&ndash;100 daily mood ratings, not thousands. Granger causality testing
             needs careful lag selection with limited data. Solution: multiple lag windows,
-            Mann-Whitney U when normality fails, explicit uncertainty reporting. The app
-            never overstates what small samples can support.</span>
+            Mann-Whitney U when normality fails, explicit uncertainty reporting. The aim is
+            to never overstate what small samples can support.</span>
           </li>
           <li>
             <strong>Confirmation bias by design</strong>
@@ -359,10 +351,10 @@
 
       <!-- The Falsification Engine -->
       <section class="case-study__section reveal">
-        <p class="case-study__section-label">The Feature No Other App Would Build</p>
+        <p class="case-study__section-label">The Feature Most Apps Would Skip</p>
         <h2 class="case-study__h2">The falsification report</h2>
         <p>
-          This is the feature I'm most proud of and the one no astrology company would ever ship.
+          This is the feature I'm most proud of, and probably not one a typical astrology company would choose to ship.
           The falsification engine reads every testable prediction the app has made for you,
           checks what your actual data contradicts, and presents severity-graded disconfirmations.
         </p>
@@ -373,17 +365,17 @@
         </p>
         <p>
           The app doesn't just tell you what's working. It tells you what's failing.
-          Every claim is grounded in your data, not in tradition. If your Sun sign traits
+          Each check is grounded in your data, not in tradition. If your Sun sign traits
           don't match your Big Five scores, you'll see it in black and white.
         </p>
         <div class="verdict">
           <p>
-            Most apps sell you confirmation. This one sells you the truth &mdash; and trusts
-            that the truth is more interesting than comfort.
+            Most apps sell you confirmation. This one tries to show you what your data
+            actually says &mdash; and trusts that it's more interesting than comfort.
           </p>
           <p class="dim">
-            An astrology app with a falsification engine is either the most honest thing
-            in the category or the worst business decision. Probably both.
+            An astrology app with a falsification engine is either an unusually honest idea
+            or a questionable business decision. Possibly both.
           </p>
         </div>
       </section>
@@ -411,7 +403,7 @@
           every sign by its worst tendencies with a tone that's equal parts devastating and hilarious.
         </p>
         <p>
-          Most astrology apps only give you the flattering version. But psychology teaches you
+          Many astrology apps give you only the flattering version. But psychology teaches you
           that personality has shadow. Every strength has a pathological extreme. Every gift
           has a cost. Offering both Solar and Void isn't a gimmick &mdash; it's a commitment to
           psychological honesty. You should be able to see your chart from the angle that
@@ -438,10 +430,10 @@
           Building something designed to disprove its own premise is a strange experience.
           Every feature I added made the app more useful <em>and</em> more likely to show
           that the thing it's measuring might not exist. That tension turned out to be
-          the product's greatest strength.
+          the most interesting part of the project.
         </p>
         <p>
-          The three-layer model was the breakthrough. Instead of asking "is astrology real?"
+          The three-layer model was the turning point. Instead of asking "is astrology real?"
           &mdash; a question too blunt to be useful &mdash; the app asks "which specific mechanisms,
           if any, produce measurable effects?" Photoperiod imprinting is real science.
           Geomagnetic modulation is measurable. Traditional transit astrology is testable.
@@ -473,7 +465,7 @@
           genuinely useful application.
         </p>
         <p>
-          The biological layers alone are worth the download. Photoperiod imprinting is established
+          The biological layers could stand on their own. Photoperiod imprinting is established
           neuroscience &mdash; understanding how your birth season calibrated your circadian system,
           your chronotype, your seasonal sensitivity patterns. That data is real, it's personal,
           and most people have never seen it. Layer the emerging research on top &mdash; geomagnetic
@@ -483,7 +475,7 @@
         </p>
         <p>
           Then there's the astrology suite itself. For the millions of people who work with
-          astrology as a daily practice, AstroDeep is a serious tool: natal charts, transit
+          astrology as a daily practice, AstroDeep is designed to be a serious tool: natal charts, transit
           tracking, synastry, progressions, astrocartography, AI-powered interpretations in two
           distinct voices. The validation engine runs quietly in the background. You don't have
           to care about the research to get a full-featured astrology experience. But if you're
@@ -541,13 +533,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

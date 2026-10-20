@@ -8,8 +8,9 @@
   'use strict';
 
   // ── SWITCH PROVIDER HERE ──────────────────────────────
-  // 'adsterra' (live) | 'adsense' (pending approval) | 'none'
-  const AD_PROVIDER = 'adsterra';
+  // 'adsterra' | 'adsense' (pending approval) | 'none'
+  // Off since 2026-10: the site runs ad- and cookie-free. Empty slots collapse via CSS.
+  const AD_PROVIDER = 'none';
   // ──────────────────────────────────────────────────────
 
   const PROVIDERS = {

@@ -32,14 +32,6 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preload" href="js/effects.js" as="script">
   <link rel="preload" href="js/main.js" as="script">
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -66,65 +58,27 @@
       <div class="reveal">
         <p class="label">Contact</p>
         <h1 class="heading-xl glitch">Connect</h1>
-        <p class="text-body mt-2 text-dim">Multiple frequencies available. Choose your wavelength.</p>
+        <p class="text-body mt-2 text-dim">A question, an idea, or a way to help &mdash; all welcome.</p>
       </div>
     </section>
 
     <section class="section container" style="padding-top: 0;">
 
       <!-- Tabs -->
-      <div class="tabs" data-tabs="connect">
-        <button class="tab active" data-target="social">Social</button>
-        <button class="tab" data-target="contact">Contact</button>
-        <button class="tab" data-target="collab">Collaborate</button>
-        <button class="tab" data-target="partner">Partner</button>
-        <button class="tab" data-target="invest">Invest</button>
-      </div>
-
-      <!-- SOCIAL -->
-      <div class="tab-content active" id="social">
-        <div class="reveal">
-          <p class="heading-md mb-4">Find me elsewhere.</p>
-          <div class="social-grid stagger">
-            <a href="https://github.com/Moonligh7er" class="social-link" target="_blank" rel="noopener">
-              <span class="social-link__icon">&#9670;</span>
-              <div>
-                <p class="social-link__label">GitHub</p>
-                <p class="social-link__handle">@Moonligh7er</p>
-              </div>
-            </a>
-            <span class="social-link" style="opacity:0.35;cursor:default;">
-              <span class="social-link__icon">&#9670;</span>
-              <div>
-                <p class="social-link__label">LinkedIn</p>
-                <p class="social-link__handle">Coming soon</p>
-              </div>
-            </span>
-            <span class="social-link" style="opacity:0.35;cursor:default;">
-              <span class="social-link__icon">&#9670;</span>
-              <div>
-                <p class="social-link__label">Twitter / X</p>
-                <p class="social-link__handle">Coming soon</p>
-              </div>
-            </span>
-            <span class="social-link" style="opacity:0.35;cursor:default;">
-              <span class="social-link__icon">&#9670;</span>
-              <div>
-                <p class="social-link__label">Discord</p>
-                <p class="social-link__handle">Coming soon</p>
-              </div>
-            </span>
-          </div>
-        </div>
+      <div class="tabs" data-tabs="connect" role="tablist" aria-label="Ways to connect">
+        <button class="tab active" id="tab-contact" data-target="contact" role="tab" aria-selected="true" aria-controls="contact">Contact</button>
+        <button class="tab" id="tab-collab" data-target="collab" role="tab" aria-selected="false" aria-controls="collab" tabindex="-1">Collaborate</button>
+        <button class="tab" id="tab-support" data-target="support" role="tab" aria-selected="false" aria-controls="support" tabindex="-1">Support &amp; partner</button>
       </div>
 
       <!-- CONTACT -->
-      <div class="tab-content" id="contact">
+      <div class="tab-content active" id="contact" role="tabpanel" aria-labelledby="tab-contact">
         <div class="reveal">
           <p class="heading-md mb-4">Send a message.</p>
           <p class="text-body mb-4 text-dim">
             For general inquiries, project questions, or if you've detected an anomaly
-            you think I should know about.
+            you think I should know about. You can also find the code side of things on
+            <a href="https://github.com/Moonligh7er" target="_blank" rel="noopener" style="color: var(--teal);">GitHub @Moonligh7er</a>.
           </p>
           <form class="connect-form" action="https://formspree.io/f/xqeyngwv" method="POST">
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
@@ -152,7 +106,7 @@
       </div>
 
       <!-- COLLABORATE -->
-      <div class="tab-content" id="collab">
+      <div class="tab-content" id="collab" role="tabpanel" aria-labelledby="tab-collab">
         <div class="reveal">
           <p class="heading-md mb-4">Build together.</p>
           <p class="text-body mb-2">
@@ -250,150 +204,71 @@
         </div>
       </div>
 
-      <!-- PARTNER -->
-      <div class="tab-content" id="partner">
+      <!-- SUPPORT & PARTNER -->
+      <div class="tab-content" id="support" role="tabpanel" aria-labelledby="tab-support">
         <div class="reveal">
-          <p class="heading-md mb-4">Strategic alignment.</p>
-          <p class="text-body mb-2">
-            For businesses, organizations, or individuals interested in licensing,
-            integration partnerships, investment, or strategic collaboration around
-            any of the active projects.
-          </p>
-          <p class="text-body text-dim mb-4">
-            I'm building a constellation of tools that share underlying architecture
-            and philosophy. Partnership opportunities exist at both the individual
-            product level and across the ecosystem.
+          <p class="heading-md mb-4">Help it grow.</p>
+          <p class="text-body mb-2" style="max-width: 62ch;">
+            Moonlit Social Labs is one person, early, and building in public-ish. If something here
+            resonates and you&rsquo;d like to help, there are a few ways in &mdash; from a coffee-sized
+            tip to a real partnership. Whatever the size, you&rsquo;ll get a straight account of
+            what&rsquo;s built, what&rsquo;s live, and what isn&rsquo;t yet.
           </p>
 
-          <div class="card-grid mb-4" style="max-width: 700px;">
+          <div class="card-grid mb-4 mt-4" style="max-width: 760px;">
             <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Integration</p>
-              <p class="card__desc" style="margin-bottom: 0;">Embed or connect with one of the active projects via API or white-label.</p>
+              <p class="card__category">Chip in</p>
+              <p class="card__desc" style="margin-bottom: 0.75rem;">Small, direct support keeps servers on and experiments running.</p>
+              <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="card__link">Ko-fi</a>
             </div>
             <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Licensing</p>
-              <p class="card__desc" style="margin-bottom: 0;">Enterprise or institutional licensing for specific applications.</p>
+              <p class="card__category">Grants &middot; research</p>
+              <p class="card__desc" style="margin-bottom: 0;">Several projects sit squarely in public-interest themes &mdash; civic tech, AI safety, behavioral science. Introductions and co-applications welcome.</p>
             </div>
             <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Investment</p>
-              <p class="card__desc" style="margin-bottom: 0.75rem;">Funding conversations for scaling individual products or the full portfolio.</p>
-              <a href="#invest" onclick="document.querySelector('[data-target=&quot;invest&quot;]').click(); window.scrollTo({top: 0, behavior: 'smooth'}); return false;" style="font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal); text-decoration: none;">Open Invest Tab &rarr;</a>
+              <p class="card__category">Partner</p>
+              <p class="card__desc" style="margin-bottom: 0;">Integrations, institutional licensing, pilots with a classroom, newsroom, or bar program &mdash; anywhere a tool here could do real work.</p>
             </div>
             <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Strategic</p>
-              <p class="card__desc" style="margin-bottom: 0;">Joint ventures, distribution partnerships, or ecosystem alignment.</p>
+              <p class="card__category">Invest</p>
+              <p class="card__desc" style="margin-bottom: 0;">Early conversations with people who care about the problems as much as the returns, whether that&rsquo;s one project or the studio.</p>
             </div>
           </div>
 
           <form class="connect-form" action="https://formspree.io/f/xqeyngwv" method="POST">
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-            <input type="hidden" name="_subject" value="Partnership inquiry from developer site">
+            <input type="hidden" name="_subject" value="Support / partnership note from developer site">
             <input type="hidden" name="_next" value="https://moonligh7er.github.io/developer-site/thanks.html">
-            <input type="hidden" name="form_type" value="partnership">
+            <input type="hidden" name="form_type" value="support">
             <div class="form-group">
-              <label for="partner-name">Name</label>
-              <input type="text" id="partner-name" name="name" placeholder="Your name" autocomplete="name" required>
+              <label for="support-name">Name</label>
+              <input type="text" id="support-name" name="name" placeholder="Your name" autocomplete="name" required>
             </div>
             <div class="form-group">
-              <label for="partner-org">Organization</label>
-              <input type="text" id="partner-org" name="organization" placeholder="Company or organization">
+              <label for="support-org">Organization (optional)</label>
+              <input type="text" id="support-org" name="organization" placeholder="Foundation, company, fund, school&hellip;" autocomplete="organization">
             </div>
             <div class="form-group">
-              <label for="partner-email">Email</label>
-              <input type="email" id="partner-email" name="email" placeholder="your@email.com" autocomplete="email" required>
+              <label for="support-email">Email</label>
+              <input type="email" id="support-email" name="email" placeholder="your@email.com" autocomplete="email" required>
             </div>
             <div class="form-group">
-              <label for="partner-type">Partnership Type</label>
-              <select id="partner-type" name="partnership_type">
-                <option value="">Select type...</option>
-                <option value="integration">Integration</option>
+              <label for="support-kind">What are you thinking?</label>
+              <select id="support-kind" name="support_type">
+                <option value="">Choose one&hellip;</option>
+                <option value="grant">Grant or research collaboration</option>
+                <option value="partnership">Partnership, pilot, or integration</option>
                 <option value="licensing">Licensing</option>
                 <option value="investment">Investment</option>
-                <option value="strategic">Strategic Partnership</option>
-                <option value="other">Other</option>
+                <option value="donation">Donation or sponsorship</option>
+                <option value="other">Something else</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="partner-message">Proposal</label>
-              <textarea id="partner-message" name="message" placeholder="Describe the partnership opportunity..." required></textarea>
-            </div>
-            <button type="submit" class="btn btn--primary">Send Proposal</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- INVEST -->
-      <div class="tab-content" id="invest">
-        <div class="reveal">
-          <p class="heading-md mb-4">Back the work.</p>
-          <p class="text-body mb-2">
-            A solo developer shipping a constellation of 20+ applications &mdash; OSINT,
-            AI safety, civic tech, behavioral science, creative tools, and more &mdash; all
-            built on a shared architecture and a coherent philosophy. Each product is a
-            standalone investment opportunity. The ecosystem is the multiplier.
-          </p>
-          <p class="text-body text-dim mb-4">
-            Angel checks, pre-seed, seed rounds, revenue-based financing, and grant
-            introductions all welcome. I'll send a data room and a walkthrough for any
-            serious conversation.
-          </p>
-
-          <div class="card-grid mb-4" style="max-width: 700px;">
-            <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Individual Product</p>
-              <p class="card__desc" style="margin-bottom: 0;">Back a single Venture (PsyStat Lab, The Service Well, Forked Tongue) or a Civic &amp; Research Instrument (TheoLink, Hyper-Scry, The Signal Index, Filament, Fault / Line) &mdash; each is ready for its own round.</p>
-            </div>
-            <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Portfolio Thesis</p>
-              <p class="card__desc" style="margin-bottom: 0;">Invest in the constellation. Shared infrastructure, cross-product data flywheels, and a single operator with range.</p>
-            </div>
-            <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Angel &middot; Pre-Seed</p>
-              <p class="card__desc" style="margin-bottom: 0;">Small early checks with high conviction. Direct line to the builder. No middle layer.</p>
-            </div>
-            <div class="card" style="padding: 1.5rem;">
-              <p class="card__category">Grants &middot; Research</p>
-              <p class="card__desc" style="margin-bottom: 0;">Several projects align with AI safety, civic tech, and public-interest research grant themes. Intros welcome.</p>
-            </div>
-          </div>
-
-          <form class="connect-form" action="https://formspree.io/f/xqeyngwv" method="POST">
-            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-            <input type="hidden" name="_subject" value="Investment inquiry from developer site">
-            <input type="hidden" name="_next" value="https://moonligh7er.github.io/developer-site/thanks.html">
-            <input type="hidden" name="form_type" value="investment">
-            <div class="form-group">
-              <label for="invest-name">Name</label>
-              <input type="text" id="invest-name" name="name" placeholder="Your name" autocomplete="name" required>
-            </div>
-            <div class="form-group">
-              <label for="invest-firm">Firm or Fund</label>
-              <input type="text" id="invest-firm" name="firm" placeholder="Fund, syndicate, or solo angel">
-            </div>
-            <div class="form-group">
-              <label for="invest-email">Email</label>
-              <input type="email" id="invest-email" name="email" placeholder="your@email.com" autocomplete="email" required>
-            </div>
-            <div class="form-group">
-              <label for="invest-stage">Check Stage</label>
-              <select id="invest-stage" name="stage">
-                <option value="">Select stage...</option>
-                <option value="friends-family">Friends &amp; Family</option>
-                <option value="angel">Angel</option>
-                <option value="pre-seed">Pre-Seed</option>
-                <option value="seed">Seed</option>
-                <option value="series-a">Series A</option>
-                <option value="revenue-based">Revenue-Based</option>
-                <option value="grant">Grant / Non-Dilutive</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="invest-interest">Primary Interest</label>
-              <select id="invest-interest" name="interest">
-                <option value="">Select focus...</option>
-                <option value="single-product">Single Product</option>
-                <option value="portfolio-thesis">Portfolio Thesis</option>
+              <label for="support-focus">Which work?</label>
+              <select id="support-focus" name="interest">
+                <option value="">Anything in particular?</option>
+                <option value="studio">The studio as a whole</option>
                 <option value="learning">Learning &amp; Mastery / PsyStat Lab &middot; Forked Tongue &middot; StudyCircuit &middot; Praxical Psych &middot; The Service Well</option>
                 <option value="civic-research">Civic &amp; Research Instruments / DDN &middot; TheoLink &middot; Hyper-Scry &middot; Filament &middot; Signal Index &middot; Fault Line &middot; AUSPEX</option>
                 <option value="inner-life">Inner Life &amp; Everyday / Liminaut Labs &middot; Synchro-City &middot; ShadeSense &middot; Spirit Lodge &middot; Entropic Tarot &middot; AstroDeep &middot; Thought+Form Planner</option>
@@ -403,14 +278,10 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="invest-check">Typical Check Size (optional)</label>
-              <input type="text" id="invest-check" name="check_size" placeholder="$25k, $100k, $500k+, etc.">
+              <label for="support-message">Message</label>
+              <textarea id="support-message" name="message" placeholder="What caught your attention, and what would you like to explore?" required></textarea>
             </div>
-            <div class="form-group">
-              <label for="invest-message">Thesis &amp; Questions</label>
-              <textarea id="invest-message" name="message" placeholder="What caught your attention? What would you want to see in a data room?" required></textarea>
-            </div>
-            <button type="submit" class="btn btn--primary">Send Message</button>
+            <button type="submit" class="btn btn--primary">Send</button>
           </form>
         </div>
       </div>
@@ -426,13 +297,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

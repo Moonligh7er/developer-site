@@ -13,7 +13,7 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Case Study: Synchro-City™ (Digital Serendipity) — Bluetooth-Powered Social Discovery",
-    "description": "How one developer built a proximity social discovery app using over 30 psychological frameworks, computed entirely on-device, with zero-knowledge architecture.",
+    "description": "How one developer built a proximity social discovery app using over 30 psychological frameworks, computed on-device, with an architecture designed so the server learns as little as possible.",
     "author": {"@type": "Person", "name": "Michael Wylde"},
     "url": "https://moonligh7er.github.io/developer-site/case-study-serendipity.html",
     "image": "https://moonligh7er.github.io/developer-site/og-image.png"
@@ -131,14 +131,6 @@
       .case-study__meta { gap: 1rem; }
     }
   </style>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -168,7 +160,7 @@
         <h1 class="heading-xl glitch">Synchro-City&trade;</h1>
         <p class="case-study__subtitle" style="font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); font-style: italic; margin-top: 0.25rem; margin-bottom: 1rem;">Digital Serendipity</p>
         <p class="text-body mt-2" style="max-width: 55ch;">
-          Bluetooth-powered social discovery. Matches compatible people within 50 meters
+          Bluetooth-powered social discovery. Designed to match compatible people within 50 meters
           using over 30 psychological frameworks of resonance &mdash; computed locally,
           never transmitted. Real encounters instead of swipe theater. Built for builders,
           introverts, and neurodivergent thinkers.
@@ -188,8 +180,8 @@
           The US Surgeon General called it an epidemic. More than half of adults describe
           themselves as lonely. One in four have zero close friends &mdash; double the rate
           from 1990. Time spent at "third places" &mdash; the cafes, bookstores, and bars
-          where strangers used to become friends &mdash; has collapsed. And the apps built
-          to solve this have made it worse.
+          where strangers used to become friends &mdash; has collapsed. And many of the apps
+          built to solve this have arguably made it worse.
         </p>
         <p>
           Dating apps reduce human compatibility to a photo and a swipe. LinkedIn reduces
@@ -198,10 +190,10 @@
           in the same cafe as you last Tuesday. Neither of you knew.
         </p>
         <p>
-          The technology to fix this has existed for a decade. Bluetooth Low Energy in
+          The technology to help has existed for a decade. Bluetooth Low Energy in
           every pocket. Enough compute power on a mid-range phone to run real psychological
-          models locally. What didn't exist was the will to build something that respects
-          the user instead of farming them.
+          models locally. What seemed to be missing was an app built to respect the user
+          instead of farming them.
         </p>
       </section>
 
@@ -243,7 +235,7 @@
           </div>
           <div class="stat-block">
             <p class="stat-block__number">$0</p>
-            <p class="stat-block__label">Free Tier, Forever</p>
+            <p class="stat-block__label">Free Tier</p>
           </div>
         </div>
       </section>
@@ -274,10 +266,11 @@
       <!-- How Matching Works -->
       <section class="case-study__section reveal">
         <p class="case-study__section-label">How Matching Works</p>
-        <h2 class="case-study__h2">Over 30 frameworks. None of your data on our servers.</h2>
+        <h2 class="case-study__h2">Over 30 frameworks, computed on your phone.</h2>
         <p>
-          The resonance engine draws on over 30 psychological frameworks that span fifty
-          years of validated research. Big Five personality. Schwartz values theory.
+          The resonance engine draws on over 30 psychological frameworks spanning fifty
+          years of research and theory &mdash; some strongly validated, some more speculative
+          and treated as lenses rather than verdicts. Big Five personality. Schwartz values theory.
           Jungian cognitive functions. Attachment theory. Kegan developmental stages.
           Polyvagal theory. Flow theory. Broaden-and-build. Self-determination theory.
           Interpersonal circumplex. Complementarity hypothesis. Optional astrology for
@@ -305,7 +298,7 @@
         <p class="case-study__section-label">Privacy as Architecture</p>
         <h2 class="case-study__h2">Safety isn't a feature &mdash; it's the foundation</h2>
         <p>
-          Beacon IDs rotate every fifteen minutes so no one can follow a device across a
+          Beacon IDs rotate every fifteen minutes so a device is hard to follow across a
           city. Resonance scoring happens on-device, so the server has nothing worth
           subpoenaing. Communications use X25519 key exchange for end-to-end encryption
           &mdash; meaning Moonlit Social Labs can't read your messages even if compelled.
@@ -457,20 +450,20 @@
         <p class="case-study__section-label">Verdict</p>
         <h2 class="case-study__h2">The anti-swipe</h2>
         <p>
-          Synchro-City is a bet that people are hungry for something every existing
-          social app has trained them to forget: that the most important encounters of
+          Synchro-City is a bet that people are hungry for something most social apps
+          have trained them to forget: that the most important encounters of
           their life are likely to happen within arm's reach of someone they don't know
           yet. Not in a feed. Not in a DM. In a room. With signal.
         </p>
         <p>
-          The platforms that profit from attention will never build this. The economics
+          The platforms that profit from attention are unlikely to build this. The economics
           don't work when the product is a two-minute conversation that happens offline.
-          So it had to be built by someone who thinks the loneliness epidemic is a
+          So it's being built by someone who thinks the loneliness epidemic is a
           design failure, not a market opportunity.
         </p>
         <p class="dim">
-          Launched to web. Mobile in development. The mesh is forming &mdash; the only
-          question is whether you're broadcasting.
+          Launched to web. Mobile in development. The mesh is just starting to form &mdash;
+          and it only works if people show up and broadcast.
         </p>
       </section>
 
@@ -480,13 +473,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

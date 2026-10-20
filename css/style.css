@@ -22,42 +22,8 @@
 }
 
 /* --- Minimum Font Size --- */
-*, *::before, *::after {
-  font-size: max(inherit, 12px);
-}
 html { font-size: max(100%, 12px); }
 body { font-size: max(1rem, 12px); }
-
-/* Override for elements that intentionally use smaller sizes */
-.stat-block__label,
-.case-study__section-label,
-.case-study__meta,
-.stack-section__title,
-.tag,
-.tech-tag,
-.card__category,
-.status {
-  font-size: max(0.6rem, 12px);
-}
-
-/* --- Ko-fi Footer Button --- */
-.kofi-btn {
-  display: inline-block;
-  font-family: var(--font-mono, monospace);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #07070d;
-  background: linear-gradient(135deg, #00ffc8, #a855f7);
-  padding: 0.6rem 1.5rem;
-  text-decoration: none;
-  transition: box-shadow 0.3s, transform 0.2s;
-  font-weight: 500;
-}
-.kofi-btn:hover {
-  box-shadow: 0 0 20px rgba(0,255,200,0.4), 0 0 40px rgba(168,85,247,0.2);
-  transform: translateY(-1px);
-}
 
 /* --- Page Transition --- */
 .page-transition {
@@ -68,10 +34,14 @@ body { font-size: max(1rem, 12px); }
   opacity: 1;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  /* Failsafe: lift on its own if the script never runs */
+  animation: page-transition-failsafe 0.3s ease 2s forwards;
 }
 .page-transition.loaded {
   opacity: 0;
+  animation: none;
 }
+@keyframes page-transition-failsafe { to { opacity: 0; } }
 
 /* --- Loading Indicator --- */
 .page-loader {
@@ -106,8 +76,9 @@ body { font-size: max(1rem, 12px); }
 
   /* Text */
   --text-primary: #c8c8d4;
-  --text-secondary: #7a7a90;
-  --text-dim: #4a4a60;
+  --text-secondary: #8e8ea6;
+  --text-dim: #7c7c94;
+  --text-faint: #4a4a60;
   --text-bright: #e8e8f0;
 
   /* Accents */
@@ -365,15 +336,17 @@ body::before {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding-inline: 2rem;
 }
 
+/* .section and .container share elements: sections own the vertical padding,
+   containers the horizontal, so neither uses the padding shorthand */
 .section {
-  padding: 5rem 0;
+  padding-block: 5rem;
 }
 
 .section--hero {
-  padding: 8rem 0 5rem;
+  padding-block: 8rem 5rem;
   position: relative;
 }
 
@@ -445,7 +418,7 @@ body::before {
 
 .label::before {
   content: '//';
-  color: var(--text-dim);
+  color: var(--text-faint);
 }
 
 /* ============================================
@@ -702,37 +675,7 @@ body::before {
 .card--amber .card__category { color: var(--amber); }
 .card--rose .card__category { color: var(--rose); }
 
-/* --- New card layout: top-right status + platform/extras footer --- */
-.card__status-top {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-family: var(--font-mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  z-index: 2;
-}
-.card__status-top::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--amber);
-  box-shadow: 0 0 6px rgba(212,160,32,0.7);
-  animation: pulse-amber 2s ease-in-out infinite;
-}
-@keyframes pulse-amber {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.card__category { padding-right: 9rem; }
-
+/* --- Card footer: platform links + extras --- */
 .card__footer {
   display: flex;
   justify-content: space-between;
@@ -782,14 +725,54 @@ a.card__platform:hover {
   gap: 0.75rem;
 }
 
-/* N/A = span, not a link */
+.card__platform-domain {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--text-dim);
+}
+
+/* No public link: a ring that says where the project actually is */
 span.card__platform {
   color: var(--text-dim);
-  opacity: 0.45;
 }
-span.card__platform::before {
-  background: #3a3a4a;
+span.card__platform::before,
+.stage-legend span::before {
+  background: transparent;
+  border: 1.5px solid var(--text-dim);
   box-shadow: none;
+}
+[data-stage="concept"]::before { border-style: dotted; }
+[data-stage="offline"]::before { border-color: var(--amber); }
+
+/* Status key under the portfolio title */
+.stage-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.stage-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.stage-legend span::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.stage-legend [data-stage="live"]::before {
+  background: #22c55e;
+  border-color: #22c55e;
+  box-shadow: 0 0 8px rgba(34,197,94,0.6);
 }
 
 .card__extras {
@@ -936,7 +919,7 @@ span.card__platform::before {
   content: '\25B8';
   position: absolute;
   left: 0;
-  color: var(--text-dim);
+  color: var(--text-faint);
 }
 
 @media (max-width: 768px) {
@@ -1019,7 +1002,7 @@ span.card__platform::before {
   font-size: 1.25rem;
   width: 2rem;
   text-align: center;
-  color: var(--text-dim);
+  color: var(--text-faint);
 }
 
 .social-link__label {
@@ -1093,6 +1076,9 @@ span.card__platform::before {
   position: relative;
   display: inline-block;
 }
+
+/* Page titles get their own line; inline-block let them sit beside the .label above */
+.heading-xl.glitch { display: block; }
 
 .glitch:hover {
   animation: glitch-text 0.3s ease;
@@ -1173,6 +1159,36 @@ span.card__platform::before {
   color: var(--text-secondary);
 }
 
+.footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem 0.9rem;
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+.footer__links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.footer__links a:hover { color: var(--teal); }
+.footer__links .footer__support { color: var(--text-secondary); }
+.footer__links .footer__support:hover { color: #a855f7; }
+.footer__links span { color: var(--text-faint); }
+
+.footer__fine {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+
 /* ============================================
    UTILITIES
    ============================================ */
@@ -1235,13 +1251,25 @@ span.card__platform::before {
   transform: translateY(0);
 }
 
+/* Respect the OS "reduce motion" setting: content appears in place, no drift or flicker */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .stagger > * { opacity: 1; transform: none; }
+}
+
 /* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
-  .section { padding: 3rem 0; }
-  .section--hero { padding: 5rem 0 3rem; }
-  .container { padding: 0 1.25rem; }
+  .section { padding-block: 3rem; }
+  .section--hero { padding-block: 5rem 3rem; }
+  .container { padding-inline: 1.25rem; }
   .card-grid { grid-template-columns: 1fr; }
   .hero__line { display: none; }
 
@@ -1280,8 +1308,32 @@ span.card__platform::before {
 
 /* Small phones */
 @media (max-width: 380px) {
-  .container { padding: 0 1rem; }
+  .container { padding-inline: 1rem; }
   .nav { padding: 0 1rem; }
   .nav__logo { font-size: 0.75rem; }
   .card { padding: 1.5rem; }
+}
+
+/* ============================================
+   LEGIBILITY FLOOR
+   Small mono labels keep the instrument-panel feel
+   but never drop below ~11px
+   ============================================ */
+.tag,
+.card__category,
+.card__platform,
+.card__extras .card__link,
+.label,
+.status,
+.lab-entry__date,
+.footer__text {
+  font-size: max(0.7rem, 11px);
+}
+
+/* Lunar readout (js/main.js): real values, so keep the symbols as written */
+.coord-display {
+  font-family: var(--font-mono);
+  text-transform: none;
+  letter-spacing: 0.06em;
+  cursor: help;
 }

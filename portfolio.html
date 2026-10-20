@@ -34,14 +34,6 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="preload" href="js/effects.js" as="script">
   <link rel="preload" href="js/main.js" as="script">
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -69,6 +61,12 @@
         <p class="label">Catalog</p>
         <h1 class="heading-xl glitch">Portfolio</h1>
         <p class="text-body mt-2 text-dim">Software, games, and instruments &mdash; built in-house.</p>
+        <p class="stage-legend mt-2" aria-label="Status key">
+          <span data-stage="live">live</span>
+          <span data-stage="build">in build</span>
+          <span data-stage="concept">concept</span>
+          <span data-stage="offline">offline for now</span>
+        </p>
       </div>
     </section>
 
@@ -93,7 +91,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://psystat-lab.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">psystat-lab.dev</span></a>
+              <a href="https://psystat-lab.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">psystat-lab.dev</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-psystat.html" class="card__link">Case Study</a>
@@ -125,7 +123,7 @@
           <div class="card card--violet" data-category="learning">
             <div class="card__category">Productivity &middot; Education</div>
             <h3 class="card__title">StudyCircuit&trade;</h3>
-            <p class="card__desc">65+ features that replace Quizlet, Anki, Notion, and Google Calendar &mdash; powered by AI that actually reads your course materials. The last study app you'll ever download.</p>
+            <p class="card__desc">Flashcards, notes, planning, and an AI tutor that works from your own course materials &mdash; 65+ features in one place, with spaced repetition and a catch-up planner for when the semester gets away from you.</p>
             <div class="card__tags">
               <span class="tag">Education</span>
               <span class="tag">AI</span>
@@ -134,7 +132,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://study-break-0bi1.onrender.com/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
+              <a href="https://study-circuit-production.up.railway.app/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-studycircuit.html" class="card__link">Case Study</a>
@@ -162,7 +160,7 @@
           <div class="card card--amber" data-category="learning">
             <div class="card__category">Hospitality &middot; Operations</div>
             <h3 class="card__title">The Service Well&trade;</h3>
-            <p class="card__desc">181 recipes. 44 data points each. AI-powered pairing, floor plan management, menu engineering, training systems, and inventory &mdash; the only app that knows your bar as well as you do. Zero bullshit.</p>
+            <p class="card__desc">181 recipes, 44 data points each. AI-assisted pairing, floor plans, menu engineering, training, and inventory &mdash; built from behind the bar, for the people who run one.</p>
             <div class="card__tags">
               <span class="tag">Mobile</span>
               <span class="tag">AI</span>
@@ -171,7 +169,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://theservicewell.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">theservicewell.app</span></a>
+              <a href="https://theservicewell.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">theservicewell.app</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-bbb.html" class="card__link">Case Study</a>
@@ -205,7 +203,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://liminaut-labs.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">liminaut-labs.org</span></a>
+              <a href="https://liminaut-labs.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">liminaut-labs.org</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-liminaut.html" class="card__link">Case Study</a>
@@ -239,7 +237,7 @@
           <div class="card card--rose" data-category="inner">
             <div class="card__category">Privacy &middot; Security</div>
             <h3 class="card__title">ShadeSense&trade;</h3>
-            <p class="card__desc">Your data is being bought, sold, and profiled by 4,000+ companies. Shade scans 101+ data brokers, generates jurisdiction-aware removal request templates you send yourself, and helps you get harder to find. Join the Shadelings &mdash; a growing community taking back control of who gets to know what about them.</p>
+            <p class="card__desc">Thousands of companies buy, sell, and profile personal data. ShadeSense scans 101+ data brokers, drafts jurisdiction-aware removal requests you send yourself, and helps you get harder to find. Join the Shadelings &mdash; a growing community taking back control of who gets to know what about them.</p>
             <div class="card__tags">
               <span class="tag">Privacy</span>
               <span class="tag">Data Removal</span>
@@ -248,10 +246,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://shadesense.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
-            </div>
-            <div class="card__extras">
-              <a href="https://shadesense.up.railway.app/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
+              <span class="card__platform" data-stage="offline"><span class="card__platform-label">Offline for now</span></span>
             </div>
           </div>
           </div>
@@ -279,7 +274,7 @@
           <div class="card card--violet" data-category="inner">
             <div class="card__category">Lifestyle &middot; Divination</div>
             <h3 class="card__title">Entropic Tarot&trade;</h3>
-            <p class="card__desc">Quantum divination through sacred randomness. The first tarot app powered by true physical entropy &mdash; your device's sensors create genuinely unpredictable readings no algorithm can replicate. Bank-grade cryptography meets ancient wisdom.</p>
+            <p class="card__desc">Tarot drawn from physical entropy: your device's sensors seed every shuffle, and the randomness is checked with standard cryptographic tools. An experiment in what &ldquo;chance&rdquo; should mean in a digital reading.</p>
             <div class="card__tags">
               <span class="tag">Entropy</span>
               <span class="tag">Cryptography</span>
@@ -300,7 +295,7 @@
           <div class="card card--violet" data-category="inner">
             <div class="card__category">Lifestyle &middot; Science</div>
             <h3 class="card__title">AstroDeep</h3>
-            <p class="card__desc">The first astrology app built for skeptics. 55+ statistical engines, Granger causality testing, adversarial steel-man arguments, personal effect size library, falsification engine, blind testing, 16 biological layers, and three competing prediction systems. Test it. Falsify it. The instrument, not the belief.</p>
+            <p class="card__desc">An astrology app built for skeptics. 55+ statistical engines, Granger causality tests, steel-manned counterarguments, blind testing, and a falsification engine &mdash; so you can test the claims instead of taking them on faith. The instrument, not the belief.</p>
             <div class="card__tags">
               <span class="tag">Statistics</span>
               <span class="tag">AI</span>
@@ -329,7 +324,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">Invite-only</span></span>
             </div>
           </div>
           </div>
@@ -359,7 +354,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://dystopiandailynews.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">dystopiandailynews.org</span></a>
+              <a href="https://dystopiandailynews.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">dystopiandailynews.org</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-ddn.html" class="card__link">Case Study</a>
@@ -380,7 +375,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://fault-line.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">fault-line.dev</span></a>
+              <a href="https://fault-line.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">fault-line.dev</span></a>
               <a href="https://moonligh7er.github.io/FaultLine/" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Site</span></a>
             </div>
             <div class="card__extras">
@@ -402,7 +397,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://civicfilament.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">civicfilament.org</span></a>
+              <a href="https://civicfilament.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">civicfilament.org</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-civicfilament.html" class="card__link">Case Study</a>
@@ -414,7 +409,7 @@
           <div class="card card--violet" data-category="civic">
             <div class="card__category">Intelligence &middot; Influence</div>
             <h3 class="card__title">Civic Filament&trade;: Persuasion Lab</h3>
-            <p class="card__desc">See through every influence. The platform that teaches persuasion, detects when others persuade you, and gives you tools to understand and counter influence operations. 9 categories, 47 tools.</p>
+            <p class="card__desc">Learn how persuasion works, notice when it's being used on you, and practice recognizing and countering influence operations. 9 categories, 47 tools.</p>
             <div class="card__tags">
               <span class="tag">Persuasion Literacy</span>
               <span class="tag">OSINT</span>
@@ -444,7 +439,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://TheoLink.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">theolink.org</span></a>
+              <a href="https://TheoLink.org" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">theolink.org</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-theolink.html" class="card__link">Case Study</a>
@@ -478,7 +473,7 @@
           <div class="card card--teal" data-category="civic">
             <div class="card__category">Intelligence &middot; OSINT</div>
             <h3 class="card__title">Hyper-Scry&trade;</h3>
-            <p class="card__desc">The world's most comprehensive open-source intelligence platform. 90+ live data sources, real-time 3D globe visualization, AI-powered analysis, and cryptographically verifiable evidence exports (SHA-256 + HMAC + RFC 3161 timestamps). Sees everything. Proves the chain.</p>
+            <p class="card__desc">Open-source intelligence on a 3D globe: 90+ live data sources, AI-assisted analysis, and evidence exports with a verifiable chain (SHA-256, HMAC, RFC 3161 timestamps). Built for journalists, researchers, and the curious.</p>
             <div class="card__tags">
               <span class="tag">OSINT</span>
               <span class="tag">AI/NLP</span>
@@ -487,7 +482,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://deep-seer.onrender.com" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
+              <a href="https://hyperscry.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
             </div>
             <div class="card__extras">
               <a href="case-study-deepseer.html" class="card__link">Case Study</a>
@@ -508,7 +503,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://auspex-uap-intel.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">auspex-uap-intel.dev</span></a>
+              <a href="https://auspex-uap-intel.dev" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">auspex-uap-intel.dev</span></a>
             </div>
             <div class="card__extras">
               <a href="https://auspex-uap-intel.dev/blog" class="card__link" target="_blank" rel="noopener">Blog</a>
@@ -526,7 +521,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">In build</span></span>
             </div>
           </div>
           </div>
@@ -540,7 +535,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="concept"><span class="card__platform-label">Concept</span></span>
             </div>
           </div>
           </div>
@@ -571,7 +566,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">In build</span></span>
             </div>
           </div>
           </div>
@@ -579,7 +574,7 @@
           <div class="card card--teal" data-category="games">
             <div class="card__category">Web Games &middot; Horror</div>
             <h3 class="card__title">DreadMaze&trade;</h3>
-            <p class="card__desc">Procedurally-generated horror mazes with fog of war, statues that only move when you look away, 3 mythological bosses, and 8-player multiplayer. 24 maps with sacred geometry layouts. Free in your browser. Find the center. Try not to look away.</p>
+            <p class="card__desc">Procedurally-generated horror mazes with fog of war, statues that only move when you look away, 3 mythological bosses, and 8-player multiplayer. 24 maps with sacred geometry layouts. Find the center. Try not to look away.</p>
             <div class="card__tags">
               <span class="tag">Browser Game</span>
               <span class="tag">Procedural</span>
@@ -588,7 +583,10 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://hedgemazeclient-production.up.railway.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Play Web Game</span></a>
+              <span class="card__platform" data-stage="offline"><span class="card__platform-label">Offline for now</span></span>
+            </div>
+            <div class="card__extras">
+              <a href="HedgeMaze.html" class="card__link">Overview</a>
             </div>
           </div>
           </div>
@@ -605,7 +603,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">In build</span></span>
             </div>
           </div>
           </div>
@@ -623,7 +621,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">In Development</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">Playable prototype</span></span>
             </div>
           </div>
           </div>
@@ -652,7 +650,7 @@
           <div class="card card--teal" data-category="lab">
             <div class="card__category">Developer &middot; Security</div>
             <h3 class="card__title">Dagda</h3>
-            <p class="card__desc">AI-powered cybersecurity command platform. Hundreds of security tools across 9 operational modes. One AI that understands them all. Watches, hunts, traps, and fights. Named after the Celtic god of knowledge.</p>
+            <p class="card__desc">A cybersecurity command platform in development: hundreds of security tools across 9 operational modes, coordinated by one AI &mdash; with safeguards it can't override. Named after the Celtic god of knowledge.</p>
             <div class="card__tags">
               <span class="tag">Cybersecurity</span>
               <span class="tag">AI</span>
@@ -661,7 +659,10 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Web App</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">In build</span></span>
+            </div>
+            <div class="card__extras">
+              <a href="Dagda.html" class="card__link">Overview</a>
             </div>
           </div>
           </div>
@@ -669,7 +670,7 @@
           <div class="card card--teal" data-category="lab">
             <div class="card__category">Developer &middot; Productivity</div>
             <h3 class="card__title">Thought+Form</h3>
-            <p class="card__desc">The developer command center that replaces your entire tool stack. 44 interconnected modules, AI-powered intelligence, zero context switching. The command center you didn't know you needed.</p>
+            <p class="card__desc">The command center I'm building for my own work: 44 interconnected modules that keep projects, decisions, content, and context in one place, so switching between them costs less.</p>
             <div class="card__tags">
               <span class="tag">Dev Tools</span>
               <span class="tag">AI</span>
@@ -678,7 +679,10 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Web App</span></span>
+              <span class="card__platform" data-stage="build"><span class="card__platform-label">Private build</span></span>
+            </div>
+            <div class="card__extras">
+              <a href="Thoughtform.html" class="card__link">Overview</a>
             </div>
           </div>
           </div>
@@ -720,7 +724,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <a href="https://LightUpYourNight.net" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span style="display:block;font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-top:0.25rem;letter-spacing:0.04em;">LightUpYourNight.net</span></a>
+              <a href="https://LightUpYourNight.net" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span><span class="card__platform-domain">LightUpYourNight.net</span></a>
             </div>
           </div>
           </div>
@@ -737,7 +741,7 @@
             </div>
             <div class="card__footer">
             <div class="card__platforms">
-              <span class="card__platform"><span class="card__platform-label">Coming Soon</span></span>
+              <a href="https://sunstone-social-labs.vercel.app" class="card__platform" target="_blank" rel="noopener"><span class="card__platform-label">Web App</span></a>
             </div>
           </div>
           </div>
@@ -747,13 +751,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

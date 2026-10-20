@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Study: The Signal Index | dev://portfolio</title>
-  <meta name="description" content="How one developer built a real-time dashboard for tracking AI progress toward singularity &mdash; 8 threat vectors with a causal network, containment readiness analysis, an ethics framework, and 53 timeline events &mdash; in a PWA that works fully offline.">
+  <meta name="description" content="How one developer built a dashboard for tracking AI progress toward singularity &mdash; 8 threat vectors with a causal network, containment readiness analysis, an ethics framework, and 53 timeline events &mdash; in a PWA that works offline.">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-aitracker.html">
@@ -12,8 +12,8 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Case Study: The Signal Index — Real-Time Dashboard for AI Risk",
-    "description": "How one developer built a real-time dashboard for tracking AI progress toward singularity, with threat vectors, containment readiness, and an ethics framework.",
+    "headline": "Case Study: The Signal Index — A Dashboard for Thinking About AI Risk",
+    "description": "How one developer built a dashboard for tracking AI progress toward singularity, with threat vectors, containment readiness, and an ethics framework.",
     "author": {"@type": "Person", "name": "Michael Wylde"},
     "url": "https://moonligh7er.github.io/developer-site/case-study-aitracker.html",
     "image": "https://moonligh7er.github.io/developer-site/og-image.png"
@@ -21,12 +21,12 @@
   </script>
   <meta property="og:type" content="article">
   <meta property="og:title" content="Case Study: The Signal Index | dev://portfolio">
-  <meta property="og:description" content="Building a real-time dashboard for AI risk &mdash; threat vectors, containment readiness, ethics framework, thought experiments, and 53 timeline events.">
+  <meta property="og:description" content="Building a dashboard for AI risk that shows its assumptions &mdash; threat vectors, containment readiness, ethics framework, thought experiments, and 53 timeline events.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-aitracker.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Case Study: The Signal Index">
-  <meta name="twitter:description" content="Building a real-time dashboard for AI risk &mdash; threat vectors, containment readiness, ethics framework, and 53 timeline events.">
+  <meta name="twitter:description" content="Building a dashboard for AI risk that shows its assumptions &mdash; threat vectors, containment readiness, ethics framework, and 53 timeline events.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,14 +131,6 @@
       .case-study__meta { gap: 1rem; }
     }
   </style>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -167,10 +159,10 @@
         <p class="label">Case Study</p>
         <h1 class="heading-xl glitch">The Signal Index</h1>
         <p class="text-body mt-2" style="max-width: 55ch;">
-          Track AI progress toward singularity in real time. An interactive consciousness index,
+          Track AI progress toward singularity on one screen. An interactive consciousness index,
           eight threat vectors with a causal network, containment readiness analysis, an ethics
           framework, branching thought experiments, and 53 timeline events &mdash; all in a
-          progressive web app that works fully offline.
+          progressive web app that works offline.
         </p>
         <div class="case-study__meta">
           <div>Status <span>Launched (Web, Alpha) &middot; Mobile In Development</span></div>
@@ -184,14 +176,14 @@
         <p class="case-study__section-label">The Problem</p>
         <h2 class="case-study__h2">AI risk discourse runs on vibes</h2>
         <p>
-          Half the public conversation about AI is marketing. The other half is apocalypse theater.
+          A lot of the public conversation about AI is marketing. Much of the rest is apocalypse theater.
           In between, there's a small population of researchers, policy staffers, and journalists
           trying to have a grounded conversation &mdash; and they don't have a shared picture to
           point at. Incidents happen in isolation. Papers drop into a void. A CEO says something
           alarming on a podcast and nobody can tell if it matters.
         </p>
         <p>
-          The tools that do exist either reduce the problem to a single doom probability, or they
+          The tools that do exist tend to either reduce the problem to a single doom probability, or
           sprawl across dozens of PDFs and dashboards that don't talk to each other. Threats are
           treated as a list instead of a system. Containment is treated as an aspiration instead of
           a readiness score. Ethics is treated as a footnote instead of a protocol.
@@ -312,8 +304,8 @@
           strategies &mdash; AI boxing, corrigibility, interpretability, kill switches, formal
           verification, compute governance, behavioral monitoring, and alignment tax reduction
           &mdash; each get a readiness percentage with the challenges and active research behind
-          it. A dual-curve chart plots capability against containment. The gap between them isn't
-          editorial; it's the area between two lines.
+          it. A dual-curve chart plots capability against containment. The readiness scores are
+          still judgment calls, but the gap is out in the open: the area between two lines.
         </p>
         <div class="verdict">
           <p>
@@ -382,7 +374,8 @@
             <strong>Giving containment an honest scoreboard</strong>
             <span>Containment readiness is usually hand-waved. Scoring eight strategies against
             capability on a dual-curve chart forces the question: are we catching up or falling
-            behind? The gap is rendered as a filled area. No rhetoric required.</span>
+            behind? The gap is rendered as a filled area, so the argument moves to the inputs
+            instead of the adjectives.</span>
           </li>
           <li>
             <strong>Turning a dashboard into a knowledge web</strong>
@@ -417,8 +410,8 @@
           A service worker with network-first strategy caches every JS file, HTML, CSS, and
           dataset. The cache is versioned so deploys clean up old entries. All personal state
           &mdash; slider positions, saved scenarios, temporal history, research workspace, reading
-          progress, tutorial progress &mdash; lives in localStorage on the device. Nothing is
-          transmitted anywhere. The Live Signal feed aggregates ten RSS sources through a CORS
+          progress, tutorial progress &mdash; lives in localStorage on the device. None of it is
+          sent to a server. The Live Signal feed aggregates ten RSS sources through a CORS
           proxy with a 30-minute cache TTL, so even the &ldquo;live&rdquo; news keeps working on
           an airplane.
         </p>
@@ -474,13 +467,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">&#9825; Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">&middot;</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Study: Hyper-Scry&trade; | dev://portfolio</title>
-  <meta name="description" content="How one developer built an enterprise-grade OSINT platform with 90+ live data sources, a 3D globe, cryptographically verifiable evidence exports, and the statistical rigor to prove what it finds.">
+  <meta name="description" content="How one developer is building an OSINT platform with 90+ live data sources, a 3D globe, evidence exports with a verifiable chain of custody, and published statistical methods for testing what it finds.">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/case-study-deepseer.html">
@@ -13,7 +13,7 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Case Study: Hyper-Scry™ — Open-Source Intelligence Platform",
-    "description": "How one developer built an enterprise-grade OSINT platform with 90+ live data sources and cryptographically verifiable evidence.",
+    "description": "How one developer is building an OSINT platform with 90+ live data sources and evidence exports with a verifiable chain of custody.",
     "author": {"@type": "Person", "name": "Michael Wylde"},
     "url": "https://moonligh7er.github.io/developer-site/case-study-deepseer.html",
     "image": "https://moonligh7er.github.io/developer-site/og-image.png"
@@ -21,12 +21,12 @@
   </script>
   <meta property="og:type" content="article">
   <meta property="og:title" content="Case Study: Hyper-Scry™ | dev://portfolio">
-  <meta property="og:description" content="Building an enterprise-grade OSINT platform with 90+ live data sources and cryptographically verifiable evidence.">
+  <meta property="og:description" content="Building an OSINT platform with 90+ live data sources and evidence exports with a verifiable chain of custody.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/case-study-deepseer.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Case Study: Hyper-Scry™">
-  <meta name="twitter:description" content="Building an enterprise-grade OSINT platform with 90+ live data sources and cryptographically verifiable evidence.">
+  <meta name="twitter:description" content="Building an OSINT platform with 90+ live data sources and evidence exports with a verifiable chain of custody.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,14 +131,6 @@
       .case-study__meta { gap: 1rem; }
     }
   </style>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
 </head>
 <body>
   <div class="page-transition"></div>
@@ -167,9 +159,9 @@
         <p class="label">Case Study</p>
         <h1 class="heading-xl glitch">Hyper-Scry&trade;</h1>
         <p class="text-body mt-2" style="max-width: 55ch;">
-          See everything. Understand everything. Prove everything. An open-source intelligence
-          platform that puts 90+ live data sources on a 3D globe and gives you the statistical
-          rigor and cryptographic evidence chain to prove what you find in court.
+          Public data, in one place, with its receipts. An open-source intelligence platform
+          that puts 90+ live data sources on a 3D globe, pairs them with published statistical
+          methods, and is designed to produce evidence with a verifiable chain of custody.
         </p>
         <div class="case-study__meta">
           <div>Status <span>In Development</span></div>
@@ -181,7 +173,7 @@
       <!-- The Problem -->
       <section class="case-study__section reveal">
         <p class="case-study__section-label">The Problem</p>
-        <h2 class="case-study__h2">Intelligence lives in silos by design</h2>
+        <h2 class="case-study__h2">Public data lives in silos</h2>
         <p>
           The EPA publishes pollution data. The FAA tracks aircraft. The FEC discloses campaign
           contributions. The Coast Guard monitors vessels. The USGS records earthquakes. Each
@@ -190,16 +182,16 @@
           of them, the situation has changed.
         </p>
         <p>
-          This fragmentation isn't accidental. It's structural. And it's the reason a factory
-          can violate EPA permits for years while the health data from the community downwind
-          lives in a completely different database that nobody thinks to check at the same time.
+          This fragmentation is structural. And it's part of the reason a factory can violate
+          EPA permits for years while the health data from the community downwind lives in a
+          completely different database that rarely gets checked at the same time.
         </p>
         <p>
-          Existing platforms either embed iframes to different services (aggregation without
+          Many existing platforms either embed iframes to different services (aggregation without
           integration) or charge enterprise prices that put them out of reach for the journalists,
-          researchers, and NGOs who need them most. There was no platform that unified these
-          sources into a common intelligence picture, applied peer-reviewed statistical methods
-          to the live data, and produced evidence that could survive a courtroom.
+          researchers, and NGOs who need them most. I couldn't find one that unified these
+          sources into a common picture, applied peer-reviewed statistical methods to the live
+          data, and was built from the start to produce evidence that could hold up in a courtroom.
         </p>
       </section>
 
@@ -268,16 +260,16 @@
       <!-- Evidence -->
       <section class="case-study__section reveal">
         <p class="case-study__section-label">Evidence Integrity</p>
-        <h2 class="case-study__h2">Built for the courtroom, not the screenshot</h2>
+        <h2 class="case-study__h2">Designed for the courtroom, not just the screenshot</h2>
         <p>
-          Every intelligence platform has screenshots. Hyper-Scry is built for legal proceedings.
+          Screenshots are easy to dispute. Hyper-Scry is designed with legal proceedings in mind.
           Every piece of evidence collected carries a SHA-256 fingerprint, an HMAC-SHA256
           signature, and an RFC 3161 cryptographic timestamp. The chain of custody is logged
           immutably.
         </p>
         <p>
-          When a defense attorney challenges the authenticity of a satellite image or a social
-          media capture, you don't argue &mdash; you provide the cryptographic proof. Export
+          When a defense attorney challenges a satellite image or a social media capture, you
+          can show cryptographic proof that it hasn't changed since collection. Export
           templates are pre-formatted for ICC Rome Statute, ECHR Rule 47, and US Federal Rules
           of Evidence 901/902.
         </p>
@@ -408,20 +400,20 @@
         <p>
           Every data source in Hyper-Scry is public. Published by governments and institutions
           about themselves. The EPA publishes its own violation data. The FEC publishes its
-          own donation records. The FAA publishes its own flight data. This isn't surveillance
-          &mdash; it's accountability. The information exists. The question is whether it's
+          own donation records. The FAA publishes its own flight data. The intent isn't
+          surveillance &mdash; it's accountability. The information exists. The question is whether it's
           accessible to the people who need it.
         </p>
         <p>
-          Most intelligence platforms price out the journalists, NGOs, and researchers who
+          Many intelligence platforms price out the journalists, NGOs, and researchers who
           would use them for public interest work. Hyper-Scry's free tier includes all 90+
           data sources because the people doing accountability work shouldn't have to outbid
           the people they're investigating.
         </p>
         <p class="dim">
-          The world isn't going to watch itself. Every minute you don't have situational
-          awareness is a minute someone else controls the narrative. Hyper-Scry is live.
-          The data is streaming. The only question is whether you're watching.
+          The world isn't going to watch itself. Hyper-Scry is still in development, but the
+          data is already streaming &mdash; and the question I find most interesting is what
+          journalists, researchers, and communities will do with it once it's in their hands.
         </p>
       </section>
 
@@ -431,13 +423,16 @@
   </main>
 
   <footer class="footer">
-    <p style="text-align:center;margin-bottom:0.75rem;"><a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="kofi-btn">♡ Support on Ko-fi</a></p>
     <p class="footer__text">
       <span class="footer-accent">&#9671;</span> Transmitting from local spacetime
       <span class="footer-accent">&#9671;</span>
     </p>
-<p style="text-align:center;margin-top:0.5rem;"><a href="privacy.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Privacy</a> <span style="color:var(--text-dim,#666);font-size:0.55rem;">·</span> <a href="terms.html" style="font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.08em;color:var(--text-dim,#666);text-decoration:none;">Terms</a></p>
-    <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="privacy.html">Privacy</a><span aria-hidden="true">&middot;</span>
+      <a href="terms.html">Terms</a><span aria-hidden="true">&middot;</span>
+      <a href="https://ko-fi.com/moonlitsociallabs" target="_blank" rel="noopener" class="footer__support">&#9825; Support the work</a>
+    </nav>
+    <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
   <script src="js/effects.js"></script>

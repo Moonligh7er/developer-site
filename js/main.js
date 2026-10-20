@@ -2,6 +2,8 @@
    MAIN — Navigation, Tabs, Interactions
    ============================================ */
 
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // --- Mobile Navigation ---
 function initNavigation() {
   const toggle = document.querySelector('.nav__toggle');
@@ -40,13 +42,33 @@ function initTabs() {
     const tabs = tabContainer.querySelectorAll('.tab');
     const contentId = tabContainer.dataset.tabs;
 
-    tabs.forEach(tab => {
+    tabs.forEach((tab, i) => {
+      // Arrow keys move between tabs (WAI-ARIA tabs pattern)
+      tab.addEventListener('keydown', (e) => {
+        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        const next = tabs[(i + step + tabs.length) % tabs.length];
+        next.focus();
+        next.click();
+      });
+
       tab.addEventListener('click', () => {
         const target = tab.dataset.target;
 
         // Update active tab
-        tabs.forEach(t => t.classList.remove('active'));
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          if (t.hasAttribute('role')) {
+            t.setAttribute('aria-selected', 'false');
+            t.tabIndex = -1;
+          }
+        });
         tab.classList.add('active');
+        if (tab.hasAttribute('role')) {
+          tab.setAttribute('aria-selected', 'true');
+          tab.tabIndex = 0;
+        }
 
         // Update active content
         const parent = tabContainer.parentElement;
@@ -64,8 +86,10 @@ function initTabs() {
     });
   });
 
-  // Handle hash on load
-  const hash = window.location.hash.slice(1);
+  // Handle hash on load (old Connect tabs were folded into new ones)
+  const aliases = { social: 'contact', partner: 'support', invest: 'support' };
+  const raw = window.location.hash.slice(1);
+  const hash = aliases[raw] || raw;
   if (hash) {
     const targetTab = document.querySelector(`.tab[data-target="${hash}"]`);
     if (targetTab) targetTab.click();
@@ -78,8 +102,12 @@ function initTypingEffect() {
   if (!el) return;
 
   const text = el.dataset.text;
-  el.textContent = '';
   el.style.visibility = 'visible';
+  if (REDUCED_MOTION) {
+    el.textContent = text;
+    return;
+  }
+  el.textContent = '';
   let i = 0;
 
   function type() {
@@ -107,26 +135,64 @@ function initSmoothScroll() {
   });
 }
 
-// --- Random dimensional coordinates (decorative) ---
+// --- Lunar readout ---
+// The "coordinates" are real: the Moon's ecliptic longitude, phase and sign right now,
+// computed here in the browser (truncated lunar theory, good to a few tenths of a degree).
+const SIGNS = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
+  'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'];
+
+function moonNow(date = new Date()) {
+  const rad = Math.PI / 180;
+  const norm = deg => ((deg % 360) + 360) % 360;
+  const d = date.getTime() / 86400000 + 2440587.5 - 2451545.0; // days since J2000.0
+
+  const L = norm(218.316 + 13.176396 * d);   // Moon mean longitude
+  const M = norm(134.963 + 13.064993 * d);   // Moon mean anomaly
+  const D = norm(297.850 + 12.190749 * d);   // mean elongation
+  const F = norm(93.272 + 13.229350 * d);    // argument of latitude
+  const Ms = norm(357.529 + 0.98560028 * d); // Sun mean anomaly
+  const s = x => Math.sin(x * rad);
+
+  const lon = norm(L + 6.289 * s(M) + 1.274 * s(2 * D - M) + 0.658 * s(2 * D) - 0.186 * s(Ms)
+    - 0.059 * s(2 * M - 2 * D) - 0.057 * s(M - 2 * D + Ms) + 0.053 * s(M + 2 * D)
+    + 0.046 * s(2 * D - Ms) + 0.041 * s(M - Ms) - 0.035 * s(D) - 0.031 * s(M + Ms)
+    - 0.015 * s(2 * F - 2 * D) + 0.011 * s(M - 4 * D));
+  const sunLon = norm(280.460 + 0.9856474 * d + 1.915 * s(Ms) + 0.020 * s(2 * Ms));
+
+  const elong = norm(lon - sunLon);
+  const lit = (1 - Math.cos(elong * rad)) / 2;
+  const waxing = elong < 180;
+  let phase;
+  if (lit < 0.02) phase = 'new';
+  else if (lit > 0.98) phase = 'full';
+  else if (Math.abs(lit - 0.5) < 0.06) phase = waxing ? 'first quarter' : 'last quarter';
+  else phase = (waxing ? 'waxing ' : 'waning ') + (lit < 0.5 ? 'crescent' : 'gibbous');
+  const ayanamsa = 23.853 + (d / 36525) * 1.397; // Lahiri, approx.
+  return {
+    lon, lit, phase,
+    sign: SIGNS[Math.floor(lon / 30)],
+    siderealSign: SIGNS[Math.floor(norm(lon - ayanamsa) / 30)],
+  };
+}
+
 function initCoordinates() {
   document.querySelectorAll('.coord-display').forEach(el => {
-    function updateCoord() {
-      const dims = ['α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ'];
-      const dim = dims[Math.floor(Math.random() * dims.length)];
-      const x = (Math.random() * 999).toFixed(1);
-      const y = (Math.random() * 999).toFixed(1);
-      const z = (Math.random() * 99).toFixed(2);
-      el.textContent = `${dim}:${x}.${y}.${z}`;
+    function update() {
+      const m = moonNow();
+      el.textContent = `☾ λ ${m.lon.toFixed(1).padStart(5, '0')}° · ${Math.round(m.lit * 100)}% lit · ${m.sign}`;
+      el.title = `The Moon right now: ${m.phase}, ${Math.round(m.lit * 100)}% illuminated, ` +
+        `ecliptic longitude ${m.lon.toFixed(1)}° (tropical ${m.sign}; sidereal ${m.siderealSign}). ` +
+        'Computed in your browser.';
     }
-    updateCoord();
-    setInterval(updateCoord, 8000 + Math.random() * 4000);
+    update();
+    setInterval(update, 60000);
   });
 }
 
 // --- Decrypt Name Animation ---
 function initDecryptName() {
   const els = document.querySelectorAll('.decrypt-name');
-  if (!els.length) return;
+  if (!els.length || REDUCED_MOTION) return;
 
   els.forEach((el, elIdx) => {
     const names = JSON.parse(el.dataset.names);

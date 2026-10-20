@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HedgeMaze — Can You Find the Center?</title>
-<meta name="description" content="Navigate terrifying procedurally-generated mazes. Fog of war. Weeping Angel statues. 24 unique maps. 8-player multiplayer. Play free in your browser.">
+<title>DreadMaze™ — Can You Find the Center?</title>
+<meta name="description" content="DreadMaze: procedurally-generated horror mazes with fog of war, statues that only move when you look away, 3 mythological bosses, and 8-player multiplayer. 24 maps with sacred geometry layouts. Playable build returning soon.">
 <link rel="canonical" href="https://moonligh7er.github.io/developer-site/HedgeMaze.html">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"VideoGame","name":"HedgeMaze","description":"Procedurally-generated horror mazes with fog of war, Weeping Angel statues, and 8-player multiplayer. 24 unique maps.","author":{"@type":"Person","name":"Michael Wylde"},"gamePlatform":"Web Browser","numberOfPlayers":"1-8"}
+{"@context":"https://schema.org","@type":"VideoGame","name":"DreadMaze","description":"Procedurally-generated horror mazes with fog of war, statues that only move when you look away, 3 mythological bosses, and 8-player multiplayer. 24 maps with sacred geometry layouts.","author":{"@type":"Person","name":"Michael Wylde"},"gamePlatform":"Web Browser","numberOfPlayers":"1-8"}
 </script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -954,35 +954,36 @@ footer a:hover { color: var(--green); }
 .danger-title { color: var(--red); }
 .gold-title { color: var(--gold); }
 .ice-title { color: var(--ice); }
+
+/* ─── OFFLINE CTA (playable build returning soon) ─── */
+.cta-static { cursor: default; }
+.cta-static:hover { transform: none; box-shadow: none; }
+.cta-static.pulse-btn { animation: none; }
+.nav-links .cta-static { text-transform: uppercase; letter-spacing: 0.05em; }
 </style>
-<!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SJBEYXVKZ1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-SJBEYXVKZ1');
-  </script>
+<style>
+.msl-backlink:hover, .msl-backlink:focus-visible { color: #00d4aa !important; border-color: rgba(0, 212, 170, 0.5) !important; }
+.msl-backlink:focus-visible { outline: 2px solid #00d4aa !important; outline-offset: 2px !important; }
+</style>
 </head>
 <body>
+
+<a href="portfolio.html" class="msl-backlink" style="position:fixed;left:16px;bottom:16px;z-index:1000;display:inline-block;padding:6px 12px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;font-size:12px;font-weight:400;line-height:1.4;letter-spacing:0.04em;text-transform:none;color:#7a7a90;background:#07070d;border:1px solid rgba(122,122,144,0.3);border-radius:6px;text-decoration:none;">&larr; Moonlit Social Labs portfolio</a>
 
 <!-- Loader -->
 <div class="page-loader" id="loader">
   <div class="loader-ring"></div>
 </div>
 
-<!-- Seasonal Banner -->
-<div class="seasonal-banner" id="seasonalBanner" style="display:none;"></div>
-
 <!-- Nav -->
 <nav id="nav">
-  <a href="#" class="nav-logo">HedgeMaze</a>
+  <a href="#" class="nav-logo">DreadMaze</a>
   <div class="nav-links">
     <a href="#features">Features</a>
     <a href="#maps">Maps</a>
     <a href="#progression">Progression</a>
     <a href="#platforms">Platforms</a>
-    <a href="/" class="nav-cta">Play Now</a>
+    <span class="nav-cta cta-static">Returning soon</span>
   </div>
 </nav>
 
@@ -992,14 +993,14 @@ footer a:hover { color: var(--green); }
   <canvas id="particles"></canvas>
   <div class="hero-content">
     <p class="hero-pre">A multiplayer maze horror experience</p>
-    <h1 class="hero-title">HedgeMaze</h1>
+    <h1 class="hero-title">DreadMaze</h1>
     <p class="hero-tagline">Can you find the center before the maze finds you?</p>
     <div class="hero-buttons">
-      <a href="/" class="btn-primary">
-        <span>&#9654;</span> Play Now
-      </a>
-      <a href="#platforms" class="btn-secondary">
-        <span>&#8595;</span> Download App
+      <span class="btn-primary cta-static">
+        Playable build returning soon
+      </span>
+      <a href="#features" class="btn-secondary">
+        <span>&#8595;</span> See how it plays
       </a>
     </div>
   </div>
@@ -1015,11 +1016,9 @@ footer a:hover { color: var(--green); }
     <span class="proof-dot" aria-hidden="true">&middot;</span>
     <span class="proof-stat"><strong>15+</strong> Items</span>
     <span class="proof-dot" aria-hidden="true">&middot;</span>
-    <span class="proof-stat"><strong>2</strong> Bosses</span>
+    <span class="proof-stat"><strong>3</strong> Mythological Bosses</span>
     <span class="proof-dot" aria-hidden="true">&middot;</span>
     <span class="proof-stat"><strong>5</strong> AI Personalities</span>
-    <span class="proof-dot" aria-hidden="true">&middot;</span>
-    <span class="proof-stat"><strong>Zero</strong> Assets Required</span>
   </div>
 </div>
 
@@ -1067,7 +1066,7 @@ footer a:hover { color: var(--green); }
       <h2 class="feature-title danger-title">You Are Not<br>Alone</h2>
       <p class="feature-desc">Stone statues stand in the corridors. They don't move while you're looking. <em>Turn away and listen.</em> The Minotaur roams the deepest paths, his red eyes piercing the dark. Shadow entities drift at the maze edges, drawn to sound.</p>
       <ul class="feature-list danger">
-        <li>Weeping Angel statues -- 4 variants with distinct behaviors</li>
+        <li>Statues that only move when you look away -- 4 variants with distinct behaviors</li>
         <li>The Minotaur: massive, relentless, glowing red eyes</li>
         <li>The Frost Giant: ice-blue colossus with crystal crown</li>
         <li>Shadow entities that hunt at the maze perimeter</li>
@@ -1412,40 +1411,40 @@ footer a:hover { color: var(--green); }
 <section class="section section-alt">
   <div class="container">
     <div class="section-header reveal">
-      <p class="section-label">Player Stories</p>
-      <h2 class="section-title">From the Survivors</h2>
+      <p class="section-label">Design Notes</p>
+      <h2 class="section-title">The Moments It's Built Around</h2>
     </div>
 
     <div class="quotes-grid">
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">I heard the statue move behind me. I didn't turn around. I just ran.</p>
-        <p class="quote-author">-- Player, after their first Weeping Angel encounter</p>
+        <p class="quote-text">You hear the statue move behind you. You don't turn around. You just run.</p>
+        <p class="quote-author">-- Statues that only move when you look away</p>
       </div>
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">The hedges closed and I realized my path back was gone. Pure panic. I've never felt that in a browser game before.</p>
-        <p class="quote-author">-- First-time player, Classic Hedge map</p>
+        <p class="quote-text">The hedges close, and you realize the path back is gone.</p>
+        <p class="quote-author">-- Hedges that seal shut behind you</p>
       </div>
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">We were screaming on Discord the entire match. Someone found a tunnel and we all followed them into the dark. Nobody made it out that way.</p>
-        <p class="quote-author">-- Team of 4, King of the Maze mode</p>
+        <p class="quote-text">Someone finds a tunnel, and the whole team follows them into the dark.</p>
+        <p class="quote-author">-- Underground tunnels, team modes</p>
       </div>
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">I've played every historical map. Knossos on INSANE difficulty is the most terrifying gaming experience I've had this year. And this runs in a browser.</p>
-        <p class="quote-author">-- Prestige Tier 3 player</p>
+        <p class="quote-text">Knossos and Hawara stay locked until you're ready for INSANE difficulty.</p>
+        <p class="quote-author">-- Historical labyrinths</p>
       </div>
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">No downloads. No assets. Everything is generated. I thought that was a gimmick until I saw the Frost Giant emerge from the fog. How is this procedural?</p>
-        <p class="quote-author">-- Game developer, after inspecting source</p>
+        <p class="quote-text">The Frost Giant steps out of the fog -- and, like everything else you see and hear, it's generated in code.</p>
+        <p class="quote-author">-- Procedural visuals and audio</p>
       </div>
       <div class="quote-card reveal">
         <div class="quote-mark">&ldquo;</div>
-        <p class="quote-text">The Fibonacci Spiral map broke my brain. I kept ending up back where I started, but the hedges had changed. The maze is alive.</p>
-        <p class="quote-author">-- Player, 47 minutes in</p>
+        <p class="quote-text">The Fibonacci Spiral keeps turning you back toward where you started. The deeper you go, the tighter the turns.</p>
+        <p class="quote-author">-- Sacred geometry layouts</p>
       </div>
     </div>
   </div>
@@ -1457,9 +1456,9 @@ footer a:hover { color: var(--green); }
 <section class="section section-dark" id="platforms">
   <div class="container">
     <div class="section-header reveal">
-      <p class="section-label">Play Anywhere</p>
+      <p class="section-label">Platforms</p>
       <h2 class="section-title">Your Maze.<br>Every Device.</h2>
-      <p class="section-subtitle">Your progress follows you. Play on your laptop at home. Continue on your phone on the train. Works offline. Zero downloads required for browser play.</p>
+      <p class="section-subtitle">Designed so your progress follows you: start on a laptop, pick it up on your phone. Browser play needs no download, and the PWA works offline. The playable build is offline for now and returning soon.</p>
     </div>
 
     <div class="platform-row reveal">
@@ -1480,21 +1479,21 @@ footer a:hover { color: var(--green); }
       <div class="platform-badge">
         <span class="platform-icon">&#63743;</span>
         <div class="platform-info">
-          <small>App Store</small>
+          <small>Planned &middot; App Store</small>
           <strong>iOS</strong>
         </div>
       </div>
       <div class="platform-badge">
         <span class="platform-icon">&#129302;</span>
         <div class="platform-info">
-          <small>Google Play</small>
+          <small>Planned &middot; Google Play</small>
           <strong>Android</strong>
         </div>
       </div>
     </div>
 
     <div style="text-align:center; margin-top:48px;" class="reveal">
-      <p style="color:var(--text-muted); font-size:0.85rem; letter-spacing:0.05em;">Zero external assets &middot; Procedurally generated audio &amp; visuals &middot; Docker deployment &middot; Offline capable</p>
+      <p style="color:var(--text-muted); font-size:0.85rem; letter-spacing:0.05em;">Procedurally generated audio &amp; visuals &middot; Docker deployment &middot; Offline capable</p>
     </div>
   </div>
 </section>
@@ -1528,7 +1527,7 @@ footer a:hover { color: var(--green); }
         Outsmart 7 other players -- or 7 AI opponents with distinct personalities. Conquer every historical labyrinth. Survive every mythological nightmare. Reach Prestige Tier 5.
       </p>
       <p style="color:var(--text-muted); font-size:0.85rem;">
-        INSANE difficulty unlocks the legendary Knossos and Hawara maps. Only 2% of players have seen them.
+        INSANE difficulty unlocks the legendary Knossos and Hawara maps.
       </p>
     </div>
   </div>
@@ -1541,16 +1540,17 @@ footer a:hover { color: var(--green); }
   <div class="reveal">
     <p class="section-label">Ready?</p>
     <h2 class="section-title">Enter the Maze</h2>
-    <p class="section-subtitle">No download. No signup. Just you, the fog, and whatever is waiting in the dark.</p>
-    <a href="/" class="btn-primary pulse-btn" style="margin-top:16px;">
-      <span>&#9654;</span> Play Now -- Free
-    </a>
+    <p class="section-subtitle">The playable build is offline for now. When it's back: no download, no signup. Just you, the fog, and whatever is waiting in the dark.</p>
+    <span class="btn-primary pulse-btn cta-static" style="margin-top:16px;">
+      Playable build returning soon
+    </span>
+    <p style="margin-top:20px;"><a href="portfolio.html" style="color:var(--text-dim);">&larr; Back to the portfolio</a></p>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
-  <p>HedgeMaze &copy; <span id="year"></span> &middot; All visuals and audio procedurally generated &middot; <a href="/">Play Now</a></p>
+  <p>DreadMaze&trade; &copy; <span id="year"></span> &middot; All visuals and audio procedurally generated &middot; <a href="portfolio.html">Portfolio</a></p>
     <p style="text-align:center;margin-top:0.75rem;font-family:var(--font-mono,monospace);font-size:0.55rem;letter-spacing:0.1em;color:var(--text-dim,#666);">&copy; 2025-2026 Moonlit Social Labs&trade;</p>
   </footer>
 
@@ -1565,25 +1565,6 @@ footer a:hover { color: var(--green); }
 
   // ─── Year ───
   document.getElementById('year').textContent = new Date().getFullYear();
-
-  // ─── Seasonal Banner ───
-  (function() {
-    var month = new Date().getMonth();
-    var seasons = {
-      spring: { months: [2, 3, 4], text: 'SPRING EVENT LIVE NOW — Overgrown theme with exclusive 30-tier reward track' },
-      summer: { months: [5, 6, 7], text: 'SUMMER EVENT LIVE NOW — Frost Giant hunts begin. 30-tier reward track active.' },
-      autumn: { months: [8, 9, 10], text: "HALLOWS' EVE EVENT LIVE NOW — Cemetery & Demon Palace maps. 30 exclusive rewards." },
-      winter: { months: [11, 0, 1], text: 'WINTER EVENT LIVE NOW — Frost theme with ice physics. Limited cosmetics available.' }
-    };
-    for (var key in seasons) {
-      if (seasons[key].months.indexOf(month) !== -1) {
-        var banner = document.getElementById('seasonalBanner');
-        banner.textContent = seasons[key].text;
-        banner.style.display = 'block';
-        break;
-      }
-    }
-  })();
 
   // ─── Nav scroll ───
   var nav = document.getElementById('nav');
@@ -1731,5 +1712,6 @@ footer a:hover { color: var(--green); }
 
 })();
 </script>
+  <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

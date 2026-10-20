@@ -4,6 +4,10 @@
 // ============================================
 
 (function () {
+  // Track paths are relative to the site root; resolve them from this script's own URL
+  // (js/player.js) so pages in subfolders like tools/ find the same files.
+  const SCRIPT_URL = (document.currentScript && document.currentScript.src) || location.href;
+
   const TRACKS = [
     { title: 'Three Moons on the Shore', file: 'music/Three_Moons_on_the_Shore.mp3' },
     { title: 'Within Network Reach', file: 'music/Within_Network_Reach_2026-03-25T070230.mp3' },
@@ -26,12 +30,11 @@
   }
 
   function saveState(s) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch { /* storage blocked: player still works, just forgets */ }
   }
 
   function resolvePath(file) {
-    const base = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1);
-    return base + file;
+    return new URL('../' + file, SCRIPT_URL).href;
   }
 
   // --- Inject styles once ---

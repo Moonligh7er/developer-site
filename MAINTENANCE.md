@@ -40,7 +40,7 @@ Last full audit: **2026-09-05**.
 **Used by:** `tools/solar-savings-estimator.html`
 **Cadence:** annual (spring — after EIA publishes prior-year state averages)
 **Sources:**
-- Peak sun hours: [NREL Solar Resource Maps](https://www.nrel.gov/gis/solar-resource-maps.html) — state averages don't shift year-to-year meaningfully; the annual check is the electricity rate.
+- Peak sun hours: [NLR (formerly NREL) map library](https://www.nlr.gov/gis/maps) — nrel.gov stopped resolving after the Dec 2025 rename; the old latitude-tilt PV maps were not carried over — state averages don't shift year-to-year meaningfully; the annual check is the electricity rate.
 - Electricity rates: [EIA Electric Power Monthly](https://www.eia.gov/electricity/monthly/) — Table 5.6.A, "Average Price of Electricity to Ultimate Customers by End-Use Sector".
 - Federal credit status: [IRS Residential Clean Energy Credit page](https://www.irs.gov/credits-deductions/residential-clean-energy-credit).
 **Critical watch item — federal credit:**

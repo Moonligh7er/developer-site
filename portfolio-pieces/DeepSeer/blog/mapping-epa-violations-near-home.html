@@ -126,20 +126,22 @@ a:hover{text-decoration:underline}
 
 <p>The EPA provides REST APIs for both datasets. For TRI, the Envirofacts API lets you query by ZIP code, city, state, or geographic coordinates:</p>
 
-<pre><code>GET https://enviro.epa.gov/enviro/efservice/
-    TRI_FACILITY/ZIP_CODE/77001/JSON
+<pre><code>GET https://data.epa.gov/dmapservice/
+    tri.tri_facility/zip_code/equals/77530/JSON
 
 Returns: [{
-  "TRI_FACILITY_ID": "77001LYNDL2250E",
-  "FACILITY_NAME": "LYONDELLBASELL CHANNELVIEW",
-  "STREET_ADDRESS": "2250 E SHELDON RD",
-  "CITY_NAME": "CHANNELVIEW",
-  "COUNTY_NAME": "HARRIS",
-  "LATITUDE": 29.7688,
-  "LONGITUDE": -95.1094,
-  "INDUSTRY_SECTOR": "Petroleum Refining",
+  "tri_facility_id": "77530RCCHM2502S",
+  "facility_name": "LYONDELL CHEMICAL CO",
+  "street_address": "2502 SHELDON RD",
+  "city_name": "CHANNELVIEW",
+  "county_name": "HARRIS",
+  "pref_latitude": 29.814167,
+  "pref_longitude": 95.101111,
+  "standardized_parent_company": "LYONDELLBASELL FINANCE CO",
   ...
 }]</code></pre>
+
+<p>(Envirofacts moved to this DMAP endpoint in 2025; the <a href="https://www.epa.gov/enviro/envirofacts-data-service-api" target="_blank" rel="noopener">API documentation</a> covers the newer filter syntax. Longitudes in this table are stored as positive degrees west.)</p>
 
 <p>For ECHO, the facility search endpoint accepts latitude/longitude with a radius parameter:</p>
 

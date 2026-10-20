@@ -1337,3 +1337,26 @@ span.card__platform::before,
   letter-spacing: 0.06em;
   cursor: help;
 }
+
+/* Temporarily offline: link kept (URL in data-href) but not clickable */
+a[aria-disabled="true"] {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: line-through;
+  text-decoration-color: var(--amber);
+  opacity: 0.6;
+}
+a.card__platform[aria-disabled="true"] { color: var(--text-dim); }
+a.card__platform[aria-disabled="true"]::before {
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  box-shadow: none;
+}
+.card__notice {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+}

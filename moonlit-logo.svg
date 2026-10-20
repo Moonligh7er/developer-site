@@ -1,0 +1,274 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Teal glow for the crescent -->
+    <radialGradient id="crescentGlow" cx="35%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00ffc8" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#00ffc8" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#00ffc8" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <!-- Subtle outer glow -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0  0 0 0 0 1  0 0 0 0 0.78  0 0 0 0.5 0" result="tealBlur"/>
+      <feMerge>
+        <feMergeNode in="tealBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip for code rain inside the dark portion -->
+    <clipPath id="darkMoon">
+      <!-- Full circle minus the crescent = the dark part -->
+      <path d="M256,36 A220,220 0 1,1 256,476 A220,220 0 1,1 256,36 Z"/>
+    </clipPath>
+
+    <!-- Clip to keep code rain only in the dark (non-crescent) area -->
+    <clipPath id="codeArea">
+      <path d="M256,36 A220,220 0 0,1 256,476 A160,220 0 0,0 256,36 Z"/>
+    </clipPath>
+
+    <!-- Mask for the crescent shape -->
+    <mask id="crescentMask">
+      <rect width="512" height="512" fill="black"/>
+      <!-- Full moon circle -->
+      <circle cx="256" cy="256" r="220" fill="white"/>
+      <!-- Cut out the dark side to leave crescent -->
+      <circle cx="310" cy="256" r="180" fill="black"/>
+    </mask>
+
+    <!-- Mask for dark side (inverse of crescent) -->
+    <mask id="darkMask">
+      <rect width="512" height="512" fill="black"/>
+      <circle cx="310" cy="256" r="180" fill="white"/>
+      <!-- But only within the moon circle -->
+    </mask>
+
+    <mask id="moonCircle">
+      <rect width="512" height="512" fill="black"/>
+      <circle cx="256" cy="256" r="220" fill="white"/>
+    </mask>
+  </defs>
+
+  <!-- Background (transparent for logo use) -->
+
+  <!-- Dark side of the moon with code characters -->
+  <g mask="url(#moonCircle)">
+    <!-- Dark moon base -->
+    <circle cx="310" cy="256" r="180" fill="#07070d"/>
+
+    <!-- Code rain columns in the dark portion -->
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.12">
+      <!-- Column 1 -->
+      <text x="230" y="80">0</text>
+      <text x="230" y="95">1</text>
+      <text x="230" y="110">1</text>
+      <text x="230" y="125">0</text>
+      <text x="230" y="140">1</text>
+      <text x="230" y="155">0</text>
+      <text x="230" y="170">0</text>
+      <text x="230" y="185">1</text>
+      <text x="230" y="200">1</text>
+      <text x="230" y="215">0</text>
+      <text x="230" y="230">1</text>
+      <text x="230" y="245">0</text>
+      <text x="230" y="260">1</text>
+      <text x="230" y="275">1</text>
+      <text x="230" y="290">0</text>
+      <text x="230" y="305">0</text>
+      <text x="230" y="320">1</text>
+      <text x="230" y="335">0</text>
+      <text x="230" y="350">1</text>
+      <text x="230" y="365">1</text>
+      <text x="230" y="380">0</text>
+      <text x="230" y="395">1</text>
+      <text x="230" y="410">0</text>
+      <text x="230" y="425">0</text>
+    </g>
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.18">
+      <!-- Column 2 -->
+      <text x="255" y="70">{</text>
+      <text x="255" y="85">1</text>
+      <text x="255" y="100">0</text>
+      <text x="255" y="115">}</text>
+      <text x="255" y="130">0</text>
+      <text x="255" y="145">1</text>
+      <text x="255" y="160">1</text>
+      <text x="255" y="175">0</text>
+      <text x="255" y="190">0</text>
+      <text x="255" y="205">1</text>
+      <text x="255" y="220">;</text>
+      <text x="255" y="235">0</text>
+      <text x="255" y="250">1</text>
+      <text x="255" y="265">0</text>
+      <text x="255" y="280">1</text>
+      <text x="255" y="295">1</text>
+      <text x="255" y="310">0</text>
+      <text x="255" y="325">0</text>
+      <text x="255" y="340">1</text>
+      <text x="255" y="355">0</text>
+      <text x="255" y="370">1</text>
+      <text x="255" y="385">1</text>
+      <text x="255" y="400">0</text>
+      <text x="255" y="415">/</text>
+      <text x="255" y="430">1</text>
+    </g>
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.25">
+      <!-- Column 3 - brighter -->
+      <text x="280" y="90">0</text>
+      <text x="280" y="105">1</text>
+      <text x="280" y="120">0</text>
+      <text x="280" y="135">1</text>
+      <text x="280" y="150">1</text>
+      <text x="280" y="165">0</text>
+      <text x="280" y="180">(</text>
+      <text x="280" y="195">1</text>
+      <text x="280" y="210">0</text>
+      <text x="280" y="225">1</text>
+      <text x="280" y="240">0</text>
+      <text x="280" y="255">1</text>
+      <text x="280" y="270">0</text>
+      <text x="280" y="285">0</text>
+      <text x="280" y="300">1</text>
+      <text x="280" y="315">)</text>
+      <text x="280" y="330">0</text>
+      <text x="280" y="345">1</text>
+      <text x="280" y="360">1</text>
+      <text x="280" y="375">0</text>
+      <text x="280" y="390">0</text>
+      <text x="280" y="405">1</text>
+      <text x="280" y="420">0</text>
+    </g>
+    <g fill="#a855f7" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.15">
+      <!-- Column 4 - violet -->
+      <text x="305" y="75">1</text>
+      <text x="305" y="90">0</text>
+      <text x="305" y="105">1</text>
+      <text x="305" y="120">=</text>
+      <text x="305" y="135">0</text>
+      <text x="305" y="150">1</text>
+      <text x="305" y="165">0</text>
+      <text x="305" y="180">1</text>
+      <text x="305" y="195">1</text>
+      <text x="305" y="210">0</text>
+      <text x="305" y="225">0</text>
+      <text x="305" y="240">1</text>
+      <text x="305" y="255">0</text>
+      <text x="305" y="270">1</text>
+      <text x="305" y="285">1</text>
+      <text x="305" y="300">0</text>
+      <text x="305" y="315">1</text>
+      <text x="305" y="330">0</text>
+      <text x="305" y="345">0</text>
+      <text x="305" y="360">1</text>
+      <text x="305" y="375">=</text>
+      <text x="305" y="390">0</text>
+      <text x="305" y="405">1</text>
+      <text x="305" y="420">1</text>
+      <text x="305" y="435">0</text>
+    </g>
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.1">
+      <!-- Column 5 -->
+      <text x="330" y="100">0</text>
+      <text x="330" y="115">1</text>
+      <text x="330" y="130">1</text>
+      <text x="330" y="145">0</text>
+      <text x="330" y="160">0</text>
+      <text x="330" y="175">1</text>
+      <text x="330" y="190">0</text>
+      <text x="330" y="205">1</text>
+      <text x="330" y="220">1</text>
+      <text x="330" y="235">0</text>
+      <text x="330" y="250">1</text>
+      <text x="330" y="265">0</text>
+      <text x="330" y="280">0</text>
+      <text x="330" y="295">1</text>
+      <text x="330" y="310">1</text>
+      <text x="330" y="325">0</text>
+      <text x="330" y="340">1</text>
+      <text x="330" y="355">0</text>
+      <text x="330" y="370">0</text>
+      <text x="330" y="385">1</text>
+      <text x="330" y="400">0</text>
+      <text x="330" y="415">1</text>
+    </g>
+    <g fill="#a855f7" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.08">
+      <!-- Column 6 - faint violet -->
+      <text x="355" y="115">1</text>
+      <text x="355" y="130">0</text>
+      <text x="355" y="145">1</text>
+      <text x="355" y="160">0</text>
+      <text x="355" y="175">0</text>
+      <text x="355" y="190">1</text>
+      <text x="355" y="205">1</text>
+      <text x="355" y="220">0</text>
+      <text x="355" y="235">1</text>
+      <text x="355" y="250">0</text>
+      <text x="355" y="265">1</text>
+      <text x="355" y="280">0</text>
+      <text x="355" y="295">1</text>
+      <text x="355" y="310">1</text>
+      <text x="355" y="325">0</text>
+      <text x="355" y="340">0</text>
+      <text x="355" y="355">1</text>
+      <text x="355" y="370">0</text>
+      <text x="355" y="385">1</text>
+      <text x="355" y="400">1</text>
+    </g>
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="11" opacity="0.06">
+      <!-- Column 7 - very faint, edge -->
+      <text x="380" y="140">0</text>
+      <text x="380" y="155">1</text>
+      <text x="380" y="170">0</text>
+      <text x="380" y="185">1</text>
+      <text x="380" y="200">1</text>
+      <text x="380" y="215">0</text>
+      <text x="380" y="230">0</text>
+      <text x="380" y="245">1</text>
+      <text x="380" y="260">0</text>
+      <text x="380" y="275">1</text>
+      <text x="380" y="280">1</text>
+      <text x="380" y="295">0</text>
+      <text x="380" y="310">0</text>
+      <text x="380" y="325">1</text>
+      <text x="380" y="340">0</text>
+      <text x="380" y="355">1</text>
+      <text x="380" y="370">0</text>
+    </g>
+
+    <!-- A few brighter "lead" characters falling -->
+    <g fill="#00ffc8" font-family="'JetBrains Mono', 'Courier New', monospace" font-size="12" opacity="0.5">
+      <text x="255" y="160">1</text>
+      <text x="280" y="240">0</text>
+      <text x="305" y="195">1</text>
+      <text x="330" y="280">0</text>
+      <text x="355" y="220">1</text>
+    </g>
+  </g>
+
+  <!-- Lit crescent -->
+  <g filter="url(#glow)">
+    <g mask="url(#crescentMask)">
+      <circle cx="256" cy="256" r="220" fill="url(#crescentGlow)"/>
+      <!-- Inner edge highlight -->
+      <circle cx="256" cy="256" r="218" fill="none" stroke="#00ffc8" stroke-width="1" opacity="0.4"/>
+    </g>
+  </g>
+
+  <!-- Outer ring - very subtle -->
+  <circle cx="256" cy="256" r="222" fill="none" stroke="#00ffc8" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- Tiny ambient particles -->
+  <g fill="#00ffc8" opacity="0.3">
+    <circle cx="170" cy="140" r="1"/>
+    <circle cx="145" cy="290" r="0.8"/>
+    <circle cx="190" cy="400" r="1.2"/>
+    <circle cx="420" cy="180" r="0.6"/>
+    <circle cx="400" cy="350" r="0.9"/>
+  </g>
+  <g fill="#a855f7" opacity="0.2">
+    <circle cx="160" cy="200" r="0.7"/>
+    <circle cx="430" cy="260" r="0.8"/>
+    <circle cx="200" cy="430" r="1"/>
+  </g>
+</svg>

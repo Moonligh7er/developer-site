@@ -4,6 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signal Lost | dev://portfolio</title>
+  <script>
+    // Pages that used to be hosted here now live on each project's own site.
+    // Forward old links (bookmarks, search results) instead of dead-ending them.
+    (function () {
+      var p = location.pathname.replace(/^\/developer-site\//, '');
+      var m, to = null;
+      if ((m = p.match(/^portfolio-pieces\/DeepSeer\/blog\/?([a-z0-9-]*?)(?:\.html)?$/))) {
+        to = 'https://hyperscry.dev/blog' + (m[1] && m[1] !== 'index' ? '/' + m[1] : '');
+      } else if ((m = p.match(/^portfolio-pieces\/Entheo\/blog\/?([a-z0-9-]*?)(?:\.html)?$/))) {
+        to = 'https://entheo-eosin.vercel.app/blog' + (m[1] && m[1] !== 'index' ? '/' + m[1] + '.html' : '');
+      } else if ((m = p.match(/^portfolio-pieces\/FixItFaster\/(features|privacy|terms)(?:\.html)?$/))) {
+        to = 'https://fault-line.dev/' + m[1];
+      } else if (/^portfolio-pieces\/ForkedTongue\/(?:index\.html)?$/.test(p)) {
+        to = 'https://forked-tongue.vercel.app/';
+      } else if (/^portfolio-pieces\/AI-Signal-Tracker\//.test(p)) {
+        to = 'https://ai-consciousness-tracker.vercel.app/';
+      } else if (/^portfolio-pieces\//.test(p)) {
+        to = '/developer-site/portfolio.html';
+      }
+      if (to) location.replace(to);
+    })();
+  </script>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="/developer-site/img/moonlit-logo.png">

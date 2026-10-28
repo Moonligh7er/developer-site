@@ -249,9 +249,9 @@
         <span class="ai-notice__dot"></span>
         <span class="ai-notice__title">Pattern engine v<span id="engine-version">2</span> &mdash; runs in your browser</span>
         <span class="ai-notice__dot ai-notice__dot--amber" style="margin-left:0.75rem;"></span>
-        <span class="ai-notice__title ai-notice__title--amber">AI deep scan &mdash; not yet switched on</span>
+        <span class="ai-notice__title ai-notice__title--amber">AI deep scan &mdash; optional, 3 a day</span>
       </div>
-      <p class="ai-notice__body">Nothing you paste leaves this page. The engine is the same rule set that powers <strong>Civic Filament: Persuasion Lab</strong>: it detects <em>structure</em> (if-you-don&rsquo;t/I-will threats, pay-then-do bribes, ultimatums) as well as vocabulary, weighs each hit by how harmful the technique is, and reports its own confidence. Honest hedging (&ldquo;perhaps&rdquo;, &ldquo;to the best of my knowledge&rdquo;) is never counted against a writer. The AI deep scan, which reads context and omission, will call Persuasion Lab&rsquo;s analysis service once it is funded.</p>
+      <p class="ai-notice__body">Nothing you paste leaves this page unless you ask for the AI deep scan. The engine is the same rule set that powers <strong>Civic Filament: Persuasion Lab</strong>: it detects <em>structure</em> (if-you-don&rsquo;t/I-will threats, pay-then-do bribes, ultimatums) as well as vocabulary, weighs each hit by how harmful the technique is, and reports its own confidence. Honest hedging (&ldquo;perhaps&rdquo;, &ldquo;to the best of my knowledge&rdquo;) is never counted against a writer. The AI deep scan reads context and omission: it sends your text, anonymously, to Persuasion Lab&rsquo;s analysis service, which runs it through Claude and doesn&rsquo;t save it. Three deep scans a day per visitor.</p>
       <details>
         <summary>What a pattern engine cannot see &darr;</summary>
         <ul class="ai-notice__list" id="cannot-see-list"></ul>
@@ -274,7 +274,7 @@
         </div>
         <div class="btn-row">
           <button class="btn-analyze" id="btn-analyze" type="button" disabled>Analyze</button>
-          <button class="btn-ai" id="btn-ai" type="button" disabled title="AI deep scan is not switched on yet">AI deep scan &mdash; soon</button>
+          <button class="btn-ai" id="btn-ai" type="button" disabled title="Analyze first, then send the same text for a contextual AI read">AI deep scan</button>
           <button class="btn-clear" id="btn-clear" type="button">Clear</button>
           <span class="char-count" id="char-count">0 characters</span>
         </div>
@@ -399,7 +399,7 @@
     var D = window.PersuasionDetector;
     if (!D) { document.getElementById('score-verdict').textContent = 'Engine failed to load.'; return; }
 
-    // ========== AI DEEP SCAN (switched off until funded) ==========
+    // ========== AI DEEP SCAN ==========
     // When enabled, the page POSTs { input } to Persuasion Lab's public, anonymous, non-persisting
     // endpoint (IP-limited to 3 scans/day) and renders the DefenseResult it returns:
     //   { techniquesIdentified: [{ name, category, quote, explanation, severityLevel }],
@@ -407,9 +407,9 @@
     //     counterArguments: [{ technique, rebuttal, explanation }], boundaryScripts: string[] }
     // The system prompt behind that endpoint is DEFENSE_SYSTEM_PROMPT in the Persuasion Lab API
     // (packages/api/src/prompts/defense.ts). No API key is ever present in this page.
-    // Server prerequisite: add https://moonligh7er.github.io to CORS_ORIGINS on the API host.
+    // Server prerequisite: https://moonligh7er.github.io must stay in CORS_ORIGINS on the API host.
     var AI_MODE = {
-      enabled: false,
+      enabled: true,
       endpoint: 'https://filament-api-production.up.railway.app/api/defense/public',
       maxChars: 3000
     };
@@ -629,8 +629,10 @@
     function aiDeepScan() {
       if (!AI_MODE.enabled || !lastText) return;
       var panel = el('ai-panel');
+      var aiBtn = el('btn-ai');
+      aiBtn.disabled = true; // one scan per analyzed text; each counts against the 3/day limit
       panel.classList.add('active');
-      el('ai-status').textContent = 'Contacting Persuasion Lab (anonymous, nothing stored)...';
+      el('ai-status').textContent = 'Contacting Persuasion Lab (anonymous, nothing stored). This takes about 15 seconds...';
       el('ai-result').innerHTML = '';
       fetch(AI_MODE.endpoint, {
         method: 'POST',
@@ -640,12 +642,13 @@
         .then(function (x) {
           if (!x.ok || !x.body || !x.body.success) {
             el('ai-status').textContent = (x.body && (x.body.message || x.body.error)) || ('Deep scan unavailable (HTTP ' + x.status + ').');
+            if (x.status !== 429) aiBtn.disabled = false;
             return;
           }
           el('ai-status').textContent = 'Contextual analysis by Claude via Civic Filament: Persuasion Lab. Treat as a second opinion, not a verdict.';
           renderAiResult(x.body.data);
         })
-        .catch(function () { el('ai-status').textContent = 'Deep scan unavailable right now. The pattern results above still stand.'; });
+        .catch(function () { el('ai-status').textContent = 'Deep scan unavailable right now. The pattern results above still stand.'; aiBtn.disabled = false; });
     }
 
     // ---------- events ----------

@@ -675,6 +675,20 @@ body::before {
 .card--amber .card__category { color: var(--amber); }
 .card--rose .card__category { color: var(--rose); }
 
+/* Backglow in the card's accent colour, for the flagship projects */
+.card--glow {
+  --glow: 0, 212, 170;
+  border-color: rgba(var(--glow), 0.22);
+  box-shadow: 0 0 24px rgba(var(--glow), 0.14);
+}
+.card--glow.card--violet { --glow: 139, 92, 246; }
+.card--glow.card--amber { --glow: 212, 160, 32; }
+.card--glow.card--rose { --glow: 196, 74, 138; }
+.card--glow:hover {
+  border-color: rgba(var(--glow), 0.4);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 32px rgba(var(--glow), 0.22);
+}
+
 /* --- Card footer: platform links + extras --- */
 .card__footer {
   display: flex;

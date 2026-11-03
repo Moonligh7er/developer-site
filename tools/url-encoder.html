@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free URL Encoder & Decoder — Percent Encoding Tool | Moonlit Social Labs</title>
-  <meta name="description" content="Encode and decode URL components with percent encoding. Handles special characters, spaces, and unicode. Client-side only.">
+  <meta name="description" content="Percent-encode and decode text for URLs: query values, strict RFC 3986, form data (+ for spaces) or whole URLs. UTF-8 aware; runs in your browser.">
   <meta name="keywords" content="URL encoder, URL decoder, percent encoding, URI encoder, encodeURIComponent, online URL tool">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free URL Encoder & Decoder — Percent Encoding Tool",
-    "description": "Encode and decode URL components with percent encoding. Handles special characters, spaces, and unicode. Client-side only.",
+    "description": "Percent-encode and decode text for URLs: query values, strict RFC 3986, form data (+ for spaces) or whole URLs. UTF-8 aware; runs in your browser.",
     "url": "https://moonligh7er.github.io/developer-site/tools/url-encoder.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free URL Encoder & Decoder — Percent Encoding Tool">
-  <meta property="og:description" content="Encode and decode URL components with percent encoding. Handles special characters, spaces, and unicode. Client-side only.">
+  <meta property="og:description" content="Percent-encode and decode text for URLs: query values, strict RFC 3986, form data (+ for spaces) or whole URLs. UTF-8 aware; runs in your browser.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/url-encoder.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free URL Encoder & Decoder — Percent Encoding Tool">
-  <meta name="twitter:description" content="Encode and decode URL components with percent encoding. Handles special characters, spaces, and unicode. Client-side only.">
+  <meta name="twitter:description" content="Percent-encode and decode text for URLs: query values, strict RFC 3986, form data (+ for spaces) or whole URLs. UTF-8 aware; runs in your browser.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -531,6 +531,144 @@
       border-color: var(--teal);
       box-shadow: 0 0 8px var(--teal-dim);
     }
+    /* ── Dev tools suite: shared additions (same block on the hub and all 30 tool pages) ── */
+    .dt-btn, .dt-select { min-height: 40px; }
+    .dt-select { max-width: 100%; }
+    .dt-field > .dt-select { width: 100%; }
+    .dt-tab { min-height: 44px; }
+    .dt-btn[aria-pressed="true"] { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .dt-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+    .dt-btn--sm { min-height: 40px; padding: 0.35rem 0.75rem; font-size: 0.58rem; }
+    .dt-input { min-height: 40px; }
+    .dt-input[type="color"] { padding: 0.25rem; height: 44px; cursor: pointer; }
+    .dt-input--sm { width: 7rem; }
+    .dt-textarea, .dt-input { font-size: max(16px, 0.85rem); }
+    @media (min-width: 769px) { .dt-textarea, .dt-input { font-size: 0.85rem; } }
+    .dt-label--inline { display: inline-block; margin-bottom: 0; }
+    .dt-field { margin-bottom: 1rem; }
+    .dt-field .dt-label { margin-bottom: 0.4rem; }
+    .dt-check { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 40px; cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); }
+    .dt-check input { width: 1.05rem; height: 1.05rem; accent-color: var(--teal); margin: 0; }
+    .dt-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .dt-row--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .dt-row > * { min-width: 0; }
+    @media (max-width: 768px) { .dt-row--3, .dt-row--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 480px) { .dt-row--3, .dt-row--4 { grid-template-columns: 1fr; } }
+    .dt-status-line { min-height: 1.9rem; }
+    .dt-status { line-height: 1.5; }
+    .dt-status--warn { color: var(--amber); border-left: 2px solid var(--amber); }
+    .dt-status--info { color: var(--text-secondary); border-left: 2px solid var(--border-glow); }
+    .dt-field-error { font-family: var(--font-mono); font-size: 0.7rem; color: var(--rose); margin: 0.35rem 0 0; line-height: 1.5; }
+    .dt-field-error:empty { display: none; }
+    .dt-input[aria-invalid="true"], .dt-textarea[aria-invalid="true"] { border-color: var(--rose); }
+    .dt-hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin: 0.35rem 0 0; }
+    .dt-dedicated { margin: -0.75rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .dt-dedicated a { color: var(--teal); text-decoration: none; }
+    .dt-dedicated a:hover { color: var(--text-bright); }
+    .dt-output { overflow-x: auto; }
+    .dt-output:focus-visible, .dt-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .dt-output--tall { max-height: 520px; }
+    .dt-output--nowrap { white-space: pre; word-break: normal; }
+    .dt-table-wrap { overflow-x: auto; max-width: 100%; }
+    .dt-table-wrap--scroll { max-height: 520px; overflow-y: auto; }
+    .hash-table th { padding: 0.6rem 0.75rem; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; text-align: left; vertical-align: top; }
+    .hash-table tbody th { width: 1%; white-space: nowrap; }
+    .hash-table td { vertical-align: top; }
+    .hash-table .dt-kv-copy { width: 1%; padding: 0.3rem 0.5rem; vertical-align: middle; word-break: normal; white-space: nowrap; }
+    .dt-kv--err { color: var(--rose); }
+    .dt-kv--warn { color: var(--amber); }
+    .dt-th-note { display: block; text-transform: none; letter-spacing: 0; font-size: 0.6rem; color: var(--text-dim); margin-top: 0.2rem; }
+    @media (max-width: 600px) { .hash-table tbody th { white-space: normal; width: 34%; } }
+    .dt-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .dt-how summary { cursor: pointer; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); min-height: 40px; display: flex; align-items: center; }
+    .dt-how summary:hover { color: var(--teal); }
+    .dt-how summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .dt-how p, .dt-how li { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+    .dt-how p + p { margin-top: 0.6rem; }
+    .dt-how ul { margin: 0.4rem 0 0.6rem 1.25rem; list-style: disc; }
+    .dt-how code { font-family: var(--font-mono); font-size: 0.82em; color: var(--text-primary); }
+    .dt-how a { color: var(--teal); }
+    .dt-panel[hidden] { display: none !important; }
+    .dt-jump { display: none; margin: 0 0 1rem; }
+    .dt-jump .dt-select { width: 100%; }
+    @media (max-width: 768px) { .dt-jump { display: block; } }
+    .dt-card { min-width: 0; }
+    .dt-panel { color-scheme: dark; }
+    .dt-panel input[type="file"]::file-selector-button { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: var(--teal); border: 1px solid var(--teal); padding: 0.55rem 0.9rem; margin-right: 0.75rem; cursor: pointer; }
+    .dt-panel input[type="file"] { color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem; }
+    /* tool-specific */
+    .regex-highlight .dt-mark-empty { display: inline-block; width: 2px; height: 1.1em; vertical-align: text-bottom; background: var(--teal); border: 0; padding: 0; }
+    .ts-live small { display: block; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.08em; margin-top: 0.25rem; }
+    .dt-list { margin: 0.5rem 0 0 1.4rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-primary); line-height: 1.9; }
+    .dt-pw-list { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+    .dt-pw-list li { display: flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border); border-top: 0; background: var(--surface); padding: 0.35rem 0.5rem 0.35rem 1rem; }
+    .dt-pw-list li:first-child { border-top: 1px solid var(--border); }
+    .dt-pw-list code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-bright); word-break: break-all; }
+    .dt-diff { padding: 0; font-size: 0.78rem; line-height: 1.55; white-space: normal; }
+    .dt-diff-row { display: grid; grid-template-columns: 3.2em 3.2em 1.4em minmax(0, 1fr); }
+    .dt-diff-ln { color: var(--text-faint); text-align: right; padding-right: 0.5em; user-select: none; }
+    .dt-diff-sign { text-align: center; user-select: none; }
+    .dt-diff-text { white-space: pre-wrap; word-break: break-word; padding-right: 0.75em; }
+    .dt-diff-row--add { background: var(--teal-glow); }
+    .dt-diff-row--add .dt-diff-sign, .dt-diff-row--add .dt-diff-text { color: var(--teal); }
+    .dt-diff-row--del { background: #c44a8a14; }
+    .dt-diff-row--del .dt-diff-sign, .dt-diff-row--del .dt-diff-text { color: var(--rose); }
+    .dt-diff-row--same .dt-diff-text { color: var(--text-secondary); }
+    .dt-diff-row--gap { grid-template-columns: 1fr; color: var(--text-dim); background: var(--deep); text-align: center; font-size: 0.7rem; padding: 0.15rem 0; }
+    .dt-md { white-space: normal; word-break: break-word; font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.65; }
+    .dt-md > :first-child { margin-top: 0; }
+    .dt-md h1, .dt-md h2, .dt-md h3, .dt-md h4, .dt-md h5, .dt-md h6 { font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin: 1rem 0 0.5rem; line-height: 1.3; }
+    .dt-md h1 { font-size: 1.6rem; } .dt-md h2 { font-size: 1.3rem; } .dt-md h3 { font-size: 1.1rem; } .dt-md h4, .dt-md h5, .dt-md h6 { font-size: 1rem; }
+    .dt-md p, .dt-md ul, .dt-md ol, .dt-md blockquote, .dt-md pre, .dt-md .dt-md-table { margin: 0.5rem 0; }
+    .dt-md ul, .dt-md ol { padding-left: 1.5rem; }
+    .dt-md ul { list-style: disc; } .dt-md ol { list-style: decimal; }
+    .dt-md li > ul, .dt-md li > ol { margin: 0.2rem 0; }
+    .dt-md a { color: var(--teal); }
+    .dt-md code { font-family: var(--font-mono); font-size: 0.85em; background: var(--deep); border: 1px solid var(--border); padding: 0.05rem 0.3rem; }
+    .dt-md pre { background: var(--deep); border: 1px solid var(--border); padding: 0.75rem; overflow-x: auto; white-space: pre; }
+    .dt-md pre code { border: 0; padding: 0; background: none; }
+    .dt-md blockquote { border-left: 2px solid var(--teal); padding-left: 1rem; color: var(--text-secondary); }
+    .dt-md hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .dt-md img { max-width: 100%; height: auto; }
+    .dt-md .dt-md-table { overflow-x: auto; }
+    .dt-md table { border-collapse: collapse; }
+    .dt-md th, .dt-md td { border: 1px solid var(--border); padding: 0.35rem 0.6rem; }
+    .dt-md del { color: var(--text-dim); }
+    .dt-md input[type="checkbox"] { accent-color: var(--teal); margin-right: 0.3rem; }
+    .dt-swatch-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: end; }
+    .dt-swatch-row .color-swatch { margin: 0; }
+    .dt-swatch-row .dt-input[type="color"] { width: 5rem; height: 80px; }
+    .dt-chmod-table td, .dt-chmod-table th { text-align: center; }
+    .dt-chmod-table tbody th { text-align: left; }
+    .dt-chmod-table input { width: 1.2rem; height: 1.2rem; accent-color: var(--teal); cursor: pointer; }
+    .dt-chmod-table label { display: flex; justify-content: center; align-items: center; gap: 0.4rem; min-height: 40px; cursor: pointer; }
+    .dt-http-code { font-size: 0.85rem !important; font-weight: 500; letter-spacing: 0 !important; }
+    .dt-http-1 { color: var(--text-secondary) !important; } .dt-http-2 { color: var(--teal) !important; } .dt-http-3 { color: var(--violet) !important; }
+    .dt-http-4 { color: var(--amber) !important; } .dt-http-5 { color: var(--rose) !important; }
+    .dt-http-desc { display: block; color: var(--text-secondary); font-size: 0.72rem; margin-top: 0.2rem; word-break: normal; }
+    .dt-http-ref { color: var(--text-dim) !important; font-size: 0.65rem !important; white-space: nowrap; word-break: normal !important; }
+    @media (max-width: 600px) { .dt-http-ref { white-space: normal; } }
+    .dt-ascii thead th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
+    .dt-ascii td, .dt-ascii th { white-space: nowrap; word-break: normal; }
+    .dt-ascii-char { min-width: 3rem; min-height: 40px; background: transparent; border: 1px solid var(--border); color: var(--teal); font-family: var(--font-mono); font-size: 1rem; cursor: pointer; }
+    .dt-ascii-char--ctl { font-size: 0.62rem; color: var(--text-dim); }
+    .dt-ascii-char:hover { border-color: var(--teal); }
+    .dt-ascii-char.copied { font-size: 0.55rem; }
+    .dt-drop { display: block; border: 1px dashed var(--border-glow); background: var(--surface); padding: 1.5rem 1rem; text-align: center; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; transition: border-color 0.2s ease; }
+    .dt-drop:hover, .dt-drop.is-over, .dt-drop:focus-within { border-color: var(--teal); }
+    .dt-drop input { min-height: 40px; display: block; margin: 0.75rem auto 0; max-width: 100%; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem; }
+    .dt-preview img { max-width: 220px; max-height: 220px; border: 1px solid var(--border); background: repeating-conic-gradient(#ffffff10 0 25%, transparent 0 50%) 0 0 / 16px 16px; }
+    .dt-fav-preview { display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; margin: 1rem 0; }
+    .dt-fav-item { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; margin: 0; }
+    .dt-fav-item figcaption { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); }
+    .dt-range { width: 100%; accent-color: var(--teal); min-height: 40px; }
+    .dt-grad-preview { width: 100%; height: 180px; border: 1px solid var(--border); margin: 0.5rem 0; }
+    @media (max-width: 600px) {
+      .dt-card { padding: 1.25rem 1rem; }
+      .dt-panels, .dt-tabs-wrap, .dt-standalone-wrap { padding-left: 1rem; padding-right: 1rem; }
+      .dt-other-tools { margin-left: 1rem; margin-right: 1rem; padding: 1.25rem 1rem; }
+      .dt-diff-row { grid-template-columns: 2.4em 2.4em 1.2em minmax(0, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -561,28 +699,44 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="dt-standalone-wrap">
-      <p class="dt-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="dev-tools.html">Dev Tools Suite</a> &rarr; Url Encoder</p>
-      <div class="dt-panel" id="panel-url" role="tabpanel">
+      <nav class="dt-breadcrumb" aria-label="Breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="dev-tools.html">Dev Tools Suite</a> &rarr; Url Encoder</nav>
+      <div class="dt-panel" id="panel-url">
         <div class="dt-card">
-          <h2 class="dt-card__title">URL Encode / Decode</h2>
-          <p class="dt-card__desc">Encode or decode URL components. Handles special characters, spaces, and unicode.</p>
+          <h1 class="dt-card__title">URL Encode / Decode</h1>
+          <p class="dt-card__desc">Percent-encode text for a URL, or decode it back. Pick the mode that matches where the text is going.</p>
+          <div class="dt-field">
+            <label class="dt-label" for="url-mode">Mode</label>
+            <select class="dt-select" id="url-mode">
+              <option value="component">Component: a query value or path segment (encodeURIComponent)</option>
+              <option value="strict">Component, strict RFC 3986 (also encodes ! ' ( ) *)</option>
+              <option value="form">Form data: application/x-www-form-urlencoded (space &rarr; +)</option>
+              <option value="uri">Whole URL: keep : / ? # &amp; = (encodeURI)</option>
+            </select>
+          </div>
           <div class="dt-row">
             <div>
-              <label class="dt-label" for="url-input">Decoded Text</label>
-              <textarea class="dt-textarea" id="url-input" rows="8" placeholder="hello world & foo=bar"></textarea>
+              <label class="dt-label" for="url-input">Decoded text</label>
+              <textarea class="dt-textarea" id="url-input" rows="7" spellcheck="false" aria-describedby="url-input-err">name=Zoë &amp; friends / 100% fun?</textarea>
+              <p class="dt-field-error" id="url-input-err" aria-live="polite"></p>
             </div>
             <div>
-              <label class="dt-label" for="url-output">Encoded URL</label>
-              <textarea class="dt-textarea" id="url-output" rows="8" placeholder="hello%20world%20%26%20foo%3Dbar"></textarea>
+              <label class="dt-label" for="url-output">Encoded</label>
+              <textarea class="dt-textarea" id="url-output" rows="7" spellcheck="false" aria-describedby="url-output-err"></textarea>
+              <p class="dt-field-error" id="url-output-err" aria-live="polite"></p>
             </div>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="urlEncode()">Encode &rarr;</button>
-            <button class="dt-btn dt-btn--violet" onclick="urlDecode()">&larr; Decode</button>
-            <button class="dt-btn" onclick="urlEncodeComponent()">Encode Component</button>
-            <button class="dt-btn" onclick="copyOutput('url-output')">Copy Encoded</button>
-            <button class="dt-btn" onclick="clearFields('url-input','url-output')">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="encode">Encode &rarr;</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="decode">&larr; Decode</button>
+            <button type="button" class="dt-btn" data-copy="url-output">Copy encoded</button>
+            <button type="button" class="dt-btn" data-copy="url-input">Copy decoded</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <div class="dt-status-line" id="url-status" aria-live="polite"></div>
+          <details class="dt-how" open><summary>How it works</summary>
+            <p>Characters are converted to UTF-8 bytes and each unsafe byte becomes <code>%XX</code>. <strong>Component</strong> mode is right for one piece of a URL (a query value, a path segment): it encodes everything except letters, digits and <code>- _ . ! ~ * ' ( )</code>. <strong>Strict</strong> also encodes <code>! ' ( ) *</code>, leaving only RFC 3986's unreserved set. <strong>Form data</strong> follows the URL Standard's form encoding, writing spaces as <code>+</code>. <strong>Whole URL</strong> leaves the URL's structure (<code>: / ? # &amp; =</code>) alone, so don't use it for values that contain those characters.</p>
+            <p>Decoding uses the same mode; in Component mode a <code>+</code> stays a plus sign, while Form mode turns it into a space. A stray <code>%</code> or an escape that isn't valid UTF-8 is pointed out rather than guessed at.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -590,32 +744,32 @@
   <aside class="dt-other-tools">
     <p class="dt-other-tools__title">Also Available &mdash; 29 Other Tools</p>
     <div class="dt-other-tools__grid">
-      <a href="json-formatter.html" class="dt-other-tools__link">Json Formatter</a>
+      <a href="json-formatter.html" class="dt-other-tools__link">JSON Formatter</a>
       <a href="base64-encoder.html" class="dt-other-tools__link">Base64 Encoder</a>
       <a href="hash-generator.html" class="dt-other-tools__link">Hash Generator</a>
-      <a href="uuid-generator.html" class="dt-other-tools__link">Uuid Generator</a>
-      <a href="jwt-decoder.html" class="dt-other-tools__link">Jwt Decoder</a>
+      <a href="uuid-generator.html" class="dt-other-tools__link">UUID Generator</a>
+      <a href="jwt-decoder.html" class="dt-other-tools__link">JWT Decoder</a>
       <a href="color-converter.html" class="dt-other-tools__link">Color Converter</a>
       <a href="regex-tester.html" class="dt-other-tools__link">Regex Tester</a>
       <a href="timestamp-converter.html" class="dt-other-tools__link">Timestamp Converter</a>
-      <a href="lorem-ipsum-generator.html" class="dt-other-tools__link">Lorem Ipsum Generator</a>
+      <a href="lorem-ipsum-generator.html" class="dt-other-tools__link">Lorem Ipsum</a>
       <a href="cron-parser.html" class="dt-other-tools__link">Cron Parser</a>
       <a href="diff-checker.html" class="dt-other-tools__link">Diff Checker</a>
       <a href="markdown-preview.html" class="dt-other-tools__link">Markdown Preview</a>
       <a href="code-beautifier.html" class="dt-other-tools__link">Code Beautifier</a>
-      <a href="csv-json-converter.html" class="dt-other-tools__link">Csv Json Converter</a>
+      <a href="csv-json-converter.html" class="dt-other-tools__link">CSV &harr; JSON</a>
       <a href="case-converter.html" class="dt-other-tools__link">Case Converter</a>
       <a href="character-counter.html" class="dt-other-tools__link">Character Counter</a>
       <a href="text-sorter.html" class="dt-other-tools__link">Text Sorter</a>
       <a href="chmod-calculator.html" class="dt-other-tools__link">Chmod Calculator</a>
-      <a href="http-status-codes.html" class="dt-other-tools__link">Http Status Codes</a>
+      <a href="http-status-codes.html" class="dt-other-tools__link">HTTP Status Codes</a>
       <a href="user-agent-parser.html" class="dt-other-tools__link">User Agent Parser</a>
-      <a href="cidr-calculator.html" class="dt-other-tools__link">Cidr Calculator</a>
+      <a href="cidr-calculator.html" class="dt-other-tools__link">CIDR Calculator</a>
       <a href="text-escape.html" class="dt-other-tools__link">Text Escape</a>
-      <a href="image-to-base64.html" class="dt-other-tools__link">Image To Base64</a>
+      <a href="image-to-base64.html" class="dt-other-tools__link">Image to Base64</a>
       <a href="password-generator.html" class="dt-other-tools__link">Password Generator</a>
       <a href="number-base-converter.html" class="dt-other-tools__link">Number Base Converter</a>
-      <a href="ascii-table.html" class="dt-other-tools__link">Ascii Table</a>
+      <a href="ascii-table.html" class="dt-other-tools__link">ASCII Table</a>
       <a href="favicon-generator.html" class="dt-other-tools__link">Favicon Generator</a>
       <a href="gradient-generator.html" class="dt-other-tools__link">Gradient Generator</a>
       <a href="slug-generator.html" class="dt-other-tools__link">Slug Generator</a>
@@ -642,7 +796,7 @@
   <script src="../js/effects.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
-  <script src="dev-tools-core.js"></script>
+  <script src="dev-tools-core.js?v=2026-11-03"></script>
   <script defer src="../js/ads.js"></script>
 </body>
 </html>

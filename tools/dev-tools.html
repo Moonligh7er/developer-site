@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dev Tools Suite — 30+ Free Developer Tools: JSON, Regex, Diff, Cron, Markdown & More | Moonlit Social Labs</title>
-  <meta name="description" content="30+ free client-side developer tools in one page: JSON formatter, JWT decoder, Base64, regex tester, UUID, hash generator, color converter, cron parser, diff checker, markdown preview, code beautifier, CSV/JSON converter, case converter, chmod, HTTP codes, user agent parser, CIDR, password generator, favicon generator, and more. No signup, no uploads, nothing leaves your browser.">
+  <title>Dev Tools Suite — 30 Free Developer Tools: JSON, Regex, Diff, Cron, Markdown &amp; More | Moonlit Social Labs</title>
+  <meta name="description" content="30 free developer tools in one page: JSON formatter, JWT decoder, Base64, regex tester, UUID, hashes, color converter, cron parser, diff, Markdown preview, code beautifier, CSV/JSON, chmod, CIDR, password generator and more. They run in your browser; nothing you type is uploaded.">
   <meta name="keywords" content="developer tools, JSON formatter, JWT decoder, Base64 encoder, regex tester, UUID generator, hash generator, color converter, cron parser, diff checker, markdown preview, code beautifier, CSV to JSON, case converter, chmod calculator, HTTP status codes, user agent parser, CIDR calculator, password generator, favicon generator, gradient generator, slug generator, URL encoder, timestamp converter, lorem ipsum, ASCII table, number base converter, image to base64, escape unescape">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Dev Tools Suite — Moonlit Social Labs",
-    "description": "30+ free client-side developer tools: JSON, JWT, Base64, regex, UUID, hash, color, cron parser, diff, markdown, code beautifier, CSV/JSON, case converter, chmod, HTTP codes, UA parser, CIDR, password generator, favicon, gradient, slug, ASCII table, number base converter, image to base64, and more.",
+    "description": "30 free developer tools in one page: JSON formatter, JWT decoder, Base64, regex tester, UUID, hashes, color converter, cron parser, diff, Markdown preview, code beautifier, CSV/JSON, chmod, CIDR, password generator and more. They run in your browser; nothing you type is uploaded.",
     "url": "https://moonligh7er.github.io/developer-site/tools/dev-tools.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Dev Tools Suite — 30+ Free Developer Tools in One Page">
-  <meta property="og:description" content="Every common developer tool in one client-side page: JSON, JWT, Base64, regex, cron parser, diff checker, markdown preview, code beautifier, password generator, and 20+ more. Nothing leaves your browser.">
+  <meta property="og:title" content="Dev Tools Suite — 30 Free Developer Tools in One Page">
+  <meta property="og:description" content="JSON, JWT, Base64, regex, cron, diff, Markdown, a code beautifier, a password generator and 21 more, all running in your browser.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/dev-tools.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Dev Tools Suite | 30+ Tools | Moonlit Social Labs">
-  <meta name="twitter:description" content="30+ free client-side developer tools: JSON, JWT, regex, cron, diff, markdown, and more. No signup, no uploads.">
+  <meta name="twitter:title" content="Dev Tools Suite | 30 Tools | Moonlit Social Labs">
+  <meta name="twitter:description" content="JSON, JWT, Base64, regex, cron, diff, Markdown, a code beautifier, a password generator and 21 more, all running in your browser.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -481,6 +481,144 @@
       border-color: var(--teal) !important;
       color: var(--teal) !important;
     }
+    /* ── Dev tools suite: shared additions (same block on the hub and all 30 tool pages) ── */
+    .dt-btn, .dt-select { min-height: 40px; }
+    .dt-select { max-width: 100%; }
+    .dt-field > .dt-select { width: 100%; }
+    .dt-tab { min-height: 44px; }
+    .dt-btn[aria-pressed="true"] { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
+    .dt-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+    .dt-btn--sm { min-height: 40px; padding: 0.35rem 0.75rem; font-size: 0.58rem; }
+    .dt-input { min-height: 40px; }
+    .dt-input[type="color"] { padding: 0.25rem; height: 44px; cursor: pointer; }
+    .dt-input--sm { width: 7rem; }
+    .dt-textarea, .dt-input { font-size: max(16px, 0.85rem); }
+    @media (min-width: 769px) { .dt-textarea, .dt-input { font-size: 0.85rem; } }
+    .dt-label--inline { display: inline-block; margin-bottom: 0; }
+    .dt-field { margin-bottom: 1rem; }
+    .dt-field .dt-label { margin-bottom: 0.4rem; }
+    .dt-check { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 40px; cursor: pointer; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); }
+    .dt-check input { width: 1.05rem; height: 1.05rem; accent-color: var(--teal); margin: 0; }
+    .dt-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .dt-row--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .dt-row > * { min-width: 0; }
+    @media (max-width: 768px) { .dt-row--3, .dt-row--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 480px) { .dt-row--3, .dt-row--4 { grid-template-columns: 1fr; } }
+    .dt-status-line { min-height: 1.9rem; }
+    .dt-status { line-height: 1.5; }
+    .dt-status--warn { color: var(--amber); border-left: 2px solid var(--amber); }
+    .dt-status--info { color: var(--text-secondary); border-left: 2px solid var(--border-glow); }
+    .dt-field-error { font-family: var(--font-mono); font-size: 0.7rem; color: var(--rose); margin: 0.35rem 0 0; line-height: 1.5; }
+    .dt-field-error:empty { display: none; }
+    .dt-input[aria-invalid="true"], .dt-textarea[aria-invalid="true"] { border-color: var(--rose); }
+    .dt-hint { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin: 0.35rem 0 0; }
+    .dt-dedicated { margin: -0.75rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .dt-dedicated a { color: var(--teal); text-decoration: none; }
+    .dt-dedicated a:hover { color: var(--text-bright); }
+    .dt-output { overflow-x: auto; }
+    .dt-output:focus-visible, .dt-table-wrap:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .dt-output--tall { max-height: 520px; }
+    .dt-output--nowrap { white-space: pre; word-break: normal; }
+    .dt-table-wrap { overflow-x: auto; max-width: 100%; }
+    .dt-table-wrap--scroll { max-height: 520px; overflow-y: auto; }
+    .hash-table th { padding: 0.6rem 0.75rem; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.65rem; font-weight: 400; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; text-align: left; vertical-align: top; }
+    .hash-table tbody th { width: 1%; white-space: nowrap; }
+    .hash-table td { vertical-align: top; }
+    .hash-table .dt-kv-copy { width: 1%; padding: 0.3rem 0.5rem; vertical-align: middle; word-break: normal; white-space: nowrap; }
+    .dt-kv--err { color: var(--rose); }
+    .dt-kv--warn { color: var(--amber); }
+    .dt-th-note { display: block; text-transform: none; letter-spacing: 0; font-size: 0.6rem; color: var(--text-dim); margin-top: 0.2rem; }
+    @media (max-width: 600px) { .hash-table tbody th { white-space: normal; width: 34%; } }
+    .dt-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .dt-how summary { cursor: pointer; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); min-height: 40px; display: flex; align-items: center; }
+    .dt-how summary:hover { color: var(--teal); }
+    .dt-how summary:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .dt-how p, .dt-how li { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+    .dt-how p + p { margin-top: 0.6rem; }
+    .dt-how ul { margin: 0.4rem 0 0.6rem 1.25rem; list-style: disc; }
+    .dt-how code { font-family: var(--font-mono); font-size: 0.82em; color: var(--text-primary); }
+    .dt-how a { color: var(--teal); }
+    .dt-panel[hidden] { display: none !important; }
+    .dt-jump { display: none; margin: 0 0 1rem; }
+    .dt-jump .dt-select { width: 100%; }
+    @media (max-width: 768px) { .dt-jump { display: block; } }
+    .dt-card { min-width: 0; }
+    .dt-panel { color-scheme: dark; }
+    .dt-panel input[type="file"]::file-selector-button { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: var(--teal); border: 1px solid var(--teal); padding: 0.55rem 0.9rem; margin-right: 0.75rem; cursor: pointer; }
+    .dt-panel input[type="file"] { color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem; }
+    /* tool-specific */
+    .regex-highlight .dt-mark-empty { display: inline-block; width: 2px; height: 1.1em; vertical-align: text-bottom; background: var(--teal); border: 0; padding: 0; }
+    .ts-live small { display: block; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.08em; margin-top: 0.25rem; }
+    .dt-list { margin: 0.5rem 0 0 1.4rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-primary); line-height: 1.9; }
+    .dt-pw-list { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+    .dt-pw-list li { display: flex; align-items: center; gap: 0.75rem; border: 1px solid var(--border); border-top: 0; background: var(--surface); padding: 0.35rem 0.5rem 0.35rem 1rem; }
+    .dt-pw-list li:first-child { border-top: 1px solid var(--border); }
+    .dt-pw-list code { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-bright); word-break: break-all; }
+    .dt-diff { padding: 0; font-size: 0.78rem; line-height: 1.55; white-space: normal; }
+    .dt-diff-row { display: grid; grid-template-columns: 3.2em 3.2em 1.4em minmax(0, 1fr); }
+    .dt-diff-ln { color: var(--text-faint); text-align: right; padding-right: 0.5em; user-select: none; }
+    .dt-diff-sign { text-align: center; user-select: none; }
+    .dt-diff-text { white-space: pre-wrap; word-break: break-word; padding-right: 0.75em; }
+    .dt-diff-row--add { background: var(--teal-glow); }
+    .dt-diff-row--add .dt-diff-sign, .dt-diff-row--add .dt-diff-text { color: var(--teal); }
+    .dt-diff-row--del { background: #c44a8a14; }
+    .dt-diff-row--del .dt-diff-sign, .dt-diff-row--del .dt-diff-text { color: var(--rose); }
+    .dt-diff-row--same .dt-diff-text { color: var(--text-secondary); }
+    .dt-diff-row--gap { grid-template-columns: 1fr; color: var(--text-dim); background: var(--deep); text-align: center; font-size: 0.7rem; padding: 0.15rem 0; }
+    .dt-md { white-space: normal; word-break: break-word; font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.65; }
+    .dt-md > :first-child { margin-top: 0; }
+    .dt-md h1, .dt-md h2, .dt-md h3, .dt-md h4, .dt-md h5, .dt-md h6 { font-family: var(--font-display); font-weight: 400; color: var(--text-bright); margin: 1rem 0 0.5rem; line-height: 1.3; }
+    .dt-md h1 { font-size: 1.6rem; } .dt-md h2 { font-size: 1.3rem; } .dt-md h3 { font-size: 1.1rem; } .dt-md h4, .dt-md h5, .dt-md h6 { font-size: 1rem; }
+    .dt-md p, .dt-md ul, .dt-md ol, .dt-md blockquote, .dt-md pre, .dt-md .dt-md-table { margin: 0.5rem 0; }
+    .dt-md ul, .dt-md ol { padding-left: 1.5rem; }
+    .dt-md ul { list-style: disc; } .dt-md ol { list-style: decimal; }
+    .dt-md li > ul, .dt-md li > ol { margin: 0.2rem 0; }
+    .dt-md a { color: var(--teal); }
+    .dt-md code { font-family: var(--font-mono); font-size: 0.85em; background: var(--deep); border: 1px solid var(--border); padding: 0.05rem 0.3rem; }
+    .dt-md pre { background: var(--deep); border: 1px solid var(--border); padding: 0.75rem; overflow-x: auto; white-space: pre; }
+    .dt-md pre code { border: 0; padding: 0; background: none; }
+    .dt-md blockquote { border-left: 2px solid var(--teal); padding-left: 1rem; color: var(--text-secondary); }
+    .dt-md hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .dt-md img { max-width: 100%; height: auto; }
+    .dt-md .dt-md-table { overflow-x: auto; }
+    .dt-md table { border-collapse: collapse; }
+    .dt-md th, .dt-md td { border: 1px solid var(--border); padding: 0.35rem 0.6rem; }
+    .dt-md del { color: var(--text-dim); }
+    .dt-md input[type="checkbox"] { accent-color: var(--teal); margin-right: 0.3rem; }
+    .dt-swatch-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; align-items: end; }
+    .dt-swatch-row .color-swatch { margin: 0; }
+    .dt-swatch-row .dt-input[type="color"] { width: 5rem; height: 80px; }
+    .dt-chmod-table td, .dt-chmod-table th { text-align: center; }
+    .dt-chmod-table tbody th { text-align: left; }
+    .dt-chmod-table input { width: 1.2rem; height: 1.2rem; accent-color: var(--teal); cursor: pointer; }
+    .dt-chmod-table label { display: flex; justify-content: center; align-items: center; gap: 0.4rem; min-height: 40px; cursor: pointer; }
+    .dt-http-code { font-size: 0.85rem !important; font-weight: 500; letter-spacing: 0 !important; }
+    .dt-http-1 { color: var(--text-secondary) !important; } .dt-http-2 { color: var(--teal) !important; } .dt-http-3 { color: var(--violet) !important; }
+    .dt-http-4 { color: var(--amber) !important; } .dt-http-5 { color: var(--rose) !important; }
+    .dt-http-desc { display: block; color: var(--text-secondary); font-size: 0.72rem; margin-top: 0.2rem; word-break: normal; }
+    .dt-http-ref { color: var(--text-dim) !important; font-size: 0.65rem !important; white-space: nowrap; word-break: normal !important; }
+    @media (max-width: 600px) { .dt-http-ref { white-space: normal; } }
+    .dt-ascii thead th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
+    .dt-ascii td, .dt-ascii th { white-space: nowrap; word-break: normal; }
+    .dt-ascii-char { min-width: 3rem; min-height: 40px; background: transparent; border: 1px solid var(--border); color: var(--teal); font-family: var(--font-mono); font-size: 1rem; cursor: pointer; }
+    .dt-ascii-char--ctl { font-size: 0.62rem; color: var(--text-dim); }
+    .dt-ascii-char:hover { border-color: var(--teal); }
+    .dt-ascii-char.copied { font-size: 0.55rem; }
+    .dt-drop { display: block; border: 1px dashed var(--border-glow); background: var(--surface); padding: 1.5rem 1rem; text-align: center; color: var(--text-secondary); font-size: 0.85rem; cursor: pointer; transition: border-color 0.2s ease; }
+    .dt-drop:hover, .dt-drop.is-over, .dt-drop:focus-within { border-color: var(--teal); }
+    .dt-drop input { min-height: 40px; display: block; margin: 0.75rem auto 0; max-width: 100%; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem; }
+    .dt-preview img { max-width: 220px; max-height: 220px; border: 1px solid var(--border); background: repeating-conic-gradient(#ffffff10 0 25%, transparent 0 50%) 0 0 / 16px 16px; }
+    .dt-fav-preview { display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; margin: 1rem 0; }
+    .dt-fav-item { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; margin: 0; }
+    .dt-fav-item figcaption { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-dim); }
+    .dt-range { width: 100%; accent-color: var(--teal); min-height: 40px; }
+    .dt-grad-preview { width: 100%; height: 180px; border: 1px solid var(--border); margin: 0.5rem 0; }
+    @media (max-width: 600px) {
+      .dt-card { padding: 1.25rem 1rem; }
+      .dt-panels, .dt-tabs-wrap, .dt-standalone-wrap { padding-left: 1rem; padding-right: 1rem; }
+      .dt-other-tools { margin-left: 1rem; margin-right: 1rem; padding: 1.25rem 1rem; }
+      .dt-diff-row { grid-template-columns: 2.4em 2.4em 1.2em minmax(0, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -519,37 +657,72 @@
 
     <!-- Tabs -->
     <div class="dt-tabs-wrap">
-      <div class="dt-tabs" role="tablist">
-        <button class="dt-tab active" role="tab" data-tab="json" aria-selected="true">JSON</button>
-        <button class="dt-tab" role="tab" data-tab="base64" aria-selected="false">Base64</button>
-        <button class="dt-tab" role="tab" data-tab="url" aria-selected="false">URL</button>
-        <button class="dt-tab" role="tab" data-tab="hash" aria-selected="false">Hash</button>
-        <button class="dt-tab" role="tab" data-tab="uuid" aria-selected="false">UUID</button>
-        <button class="dt-tab" role="tab" data-tab="jwt" aria-selected="false">JWT</button>
-        <button class="dt-tab" role="tab" data-tab="color" aria-selected="false">Color</button>
-        <button class="dt-tab" role="tab" data-tab="regex" aria-selected="false">Regex</button>
-        <button class="dt-tab" role="tab" data-tab="timestamp" aria-selected="false">Timestamp</button>
-        <button class="dt-tab" role="tab" data-tab="lorem" aria-selected="false">Lorem</button>
-        <button class="dt-tab" role="tab" data-tab="cron" aria-selected="false">Cron</button>
-        <button class="dt-tab" role="tab" data-tab="diff" aria-selected="false">Diff</button>
-        <button class="dt-tab" role="tab" data-tab="markdown" aria-selected="false">Markdown</button>
-        <button class="dt-tab" role="tab" data-tab="beautify" aria-selected="false">Beautify</button>
-        <button class="dt-tab" role="tab" data-tab="csv" aria-selected="false">CSV&#8596;JSON</button>
-        <button class="dt-tab" role="tab" data-tab="case" aria-selected="false">Case</button>
-        <button class="dt-tab" role="tab" data-tab="counter" aria-selected="false">Counter</button>
-        <button class="dt-tab" role="tab" data-tab="sort" aria-selected="false">Sort</button>
-        <button class="dt-tab" role="tab" data-tab="chmod" aria-selected="false">Chmod</button>
-        <button class="dt-tab" role="tab" data-tab="http" aria-selected="false">HTTP</button>
-        <button class="dt-tab" role="tab" data-tab="ua" aria-selected="false">UA Parser</button>
-        <button class="dt-tab" role="tab" data-tab="cidr" aria-selected="false">CIDR</button>
-        <button class="dt-tab" role="tab" data-tab="escape" aria-selected="false">Escape</button>
-        <button class="dt-tab" role="tab" data-tab="img2b64" aria-selected="false">Img&rarr;B64</button>
-        <button class="dt-tab" role="tab" data-tab="password" aria-selected="false">Password</button>
-        <button class="dt-tab" role="tab" data-tab="numbase" aria-selected="false">Num Base</button>
-        <button class="dt-tab" role="tab" data-tab="ascii" aria-selected="false">ASCII</button>
-        <button class="dt-tab" role="tab" data-tab="favicon" aria-selected="false">Favicon</button>
-        <button class="dt-tab" role="tab" data-tab="gradient" aria-selected="false">Gradient</button>
-        <button class="dt-tab" role="tab" data-tab="slug" aria-selected="false">Slug</button>
+      <div class="dt-jump">
+        <label class="dt-label" for="dt-jump">Jump to a tool</label>
+        <select class="dt-select" id="dt-jump">
+          <option value="json">JSON formatter</option>
+          <option value="base64">Base64 encode/decode</option>
+          <option value="url">URL encode/decode</option>
+          <option value="hash">Hash generator</option>
+          <option value="uuid">UUID generator</option>
+          <option value="jwt">JWT decoder</option>
+          <option value="color">Color converter</option>
+          <option value="regex">Regex tester</option>
+          <option value="timestamp">Timestamp converter</option>
+          <option value="lorem">Lorem ipsum</option>
+          <option value="cron">Cron parser</option>
+          <option value="diff">Diff checker</option>
+          <option value="markdown">Markdown preview</option>
+          <option value="beautify">Code beautifier</option>
+          <option value="csv">CSV ↔ JSON</option>
+          <option value="case">Case converter</option>
+          <option value="counter">Character counter</option>
+          <option value="sort">Text sorter</option>
+          <option value="chmod">Chmod calculator</option>
+          <option value="http">HTTP status codes</option>
+          <option value="ua">User agent parser</option>
+          <option value="cidr">CIDR calculator</option>
+          <option value="escape">Text escape</option>
+          <option value="img2b64">Image to Base64</option>
+          <option value="password">Password generator</option>
+          <option value="numbase">Number base converter</option>
+          <option value="ascii">ASCII table</option>
+          <option value="favicon">Favicon generator</option>
+          <option value="gradient">Gradient generator</option>
+          <option value="slug">Slug generator</option>
+        </select>
+      </div>
+      <div class="dt-tabs" role="tablist" aria-label="Developer tools">
+        <button type="button" class="dt-tab active" role="tab" id="tab-json" data-tab="json" aria-controls="panel-json" aria-selected="true" tabindex="0">JSON</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-base64" data-tab="base64" aria-controls="panel-base64" aria-selected="false" tabindex="-1">Base64</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-url" data-tab="url" aria-controls="panel-url" aria-selected="false" tabindex="-1">URL</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-hash" data-tab="hash" aria-controls="panel-hash" aria-selected="false" tabindex="-1">Hash</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-uuid" data-tab="uuid" aria-controls="panel-uuid" aria-selected="false" tabindex="-1">UUID</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-jwt" data-tab="jwt" aria-controls="panel-jwt" aria-selected="false" tabindex="-1">JWT</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-color" data-tab="color" aria-controls="panel-color" aria-selected="false" tabindex="-1">Color</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-regex" data-tab="regex" aria-controls="panel-regex" aria-selected="false" tabindex="-1">Regex</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-timestamp" data-tab="timestamp" aria-controls="panel-timestamp" aria-selected="false" tabindex="-1">Timestamp</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-lorem" data-tab="lorem" aria-controls="panel-lorem" aria-selected="false" tabindex="-1">Lorem</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-cron" data-tab="cron" aria-controls="panel-cron" aria-selected="false" tabindex="-1">Cron</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-diff" data-tab="diff" aria-controls="panel-diff" aria-selected="false" tabindex="-1">Diff</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-markdown" data-tab="markdown" aria-controls="panel-markdown" aria-selected="false" tabindex="-1">Markdown</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-beautify" data-tab="beautify" aria-controls="panel-beautify" aria-selected="false" tabindex="-1">Beautify</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-csv" data-tab="csv" aria-controls="panel-csv" aria-selected="false" tabindex="-1">CSV&#8596;JSON</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-case" data-tab="case" aria-controls="panel-case" aria-selected="false" tabindex="-1">Case</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-counter" data-tab="counter" aria-controls="panel-counter" aria-selected="false" tabindex="-1">Counter</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-sort" data-tab="sort" aria-controls="panel-sort" aria-selected="false" tabindex="-1">Sort</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-chmod" data-tab="chmod" aria-controls="panel-chmod" aria-selected="false" tabindex="-1">Chmod</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-http" data-tab="http" aria-controls="panel-http" aria-selected="false" tabindex="-1">HTTP</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-ua" data-tab="ua" aria-controls="panel-ua" aria-selected="false" tabindex="-1">UA Parser</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-cidr" data-tab="cidr" aria-controls="panel-cidr" aria-selected="false" tabindex="-1">CIDR</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-escape" data-tab="escape" aria-controls="panel-escape" aria-selected="false" tabindex="-1">Escape</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-img2b64" data-tab="img2b64" aria-controls="panel-img2b64" aria-selected="false" tabindex="-1">Img&rarr;B64</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-password" data-tab="password" aria-controls="panel-password" aria-selected="false" tabindex="-1">Password</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-numbase" data-tab="numbase" aria-controls="panel-numbase" aria-selected="false" tabindex="-1">Num Base</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-ascii" data-tab="ascii" aria-controls="panel-ascii" aria-selected="false" tabindex="-1">ASCII</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-favicon" data-tab="favicon" aria-controls="panel-favicon" aria-selected="false" tabindex="-1">Favicon</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-gradient" data-tab="gradient" aria-controls="panel-gradient" aria-selected="false" tabindex="-1">Gradient</button>
+        <button type="button" class="dt-tab" role="tab" id="tab-slug" data-tab="slug" aria-controls="panel-slug" aria-selected="false" tabindex="-1">Slug</button>
       </div>
     </div>
 
@@ -557,338 +730,494 @@
     <div class="dt-panels">
 
       <!-- ═══════════════════ JSON Formatter ═══════════════════ -->
-      <div class="dt-panel active" id="panel-json" role="tabpanel">
+      <div class="dt-panel active" id="panel-json" role="tabpanel" aria-labelledby="tab-json">
         <div class="dt-card">
-          <h2 class="dt-card__title">JSON Formatter & Validator</h2>
-          <p class="dt-card__desc">Paste JSON to format, minify, or validate. Syntax errors are highlighted with line numbers.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="json-formatter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <h2 class="dt-card__title">JSON Formatter &amp; Validator</h2>
+          <p class="dt-card__desc">Paste JSON to check it, pretty-print it or minify it. It is re-checked as you type, and a syntax error points to its line and column.</p>
+          <p class="dt-dedicated"><a href="json-formatter.html">&rarr; Open dedicated page</a></p>
           <label class="dt-label" for="json-input">Input JSON</label>
-          <textarea class="dt-textarea" id="json-input" rows="10" placeholder='{"key": "value", "nested": {"a": 1}}'></textarea>
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="jsonFormat()">Format</button>
-            <button class="dt-btn" onclick="jsonMinify()">Minify</button>
-            <button class="dt-btn" onclick="jsonValidate()">Validate</button>
-            <button class="dt-btn" onclick="copyOutput('json-output')">Copy</button>
-            <button class="dt-btn" onclick="clearFields('json-input','json-output','json-status')">Clear</button>
+          <textarea class="dt-textarea" id="json-input" rows="10" spellcheck="false" aria-describedby="json-status">{"name":"Moonlit","tools":30,"tags":["json","free"],"nested":{"ok":true,"value":null}}</textarea>
+          <div class="dt-inline-group" style="margin-top:1rem">
+            <label class="dt-label dt-label--inline" for="json-indent">Indent</label>
+            <select class="dt-select" id="json-indent">
+              <option value="2">2 spaces</option>
+              <option value="4">4 spaces</option>
+              <option value="tab">Tab</option>
+            </select>
+            <label class="dt-check"><input type="checkbox" id="json-sort"> Sort keys A&ndash;Z</label>
           </div>
-          <div id="json-status"></div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="json-output"></div>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn dt-btn--primary" data-act="mode" data-mode="format" aria-pressed="true">Format</button>
+            <button type="button" class="dt-btn" data-act="mode" data-mode="minify" aria-pressed="false">Minify</button>
+            <button type="button" class="dt-btn" data-copy="json-output">Copy output</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
+          </div>
+          <div class="dt-status-line" id="json-status" aria-live="polite"></div>
+          <p class="dt-label" id="json-output-label">Output</p>
+          <pre class="dt-output dt-output--tall" id="json-output" tabindex="0" aria-labelledby="json-output-label"></pre>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Your text goes through the browser's own <code>JSON.parse</code>, which follows the JSON standard (RFC 8259) strictly: no comments, no trailing commas, double-quoted keys only. Formatting is <code>JSON.stringify</code> with the indent you pick.</p>
+            <p>Two things to know. If a key appears twice, the last value wins and the duplicate disappears from the output. And numbers become 64-bit floating point, so integers past 2<sup>53</sup> (9,007,199,254,740,991), such as some database IDs, can change; the tool warns when that happens.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Base64 ═══════════════════ -->
-      <div class="dt-panel" id="panel-base64" role="tabpanel">
+      <div class="dt-panel" id="panel-base64" role="tabpanel" aria-labelledby="tab-base64">
         <div class="dt-card">
           <h2 class="dt-card__title">Base64 Encode / Decode</h2>
-          <p class="dt-card__desc">Convert text to and from Base64 encoding. Supports UTF-8 characters.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="base64-encoder.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Type on either side: text is encoded as UTF-8 and then Base64; Base64 is decoded back to text. Both the standard and the URL-safe alphabet work.</p>
+          <p class="dt-dedicated"><a href="base64-encoder.html">&rarr; Open dedicated page</a></p>
           <div class="dt-row">
             <div>
               <label class="dt-label" for="b64-input">Text</label>
-              <textarea class="dt-textarea" id="b64-input" rows="8" placeholder="Enter text to encode..."></textarea>
+              <textarea class="dt-textarea" id="b64-input" rows="8" spellcheck="false">Hello, world! UTF-8 works too: café, 日本語, 😀</textarea>
             </div>
             <div>
               <label class="dt-label" for="b64-output">Base64</label>
-              <textarea class="dt-textarea" id="b64-output" rows="8" placeholder="Enter Base64 to decode..."></textarea>
+              <textarea class="dt-textarea" id="b64-output" rows="8" spellcheck="false" aria-describedby="b64-output-err"></textarea>
+              <p class="dt-field-error" id="b64-output-err" aria-live="polite"></p>
             </div>
           </div>
+          <label class="dt-check"><input type="checkbox" id="b64-url"> URL-safe output (base64url: <code>-</code> and <code>_</code>, no padding)</label>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="b64Encode()">Encode &rarr;</button>
-            <button class="dt-btn dt-btn--violet" onclick="b64Decode()">&larr; Decode</button>
-            <button class="dt-btn" onclick="copyOutput('b64-output')">Copy Base64</button>
-            <button class="dt-btn" onclick="copyOutput('b64-input')">Copy Text</button>
-            <button class="dt-btn" onclick="clearFields('b64-input','b64-output','b64-status')">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="encode">Encode &rarr;</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="decode">&larr; Decode</button>
+            <button type="button" class="dt-btn" data-copy="b64-output">Copy Base64</button>
+            <button type="button" class="dt-btn" data-copy="b64-input">Copy text</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <div id="b64-status"></div>
+          <div class="dt-status-line" id="b64-status" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Base64 (RFC 4648) writes every 3 bytes as 4 characters from a 64-letter alphabet, so the output is about a third larger than the input. Text is first turned into bytes with UTF-8, which is why accented letters and emoji round-trip correctly.</p>
+            <p>The URL-safe variant (base64url, RFC 4648 &sect;5) swaps <code>+</code> and <code>/</code> for <code>-</code> and <code>_</code> and usually drops the <code>=</code> padding; JWTs use it. Decoding accepts either alphabet, ignores spaces and line breaks, and tolerates missing padding. If the bytes aren't valid UTF-8 (an image, say), you get a hex preview instead of garbled text. Base64 is an encoding, not encryption: anyone can decode it.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ URL Encode ═══════════════════ -->
-      <div class="dt-panel" id="panel-url" role="tabpanel">
+      <div class="dt-panel" id="panel-url" role="tabpanel" aria-labelledby="tab-url">
         <div class="dt-card">
           <h2 class="dt-card__title">URL Encode / Decode</h2>
-          <p class="dt-card__desc">Encode or decode URL components. Handles special characters, spaces, and unicode.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="url-encoder.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Percent-encode text for a URL, or decode it back. Pick the mode that matches where the text is going.</p>
+          <p class="dt-dedicated"><a href="url-encoder.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-field">
+            <label class="dt-label" for="url-mode">Mode</label>
+            <select class="dt-select" id="url-mode">
+              <option value="component">Component: a query value or path segment (encodeURIComponent)</option>
+              <option value="strict">Component, strict RFC 3986 (also encodes ! ' ( ) *)</option>
+              <option value="form">Form data: application/x-www-form-urlencoded (space &rarr; +)</option>
+              <option value="uri">Whole URL: keep : / ? # &amp; = (encodeURI)</option>
+            </select>
+          </div>
           <div class="dt-row">
             <div>
-              <label class="dt-label" for="url-input">Decoded Text</label>
-              <textarea class="dt-textarea" id="url-input" rows="8" placeholder="hello world & foo=bar"></textarea>
+              <label class="dt-label" for="url-input">Decoded text</label>
+              <textarea class="dt-textarea" id="url-input" rows="7" spellcheck="false" aria-describedby="url-input-err">name=Zoë &amp; friends / 100% fun?</textarea>
+              <p class="dt-field-error" id="url-input-err" aria-live="polite"></p>
             </div>
             <div>
-              <label class="dt-label" for="url-output">Encoded URL</label>
-              <textarea class="dt-textarea" id="url-output" rows="8" placeholder="hello%20world%20%26%20foo%3Dbar"></textarea>
+              <label class="dt-label" for="url-output">Encoded</label>
+              <textarea class="dt-textarea" id="url-output" rows="7" spellcheck="false" aria-describedby="url-output-err"></textarea>
+              <p class="dt-field-error" id="url-output-err" aria-live="polite"></p>
             </div>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="urlEncode()">Encode &rarr;</button>
-            <button class="dt-btn dt-btn--violet" onclick="urlDecode()">&larr; Decode</button>
-            <button class="dt-btn" onclick="urlEncodeComponent()">Encode Component</button>
-            <button class="dt-btn" onclick="copyOutput('url-output')">Copy Encoded</button>
-            <button class="dt-btn" onclick="clearFields('url-input','url-output')">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="encode">Encode &rarr;</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="decode">&larr; Decode</button>
+            <button type="button" class="dt-btn" data-copy="url-output">Copy encoded</button>
+            <button type="button" class="dt-btn" data-copy="url-input">Copy decoded</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <div class="dt-status-line" id="url-status" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Characters are converted to UTF-8 bytes and each unsafe byte becomes <code>%XX</code>. <strong>Component</strong> mode is right for one piece of a URL (a query value, a path segment): it encodes everything except letters, digits and <code>- _ . ! ~ * ' ( )</code>. <strong>Strict</strong> also encodes <code>! ' ( ) *</code>, leaving only RFC 3986's unreserved set. <strong>Form data</strong> follows the URL Standard's form encoding, writing spaces as <code>+</code>. <strong>Whole URL</strong> leaves the URL's structure (<code>: / ? # &amp; =</code>) alone, so don't use it for values that contain those characters.</p>
+            <p>Decoding uses the same mode; in Component mode a <code>+</code> stays a plus sign, while Form mode turns it into a space. A stray <code>%</code> or an escape that isn't valid UTF-8 is pointed out rather than guessed at.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Hash Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-hash" role="tabpanel">
+      <div class="dt-panel" id="panel-hash" role="tabpanel" aria-labelledby="tab-hash">
         <div class="dt-card">
           <h2 class="dt-card__title">Hash Generator</h2>
-          <p class="dt-card__desc">Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text input. SHA hashes use the Web Crypto API.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="hash-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="hash-input">Input Text</label>
-          <textarea class="dt-textarea" id="hash-input" rows="6" placeholder="Enter text to hash..."></textarea>
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="generateHashes()">Generate All Hashes</button>
-            <button class="dt-btn" onclick="clearFields('hash-input');document.getElementById('hash-results').innerHTML=''">Clear</button>
+          <p class="dt-card__desc">MD5, SHA-1, SHA-256, SHA-384 and SHA-512 of text (as UTF-8) or of a file, updated as you type. Files are read in this tab and never uploaded.</p>
+          <p class="dt-dedicated"><a href="hash-generator.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="hash-input">Input text</label>
+          <textarea class="dt-textarea" id="hash-input" rows="5" spellcheck="false">hello world</textarea>
+          <div class="dt-inline-group" style="margin-top:1rem">
+            <label class="dt-label dt-label--inline" for="hash-file">Or hash a file</label>
+            <input class="dt-input" id="hash-file" type="file" style="width:auto;max-width:100%">
+            <label class="dt-check"><input type="checkbox" id="hash-upper"> Uppercase hex</label>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <div class="dt-status-line" id="hash-status" aria-live="polite"></div>
           <div id="hash-results"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>The SHA family is computed by your browser's Web Crypto API (<code>crypto.subtle.digest</code>); MD5 (RFC 1321) is computed by a small script on this page. Text is hashed as its UTF-8 bytes, which matches <code>sha256sum</code>, Python's <code>hashlib</code> and most other tools for the same string. A trailing newline counts, so <code>echo "hi" | sha256sum</code> differs from hashing <code>hi</code> here.</p>
+            <p>MD5 and SHA-1 are broken for security (collisions can be manufactured), so use them only as checksums. None of these is suitable for storing passwords; use bcrypt, scrypt or Argon2 for that.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ UUID Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-uuid" role="tabpanel">
+      <div class="dt-panel" id="panel-uuid" role="tabpanel" aria-labelledby="tab-uuid">
         <div class="dt-card">
           <h2 class="dt-card__title">UUID Generator</h2>
-          <p class="dt-card__desc">Generate cryptographically random v4 UUIDs. Bulk generate up to 1000 at once.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="uuid-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Random version 4 UUIDs, or time-ordered version 7 UUIDs that sort by creation time. Up to 1,000 at once, plus a checker that reads any UUID's version and timestamp.</p>
+          <p class="dt-dedicated"><a href="uuid-generator.html">&rarr; Open dedicated page</a></p>
           <div class="dt-inline-group">
-            <label class="dt-label" for="uuid-count" style="margin-bottom:0">Count</label>
-            <input class="dt-input" id="uuid-count" type="number" min="1" max="1000" value="1" style="width:100px">
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
-              <input type="checkbox" id="uuid-uppercase"> Uppercase
-            </label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
-              <input type="checkbox" id="uuid-braces"> {Braces}
-            </label>
+            <label class="dt-label dt-label--inline" for="uuid-version">Version</label>
+            <select class="dt-select" id="uuid-version">
+              <option value="4">v4 (random)</option>
+              <option value="7">v7 (time-ordered)</option>
+            </select>
+            <label class="dt-label dt-label--inline" for="uuid-count">How many</label>
+            <input class="dt-input dt-input--sm" id="uuid-count" type="number" inputmode="numeric" min="1" max="1000" value="5" aria-describedby="uuid-count-err">
+          </div>
+          <p class="dt-field-error" id="uuid-count-err" aria-live="polite"></p>
+          <div class="dt-inline-group">
+            <label class="dt-check"><input type="checkbox" id="uuid-hyphens" checked> Hyphens</label>
+            <label class="dt-check"><input type="checkbox" id="uuid-uppercase"> Uppercase</label>
+            <label class="dt-check"><input type="checkbox" id="uuid-braces"> {Braces}</label>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="generateUUIDs()">Generate</button>
-            <button class="dt-btn" onclick="copyOutput('uuid-output')">Copy</button>
-            <button class="dt-btn" onclick="document.getElementById('uuid-output').textContent=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="generate">Generate</button>
+            <button type="button" class="dt-btn" data-copy="uuid-output">Copy all</button>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="uuid-output" style="max-height:300px;overflow-y:auto"></div>
+          <div class="dt-status-line" id="uuid-status" aria-live="polite"></div>
+          <pre class="dt-output dt-output--tall" id="uuid-output" tabindex="0" aria-label="Generated UUIDs"></pre>
+          <div class="dt-field" style="margin-top:1.5rem">
+            <label class="dt-label" for="uuid-check">Check a UUID</label>
+            <input class="dt-input" id="uuid-check" type="text" spellcheck="false" autocomplete="off" placeholder="017f22e2-79b0-7cc3-98c4-dc0c0c07398f" aria-describedby="uuid-check-err">
+            <p class="dt-field-error" id="uuid-check-err" aria-live="polite"></p>
+            <div id="uuid-check-result" aria-live="polite"></div>
+          </div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Both versions follow RFC 9562 (which replaced RFC 4122). A v4 UUID is 122 random bits from your browser's cryptographic generator (<code>crypto.randomUUID</code> or <code>crypto.getRandomValues</code>), with the version and variant bits set. Chance of a collision is negligible for any realistic number of IDs.</p>
+            <p>A v7 UUID starts with the current Unix time in milliseconds, so new IDs sort after old ones, which keeps database indexes compact. A batch made in the same millisecond uses a counter so it still sorts in creation order. The trade-off: a v7 UUID reveals when it was created. Nothing here is sent anywhere or stored.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ JWT Decoder ═══════════════════ -->
-      <div class="dt-panel" id="panel-jwt" role="tabpanel">
+      <div class="dt-panel" id="panel-jwt" role="tabpanel" aria-labelledby="tab-jwt">
         <div class="dt-card">
           <h2 class="dt-card__title">JWT Decoder</h2>
-          <p class="dt-card__desc">Paste a JSON Web Token to decode its header and payload. Shows expiration status.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="jwt-decoder.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="jwt-input">Paste JWT</label>
-          <textarea class="dt-textarea" id="jwt-input" rows="5" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea>
+          <p class="dt-card__desc">Paste a JSON Web Token to read its header, payload and time claims. Decoding happens in this tab; the signature is shown but not verified.</p>
+          <p class="dt-dedicated"><a href="jwt-decoder.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="jwt-input">Token</label>
+          <textarea class="dt-textarea" id="jwt-input" rows="5" spellcheck="false" autocomplete="off">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</textarea>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="decodeJWT()">Decode</button>
-            <button class="dt-btn" onclick="clearFields('jwt-input');document.getElementById('jwt-results').innerHTML=''">Clear</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <div class="dt-status-line" id="jwt-status" aria-live="polite"></div>
           <div id="jwt-results"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>A signed JWT (RFC 7519, using JWS from RFC 7515) is three base64url pieces joined by dots: a header, a payload and a signature. This tool decodes the first two and pretty-prints them. <code>exp</code>, <code>nbf</code> and <code>iat</code> are shown as dates and compared with this device's clock.</p>
+            <p>It does not verify the signature. Anyone can write a token whose payload says anything, so never trust a decoded payload until your server has checked the signature with the right key and algorithm. The sample token is the well-known public example from jwt.io. Avoid pasting live production tokens into any website, including this one, even though nothing here leaves your browser.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Color Converter ═══════════════════ -->
-      <div class="dt-panel" id="panel-color" role="tabpanel">
+      <div class="dt-panel" id="panel-color" role="tabpanel" aria-labelledby="tab-color">
         <div class="dt-card">
           <h2 class="dt-card__title">Color Converter</h2>
-          <p class="dt-card__desc">Convert between HEX, RGB, and HSL color formats with a live preview swatch.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="color-converter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="color-swatch" id="color-swatch" style="background:#00d4aa"></div>
-          <div class="dt-row" style="grid-template-columns:1fr 1fr 1fr">
+          <p class="dt-card__desc">Edit any field, or use the picker, and the others follow: HEX, RGB and HSL, with alpha. Includes the WCAG contrast ratio against white and black text.</p>
+          <p class="dt-dedicated"><a href="color-converter.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-swatch-row">
+            <div class="color-swatch" id="color-swatch" role="img" aria-label="Color preview" style="background:#00d4aa"></div>
+            <div>
+              <label class="dt-label" for="color-picker">Picker</label>
+              <input class="dt-input" id="color-picker" type="color" value="#00d4aa">
+            </div>
+          </div>
+          <div class="dt-row dt-row--3" style="margin-top:1rem">
             <div>
               <label class="dt-label" for="color-hex">HEX</label>
-              <input class="dt-input" id="color-hex" type="text" value="#00d4aa" placeholder="#00d4aa">
+              <input class="dt-input" id="color-hex" type="text" value="#00d4aa" spellcheck="false" autocomplete="off" aria-describedby="color-hex-err">
+              <p class="dt-field-error" id="color-hex-err" aria-live="polite"></p>
+              <button type="button" class="dt-btn dt-btn--sm" data-copy="color-hex" style="margin-top:0.5rem">Copy HEX</button>
             </div>
             <div>
               <label class="dt-label" for="color-rgb">RGB</label>
-              <input class="dt-input" id="color-rgb" type="text" value="rgb(0, 212, 170)" placeholder="rgb(0, 212, 170)">
+              <input class="dt-input" id="color-rgb" type="text" spellcheck="false" autocomplete="off" aria-describedby="color-rgb-err">
+              <p class="dt-field-error" id="color-rgb-err" aria-live="polite"></p>
+              <button type="button" class="dt-btn dt-btn--sm" data-copy="color-rgb" style="margin-top:0.5rem">Copy RGB</button>
             </div>
             <div>
               <label class="dt-label" for="color-hsl">HSL</label>
-              <input class="dt-input" id="color-hsl" type="text" value="hsl(168, 100%, 42%)" placeholder="hsl(168, 100%, 42%)">
+              <input class="dt-input" id="color-hsl" type="text" spellcheck="false" autocomplete="off" aria-describedby="color-hsl-err">
+              <p class="dt-field-error" id="color-hsl-err" aria-live="polite"></p>
+              <button type="button" class="dt-btn dt-btn--sm" data-copy="color-hsl" style="margin-top:0.5rem">Copy HSL</button>
             </div>
           </div>
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="colorFromHex()">From HEX</button>
-            <button class="dt-btn" onclick="colorFromRGB()">From RGB</button>
-            <button class="dt-btn" onclick="colorFromHSL()">From HSL</button>
-            <button class="dt-btn" onclick="copyText(document.getElementById('color-hex').value)">Copy HEX</button>
-            <button class="dt-btn" onclick="copyText(document.getElementById('color-rgb').value)">Copy RGB</button>
-            <button class="dt-btn" onclick="copyText(document.getElementById('color-hsl').value)">Copy HSL</button>
-          </div>
+          <p class="dt-hint" id="color-contrast" aria-live="polite"></p>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>HEX and RGB are the same sRGB values written two ways. HSL rearranges them as hue (0&ndash;360&deg;), saturation and lightness, using the formulas in CSS Color Module Level 4; HSL is shown to one decimal so converting back lands on the same color. Inputs can be modern or legacy CSS syntax: <code>rgb(0 212 170 / 50%)</code>, <code>rgba(0, 212, 170, .5)</code>, <code>#0da</code>, <code>#00d4aa80</code>, <code>hsl(168deg 100% 42%)</code>.</p>
+            <p>The contrast figure is the WCAG 2.2 ratio between this color and pure white or black. 4.5:1 is the AA minimum for body text and 3:1 for large text. Transparency is ignored in that calculation.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Regex Tester ═══════════════════ -->
-      <div class="dt-panel" id="panel-regex" role="tabpanel">
+      <div class="dt-panel" id="panel-regex" role="tabpanel" aria-labelledby="tab-regex">
         <div class="dt-card">
           <h2 class="dt-card__title">Regex Tester</h2>
-          <p class="dt-card__desc">Test regular expressions against a string. Matches are highlighted and capture groups are listed.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="regex-tester.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Pattern</label>
-            <input class="dt-input" id="regex-pattern" type="text" placeholder="\b\w+@\w+\.\w+\b" style="flex:1">
-            <input class="dt-input" id="regex-flags" type="text" value="gi" placeholder="gi" style="width:60px">
+          <p class="dt-card__desc">Test a JavaScript regular expression as you type: matches are highlighted, capture groups are listed, and an optional replacement is previewed.</p>
+          <p class="dt-dedicated"><a href="regex-tester.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-row" style="grid-template-columns:minmax(0,1fr) 8rem">
+            <div>
+              <label class="dt-label" for="regex-pattern">Pattern (without slashes)</label>
+              <input class="dt-input" id="regex-pattern" type="text" spellcheck="false" autocomplete="off" value="\b([\w.+-]+)@([\w-]+)\.(com|org)\b" aria-describedby="regex-pattern-err">
+              <p class="dt-field-error" id="regex-pattern-err" aria-live="polite"></p>
+            </div>
+            <div>
+              <label class="dt-label" for="regex-flags">Flags</label>
+              <input class="dt-input" id="regex-flags" type="text" spellcheck="false" autocomplete="off" value="gi" aria-describedby="regex-flags-err">
+              <p class="dt-field-error" id="regex-flags-err" aria-live="polite"></p>
+            </div>
           </div>
-          <label class="dt-label" for="regex-test">Test String</label>
-          <textarea class="dt-textarea" id="regex-test" rows="5" placeholder="Enter text to test the regex against..."></textarea>
+          <label class="dt-label" for="regex-test">Test string</label>
+          <textarea class="dt-textarea" id="regex-test" rows="5" spellcheck="false">Write to ada@example.com or grace.hopper@navy.org.
+Not an address: someone@localhost</textarea>
+          <label class="dt-label" for="regex-replace" style="margin-top:1rem">Replace with (optional; $1, $&lt;name&gt; and $&amp; work)</label>
+          <input class="dt-input" id="regex-replace" type="text" spellcheck="false" autocomplete="off" value="">
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="testRegex()">Test</button>
-            <button class="dt-btn" onclick="clearFields('regex-pattern','regex-test');document.getElementById('regex-result').innerHTML='';document.getElementById('regex-groups').innerHTML=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="test">Test</button>
+            <button type="button" class="dt-btn" data-copy="regex-replaced">Copy replaced text</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <label class="dt-label">Highlighted Matches</label>
-          <div class="regex-highlight" id="regex-result"></div>
-          <label class="dt-label" style="margin-top:1rem">Capture Groups</label>
-          <div class="dt-output" id="regex-groups"></div>
+          <div class="dt-status-line" id="regex-status" aria-live="polite"></div>
+          <p class="dt-label" id="regex-result-label">Highlighted matches</p>
+          <div class="regex-highlight" id="regex-result" tabindex="0" aria-labelledby="regex-result-label"></div>
+          <p class="dt-label" id="regex-groups-label" style="margin-top:1rem">Matches and capture groups</p>
+          <pre class="dt-output" id="regex-groups" tabindex="0" aria-labelledby="regex-groups-label"></pre>
+          <p class="dt-label" id="regex-replaced-label" style="margin-top:1rem">Replacement preview</p>
+          <pre class="dt-output" id="regex-replaced" tabindex="0" aria-labelledby="regex-replaced-label"></pre>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>This uses your browser's own <code>RegExp</code> engine, so results match JavaScript exactly; other languages (PCRE, Python, Go) differ in places such as lookbehind support and Unicode classes. Flags: <code>g</code> all matches, <code>i</code> ignore case, <code>m</code> ^ and $ per line, <code>s</code> dot matches newlines, <code>u</code>/<code>v</code> Unicode, <code>y</code> sticky, <code>d</code> match indices.</p>
+            <p>Matching runs in a background worker with a 1.5-second limit, so a pattern with catastrophic backtracking, like <code>(a+)+$</code>, is stopped and reported instead of freezing the page. At most 5,000 matches are collected.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Timestamp Converter ═══════════════════ -->
-      <div class="dt-panel" id="panel-timestamp" role="tabpanel">
+      <div class="dt-panel" id="panel-timestamp" role="tabpanel" aria-labelledby="tab-timestamp">
         <div class="dt-card">
-          <h2 class="dt-card__title">Timestamp Converter</h2>
-          <p class="dt-card__desc">Convert between Unix timestamps and human-readable dates. Live current timestamp updates every second.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="timestamp-converter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="ts-live" id="ts-live">---</div>
+          <h2 class="dt-card__title">Unix Timestamp Converter</h2>
+          <p class="dt-card__desc">Convert Unix time (seconds, milliseconds, microseconds or nanoseconds) to dates and back, in UTC or your local time zone.</p>
+          <p class="dt-dedicated"><a href="timestamp-converter.html">&rarr; Open dedicated page</a></p>
+          <div class="ts-live"><span id="ts-live">&ndash;</span><small>Unix seconds now &middot; <span id="ts-live-ms">&ndash;</span> ms</small></div>
           <div class="dt-row">
             <div>
-              <label class="dt-label" for="ts-unix">Unix Timestamp (seconds)</label>
-              <input class="dt-input" id="ts-unix" type="text" placeholder="1711843200">
+              <label class="dt-label" for="ts-unix">Unix timestamp</label>
+              <input class="dt-input" id="ts-unix" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" aria-describedby="ts-unix-err">
+              <p class="dt-field-error" id="ts-unix-err" aria-live="polite"></p>
+              <div class="dt-inline-group" style="margin-top:0.75rem">
+                <label class="dt-label dt-label--inline" for="ts-unit">Unit</label>
+                <select class="dt-select" id="ts-unit">
+                  <option value="auto">Auto-detect</option>
+                  <option value="s">Seconds</option>
+                  <option value="ms">Milliseconds</option>
+                  <option value="us">Microseconds</option>
+                  <option value="ns">Nanoseconds</option>
+                </select>
+              </div>
               <div class="dt-btn-row">
-                <button class="dt-btn dt-btn--primary" onclick="tsToHuman()">To Date &rarr;</button>
-                <button class="dt-btn" onclick="tsNow()">Now</button>
+                <button type="button" class="dt-btn dt-btn--primary" data-act="toDate">To date &rarr;</button>
+                <button type="button" class="dt-btn" data-act="now">Now</button>
               </div>
             </div>
             <div>
-              <label class="dt-label" for="ts-human">Date & Time</label>
-              <input class="dt-input" id="ts-human" type="text" placeholder="2024-03-31T00:00:00Z">
+              <label class="dt-label" for="ts-human">Date and time</label>
+              <input class="dt-input" id="ts-human" type="text" spellcheck="false" autocomplete="off" aria-describedby="ts-human-err">
+              <p class="dt-field-error" id="ts-human-err" aria-live="polite"></p>
+              <div class="dt-inline-group" style="margin-top:0.75rem">
+                <label class="dt-label dt-label--inline" for="ts-zone">Show and read dates in</label>
+                <select class="dt-select" id="ts-zone">
+                  <option value="local">Local time</option>
+                  <option value="utc">UTC</option>
+                </select>
+              </div>
               <div class="dt-btn-row">
-                <button class="dt-btn dt-btn--violet" onclick="tsToUnix()">&larr; To Unix</button>
+                <button type="button" class="dt-btn dt-btn--violet" data-act="toUnix">&larr; To Unix</button>
               </div>
             </div>
           </div>
-          <label class="dt-label">Details</label>
-          <div class="dt-output" id="ts-details"></div>
+          <p class="dt-hint" id="ts-how" aria-live="polite"></p>
+          <div id="ts-details"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Unix time counts seconds since 1970-01-01 00:00:00 UTC, ignoring leap seconds. Auto-detect reads the size of the number: under 100 billion is seconds (good until the year 5138), then milliseconds, microseconds and nanoseconds. Pick a unit yourself for millisecond values from before March 1973.</p>
+            <p>Dates are best typed in ISO 8601, like <code>2026-11-03T14:30:00Z</code> or <code>2026-11-03 14:30 +05:30</code>. Without an offset, the date is read in the zone chosen above. Other formats are handed to your browser's parser, which varies between browsers. 32-bit systems that store seconds in a signed integer overflow at <code>2147483647</code>, which is 2038-01-19 03:14:07 UTC.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Lorem Ipsum ═══════════════════ -->
-      <div class="dt-panel" id="panel-lorem" role="tabpanel">
+      <div class="dt-panel" id="panel-lorem" role="tabpanel" aria-labelledby="tab-lorem">
         <div class="dt-card">
           <h2 class="dt-card__title">Lorem Ipsum Generator</h2>
-          <p class="dt-card__desc">Generate placeholder text by paragraphs, sentences, or words.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="lorem-ipsum-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Placeholder text by paragraphs, sentences or words, as plain text or wrapped in &lt;p&gt; tags.</p>
+          <p class="dt-dedicated"><a href="lorem-ipsum-generator.html">&rarr; Open dedicated page</a></p>
           <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Type</label>
+            <label class="dt-label dt-label--inline" for="lorem-type">Type</label>
             <select class="dt-select" id="lorem-type">
               <option value="paragraphs">Paragraphs</option>
               <option value="sentences">Sentences</option>
               <option value="words">Words</option>
             </select>
-            <label class="dt-label" style="margin-bottom:0">Count</label>
-            <input class="dt-input" id="lorem-count" type="number" min="1" max="100" value="3" style="width:80px">
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
-              <input type="checkbox" id="lorem-start-lorem" checked> Start with "Lorem ipsum..."
-            </label>
+            <label class="dt-label dt-label--inline" for="lorem-count">Count</label>
+            <input class="dt-input dt-input--sm" id="lorem-count" type="number" inputmode="numeric" min="1" max="50" value="3" aria-describedby="lorem-count-err">
+          </div>
+          <p class="dt-field-error" id="lorem-count-err" aria-live="polite"></p>
+          <div class="dt-inline-group">
+            <label class="dt-check"><input type="checkbox" id="lorem-start-lorem" checked> Start with &ldquo;Lorem ipsum dolor sit amet&hellip;&rdquo;</label>
+            <label class="dt-check"><input type="checkbox" id="lorem-html"> Wrap in &lt;p&gt; tags</label>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="generateLorem()">Generate</button>
-            <button class="dt-btn" onclick="copyOutput('lorem-output')">Copy</button>
-            <button class="dt-btn" onclick="document.getElementById('lorem-output').textContent=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="generate">Generate again</button>
+            <button type="button" class="dt-btn" data-copy="lorem-output">Copy</button>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="lorem-output" style="max-height:400px;overflow-y:auto"></div>
+          <div class="dt-status-line" id="lorem-status" aria-live="polite"></div>
+          <div class="dt-output dt-output--tall" id="lorem-output" tabindex="0" aria-label="Generated text" style="word-break:normal"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Sentences are 6 to 16 words drawn at random from a list of 168 pseudo-Latin words; paragraphs are 4 to 7 sentences. The classic opening line comes from a scrambled passage of Cicero's <em>De finibus</em> (45 BC) that typesetters have used since at least the 1960s. Limits: 50 paragraphs, 500 sentences or 5,000 words at a time.</p>
+          </details>
         </div>
       </div>
 
-
       <!-- ═══════════════════ Cron Parser ═══════════════════ -->
-      <div class="dt-panel" id="panel-cron" role="tabpanel">
+      <div class="dt-panel" id="panel-cron" role="tabpanel" aria-labelledby="tab-cron">
         <div class="dt-card">
           <h2 class="dt-card__title">Cron Expression Parser</h2>
-          <p class="dt-card__desc">Paste a standard 5-field cron expression (minute hour day-of-month month day-of-week) to see a human-readable description and the next 10 run times.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="cron-parser.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="cron-input">Cron Expression</label>
-          <input class="dt-input" id="cron-input" type="text" placeholder="*/15 9-17 * * 1-5" value="*/15 9-17 * * 1-5">
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="parseCron()">Parse</button>
-            <button class="dt-btn" onclick="document.getElementById('cron-input').value='0 9 * * 1';parseCron()">Example: Mondays 9am</button>
-            <button class="dt-btn" onclick="document.getElementById('cron-input').value='*/5 * * * *';parseCron()">Example: every 5 min</button>
+          <p class="dt-card__desc">Paste a standard 5-field cron schedule (minute, hour, day of month, month, day of week) to read it in plain English and see the next 10 run times.</p>
+          <p class="dt-dedicated"><a href="cron-parser.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="cron-input">Cron expression</label>
+          <input class="dt-input" id="cron-input" type="text" spellcheck="false" autocomplete="off" value="*/15 9-17 * * 1-5" aria-describedby="cron-input-err">
+          <p class="dt-field-error" id="cron-input-err" aria-live="polite"></p>
+          <div class="dt-inline-group" style="margin-top:0.75rem">
+            <label class="dt-label dt-label--inline" for="cron-zone">Show run times in</label>
+            <select class="dt-select" id="cron-zone">
+              <option value="local">Local time</option>
+              <option value="utc">UTC</option>
+            </select>
           </div>
-          <label class="dt-label">Description</label>
-          <div class="dt-output" id="cron-description"></div>
-          <label class="dt-label" style="margin-top:1rem">Next 10 Runs (local time)</label>
-          <div class="dt-output" id="cron-runs"></div>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn dt-btn--primary" data-act="parse">Parse</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="0 9 * * 1">Mondays 09:00</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="*/5 * * * *">Every 5 min</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="0 0 1,15 * *">1st &amp; 15th</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="@daily">@daily</button>
+          </div>
+          <p class="dt-label" id="cron-description-label">Description</p>
+          <div class="dt-output" id="cron-description" aria-live="polite" aria-labelledby="cron-description-label" style="min-height:0;word-break:normal"></div>
+          <p class="dt-label" style="margin-top:1rem">Next 10 runs</p>
+          <ol class="dt-list" id="cron-runs"></ol>
+          <p class="dt-label" style="margin-top:1rem">Fields</p>
+          <div id="cron-fields"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>This reads the Vixie/cronie syntax used by Linux crontab: <code>*</code>, lists (<code>1,15</code>), ranges (<code>9-17</code>), steps (<code>*/15</code>, <code>0-30/10</code>, <code>5/15</code>), month and weekday names (<code>JAN</code>, <code>MON-FRI</code>), Sunday as 0 or 7, and the shortcuts <code>@yearly @monthly @weekly @daily @hourly @reboot</code>.</p>
+            <p>One rule surprises people: when both day-of-month and day-of-week are restricted, a day matches if <em>either</em> matches. <code>0 0 1 * 5</code> runs on the 1st <em>and</em> on every Friday. Quartz/Spring expressions with a seconds field, <code>?</code>, <code>L</code>, <code>W</code> or <code>#</code> are not standard cron and are rejected. Daylight-saving changes can shift or skip a run in local time; your server's cron may handle that hour differently.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Diff Checker ═══════════════════ -->
-      <div class="dt-panel" id="panel-diff" role="tabpanel">
+      <div class="dt-panel" id="panel-diff" role="tabpanel" aria-labelledby="tab-diff">
         <div class="dt-card">
           <h2 class="dt-card__title">Diff Checker</h2>
-          <p class="dt-card__desc">Compare two blocks of text line by line. Additions, deletions, and unchanged lines are color-coded.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="diff-checker.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Compare two versions line by line. Added and removed lines are marked with + and &minus; as well as color, with line numbers from both sides.</p>
+          <p class="dt-dedicated"><a href="diff-checker.html">&rarr; Open dedicated page</a></p>
           <div class="dt-row">
             <div>
               <label class="dt-label" for="diff-a">Original</label>
-              <textarea class="dt-textarea" id="diff-a" rows="10" placeholder="First version..."></textarea>
+              <textarea class="dt-textarea" id="diff-a" rows="9" spellcheck="false">The quick brown fox
+jumps over
+the lazy dog.
+Nothing else changed here.</textarea>
             </div>
             <div>
-              <label class="dt-label" for="diff-b">Modified</label>
-              <textarea class="dt-textarea" id="diff-b" rows="10" placeholder="Second version..."></textarea>
+              <label class="dt-label" for="diff-b">Changed</label>
+              <textarea class="dt-textarea" id="diff-b" rows="9" spellcheck="false">The quick brown fox
+leaps over
+the lazy dog.
+Nothing else changed here.
+A new last line.</textarea>
             </div>
           </div>
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="runDiff()">Compare</button>
-            <button class="dt-btn" onclick="clearFields('diff-a','diff-b');document.getElementById('diff-output').innerHTML=''">Clear</button>
+          <div class="dt-inline-group">
+            <label class="dt-check"><input type="checkbox" id="diff-icase"> Ignore case</label>
+            <label class="dt-check"><input type="checkbox" id="diff-iws"> Ignore whitespace changes</label>
+            <label class="dt-check"><input type="checkbox" id="diff-context"> Only changes (3 lines of context)</label>
           </div>
-          <label class="dt-label">Result</label>
-          <div class="dt-output" id="diff-output" style="font-family:var(--font-mono);white-space:pre"></div>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn dt-btn--primary" data-act="compare">Compare</button>
+            <button type="button" class="dt-btn" data-act="swap">Swap sides</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
+          </div>
+          <div class="dt-status-line" id="diff-status" aria-live="polite"></div>
+          <div class="dt-output dt-output--tall dt-diff" id="diff-output" tabindex="0" aria-label="Differences"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Lines are compared with Myers' diff algorithm (the one behind <code>git diff</code>), which finds the smallest set of added and removed lines. A changed line shows as one removal plus one addition. The ignore options affect only the comparison; lines are shown as typed. Very different inputs (more than 2,000 changed lines) are declined rather than slowing the page down.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Markdown Preview ═══════════════════ -->
-      <div class="dt-panel" id="panel-markdown" role="tabpanel">
+      <div class="dt-panel" id="panel-markdown" role="tabpanel" aria-labelledby="tab-markdown">
         <div class="dt-card">
           <h2 class="dt-card__title">Markdown Preview</h2>
-          <p class="dt-card__desc">Live preview of Markdown. Supports headers, bold, italic, code, links, images, lists, blockquotes, horizontal rules, and tables.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="markdown-preview.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Live preview as you type: headings, emphasis, links, images, lists (nested and task lists), blockquotes, code blocks, tables and strikethrough.</p>
+          <p class="dt-dedicated"><a href="markdown-preview.html">&rarr; Open dedicated page</a></p>
           <div class="dt-row">
             <div>
               <label class="dt-label" for="md-input">Markdown</label>
-              <textarea class="dt-textarea" id="md-input" rows="16" oninput="renderMarkdown()" placeholder="# Hello&#10;&#10;**bold** and *italic*..."># Hello World
+              <textarea class="dt-textarea" id="md-input" rows="18" spellcheck="false"># Hello, Markdown
 
-Some **bold** and *italic* text with a [link](https://example.com).
+Some **bold**, *italic*, ~~struck~~ and `inline code`, plus a [link](https://example.com).
 
-- Item one
-- Item two
+- A list item
+- Another, with a nested list:
+  - nested item
+- [x] A finished task
 
-&gt; Quoted text
+&gt; A blockquote.
 
-`inline code`</textarea>
+| Tool | Runs where |
+|:-----|-----------:|
+| This preview | Your browser |
+
+```js
+const answer = 42;
+```</textarea>
             </div>
             <div>
-              <label class="dt-label">Preview</label>
-              <div class="dt-output" id="md-output" style="max-height:460px;overflow-y:auto"></div>
+              <p class="dt-label" id="md-output-label">Preview</p>
+              <div class="dt-output dt-output--tall dt-md" id="md-output" tabindex="0" aria-labelledby="md-output-label"></div>
             </div>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="renderMarkdown()">Render</button>
-            <button class="dt-btn" onclick="copyOutput('md-output')">Copy HTML</button>
-            <button class="dt-btn" onclick="clearFields('md-input');document.getElementById('md-output').innerHTML=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-copy="md-output">Copy HTML</button>
+            <button type="button" class="dt-btn" data-copy="md-input">Copy Markdown</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>A small renderer on this page covers the everyday parts of CommonMark plus GitHub's tables, task lists, strikethrough and bare-URL links. It is not a full CommonMark implementation, so unusual edge cases can render differently from GitHub.</p>
+            <p>For safety, raw HTML in your Markdown is shown as text rather than rendered, and links are limited to http, https, mailto, tel and ftp, so pasting a README from elsewhere can't run code here. Images load from their URLs like on any web page, which means the image's host sees the request.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Code Beautifier ═══════════════════ -->
-      <div class="dt-panel" id="panel-beautify" role="tabpanel">
+      <div class="dt-panel" id="panel-beautify" role="tabpanel" aria-labelledby="tab-beautify">
         <div class="dt-card">
           <h2 class="dt-card__title">Code Beautifier &amp; Minifier</h2>
-          <p class="dt-card__desc">Format or minify HTML, CSS, JavaScript, XML, and SQL. Best-effort indentation using a bracket-aware formatter.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="code-beautifier.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Re-indent or minify HTML, CSS, JavaScript, XML and SQL. Strings, comments, regex literals and &lt;pre&gt; blocks are left exactly as written.</p>
+          <p class="dt-dedicated"><a href="code-beautifier.html">&rarr; Open dedicated page</a></p>
           <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Language</label>
+            <label class="dt-label dt-label--inline" for="beautify-lang">Language</label>
             <select class="dt-select" id="beautify-lang">
               <option value="html">HTML</option>
               <option value="css">CSS</option>
@@ -896,7 +1225,7 @@ Some **bold** and *italic* text with a [link](https://example.com).
               <option value="xml">XML</option>
               <option value="sql">SQL</option>
             </select>
-            <label class="dt-label" style="margin-bottom:0">Indent</label>
+            <label class="dt-label dt-label--inline" for="beautify-indent">Indent</label>
             <select class="dt-select" id="beautify-indent">
               <option value="2">2 spaces</option>
               <option value="4">4 spaces</option>
@@ -904,427 +1233,630 @@ Some **bold** and *italic* text with a [link](https://example.com).
             </select>
           </div>
           <label class="dt-label" for="beautify-input">Input</label>
-          <textarea class="dt-textarea" id="beautify-input" rows="10" placeholder="Paste your code..."></textarea>
+          <textarea class="dt-textarea" id="beautify-input" rows="10" spellcheck="false">&lt;div class="card"&gt;&lt;h2&gt;Title&lt;/h2&gt;&lt;p&gt;Some &lt;b&gt;bold&lt;/b&gt; text.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;One&lt;/li&gt;&lt;li&gt;Two&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;</textarea>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="runBeautify()">Beautify</button>
-            <button class="dt-btn" onclick="runMinify()">Minify</button>
-            <button class="dt-btn" onclick="copyOutput('beautify-output')">Copy</button>
-            <button class="dt-btn" onclick="clearFields('beautify-input');document.getElementById('beautify-output').textContent=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="mode" data-mode="beautify" aria-pressed="true">Beautify</button>
+            <button type="button" class="dt-btn" data-act="mode" data-mode="minify" aria-pressed="false">Minify</button>
+            <button type="button" class="dt-btn" data-copy="beautify-output">Copy output</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="beautify-output"></div>
+          <div class="dt-status-line" id="beautify-status" aria-live="polite"></div>
+          <pre class="dt-output dt-output--tall dt-output--nowrap" id="beautify-output" tabindex="0" aria-label="Output"></pre>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Each language is split into tokens first, so text inside strings, comments, regular expressions, template literals, <code>url()</code> and &lt;pre&gt;/&lt;textarea&gt; is never touched. The beautifier then re-indents and breaks lines; it doesn't reflow long expressions the way Prettier does. In HTML, inline tags like &lt;b&gt; and &lt;a&gt; stay inside their line so no visible spaces are added.</p>
+            <p>The minifiers only remove comments and whitespace. The JavaScript one keeps a line break wherever automatic semicolon insertion could depend on it, so it is safe but less compact than Terser or esbuild, which also rename variables. Comments that start <code>/*!</code> (usually licenses) are kept.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ CSV ↔ JSON ═══════════════════ -->
-      <div class="dt-panel" id="panel-csv" role="tabpanel">
+      <div class="dt-panel" id="panel-csv" role="tabpanel" aria-labelledby="tab-csv">
         <div class="dt-card">
           <h2 class="dt-card__title">CSV &harr; JSON Converter</h2>
-          <p class="dt-card__desc">Convert between CSV and JSON. CSV must have a header row. Handles quoted values and commas inside quotes.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="csv-json-converter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Type on either side to convert. Handles quoted fields with commas, quotes and line breaks inside them, and detects comma, semicolon, tab or pipe delimiters.</p>
+          <p class="dt-dedicated"><a href="csv-json-converter.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-inline-group">
+            <label class="dt-label dt-label--inline" for="csv-delim">Delimiter</label>
+            <select class="dt-select" id="csv-delim">
+              <option value="auto">Auto-detect</option>
+              <option value=",">Comma ,</option>
+              <option value=";">Semicolon ;</option>
+              <option value="tab">Tab</option>
+              <option value="|">Pipe |</option>
+            </select>
+            <label class="dt-check"><input type="checkbox" id="csv-header" checked> First row is a header</label>
+            <label class="dt-check"><input type="checkbox" id="csv-numeric"> Detect numbers, true/false and null</label>
+          </div>
           <div class="dt-row">
             <div>
               <label class="dt-label" for="csv-left">CSV</label>
-              <textarea class="dt-textarea" id="csv-left" rows="10" placeholder="name,age,city&#10;Alice,30,NYC&#10;Bob,25,LA"></textarea>
+              <textarea class="dt-textarea" id="csv-left" rows="10" spellcheck="false" aria-describedby="csv-left-err">name,role,joined
+Ada Lovelace,"Analyst, first programmer",1843
+"Grace ""Amazing Grace"" Hopper",Rear admiral,1944</textarea>
+              <p class="dt-field-error" id="csv-left-err" aria-live="polite"></p>
             </div>
             <div>
               <label class="dt-label" for="csv-right">JSON</label>
-              <textarea class="dt-textarea" id="csv-right" rows="10" placeholder='[{"name":"Alice","age":"30"}]'></textarea>
+              <textarea class="dt-textarea" id="csv-right" rows="10" spellcheck="false" aria-describedby="csv-right-err"></textarea>
+              <p class="dt-field-error" id="csv-right-err" aria-live="polite"></p>
             </div>
           </div>
-          <div class="dt-inline-group">
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)">
-              <input type="checkbox" id="csv-numeric"> Parse numbers
-            </label>
-          </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="csvToJson()">CSV &rarr; JSON</button>
-            <button class="dt-btn dt-btn--violet" onclick="jsonToCsv()">JSON &rarr; CSV</button>
-            <button class="dt-btn" onclick="clearFields('csv-left','csv-right')">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="toJson">CSV &rarr; JSON</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="toCsv">JSON &rarr; CSV</button>
+            <button type="button" class="dt-btn" data-copy="csv-right">Copy JSON</button>
+            <button type="button" class="dt-btn" data-copy="csv-left">Copy CSV</button>
+            <button type="button" class="dt-btn" data-act="dlCsv">Download .csv</button>
+            <button type="button" class="dt-btn" data-act="dlJson">Download .json</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
+          <div class="dt-status-line" id="csv-status" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>CSV is parsed by the rules in RFC 4180: a field wrapped in double quotes may contain the delimiter, line breaks and doubled quotes (<code>""</code>). Blank lines are skipped. With a header row, each line becomes an object; repeated or empty header names get <code>_2</code> or <code>column_N</code> so nothing is overwritten. Without a header, you get an array of arrays.</p>
+            <p>Values stay text unless you turn on type detection. Even then, numbers with leading zeros (zip codes, IDs like <code>007</code>) and numbers longer than 15 digits stay text so nothing changes value. Going the other way, nested objects and arrays are written as JSON inside the cell. Spreadsheet apps treat cells starting with <code>=</code>, <code>+</code>, <code>-</code> or <code>@</code> as formulas, so be careful opening CSV built from untrusted data.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Case Converter ═══════════════════ -->
-      <div class="dt-panel" id="panel-case" role="tabpanel">
+      <div class="dt-panel" id="panel-case" role="tabpanel" aria-labelledby="tab-case">
         <div class="dt-card">
           <h2 class="dt-card__title">String Case Converter</h2>
-          <p class="dt-card__desc">Convert text between camelCase, snake_case, kebab-case, PascalCase, CONSTANT_CASE, Title Case, and more.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="case-converter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="case-input">Input Text</label>
-          <textarea class="dt-textarea" id="case-input" rows="4" oninput="runCase()" placeholder="Hello World Example Text">Hello World Example Text</textarea>
-          <div id="case-results"></div>
+          <p class="dt-card__desc">Type once and get camelCase, PascalCase, snake_case, CONSTANT_CASE, kebab-case and more. Input in any of those styles is split into words correctly.</p>
+          <p class="dt-dedicated"><a href="case-converter.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="case-input">Input text</label>
+          <textarea class="dt-textarea" id="case-input" rows="3" spellcheck="false">parseXMLHttpRequest for user_account id</textarea>
+          <div id="case-results" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>The text is split into words at spaces, punctuation, underscores and hyphens, and also inside camelCase and acronyms: <code>parseXMLHttpRequest</code> becomes parse / XML / Http / Request. Apostrophes inside words are dropped (<code>don't</code> &rarr; <code>dont</code>). Letters outside English work too.</p>
+            <p>Title Case capitalizes every word; publication styles like AP or Chicago keep short words such as &ldquo;of&rdquo; lowercase, so adjust by hand if you need that. Sentence case lowercases everything first, which also lowercases names and acronyms.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Text Counter ═══════════════════ -->
-      <div class="dt-panel" id="panel-counter" role="tabpanel">
+      <div class="dt-panel" id="panel-counter" role="tabpanel" aria-labelledby="tab-counter">
         <div class="dt-card">
           <h2 class="dt-card__title">Character &amp; Word Counter</h2>
-          <p class="dt-card__desc">Real-time character, word, line, sentence, paragraph counts and reading time estimates.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="character-counter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Characters, words, sentences, paragraphs and lines as you type, plus reading and speaking time and byte counts for developers.</p>
+          <p class="dt-dedicated"><a href="character-counter.html">&rarr; Open dedicated page</a></p>
           <label class="dt-label" for="counter-input">Text</label>
-          <textarea class="dt-textarea" id="counter-input" rows="10" oninput="runCounter()" placeholder="Paste or type text to analyze..."></textarea>
-          <div id="counter-results"></div>
+          <textarea class="dt-textarea" id="counter-input" rows="9">Paste or type here. Every count updates as you type.
+
+Emoji like 👨‍👩‍👧 count as one character, the way you see them.</textarea>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
+          </div>
+          <div id="counter-results" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Characters are counted the way you see them (grapheme clusters, via <code>Intl.Segmenter</code>), so 👨‍👩‍👧 is 1, not the 8 that JavaScript's <code>.length</code> reports. Code points, UTF-16 units and UTF-8 bytes are listed separately because databases, APIs and SMS limits use different ones. Words use your browser's word segmenter, which also handles languages written without spaces. Sentences are approximate: abbreviations like &ldquo;Dr.&rdquo; end a sentence early.</p>
+            <p>Reading time uses 238 words per minute, the average for silent reading of non-fiction in Brysbaert's 2019 review of 190 studies; speaking time uses about 150 words per minute, a typical presentation pace. Real speeds vary a lot from person to person.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Sort / Dedupe ═══════════════════ -->
-      <div class="dt-panel" id="panel-sort" role="tabpanel">
+      <div class="dt-panel" id="panel-sort" role="tabpanel" aria-labelledby="tab-sort">
         <div class="dt-card">
           <h2 class="dt-card__title">Text Sorter, Dedupe &amp; Shuffle</h2>
-          <p class="dt-card__desc">Sort lines alphabetically, numerically, or reverse. Remove duplicates, shuffle, trim whitespace, and more.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="text-sorter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Sort lines alphabetically, naturally (file2 before file10) or numerically; remove duplicates or blank lines; trim; reverse; shuffle.</p>
+          <p class="dt-dedicated"><a href="text-sorter.html">&rarr; Open dedicated page</a></p>
           <label class="dt-label" for="sort-input">Input (one item per line)</label>
-          <textarea class="dt-textarea" id="sort-input" rows="10" placeholder="apple&#10;banana&#10;cherry"></textarea>
-          <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="sortLines('asc')">A&rarr;Z</button>
-            <button class="dt-btn" onclick="sortLines('desc')">Z&rarr;A</button>
-            <button class="dt-btn" onclick="sortLines('num')">Numeric</button>
-            <button class="dt-btn" onclick="sortLines('numdesc')">Numeric Desc</button>
-            <button class="dt-btn" onclick="sortLines('len')">By Length</button>
-            <button class="dt-btn" onclick="sortLines('reverse')">Reverse Order</button>
-            <button class="dt-btn" onclick="sortLines('shuffle')">Shuffle</button>
-            <button class="dt-btn dt-btn--violet" onclick="sortLines('dedupe')">Dedupe</button>
-            <button class="dt-btn" onclick="sortLines('trim')">Trim Lines</button>
-            <button class="dt-btn" onclick="sortLines('noblank')">Remove Blank</button>
-            <button class="dt-btn" onclick="copyOutput('sort-output')">Copy</button>
+          <textarea class="dt-textarea" id="sort-input" rows="9" spellcheck="false">banana
+file10.txt
+Apple
+file2.txt
+cherry
+banana
+42
+7</textarea>
+          <div class="dt-inline-group" style="margin-top:1rem">
+            <label class="dt-check"><input type="checkbox" id="sort-icase" checked> Ignore case</label>
+            <label class="dt-check"><input type="checkbox" id="sort-natural" checked> Natural order for numbers in text</label>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="sort-output" style="white-space:pre"></div>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn dt-btn--primary" data-act="sort" data-mode="asc">A&rarr;Z</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="desc">Z&rarr;A</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="num">Numeric 1&rarr;9</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="numdesc">Numeric 9&rarr;1</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="len">By length</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="reverse">Reverse order</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="shuffle">Shuffle</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="sort" data-mode="dedupe">Remove duplicates</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="trim">Trim spaces</button>
+            <button type="button" class="dt-btn" data-act="sort" data-mode="noblank">Remove blank lines</button>
+          </div>
+          <div class="dt-status-line" id="sort-status" aria-live="polite"></div>
+          <pre class="dt-output dt-output--tall dt-output--nowrap" id="sort-output" tabindex="0" aria-label="Output"></pre>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn" data-copy="sort-output">Copy output</button>
+            <button type="button" class="dt-btn" data-act="apply">Use output as input</button>
+          </div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Alphabetical sorting uses your browser's locale-aware collation (<code>Intl.Collator</code>), so accented letters sort next to their base letters. Natural order compares runs of digits by value. Numeric sorting reads the number at the start of each line; lines without one go to the end in their original order. Remove duplicates keeps the first occurrence, and respects the ignore-case box. Shuffle is an unbiased Fisher&ndash;Yates shuffle using the browser's cryptographic random generator.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Chmod Calculator ═══════════════════ -->
-      <div class="dt-panel" id="panel-chmod" role="tabpanel">
+      <div class="dt-panel" id="panel-chmod" role="tabpanel" aria-labelledby="tab-chmod">
         <div class="dt-card">
           <h2 class="dt-card__title">Unix Permissions (chmod) Calculator</h2>
-          <p class="dt-card__desc">Click checkboxes or type the octal value. Read=4, Write=2, Execute=1.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="chmod-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <table class="hash-table" id="chmod-table">
-            <thead><tr><td></td><td>Read</td><td>Write</td><td>Execute</td></tr></thead>
-            <tbody>
-              <tr><td>Owner</td>
-                <td><input type="checkbox" id="chmod-or" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-ow" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-ox" onchange="chmodUpdate()"></td>
-              </tr>
-              <tr><td>Group</td>
-                <td><input type="checkbox" id="chmod-gr" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-gw" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-gx" onchange="chmodUpdate()"></td>
-              </tr>
-              <tr><td>Other</td>
-                <td><input type="checkbox" id="chmod-tr" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-tw" onchange="chmodUpdate()"></td>
-                <td><input type="checkbox" id="chmod-tx" onchange="chmodUpdate()"></td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="dt-row" style="grid-template-columns:1fr 1fr 1fr;margin-top:1rem">
+          <p class="dt-card__desc">Tick boxes, or type an octal mode or an <code>ls -l</code> string, and the rest follows. Includes setuid, setgid and the sticky bit.</p>
+          <p class="dt-dedicated"><a href="chmod-calculator.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-table-wrap">
+            <table class="hash-table dt-chmod-table">
+              <thead><tr><th scope="col"><span class="visually-hidden">Who</span></th><th scope="col">Read (4)</th><th scope="col">Write (2)</th><th scope="col">Execute (1)</th><th scope="col">Special</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Owner (u)</th>
+                  <td><label><input type="checkbox" id="chmod-or" aria-label="Owner read"></label></td>
+                  <td><label><input type="checkbox" id="chmod-ow" aria-label="Owner write"></label></td>
+                  <td><label><input type="checkbox" id="chmod-ox" aria-label="Owner execute"></label></td>
+                  <td><label><input type="checkbox" id="chmod-su" aria-label="Setuid (4000)"> <span class="dt-th-note" style="display:inline">setuid</span></label></td>
+                </tr>
+                <tr><th scope="row">Group (g)</th>
+                  <td><label><input type="checkbox" id="chmod-gr" aria-label="Group read"></label></td>
+                  <td><label><input type="checkbox" id="chmod-gw" aria-label="Group write"></label></td>
+                  <td><label><input type="checkbox" id="chmod-gx" aria-label="Group execute"></label></td>
+                  <td><label><input type="checkbox" id="chmod-sg" aria-label="Setgid (2000)"> <span class="dt-th-note" style="display:inline">setgid</span></label></td>
+                </tr>
+                <tr><th scope="row">Others (o)</th>
+                  <td><label><input type="checkbox" id="chmod-tr" aria-label="Others read"></label></td>
+                  <td><label><input type="checkbox" id="chmod-tw" aria-label="Others write"></label></td>
+                  <td><label><input type="checkbox" id="chmod-tx" aria-label="Others execute"></label></td>
+                  <td><label><input type="checkbox" id="chmod-st" aria-label="Sticky bit (1000)"> <span class="dt-th-note" style="display:inline">sticky</span></label></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="dt-row" style="margin-top:1rem">
             <div>
               <label class="dt-label" for="chmod-octal">Octal</label>
-              <input class="dt-input" id="chmod-octal" type="text" value="000" oninput="chmodFromOctal()">
+              <input class="dt-input" id="chmod-octal" type="text" inputmode="numeric" value="755" spellcheck="false" autocomplete="off" aria-describedby="chmod-octal-err">
+              <p class="dt-field-error" id="chmod-octal-err" aria-live="polite"></p>
             </div>
             <div>
-              <label class="dt-label" for="chmod-symbolic">Symbolic</label>
-              <input class="dt-input" id="chmod-symbolic" type="text" value="---------" readonly>
-            </div>
-            <div>
-              <label class="dt-label" for="chmod-cmd">Command</label>
-              <input class="dt-input" id="chmod-cmd" type="text" value="chmod 000 file" readonly>
+              <label class="dt-label" for="chmod-symbolic">Symbolic (as in ls -l)</label>
+              <input class="dt-input" id="chmod-symbolic" type="text" spellcheck="false" autocomplete="off" aria-describedby="chmod-symbolic-err">
+              <p class="dt-field-error" id="chmod-symbolic-err" aria-live="polite"></p>
             </div>
           </div>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="chmod-cmd">Command (numeric)</label>
+              <input class="dt-input" id="chmod-cmd" type="text" readonly>
+              <button type="button" class="dt-btn dt-btn--sm" data-copy="chmod-cmd" style="margin-top:0.5rem">Copy</button>
+            </div>
+            <div>
+              <label class="dt-label" for="chmod-cmd-sym">Command (symbolic)</label>
+              <input class="dt-input" id="chmod-cmd-sym" type="text" readonly>
+              <button type="button" class="dt-btn dt-btn--sm" data-copy="chmod-cmd-sym" style="margin-top:0.5rem">Copy</button>
+            </div>
+          </div>
+          <div class="dt-btn-row">
+            <span class="dt-label dt-label--inline" style="align-self:center">Common</span>
+            <button type="button" class="dt-btn" data-act="preset" data-mode="644">644 file</button>
+            <button type="button" class="dt-btn" data-act="preset" data-mode="755">755 script / dir</button>
+            <button type="button" class="dt-btn" data-act="preset" data-mode="600">600 private</button>
+            <button type="button" class="dt-btn" data-act="preset" data-mode="700">700 private dir</button>
+            <button type="button" class="dt-btn" data-act="preset" data-mode="1777">1777 /tmp</button>
+          </div>
+          <ul class="dt-list" id="chmod-explain" aria-live="polite" style="font-family:var(--font-sans)"></ul>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Each octal digit adds up read (4), write (2) and execute (1) for the owner, the group and everyone else, so 755 is rwx for the owner and r-x for the rest. An optional leading fourth digit adds setuid (4), setgid (2) and sticky (1). In <code>ls -l</code> output those replace the matching x with <code>s</code> or <code>t</code>, or <code>S</code>/<code>T</code> when the execute bit underneath is off.</p>
+            <p>On a directory, execute means &ldquo;may enter&rdquo;, setgid makes new files inherit the directory's group, and sticky (as on /tmp) stops users deleting each other's files. GNU chmod keeps a directory's setuid/setgid bits when you give only three digits; write the fourth digit (for example 0755) to clear them.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ HTTP Status Codes ═══════════════════ -->
-      <div class="dt-panel" id="panel-http" role="tabpanel">
+      <div class="dt-panel" id="panel-http" role="tabpanel" aria-labelledby="tab-http">
         <div class="dt-card">
           <h2 class="dt-card__title">HTTP Status Code Reference</h2>
-          <p class="dt-card__desc">Complete list of HTTP status codes with descriptions. Filter by category or search by code or name.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="http-status-codes.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-inline-group">
-            <input class="dt-input" id="http-search" type="text" placeholder="Search by code or name..." oninput="renderHttp()" style="flex:1">
-            <select class="dt-select" id="http-category" onchange="renderHttp()">
-              <option value="all">All Categories</option>
-              <option value="1">1xx Informational</option>
-              <option value="2">2xx Success</option>
-              <option value="3">3xx Redirection</option>
-              <option value="4">4xx Client Error</option>
-              <option value="5">5xx Server Error</option>
-            </select>
+          <p class="dt-card__desc">Every code in the IANA HTTP status code registry, with a plain-English meaning and the RFC that defines it. Search by number, name or meaning.</p>
+          <p class="dt-dedicated"><a href="http-status-codes.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-row" style="grid-template-columns:minmax(0,1fr) auto">
+            <div>
+              <label class="dt-label" for="http-search">Search</label>
+              <input class="dt-input" id="http-search" type="search" spellcheck="false" autocomplete="off" placeholder="404, redirect, rate limit…">
+            </div>
+            <div>
+              <label class="dt-label" for="http-category">Class</label>
+              <select class="dt-select" id="http-category">
+                <option value="all">All classes</option>
+                <option value="1">1xx Informational</option>
+                <option value="2">2xx Success</option>
+                <option value="3">3xx Redirection</option>
+                <option value="4">4xx Client error</option>
+                <option value="5">5xx Server error</option>
+              </select>
+            </div>
           </div>
-          <div id="http-results" style="margin-top:1rem"></div>
+          <p class="dt-hint" id="http-count" aria-live="polite"></p>
+          <div class="dt-table-wrap">
+            <table class="hash-table">
+              <thead><tr><th scope="col">Code</th><th scope="col">Name and meaning</th><th scope="col">Class &middot; defined in</th></tr></thead>
+              <tbody id="http-results"></tbody>
+            </table>
+          </div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>The list mirrors the IANA HTTP Status Code Registry (last updated 2025-09-15). Most codes are defined in RFC 9110 (HTTP Semantics, 2022), which renamed 413 to &ldquo;Content Too Large&rdquo; and 422 to &ldquo;Unprocessable Content&rdquo;; the old names still match a search. 418 is listed as reserved: the &ldquo;I'm a teapot&rdquo; joke from RFC 2324 is popular, but it was never a real HTTP status.</p>
+            <p>You will also meet unregistered codes that particular servers invent, such as nginx's 499 (client closed the connection) or Cloudflare's 520&ndash;527. They mean something only for that product, so they aren't listed here.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ User Agent Parser ═══════════════════ -->
-      <div class="dt-panel" id="panel-ua" role="tabpanel">
+      <div class="dt-panel" id="panel-ua" role="tabpanel" aria-labelledby="tab-ua">
         <div class="dt-card">
           <h2 class="dt-card__title">User Agent Parser</h2>
-          <p class="dt-card__desc">Parse a User-Agent string to detect browser, OS, and device. Click "Use Mine" to parse your current browser's UA.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="user-agent-parser.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="ua-input">User Agent String</label>
-          <textarea class="dt-textarea" id="ua-input" rows="3" placeholder="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36..."></textarea>
+          <p class="dt-card__desc">Read the browser, rendering engine, operating system and device type from a User-Agent string. It starts with your own.</p>
+          <p class="dt-dedicated"><a href="user-agent-parser.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="ua-input">User-Agent string</label>
+          <textarea class="dt-textarea" id="ua-input" rows="3" spellcheck="false"></textarea>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="parseUA()">Parse</button>
-            <button class="dt-btn" onclick="useMyUA()">Use Mine</button>
-            <button class="dt-btn" onclick="clearFields('ua-input');document.getElementById('ua-results').innerHTML=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="parse">Parse</button>
+            <button type="button" class="dt-btn" data-act="mine">Use mine</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <div id="ua-results"></div>
+          <div id="ua-results" aria-live="polite"></div>
+          <div id="ua-hints"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>The parser looks for known product tokens in a set order (Edge and Opera before Chrome, Chrome before Safari, because each copies the others' tokens). User-Agent strings were never designed to be parsed and are now partly frozen: Chrome reports only its major version, macOS is stuck at 10.15.7, Android hides the device model, and Windows 10 and 11 look identical. When you use your own browser's string, the extra rows come from User-Agent Client Hints where your browser supports them; they are read locally, not sent anywhere.</p>
+            <p>For feature decisions in your own sites, test for the feature itself rather than the browser name.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ CIDR Subnet Calculator ═══════════════════ -->
-      <div class="dt-panel" id="panel-cidr" role="tabpanel">
+      <div class="dt-panel" id="panel-cidr" role="tabpanel" aria-labelledby="tab-cidr">
         <div class="dt-card">
-          <h2 class="dt-card__title">CIDR Subnet Calculator</h2>
-          <p class="dt-card__desc">Enter an IPv4 address in CIDR notation to calculate network, broadcast, first/last host, usable hosts, and netmask.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="cidr-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="cidr-input">CIDR Notation</label>
-          <input class="dt-input" id="cidr-input" type="text" placeholder="192.168.1.0/24" value="192.168.1.0/24">
+          <h2 class="dt-card__title">CIDR Subnet Calculator (IPv4)</h2>
+          <p class="dt-card__desc">Enter an IPv4 address with a prefix (192.168.1.0/24) or a netmask (192.168.1.0 255.255.255.0) to get the network, broadcast, host range and address type.</p>
+          <p class="dt-dedicated"><a href="cidr-calculator.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="cidr-input">Address and prefix</label>
+          <input class="dt-input" id="cidr-input" type="text" spellcheck="false" autocomplete="off" value="192.168.1.77/24" aria-describedby="cidr-input-err">
+          <p class="dt-field-error" id="cidr-input-err" aria-live="polite"></p>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="calcCIDR()">Calculate</button>
-            <button class="dt-btn" onclick="document.getElementById('cidr-input').value='10.0.0.0/16';calcCIDR()">10.0.0.0/16</button>
-            <button class="dt-btn" onclick="document.getElementById('cidr-input').value='172.16.0.0/12';calcCIDR()">172.16.0.0/12</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="calc">Calculate</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="10.0.0.0/8">10.0.0.0/8</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="172.16.0.0/12">172.16.0.0/12</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="100.64.0.0/10">100.64.0.0/10</button>
+            <button type="button" class="dt-btn" data-act="example" data-expr="203.0.113.8/31">/31 link</button>
           </div>
-          <div id="cidr-results"></div>
+          <div class="dt-status-line" id="cidr-status" aria-live="polite"></div>
+          <div id="cidr-results" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>The prefix length says how many leading bits name the network; the rest number the hosts. A /24 leaves 8 host bits, so 256 addresses, minus the network address (all host bits 0) and the broadcast address (all 1) gives 254 usable hosts. Two exceptions: a /31 has no broadcast and both addresses are usable on point-to-point links (RFC 3021), and a /32 is a single host.</p>
+            <p>The address type comes from IANA's special-purpose registry: private ranges (RFC 1918), carrier-grade NAT (RFC 6598), loopback, link-local, documentation and so on. Leading zeros like <code>010</code> are refused because some tools read them as octal. IPv6 isn't supported here.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Escape / Unescape ═══════════════════ -->
-      <div class="dt-panel" id="panel-escape" role="tabpanel">
+      <div class="dt-panel" id="panel-escape" role="tabpanel" aria-labelledby="tab-escape">
         <div class="dt-card">
           <h2 class="dt-card__title">Text Escape &amp; Unescape</h2>
-          <p class="dt-card__desc">Escape or unescape text for HTML entities, JavaScript strings, SQL, XML, and CSV.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="text-escape.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="escape-input">Input</label>
-          <textarea class="dt-textarea" id="escape-input" rows="6" placeholder="Paste text here..."></textarea>
+          <p class="dt-card__desc">Escape or unescape text for HTML, XML, JavaScript strings, JSON strings, SQL literals, CSV fields, POSIX shell arguments and regular expressions.</p>
+          <p class="dt-dedicated"><a href="text-escape.html">&rarr; Open dedicated page</a></p>
           <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Format</label>
+            <label class="dt-label dt-label--inline" for="escape-format">Format</label>
             <select class="dt-select" id="escape-format">
-              <option value="html">HTML Entities</option>
-              <option value="js">JavaScript String</option>
-              <option value="sql">SQL String</option>
-              <option value="xml">XML Entities</option>
-              <option value="csv">CSV Field</option>
-              <option value="shell">Shell (POSIX)</option>
+              <option value="html">HTML entities</option>
+              <option value="xml">XML entities</option>
+              <option value="js">JavaScript string</option>
+              <option value="json">JSON string</option>
+              <option value="sql">SQL string literal</option>
+              <option value="csv">CSV field</option>
+              <option value="shell">Shell argument (POSIX)</option>
+              <option value="regex">Regular expression</option>
             </select>
           </div>
+          <label class="dt-label" for="escape-input">Input</label>
+          <textarea class="dt-textarea" id="escape-input" rows="6" spellcheck="false">&lt;a href="/search?q=tom&amp;jerry"&gt;It's "fun"&lt;/a&gt;</textarea>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="runEscape(true)">Escape</button>
-            <button class="dt-btn dt-btn--violet" onclick="runEscape(false)">Unescape</button>
-            <button class="dt-btn" onclick="copyOutput('escape-output')">Copy</button>
-            <button class="dt-btn" onclick="clearFields('escape-input');document.getElementById('escape-output').textContent=''">Clear</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="dir" data-mode="escape" aria-pressed="true">Escape</button>
+            <button type="button" class="dt-btn dt-btn--violet" data-act="dir" data-mode="unescape" aria-pressed="false">Unescape</button>
+            <button type="button" class="dt-btn" data-copy="escape-output">Copy output</button>
+            <button type="button" class="dt-btn" data-act="reuse">Use output as input</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="escape-output"></div>
+          <div class="dt-status-line" id="escape-status" aria-live="polite"></div>
+          <pre class="dt-output" id="escape-output" tabindex="0" aria-label="Output"></pre>
+          <details class="dt-how"><summary>How it works</summary>
+            <ul>
+              <li><strong>HTML / XML:</strong> <code>&amp; &lt; &gt; " '</code> become entities. Unescaping HTML understands every named and numeric entity; XML knows its five plus numeric ones.</li>
+              <li><strong>JavaScript:</strong> backslash escapes for quotes, backticks, <code>${</code>, control characters and the U+2028/2029 line separators. <strong>JSON</strong> uses <code>JSON.stringify</code> rules.</li>
+              <li><strong>SQL:</strong> doubles single quotes (standard SQL). MySQL also treats backslashes as escapes by default. Escaping is not protection against SQL injection; use parameterized queries.</li>
+              <li><strong>CSV:</strong> quotes the field when it holds a comma, quote, line break or edge spaces (RFC 4180). <strong>Shell:</strong> wraps in single quotes, writing <code>'</code> as <code>'\''</code>; unescaping reads one shell word with single, double and backslash quoting. <strong>Regex:</strong> backslashes the characters that have special meaning, so the text matches literally.</li>
+            </ul>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Image to Base64 ═══════════════════ -->
-      <div class="dt-panel" id="panel-img2b64" role="tabpanel">
+      <div class="dt-panel" id="panel-img2b64" role="tabpanel" aria-labelledby="tab-img2b64">
         <div class="dt-card">
-          <h2 class="dt-card__title">Image &rarr; Base64</h2>
-          <p class="dt-card__desc">Drop or select an image to convert it to a Base64 data URI. Runs entirely in your browser &mdash; nothing is uploaded.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="image-to-base64.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="img2b64-file">Image File</label>
-          <input class="dt-input" id="img2b64-file" type="file" accept="image/*" onchange="imgToBase64(this)">
+          <h2 class="dt-card__title">Image &rarr; Base64 Data URI</h2>
+          <p class="dt-card__desc">Turn an image into a data URI for HTML or CSS. The file is read in this tab with FileReader and never uploaded.</p>
+          <p class="dt-dedicated"><a href="image-to-base64.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-drop" id="img2b64-drop" for="img2b64-file">
+            Drop an image here, or choose one
+            <input id="img2b64-file" type="file" accept="image/*">
+          </label>
           <div class="dt-btn-row">
-            <button class="dt-btn" onclick="copyOutput('img2b64-output')">Copy Data URI</button>
-            <button class="dt-btn" onclick="copyOutput('img2b64-css')">Copy CSS</button>
-            <button class="dt-btn" onclick="copyOutput('img2b64-html')">Copy HTML</button>
-            <button class="dt-btn" onclick="document.getElementById('img2b64-preview').innerHTML='';document.getElementById('img2b64-output').textContent='';document.getElementById('img2b64-css').textContent='';document.getElementById('img2b64-html').textContent=''">Clear</button>
+            <button type="button" class="dt-btn" data-copy="img2b64-output">Copy data URI</button>
+            <button type="button" class="dt-btn" data-copy="img2b64-raw">Copy Base64 only</button>
+            <button type="button" class="dt-btn" data-copy="img2b64-css">Copy CSS</button>
+            <button type="button" class="dt-btn" data-copy="img2b64-html">Copy &lt;img&gt;</button>
+            <button type="button" class="dt-btn" data-act="clear">Clear</button>
           </div>
-          <div id="img2b64-preview" style="margin:1rem 0"></div>
-          <label class="dt-label">Data URI</label>
-          <div class="dt-output" id="img2b64-output" style="max-height:150px"></div>
-          <label class="dt-label" style="margin-top:1rem">CSS</label>
-          <div class="dt-output" id="img2b64-css" style="max-height:100px"></div>
-          <label class="dt-label" style="margin-top:1rem">HTML</label>
-          <div class="dt-output" id="img2b64-html" style="max-height:100px"></div>
+          <div class="dt-status-line" id="img2b64-status" aria-live="polite"></div>
+          <div class="dt-preview" id="img2b64-preview"></div>
+          <p class="dt-label" id="img2b64-output-label" style="margin-top:1rem">Data URI</p>
+          <div class="dt-output" id="img2b64-output" tabindex="0" aria-labelledby="img2b64-output-label" style="max-height:150px"></div>
+          <p class="dt-label" id="img2b64-raw-label" style="margin-top:1rem">Base64 only</p>
+          <div class="dt-output" id="img2b64-raw" tabindex="0" aria-labelledby="img2b64-raw-label" style="max-height:120px"></div>
+          <p class="dt-label" id="img2b64-css-label" style="margin-top:1rem">CSS</p>
+          <div class="dt-output" id="img2b64-css" tabindex="0" aria-labelledby="img2b64-css-label" style="max-height:100px"></div>
+          <p class="dt-label" id="img2b64-html-label" style="margin-top:1rem">HTML</p>
+          <div class="dt-output" id="img2b64-html" tabindex="0" aria-labelledby="img2b64-html-label" style="max-height:100px"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>A data URI (RFC 2397) puts the file's bytes, Base64-encoded, straight into the URL: <code>data:image/png;base64,&hellip;</code>. That saves a network request but makes the file about 33% larger and stops the browser caching it separately, so it pays off mainly for small icons of a few kilobytes. Files up to 20 MB are accepted; very long outputs are shortened on screen, and the Copy buttons always copy the full text.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Password Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-password" role="tabpanel">
+      <div class="dt-panel" id="panel-password" role="tabpanel" aria-labelledby="tab-password">
         <div class="dt-card">
           <h2 class="dt-card__title">Password Generator</h2>
-          <p class="dt-card__desc">Generate cryptographically random passwords. Uses <code>crypto.getRandomValues</code>.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="password-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <p class="dt-card__desc">Random passwords from your browser's cryptographic generator. Generated in this tab, never sent or stored.</p>
+          <p class="dt-dedicated"><a href="password-generator.html">&rarr; Open dedicated page</a></p>
           <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Length</label>
-            <input class="dt-input" id="pw-length" type="number" min="4" max="128" value="20" style="width:80px" oninput="genPassword()">
-            <label class="dt-label" style="margin-bottom:0">Count</label>
-            <input class="dt-input" id="pw-count" type="number" min="1" max="50" value="5" style="width:80px" oninput="genPassword()">
+            <label class="dt-label dt-label--inline" for="pw-length">Length</label>
+            <input class="dt-input dt-input--sm" id="pw-length" type="number" inputmode="numeric" min="4" max="128" value="20" aria-describedby="pw-length-err">
+            <label class="dt-label dt-label--inline" for="pw-count">How many</label>
+            <input class="dt-input dt-input--sm" id="pw-count" type="number" inputmode="numeric" min="1" max="50" value="5" aria-describedby="pw-count-err">
           </div>
+          <p class="dt-field-error" id="pw-length-err" aria-live="polite"></p>
+          <p class="dt-field-error" id="pw-count-err" aria-live="polite"></p>
           <div class="dt-inline-group">
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="pw-upper" checked onchange="genPassword()"> Uppercase</label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="pw-lower" checked onchange="genPassword()"> Lowercase</label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="pw-digits" checked onchange="genPassword()"> Digits</label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="pw-symbols" checked onchange="genPassword()"> Symbols</label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="pw-ambig" onchange="genPassword()"> Exclude ambiguous (0OIl1)</label>
+            <label class="dt-check"><input type="checkbox" id="pw-upper" checked> Uppercase A&ndash;Z</label>
+            <label class="dt-check"><input type="checkbox" id="pw-lower" checked> Lowercase a&ndash;z</label>
+            <label class="dt-check"><input type="checkbox" id="pw-digits" checked> Digits 0&ndash;9</label>
+            <label class="dt-check"><input type="checkbox" id="pw-symbols" checked> Symbols !#$%&hellip;</label>
+            <label class="dt-check"><input type="checkbox" id="pw-ambig"> Avoid look-alikes (O 0 o I l 1 |)</label>
+            <label class="dt-check"><input type="checkbox" id="pw-require" checked> At least one from each set</label>
           </div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="genPassword()">Regenerate</button>
-            <button class="dt-btn" onclick="copyOutput('pw-output')">Copy All</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="generate">Generate</button>
+            <button type="button" class="dt-btn" data-copy="pw-output">Copy all</button>
           </div>
-          <label class="dt-label">Output</label>
-          <div class="dt-output" id="pw-output"></div>
-          <label class="dt-label" style="margin-top:1rem">Strength (first password)</label>
-          <div id="pw-strength"></div>
+          <div class="dt-status-line" id="pw-strength" aria-live="polite"></div>
+          <ul class="dt-pw-list" id="pw-output" aria-label="Generated passwords"></ul>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Every character is picked with <code>crypto.getRandomValues</code> using rejection sampling, so each allowed character is exactly equally likely (no modulo bias). With &ldquo;at least one from each set&rdquo;, whole passwords that miss a set are thrown away and redrawn, which keeps the choice uniform among the passwords that qualify.</p>
+            <p>Entropy is length &times; log<sub>2</sub>(pool size), slightly reduced for the each-set rule. The labels are a rough guide: under 40 bits weak, 40&ndash;59 fair, 60&ndash;79 strong, 80+ very strong. A long passphrase or a password manager's generated password is a fine choice too; what matters most is not reusing passwords.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Number Base Converter ═══════════════════ -->
-      <div class="dt-panel" id="panel-numbase" role="tabpanel">
+      <div class="dt-panel" id="panel-numbase" role="tabpanel" aria-labelledby="tab-numbase">
         <div class="dt-card">
           <h2 class="dt-card__title">Number Base Converter</h2>
-          <p class="dt-card__desc">Convert between binary (base 2), octal (base 8), decimal (base 10), and hexadecimal (base 16). Supports integers up to 2^53.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="number-base-converter.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-row" style="grid-template-columns:1fr 1fr">
+          <p class="dt-card__desc">Convert whole numbers of any size between binary, octal, decimal, hexadecimal and any base from 2 to 36. Negative numbers show their two's complement.</p>
+          <p class="dt-dedicated"><a href="number-base-converter.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-row">
             <div>
-              <label class="dt-label" for="nb-bin">Binary</label>
-              <input class="dt-input" id="nb-bin" type="text" placeholder="1101" oninput="numBase('bin')">
-              <label class="dt-label" for="nb-oct" style="margin-top:1rem">Octal</label>
-              <input class="dt-input" id="nb-oct" type="text" placeholder="17" oninput="numBase('oct')">
+              <label class="dt-label" for="nb-dec">Decimal (base 10)</label>
+              <input class="dt-input" id="nb-dec" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" value="255" aria-describedby="nb-dec-err">
+              <p class="dt-field-error" id="nb-dec-err" aria-live="polite"></p>
             </div>
             <div>
-              <label class="dt-label" for="nb-dec">Decimal</label>
-              <input class="dt-input" id="nb-dec" type="text" placeholder="13" oninput="numBase('dec')">
-              <label class="dt-label" for="nb-hex" style="margin-top:1rem">Hexadecimal</label>
-              <input class="dt-input" id="nb-hex" type="text" placeholder="d" oninput="numBase('hex')">
+              <label class="dt-label" for="nb-hex">Hexadecimal (base 16)</label>
+              <input class="dt-input" id="nb-hex" type="text" spellcheck="false" autocomplete="off" aria-describedby="nb-hex-err">
+              <p class="dt-field-error" id="nb-hex-err" aria-live="polite"></p>
+            </div>
+            <div>
+              <label class="dt-label" for="nb-bin">Binary (base 2)</label>
+              <input class="dt-input" id="nb-bin" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" aria-describedby="nb-bin-err">
+              <p class="dt-field-error" id="nb-bin-err" aria-live="polite"></p>
+            </div>
+            <div>
+              <label class="dt-label" for="nb-oct">Octal (base 8)</label>
+              <input class="dt-input" id="nb-oct" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" aria-describedby="nb-oct-err">
+              <p class="dt-field-error" id="nb-oct-err" aria-live="polite"></p>
+            </div>
+            <div>
+              <label class="dt-label" for="nb-custom">Custom base</label>
+              <input class="dt-input" id="nb-custom" type="text" spellcheck="false" autocomplete="off" aria-describedby="nb-custom-err">
+              <p class="dt-field-error" id="nb-custom-err" aria-live="polite"></p>
+            </div>
+            <div>
+              <label class="dt-label" for="nb-base">Custom base is</label>
+              <input class="dt-input dt-input--sm" id="nb-base" type="number" inputmode="numeric" min="2" max="36" value="36" aria-describedby="nb-base-err">
+              <p class="dt-field-error" id="nb-base-err" aria-live="polite"></p>
             </div>
           </div>
-          <div id="nb-status" style="margin-top:0.5rem"></div>
+          <label class="dt-check"><input type="checkbox" id="nb-upper"> Uppercase letters</label>
+          <div class="dt-status-line" id="nb-status" aria-live="polite"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Numbers are handled as JavaScript <code>BigInt</code>, so there's no size limit and no rounding (ordinary JavaScript numbers lose precision past 2<sup>53</sup>). Prefixes <code>0x</code>, <code>0b</code> and <code>0o</code> are accepted, and so are <code>_</code> or spaces as digit separators. Letters stand for 10 to 35 in bases above 10.</p>
+            <p>For negative numbers the fields show a minus sign, and the status line adds the two's complement in the smallest common width (8, 16, 32, 64 or 128 bits) that holds the value, which is how most CPUs and languages store it. Fractions aren't supported.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ ASCII Table ═══════════════════ -->
-      <div class="dt-panel" id="panel-ascii" role="tabpanel">
+      <div class="dt-panel" id="panel-ascii" role="tabpanel" aria-labelledby="tab-ascii">
         <div class="dt-card">
-          <h2 class="dt-card__title">ASCII Table Reference</h2>
-          <p class="dt-card__desc">Complete 0-127 ASCII character table with decimal, hex, octal, binary, and HTML entity. Click any row to copy the character.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="ascii-table.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-inline-group">
-            <input class="dt-input" id="ascii-search" type="text" placeholder="Search by char, dec, hex, or name..." oninput="renderASCII()" style="flex:1">
+          <h2 class="dt-card__title">ASCII Table</h2>
+          <p class="dt-card__desc">All 128 ASCII codes with decimal, hex, octal, binary, HTML entity and name. Search by character, code or name; select a character to copy it.</p>
+          <p class="dt-dedicated"><a href="ascii-table.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="ascii-search">Search</label>
+          <input class="dt-input" id="ascii-search" type="search" spellcheck="false" autocomplete="off" placeholder="A, 65, 0x41, tab, line feed…">
+          <p class="dt-hint" id="ascii-count" aria-live="polite"></p>
+          <div class="dt-table-wrap dt-table-wrap--scroll" tabindex="0" aria-label="ASCII table" style="margin-top:0.75rem">
+            <table class="hash-table dt-ascii">
+              <thead><tr><th scope="col">Char</th><th scope="col">Dec</th><th scope="col">Hex</th><th scope="col">Oct</th><th scope="col">Bin</th><th scope="col">HTML</th><th scope="col">Name</th></tr></thead>
+              <tbody id="ascii-results"></tbody>
+            </table>
           </div>
-          <div id="ascii-results" style="max-height:500px;overflow-y:auto;margin-top:1rem"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>ASCII (ANSI X3.4-1986, also ISO 646) defines 128 codes: 0&ndash;31 and 127 are control characters, 32 is the space, and 33&ndash;126 are printable. Codes 128&ndash;255 are not ASCII; they differ between legacy code pages, and in UTF-8 they are the start of multi-byte characters. For a control character the copy button gives its escape sequence (<code>\n</code>, <code>\t</code>, <code>\x1B</code>&hellip;) since the raw character would be invisible.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Favicon Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-favicon" role="tabpanel">
+      <div class="dt-panel" id="panel-favicon" role="tabpanel" aria-labelledby="tab-favicon">
         <div class="dt-card">
           <h2 class="dt-card__title">Favicon Generator</h2>
-          <p class="dt-card__desc">Generate a simple favicon from text or an emoji. Outputs a PNG data URI you can drop into <code>&lt;link rel="icon"&gt;</code>.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="favicon-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-row" style="grid-template-columns:1fr 1fr 1fr">
+          <p class="dt-card__desc">Make a favicon from a letter, a few characters or an emoji. Download PNGs in the common sizes and copy the &lt;link&gt; tags.</p>
+          <p class="dt-dedicated"><a href="favicon-generator.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-row dt-row--4">
             <div>
-              <label class="dt-label" for="fav-text">Text / Emoji</label>
-              <input class="dt-input" id="fav-text" type="text" value="&#9670;" maxlength="4" oninput="genFavicon()">
+              <label class="dt-label" for="fav-text">Text or emoji</label>
+              <input class="dt-input" id="fav-text" type="text" value="&#9670;" maxlength="8" autocomplete="off">
             </div>
             <div>
               <label class="dt-label" for="fav-bg">Background</label>
-              <input class="dt-input" id="fav-bg" type="color" value="#07070d" oninput="genFavicon()">
+              <input class="dt-input" id="fav-bg" type="color" value="#07070d">
             </div>
             <div>
               <label class="dt-label" for="fav-fg">Foreground</label>
-              <input class="dt-input" id="fav-fg" type="color" value="#00d4aa" oninput="genFavicon()">
+              <input class="dt-input" id="fav-fg" type="color" value="#00d4aa">
+            </div>
+            <div>
+              <label class="dt-label" for="fav-shape">Shape</label>
+              <select class="dt-select" id="fav-shape" style="width:100%">
+                <option value="square">Square</option>
+                <option value="rounded" selected>Rounded</option>
+                <option value="circle">Circle</option>
+              </select>
             </div>
           </div>
-          <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Shape</label>
-            <select class="dt-select" id="fav-shape" onchange="genFavicon()">
-              <option value="square">Square</option>
-              <option value="rounded">Rounded</option>
-              <option value="circle">Circle</option>
-            </select>
-          </div>
+          <label class="dt-label" for="fav-scale">Glyph size: <span id="fav-scale-out">70%</span></label>
+          <input class="dt-range" id="fav-scale" type="range" min="30" max="100" value="70">
+          <div class="dt-fav-preview" id="fav-preview"></div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="genFavicon()">Generate</button>
-            <button class="dt-btn" onclick="downloadFavicon()">Download PNG</button>
-            <button class="dt-btn" onclick="copyOutput('fav-data')">Copy Data URI</button>
-            <button class="dt-btn" onclick="copyOutput('fav-link')">Copy &lt;link&gt;</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-act="download" data-size="32">Download 32&times;32</button>
+            <button type="button" class="dt-btn" data-act="download" data-size="16">16&times;16</button>
+            <button type="button" class="dt-btn" data-act="download" data-size="48">48&times;48</button>
+            <button type="button" class="dt-btn" data-act="download" data-size="180">180 Apple touch</button>
+            <button type="button" class="dt-btn" data-act="download" data-size="192">192 Android</button>
+            <button type="button" class="dt-btn" data-act="download" data-size="512">512 Android</button>
           </div>
-          <div id="fav-preview" style="display:flex;gap:1.5rem;align-items:center;margin:1rem 0;flex-wrap:wrap"></div>
-          <label class="dt-label">Data URI</label>
-          <div class="dt-output" id="fav-data" style="max-height:150px"></div>
-          <label class="dt-label" style="margin-top:1rem">&lt;link&gt; tag</label>
-          <div class="dt-output" id="fav-link" style="max-height:80px"></div>
+          <p class="dt-label" id="fav-link-label">&lt;link&gt; tags</p>
+          <pre class="dt-output" id="fav-link" tabindex="0" aria-labelledby="fav-link-label" style="max-height:200px"></pre>
+          <div class="dt-btn-row">
+            <button type="button" class="dt-btn" data-copy="fav-link">Copy tags</button>
+            <button type="button" class="dt-btn" data-copy="fav-data">Copy 32px data URI</button>
+          </div>
+          <p class="dt-label" id="fav-data-label">32&times;32 PNG as a data URI</p>
+          <div class="dt-output" id="fav-data" tabindex="0" aria-labelledby="fav-data-label" style="max-height:120px"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Each size is drawn on a canvas in your browser and scaled so the glyph's actual shape (not just its font box) is centered and fits the size you set. Emoji use your system's emoji font, so they look slightly different on Windows, macOS and Android.</p>
+            <p>The output is PNG, which every current browser accepts for <code>rel="icon"</code>. This tool doesn't make a multi-size <code>.ico</code>; very old browsers and some tools still look for <code>/favicon.ico</code>, so convert the 32 or 48 px PNG if you need one.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Gradient Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-gradient" role="tabpanel">
+      <div class="dt-panel" id="panel-gradient" role="tabpanel" aria-labelledby="tab-gradient">
         <div class="dt-card">
           <h2 class="dt-card__title">CSS Gradient Generator</h2>
-          <p class="dt-card__desc">Build a linear or radial CSS gradient. Live preview and copy-ready CSS.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="gradient-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Type</label>
-            <select class="dt-select" id="grad-type" onchange="renderGradient()">
-              <option value="linear">Linear</option>
-              <option value="radial">Radial</option>
-            </select>
-            <label class="dt-label" style="margin-bottom:0" id="grad-angle-label">Angle</label>
-            <input class="dt-input" id="grad-angle" type="number" value="135" min="0" max="360" style="width:80px" oninput="renderGradient()">
-            <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-dim)">deg</span>
+          <p class="dt-card__desc">Build a linear, radial or conic CSS gradient with two or three colors, with a live preview and copy-ready CSS.</p>
+          <p class="dt-dedicated"><a href="gradient-generator.html">&rarr; Open dedicated page</a></p>
+          <div class="dt-row">
+            <div>
+              <label class="dt-label" for="grad-type">Type</label>
+              <select class="dt-select" id="grad-type" style="width:100%">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+                <option value="conic">Conic</option>
+              </select>
+            </div>
+            <div id="grad-shape-wrap" hidden>
+              <label class="dt-label" for="grad-shape">Shape</label>
+              <select class="dt-select" id="grad-shape" style="width:100%">
+                <option value="circle">Circle</option>
+                <option value="ellipse">Ellipse</option>
+              </select>
+            </div>
+            <div id="grad-angle-wrap">
+              <label class="dt-label" for="grad-angle-num">Angle (degrees)</label>
+              <div class="dt-inline-group" style="margin:0;flex-wrap:nowrap">
+                <input class="dt-range" id="grad-angle" type="range" min="0" max="360" value="135" aria-label="Angle slider">
+                <input class="dt-input dt-input--sm" id="grad-angle-num" type="number" inputmode="numeric" min="0" max="360" value="135" aria-describedby="grad-angle-num-err">
+              </div>
+              <p class="dt-field-error" id="grad-angle-num-err" aria-live="polite"></p>
+            </div>
           </div>
-          <div class="dt-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
+          <div class="dt-row dt-row--4">
             <div>
               <label class="dt-label" for="grad-c1">Color 1</label>
-              <input class="dt-input" id="grad-c1" type="color" value="#00d4aa" oninput="renderGradient()">
+              <input class="dt-input" id="grad-c1" type="color" value="#00d4aa">
             </div>
             <div>
               <label class="dt-label" for="grad-c2">Color 2</label>
-              <input class="dt-input" id="grad-c2" type="color" value="#a855f7" oninput="renderGradient()">
+              <input class="dt-input" id="grad-c2" type="color" value="#8b5cf6">
             </div>
             <div>
-              <label class="dt-label" for="grad-c3">Color 3 (opt)</label>
-              <input class="dt-input" id="grad-c3" type="color" value="#f43f5e" oninput="renderGradient()">
+              <label class="dt-label" for="grad-c3">Color 3</label>
+              <input class="dt-input" id="grad-c3" type="color" value="#c44a8a">
             </div>
-            <div>
-              <label class="dt-label" style="margin-bottom:0">&nbsp;</label>
-              <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary);margin-top:0.5rem"><input type="checkbox" id="grad-c3-enable" onchange="renderGradient()"> Use color 3</label>
+            <div style="display:flex;align-items:flex-end">
+              <label class="dt-check"><input type="checkbox" id="grad-c3-enable"> Use color 3</label>
             </div>
           </div>
-          <label class="dt-label">Preview</label>
-          <div id="grad-preview" style="width:100%;height:180px;border:1px solid var(--border);margin:0.5rem 0"></div>
+          <div class="dt-grad-preview" id="grad-preview" role="img" aria-label="Gradient preview"></div>
           <div class="dt-btn-row">
-            <button class="dt-btn dt-btn--primary" onclick="renderGradient()">Update</button>
-            <button class="dt-btn" onclick="copyOutput('grad-css')">Copy CSS</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-copy="grad-css">Copy CSS</button>
+            <button type="button" class="dt-btn" data-act="swap">Swap colors 1 and 2</button>
           </div>
-          <label class="dt-label">CSS</label>
-          <div class="dt-output" id="grad-css"></div>
+          <pre class="dt-output" id="grad-css" tabindex="0" aria-label="CSS"></pre>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Linear gradients run in the direction of the angle (0deg points up, 90deg right). Radial gradients spread from the center as a circle or an ellipse that fits the box. Conic gradients sweep around the center, starting at the angle; the first color is repeated at the end so the seam is smooth. The first line of the CSS is a plain color fallback for anything that can't draw gradients. All three types work in every current browser.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════ Slug Generator ═══════════════════ -->
-      <div class="dt-panel" id="panel-slug" role="tabpanel">
+      <div class="dt-panel" id="panel-slug" role="tabpanel" aria-labelledby="tab-slug">
         <div class="dt-card">
           <h2 class="dt-card__title">URL Slug Generator</h2>
-          <p class="dt-card__desc">Convert text to URL-friendly slugs. Handles unicode, diacritics, and special characters.</p>
-          <p style="margin-top:-0.75rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="slug-generator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <label class="dt-label" for="slug-input">Input Text</label>
-          <textarea class="dt-textarea" id="slug-input" rows="3" oninput="runSlug()" placeholder="My Awesome Blog Post Title!"></textarea>
-          <div class="dt-inline-group">
-            <label class="dt-label" style="margin-bottom:0">Separator</label>
-            <select class="dt-select" id="slug-sep" onchange="runSlug()">
-              <option value="-">- (hyphen)</option>
-              <option value="_">_ (underscore)</option>
-              <option value=".">. (period)</option>
-              <option value="">None</option>
+          <p class="dt-card__desc">Turn titles into URL-friendly slugs. Accents are removed (cr&egrave;me &rarr; creme), and each line becomes its own slug.</p>
+          <p class="dt-dedicated"><a href="slug-generator.html">&rarr; Open dedicated page</a></p>
+          <label class="dt-label" for="slug-input">Titles (one per line)</label>
+          <textarea class="dt-textarea" id="slug-input" rows="4" spellcheck="false">Crème Brûlée: 10 Easy Recipes for Beginners!
+Don't Panic &amp; Carry a Towel</textarea>
+          <div class="dt-inline-group" style="margin-top:1rem">
+            <label class="dt-label dt-label--inline" for="slug-sep">Separator</label>
+            <select class="dt-select" id="slug-sep">
+              <option value="-">- hyphen</option>
+              <option value="_">_ underscore</option>
+              <option value=".">. period</option>
+              <option value="">none</option>
             </select>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="slug-lower" checked onchange="runSlug()"> Lowercase</label>
-            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-family:var(--font-mono);font-size:0.7rem;color:var(--text-secondary)"><input type="checkbox" id="slug-strict" checked onchange="runSlug()"> Strict (ASCII only)</label>
+            <label class="dt-label dt-label--inline" for="slug-max">Max length</label>
+            <input class="dt-input dt-input--sm" id="slug-max" type="number" inputmode="numeric" min="0" max="500" placeholder="none" aria-describedby="slug-max-err">
           </div>
+          <p class="dt-field-error" id="slug-max-err" aria-live="polite"></p>
+          <div class="dt-inline-group">
+            <label class="dt-check"><input type="checkbox" id="slug-lower" checked> Lowercase</label>
+            <label class="dt-check"><input type="checkbox" id="slug-strict" checked> ASCII only (a&ndash;z, 0&ndash;9)</label>
+          </div>
+          <p class="dt-label" id="slug-output-label">Slugs</p>
+          <pre class="dt-output" id="slug-output" tabindex="0" aria-live="polite" aria-labelledby="slug-output-label"></pre>
           <div class="dt-btn-row">
-            <button class="dt-btn" onclick="copyOutput('slug-output')">Copy</button>
+            <button type="button" class="dt-btn dt-btn--primary" data-copy="slug-output">Copy</button>
           </div>
-          <label class="dt-label">Slug</label>
-          <div class="dt-output" id="slug-output"></div>
+          <details class="dt-how"><summary>How it works</summary>
+            <p>Accents are stripped with Unicode normalization (NFKD), a few letters that don't decompose are spelled out (&szlig; &rarr; ss, &aelig; &rarr; ae, &oslash; &rarr; o, &lstrok; &rarr; l), apostrophes inside words are dropped, and every other run of punctuation or spaces becomes one separator. With ASCII only off, letters from other scripts are kept, which modern browsers display fine but percent-encode when copied. Max length cuts at a word boundary.</p>
+          </details>
         </div>
       </div>
 
@@ -1367,7 +1899,7 @@ Some **bold** and *italic* text with a [link](https://example.com).
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
 
-  <script src="dev-tools-core.js"></script>
+  <script src="dev-tools-core.js?v=2026-11-03"></script>
   <script defer src="../js/ads.js"></script>
 </body>
 </html>

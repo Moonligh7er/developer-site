@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,44 +127,54 @@
 
       <div class="calc-card">
         <h1>Macro Split Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your daily calorie target (from the <a href="calorie-tdee-calculator.html" style="color:var(--teal);">TDEE calculator</a> or your own) and pick a macro preset to see grams per macro per day. Presets are common conventions, not prescriptions.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter a daily calorie target (from the <a href="calorie-tdee-calculator.html" style="color:var(--teal);">TDEE calculator</a> or your own) and pick a split to see grams of protein, carbohydrate and fat per day and per meal. Presets are common conventions, not prescriptions. Results update as you type.</p>
 
         <div class="form-grid">
-  <div class="form-group"><label for="calories">Daily Calorie Target</label><input type="number" id="calories" placeholder="2200" min="0" step="1"></div>
-  <div class="form-group"><label for="preset">Macro Preset</label>
+  <div class="form-group"><label for="calories">Daily calories (kcal)</label><input type="number" id="calories" value="2200" min="0" step="1" inputmode="numeric"></div>
+  <div class="form-group"><label for="preset">Macro split</label>
     <select id="preset">
-      <option value="balanced">Balanced (30P / 40C / 30F)</option>
-      <option value="highProtein">Higher-Protein (40P / 35C / 25F)</option>
-      <option value="lowCarb">Low-Carb (35P / 20C / 45F)</option>
-      <option value="endurance">Endurance (25P / 55C / 20F)</option>
+      <option value="balanced">Balanced (30% P / 40% C / 30% F)</option>
+      <option value="highProtein">Higher protein (40% P / 35% C / 25% F)</option>
+      <option value="lowCarb">Lower carb (35% P / 20% C / 45% F)</option>
+      <option value="endurance">Endurance (25% P / 55% C / 20% F)</option>
       <option value="custom">Custom</option>
     </select>
   </div>
+  <div class="form-group"><label for="meals">Meals per day</label>
+    <select id="meals"><option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option></select>
+  </div>
 </div>
-<div class="form-grid" id="custom-fields" style="display:none;">
-  <div class="form-group"><label for="pPct">Protein (%)</label><input type="number" id="pPct" value="30" min="0" max="100" step="any"></div>
-  <div class="form-group"><label for="cPct">Carbs (%)</label><input type="number" id="cPct" value="40" min="0" max="100" step="any"></div>
-  <div class="form-group"><label for="fPct">Fat (%)</label><input type="number" id="fPct" value="30" min="0" max="100" step="any"><span class="hint">Must sum to 100</span></div>
+<div class="form-grid" id="custom-fields" hidden>
+  <div class="form-group"><label for="pPct">Protein (% of kcal)</label><input type="number" id="pPct" value="30" min="0" max="100" step="any" inputmode="decimal"></div>
+  <div class="form-group"><label for="cPct">Carbs (% of kcal)</label><input type="number" id="cPct" value="40" min="0" max="100" step="any" inputmode="decimal"></div>
+  <div class="form-group"><label for="fPct">Fat (% of kcal)</label><input type="number" id="fPct" value="30" min="0" max="100" step="any" inputmode="decimal" aria-describedby="fPct-hint"><span class="hint" id="fPct-hint">The three should add up to 100</span></div>
+</div>
+<p class="calc-subhead">Optional: protein per body weight</p>
+<div class="form-grid">
+  <div class="form-group"><label for="units">Weight unit</label>
+    <select id="units"><option value="imperial">Pounds (lb)</option><option value="metric">Kilograms (kg)</option></select>
+  </div>
+  <div class="form-group"><label for="bw">Body weight (<span id="bw-unit">lb</span>)</label><input type="number" id="bw" placeholder="e.g. 160" min="0" step="any" inputmode="decimal"></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Daily Macros</h4><div id="out-main"></div><p class="calc-subhead">Per-Meal Split (4 meals)</p><div id="out-meals"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Daily macros</h4><div id="out-main"></div><p class="calc-subhead" id="meals-head">Per meal</p><div id="out-meals"></div>
+          <p class="calc-note">An estimate, not medical or dietetic advice.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Macro basics</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Calories from each macro: protein and carbs = 4 kcal/g, fat = 9 kcal/g. So a 30/40/30 split on 2,000 kcal gives 150g protein (600 kcal), 200g carbs (800 kcal), 67g fat (600 kcal).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When each preset fits</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Balanced 30/40/30:</strong> general-purpose maintenance or slow recomp, most people. <strong>Higher-protein 40/35/25:</strong> weight loss (preserves lean mass during a deficit) or hypertrophy training. <strong>Low-carb 35/20/45:</strong> keto-adjacent, ketogenic diets, or people who feel better on lower carbs. <strong>Endurance 25/55/20:</strong> athletes doing 8+ hours/week of cardio &mdash; glycogen replenishment matters. These are common conventions, not prescriptions; individual needs vary.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Protein per pound of bodyweight</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">A common lifter&apos;s target is 0.8&ndash;1.0g protein per lb of bodyweight. Higher-end research (Morton et al., meta-analysis) puts the ceiling around 1.6g/kg (~0.73g/lb) for muscle building &mdash; beyond that, extra protein doesn&apos;t add muscle gains, though it can help satiety during a cut. If your macro split gives you significantly more or less than your bodyweight-based target, use custom mode to dial in the exact grams.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Each macro&apos;s share of calories is divided by its energy density (the Atwater factors): protein and carbohydrate 4 kcal per gram, fat 9 kcal per gram. A 30/40/30 split of 2,000 kcal is 150 g protein (600 kcal), 200 g carbohydrate (800 kcal) and about 67 g fat (600 kcal). Grams are rounded, so they may add back up to a few kcal off the target. Alcohol (7 kcal/g) and fibre aren&apos;t modelled.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When each preset might fit</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Balanced 30/40/30:</strong> general-purpose eating, maintenance or slow recomposition. <strong>Higher protein 40/35/25:</strong> often used during a calorie deficit to help hold on to lean mass, or alongside strength training. <strong>Lower carb 35/20/45:</strong> for people who feel better with fewer carbohydrates; note that 20% is still well above a ketogenic diet, which usually keeps carbohydrate under about 10% of calories. <strong>Endurance 25/55/20:</strong> for high training volumes where refilling glycogen matters. Individual needs vary.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Protein per body weight</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">The adult RDA is 0.8 g per kg of body weight a day, a minimum for most healthy adults rather than an optimum. For people doing resistance training, a 2018 meta-analysis (Morton et al., <em>Br J Sports Med</em>) found gains in lean mass levelled off around 1.6 g/kg/day, with 2.2 g/kg as the upper end of the confidence range. Enter your weight above to see where a split lands; if it&apos;s far from where you want, switch to custom.</p>
 </section>
     </div>
 
@@ -195,66 +216,197 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      document.getElementById('preset').addEventListener('change', function() {
-  document.getElementById('custom-fields').style.display = this.value==='custom' ? '' : 'none';
-});
-
-const PRESETS = {
-  balanced: [30,40,30],
-  highProtein: [40,35,25],
-  lowCarb: [35,20,45],
-  endurance: [25,55,20]
-};
-
-function calc(){
-  hideErr();
-  const cal = n('calories');
-  if (!cal||cal<=0) return showErr('Enter calorie target.');
-  const preset = s('preset');
-  let p, c, f;
-  if (preset === 'custom') {
-    p = n('pPct')||0; c = n('cPct')||0; f = n('fPct')||0;
-    if (Math.abs(p+c+f - 100) > 1) return showErr('Custom percentages must sum to 100.');
-  } else {
-    [p,c,f] = PRESETS[preset];
-  }
-  const pG = (cal * p/100) / 4;
-  const cG = (cal * c/100) / 4;
-  const fG = (cal * f/100) / 9;
-
-  let main = '';
-  main += row('Protein', Math.round(pG) + 'g (' + Math.round(cal*p/100) + ' kcal, ' + p + '%)', 'teal');
-  main += row('Carbohydrates', Math.round(cG) + 'g (' + Math.round(cal*c/100) + ' kcal, ' + c + '%)', 'violet');
-  main += row('Fat', Math.round(fG) + 'g (' + Math.round(cal*f/100) + ' kcal, ' + f + '%)', 'amber');
-  main += row('Total calories', cal + ' kcal');
-  set('out-main', main);
-
-  let meals = '';
-  meals += row('Protein per meal', Math.round(pG/4) + 'g × 4 meals');
-  meals += row('Carbs per meal', Math.round(cG/4) + 'g × 4 meals');
-  meals += row('Fat per meal', Math.round(fG/4) + 'g × 4 meals');
-  meals += row('Calories per meal', Math.round(cal/4) + ' kcal × 4 meals');
-  set('out-meals', meals);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['calories','pPct','cPct','fPct'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('preset').value='balanced';document.getElementById('custom-fields').style.display='none';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+      /* Atwater general factors: protein 4, carbohydrate 4, fat 9 kcal/g. */
+      const PRESETS = { balanced: [30, 40, 30], highProtein: [40, 35, 25], lowCarb: [35, 20, 45], endurance: [25, 55, 20] };
+      function pct(x) { return fmt(x, x % 1 ? 1 : 0) + '%'; }
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const cal = field('calories', 500, 10000, 'kcal', st);
+        const preset = $('preset').value;
+        let p, c, f;
+        if (preset === 'custom') {
+          p = field('pPct', 0, 100, '%', st); c = field('cPct', 0, 100, '%', st); f = field('fPct', 0, 100, '%', st);
+          if (p !== null && c !== null && f !== null && Math.abs(p + c + f - 100) > 0.5) {
+            msg('fPct', 'These add up to ' + fmt(p + c + f, 1) + '%; they need to total 100%.');
+            st.bad = true;
+          }
+        } else {
+          [p, c, f] = PRESETS[preset];
+        }
+        const bwRaw = field('bw', isMetric() ? 20 : 44, isMetric() ? 650 : 1430, isMetric() ? 'kg' : 'lb', st, true);
+        if (cal === null || p === null || c === null || f === null || st.bad && preset === 'custom') {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter a daily calorie target to see grams per macro.'));
+          set('out-meals', '');
+          return;
+        }
+        const meals = parseInt($('meals').value, 10);
+        const pG = cal * p / 100 / 4, cG = cal * c / 100 / 4, fG = cal * f / 100 / 9;
+        let main = '';
+        main += row('Protein (' + pct(p) + ')', fmt(pG, 0) + ' g &middot; ' + fmt(cal * p / 100, 0) + ' kcal', 'teal');
+        main += row('Carbohydrate (' + pct(c) + ')', fmt(cG, 0) + ' g &middot; ' + fmt(cal * c / 100, 0) + ' kcal', 'violet');
+        main += row('Fat (' + pct(f) + ')', fmt(fG, 0) + ' g &middot; ' + fmt(cal * f / 100, 0) + ' kcal', 'amber');
+        main += row('Total', fmt(cal, 0) + ' kcal');
+        if (bwRaw !== null) {
+          const kg = isMetric() ? bwRaw : bwRaw * LB_KG;
+          main += row('Protein per body weight', fmt(pG / kg, 2) + ' g/kg (' + fmt(pG / (kg / LB_KG), 2) + ' g/lb)');
+        }
+        set('out-main', main);
+        $('meals-head').textContent = 'Per meal (' + meals + ' meals)';
+        set('out-meals',
+          row('Protein', fmt(pG / meals, 0) + ' g') +
+          row('Carbohydrate', fmt(cG / meals, 0) + ' g') +
+          row('Fat', fmt(fG / meals, 0) + ' g') +
+          row('Calories', fmt(cal / meals, 0) + ' kcal'));
+      }
+      function showCustom() { $('custom-fields').hidden = $('preset').value !== 'custom'; }
+      $('preset').addEventListener('change', showCustom);
+      setupUnits((toMetric) => {
+        const w = read('bw');
+        if (w > 0) $('bw').value = +(toMetric ? w * LB_KG : w / LB_KG).toFixed(1);
+      });
+      function unitLabel() { $('bw-unit').textContent = isMetric() ? 'kg' : 'lb'; }
+      $('units').addEventListener('change', unitLabel);
+      unitLabel();
+      showCustom();
+      wire(run, () => { $('preset').value = 'balanced'; $('pPct').value = 30; $('cPct').value = 40; $('fPct').value = 30; showCustom(); });
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

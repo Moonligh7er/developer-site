@@ -87,6 +87,16 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
     
   </style>
 </head>
@@ -120,16 +130,20 @@
 
       <div class="calc-card">
         <h1>Word Counter</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Live word count, character count (with/without spaces), sentence count, paragraph count, estimated reading time, keyword density, and Flesch reading-ease + Flesch-Kincaid grade-level scores. All computation happens as you type.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Live word, character, sentence and paragraph counts, reading and speaking time, keyword frequency, and Flesch readability scores for English text. Characters are counted the way people see them, so an emoji or an accented letter counts once, and Chinese, Japanese and Thai text is split into words properly where your browser supports it.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded or saved.</div>
         <div class="form-group">
   <label for="text">Paste or type your text</label>
-  <textarea id="text" placeholder="Start typing or paste your text here..." aria-label="Text to analyze"></textarea>
+  <textarea id="text" placeholder="Start typing or paste your text here..." spellcheck="true"></textarea>
 </div>
-<div class="calc-results visible" id="results" aria-live="polite">
+<div class="calc-btn-row" style="margin-top:1rem;">
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear text</button>
+</div>
+<p class="visually-hidden" id="wc-live" aria-live="polite" aria-atomic="true"></p>
+<div class="calc-results visible" id="results">
   <h4>Basic Counts</h4>
   <div id="out-basic"></div>
-  <p class="calc-subhead">Readability</p>
+  <p class="calc-subhead">Readability (English)</p>
   <div id="out-readability"></div>
   <p class="calc-subhead">Top Keywords</p>
   <div id="out-keywords"></div>
@@ -137,15 +151,16 @@
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The metrics explained</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Words</strong> are counted by splitting on whitespace after collapsing extra spaces. <strong>Characters (with spaces)</strong> is the total length; <strong>without spaces</strong> excludes all whitespace including tabs and newlines. <strong>Sentences</strong> are counted by splitting on <code style="color:var(--teal);">.!?</code> followed by whitespace or end-of-text; abbreviations may cause slight overcounts. <strong>Paragraphs</strong> are separated by blank lines.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it counts</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Words:</strong> anything between spaces that contains a letter or a number counts as one word, so &ldquo;well-known&rdquo;, &ldquo;don&apos;t&rdquo; and &ldquo;3.14&rdquo; are one word each, and a lone dash or emoji isn&apos;t a word. Text in scripts written without spaces (Chinese, Japanese, Thai and similar) is split with your browser&apos;s built-in word segmenter (<code style="color:var(--teal);">Intl.Segmenter</code>); in older browsers without it, each Chinese or Japanese character counts as one word.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Characters</strong> are user-perceived characters (grapheme clusters): 👍🏽 or &ldquo;é&rdquo; typed as e + accent count as one, not two or four. &ldquo;No spaces&rdquo; leaves out all whitespace, including tabs and line breaks. <strong>UTF-8 bytes</strong> is the storage size, handy for database and SMS limits. <strong>Sentences</strong> use the browser&apos;s sentence segmenter where available, otherwise a split on . ! ? and their CJK forms; abbreviations such as &ldquo;Mr.&rdquo; can still add an extra sentence. <strong>Paragraphs</strong> are separated by blank lines.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Reading and speaking time</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Reading time uses 238 words per minute (standard adult silent-reading speed for prose). Speaking time uses 150 wpm (typical presentation pace). Technical content and audiobook narration are usually slower; conversational speech is faster.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Reading time uses 238 words per minute, the average for silent reading of non-fiction in a 2019 review of 190 studies (Brysbaert); fiction runs a little faster. Speaking time uses 150 words per minute, a typical presentation pace. Technical writing and audiobook narration are usually slower; conversation is faster.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Flesch reading ease and Flesch-Kincaid grade</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Flesch Reading Ease</strong> = 206.835 &minus; 1.015 × (words/sentences) &minus; 84.6 × (syllables/words). Higher is easier. Scores: 90-100 very easy (5th grade), 60-70 plain English (8-9th grade), 30-50 college level, 0-30 college-graduate/professional. <strong>Flesch-Kincaid Grade</strong> = 0.39 × (words/sentences) + 11.8 × (syllables/words) &minus; 15.59. Approximates US school grade level required.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Syllable counting uses vowel-cluster heuristics (with adjustments for silent E and common word endings). It&apos;s ~85% accurate for standard English; specialized/technical vocabulary throws it off.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Keyword density</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Top 10 most-frequent non-stopword terms in your text, with counts and percentage of total words. Stopwords (common words like &ldquo;the&rdquo;, &ldquo;a&rdquo;, &ldquo;of&rdquo;) are filtered out. Useful for SEO content editing and spotting overused words.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Flesch Reading Ease</strong> = 206.835 &minus; 1.015 &times; (words &divide; sentences) &minus; 84.6 &times; (syllables &divide; words). Higher is easier: 90&ndash;100 very easy (about 5th grade), 60&ndash;70 plain English (8th&ndash;9th grade), 30&ndash;50 college level, below 30 college graduate. <strong>Flesch-Kincaid Grade</strong> = 0.39 &times; (words &divide; sentences) + 11.8 &times; (syllables &divide; words) &minus; 15.59, roughly the US school grade needed.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Both formulas were built for English. Syllables are estimated from vowel groups with adjustments for silent e and common endings, so treat the scores as a guide; unusual or technical words throw the estimate off. When most of the text isn&apos;t in the Latin alphabet, the scores are left out.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Keyword frequency</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">The ten most frequent words after leaving out common English words (&ldquo;the&rdquo;, &ldquo;a&rdquo;, &ldquo;of&rdquo; and so on) and very short ones, with each word&apos;s share of the total word count. Handy for spotting overused words.</p>
 </section>
     </div>
 
@@ -176,86 +191,177 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      function esc(t) { return String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      const int = (n) => n.toLocaleString('en-US');
 
-      const STOPWORDS = new Set('a an the and or but of in on at to for with by from as is are was were be been being have has had do does did will would should could may might must can shall this that these those i you he she it we they me him her us them my your his its our their what which who whom whose when where why how not no nor so than too very just also into over under about above below between through if then else so'.split(' '));
-function countSyllables(word){
-  word = word.toLowerCase().replace(/[^a-z]/g,'');
-  if (word.length<=3) return word.length ? 1 : 0;
-  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
-  const m = word.match(/[aeiouy]{1,2}/g);
-  return m ? m.length : 1;
-}
-function analyze(){
-  const t = document.getElementById('text').value;
-  const chars = t.length;
-  const charsNoSpace = t.replace(/\s/g,'').length;
-  const wordsArr = t.trim() ? t.trim().split(/\s+/) : [];
-  const words = wordsArr.length;
-  const sentences = t.trim() ? (t.match(/[.!?]+(?=\s|$)/g) || []).length || 1 : 0;
-  const paragraphs = t.trim() ? t.split(/\n\s*\n/).filter(p=>p.trim()).length : 0;
-  const readMin = words / 238;
-  const speakMin = words / 150;
-  let syl = 0;
-  for (const w of wordsArr) syl += countSyllables(w);
-  const fleschEase = words>0 && sentences>0 ? 206.835 - 1.015*(words/sentences) - 84.6*(syl/words) : 0;
-  const fkGrade = words>0 && sentences>0 ? 0.39*(words/sentences) + 11.8*(syl/words) - 15.59 : 0;
+      /* Unicode-aware segmentation via Intl.Segmenter where the browser has it, with regex fallbacks. */
+      const HAS_SEG = typeof Intl !== 'undefined' && typeof Intl.Segmenter === 'function';
+      const graphemes = HAS_SEG ? new Intl.Segmenter(undefined, { granularity: 'grapheme' }) : null;
+      const wordSeg = HAS_SEG ? new Intl.Segmenter(undefined, { granularity: 'word' }) : null;
+      const sentenceSeg = HAS_SEG ? new Intl.Segmenter(undefined, { granularity: 'sentence' }) : null;
+      const HAS_WORD = /[\p{L}\p{N}]/u;
+      const NO_SPACE_SCRIPT = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}]/u;
+      const LATIN = /\p{Script=Latin}/gu;
+      const LETTER = /\p{L}/gu;
 
-  let basic = '';
-  basic += row('Words', words.toLocaleString(), 'teal');
-  basic += row('Characters (with spaces)', chars.toLocaleString());
-  basic += row('Characters (no spaces)', charsNoSpace.toLocaleString());
-  basic += row('Sentences', sentences.toLocaleString());
-  basic += row('Paragraphs', paragraphs.toLocaleString());
-  basic += row('Syllables (estimated)', syl.toLocaleString());
-  basic += row('Reading time', readMin < 1 ? '<1 min' : Math.round(readMin) + ' min', 'violet');
-  basic += row('Speaking time', speakMin < 1 ? '<1 min' : Math.round(speakMin) + ' min', 'violet');
-  set('out-basic', basic);
+      function countGraphemes(s) {
+        if (!s) return 0;
+        if (graphemes) { let n = 0; const it = graphemes.segment(s)[Symbol.iterator](); while (!it.next().done) n++; return n; }
+        return Array.from(s).length;
+      }
+      /* Word-like pieces of a whitespace-free token written in a script without spaces. */
+      function cjkWords(tok) {
+        if (wordSeg) { const out = []; for (const s of wordSeg.segment(tok)) if (s.isWordLike) out.push(s.segment); return out; }
+        return tok.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]|[\p{L}\p{N}]+/gu) || [];
+      }
+      /* Words: whitespace-separated tokens containing a letter or digit; tokens in no-space scripts are segmented. */
+      function words(text) {
+        const out = [];
+        for (const tok of text.split(/\s+/)) {
+          if (!tok || !HAS_WORD.test(tok)) continue;
+          if (NO_SPACE_SCRIPT.test(tok)) { for (const w of cjkWords(tok)) out.push(w); }
+          else out.push(tok);
+        }
+        return out;
+      }
+      function countSentences(text) {
+        if (!text.trim()) return 0;
+        if (sentenceSeg) { let n = 0; for (const s of sentenceSeg.segment(text)) if (HAS_WORD.test(s.segment)) n++; return n; }
+        return text.split(/(?<=[.!?。！？…])["'”’)\]]*\s*/u).filter((p) => HAS_WORD.test(p)).length;
+      }
+      /* English syllable estimate (vowel groups, silent e, common endings). */
+      function syllables(word) {
+        let w = word.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z]/g, '');
+        if (!w) return 0;
+        if (w.length <= 3) return 1;
+        w = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+        const m = w.match(/[aeiouy]{1,2}/g);
+        return m ? m.length : 1;
+      }
+      const STOPWORDS = new Set('a an the and or but of in on at to for with by from as is are was were be been being have has had do does did will would should could may might must can shall this that these those i you he she it we they me him her us them my your his its our their what which who whom whose when where why how not no nor so than too very just also into over under about above below between through if then else its it\'s i\'m don\'t didn\'t can\'t won\'t isn\'t aren\'t wasn\'t there here all any some more most such only own same other each few both out up down off again further once'.split(' '));
+      /* Lower-cased word tokens for keyword counting (punctuation trimmed). */
+      function keywordTokens(text) {
+        const toks = [];
+        if (wordSeg) { for (const s of wordSeg.segment(text)) if (s.isWordLike) toks.push(s.segment); }
+        else { const m = text.match(/[\p{L}\p{N}]+(?:['’][\p{L}]+)*/gu); if (m) toks.push.apply(toks, m); }
+        return toks.map((t) => t.normalize('NFC').toLocaleLowerCase().replace(/’/g, '\''));
+      }
+      function duration(minutes) {
+        if (minutes <= 0) return '0 sec';
+        const secs = minutes * 60;
+        if (secs < 60) return 'about ' + Math.max(1, Math.round(secs)) + ' sec';
+        const m = Math.round(minutes);
+        return 'about ' + int(m) + ' min';
+      }
+      function easeLabel(f) {
+        if (f >= 90) return 'very easy (about 5th grade)';
+        if (f >= 80) return 'easy (6th grade)';
+        if (f >= 70) return 'fairly easy (7th grade)';
+        if (f >= 60) return 'plain English (8th–9th grade)';
+        if (f >= 50) return 'fairly difficult (10th–12th grade)';
+        if (f >= 30) return 'difficult (college)';
+        return 'very difficult (college graduate)';
+      }
 
-  let easeLabel = '';
-  if (fleschEase >= 90) easeLabel = 'Very easy (5th grade)';
-  else if (fleschEase >= 80) easeLabel = 'Easy (6th grade)';
-  else if (fleschEase >= 70) easeLabel = 'Fairly easy (7th grade)';
-  else if (fleschEase >= 60) easeLabel = 'Plain English (8-9th grade)';
-  else if (fleschEase >= 50) easeLabel = 'Fairly difficult (10-12th grade)';
-  else if (fleschEase >= 30) easeLabel = 'Difficult (college)';
-  else easeLabel = 'Very difficult (college graduate)';
+      let liveTimer = null;
+      function analyze() {
+        const t = $('text').value;
+        const ws = words(t);
+        const wc = ws.length;
+        const chars = countGraphemes(t);
+        const charsNoSpace = countGraphemes(t.replace(/\s+/gu, ''));
+        const bytes = new TextEncoder().encode(t).length;
+        const sentences = countSentences(t);
+        const paragraphs = t.trim() ? t.split(/\n\s*\n/).filter((p) => HAS_WORD.test(p)).length : 0;
 
-  let read = '';
-  read += row('Flesch reading ease', words>0 ? fleschEase.toFixed(1) + ' (' + easeLabel + ')' : '—', 'teal');
-  read += row('Flesch-Kincaid grade level', words>0 ? fkGrade.toFixed(1) : '—', 'violet');
-  read += row('Avg. words per sentence', sentences>0 ? (words/sentences).toFixed(1) : '—');
-  read += row('Avg. syllables per word', words>0 ? (syl/words).toFixed(2) : '—');
-  set('out-readability', read);
+        let basic = '';
+        basic += row('Words', int(wc), 'teal');
+        basic += row('Characters', int(chars));
+        basic += row('Characters (no spaces)', int(charsNoSpace));
+        basic += row('UTF-8 bytes', int(bytes));
+        basic += row('Sentences', int(sentences));
+        basic += row('Paragraphs', int(paragraphs));
+        basic += row('Reading time (238 wpm)', duration(wc / 238), 'violet');
+        basic += row('Speaking time (150 wpm)', duration(wc / 150), 'violet');
+        set('out-basic', basic);
 
-  // Keyword density
-  const freq = {};
-  for (const w of wordsArr) {
-    const clean = w.toLowerCase().replace(/[^a-z]/g,'');
-    if (!clean || clean.length < 3 || STOPWORDS.has(clean)) continue;
-    freq[clean] = (freq[clean]||0) + 1;
-  }
-  const sorted = Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  let kw = '';
-  if (sorted.length === 0) {
-    kw = '<p style="color:var(--text-dim);font-size:0.85rem;">Type text to see keyword frequency.</p>';
-  } else {
-    for (const [word, count] of sorted) {
-      const pct = (count / words * 100).toFixed(1);
-      kw += row(word, count + ' (' + pct + '%)');
-    }
-  }
-  set('out-keywords', kw);
-}
-document.getElementById('text').addEventListener('input', analyze);
-analyze();
+        /* Readability only when the text is mostly Latin-alphabet letters. */
+        const letters = (t.match(LETTER) || []).length;
+        const latin = (t.match(LATIN) || []).length;
+        let read = '';
+        if (wc === 0) {
+          read = '<p class="calc-placeholder">Type or paste some text to see readability scores.</p>';
+        } else if (latin < letters * 0.8) {
+          read = '<p class="calc-placeholder">Most of this text isn&apos;t in the Latin alphabet, so the English readability formulas are left out.</p>';
+        } else {
+          let syl = 0;
+          for (const w of ws) syl += syllables(w);
+          const sCount = Math.max(1, sentences);
+          const wps = wc / sCount, spw = syl / wc;
+          const ease = 206.835 - 1.015 * wps - 84.6 * spw;
+          const grade = 0.39 * wps + 11.8 * spw - 15.59;
+          const fix1 = (x) => { const r = Number(x.toFixed(1)); return (r === 0 ? 0 : r).toFixed(1); };
+          read += row('Flesch reading ease', fix1(ease) + ' (' + easeLabel(ease) + ')', 'teal');
+          read += row('Flesch-Kincaid grade level', grade < 0 ? '0.0 (below grade 1)' : fix1(grade), 'violet');
+          read += row('Average words per sentence', fix1(wps));
+          read += row('Average syllables per word', (syl / wc).toFixed(2));
+          read += row('Syllables (estimated)', int(syl));
+        }
+        set('out-readability', read);
 
+        const freq = new Map();
+        for (const k of keywordTokens(t)) {
+          const min = NO_SPACE_SCRIPT.test(k) ? 2 : 3; /* single kana/han tokens are mostly particles */
+          if (Array.from(k).length < min || STOPWORDS.has(k) || !/\p{L}/u.test(k)) continue;
+          freq.set(k, (freq.get(k) || 0) + 1);
+        }
+        const top = Array.from(freq.entries()).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 10);
+        set('out-keywords', top.length
+          ? top.map((e) => row(esc(e[0]), int(e[1]) + ' (' + (e[1] / wc * 100).toFixed(1) + '%)')).join('')
+          : '<p class="calc-placeholder">Type or paste some text to see the most frequent words.</p>');
+
+        /* Short spoken summary, only after typing pauses, so screen readers aren't flooded. */
+        clearTimeout(liveTimer);
+        liveTimer = setTimeout(() => {
+          $('wc-live').textContent = int(wc) + (wc === 1 ? ' word, ' : ' words, ') + int(chars) + (chars === 1 ? ' character.' : ' characters.');
+        }, 1200);
+      }
+
+      let pending = null;
+      let undoText = null, undoTimer = null;
+      $('text').addEventListener('input', () => {
+        /* Long documents: debounce so typing stays smooth. */
+        clearTimeout(pending);
+        const delay = $('text').value.length > 20000 ? 250 : 0;
+        if (delay) pending = setTimeout(analyze, delay); else analyze();
+        if (undoText !== null) { undoText = null; $('clear-btn').textContent = 'Clear text'; }
+      });
+      /* Clear, with a short-lived undo (programmatic clears can't be undone with Ctrl+Z). */
+      $('clear-btn').addEventListener('click', () => {
+        const ta = $('text');
+        if (undoText !== null) {
+          ta.value = undoText;
+          undoText = null;
+          $('clear-btn').textContent = 'Clear text';
+        } else {
+          if (!ta.value) { ta.focus(); return; }
+          undoText = ta.value;
+          ta.value = '';
+          $('clear-btn').textContent = 'Undo clear';
+          clearTimeout(undoTimer);
+          undoTimer = setTimeout(() => { undoText = null; $('clear-btn').textContent = 'Clear text'; }, 15000);
+        }
+        analyze();
+        ta.focus();
+      });
+      analyze();
     })();
   </script>
   <script defer src="../js/ads.js"></script>

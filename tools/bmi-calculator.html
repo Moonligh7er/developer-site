@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,7 +127,7 @@
 
       <div class="calc-card">
         <h1>BMI Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Body Mass Index from height and weight, with CDC/WHO category labels. Metric and imperial inputs both supported.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Body Mass Index from height and weight, with the CDC adult category and the weight range that maps to BMI 18.5&ndash;24.9 at your height. Metric and imperial both work; results update as you type.</p>
 
         <div class="form-grid">
   <div class="form-group"><label for="units">Units</label>
@@ -127,41 +138,47 @@
   </div>
 </div>
 <div class="form-grid" id="imperial-fields">
-  <div class="form-group"><label for="ft">Height (feet)</label><input type="number" id="ft" placeholder="5" min="0" step="1"></div>
-  <div class="form-group"><label for="in">Height (inches)</label><input type="number" id="in" placeholder="10" min="0" step="any"></div>
-  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" placeholder="160" min="0" step="any"></div>
+  <fieldset class="form-group fieldset-reset"><legend>Height</legend>
+    <div class="split-2">
+      <div class="form-group"><label for="ft">Feet (ft)</label><input type="number" id="ft" value="5" min="0" max="8" step="1" inputmode="numeric"></div>
+      <div class="form-group"><label for="in">Inches (in)</label><input type="number" id="in" value="10" min="0" step="any" inputmode="decimal"></div>
+    </div>
+  </fieldset>
+  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" value="160" min="0" step="any" inputmode="decimal"></div>
 </div>
-<div class="form-grid" id="metric-fields" style="display:none;">
-  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" placeholder="178" min="0" step="any"></div>
-  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" placeholder="72" min="0" step="any"></div>
+<div class="form-grid" id="metric-fields" hidden>
+  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" value="178" min="0" step="any" inputmode="decimal"></div>
+  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" value="72.6" min="0" step="any" inputmode="decimal"></div>
 </div>
-<div class="inline-warn">BMI is a population-level screening tool. It doesn&apos;t distinguish muscle from fat, so muscular people often score in the &ldquo;overweight&rdquo; category despite low body fat, and older adults with low muscle mass may score &ldquo;normal&rdquo; despite excess body fat. BMI is not diagnostic.</div>
+<div class="inline-warn">BMI is a screening measure, not a diagnosis. It can&apos;t tell muscle from fat, so very muscular people can read high and people who have lost muscle (often older adults) can read in range while carrying more body fat. The adult categories apply from age 20 (CDC).</div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Your BMI</h4><div id="out-main"></div><p class="calc-subhead">Category Reference</p><div id="out-categories"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Your BMI</h4><div id="out-main"></div><p class="calc-subhead">CDC adult categories</p><div id="out-categories"></div>
+          <p class="calc-note">An estimate to start a conversation, not medical advice.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">CDC/WHO BMI categories (adults)</h2>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">BMI = weight (kg) &divide; height (m)². Imperial inputs are converted exactly (1 lb = 0.45359237 kg, 1 in = 2.54 cm), which is the same as the familiar lb &divide; in² &times; 703 shortcut to within a hundredth of a point. BMI is rounded to one decimal before it is matched to a category, so the number and the label always agree.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">CDC adult categories (age 20+)</h3>
   <ul style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;padding-left:1.5rem;">
     <li>Below 18.5: Underweight</li>
     <li>18.5&ndash;24.9: Healthy weight</li>
     <li>25.0&ndash;29.9: Overweight</li>
-    <li>30.0&ndash;34.9: Obesity class I</li>
-    <li>35.0&ndash;39.9: Obesity class II</li>
-    <li>40.0+: Obesity class III (severe)</li>
+    <li>30.0&ndash;34.9: Class 1 obesity</li>
+    <li>35.0&ndash;39.9: Class 2 obesity</li>
+    <li>40.0 and above: Class 3 obesity (sometimes called severe obesity)</li>
   </ul>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Formula: BMI = weight (kg) / height (m)². Imperial: BMI = weight (lb) / height (in)² × 703. Both give the same number.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The WHO uses the same cut-offs with slightly different names (&ldquo;normal weight&rdquo; for 18.5&ndash;24.9 and &ldquo;pre-obesity&rdquo; for 25&ndash;29.9). Source: <a href="https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html" target="_blank" rel="noopener" style="color:var(--teal);">CDC, Adult BMI Categories</a> (checked November 2026).</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Real limitations</h3>
   <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">BMI was designed in the 19th century by Adolphe Quetelet as a population statistic, not an individual health metric. It correlates with body fat at the population level but can be misleading for individuals: athletes with significant muscle mass score high; older adults with sarcopenia (muscle loss) score low despite unhealthy body composition. Better individual metrics include body fat percentage (see the <a href="body-fat-navy-calculator.html" style="color:var(--teal);">Navy method calculator</a>), waist-to-height ratio, and DEXA scan for clinical accuracy.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">BMI cutoffs are also different for children (age- and sex-specific percentiles) and for some ethnic groups &mdash; the WHO has proposed lower cutoffs for Asian populations. This calculator uses the standard adult cutoffs; consult a healthcare provider for individualized guidance.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Children and teens (2&ndash;19) are assessed with age- and sex-specific BMI percentiles rather than these cut-offs. A 2004 WHO expert consultation also suggested lower action points (23 and 27.5) for many Asian populations. This calculator uses the standard adult cut-offs; a healthcare provider can put your number in context.</p>
 </section>
     </div>
 
@@ -203,69 +220,181 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      function toggleUnits(){
-  const m = s('units')==='metric';
-  document.getElementById('imperial-fields').style.display = m ? 'none' : '';
-  document.getElementById('metric-fields').style.display = m ? '' : 'none';
-}
-document.getElementById('units').addEventListener('change', toggleUnits);
-
-function calc(){
-  hideErr();
-  let bmi;
-  if (s('units')==='metric') {
-    const cm = n('cm'), kg = n('kg');
-    if (!cm||!kg||cm<=0||kg<=0) return showErr('Enter height (cm) and weight (kg).');
-    const m = cm / 100;
-    bmi = kg / (m*m);
-  } else {
-    const ft = n('ft')||0, inch = n('in')||0, lb = n('lb');
-    const totalIn = ft*12 + inch;
-    if (totalIn<=0||!lb||lb<=0) return showErr('Enter height (ft + in) and weight (lb).');
-    bmi = (lb / (totalIn*totalIn)) * 703;
-  }
-
-  let cat, cls;
-  if (bmi < 18.5) { cat = 'Underweight'; cls = 'amber'; }
-  else if (bmi < 25) { cat = 'Healthy weight'; cls = 'teal'; }
-  else if (bmi < 30) { cat = 'Overweight'; cls = 'amber'; }
-  else if (bmi < 35) { cat = 'Obesity class I'; cls = 'rose'; }
-  else if (bmi < 40) { cat = 'Obesity class II'; cls = 'rose'; }
-  else { cat = 'Obesity class III (severe)'; cls = 'rose'; }
-
-  set('out-main',
-    row('Your BMI', bmi.toFixed(1), cls) +
-    row('CDC/WHO category', cat, cls)
-  );
-
-  let ranges = '';
-  ranges += row('Underweight', 'Below 18.5');
-  ranges += row('Healthy weight', '18.5 – 24.9');
-  ranges += row('Overweight', '25.0 – 29.9');
-  ranges += row('Obesity class I', '30.0 – 34.9');
-  ranges += row('Obesity class II', '35.0 – 39.9');
-  ranges += row('Obesity class III', '40.0 and above');
-  set('out-categories', ranges);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['ft','in','lb','cm','kg'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+      /* CDC adult BMI categories: https://www.cdc.gov/bmi/adult-calculator/bmi-categories.html (checked 2026-11). */
+      const CATS = [
+        [18.5, 'Underweight', 'Below 18.5'],
+        [25, 'Healthy weight', '18.5 &ndash; 24.9'],
+        [30, 'Overweight', '25.0 &ndash; 29.9'],
+        [35, 'Class 1 obesity', '30.0 &ndash; 34.9'],
+        [40, 'Class 2 obesity', '35.0 &ndash; 39.9'],
+        [Infinity, 'Class 3 obesity', '40.0 and above']
+      ];
+      function table(you) {
+        return CATS.map((c, i) => row(c[1] + (i === you ? ' (you)' : ''), c[2], null, i === you ? 'result-row--you' : '')).join('');
+      }
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const cm = heightCm(st), kg = weightKg(st);
+        if (cm === null || kg === null) {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter your height and weight to see your BMI.'));
+          set('out-categories', table(-1));
+          return;
+        }
+        const m2 = (cm / 100) * (cm / 100);
+        const bmi = kg / m2;
+        const b1 = Math.round(bmi * 10) / 10; /* the category is matched on the displayed, 1-decimal value */
+        const idx = CATS.findIndex((c) => b1 < c[0]);
+        const lowKg = 18.5 * m2, highKg = 24.9 * m2;
+        const range = isMetric()
+          ? fmt(lowKg, 1) + '&ndash;' + fmt(highKg, 1) + ' kg (' + fmt(lowKg / LB_KG, 0) + '&ndash;' + fmt(highKg / LB_KG, 0) + ' lb)'
+          : fmt(lowKg / LB_KG, 0) + '&ndash;' + fmt(highKg / LB_KG, 0) + ' lb (' + fmt(lowKg, 1) + '&ndash;' + fmt(highKg, 1) + ' kg)';
+        let h = row('BMI', fmt(b1, 1) + ' kg/m&sup2;', 'teal') +
+                row('CDC category (adults 20+)', CATS[idx][1]) +
+                row('Weight range for BMI 18.5&ndash;24.9 at your height', range);
+        if (b1 < 12 || b1 > 70) h += '<p class="calc-note">That BMI is outside the range people usually see; it may be worth double-checking the height, weight and units.</p>';
+        set('out-main', h);
+        set('out-categories', table(idx));
+      }
+      setupUnits((toMetric) => { convertHeight(toMetric); convertWeight(toMetric); });
+      wire(run);
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

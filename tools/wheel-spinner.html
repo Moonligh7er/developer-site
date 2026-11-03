@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Wheel Spinner / Random Picker (Shareable) | Moonlit Social Labs</title>
-  <meta name="description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta name="description" content="Wheel spinner for fair random picks: every entry has the same chance (browser crypto randomness, no modulo bias). Paste entries, spin, remove winners, share a list by link.">
   <meta name="keywords" content="wheel spinner, random picker, random name picker, wheel of names, spinner wheel">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Wheel Spinner / Random Picker (Shareable)",
-    "description": "Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.",
+    "description": "Wheel spinner for fair random picks: every entry has the same chance (browser crypto randomness, no modulo bias). Paste entries, spin, remove winners, share a list by link.",
     "url": "https://moonligh7er.github.io/developer-site/tools/wheel-spinner.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Wheel Spinner / Random Picker (Shareable)">
-  <meta property="og:description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta property="og:description" content="Wheel spinner for fair random picks: every entry has the same chance (browser crypto randomness, no modulo bias). Paste entries, spin, remove winners, share a list by link.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/wheel-spinner.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Wheel Spinner / Random Picker (Shareable)">
-  <meta name="twitter:description" content="Canvas wheel spinner for random picks. Add/remove/paste entries, spin animation, remove-winner mode. Shareable via URL.">
+  <meta name="twitter:description" content="Wheel spinner for fair random picks: every entry has the same chance (browser crypto randomness, no modulo bias). Paste entries, spin, remove winners, share a list by link.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,12 +87,26 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
     .wheel-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
     @media (max-width: 800px) { .wheel-wrap { grid-template-columns: 1fr; } }
-    .wheel-canvas { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+    .wheel-wrap > * { min-width: 0; }
+    .wheel-canvas { display: block; margin: 0 auto; width: 100%; max-width: 400px; height: auto; aspect-ratio: 1 / 1; }
     .wheel-controls textarea { min-height: 200px; }
     .winner-panel { padding: 1rem; margin-top: 1rem; border: 1px solid var(--teal); background: var(--teal-glow); text-align: center; }
-    .winner-panel h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-bright); margin-bottom: 0.5rem; }
+    .winner-panel h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--text-bright); margin-bottom: 0.75rem; overflow-wrap: anywhere; }
+    .winner-panel .calc-btn-row { justify-content: center; margin-bottom: 0; }
+    .wheel-status { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--text-dim); text-align: center; margin-top: 0.5rem; }
+    .wheel-history { font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.75rem; overflow-wrap: anywhere; }
   </style>
 </head>
 <body>
@@ -125,44 +139,51 @@
 
       <div class="calc-card">
         <h1>Wheel Spinner / Random Picker</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Add entries, spin the wheel, get a random pick. Optional remove-winner mode for elimination-style picking. Share your entry list via URL &mdash; entries are encoded in the hash, nothing hits any server.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Add entries, spin, get a random pick. Each entry has exactly the same chance, using your browser&apos;s cryptographic random number generator, and the wheel always stops on the entry it announces. Remove winners one by one for elimination-style picks, and share a list as a link if you want to.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded or saved.</div>
         <div class="wheel-wrap">
   <div>
-    <canvas id="wheel" class="wheel-canvas" width="400" height="400"></canvas>
+    <canvas id="wheel" class="wheel-canvas" width="400" height="400" role="img" aria-label="Wheel"></canvas>
+    <p class="wheel-status" id="wheel-status"></p>
     <div class="calc-btn-row" style="justify-content:center;margin-top:1rem;">
-      <button class="calc-btn" onclick="spin()">Spin</button>
-      <button class="calc-btn calc-btn--secondary" onclick="shareLink()">Copy Share Link</button>
+      <button type="button" class="calc-btn" id="spin-btn">Spin</button>
+      <button type="button" class="calc-btn calc-btn--secondary" id="share-btn">Copy Share Link</button>
     </div>
-    <div id="winner-panel" class="winner-panel" style="display:none;">
-      <h3 id="winner-name"></h3>
-      <div style="display:flex;gap:0.5rem;justify-content:center;">
-        <button class="calc-btn calc-btn--secondary" onclick="removeWinner()">Remove Winner</button>
-        <button class="calc-btn calc-btn--secondary" onclick="closeWinner()">Close</button>
+    <div class="form-group" id="share-out-group" hidden><label for="share-out">Share link (select and copy)</label><input type="text" id="share-out" readonly style="font-family:var(--font-mono);font-size:0.8rem;background:var(--deep);border:1px solid var(--border);color:var(--text-primary);padding:0.6rem;min-height:44px;width:100%;box-sizing:border-box;"></div>
+    <div id="winner-panel" class="winner-panel" hidden>
+      <p style="font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--teal);margin-bottom:0.4rem;">Picked</p>
+      <h3 id="winner-name" tabindex="-1"></h3>
+      <div class="calc-btn-row">
+        <button type="button" class="calc-btn calc-btn--secondary" id="remove-btn">Remove Winner</button>
+        <button type="button" class="calc-btn calc-btn--secondary" id="close-btn">Close</button>
       </div>
     </div>
+    <p class="visually-hidden" id="wheel-live" aria-live="polite" aria-atomic="true"></p>
+    <p class="wheel-history" id="wheel-history" hidden></p>
   </div>
   <div class="wheel-controls">
     <div class="form-group">
       <label for="entries">Entries (one per line)</label>
-      <textarea id="entries" placeholder="Alice&#10;Bob&#10;Charlie&#10;Dana"></textarea>
-      <span class="hint">Or paste a comma/newline-separated list</span>
+      <textarea id="entries" aria-describedby="entries-hint"></textarea>
+      <span class="hint" id="entries-hint">One per line. A single line separated by commas also works. Up to 500 entries.</span>
     </div>
-    <div class="calc-btn-row">
-      <button class="calc-btn calc-btn--secondary" onclick="loadEntries()">Update Wheel</button>
-      <button class="calc-btn calc-btn--secondary" onclick="shuffleEntries()">Shuffle</button>
+    <div class="calc-btn-row" style="margin-top:1rem;">
+      <button type="button" class="calc-btn calc-btn--secondary" id="shuffle-btn">Shuffle</button>
+      <button type="button" class="calc-btn calc-btn--secondary" id="restore-btn" disabled>Restore Removed</button>
     </div>
+    <p class="hint" id="share-note" style="font-size:0.75rem;color:var(--text-dim);line-height:1.6;">A share link carries your entries after the # in the address. That part isn&apos;t sent to the web server, but anyone you give the link to can read the list.</p>
   </div>
 </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Sharing via URL</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Click &ldquo;Copy Share Link&rdquo; to get a URL that encodes your entry list in the URL hash (the part after #). When someone opens the link, the entries are decoded from the URL and loaded automatically. Nothing is sent to any server &mdash; the entries live only in the URL and only ever hit the recipient&apos;s browser.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How the pick works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The winner is chosen first, with <code style="color:var(--teal);">crypto.getRandomValues()</code>, the browser&apos;s cryptographically secure random source. Random numbers that would favour some entries over others (the &ldquo;modulo bias&rdquo; you get from squeezing a random number into a smaller range) are thrown away and redrawn, so every entry has exactly a 1-in-N chance. The wheel then spins to a random point inside the winner&apos;s slice, never on a border, and the name under the pointer is the name announced.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Shuffle uses the same random source with a Fisher&ndash;Yates shuffle. Duplicate entries are allowed; an entry listed twice gets two slices and twice the chance. If your device is set to reduce motion, the wheel turns straight to the result instead of spinning.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Remove-winner mode</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">After a spin, click &ldquo;Remove Winner&rdquo; to drop the picked entry from the list. Useful for tournament brackets, ordered picks, or elimination games. Refresh the page or paste your original list to start over.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Randomness</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Winner selection uses <code style="color:var(--teal);">Math.random()</code>, which is a pseudorandom number generator suitable for casual use but not cryptographically secure &mdash; don&apos;t use this to pick a Bitcoin private key or anything similarly consequential. For fairness in casual applications (name draws, chore rotation, etc.) it&apos;s more than good enough.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">After a spin, &ldquo;Remove Winner&rdquo; drops that entry from the list, which suits draws, turn orders and elimination games. &ldquo;Restore Removed&rdquo; puts every removed entry back.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Sharing via link</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">&ldquo;Copy Share Link&rdquo; copies a link with your entries encoded after the # in the address. Browsers don&apos;t send that part to the web server, so the list travels only inside the link itself; anyone who has the link can see it. Opening the link loads the entries. Nothing is added to the address bar unless you open a shared link.</p>
 </section>
     </div>
 
@@ -200,145 +221,300 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const TAU = Math.PI * 2;
+      const POINTER = -Math.PI / 2; /* pointer at the top, in canvas angle terms */
+      const MAX_ENTRIES = 500;
+      const COLORS = ['#00d4aa', '#8b5cf6', '#d4a020', '#c44a8a', '#22c55e', '#3b82f6', '#ec4899', '#eab308'];
+      const reduceMotion = () => !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
       let entries = [];
-let angle = 0;
-let spinning = false;
-const COLORS = ['#00d4aa','#8b5cf6','#f59e0b','#c44a8a','#22c55e','#3b82f6','#ec4899','#eab308'];
+      let removed = [];
+      let picks = [];
+      let angle = 0;
+      let spinning = false;
+      let winnerIdx = -1;
 
-function loadEntries(){
-  const raw = document.getElementById('entries').value;
-  entries = raw.split(/[\n,]/).map(s=>s.trim()).filter(Boolean);
-  drawWheel();
-  syncHash();
-}
-function drawWheel(){
-  const c = document.getElementById('wheel');
-  const ctx = c.getContext('2d');
-  const cx = c.width/2, cy = c.height/2, r = Math.min(cx,cy) - 10;
-  ctx.clearRect(0,0,c.width,c.height);
-  if (entries.length === 0) {
-    ctx.fillStyle = '#1a1a30';
-    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#7a7a90';
-    ctx.font = '14px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
-    ctx.fillText('Add entries →', cx, cy);
-    return;
-  }
-  const slice = (Math.PI*2) / entries.length;
-  for (let i=0;i<entries.length;i++) {
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.arc(cx, cy, r, angle + i*slice, angle + (i+1)*slice);
-    ctx.closePath();
-    ctx.fillStyle = COLORS[i % COLORS.length];
-    ctx.fill();
-    ctx.strokeStyle = '#07070d';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    // Label
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(angle + i*slice + slice/2);
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = '#07070d';
-    ctx.font = 'bold 12px monospace';
-    const label = entries[i].length > 20 ? entries[i].slice(0,18)+'…' : entries[i];
-    ctx.fillText(label, r - 12, 0);
-    ctx.restore();
-  }
-  // Center hub
-  ctx.beginPath(); ctx.arc(cx,cy,15,0,Math.PI*2);
-  ctx.fillStyle = '#07070d'; ctx.fill();
-  ctx.strokeStyle = '#00d4aa'; ctx.lineWidth = 2; ctx.stroke();
-  // Pointer (top)
-  ctx.beginPath();
-  ctx.moveTo(cx-12, 8); ctx.lineTo(cx+12, 8); ctx.lineTo(cx, 32); ctx.closePath();
-  ctx.fillStyle = '#00d4aa'; ctx.fill();
-}
-window.spin = function(){
-  if (spinning || entries.length === 0) return;
-  spinning = true;
-  const target = 6*Math.PI + Math.random() * Math.PI * 2; // 3+ full rotations
-  const duration = 4000;
-  const start = performance.now();
-  const startAngle = angle;
-  function step(now) {
-    const t = Math.min(1, (now - start)/duration);
-    const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
-    angle = startAngle + target * eased;
-    drawWheel();
-    if (t < 1) requestAnimationFrame(step);
-    else {
-      spinning = false;
-      // Determine winner: pointer is at top (angle = -pi/2 in canvas). Compute which slice.
-      const slice = (Math.PI*2) / entries.length;
-      // Reduce angle mod 2pi
-      const a = ((-angle - Math.PI*1.5) % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-      const idx = Math.floor(a / slice) % entries.length;
-      showWinner(entries[idx]);
-    }
-  }
-  requestAnimationFrame(step);
-};
-let currentWinner = null;
-function showWinner(name){
-  currentWinner = name;
-  document.getElementById('winner-name').textContent = name;
-  document.getElementById('winner-panel').style.display = '';
-}
-window.closeWinner = function(){ document.getElementById('winner-panel').style.display = 'none'; };
-window.removeWinner = function(){
-  if (!currentWinner) return;
-  const idx = entries.indexOf(currentWinner);
-  if (idx >= 0) entries.splice(idx, 1);
-  document.getElementById('entries').value = entries.join('\n');
-  drawWheel();
-  syncHash();
-  closeWinner();
-};
-window.shuffleEntries = function(){
-  for (let i=entries.length-1;i>0;i--) { const j = Math.floor(Math.random()*(i+1)); [entries[i],entries[j]]=[entries[j],entries[i]]; }
-  document.getElementById('entries').value = entries.join('\n');
-  drawWheel();
-};
-function syncHash(){
-  if (entries.length === 0) { history.replaceState(null,'',location.pathname); return; }
-  const encoded = btoa(unescape(encodeURIComponent(entries.join('|'))));
-  history.replaceState(null, '', '#e=' + encoded);
-}
-window.shareLink = function(){
-  syncHash();
-  navigator.clipboard.writeText(location.href).then(()=>{
-    alert('Share link copied — recipients see the same entry list.');
-  });
-};
-function loadHash(){
-  const h = location.hash;
-  if (h.startsWith('#e=')) {
-    try {
-      const decoded = decodeURIComponent(escape(atob(h.slice(3))));
-      entries = decoded.split('|').filter(Boolean);
-      document.getElementById('entries').value = entries.join('\n');
-    } catch(e) {}
-  }
-}
-loadHash();
-if (entries.length === 0) {
-  document.getElementById('entries').value = 'Alice\nBob\nCharlie\nDana';
-  loadEntries();
-} else {
-  drawWheel();
-}
+      /* ---------- randomness ----------
+         Uniform integer in [0, n) from crypto.getRandomValues, rejecting the top sliver of the
+         32-bit range that would otherwise make low numbers slightly more likely (modulo bias). */
+      function randomInt(n) {
+        const buf = new Uint32Array(1);
+        const limit = Math.floor(0x100000000 / n) * n;
+        let x;
+        do { crypto.getRandomValues(buf); x = buf[0]; } while (x >= limit);
+        return x % n;
+      }
+      /* Uniform float in [0, 1) with 53 random bits. */
+      function randomFloat() {
+        const b = new Uint32Array(2);
+        crypto.getRandomValues(b);
+        return (b[0] * 2097152 + (b[1] >>> 11)) / 9007199254740992;
+      }
+      const norm = (a) => ((a % TAU) + TAU) % TAU;
+      /* Which slice is under the pointer for a given wheel rotation. Slice i covers [angle + i*s, angle + (i+1)*s). */
+      function indexAtPointer(rot, n) { return Math.floor(norm(POINTER - rot) / (TAU / n)) % n; }
 
+      /* ---------- entries ---------- */
+      function parse(raw) {
+        const parts = /\n/.test(raw) ? raw.split(/\r?\n/) : raw.split(',');
+        return parts.map((s) => s.trim()).filter(Boolean).slice(0, MAX_ENTRIES);
+      }
+      function writeEntries() { $('entries').value = entries.join('\n'); }
+
+      /* ---------- drawing ---------- */
+      const canvas = $('wheel');
+      const ctx = canvas.getContext('2d');
+      let size = 400;
+      function fitCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 3);
+        size = 400;
+        canvas.width = Math.round(size * dpr);
+        canvas.height = Math.round(size * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        draw();
+      }
+      function colorFor(i, n) {
+        let c = i % COLORS.length;
+        if (n > 1 && i === n - 1 && c === 0) c = 1; /* never the same colour as slice 0 next to it */
+        return COLORS[c];
+      }
+      function fitLabel(text, maxW) {
+        if (ctx.measureText(text).width <= maxW) return text;
+        const chars = Array.from(text);
+        while (chars.length > 1 && ctx.measureText(chars.join('') + '…').width > maxW) chars.pop();
+        return chars.join('') + '…';
+      }
+      function draw() {
+        const cx = size / 2, cy = size / 2, r = size / 2 - 12;
+        ctx.clearRect(0, 0, size, size);
+        const n = entries.length;
+        if (n === 0) {
+          ctx.fillStyle = '#1a1a30';
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.fill();
+          ctx.fillStyle = '#8e8ea6';
+          ctx.font = '14px "JetBrains Mono", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText('Add entries', cx, cy);
+        } else {
+          const slice = TAU / n;
+          const fontPx = Math.max(9, Math.min(16, Math.floor(520 / Math.max(n, 8))));
+          ctx.font = '600 ' + fontPx + 'px "JetBrains Mono", monospace';
+          for (let i = 0; i < n; i++) {
+            const a0 = angle + i * slice;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, r, a0, a0 + slice);
+            ctx.closePath();
+            ctx.fillStyle = colorFor(i, n);
+            ctx.fill();
+            if (n > 1) { ctx.strokeStyle = '#07070d'; ctx.lineWidth = n > 60 ? 0.5 : 2; ctx.stroke(); }
+            if (n <= 120) {
+              ctx.save();
+              ctx.translate(cx, cy);
+              ctx.rotate(a0 + slice / 2);
+              ctx.textAlign = 'right';
+              ctx.textBaseline = 'middle';
+              ctx.fillStyle = '#07070d';
+              ctx.fillText(fitLabel(entries[i], r - 40), r - 12, 0);
+              ctx.restore();
+            }
+          }
+        }
+        /* Hub */
+        ctx.beginPath(); ctx.arc(cx, cy, 15, 0, TAU);
+        ctx.fillStyle = '#07070d'; ctx.fill();
+        ctx.strokeStyle = '#00d4aa'; ctx.lineWidth = 2; ctx.stroke();
+        /* Pointer at the top, pointing down into the wheel */
+        ctx.beginPath();
+        ctx.moveTo(cx - 13, 2); ctx.lineTo(cx + 13, 2); ctx.lineTo(cx, 30); ctx.closePath();
+        ctx.fillStyle = '#e8e8f0'; ctx.fill();
+        ctx.strokeStyle = '#07070d'; ctx.lineWidth = 2; ctx.stroke();
+      }
+      function describe() {
+        const n = entries.length;
+        canvas.setAttribute('aria-label', n ? 'Wheel with ' + n + (n === 1 ? ' entry' : ' entries') + (n <= 20 ? ': ' + entries.join(', ') : '') : 'Empty wheel');
+        $('wheel-status').textContent = n ? n + (n === 1 ? ' entry' : ' entries') + ' · each has a 1 in ' + n + ' chance' : 'Add at least one entry to spin';
+        /* Stay focusable while spinning (disabling a focused button drops keyboard focus); spin() ignores repeats. */
+        $('spin-btn').disabled = n === 0;
+        $('spin-btn').setAttribute('aria-disabled', spinning ? 'true' : 'false');
+        $('restore-btn').disabled = removed.length === 0;
+      }
+
+      /* ---------- spinning ---------- */
+      function spin() {
+        const n = entries.length;
+        if (spinning || n === 0) return;
+        closeWinner(false);
+        const winner = randomInt(n);
+        const slice = TAU / n;
+        const within = 0.1 + 0.8 * randomFloat(); /* land well inside the slice, never on a border */
+        const target = norm(POINTER - (winner + within) * slice); /* rotation that puts that point under the pointer */
+        const turns = 5 + randomInt(3);
+        const start = angle;
+        const end = start + turns * TAU + norm(target - norm(start));
+        const finish = () => {
+          angle = norm(end);
+          draw();
+          spinning = false;
+          $('entries').readOnly = false;
+          const shown = indexAtPointer(angle, n);
+          /* The pointer and the announced winner can't disagree; if floating point ever did, trust the pointer. */
+          showWinner(shown === winner ? winner : shown);
+        };
+        spinning = true;
+        $('entries').readOnly = true;
+        describe();
+        $('wheel-live').textContent = 'Spinning…';
+        if (reduceMotion()) { finish(); return; }
+        const duration = 4200;
+        const t0 = performance.now();
+        const step = (now) => {
+          const t = Math.min(1, (now - t0) / duration);
+          const eased = 1 - Math.pow(1 - t, 4); /* ease-out quart */
+          angle = start + (end - start) * eased;
+          draw();
+          if (t < 1) requestAnimationFrame(step); else finish();
+        };
+        requestAnimationFrame(step);
+      }
+      function showWinner(i) {
+        winnerIdx = i;
+        const name = entries[i];
+        $('winner-name').textContent = name;
+        $('winner-panel').hidden = false;
+        picks.unshift(name);
+        picks = picks.slice(0, 5);
+        const h = $('wheel-history');
+        h.hidden = false;
+        h.textContent = 'Recent picks: ' + picks.join(' · ');
+        $('wheel-live').textContent = 'Picked: ' + name;
+        describe();
+      }
+      function closeWinner(focusSpin) {
+        $('winner-panel').hidden = true;
+        winnerIdx = -1;
+        if (focusSpin) $('spin-btn').focus();
+      }
+      function removeWinner() {
+        if (winnerIdx < 0 || winnerIdx >= entries.length) return;
+        removed.push(entries[winnerIdx]);
+        entries.splice(winnerIdx, 1);
+        writeEntries();
+        forgetSharedHash();
+        closeWinner(false);
+        draw();
+        describe();
+        $('wheel-live').textContent = 'Removed. ' + entries.length + ' left.';
+        (entries.length ? $('spin-btn') : $('entries')).focus();
+      }
+      function shuffle() {
+        if (spinning) return;
+        for (let i = entries.length - 1; i > 0; i--) {
+          const j = randomInt(i + 1);
+          const t = entries[i]; entries[i] = entries[j]; entries[j] = t;
+        }
+        writeEntries();
+        closeWinner(false);
+        draw();
+        $('wheel-live').textContent = 'Shuffled.';
+      }
+      function restore() {
+        if (spinning || !removed.length) return;
+        entries = entries.concat(removed).slice(0, MAX_ENTRIES);
+        removed = [];
+        writeEntries();
+        draw();
+        describe();
+        $('wheel-live').textContent = 'Removed entries restored. ' + entries.length + ' entries.';
+      }
+
+      /* ---------- share link (only built when asked; never written to the address bar) ---------- */
+      function b64urlEncode(str) {
+        const bytes = new TextEncoder().encode(str);
+        let bin = '';
+        bytes.forEach((b) => { bin += String.fromCharCode(b); });
+        return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+      function b64Decode(s) {
+        s = s.replace(/-/g, '+').replace(/_/g, '/');
+        while (s.length % 4) s += '=';
+        const bin = atob(s);
+        return new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0)));
+      }
+      function loadFromHash() {
+        const h = location.hash;
+        try {
+          if (h.startsWith('#w=')) {
+            const list = JSON.parse(b64Decode(h.slice(3)));
+            if (Array.isArray(list)) return list.map((s) => String(s).trim()).filter(Boolean).slice(0, MAX_ENTRIES);
+          } else if (h.startsWith('#e=')) { /* links made by the earlier version of this page */
+            return b64Decode(decodeURIComponent(h.slice(3))).split('|').map((s) => s.trim()).filter(Boolean).slice(0, MAX_ENTRIES);
+          }
+        } catch (e) { /* malformed link: fall back to the example list */ }
+        return null;
+      }
+      let sharedHash = false;
+      function forgetSharedHash() {
+        /* Once a shared list is edited, drop the stale #... from the address bar. */
+        if (sharedHash) { clearHash(); sharedHash = false; }
+      }
+      function clearHash() { try { window.history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* ignore */ } }
+      function copyText(text, btn, label) {
+        const done = (ok) => {
+          btn.textContent = ok ? 'Link Copied' : 'Copy it below';
+          $('wheel-live').textContent = ok ? 'Share link copied.' : 'Couldn’t copy automatically; the link is in the field below the buttons.';
+          const group = $('share-out-group'), out = $('share-out');
+          group.hidden = ok;
+          if (!ok) { out.value = text; out.focus(); out.select(); }
+          setTimeout(() => { btn.textContent = label; }, 2000);
+        };
+        const fallback = () => {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          ta.remove();
+          done(ok);
+        };
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(() => done(true), fallback);
+        else fallback();
+      }
+      function shareLink() {
+        if (!entries.length) { $('wheel-live').textContent = 'Add entries before sharing.'; return; }
+        const url = location.origin + location.pathname + '#w=' + b64urlEncode(JSON.stringify(entries));
+        copyText(url, $('share-btn'), 'Copy Share Link');
+      }
+
+      /* ---------- events ---------- */
+      let typing = null;
+      $('entries').addEventListener('input', () => {
+        clearTimeout(typing);
+        typing = setTimeout(() => {
+          entries = parse($('entries').value);
+          removed = [];
+          forgetSharedHash();
+          closeWinner(false);
+          draw();
+          describe();
+        }, 150);
+      });
+      $('spin-btn').addEventListener('click', spin);
+      $('share-btn').addEventListener('click', shareLink);
+      $('remove-btn').addEventListener('click', removeWinner);
+      $('close-btn').addEventListener('click', () => closeWinner(true));
+      $('shuffle-btn').addEventListener('click', shuffle);
+      $('restore-btn').addEventListener('click', restore);
+      window.addEventListener('resize', () => { if (!spinning) fitCanvas(); });
+
+      /* ---------- init ---------- */
+      const fromLink = loadFromHash();
+      if (fromLink && fromLink.length) { entries = fromLink; sharedHash = true; }
+      else { entries = ['Alice', 'Bob', 'Charlie', 'Dana']; if (location.hash) clearHash(); }
+      writeEntries();
+      fitCanvas();
+      describe();
     })();
   </script>
   <script defer src="../js/ads.js"></script>

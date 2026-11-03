@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Body Fat Calculator (US Navy Tape Method) | Moonlit Social Labs</title>
-  <meta name="description" content="Estimate body fat percentage using the US Navy tape-measurement method. Metric and imperial supported. Accuracy ±3-4% vs. clinical methods.">
+  <meta name="description" content="Estimate body fat percentage using the US Navy tape-measurement method. Inch and centimetre forms of the formula, ACE reference ranges. An estimate, often within about 3–4 percentage points of lab methods.">
   <meta name="keywords" content="body fat calculator, US Navy body fat calculator, tape measure body fat, body fat percentage calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Body Fat Calculator (US Navy Tape Method)",
-    "description": "Estimate body fat percentage using the US Navy tape-measurement method. Metric and imperial supported. Accuracy ±3-4% vs. clinical methods.",
+    "description": "Estimate body fat percentage using the US Navy tape-measurement method. Inch and centimetre forms of the formula, ACE reference ranges. An estimate, often within about 3–4 percentage points of lab methods.",
     "url": "https://moonligh7er.github.io/developer-site/tools/body-fat-navy-calculator.html",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Body Fat Calculator (US Navy Tape Method)">
-  <meta property="og:description" content="Estimate body fat percentage using the US Navy tape-measurement method. Metric and imperial supported. Accuracy ±3-4% vs. clinical methods.">
+  <meta property="og:description" content="Estimate body fat percentage using the US Navy tape-measurement method. Inch and centimetre forms of the formula, ACE reference ranges. An estimate, often within about 3–4 percentage points of lab methods.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/body-fat-navy-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Body Fat Calculator (US Navy Tape Method)">
-  <meta name="twitter:description" content="Estimate body fat percentage using the US Navy tape-measurement method. Metric and imperial supported. Accuracy ±3-4% vs. clinical methods.">
+  <meta name="twitter:description" content="Estimate body fat percentage using the US Navy tape-measurement method. Inch and centimetre forms of the formula, ACE reference ranges. An estimate, often within about 3–4 percentage points of lab methods.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,47 +127,48 @@
 
       <div class="calc-card">
         <h1>Body Fat Calculator (Navy Method)</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">US Navy circumference method: uses tape measurements of neck, waist (and hip, for women) to estimate body fat. Accuracy is roughly ±3&ndash;4% vs. clinical DEXA. Better than BMI as an individual metric, less accurate than DEXA or hydrostatic weighing.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">The US Navy circumference method estimates body fat from a few tape measurements: neck, waist and height (plus hips for women). It&apos;s often within about 3&ndash;4 percentage points of lab methods such as DEXA &mdash; more informative than BMI for one person, less precise than a scan. Results update as you type.</p>
 
         <div class="form-grid">
   <div class="form-group"><label for="units">Units</label>
     <select id="units">
-      <option value="imperial">Imperial (in)</option>
-      <option value="metric">Metric (cm)</option>
+      <option value="imperial">Imperial (in + lb)</option>
+      <option value="metric">Metric (cm + kg)</option>
     </select>
   </div>
-  <div class="form-group"><label for="sex">Sex (biological)</label>
-    <select id="sex"><option value="male">Male</option><option value="female">Female</option></select>
+  <div class="form-group"><label for="sex">Formula</label>
+    <select id="sex"><option value="male">Male equation</option><option value="female">Female equation (adds hips)</option></select>
   </div>
 </div>
 <div class="form-grid">
-  <div class="form-group"><label for="height">Height</label><input type="number" id="height" placeholder="70" min="0" step="any"><span class="hint">in or cm</span></div>
-  <div class="form-group"><label for="neck">Neck Circumference</label><input type="number" id="neck" placeholder="15" min="0" step="any"><span class="hint">Below larynx, keep tape level</span></div>
-  <div class="form-group"><label for="waist">Waist Circumference</label><input type="number" id="waist" placeholder="34" min="0" step="any"><span class="hint">Men: at navel. Women: narrowest point</span></div>
-  <div class="form-group" id="hip-group" style="display:none;"><label for="hip">Hip Circumference</label><input type="number" id="hip" placeholder="40" min="0" step="any"><span class="hint">Women only: widest point of hips</span></div>
+  <div class="form-group"><label for="height">Height (<span class="u-len">in</span>)</label><input type="number" id="height" value="70" min="0" step="any" inputmode="decimal" aria-describedby="height-hint"><span class="hint" id="height-hint">5 ft 10 in = 70 in = 177.8 cm</span></div>
+  <div class="form-group"><label for="neck">Neck (<span class="u-len">in</span>)</label><input type="number" id="neck" value="15" min="0" step="any" inputmode="decimal" aria-describedby="neck-hint"><span class="hint" id="neck-hint">Just below the larynx, tape sloping slightly down to the front</span></div>
+  <div class="form-group"><label for="waist">Waist (<span class="u-len">in</span>)</label><input type="number" id="waist" value="34" min="0" step="any" inputmode="decimal" aria-describedby="waist-hint"><span class="hint" id="waist-hint">Male equation: at the navel. Female equation: narrowest point</span></div>
+  <div class="form-group" id="hip-group" hidden><label for="hip">Hips (<span class="u-len">in</span>)</label><input type="number" id="hip" value="40" min="0" step="any" inputmode="decimal" aria-describedby="hip-hint"><span class="hint" id="hip-hint">Widest point of the hips and buttocks</span></div>
+  <div class="form-group"><label for="weight">Weight (<span class="u-wt">lb</span>, optional)</label><input type="number" id="weight" placeholder="e.g. 160" min="0" step="any" inputmode="decimal" aria-describedby="weight-hint"><span class="hint" id="weight-hint">Adds fat mass and lean mass</span></div>
 </div>
-<div class="inline-warn">Accuracy is roughly ±3&ndash;4 percentage points vs. clinical methods (DEXA, hydrostatic). Measure consistently at the same time of day and use a soft, flexible tape held snug but not compressing tissue.</div>
+<div class="inline-warn">Measure the same way each time: relaxed, after breathing out normally, with a soft tape snug but not pressing in. Taking each measurement three times and averaging helps.</div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Estimated Body Fat</h4><div id="out-main"></div><p class="calc-subhead">Reference Ranges (ACE, general adult)</p><div id="out-ranges"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Estimated body fat</h4><div id="out-main"></div><p class="calc-subhead">ACE reference ranges (general adult)</p><div id="out-ranges"></div>
+          <p class="calc-note">An estimate, not medical advice. These are population reference ranges, not targets.</p>
         </div>
       </div>
 
       <section class="calc-card">
   <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How the Navy method works</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The US Navy developed this formula in the 1980s as a low-cost body fat screening for military members. It uses circumference measurements at specific anatomical points to estimate body density, then converts to body fat percentage via the Siri equation.</p>
-  <p style="color:var(--text-secondary);font-family:var(--font-mono);font-size:0.85rem;line-height:1.7;margin-bottom:1rem;padding-left:1rem;">Men: 86.010 × log₁₀(waist − neck) − 70.041 × log₁₀(height) + 36.76<br>Women: 163.205 × log₁₀(waist + hip − neck) − 97.684 × log₁₀(height) − 78.387</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The formula predicts subcutaneous fat well; it&apos;s less accurate for people with atypical fat distribution (visceral fat, extremes of body composition). It works better for the middle of the population than for very lean athletes or people with high body fat, where DEXA or hydrostatic weighing become more reliable.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Researchers at the Naval Health Research Center (Hodgdon and Beckett, 1984) fitted body-fat equations to circumference measurements and height, using underwater weighing as the reference. Versions of them have long been used for military body-composition screening. The equations come in two published forms, and this page uses the one that matches your units:</p>
+  <p style="color:var(--text-secondary);font-family:var(--font-mono);font-size:0.8rem;line-height:1.8;margin-bottom:1rem;padding-left:1rem;">Inches, male: 86.010 × log₁₀(waist − neck) − 70.041 × log₁₀(height) + 36.76<br>Inches, female: 163.205 × log₁₀(waist + hip − neck) − 97.684 × log₁₀(height) − 78.387<br>Centimetres, male: 495 ÷ (1.0324 − 0.19077 × log₁₀(waist − neck) + 0.15456 × log₁₀(height)) − 450<br>Centimetres, female: 495 ÷ (1.29579 − 0.35004 × log₁₀(waist + hip − neck) + 0.22100 × log₁₀(height)) − 450</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The centimetre form predicts body density and converts it with the Siri equation (495 ÷ density − 450). The two forms usually agree within a few tenths of a percentage point. The method tracks typical fat distribution well; it is less reliable at the extremes (very lean athletes, higher body fat, or fat carried unusually), where DEXA or underwater weighing are better.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">ACE reference ranges (adult, general population)</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">These are population reference ranges from the American Council on Exercise, not health prescriptions. Optimal body fat varies with individual goals, activity, and stage of life. Very low body fat is not a health target for most people.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Ranges from the American Council on Exercise chart: essential fat 2&ndash;5% (male) and 10&ndash;13% (female); athletes 6&ndash;13% / 14&ndash;20%; fitness 14&ndash;17% / 21&ndash;24%; average 18&ndash;24% / 25&ndash;31%; above that, 25%+ / 32%+. They describe where people commonly fall, not what anyone should aim for, and they don&apos;t adjust for age. Very low body fat is not a health goal for most people.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Measurement tips</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Measure first thing in the morning, before eating or drinking. Neck: just below the larynx, tape level, looking forward. Waist (men): at the navel level, tape horizontal, breathe normally. Waist (women): narrowest point between ribs and hips. Hip (women): widest circumference of the hips/glutes. Do 3 measurements each and use the average.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Measure in the morning before eating. Neck: just below the larynx, tape sloping slightly downward to the front. Waist for the male equation: horizontally at the navel. Waist for the female equation: at the narrowest point between ribs and hips. Hips: around the widest part of the buttocks. Stand relaxed and don&apos;t pull in your stomach.</p>
 </section>
     </div>
 
@@ -198,88 +210,224 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      document.getElementById('sex').addEventListener('change', function() {
-  document.getElementById('hip-group').style.display = this.value==='female' ? '' : 'none';
-});
-
-function calc(){
-  hideErr();
-  const sex = s('sex');
-  const h = n('height'), neck = n('neck'), waist = n('waist'), hip = n('hip');
-  if (!h||!neck||!waist||h<=0||neck<=0||waist<=0) return showErr('Enter height, neck, and waist.');
-  // Convert to inches (formula uses inches)
-  const isM = s('units')==='metric';
-  const hIn = isM ? h/IN_TO_CM : h;
-  const neckIn = isM ? neck/IN_TO_CM : neck;
-  const waistIn = isM ? waist/IN_TO_CM : waist;
-
-  let bf;
-  if (sex === 'male') {
-    if (waistIn <= neckIn) return showErr('Waist must be larger than neck.');
-    bf = 86.010 * Math.log10(waistIn - neckIn) - 70.041 * Math.log10(hIn) + 36.76;
-  } else {
-    if (!hip||hip<=0) return showErr('Enter hip measurement.');
-    const hipIn = isM ? hip/IN_TO_CM : hip;
-    if (waistIn + hipIn <= neckIn) return showErr('Waist + hip must be larger than neck.');
-    bf = 163.205 * Math.log10(waistIn + hipIn - neckIn) - 97.684 * Math.log10(hIn) - 78.387;
-  }
-
-  let cat;
-  if (sex === 'male') {
-    if (bf < 6) cat = 'Below essential fat (health risk)';
-    else if (bf < 14) cat = 'Athletes';
-    else if (bf < 18) cat = 'Fitness';
-    else if (bf < 25) cat = 'Average';
-    else cat = 'Above average';
-  } else {
-    if (bf < 14) cat = 'Below essential fat (health risk)';
-    else if (bf < 21) cat = 'Athletes';
-    else if (bf < 25) cat = 'Fitness';
-    else if (bf < 32) cat = 'Average';
-    else cat = 'Above average';
-  }
-
-  set('out-main',
-    row('Estimated body fat', bf.toFixed(1) + '%', 'teal') +
-    row('Category (ACE reference)', cat) +
-    row('Method accuracy', '±3–4% vs. clinical DEXA', 'amber')
-  );
-
-  let r = '';
-  if (sex === 'male') {
-    r += row('Essential fat', '2–5%');
-    r += row('Athletes', '6–13%');
-    r += row('Fitness', '14–17%');
-    r += row('Average', '18–24%');
-    r += row('Above average', '25%+');
-  } else {
-    r += row('Essential fat', '10–13%');
-    r += row('Athletes', '14–20%');
-    r += row('Fitness', '21–24%');
-    r += row('Average', '25–31%');
-    r += row('Above average', '32%+');
-  }
-  set('out-ranges', r);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['height','neck','waist','hip'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+      /* US Navy circumference equations (Hodgdon & Beckett, Naval Health Research Center, 1984).
+         Inch form as used in DoD/Navy body-composition instructions; centimetre form predicts density,
+         converted with Siri (495 / density - 450). The page uses the form that matches the chosen units. */
+      function navyInches(male, h, neck, waist, hip) {
+        return male ? 86.010 * Math.log10(waist - neck) - 70.041 * Math.log10(h) + 36.76
+                    : 163.205 * Math.log10(waist + hip - neck) - 97.684 * Math.log10(h) - 78.387;
+      }
+      function navyCm(male, h, neck, waist, hip) {
+        const d = male ? 1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(h)
+                       : 1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(h);
+        return 495 / d - 450;
+      }
+      /* ACE body-fat chart: [upper bound (exclusive), label] */
+      const ACE = {
+        male: [[2, 'Below the essential-fat range'], [6, 'Essential fat'], [14, 'Athletes'], [18, 'Fitness'], [25, 'Average'], [Infinity, 'Above the average range']],
+        female: [[10, 'Below the essential-fat range'], [14, 'Essential fat'], [21, 'Athletes'], [25, 'Fitness'], [32, 'Average'], [Infinity, 'Above the average range']]
       };
+      const RANGE_TEXT = {
+        male: ['Below 2%', '2&ndash;5%', '6&ndash;13%', '14&ndash;17%', '18&ndash;24%', '25% and above'],
+        female: ['Below 10%', '10&ndash;13%', '14&ndash;20%', '21&ndash;24%', '25&ndash;31%', '32% and above']
+      };
+      const LEN = ['height', 'neck', 'waist', 'hip'];
+      function ranges(sex, you) {
+        return ACE[sex].map((c, i) => i === 0 ? '' : row(c[1] + (i === you ? ' (you)' : ''), RANGE_TEXT[sex][i], null, i === you ? 'result-row--you' : '')).join('');
+      }
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const m = isMetric();
+        const male = $('sex').value === 'male';
+        const sex = male ? 'male' : 'female';
+        const k = m ? 2.54 : 1; /* limits are written in inches */
+        const h = field('height', +(35 * k).toFixed(0), +(107 * k).toFixed(0), m ? 'cm' : 'in', st);
+        const neck = field('neck', +(8 * k).toFixed(0), +(30 * k).toFixed(0), m ? 'cm' : 'in', st);
+        const waist = field('waist', +(18 * k).toFixed(0), +(80 * k).toFixed(0), m ? 'cm' : 'in', st);
+        const hip = male ? 0 : field('hip', +(20 * k).toFixed(0), +(80 * k).toFixed(0), m ? 'cm' : 'in', st);
+        const wt = m ? field('weight', 20, 650, 'kg', st, true) : field('weight', 44, 1430, 'lb', st, true);
+        if (h === null || neck === null || waist === null || hip === null) {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter height, neck and waist' + (male ? '' : ' and hips') + ' to see an estimate.'));
+          set('out-ranges', ranges(sex, -1));
+          return;
+        }
+        if (male && waist <= neck) { msg('waist', 'The male equation needs a waist larger than the neck.'); set('out-main', placeholder('Check the highlighted field above.')); set('out-ranges', ranges(sex, -1)); return; }
+        if (!male && waist + hip <= neck) { msg('hip', 'Waist plus hips must be larger than the neck.'); set('out-main', placeholder('Check the highlighted field above.')); set('out-ranges', ranges(sex, -1)); return; }
+        const bf = m ? navyCm(male, h, neck, waist, hip) : navyInches(male, h, neck, waist, hip);
+        const b1 = Math.round(bf * 10) / 10;
+        if (!Number.isFinite(b1) || b1 < 1 || b1 > 70) {
+          set('out-main', placeholder('These measurements give ' + (Number.isFinite(b1) ? fmt(b1, 1) + '%' : 'no usable number') + ', which is outside the range the equation was built for. It may be worth re-measuring, or checking the units.'));
+          set('out-ranges', ranges(sex, -1));
+          return;
+        }
+        const idx = ACE[sex].findIndex((c) => b1 < c[0]);
+        let out = row('Estimated body fat', fmt(b1, 1) + '%', 'teal') + row('ACE range', ACE[sex][idx][1]);
+        if (wt !== null) {
+          const fat = Math.round(wt * b1 / 10) / 10, lean = wt - fat, u = m ? " kg" : " lb"; /* lean from the rounded fat so the two add up */
+          out += row('Fat mass', fmt(fat, 1) + u) + row('Lean mass (everything else)', fmt(lean, 1) + u);
+        }
+        out += row('Formula used', (m ? 'Centimetre' : 'Inch') + ' form, ' + sex + ' equation');
+        set('out-main', out);
+        set('out-ranges', ranges(sex, idx));
+      }
+      function showHip() { $('hip-group').hidden = $('sex').value === 'male'; }
+      $('sex').addEventListener('change', showHip);
+      setupUnits((toMetric) => {
+        const f = toMetric ? 2.54 : 1 / 2.54;
+        LEN.forEach((id) => { const v = read(id); if (v > 0) $(id).value = +(v * f).toFixed(1); });
+        const w = read('weight');
+        if (w > 0) $('weight').value = +(toMetric ? w * LB_KG : w / LB_KG).toFixed(1);
+      });
+      function labels() {
+        document.querySelectorAll('.u-len').forEach((s) => { s.textContent = isMetric() ? 'cm' : 'in'; });
+        document.querySelectorAll('.u-wt').forEach((s) => { s.textContent = isMetric() ? 'kg' : 'lb'; });
+      }
+      $('units').addEventListener('change', labels);
+      labels();
+      showHip();
+      /* Saved metric preference: the inch defaults need converting once on load. */
+      if (isMetric()) {
+        LEN.forEach((id) => { const v = read(id); if (v > 0) $(id).value = +(v * 2.54).toFixed(1); });
+      }
+      wire(run);
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

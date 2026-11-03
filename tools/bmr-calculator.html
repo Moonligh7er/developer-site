@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free BMR Calculator (Mifflin-St Jeor + Harris-Benedict + Katch-McArdle) | Moonlit Social Labs</title>
-  <meta name="description" content="Basal Metabolic Rate using three formulas side by side: Mifflin-St Jeor (most accurate), Harris-Benedict revised, and Katch-McArdle (uses body fat %).">
+  <meta name="description" content="Basal metabolic rate from three published equations side by side: Mifflin-St Jeor, Harris-Benedict (revised 1984) and Katch-McArdle (uses body fat %). Metric or imperial.">
   <meta name="keywords" content="BMR calculator, basal metabolic rate calculator, Mifflin St Jeor calculator, Harris Benedict calculator, Katch McArdle calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free BMR Calculator (Mifflin-St Jeor + Harris-Benedict + Katch-McArdle)",
-    "description": "Basal Metabolic Rate using three formulas side by side: Mifflin-St Jeor (most accurate), Harris-Benedict revised, and Katch-McArdle (uses body fat %).",
+    "description": "Basal metabolic rate from three published equations side by side: Mifflin-St Jeor, Harris-Benedict (revised 1984) and Katch-McArdle (uses body fat %). Metric or imperial.",
     "url": "https://moonligh7er.github.io/developer-site/tools/bmr-calculator.html",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free BMR Calculator (Mifflin-St Jeor + Harris-Benedict + Katch-McArdle)">
-  <meta property="og:description" content="Basal Metabolic Rate using three formulas side by side: Mifflin-St Jeor (most accurate), Harris-Benedict revised, and Katch-McArdle (uses body fat %).">
+  <meta property="og:description" content="Basal metabolic rate from three published equations side by side: Mifflin-St Jeor, Harris-Benedict (revised 1984) and Katch-McArdle (uses body fat %). Metric or imperial.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/bmr-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free BMR Calculator (Mifflin-St Jeor + Harris-Benedict + Katch-McArdle)">
-  <meta name="twitter:description" content="Basal Metabolic Rate using three formulas side by side: Mifflin-St Jeor (most accurate), Harris-Benedict revised, and Katch-McArdle (uses body fat %).">
+  <meta name="twitter:description" content="Basal metabolic rate from three published equations side by side: Mifflin-St Jeor, Harris-Benedict (revised 1984) and Katch-McArdle (uses body fat %). Metric or imperial.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,53 +127,59 @@
 
       <div class="calc-card">
         <h1>BMR Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Basal Metabolic Rate &mdash; calories burned at complete rest for basic bodily function &mdash; using three published formulas side by side.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Basal metabolic rate &mdash; roughly the energy your body uses at complete rest &mdash; from three published equations side by side. Results update as you type.</p>
 
         <p class="calc-subhead">Body</p>
 <div class="form-grid">
   <div class="form-group"><label for="units">Units</label>
     <select id="units">
-      <option value="imperial">Imperial</option>
-      <option value="metric">Metric</option>
+      <option value="imperial">Imperial (ft/in + lb)</option>
+      <option value="metric">Metric (cm + kg)</option>
     </select>
   </div>
-  <div class="form-group"><label for="sex">Sex (biological)</label>
+  <div class="form-group"><label for="sex">Sex (as the equations use it)</label>
     <select id="sex"><option value="male">Male</option><option value="female">Female</option></select>
   </div>
-  <div class="form-group"><label for="age">Age</label><input type="number" id="age" placeholder="30" min="0" step="1"></div>
+  <div class="form-group"><label for="age">Age (years)</label><input type="number" id="age" value="30" min="18" max="100" step="1" inputmode="numeric"></div>
 </div>
 <div class="form-grid" id="imperial-fields">
-  <div class="form-group"><label for="ft">Height (ft)</label><input type="number" id="ft" placeholder="5" min="0" step="1"></div>
-  <div class="form-group"><label for="in">Height (in)</label><input type="number" id="in" placeholder="10" min="0" step="any"></div>
-  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" placeholder="160" min="0" step="any"></div>
+  <fieldset class="form-group fieldset-reset"><legend>Height</legend>
+    <div class="split-2">
+      <div class="form-group"><label for="ft">Feet (ft)</label><input type="number" id="ft" value="5" min="0" max="8" step="1" inputmode="numeric"></div>
+      <div class="form-group"><label for="in">Inches (in)</label><input type="number" id="in" value="10" min="0" step="any" inputmode="decimal"></div>
+    </div>
+  </fieldset>
+  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" value="160" min="0" step="any" inputmode="decimal"></div>
 </div>
-<div class="form-grid" id="metric-fields" style="display:none;">
-  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" placeholder="178" min="0" step="any"></div>
-  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" placeholder="72" min="0" step="any"></div>
+<div class="form-grid" id="metric-fields" hidden>
+  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" value="178" min="0" step="any" inputmode="decimal"></div>
+  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" value="72.6" min="0" step="any" inputmode="decimal"></div>
 </div>
 <p class="calc-subhead">Optional (for Katch-McArdle)</p>
 <div class="form-grid">
-  <div class="form-group"><label for="bf">Body Fat (%)</label><input type="number" id="bf" placeholder="20" min="0" max="100" step="any"><span class="hint">If known — Katch-McArdle only</span></div>
+  <div class="form-group"><label for="bf">Body fat (%)</label><input type="number" id="bf" placeholder="e.g. 20" min="2" max="70" step="any" inputmode="decimal" aria-describedby="bf-hint"><span class="hint" id="bf-hint">If you know it (the <a href="body-fat-navy-calculator.html" style="color:var(--teal);">Navy tape method</a> gives an estimate)</span></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>BMR by Formula</h4><div id="out-main"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>BMR by equation</h4><div id="out-main"></div>
+          <p class="calc-note">An estimate, not medical advice. Measured resting rates for real people commonly land 10% or more either side of any equation.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Three formulas, three answers</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Mifflin-St Jeor (1990):</strong> the current gold standard for most adults; validated against indirect calorimetry across large samples. Uses height, weight, age, and sex.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Harris-Benedict (revised 1984):</strong> the older classic. Slightly overestimates for most adults compared to Mifflin-St Jeor; still widely used in medical settings and reference tables.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Katch-McArdle (1996):</strong> uses lean body mass (weight minus fat mass) instead of total weight. Requires body fat percentage. Most accurate for athletes and very lean or very muscular people, where total-weight formulas over- or under-estimate.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When formulas disagree</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">For a typical 25&ndash;50-year-old adult in a normal BMI range, all three formulas produce numbers within ±100 kcal of each other. Larger disagreements suggest one formula is a poor fit for the individual &mdash; usually because the person is very muscular (Katch-McArdle beats the others), very obese (Mifflin-St Jeor most reliable), or elderly with sarcopenia (all formulas overstate; consider clinical measurement).</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works: three equations, three answers</h2>
+  <p style="color:var(--text-secondary);font-family:var(--font-mono);font-size:0.8rem;line-height:1.8;margin-bottom:1rem;">Mifflin-St Jeor: 10 &times; kg + 6.25 &times; cm &minus; 5 &times; age + 5 (male) or &minus; 161 (female)<br>Harris-Benedict, revised: 88.362 + 13.397 &times; kg + 4.799 &times; cm &minus; 5.677 &times; age (male)<br>&nbsp;&nbsp;or 447.593 + 9.247 &times; kg + 3.098 &times; cm &minus; 4.330 &times; age (female)<br>Katch-McArdle: 370 + 21.6 &times; lean mass (kg), where lean mass = weight &times; (1 &minus; body fat %)</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Mifflin-St Jeor (1990)</strong> was fitted on about 500 adults aged 19&ndash;78 measured by indirect calorimetry (Mifflin et al., <em>Am J Clin Nutr</em> 51:241). A 2005 systematic review (Frankenfield et al., <em>J Am Diet Assoc</em> 105:775) found it landed within 10% of measured resting rate for more people than the other equations it tested, which is why it is shown first here.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Harris-Benedict</strong> dates from 1918; this page uses the 1984 re-fit by Roza and Shizgal (<em>Am J Clin Nutr</em> 40:168). It tends to read a little higher than Mifflin-St Jeor for most adults.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Katch-McArdle</strong> uses lean body mass instead of total weight and ignores age and sex, so it needs a body-fat percentage. It can suit very lean or very muscular people better, but it is only as good as the body-fat number you give it.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When the equations disagree</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">For many adults the three land within about 100 kcal of each other. A bigger spread usually means one equation fits you poorly &mdash; for example a lot of muscle (lean-mass equations tend to do better) or age outside the 19&ndash;78 range Mifflin-St Jeor was built on. Indirect calorimetry is the way to actually measure it.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">The equations were fitted separately on men and women. If neither option describes your body well (for example during hormone therapy), it&apos;s reasonable to try both and treat the pair as a range. To turn BMR into a daily calorie figure, use the <a href="calorie-tdee-calculator.html" style="color:var(--teal);">TDEE calculator</a>.</p>
 </section>
     </div>
 
@@ -204,74 +221,181 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      function toggleUnits(){
-  const m = s('units')==='metric';
-  document.getElementById('imperial-fields').style.display = m ? 'none' : '';
-  document.getElementById('metric-fields').style.display = m ? '' : 'none';
-}
-document.getElementById('units').addEventListener('change', toggleUnits);
-
-function calc(){
-  hideErr();
-  const sex = s('sex'), age = n('age'), bf = n('bf');
-  if (!age||age<=0) return showErr('Enter age.');
-  let kg, cm;
-  if (s('units')==='metric') {
-    kg = n('kg'); cm = n('cm');
-    if (!kg||!cm) return showErr('Enter height (cm) and weight (kg).');
-  } else {
-    const ft = n('ft')||0, inch = n('in')||0, lb = n('lb');
-    const totalIn = ft*12+inch;
-    if (totalIn<=0||!lb) return showErr('Enter height and weight.');
-    kg = lb * LB_TO_KG;
-    cm = totalIn * IN_TO_CM;
-  }
-
-  // Mifflin-St Jeor
-  const mifflin = sex==='male'
-    ? 10*kg + 6.25*cm - 5*age + 5
-    : 10*kg + 6.25*cm - 5*age - 161;
-
-  // Harris-Benedict revised
-  const harris = sex==='male'
-    ? 88.362 + 13.397*kg + 4.799*cm - 5.677*age
-    : 447.593 + 9.247*kg + 3.098*cm - 4.330*age;
-
-  // Katch-McArdle: 370 + 21.6 × LBM (kg)
-  let katch = null;
-  if (bf && bf > 0 && bf < 100) {
-    const lbm = kg * (1 - bf/100);
-    katch = 370 + 21.6 * lbm;
-  }
-
-  let h = '';
-  h += row('Mifflin-St Jeor (recommended)', Math.round(mifflin) + ' kcal/day', 'teal');
-  h += row('Harris-Benedict (revised)', Math.round(harris) + ' kcal/day', 'violet');
-  if (katch) h += row('Katch-McArdle (with body fat)', Math.round(katch) + ' kcal/day', 'amber');
-  else h += row('Katch-McArdle', 'Enter body fat % to calculate', 'amber');
-  const avg = katch ? (mifflin + harris + katch)/3 : (mifflin + harris)/2;
-  h += row('Average of methods', Math.round(avg) + ' kcal/day');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['age','ft','in','lb','cm','kg','bf'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+      /* Mifflin-St Jeor: Mifflin et al., Am J Clin Nutr 1990;51:241-7.
+         Harris-Benedict revised: Roza & Shizgal, Am J Clin Nutr 1984;40:168-82.
+         Katch-McArdle: 370 + 21.6 x lean body mass (kg). */
+      function mifflin(male, kg, cm, age) { return 10 * kg + 6.25 * cm - 5 * age + (male ? 5 : -161); }
+      function harris(male, kg, cm, age) {
+        return male ? 88.362 + 13.397 * kg + 4.799 * cm - 5.677 * age
+                    : 447.593 + 9.247 * kg + 3.098 * cm - 4.330 * age;
+      }
+      function katch(kg, bf) { return 370 + 21.6 * kg * (1 - bf / 100); }
+      const kcal = (x) => fmt(x, 0) + ' kcal/day';
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const age = field('age', 18, 100, 'years', st);
+        const cm = heightCm(st), kg = weightKg(st);
+        const bf = field('bf', 2, 70, '%', st, true);
+        if (age === null || cm === null || kg === null) {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter age, height and weight to see your BMR.'));
+          return;
+        }
+        const male = $('sex').value === 'male';
+        const m = mifflin(male, kg, cm, age), h = harris(male, kg, cm, age);
+        const vals = [m, h];
+        let out = row('Mifflin-St Jeor', kcal(m), 'teal') + row('Harris-Benedict (revised 1984)', kcal(h), 'violet');
+        if (bf !== null) {
+          const k = katch(kg, bf), lbm = kg * (1 - bf / 100);
+          vals.push(k);
+          out += row('Katch-McArdle', kcal(k), 'amber');
+          out += row('Lean body mass used', isMetric() ? fmt(lbm, 1) + ' kg' : fmt(lbm / LB_KG, 1) + ' lb');
+        } else {
+          out += row('Katch-McArdle', 'Add body fat % to include');
+        }
+        out += row('Spread across equations', fmt(Math.min.apply(null, vals), 0) + '&ndash;' + fmt(Math.max.apply(null, vals), 0) + ' kcal/day');
+        if (age < 19 || age > 78) out += '<p class="calc-note">Mifflin-St Jeor was fitted on adults aged 19&ndash;78, so treat this age as outside its tested range.</p>';
+        set('out-main', out);
+      }
+      setupUnits((toMetric) => { convertHeight(toMetric); convertWeight(toMetric); });
+      wire(run);
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

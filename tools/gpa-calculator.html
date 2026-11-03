@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free GPA Calculator (4.0 Scale, Weighted, Cumulative) | Moonlit Social Labs</title>
-  <meta name="description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta name="description" content="GPA calculator on the common US 4.0 scale (A = 4.0, B = 3.0, plus/minus steps of 0.3). Shows unweighted and weighted (honors +0.5, AP/IB +1.0) GPA and a new cumulative GPA.">
   <meta name="keywords" content="GPA calculator, weighted GPA calculator, cumulative GPA calculator, 4.0 scale GPA, high school GPA calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free GPA Calculator (4.0 Scale, Weighted, Cumulative)",
-    "description": "GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.",
+    "description": "GPA calculator on the common US 4.0 scale (A = 4.0, B = 3.0, plus/minus steps of 0.3). Shows unweighted and weighted (honors +0.5, AP/IB +1.0) GPA and a new cumulative GPA.",
     "url": "https://moonligh7er.github.io/developer-site/tools/gpa-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free GPA Calculator (4.0 Scale, Weighted, Cumulative)">
-  <meta property="og:description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta property="og:description" content="GPA calculator on the common US 4.0 scale (A = 4.0, B = 3.0, plus/minus steps of 0.3). Shows unweighted and weighted (honors +0.5, AP/IB +1.0) GPA and a new cumulative GPA.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/gpa-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free GPA Calculator (4.0 Scale, Weighted, Cumulative)">
-  <meta name="twitter:description" content="GPA calculator on the standard 4.0 scale with weighted (honors/AP bump) and cumulative modes. Enter courses with credits and letter grades.">
+  <meta name="twitter:description" content="GPA calculator on the common US 4.0 scale (A = 4.0, B = 3.0, plus/minus steps of 0.3). Shows unweighted and weighted (honors +0.5, AP/IB +1.0) GPA and a new cumulative GPA.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,11 +87,30 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
-    .gpa-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 0.5rem; margin-bottom: 0.5rem; align-items: end; }
-    .gpa-row input, .gpa-row select { padding: 0.5rem 0.65rem; font-size: 0.85rem; }
-    .gpa-row .rm { background: transparent; border: 1px solid var(--border); color: var(--rose); width: 32px; height: 32px; cursor: pointer; font-family: var(--font-mono); }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
+    .gpa-row, .gpa-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1.3fr 44px; gap: 0.5rem; margin-bottom: 0.5rem; align-items: end; }
+    .gpa-head { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.35rem; }
+    .gpa-cell { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+    .gpa-cell label { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+    .gpa-row input, .gpa-row select { font-family: var(--font-mono); font-size: 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.5rem 0.6rem; min-height: 44px; width: 100%; box-sizing: border-box; outline: none; }
+    .gpa-row input:focus, .gpa-row select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
+    .gpa-row .rm { background: transparent; border: 1px solid var(--border); color: var(--rose); width: 44px; height: 44px; cursor: pointer; font-family: var(--font-mono); font-size: 1.1rem; }
     .gpa-row .rm:hover { border-color: var(--rose); }
-    @media (max-width: 600px) { .gpa-row { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 601px) { .gpa-cell label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; } }
+    @media (max-width: 600px) {
+      .gpa-head { display: none; }
+      .gpa-row { grid-template-columns: 1fr 1fr; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 0.75rem; }
+      .gpa-cell--name { grid-column: 1 / -1; }
+    }
   </style>
 </head>
 <body>
@@ -124,45 +143,38 @@
 
       <div class="calc-card">
         <h1>GPA Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Calculate GPA on the standard 4.0 scale from courses with credit hours and letter grades. Toggle weighted mode for honors/AP courses (+0.5) or AP-only bump. Cumulative mode adds prior GPA + prior credits.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">GPA on the common US 4.0 scale from your courses, credits and letter grades. It shows the unweighted GPA, a weighted GPA when you mark honors or AP/IB courses, and a new cumulative GPA if you add your previous totals. Results update as you type.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Scale used: A+ and A = 4.0, A&minus; = 3.7, B+ = 3.3, B = 3.0, B&minus; = 2.7, C+ = 2.3, C = 2.0, C&minus; = 1.7, D+ = 1.3, D = 1.0, D&minus; = 0.7, F = 0. Schools differ (some give A+ 4.3 or use other steps), so check your school&apos;s scale.</div>
         <p class="calc-subhead">Courses</p>
+<div class="gpa-head" aria-hidden="true"><span>Course</span><span>Credits</span><span>Grade</span><span>Type</span><span></span></div>
 <div id="gpa-list"></div>
-<button class="calc-btn calc-btn--secondary" onclick="addRow()" style="margin-bottom:1rem;">+ Add Course</button>
+<button type="button" class="calc-btn calc-btn--secondary" id="add-row" style="margin-bottom:1rem;">+ Add Course</button>
 
-<p class="calc-subhead">Options</p>
+<p class="calc-subhead">Cumulative (optional)</p>
 <div class="form-grid">
-  <div class="form-group">
-    <label><input type="checkbox" id="weighted"> Weighted mode (honors/AP +0.5/+1.0)</label>
-  </div>
-</div>
-
-<p class="calc-subhead">Cumulative (Optional)</p>
-<div class="form-grid">
-  <div class="form-group"><label for="priorGpa">Prior Cumulative GPA</label><input type="number" id="priorGpa" placeholder="3.5" min="0" max="4.5" step="0.01"></div>
-  <div class="form-group"><label for="priorCredits">Prior Total Credits</label><input type="number" id="priorCredits" placeholder="45" min="0" step="0.5"></div>
+  <div class="form-group"><label for="priorGpa">Previous cumulative GPA</label><input type="number" id="priorGpa" placeholder="e.g. 3.5" min="0" max="5" step="0.01" inputmode="decimal"></div>
+  <div class="form-group"><label for="priorCredits">Previous total credits</label><input type="number" id="priorCredits" placeholder="e.g. 45" min="0" step="0.5" inputmode="decimal"></div>
 </div>
 
 <div class="calc-btn-row">
-  <button class="calc-btn" onclick="calc()">Calculate</button>
-  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear All</button>
+  <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear All</button>
 </div>
-<div class="calc-error" id="err"></div>
 
-<div class="calc-results" id="results" aria-live="polite">
+<div class="calc-results visible" id="results" aria-live="polite">
   <h4>GPA</h4>
   <div id="out"></div>
 </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">4.0 scale grade points</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A: 4.0 &middot; A−: 3.7 &middot; B+: 3.3 &middot; B: 3.0 &middot; B−: 2.7 &middot; C+: 2.3 &middot; C: 2.0 &middot; C−: 1.7 &middot; D+: 1.3 &middot; D: 1.0 &middot; D−: 0.7 &middot; F: 0.0</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">GPA is a credit-weighted average: sum of (grade points × credits) divided by sum of credits. A single-credit course affects your GPA less than a four-credit course with the same grade.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">GPA is a credit-weighted average: add up grade points &times; credits for each course (&ldquo;quality points&rdquo;) and divide by the total credits. A 1-credit course moves your GPA less than a 4-credit course with the same grade. Rows without both credits and a grade are left out, and the result says so.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The scale is the common US 4.0 scale above, with plus/minus steps of 0.3 and A+ counted the same as A. Some colleges give A+ 4.3, some don&apos;t use minus grades for D, and other countries use different systems entirely.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Weighted GPA</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Many US high schools bump honors courses by +0.5 and AP/IB courses by +1.0 &mdash; so an A in AP Chemistry is worth 5.0 instead of 4.0. This inflates GPAs above 4.0. Colleges usually re-calculate an <em>unweighted</em> GPA from your transcript, so weighted GPA is primarily useful for class rank at high schools that use it.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Cumulative mode</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">If you enter a prior cumulative GPA and prior credits, the tool combines them with the current semester&apos;s courses to give you a new cumulative GPA. Formula: (prior GPA × prior credits + current GPA × current credits) / (prior credits + current credits).</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Many US high schools add 0.5 for honors courses and 1.0 for AP/IB courses, so an A in AP Chemistry counts as 5.0. Here the bonus applies to passing grades only (an F stays 0), which is the most common rule, but policies vary: some schools don&apos;t add it to D grades either. Colleges often recalculate an unweighted GPA from your transcript.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Cumulative GPA</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">New cumulative = (previous GPA &times; previous credits + this term&apos;s quality points) &divide; (previous credits + this term&apos;s credits). Use a previous GPA on the same basis: the unweighted line uses this term&apos;s unweighted points, the weighted line its weighted points.</p>
 </section>
     </div>
 
@@ -200,82 +212,150 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      function msg(input, text) {
+        let m = $(input.id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = input.id + '-msg';
+          input.parentNode.appendChild(m);
+          input.setAttribute('aria-describedby', m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      const fixed = (x, dp) => { const r = Number(x.toFixed(dp)); return (r === 0 ? 0 : r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
+      const trim = (x) => Number(x.toFixed(2)).toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-      const GRADES = {"A":4.0,"A-":3.7,"B+":3.3,"B":3.0,"B-":2.7,"C+":2.3,"C":2.0,"C-":1.7,"D+":1.3,"D":1.0,"D-":0.7,"F":0.0};
-let rowIdx = 0;
-window.addRow = function(){
-  const el = document.getElementById('gpa-list');
-  const div = document.createElement('div');
-  div.className = 'gpa-row';
-  const idx = rowIdx++;
-  let opts = '<option value="">--</option>';
-  for (const g of Object.keys(GRADES)) opts += '<option value="'+g+'">'+g+'</option>';
-  div.innerHTML = '<input type="text" placeholder="Course name" data-role="name">' +
-                  '<input type="number" placeholder="Credits" min="0" step="0.5" data-role="cr">' +
-                  '<select data-role="gr">'+opts+'</select>' +
-                  '<select data-role="type"><option value="reg">Regular</option><option value="hon">Honors +0.5</option><option value="ap">AP/IB +1.0</option></select>' +
-                  '<button class="rm" onclick="this.parentNode.remove()" title="Remove">&times;</button>';
-  el.appendChild(div);
-};
-// Seed 4 rows
-for (let i=0;i<4;i++) addRow();
+      /* Common US 4.0 scale; A+ counted as 4.0. */
+      const GRADES = [['A+', 4.0], ['A', 4.0], ['A-', 3.7], ['B+', 3.3], ['B', 3.0], ['B-', 2.7], ['C+', 2.3], ['C', 2.0], ['C-', 1.7], ['D+', 1.3], ['D', 1.0], ['D-', 0.7], ['F', 0.0]];
+      const POINTS = Object.fromEntries(GRADES);
+      const BONUS = { reg: 0, hon: 0.5, ap: 1.0 };
+      let rowSeq = 0;
 
-window.calc = function(){
-  hideErr();
-  const rows = document.querySelectorAll('.gpa-row');
-  const weighted = document.getElementById('weighted').checked;
-  let totalPts = 0, totalCr = 0, courseCount = 0;
-  for (const r of rows) {
-    const cr = parseFloat(r.querySelector('[data-role=cr]').value);
-    const g = r.querySelector('[data-role=gr]').value;
-    if (!g || isNaN(cr) || cr <= 0) continue;
-    let pts = GRADES[g];
-    if (weighted) {
-      const t = r.querySelector('[data-role=type]').value;
-      if (t === 'hon') pts += 0.5;
-      else if (t === 'ap') pts += 1.0;
-    }
-    totalPts += pts * cr;
-    totalCr += cr;
-    courseCount++;
-  }
-  if (courseCount === 0) return showErr('Add at least one course with grade + credits.');
-  const currGpa = totalPts / totalCr;
+      function addRow(preset, focus) {
+        const idx = ++rowSeq;
+        const div = document.createElement('div');
+        div.className = 'gpa-row';
+        let opts = '<option value="">Grade</option>';
+        for (const g of GRADES) opts += '<option value="' + g[0] + '">' + g[0].replace('-', '&minus;') + '</option>';
+        div.innerHTML =
+          '<div class="gpa-cell gpa-cell--name"><label for="c' + idx + '-name">Course name</label><input type="text" id="c' + idx + '-name" placeholder="Course name" data-role="name" autocomplete="off"></div>' +
+          '<div class="gpa-cell"><label for="c' + idx + '-cr">Credits</label><input type="number" id="c' + idx + '-cr" placeholder="Credits" min="0" max="20" step="0.5" inputmode="decimal" data-role="cr"></div>' +
+          '<div class="gpa-cell"><label for="c' + idx + '-gr">Grade</label><select id="c' + idx + '-gr" data-role="gr">' + opts + '</select></div>' +
+          '<div class="gpa-cell"><label for="c' + idx + '-type">Type</label><select id="c' + idx + '-type" data-role="type"><option value="reg">Regular</option><option value="hon">Honors +0.5</option><option value="ap">AP/IB +1.0</option></select></div>' +
+          '<button type="button" class="rm" aria-label="Remove course" title="Remove course">&times;</button>';
+        if (preset) {
+          div.querySelector('[data-role=name]').value = preset[0];
+          div.querySelector('[data-role=cr]').value = preset[1];
+          div.querySelector('[data-role=gr]').value = preset[2];
+          div.querySelector('[data-role=type]').value = preset[3];
+        }
+        $('gpa-list').appendChild(div);
+        relabel();
+        if (focus) div.querySelector('input').focus();
+      }
+      /* Number each row's labels ("Course 2 credits") and name each remove button. */
+      function relabel() {
+        document.querySelectorAll('.gpa-row').forEach((r, i) => {
+          const n = 'Course ' + (i + 1);
+          const labels = r.querySelectorAll('label');
+          ['name', 'credits', 'grade', 'type'].forEach((w, j) => { labels[j].textContent = n + ' ' + w; });
+          const name = r.querySelector('[data-role=name]').value.trim();
+          r.querySelector('.rm').setAttribute('aria-label', 'Remove ' + (name ? name : n.toLowerCase()));
+        });
+      }
 
-  const priorGpa = n('priorGpa'), priorCr = n('priorCredits');
-  let cumGpa = null, cumCr = null;
-  if (priorGpa !== null && priorCr !== null && priorCr > 0) {
-    const cumPts = priorGpa * priorCr + totalPts;
-    cumCr = priorCr + totalCr;
-    cumGpa = cumPts / cumCr;
-  }
+      function run(strict) {
+        clearMsgs();
+        let pts = 0, wpts = 0, cr = 0, count = 0, skipped = 0, weightedCount = 0, bad = false;
+        document.querySelectorAll('.gpa-row').forEach((r) => {
+          const crIn = r.querySelector('[data-role=cr]');
+          const g = r.querySelector('[data-role=gr]').value;
+          const t = r.querySelector('[data-role=type]').value;
+          const raw = crIn.value.trim();
+          const c = raw === '' ? null : Number(raw);
+          if (crIn.validity.badInput || (c !== null && (!Number.isFinite(c) || c < 0 || c > 20))) { msg(crIn, 'Credits from 0 to 20.'); bad = true; return; }
+          if (c === null && !g) return;          /* empty row */
+          if (!g || c === null || c === 0) { skipped++; return; }
+          const p = POINTS[g];
+          const bonus = p > 0 ? BONUS[t] : 0;  /* no bonus on an F */
+          pts += p * c;
+          wpts += (p + bonus) * c;
+          cr += c;
+          count++;
+          if (BONUS[t] > 0) weightedCount++;
+        });
+        const priorIn = $('priorGpa'), priorCrIn = $('priorCredits');
+        const pg = priorIn.value.trim() === '' ? null : Number(priorIn.value);
+        const pc = priorCrIn.value.trim() === '' ? null : Number(priorCrIn.value);
+        if (priorIn.validity.badInput || (pg !== null && (!Number.isFinite(pg) || pg < 0 || pg > 5))) { msg(priorIn, 'Enter a GPA from 0 to 5.'); bad = true; }
+        if (priorCrIn.validity.badInput || (pc !== null && (!Number.isFinite(pc) || pc < 0 || pc > 1000))) { msg(priorCrIn, 'Enter credits from 0 to 1,000.'); bad = true; }
 
-  let out = '';
-  out += row('This term GPA', currGpa.toFixed(3), 'teal');
-  out += row('Term credits', totalCr + ' credits');
-  out += row('Courses counted', courseCount);
-  if (weighted) out += row('Mode', 'Weighted (honors +0.5, AP +1.0)', 'violet');
-  if (cumGpa !== null) {
-    out += row('New cumulative GPA', cumGpa.toFixed(3), 'teal');
-    out += row('New total credits', cumCr);
-  }
-  set('out', out);
-  document.getElementById('results').classList.add('visible');
-};
-window.clearForm = function(){
-  document.getElementById('gpa-list').innerHTML = '';
-  for (let i=0;i<4;i++) addRow();
-  document.getElementById('weighted').checked = false;
-  ['priorGpa','priorCredits'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  hideErr(); document.getElementById('results').classList.remove('visible');
-};
+        if (count === 0) {
+          set('out', placeholder(bad ? 'Check the highlighted field above.' : 'Add at least one course with credits and a grade.'));
+          return;
+        }
+        const gpa = pts / cr, wgpa = wpts / cr;
+        let out = '';
+        out += row('Unweighted GPA (this term)', fixed(gpa, 2), 'teal');
+        if (weightedCount) out += row('Weighted GPA (honors +0.5, AP/IB +1.0)', fixed(wgpa, 2), 'violet');
+        out += row('Quality points &divide; credits', trim(pts) + ' &divide; ' + trim(cr) + ' = ' + fixed(gpa, 3));
+        out += row('Courses counted', count + (skipped ? ' (' + skipped + ' skipped: ' + (skipped === 1 ? 'it needs' : 'they need') + ' credits and a grade)' : ''));
+        if (pg !== null && pc !== null && pc > 0 && !bad) {
+          const total = pc + cr;
+          out += row('New cumulative GPA (unweighted)', fixed((pg * pc + pts) / total, 2), 'teal');
+          if (weightedCount) out += row('New cumulative GPA (weighted)', fixed((pg * pc + wpts) / total, 2), 'violet');
+          out += row('New total credits', trim(total));
+        } else if ((pg !== null) !== (pc !== null)) {
+          out += '<p class="calc-note">Add both the previous GPA and previous credits to see a cumulative GPA.</p>';
+        }
+        if (bad) out += '<p class="calc-note" style="color:var(--amber);">Some fields need a look (highlighted above); they were left out.</p>';
+        set('out', out);
+      }
+
+      const list = $('gpa-list');
+      list.addEventListener('click', (e) => {
+        const btn = e.target.closest('.rm');
+        if (!btn) return;
+        const r = btn.closest('.gpa-row');
+        const next = r.nextElementSibling || r.previousElementSibling;
+        r.remove();
+        relabel();
+        run(false);
+        (next ? next.querySelector('input') : $('add-row')).focus();
+      });
+      const card = document.querySelector('.calc-card');
+      card.addEventListener('input', (e) => { if (e.target.matches('[data-role=name]')) relabel(); run(false); });
+      card.addEventListener('change', () => run(false));
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); run(true); } });
+      $('add-row').addEventListener('click', () => { addRow(null, true); run(false); });
+      $('calc-btn').addEventListener('click', () => run(true));
+      $('clear-btn').addEventListener('click', () => {
+        list.innerHTML = '';
+        for (let i = 0; i < 4; i++) addRow();
+        $('priorGpa').value = '';
+        $('priorCredits').value = '';
+        clearMsgs();
+        run(false);
+        list.querySelector('input').focus();
+      });
+      /* Example courses so the page shows a result straight away. */
+      [['English', 3, 'A-', 'reg'], ['Calculus', 4, 'B+', 'reg'], ['Biology', 4, 'A', 'hon'], ['History', 3, 'B', 'reg']].forEach((p) => addRow(p));
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

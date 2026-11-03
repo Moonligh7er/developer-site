@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof &amp; More | Moonlit Social Labs</title>
-  <meta name="description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8 Technique, Wim Hof Method, and Nadi Shodhana. No signup required.">
+  <title>Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof-style &amp; More | Moonlit Social Labs</title>
+  <meta name="description" content="Free guided breathwork timer with a calm animated guide, optional tones and screen-reader cues. Box Breathing, 4-7-8, Wim Hof-style rounds and Nadi Shodhana. No signup.">
   <meta name="keywords" content="breathwork timer, box breathing timer, 4-7-8 breathing, wim hof breathing timer, guided breathing exercise, meditation timer, nadi shodhana, alternate nostril breathing">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Breathwork Timer",
-    "description": "Free guided breathwork timer with hypnotic visualizations. Supports Box Breathing, 4-7-8 Technique, Wim Hof Method, and Nadi Shodhana alternate nostril breathing.",
+    "description": "Free guided breathwork timer with a calm animated guide, optional tones and screen-reader cues. Supports Box Breathing, 4-7-8, Wim Hof-style rounds and Nadi Shodhana alternate-nostril breathing.",
     "url": "https://moonligh7er.github.io/developer-site/tools/breathwork-timer.html",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof & More">
-  <meta property="og:description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8, Wim Hof Method, and Nadi Shodhana. No signup required.">
+  <meta property="og:title" content="Free Breathwork Timer — Box Breathing, 4-7-8, Wim Hof-style & More">
+  <meta property="og:description" content="Free guided breathwork timer with a calm animated guide. Box Breathing, 4-7-8, Wim Hof-style rounds and Nadi Shodhana. No signup.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/breathwork-timer.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Breathwork Timer | Moonlit Social Labs">
-  <meta name="twitter:description" content="Free guided breathwork timer with hypnotic visualizations. Box Breathing, 4-7-8, Wim Hof, and Nadi Shodhana.">
+  <meta name="twitter:description" content="Free guided breathwork timer with a calm animated guide. Box Breathing, 4-7-8, Wim Hof-style rounds and Nadi Shodhana.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -252,79 +252,149 @@
     .rounds-control input[type="range"] {
       -webkit-appearance: none;
       appearance: none;
-      width: 120px;
+      width: 140px;
+      height: 40px; /* generous hit area; the visible track is drawn below */
+      background: transparent;
+      cursor: pointer;
+    }
+    .rounds-control input[type="range"]::-webkit-slider-runnable-track {
       height: 4px;
       background: var(--border);
       border-radius: 2px;
-      outline: none;
+    }
+    .rounds-control input[type="range"]::-moz-range-track {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
     }
     .rounds-control input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
+      margin-top: -7px;
       background: var(--teal);
       border-radius: 50%;
       cursor: pointer;
       box-shadow: 0 0 8px var(--teal-dim);
     }
     .rounds-control input[type="range"]::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       background: var(--teal);
       border-radius: 50%;
       cursor: pointer;
       border: none;
       box-shadow: 0 0 8px var(--teal-dim);
     }
+    .rounds-control input[type="range"]:disabled { opacity: 0.4; cursor: not-allowed; }
     .rounds-value {
       font-family: var(--font-mono);
       font-size: 0.8rem;
       color: var(--teal);
-      min-width: 1.5ch;
+      min-width: 2ch;
       text-align: center;
+    }
+    .bw-select {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: var(--deep);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 0 0.6rem;
+      min-height: 40px;
     }
     .sound-toggle {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       justify-content: center;
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
     }
-    .sound-toggle label {
+    .sound-toggle span {
       font-family: var(--font-mono);
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-dim);
-      cursor: pointer;
     }
     .toggle-switch {
       position: relative;
-      width: 36px;
+      width: 52px;
+      height: 40px;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      top: 11px;
       height: 18px;
       background: var(--border);
       border-radius: 9px;
-      cursor: pointer;
       transition: background 0.3s;
     }
-    .toggle-switch.on {
+    .toggle-switch[aria-checked="true"]::before {
       background: var(--teal-dim);
     }
     .toggle-switch::after {
       content: '';
       position: absolute;
-      top: 2px;
-      left: 2px;
+      top: 13px;
+      left: 8px;
       width: 14px;
       height: 14px;
       background: var(--text-dim);
       border-radius: 50%;
       transition: all 0.3s;
     }
-    .toggle-switch.on::after {
-      left: 20px;
+    .toggle-switch[aria-checked="true"]::after {
+      left: 30px;
       background: var(--teal);
       box-shadow: 0 0 6px var(--teal-dim);
+    }
+    .bw-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.25rem 1.5rem;
+      margin-top: 1rem;
+    }
+    .bw-options .rounds-control,
+    .bw-options .sound-toggle { margin-top: 0; }
+    .bw-length {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      margin-top: 0.5rem;
+    }
+    .bw-safety {
+      max-width: 560px;
+      margin: 1.5rem auto 0;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--violet);
+      background: var(--surface);
+      text-align: left;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .bw-safety p + p { margin-top: 0.5rem; }
+    .bw-safety strong { color: var(--text-bright); font-weight: 500; }
+    .technique-card:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .technique-card[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-breath { min-height: 44px; }
+    [hidden] { display: none !important; }
+    .breathwork-container { overflow: hidden; }
+    @media (prefers-reduced-motion: reduce) {
+      #particle-canvas { display: none; }
+      .technique-card:hover, .technique-card.active { transform: none; }
     }
 
     /* ── Session Summary ── */
@@ -426,7 +496,7 @@
       <div class="reveal">
         <p class="label" style="color:var(--violet);">Wellness</p>
         <h1 class="heading-xl glitch">Breathwork Timer</h1>
-        <p class="text-body">Just breathe. Guided breathing exercises with hypnotic visualizations. Everything runs client-side.</p>
+        <p class="text-body">Just breathe. Guided breathing with a slow, animated circle, optional tones and screen-reader cues. Everything runs in your browser.</p>
       </div>
     </section>
 
@@ -438,28 +508,28 @@
       <div class="technique-card active" data-technique="box" role="radio" aria-checked="true" tabindex="0">
         <div class="technique-card__name">Box Breathing</div>
         <div class="technique-card__pattern">4s - 4s - 4s - 4s</div>
-        <div class="technique-card__desc">Navy SEAL stress management. Equal phases of inhale, hold, exhale, hold.</div>
+        <div class="technique-card__desc">Four equal four-second phases: in, hold, out, hold. A common way to steady nerves.</div>
       </div>
-      <div class="technique-card" data-technique="478" role="radio" aria-checked="false" tabindex="0">
+      <div class="technique-card" data-technique="478" role="radio" aria-checked="false" tabindex="-1">
         <div class="technique-card__name">4-7-8 Technique</div>
         <div class="technique-card__pattern">4s - 7s - 8s</div>
-        <div class="technique-card__desc">Dr. Andrew Weil's parasympathetic activation. Deep calm through extended exhale.</div>
+        <div class="technique-card__desc">In for 4, hold for 7, out for 8. A long, slow exhale, popularised by Dr Andrew Weil.</div>
       </div>
-      <div class="technique-card" data-technique="wimhof" role="radio" aria-checked="false" tabindex="0">
-        <div class="technique-card__name">Wim Hof Method</div>
-        <div class="technique-card__pattern">30 breaths + 60s hold</div>
-        <div class="technique-card__desc">Power breathing with retention. 30 rapid breaths, breath hold, recovery breath.</div>
+      <div class="technique-card" data-technique="wimhof" role="radio" aria-checked="false" tabindex="-1">
+        <div class="technique-card__name">Wim Hof-style Rounds</div>
+        <div class="technique-card__pattern">30 breaths + hold + recovery</div>
+        <div class="technique-card__desc">30 full, quick breaths, a hold after breathing out, then a 15-second recovery hold. Sitting or lying down only.</div>
       </div>
-      <div class="technique-card" data-technique="nadi" role="radio" aria-checked="false" tabindex="0">
+      <div class="technique-card" data-technique="nadi" role="radio" aria-checked="false" tabindex="-1">
         <div class="technique-card__name">Nadi Shodhana</div>
-        <div class="technique-card__pattern">Alternate Nostril</div>
-        <div class="technique-card__desc">Yogic channel purification. Alternate nostril breathing for balance and clarity.</div>
+        <div class="technique-card__pattern">Alternate nostril, 4s phases</div>
+        <div class="technique-card__desc">Alternate-nostril breathing with short holds. Switch sides with your thumb and ring finger.</div>
       </div>
     </section>
 
     <!-- Breathing Visualizer -->
-    <section class="breathwork-container">
-      <div class="circle-wrapper">
+    <section class="breathwork-container" aria-label="Breathing guide">
+      <div class="circle-wrapper" aria-hidden="true">
         <canvas id="particle-canvas"></canvas>
         <div class="breathing-circle" id="breathingCircle">
           <div class="phase-label" id="phaseLabel">READY</div>
@@ -467,29 +537,47 @@
           <div class="phase-detail" id="phaseDetail"></div>
         </div>
       </div>
+      <p class="visually-hidden" id="bwLive" aria-live="polite" aria-atomic="true"></p>
 
       <div class="round-display" id="roundDisplay">Round 1 of 4</div>
 
       <div class="controls">
-        <button class="btn-breath primary" id="btnStart">Start</button>
-        <button class="btn-breath" id="btnPause" disabled>Pause</button>
-        <button class="btn-breath" id="btnReset" disabled>Reset</button>
+        <button type="button" class="btn-breath primary" id="btnStart">Start</button>
+        <button type="button" class="btn-breath" id="btnPause" disabled>Pause</button>
+        <button type="button" class="btn-breath" id="btnReset" disabled>Reset</button>
+        <button type="button" class="btn-breath" id="btnSkip" hidden>Breathe now</button>
       </div>
 
-      <div class="rounds-control">
-        <label for="roundsSlider">Rounds</label>
-        <input type="range" id="roundsSlider" min="1" max="10" value="4">
-        <span class="rounds-value" id="roundsValue">4</span>
+      <div class="bw-options">
+        <div class="rounds-control">
+          <label for="roundsSlider">Rounds</label>
+          <input type="range" id="roundsSlider" min="1" max="10" value="4">
+          <output class="rounds-value" id="roundsValue" for="roundsSlider">4</output>
+        </div>
+        <div class="rounds-control" id="holdControl" hidden>
+          <label for="holdSelect">Hold up to</label>
+          <select id="holdSelect" class="bw-select">
+            <option value="30">30 s</option>
+            <option value="60" selected>60 s</option>
+            <option value="90">90 s</option>
+            <option value="120">2 min</option>
+          </select>
+        </div>
+        <div class="sound-toggle">
+          <span id="soundLabel">Sound</span>
+          <button type="button" class="toggle-switch" id="soundToggle" role="switch" aria-checked="false" aria-labelledby="soundLabel"></button>
+        </div>
       </div>
+      <p class="bw-length" id="sessionLength"></p>
 
-      <div class="sound-toggle">
-        <label for="soundToggle">Sound</label>
-        <div class="toggle-switch" id="soundToggle" role="switch" aria-checked="false" tabindex="0"></div>
+      <div class="bw-safety" id="bwSafety" role="note">
+        <p><strong>Go gently.</strong> Breathe in a way that stays comfortable. If you feel dizzy, light-headed, tingly or anxious, stop and let your breathing return to normal; the holds are always optional.</p>
+        <p id="safetyWimHof" hidden>Quick-breathing rounds with long holds can make some people faint. Do them sitting or lying down, and never in or near water, in the bath, while driving, or anywhere fainting could hurt you. If you are pregnant, or have epilepsy, a heart condition or high blood pressure, check with a clinician first. Use <em>Breathe now</em> to end any hold early.</p>
       </div>
     </section>
 
     <!-- Session Summary -->
-    <div class="session-summary" id="sessionSummary">
+    <div class="session-summary" id="sessionSummary" tabindex="-1">
       <h3>Session Complete</h3>
       <div class="summary-row">
         <span class="summary-label">Technique</span>
@@ -500,7 +588,7 @@
         <span class="summary-value" id="sumRounds">--</span>
       </div>
       <div class="summary-row">
-        <span class="summary-label">Total Time</span>
+        <span class="summary-label">Active Time</span>
         <span class="summary-value" id="sumTime">--</span>
       </div>
     </div>
@@ -545,176 +633,284 @@
     'use strict';
 
     /* ================================================================
-       TECHNIQUE DEFINITIONS
+       TECHNIQUES. round(holdSeconds) returns one round of phases.
+       label: big text in the circle; say: what the screen-reader cue announces
+       (quiet phases are not announced); skippable: "Breathe now" can end it.
        ================================================================ */
+    function simple(label, duration, type, say, detail) {
+      return { label: label, duration: duration, type: type, say: say, detail: detail || '' };
+    }
     const TECHNIQUES = {
       box: {
         name: 'Box Breathing',
-        phases: [
-          { label: 'INHALE',  duration: 4, type: 'inhale' },
-          { label: 'HOLD',    duration: 4, type: 'hold-full' },
-          { label: 'EXHALE',  duration: 4, type: 'exhale' },
-          { label: 'HOLD',    duration: 4, type: 'hold-empty' }
-        ]
+        round: function() {
+          return [
+            simple('INHALE', 4, 'inhale', 'Breathe in, 4 seconds'),
+            simple('HOLD', 4, 'hold-full', 'Hold, 4 seconds'),
+            simple('EXHALE', 4, 'exhale', 'Breathe out, 4 seconds'),
+            simple('HOLD', 4, 'hold-empty', 'Hold, 4 seconds')
+          ];
+        }
       },
       '478': {
         name: '4-7-8 Technique',
-        phases: [
-          { label: 'INHALE',  duration: 4, type: 'inhale' },
-          { label: 'HOLD',    duration: 7, type: 'hold-full' },
-          { label: 'EXHALE',  duration: 8, type: 'exhale' }
-        ]
+        round: function() {
+          return [
+            simple('INHALE', 4, 'inhale', 'Breathe in through the nose, 4 seconds'),
+            simple('HOLD', 7, 'hold-full', 'Hold, 7 seconds'),
+            simple('EXHALE', 8, 'exhale', 'Breathe out slowly, 8 seconds')
+          ];
+        }
       },
       wimhof: {
-        name: 'Wim Hof Method',
-        /* Wim Hof is handled specially: 30 power breaths, then hold, then recovery */
-        powerBreaths: 30,
-        breathDuration: 2,  /* 2s per inhale/exhale cycle = 1s in, 1s out */
-        holdDuration: 60,
-        recoveryDuration: 15,
-        phases: [] /* generated dynamically */
+        name: 'Wim Hof-style Rounds',
+        breaths: 30,
+        round: function(hold) {
+          const n = TECHNIQUES.wimhof.breaths;
+          const phases = [];
+          for (let i = 1; i <= n; i++) {
+            const detail = 'Breath ' + i + ' of ' + n;
+            phases.push({ label: 'IN', duration: 1, type: 'inhale', detail: detail, quiet: i > 1,
+                          say: n + ' full, quick breaths: in, then let go. About one second each.' });
+            phases.push({ label: 'OUT', duration: 1, type: 'exhale', detail: detail, quiet: true });
+          }
+          phases.push({ label: 'HOLD', duration: hold, type: 'hold-empty', detail: 'After breathing out', skippable: true,
+                        say: 'Breathe out and hold, up to ' + spokenSeconds(hold) + '. Breathe now ends the hold whenever you like.' });
+          phases.push(simple('INHALE', 2, 'inhale', 'Breathe in fully', 'Recovery breath'));
+          phases.push(Object.assign(simple('HOLD', 15, 'hold-full', 'Hold, 15 seconds', 'Recovery hold'), { skippable: true }));
+          phases.push(simple('EXHALE', 2, 'exhale', 'Let go', 'Recovery'));
+          return phases;
+        }
       },
       nadi: {
         name: 'Nadi Shodhana',
-        phases: [
-          { label: 'INHALE',  detail: 'Left Nostril',  duration: 4, type: 'inhale' },
-          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-full' },
-          { label: 'EXHALE',  detail: 'Right Nostril',  duration: 4, type: 'exhale' },
-          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-empty' },
-          { label: 'INHALE',  detail: 'Right Nostril',  duration: 4, type: 'inhale' },
-          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-full' },
-          { label: 'EXHALE',  detail: 'Left Nostril',   duration: 4, type: 'exhale' },
-          { label: 'HOLD',    detail: '',               duration: 4, type: 'hold-empty' }
-        ]
+        round: function() {
+          return [
+            simple('INHALE', 4, 'inhale', 'Breathe in through the left nostril, 4 seconds', 'Left nostril'),
+            simple('HOLD', 4, 'hold-full', 'Hold, 4 seconds'),
+            simple('EXHALE', 4, 'exhale', 'Breathe out through the right nostril, 4 seconds', 'Right nostril'),
+            simple('HOLD', 4, 'hold-empty', 'Hold, 4 seconds'),
+            simple('INHALE', 4, 'inhale', 'Breathe in through the right nostril, 4 seconds', 'Right nostril'),
+            simple('HOLD', 4, 'hold-full', 'Hold, 4 seconds'),
+            simple('EXHALE', 4, 'exhale', 'Breathe out through the left nostril, 4 seconds', 'Left nostril'),
+            simple('HOLD', 4, 'hold-empty', 'Hold, 4 seconds')
+          ];
+        }
       }
     };
 
-    /* Generate Wim Hof phases for one round */
-    function generateWimHofPhases() {
-      const phases = [];
-      const t = TECHNIQUES.wimhof;
-      for (let i = 0; i < t.powerBreaths; i++) {
-        phases.push({ label: 'INHALE', detail: 'Breath ' + (i + 1) + ' of ' + t.powerBreaths, duration: 1, type: 'inhale' });
-        phases.push({ label: 'EXHALE', detail: 'Breath ' + (i + 1) + ' of ' + t.powerBreaths, duration: 1, type: 'exhale' });
-      }
-      phases.push({ label: 'HOLD', detail: 'Retention', duration: t.holdDuration, type: 'hold-empty' });
-      phases.push({ label: 'INHALE', detail: 'Recovery', duration: t.recoveryDuration, type: 'inhale' });
-      return phases;
+    function spokenSeconds(s) { return s >= 120 && s % 60 === 0 ? (s / 60) + ' minutes' : s + ' seconds'; }
+    function clock(sec) {
+      sec = Math.max(0, Math.round(sec));
+      return Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
+    }
+    function spokenDuration(sec) {
+      sec = Math.max(0, Math.round(sec));
+      const m = Math.floor(sec / 60), s = sec % 60;
+      const parts = [];
+      if (m) parts.push(m + (m === 1 ? ' minute' : ' minutes'));
+      if (s || !m) parts.push(s + (s === 1 ? ' second' : ' seconds'));
+      return parts.join(' ');
+    }
+    function words(sec) {
+      sec = Math.max(0, Math.round(sec));
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return (m ? m + ' min ' : '') + s + ' s';
     }
 
     /* ================================================================
-       STATE MACHINE
+       STATE. Timing is derived from performance.now() timestamps, never
+       from counting frames or intervals, so long sessions don't drift and
+       a backgrounded tab catches up correctly when it comes back.
        ================================================================ */
     const State = { IDLE: 'idle', RUNNING: 'running', PAUSED: 'paused', COMPLETE: 'complete' };
-
     let state = State.IDLE;
     let selectedTechnique = 'box';
     let totalRounds = 4;
-    let currentRound = 1;
-    let currentPhaseIndex = 0;
-    let phaseElapsed = 0;      /* seconds elapsed in current phase */
-    let sessionStartTime = 0;
-    let sessionTotalTime = 0;
-    let lastFrameTime = 0;
-    let animFrameId = null;
+    let holdSeconds = 60;
+    let timeline = null;   /* { list: [{...phase, round, start, end}], total } in seconds */
+    let seg = 0;           /* index of the current phase in timeline.list */
+    let announcedSeg = -1;
+    let t0 = 0;            /* performance.now() at start */
+    let pausedAt = 0;
+    let pausedTotal = 0;   /* ms spent paused */
+    let skipped = 0;       /* seconds of hold ended early with "Breathe now" */
     let soundEnabled = false;
-    let phases = [];           /* current phase sequence */
+    let rafId = null;
+    let ticker = null;
+
+    const reducedMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    let reducedMotion = !!(reducedMotionQuery && reducedMotionQuery.matches);
+
+    /* DOM */
+    const $ = (id) => document.getElementById(id);
+    const circle = $('breathingCircle');
+    const phaseLabel = $('phaseLabel');
+    const phaseTimer = $('phaseTimer');
+    const phaseDetail = $('phaseDetail');
+    const roundDisplay = $('roundDisplay');
+    const live = $('bwLive');
+    const btnStart = $('btnStart');
+    const btnPause = $('btnPause');
+    const btnReset = $('btnReset');
+    const btnSkip = $('btnSkip');
+    const roundsSlider = $('roundsSlider');
+    const roundsValue = $('roundsValue');
+    const holdControl = $('holdControl');
+    const holdSelect = $('holdSelect');
+    const soundToggle = $('soundToggle');
+    const sessionLength = $('sessionLength');
+    const safetyWimHof = $('safetyWimHof');
+    const summary = $('sessionSummary');
+    const particleCanvas = $('particle-canvas');
+    const cards = Array.prototype.slice.call(document.querySelectorAll('.technique-card'));
+
+    function buildTimeline() {
+      const list = [];
+      let t = 0;
+      for (let r = 1; r <= totalRounds; r++) {
+        const phases = TECHNIQUES[selectedTechnique].round(holdSeconds);
+        for (let i = 0; i < phases.length; i++) {
+          list.push(Object.assign({ round: r, start: t, end: t + phases[i].duration }, phases[i]));
+          t += phases[i].duration;
+        }
+      }
+      return { list: list, total: t };
+    }
+    function activeSeconds(now) {
+      const ref = state === State.PAUSED ? pausedAt : now;
+      return (ref - t0 - pausedTotal) / 1000;
+    }
+    function timelineSeconds(now) { return activeSeconds(now) + skipped; }
+
+    function setText(el, text) { if (el.textContent !== text) el.textContent = text; }
+    function announce(text) {
+      /* Clearing first makes repeated identical messages ("Hold, 4 seconds") announce again. */
+      live.textContent = '';
+      window.setTimeout(function() { live.textContent = text; }, 50);
+    }
 
     /* ================================================================
-       DOM REFS
-       ================================================================ */
-    const circle       = document.getElementById('breathingCircle');
-    const phaseLabel   = document.getElementById('phaseLabel');
-    const phaseTimer   = document.getElementById('phaseTimer');
-    const phaseDetail  = document.getElementById('phaseDetail');
-    const roundDisplay = document.getElementById('roundDisplay');
-    const btnStart     = document.getElementById('btnStart');
-    const btnPause     = document.getElementById('btnPause');
-    const btnReset     = document.getElementById('btnReset');
-    const roundsSlider = document.getElementById('roundsSlider');
-    const roundsValue  = document.getElementById('roundsValue');
-    const soundToggle  = document.getElementById('soundToggle');
-    const summary      = document.getElementById('sessionSummary');
-    const sumTechnique = document.getElementById('sumTechnique');
-    const sumRounds    = document.getElementById('sumRounds');
-    const sumTime      = document.getElementById('sumTime');
-    const particleCanvas = document.getElementById('particle-canvas');
-
-    /* ================================================================
-       WEB AUDIO (optional tone)
+       AUDIO: optional tones, scheduled ahead on the Web Audio clock so they
+       stay on time even when the tab is in the background.
        ================================================================ */
     let audioCtx = null;
-    function playTone(freq, dur) {
-      if (!soundEnabled) return;
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let scheduled = [];
+    let nextToneIdx = 0;
+    let chimeScheduled = false;
+    const LOOKAHEAD = 60; /* seconds of tones queued ahead */
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        audioCtx = new AC();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+    function tone(at, freq, dur) {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'sine';
       osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0, audioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.06, audioCtx.currentTime + 0.05);
-      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + dur);
+      gain.gain.setValueAtTime(0, at);
+      gain.gain.linearRampToValueAtTime(0.06, at + 0.04);
+      gain.gain.linearRampToValueAtTime(0, at + dur);
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-      osc.start(audioCtx.currentTime);
-      osc.stop(audioCtx.currentTime + dur);
+      osc.start(at);
+      osc.stop(at + dur + 0.02);
+      scheduled.push(osc);
+      osc.onended = function() { const i = scheduled.indexOf(osc); if (i >= 0) scheduled.splice(i, 1); };
+    }
+    function phaseTone(p, at) {
+      const dur = p.duration <= 1.5 ? 0.2 : 0.4;
+      if (p.type === 'inhale') tone(at, 440, dur);
+      else if (p.type === 'exhale') tone(at, 330, dur);
+      else tone(at, 392, 0.3);
+    }
+    function cancelTones() {
+      scheduled.slice().forEach(function(o) { try { o.stop(); } catch (e) { /* already stopped */ } });
+      scheduled = [];
+    }
+    function scheduleAudio(now) {
+      if (!soundEnabled || state !== State.RUNNING || !audioCtx || !timeline) return;
+      const t = timelineSeconds(now);
+      const base = audioCtx.currentTime - t; /* audio-clock time of timeline second 0 */
+      while (nextToneIdx < timeline.list.length && timeline.list[nextToneIdx].start <= t + LOOKAHEAD) {
+        const p = timeline.list[nextToneIdx];
+        phaseTone(p, Math.max(audioCtx.currentTime, base + p.start));
+        nextToneIdx++;
+      }
+      if (!chimeScheduled && nextToneIdx >= timeline.list.length && timeline.total <= t + LOOKAHEAD) {
+        const at = Math.max(audioCtx.currentTime, base + timeline.total);
+        tone(at, 523, 0.6); tone(at + 0.2, 659, 0.6); tone(at + 0.4, 784, 0.8);
+        chimeScheduled = true;
+      }
+    }
+    function resyncAudio(now, includeCurrent) {
+      cancelTones();
+      chimeScheduled = false;
+      nextToneIdx = includeCurrent ? seg : seg + 1;
+      scheduleAudio(now);
+    }
+
+    /* Keep the screen awake during a session where the browser allows it. */
+    let wakeLock = null;
+    function lockScreen() {
+      if (!('wakeLock' in navigator) || wakeLock) return;
+      navigator.wakeLock.request('screen').then(function(lock) {
+        wakeLock = lock;
+        lock.addEventListener('release', function() { wakeLock = null; });
+      }).catch(function() { wakeLock = null; });
+    }
+    function unlockScreen() {
+      if (wakeLock) { wakeLock.release().catch(function() {}); wakeLock = null; }
     }
 
     /* ================================================================
-       PARTICLE SYSTEM
+       PARTICLES (decorative; off when reduced motion is requested)
        ================================================================ */
     const pCtx = particleCanvas.getContext('2d');
     let particles = [];
     const PARTICLE_COUNT = 60;
-
-    function initParticles() {
-      const w = particleCanvas.width;
-      const h = particleCanvas.height;
+    function initParticles(w, h) {
       particles = [];
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          r: Math.random() * 1.5 + 0.5,
-          alpha: Math.random() * 0.3 + 0.05,
-          hue: Math.random() > 0.5 ? 165 : 260  /* teal or violet */
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3,
+          r: Math.random() * 1.5 + 0.5, alpha: Math.random() * 0.3 + 0.05,
+          hue: Math.random() > 0.5 ? 165 : 260 /* teal or violet */
         });
       }
     }
-
+    let pw = 0, ph = 0;
     function resizeParticleCanvas() {
       const rect = particleCanvas.getBoundingClientRect();
-      particleCanvas.width = rect.width * window.devicePixelRatio;
-      particleCanvas.height = rect.height * window.devicePixelRatio;
-      pCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
-      initParticles();
+      pw = rect.width; ph = rect.height;
+      const dpr = window.devicePixelRatio || 1;
+      particleCanvas.width = Math.round(pw * dpr);
+      particleCanvas.height = Math.round(ph * dpr);
+      pCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initParticles(pw, ph);
     }
-
     function drawParticles(breathProgress) {
-      const w = particleCanvas.getBoundingClientRect().width;
-      const h = particleCanvas.getBoundingClientRect().height;
-      pCtx.clearRect(0, 0, w, h);
-      const cx = w / 2;
-      const cy = h / 2;
-      /* breathProgress: 0 = exhaled, 1 = inhaled */
-      const pull = (breathProgress - 0.5) * 0.15;
-
+      if (reducedMotion || !pw) return;
+      pCtx.clearRect(0, 0, pw, ph);
+      const cx = pw / 2, cy = ph / 2;
+      const pull = (breathProgress - 0.5) * 0.15; /* 0 = exhaled, 1 = inhaled */
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        /* gentle drift toward/away from center based on breathing */
-        const dx = cx - p.x;
-        const dy = cy - p.y;
+        const dx = cx - p.x, dy = cy - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy) || 1;
         p.x += p.vx + (dx / dist) * pull;
         p.y += p.vy + (dy / dist) * pull;
-        /* wrap */
-        if (p.x < 0) p.x = w;
-        if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h;
-        if (p.y > h) p.y = 0;
-
+        if (p.x < 0) p.x = pw;
+        if (p.x > pw) p.x = 0;
+        if (p.y < 0) p.y = ph;
+        if (p.y > ph) p.y = 0;
         const sat = p.hue === 165 ? '100%' : '80%';
         const light = p.hue === 165 ? '42%' : '66%';
         pCtx.beginPath();
@@ -723,340 +919,324 @@
         pCtx.fill();
       }
     }
-
     resizeParticleCanvas();
     window.addEventListener('resize', resizeParticleCanvas);
 
     /* ================================================================
-       CIRCLE ANIMATION
+       CIRCLE. With reduced motion the circle keeps one size and only its
+       colour changes with the phase.
        ================================================================ */
+    function easeInOutSine(t) { return -(Math.cos(Math.PI * t) - 1) / 2; }
     function updateCircleVisual(phaseType, progress) {
-      /* progress: 0..1 within current phase
-         phaseType: inhale, exhale, hold-full, hold-empty */
       let scale, borderColor, glowColor, bgGrad;
-
       switch (phaseType) {
         case 'inhale':
-          /* scale from small to large */
           scale = 0.6 + 0.4 * easeInOutSine(progress);
           borderColor = 'rgba(0,212,170,' + (0.3 + 0.5 * progress) + ')';
           glowColor = '0 0 ' + (40 + 40 * progress) + 'px rgba(0,212,170,' + (0.08 + 0.15 * progress) + ')';
           bgGrad = 'radial-gradient(circle at 40% 35%, rgba(0,212,170,' + (0.08 + 0.15 * progress) + '), rgba(0,212,170,' + (0.02 + 0.06 * progress) + '))';
           break;
-        case 'hold-full':
-          /* full size, violet pulse */
-          const pulse = 0.5 + 0.5 * Math.sin(progress * Math.PI * 4);
+        case 'hold-full': {
+          const pulse = reducedMotion ? 0.5 : 0.5 + 0.5 * Math.sin(progress * Math.PI * 4);
           scale = 1.0 + 0.02 * pulse;
           borderColor = 'rgba(139,92,246,' + (0.5 + 0.3 * pulse) + ')';
           glowColor = '0 0 ' + (50 + 20 * pulse) + 'px rgba(139,92,246,' + (0.1 + 0.1 * pulse) + ')';
           bgGrad = 'radial-gradient(circle at 40% 35%, rgba(139,92,246,' + (0.1 + 0.08 * pulse) + '), rgba(139,92,246,' + (0.03 + 0.04 * pulse) + '))';
           break;
-        case 'exhale':
-          /* scale from large to small */
+        }
+        case 'exhale': {
           scale = 1.0 - 0.4 * easeInOutSine(progress);
           const fade = 1 - progress;
           borderColor = 'rgba(0,212,170,' + (0.6 * fade + 0.1) + ')';
           glowColor = '0 0 ' + (60 * fade + 10) + 'px rgba(0,212,170,' + (0.15 * fade) + ')';
           bgGrad = 'radial-gradient(circle at 40% 35%, rgba(0,212,170,' + (0.15 * fade) + '), rgba(0,212,170,' + (0.05 * fade) + '))';
           break;
-        case 'hold-empty':
-          /* small, dark, minimal */
-          const dimPulse = 0.5 + 0.5 * Math.sin(progress * Math.PI * 2);
+        }
+        case 'hold-empty': {
+          const dimPulse = reducedMotion ? 0.5 : 0.5 + 0.5 * Math.sin(progress * Math.PI * 2);
           scale = 0.6 + 0.01 * dimPulse;
           borderColor = 'rgba(74,74,96,' + (0.2 + 0.1 * dimPulse) + ')';
           glowColor = '0 0 10px rgba(0,0,0,0.2)';
           bgGrad = 'radial-gradient(circle at 40% 35%, rgba(30,30,58,' + (0.1 + 0.05 * dimPulse) + '), rgba(15,15,26,0.3))';
           break;
+        }
         default:
           scale = 0.6;
           borderColor = 'rgba(74,74,96,0.3)';
           glowColor = '0 0 10px rgba(0,0,0,0.1)';
           bgGrad = 'radial-gradient(circle at 40% 35%, rgba(30,30,58,0.1), rgba(15,15,26,0.2))';
       }
-
+      if (reducedMotion) scale = 0.85;
       circle.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
       circle.style.borderColor = borderColor;
       circle.style.boxShadow = glowColor;
       circle.style.background = bgGrad;
     }
-
-    function easeInOutSine(t) {
-      return -(Math.cos(Math.PI * t) - 1) / 2;
-    }
-
-    /* ================================================================
-       BREATHING PROGRESS (for particles)
-       ================================================================ */
-    function getBreathProgress(phaseType, progress) {
-      switch (phaseType) {
+    function breathProgress(type, progress) {
+      switch (type) {
         case 'inhale': return progress;
         case 'hold-full': return 1;
         case 'exhale': return 1 - progress;
         case 'hold-empty': return 0;
-        default: return 0.5;
+        default: return 0.3;
       }
     }
 
     /* ================================================================
-       GET PHASES FOR CURRENT TECHNIQUE
+       MAIN LOOP
+       update(): advances phases from timestamps (runs on rAF and on a
+       background ticker, so cues and completion happen with the tab hidden).
+       draw(): visuals only, on rAF.
        ================================================================ */
-    function getPhasesForTechnique() {
-      if (selectedTechnique === 'wimhof') {
-        return generateWimHofPhases();
+    function update(now) {
+      if (state !== State.RUNNING || !timeline) return;
+      const t = timelineSeconds(now);
+      if (t >= timeline.total) { completeSession(now); return; }
+      while (seg < timeline.list.length - 1 && t >= timeline.list[seg].end) seg++;
+      if (seg !== announcedSeg) {
+        announcedSeg = seg;
+        const p = timeline.list[seg];
+        setText(phaseLabel, p.label);
+        setText(phaseDetail, p.detail || '');
+        btnSkip.hidden = !p.skippable;
+        if (!p.quiet && p.say) announce(p.say);
       }
-      return TECHNIQUES[selectedTechnique].phases.slice();
+      scheduleAudio(now);
     }
-
-    /* ================================================================
-       MAIN LOOP (requestAnimationFrame + delta time)
-       ================================================================ */
-    function tick(timestamp) {
-      if (state !== State.RUNNING) {
-        /* Still draw particles for ambience even when paused */
-        drawParticles(getCurrentBreathProgress());
-        animFrameId = requestAnimationFrame(tick);
-        return;
+    function draw(now, textOnly) {
+      if (state === State.RUNNING || state === State.PAUSED) {
+        const t = timelineSeconds(now);
+        const p = timeline.list[seg];
+        const progress = Math.min(Math.max((t - p.start) / p.duration, 0), 1);
+        setText(phaseTimer, String(Math.max(1, Math.ceil(p.end - t - 1e-6))));
+        setText(roundDisplay, 'Round ' + p.round + ' of ' + totalRounds + ' · ' + clock(timeline.total - t) + ' left');
+        if (textOnly) return;
+        updateCircleVisual(p.type, progress);
+        drawParticles(breathProgress(p.type, progress));
+      } else {
+        drawParticles(0.3);
       }
-
-      if (lastFrameTime === 0) lastFrameTime = timestamp;
-      const dt = (timestamp - lastFrameTime) / 1000; /* delta in seconds */
-      lastFrameTime = timestamp;
-
-      /* Clamp delta to avoid huge jumps (e.g., tab was backgrounded) */
-      const clampedDt = Math.min(dt, 0.1);
-
-      phaseElapsed += clampedDt;
-
-      const phase = phases[currentPhaseIndex];
-      if (!phase) {
-        completeSession();
-        animFrameId = requestAnimationFrame(tick);
-        return;
-      }
-
-      const phaseDuration = phase.duration;
-      const progress = Math.min(phaseElapsed / phaseDuration, 1);
-      const remaining = Math.max(phaseDuration - phaseElapsed, 0);
-
-      /* Update visuals */
-      phaseLabel.textContent = phase.label;
-      phaseTimer.textContent = Math.ceil(remaining);
-      phaseDetail.textContent = phase.detail || '';
-      updateCircleVisual(phase.type, progress);
-      drawParticles(getBreathProgress(phase.type, progress));
-
-      /* Phase complete? */
-      if (phaseElapsed >= phaseDuration) {
-        phaseElapsed -= phaseDuration; /* carry over excess */
-        currentPhaseIndex++;
-
-        /* Check if round is complete */
-        if (currentPhaseIndex >= phases.length) {
-          currentRound++;
-          if (currentRound > totalRounds) {
-            completeSession();
-            animFrameId = requestAnimationFrame(tick);
-            return;
-          }
-          /* Next round */
-          currentPhaseIndex = 0;
-          phases = getPhasesForTechnique();
-          roundDisplay.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
-        }
-
-        /* Play transition tone */
-        const nextPhase = phases[currentPhaseIndex];
-        if (nextPhase) {
-          if (nextPhase.type === 'inhale') playTone(440, 0.4);
-          else if (nextPhase.type === 'exhale') playTone(330, 0.4);
-          else playTone(392, 0.3);
-        }
-      }
-
-      animFrameId = requestAnimationFrame(tick);
     }
-
-    function getCurrentBreathProgress() {
-      if (state === State.IDLE || !phases.length) return 0.3;
-      if (state === State.COMPLETE) return 0.3;
-      const phase = phases[currentPhaseIndex];
-      if (!phase) return 0.3;
-      const progress = Math.min(phaseElapsed / phase.duration, 1);
-      return getBreathProgress(phase.type, progress);
+    function frame(now) {
+      rafId = null;
+      update(now);
+      draw(now);
+      ensureLoop();
+    }
+    function ensureLoop() {
+      const needed = state === State.RUNNING || (!reducedMotion && state !== State.PAUSED);
+      if (needed && rafId === null) rafId = requestAnimationFrame(frame);
     }
 
     /* ================================================================
        STATE TRANSITIONS
        ================================================================ */
+    function setOptionsDisabled(disabled) {
+      cards.forEach(function(card) { card.setAttribute('aria-disabled', disabled ? 'true' : 'false'); });
+      roundsSlider.disabled = disabled;
+      holdSelect.disabled = disabled;
+    }
     function startSession() {
+      const now = performance.now();
       if (state === State.RUNNING) return;
-
       if (state === State.PAUSED) {
-        /* Resume */
+        pausedTotal += now - pausedAt;
         state = State.RUNNING;
-        lastFrameTime = 0;
         btnStart.textContent = 'Start';
         btnStart.disabled = true;
         btnPause.disabled = false;
+        setText(phaseLabel, timeline.list[seg].label);
+        if (soundEnabled) { ensureAudio(); resyncAudio(now, false); }
+        lockScreen();
+        announce('Resumed. ' + (timeline.list[seg].say || timeline.list[seg].label));
+        btnPause.focus();
+        ensureLoop();
         return;
       }
-
       /* Fresh start */
+      timeline = buildTimeline();
+      seg = 0;
+      announcedSeg = -1;
+      t0 = now;
+      pausedTotal = 0;
+      skipped = 0;
       state = State.RUNNING;
-      currentRound = 1;
-      currentPhaseIndex = 0;
-      phaseElapsed = 0;
-      lastFrameTime = 0;
-      sessionStartTime = performance.now();
-      phases = getPhasesForTechnique();
-
-      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
       summary.classList.remove('visible');
-
+      btnStart.textContent = 'Start';
       btnStart.disabled = true;
       btnPause.disabled = false;
       btnReset.disabled = false;
-      disableTechniqueCards(true);
-      roundsSlider.disabled = true;
-
-      /* Play start tone */
-      playTone(523, 0.5);
-
-      if (!animFrameId) {
-        animFrameId = requestAnimationFrame(tick);
-      }
+      setOptionsDisabled(true);
+      if (soundEnabled && ensureAudio()) { tone(audioCtx.currentTime, 523, 0.5); resyncAudio(now, false); }
+      lockScreen();
+      update(now);
+      btnPause.focus();
+      ensureLoop();
     }
-
     function pauseSession() {
       if (state !== State.RUNNING) return;
+      const now = performance.now();
+      update(now);
+      if (state !== State.RUNNING) return; /* it may have just completed */
+      pausedAt = now;
       state = State.PAUSED;
+      cancelTones();
+      unlockScreen();
       btnStart.textContent = 'Resume';
       btnStart.disabled = false;
       btnPause.disabled = true;
-      phaseLabel.textContent = 'PAUSED';
+      setText(phaseLabel, 'PAUSED');
+      announce('Paused');
+      btnStart.focus();
+      draw(now);
     }
-
     function resetSession() {
       state = State.IDLE;
-      currentRound = 1;
-      currentPhaseIndex = 0;
-      phaseElapsed = 0;
-      lastFrameTime = 0;
-
-      phaseLabel.textContent = 'READY';
-      phaseTimer.textContent = '--';
-      phaseDetail.textContent = '';
-      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
-
+      timeline = null;
+      seg = 0;
+      announcedSeg = -1;
+      cancelTones();
+      unlockScreen();
+      setText(phaseLabel, 'READY');
+      setText(phaseTimer, '--');
+      setText(phaseDetail, '');
+      setText(roundDisplay, 'Round 1 of ' + totalRounds);
+      btnSkip.hidden = true;
       updateCircleVisual('idle', 0);
-
       btnStart.textContent = 'Start';
       btnStart.disabled = false;
       btnPause.disabled = true;
       btnReset.disabled = true;
-      disableTechniqueCards(false);
-      roundsSlider.disabled = false;
-
+      setOptionsDisabled(false);
       summary.classList.remove('visible');
+      announce('Reset');
+      btnStart.focus();
+      ensureLoop();
     }
-
-    function completeSession() {
+    function completeSession(now) {
+      const active = activeSeconds(now);
       state = State.COMPLETE;
-      sessionTotalTime = (performance.now() - sessionStartTime) / 1000;
-
-      phaseLabel.textContent = 'COMPLETE';
-      phaseTimer.textContent = '';
-      phaseDetail.textContent = '';
+      unlockScreen();
+      setText(phaseLabel, 'COMPLETE');
+      setText(phaseTimer, '');
+      setText(phaseDetail, '');
+      setText(roundDisplay, totalRounds + (totalRounds === 1 ? ' round' : ' rounds') + ' done');
+      btnSkip.hidden = true;
       updateCircleVisual('idle', 0);
-
-      btnStart.textContent = 'Start';
+      btnStart.textContent = 'Start again';
       btnStart.disabled = false;
       btnPause.disabled = true;
       btnReset.disabled = false;
-      disableTechniqueCards(false);
-      roundsSlider.disabled = false;
-
-      /* Play completion tone */
-      playTone(523, 0.6);
-      setTimeout(function() { playTone(659, 0.6); }, 200);
-      setTimeout(function() { playTone(784, 0.8); }, 400);
-
-      /* Show summary */
-      const mins = Math.floor(sessionTotalTime / 60);
-      const secs = Math.floor(sessionTotalTime % 60);
-      sumTechnique.textContent = TECHNIQUES[selectedTechnique].name;
-      sumRounds.textContent = totalRounds;
-      sumTime.textContent = mins + 'm ' + secs + 's';
+      setOptionsDisabled(false);
+      $('sumTechnique').textContent = TECHNIQUES[selectedTechnique].name;
+      $('sumRounds').textContent = String(totalRounds);
+      $('sumTime').textContent = words(active);
       summary.classList.add('visible');
-
-      /* Reset for next start */
-      state = State.IDLE;
-      currentRound = 1;
-      currentPhaseIndex = 0;
-      phaseElapsed = 0;
+      announce('Session complete. ' + totalRounds + (totalRounds === 1 ? ' round' : ' rounds') + ' in ' + spokenDuration(active) + '.');
+      if (document.activeElement === btnPause || document.activeElement === btnSkip) btnStart.focus();
     }
-
-    function disableTechniqueCards(disabled) {
-      document.querySelectorAll('.technique-card').forEach(function(card) {
-        card.style.pointerEvents = disabled ? 'none' : '';
-        card.style.opacity = disabled ? '0.5' : '';
-      });
+    function skipHold() {
+      if (state !== State.RUNNING) return;
+      const now = performance.now();
+      const p = timeline.list[seg];
+      if (!p.skippable) return;
+      skipped += Math.max(0, p.end - timelineSeconds(now));
+      update(now);
+      if (soundEnabled && state === State.RUNNING) resyncAudio(now, true);
+      if (document.activeElement === btnSkip || btnSkip.hidden) btnPause.focus();
     }
 
     /* ================================================================
-       EVENT LISTENERS
+       OPTIONS
        ================================================================ */
+    function describeLength() {
+      const tl = buildTimeline();
+      const prefix = selectedTechnique === 'wimhof' ? 'Session length: up to ' : 'Session length: ';
+      sessionLength.textContent = prefix + words(tl.total) + ' (' + totalRounds + (totalRounds === 1 ? ' round' : ' rounds') + ')';
+      holdControl.hidden = selectedTechnique !== 'wimhof';
+      safetyWimHof.hidden = selectedTechnique !== 'wimhof';
+    }
+    function selectCard(card, focus) {
+      if (state === State.RUNNING || state === State.PAUSED) return;
+      cards.forEach(function(c) {
+        const on = c === card;
+        c.classList.toggle('active', on);
+        c.setAttribute('aria-checked', on ? 'true' : 'false');
+        c.tabIndex = on ? 0 : -1;
+      });
+      selectedTechnique = card.dataset.technique;
+      if (focus) card.focus();
+      if (state === State.COMPLETE) summary.classList.remove('visible');
+      describeLength();
+    }
+    cards.forEach(function(card, i) {
+      card.addEventListener('click', function() { selectCard(card, false); });
+      card.addEventListener('keydown', function(e) {
+        let next = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = cards[(i + 1) % cards.length];
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = cards[(i - 1 + cards.length) % cards.length];
+        else if (e.key === 'Home') next = cards[0];
+        else if (e.key === 'End') next = cards[cards.length - 1];
+        else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); selectCard(card, false); return; }
+        if (next) { e.preventDefault(); selectCard(next, true); }
+      });
+    });
+    roundsSlider.addEventListener('input', function() {
+      totalRounds = parseInt(this.value, 10);
+      roundsValue.textContent = String(totalRounds);
+      if (state === State.IDLE || state === State.COMPLETE) setText(roundDisplay, 'Round 1 of ' + totalRounds);
+      describeLength();
+    });
+    holdSelect.addEventListener('change', function() {
+      holdSeconds = parseInt(this.value, 10);
+      describeLength();
+    });
+    soundToggle.addEventListener('click', function() {
+      soundEnabled = !soundEnabled;
+      this.setAttribute('aria-checked', soundEnabled ? 'true' : 'false');
+      this.classList.toggle('on', soundEnabled);
+      if (soundEnabled) {
+        ensureAudio();
+        if (state === State.RUNNING) resyncAudio(performance.now(), false);
+      } else {
+        cancelTones();
+      }
+    });
     btnStart.addEventListener('click', startSession);
     btnPause.addEventListener('click', pauseSession);
     btnReset.addEventListener('click', resetSession);
+    btnSkip.addEventListener('click', skipHold);
 
-    roundsSlider.addEventListener('input', function() {
-      totalRounds = parseInt(this.value, 10);
-      roundsValue.textContent = totalRounds;
-      roundDisplay.textContent = 'Round 1 of ' + totalRounds;
-    });
-
-    soundToggle.addEventListener('click', function() {
-      soundEnabled = !soundEnabled;
-      this.classList.toggle('on', soundEnabled);
-      this.setAttribute('aria-checked', soundEnabled);
-      if (soundEnabled && !audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (reducedMotionQuery) {
+      const onMotionChange = function(e) {
+        reducedMotion = e.matches;
+        if (reducedMotion) pCtx.clearRect(0, 0, pw, ph);
+        ensureLoop();
+      };
+      if (reducedMotionQuery.addEventListener) reducedMotionQuery.addEventListener('change', onMotionChange);
+      else if (reducedMotionQuery.addListener) reducedMotionQuery.addListener(onMotionChange);
+    }
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        const now = performance.now();
+        update(now);
+        draw(now);
+        if (state === State.RUNNING) lockScreen();
+        ensureLoop();
       }
     });
-    soundToggle.addEventListener('keydown', function(e) {
-      if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        this.click();
-      }
-    });
+    /* Background ticker: rAF stops in hidden tabs, this keeps cues and tones on schedule. */
+    ticker = window.setInterval(function() {
+      if (state !== State.RUNNING) return;
+      const now = performance.now();
+      update(now);
+      if (state === State.RUNNING) draw(now, true);
+    }, 250);
 
-    /* Technique selection */
-    document.querySelectorAll('.technique-card').forEach(function(card) {
-      card.addEventListener('click', function() {
-        if (state === State.RUNNING || state === State.PAUSED) return;
-        document.querySelectorAll('.technique-card').forEach(function(c) {
-          c.classList.remove('active');
-          c.setAttribute('aria-checked', 'false');
-        });
-        this.classList.add('active');
-        this.setAttribute('aria-checked', 'true');
-        selectedTechnique = this.dataset.technique;
-      });
-      card.addEventListener('keydown', function(e) {
-        if (e.key === ' ' || e.key === 'Enter') {
-          e.preventDefault();
-          this.click();
-        }
-      });
-    });
-
-    /* ================================================================
-       INIT: Start animation loop (particles always animate)
-       ================================================================ */
+    /* INIT */
     updateCircleVisual('idle', 0);
-    animFrameId = requestAnimationFrame(tick);
-
+    describeLength();
+    ensureLoop();
   })();
   </script>
   <script defer src="../js/ads.js"></script>

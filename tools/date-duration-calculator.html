@@ -87,6 +87,16 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
     
   </style>
 </head>
@@ -120,33 +130,33 @@
 
       <div class="calc-card">
         <h1>Date Duration Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter two dates and get the duration in days, business days, weeks, months, and years. Business days mode excludes weekends (Sat + Sun) but does not know about US or international holidays.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter two dates to get the time between them in days, weeks, months and years, plus how many are weekdays. Weekdays here means Monday to Friday; public holidays aren&apos;t known to the tool. Results update as you type.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded or saved.</div>
         <div class="form-grid">
-  <div class="form-group"><label for="start">Start Date</label><input type="date" id="start"></div>
-  <div class="form-group"><label for="end">End Date</label><input type="date" id="end"></div>
+  <div class="form-group"><label for="start">Start date</label><input type="date" id="start" min="0001-01-01" max="9999-12-31"></div>
+  <div class="form-group"><label for="end">End date</label><input type="date" id="end" min="0001-01-01" max="9999-12-31"></div>
 </div>
-<div class="inline-warn">Business-days mode excludes weekends only. Public and observed holidays vary by country, state, and industry — this calculator doesn&apos;t know about them.</div>
+<label class="check-row" for="inclusive"><input type="checkbox" id="inclusive"> Include the end date (adds one day: Mon&ndash;Fri of one week counts as 5)</label>
+<div class="inline-warn">Weekday counts skip Saturdays and Sundays only. Public and observed holidays vary by country, state and employer, so subtract those yourself.</div>
 
 <div class="calc-btn-row">
-  <button class="calc-btn" onclick="calc()">Calculate</button>
-  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+  <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
 </div>
-<div class="calc-error" id="err"></div>
 
-<div class="calc-results" id="results" aria-live="polite">
+<div class="calc-results visible" id="results" aria-live="polite">
   <h4>Duration</h4>
   <div id="out"></div>
 </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Common conventions</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Days:</strong> the calculator uses inclusive-end date arithmetic &mdash; if you enter start = 2026-01-01 and end = 2026-01-02, you get 1 day (not 2). This matches how deadlines and rental periods are typically counted.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Business days:</strong> weekdays only (Monday through Friday). Excludes Saturday and Sunday. Does <em>not</em> exclude holidays &mdash; you&apos;ll need to subtract those yourself. In the US, federal holidays are typically 10-11 per year; state and industry-specific holidays add more.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Months/years:</strong> calendar-based, not fixed 30-day or 365-day. From 2026-01-15 to 2026-03-15 is exactly 2 months. Partial months are shown as remainder days.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Time zones and DST</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Dates are treated as local calendar days &mdash; DST changes don&apos;t affect the count because a day is always a day, regardless of whether it&apos;s 23 or 25 hours long.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it counts</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Days:</strong> by default the end date isn&apos;t counted, the way &ldquo;days between&rdquo; and most deadlines work: 2026-01-01 to 2026-01-02 is 1 day. Tick &ldquo;include the end date&rdquo; to count both ends (2 days), which suits things like hotel nights versus days on site, or leave periods.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Weekdays:</strong> Monday to Friday within the same span. Saturdays and Sundays are excluded; holidays are not. In the US, federal holidays alone are 11 days a year, and state or employer holidays add more.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Months and years:</strong> calendar-based, not 30- or 365-day blocks. 2026-01-15 to 2026-03-15 is exactly 2 months. A month is counted when the same day-number comes round again; if it doesn&apos;t exist that month, the month&apos;s last day counts (2026-01-31 to 2026-02-28 is 1 month). Anything left over is shown as days.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Leap years, time zones and DST</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Dates are counted as whole calendar days on the Gregorian calendar, including 29 February in leap years. Clock changes for daylight saving can&apos;t shift the count, because no times of day are involved. The hours line is days &times; 24; a day with a clock change actually has 23 or 25 hours.</p>
 </section>
     </div>
 
@@ -184,55 +194,139 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      const int = (n) => n.toLocaleString('en-US');
+      const plural = (n, one, many) => int(n) + ' ' + (n === 1 ? one : (many || one + 's'));
 
-      window.calc = function(){
-  hideErr();
-  const startStr = document.getElementById('start').value, endStr = document.getElementById('end').value;
-  if (!startStr||!endStr) return showErr('Enter both dates.');
-  let start = new Date(startStr + 'T00:00:00'), end = new Date(endStr + 'T00:00:00');
-  if (end < start) [start, end] = [end, start];
+      /* Calendar dates as plain {y, m, d} (m = 1..12) with whole-day arithmetic on a proleptic
+         Gregorian day count, so time zones and DST can never shift a result by an hour or a day. */
+      function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+      function daysInMonth(y, m) { return [31, isLeap(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]; }
+      /* Days since 1970-01-01 (H. Hinnant's days_from_civil). */
+      function dayNum(dt) {
+        const y = dt.m <= 2 ? dt.y - 1 : dt.y;
+        const era = Math.floor(y / 400);
+        const yoe = y - era * 400;
+        const doy = Math.floor((153 * (dt.m + (dt.m > 2 ? -3 : 9)) + 2) / 5) + dt.d - 1;
+        const doe = yoe * 365 + Math.floor(yoe / 4) - Math.floor(yoe / 100) + doy;
+        return era * 146097 + doe - 719468;
+      }
+      function fromDayNum(z) {
+        z += 719468;
+        const era = Math.floor(z / 146097);
+        const doe = z - era * 146097;
+        const yoe = Math.floor((doe - Math.floor(doe / 1460) + Math.floor(doe / 36524) - Math.floor(doe / 146096)) / 365);
+        const doy = doe - (365 * yoe + Math.floor(yoe / 4) - Math.floor(yoe / 100));
+        const mp = Math.floor((5 * doy + 2) / 153);
+        const d = doy - Math.floor((153 * mp + 2) / 5) + 1;
+        const m = mp < 10 ? mp + 3 : mp - 9;
+        return { y: yoe + era * 400 + (m <= 2 ? 1 : 0), m: m, d: d };
+      }
+      const weekdayOf = (dt) => ((dayNum(dt) % 7) + 11) % 7; /* 0 = Sunday; 1970-01-01 was a Thursday */
+      function parseDate(s) {
+        const mt = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+        if (!mt) return null;
+        const y = +mt[1], m = +mt[2], d = +mt[3];
+        if (y < 1 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return null;
+        return { y: y, m: m, d: d };
+      }
+      function iso(dt) { return String(dt.y).padStart(4, '0') + '-' + String(dt.m).padStart(2, '0') + '-' + String(dt.d).padStart(2, '0'); }
+      function today() { const n = new Date(); return { y: n.getFullYear(), m: n.getMonth() + 1, d: n.getDate() }; }
+      const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function longDate(dt) { return DAYS[weekdayOf(dt)] + ', ' + MONTHS[dt.m - 1] + ' ' + dt.d + ', ' + dt.y; }
+      /* Same day k months later; a day that doesn't exist in the target month moves to its last day
+         (Jan 31 + 1 month = Feb 28 or 29). */
+      function addMonths(dt, k) {
+        const t = dt.y * 12 + (dt.m - 1) + k;
+        const y = Math.floor(t / 12), m = t - y * 12 + 1;
+        return { y: y, m: m, d: Math.min(dt.d, daysInMonth(y, m)) };
+      }
+      /* Whole months from a to b (a <= b) using an anniversary function, plus leftover days. */
+      function monthsAndDays(a, b, anniversary) {
+        let k = (b.y - a.y) * 12 + (b.m - a.m);
+        if (dayNum(anniversary(k)) > dayNum(b)) k--;
+        return { months: k, days: dayNum(b) - dayNum(anniversary(k)) };
+      }
 
-  const totalDays = Math.round((end - start) / 86400000);
-  const totalWeeks = totalDays / 7;
-  const totalHours = totalDays * 24;
-
-  // Business days: iterate day by day (fine for reasonable ranges)
-  let busDays = 0;
-  const cur = new Date(start);
-  while (cur < end) {
-    const d = cur.getDay();
-    if (d !== 0 && d !== 6) busDays++;
-    cur.setDate(cur.getDate()+1);
-  }
-
-  // Years / months / days breakdown
-  let y = end.getFullYear() - start.getFullYear();
-  let m = end.getMonth() - start.getMonth();
-  let d = end.getDate() - start.getDate();
-  if (d < 0) { m--; const pm = new Date(end.getFullYear(), end.getMonth(), 0); d += pm.getDate(); }
-  if (m < 0) { y--; m += 12; }
-
-  let out = '';
-  out += row('Total days', totalDays.toLocaleString(), 'teal');
-  out += row('Business days (weekdays)', busDays.toLocaleString(), 'violet');
-  out += row('Weekend days', (totalDays - busDays).toLocaleString());
-  out += row('Weeks', fmt(totalWeeks, 2));
-  out += row('Total hours', totalHours.toLocaleString());
-  out += row('Years / months / days', y + ' yr, ' + m + ' mo, ' + d + ' days');
-  set('out', out);
-  document.getElementById('results').classList.add('visible');
-};
-window.clearForm = function(){
-  ['start','end'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  hideErr(); document.getElementById('results').classList.remove('visible');
-};
+      /* Mon-Fri days in the day-number range [s, e). */
+      function weekdaysBetween(s, e) {
+        const n = e - s;
+        let count = Math.floor(n / 7) * 5;
+        const rem = n % 7;
+        let w = ((s % 7) + 11) % 7; /* weekday of s, 0 = Sunday */
+        for (let i = 0; i < rem; i++) { if (w !== 0 && w !== 6) count++; w = (w + 1) % 7; }
+        return count;
+      }
+      function run(strict) {
+        clearMsgs();
+        const sRaw = $('start').value, eRaw = $('end').value;
+        let a = parseDate(sRaw), b = parseDate(eRaw);
+        let bad = false;
+        if (!a && (sRaw || strict)) { msg('start', sRaw ? 'Enter a valid date between the years 1 and 9999.' : 'Enter a start date.'); bad = true; }
+        if (!b && (eRaw || strict)) { msg('end', eRaw ? 'Enter a valid date between the years 1 and 9999.' : 'Enter an end date.'); bad = true; }
+        if (!a || !b) { set('out', placeholder(bad ? 'Check the highlighted field above.' : 'Enter two dates to see the duration.')); return; }
+        let swapped = false;
+        if (dayNum(b) < dayNum(a)) { const t = a; a = b; b = t; swapped = true; }
+        const inclusive = $('inclusive').checked;
+        const s = dayNum(a);
+        const e = dayNum(b) + (inclusive ? 1 : 0); /* exclusive end */
+        const days = e - s;
+        const endForCalendar = fromDayNum(e);
+        const md = monthsAndDays(a, endForCalendar, (k) => addMonths(a, k));
+        const years = Math.floor(md.months / 12), months = md.months % 12;
+        const wd = weekdaysBetween(s, e);
+        let out = '';
+        out += row('Total days', int(days) + (inclusive ? ' (end date included)' : ''), 'teal');
+        out += row('Years, months, days', plural(years, 'year') + ', ' + plural(months, 'month') + ', ' + plural(md.days, 'day'));
+        out += row('Weeks', plural(Math.floor(days / 7), 'week') + (days % 7 ? ', ' + plural(days % 7, 'day') : ''));
+        out += row('Weekdays (Mon&ndash;Fri)', int(wd), 'violet');
+        out += row('Weekend days (Sat + Sun)', int(days - wd));
+        out += row('Hours (days &times; 24)', int(days * 24));
+        out += row('From', longDate(a));
+        out += row('To', longDate(b));
+        if (swapped) out += '<p class="calc-note">The end date was before the start date, so the two were swapped.</p>';
+        set('out', out);
+      }
+      (function wire() {
+        const card = document.querySelector('.calc-card');
+        card.addEventListener('input', () => run(false));
+        card.addEventListener('change', () => run(false));
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.matches('input[type=date]')) { e.preventDefault(); run(true); } });
+        $('calc-btn').addEventListener('click', () => run(true));
+        $('clear-btn').addEventListener('click', () => { $('start').value = ''; $('end').value = ''; $('inclusive').checked = false; clearMsgs(); run(false); $('start').focus(); });
+      })();
+      /* Example on first load: today until 1 January next year. */
+      const t = today();
+      $('start').value = iso(t);
+      $('end').value = iso({ y: t.y + 1, m: 1, d: 1 });
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

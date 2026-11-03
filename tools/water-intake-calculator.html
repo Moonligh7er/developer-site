@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,53 +127,55 @@
 
       <div class="calc-card">
         <h1>Daily Water Intake Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A rough daily hydration range from body weight, activity level, and climate. Individual needs vary widely &mdash; thirst and light-yellow urine color are usually better guides than any formula.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A rough daily range of fluids to drink, scaled from body weight and nudged for activity and climate. Individual needs vary widely &mdash; thirst and pale-yellow urine are usually better day-to-day guides than any formula. Results update as you type.</p>
 
         <div class="form-grid">
   <div class="form-group"><label for="units">Units</label>
-    <select id="units"><option value="imperial">Imperial (lb + oz)</option><option value="metric">Metric (kg + ml)</option></select>
+    <select id="units"><option value="imperial">Imperial (lb, fl oz)</option><option value="metric">Metric (kg, litres)</option></select>
   </div>
-  <div class="form-group"><label for="weight">Weight</label><input type="number" id="weight" placeholder="160" min="0" step="any"><span class="hint">lb or kg per units</span></div>
+  <div class="form-group"><label for="weight">Body weight (<span id="w-unit">lb</span>)</label><input type="number" id="weight" value="160" min="0" step="any" inputmode="decimal"></div>
 </div>
 <div class="form-grid">
-  <div class="form-group"><label for="activity">Activity Level</label>
+  <div class="form-group"><label for="activity">Activity level</label>
     <select id="activity">
-      <option value="1.0">Sedentary</option>
-      <option value="1.15" selected>Moderate exercise 30–60 min/day</option>
-      <option value="1.3">Vigorous exercise > 1 hour/day</option>
-      <option value="1.5">Endurance athlete or heavy labor</option>
+      <option value="1.0">Mostly sedentary</option>
+      <option value="1.15" selected>Moderate exercise, 30&ndash;60 min/day</option>
+      <option value="1.3">Vigorous exercise, over 1 hour/day</option>
+      <option value="1.5">Endurance training or heavy physical work</option>
     </select>
   </div>
   <div class="form-group"><label for="climate">Climate</label>
     <select id="climate">
       <option value="1.0" selected>Temperate</option>
       <option value="1.15">Warm or humid</option>
-      <option value="1.3">Hot or high-altitude</option>
+      <option value="1.3">Hot, or high altitude</option>
     </select>
   </div>
 </div>
-<div class="inline-warn">Thirst and urine color (pale yellow = well hydrated) are typically better individual guides than any formula. Certain medical conditions require different targets set by your clinician.</div>
+<div class="inline-warn">Thirst and urine colour (pale yellow is a good sign) are usually better individual guides than a formula. Some medical conditions need fluid targets set by a clinician; this tool isn&apos;t for those.</div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Daily Water Range</h4><div id="out-main"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Daily fluid range</h4><div id="out-main"></div>
+          <p class="calc-note">An estimate, not medical advice.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Where the "8 glasses a day" rule came from</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The famous &ldquo;8 × 8 oz glasses&rdquo; recommendation has no strong scientific origin. It&apos;s traceable to a 1945 National Research Council recommendation of about 2.5 liters of water per day &mdash; but that same document noted that most of this comes from food and other beverages, not deliberate water intake. The &ldquo;8 glasses&rdquo; version dropped the food-and-beverages qualifier and became folklore.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">A more evidence-based baseline</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The Institute of Medicine (2005) suggested adequate intake of about 3.7 liters/day for men and 2.7 liters/day for women, including water from all sources (food is roughly 20% of intake). This calculator produces a body-weight-scaled range (roughly 0.5 oz per lb, adjusted for activity and climate) as a starting point.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The baseline is 30&ndash;35 mL of fluid per kg of body weight per day, a common clinical rule of thumb for adults (about 0.46&ndash;0.54 fl oz per lb). That range is then multiplied by the activity factor (&times;1.0 to &times;1.5) and the climate factor (&times;1.0 to &times;1.3). Those two factors are this tool&apos;s rough adjustments for extra sweat, not values from a study, so treat the top of the range loosely. A cup here is 8 US fl oz (236.6 mL).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Where the &ldquo;8 glasses a day&rdquo; rule came from</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The familiar &ldquo;8 &times; 8 oz glasses&rdquo; has no strong scientific origin. It&apos;s often traced to a 1945 US National Research Council recommendation of about 2.5 litres of water a day &mdash; but the same document noted that most of it is contained in prepared food. The &ldquo;8 glasses&rdquo; version dropped that qualifier and became folklore.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">An evidence-based reference point</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The Institute of Medicine (now the National Academies) set adequate intakes in 2004 of about 3.7 litres a day for men and 2.7 litres for women. Those figures are <em>total</em> water from drinks and food; roughly 80% usually comes from drinks (about 3.0 and 2.2 litres) and 20% from food. They describe typical healthy intakes, not a minimum everyone must hit.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Better guides than the calculator</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Thirst is a functional signal in healthy adults &mdash; drink when you&apos;re thirsty. Urine color is a fast check: pale yellow = well hydrated; dark yellow or amber = drink more. If you&apos;re working out hard in the heat, weigh yourself before and after; a pound of body-weight loss is roughly 16 oz of water to replace.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Thirst is a working signal in healthy adults. Urine colour is a quick check: pale yellow is a good sign; dark yellow or amber suggests drinking more. After hard exercise in the heat, weighing yourself before and after helps: each pound lost is about 16 fl oz of water (about 1 litre per kg), and sports-medicine guidance suggests drinking around 1.25&ndash;1.5 times that over the next few hours.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">When to be careful</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Heart failure, kidney disease, SIADH, and some medication regimens require restricted or increased fluid intake set by a clinician. Very heavy exercise + very high water intake without electrolytes can cause hyponatremia (dangerously low blood sodium) &mdash; endurance athletes should supplement with electrolytes, not just water. This calculator is not for anyone in these categories.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Heart failure, kidney disease, SIADH and some medicines call for fluid limits or targets set by a clinician. During very long exercise, drinking large amounts of plain water without electrolytes can cause hyponatremia (low blood sodium), so endurance athletes usually replace salt as well as water. This calculator isn&apos;t meant for anyone in these situations.</p>
 </section>
     </div>
 
@@ -204,46 +217,174 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      function calc(){
-  hideErr();
-  const w = n('weight'), act = parseFloat(s('activity')), cli = parseFloat(s('climate'));
-  if (!w||w<=0) return showErr('Enter body weight.');
-  // Base ~0.5 oz per lb; scale by activity and climate
-  const kg = s('units')==='metric' ? w : w * LB_TO_KG;
-  const baseMl = kg * 33; // ~33 ml per kg baseline
-  const totalMl = baseMl * act * cli;
-  const lowMl = totalMl * 0.9;
-  const highMl = totalMl * 1.1;
-  const lowOz = lowMl / 29.5735;
-  const highOz = highMl / 29.5735;
-  const midCups = Math.round(totalMl / 240); // 240 ml per cup
-
-  set('out-main',
-    row('Recommended daily water', Math.round(lowOz) + '–' + Math.round(highOz) + ' fl oz', 'teal') +
-    row('In metric', Math.round(lowMl) + '–' + Math.round(highMl) + ' ml') +
-    row('Roughly', midCups + ' cups (8 oz each)', 'violet') +
-    row('Note', 'Includes water from food and other beverages, not just what you drink', 'amber')
-  );
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['weight'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+      /* Baseline 30-35 mL/kg/day (common clinical rule of thumb), times rough activity and climate factors.
+         Reference: IOM/National Academies DRI for water (2004): total water AI 3.7 L men, 2.7 L women; ~80% from drinks. */
+      const ML_PER_FLOZ = 29.5735295625, ML_PER_CUP = 236.5882365;
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const w = isMetric() ? field('weight', 20, 650, 'kg', st) : field('weight', 44, 1430, 'lb', st);
+        if (w === null) {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter your body weight to see a range.'));
+          return;
+        }
+        const kg = isMetric() ? w : w * LB_KG;
+        const factor = parseFloat($('activity').value) * parseFloat($('climate').value);
+        const lo = 30 * kg * factor, hi = 35 * kg * factor;
+        const litres = fmt(lo / 1000, 1) + '&ndash;' + fmt(hi / 1000, 1) + ' L';
+        const oz = fmt(lo / ML_PER_FLOZ, 0) + '&ndash;' + fmt(hi / ML_PER_FLOZ, 0) + ' fl oz';
+        let out = row('Fluids to drink per day', isMetric() ? litres + ' (' + oz + ')' : oz + ' (' + litres + ')', 'teal');
+        out += row('In 8 fl oz cups', 'About ' + fmt(lo / ML_PER_CUP, 0) + '&ndash;' + fmt(hi / ML_PER_CUP, 0) + ' cups', 'violet');
+        out += row('Activity &times; climate factor', '&times;' + String(Number(factor.toFixed(3))));
+        out += row('For comparison: National Academies total-water AI', '2.7 L (women) / 3.7 L (men), drinks + food');
+        set('out-main', out);
+      }
+      setupUnits((toMetric) => {
+        const v = read('weight');
+        if (v > 0) $('weight').value = +(toMetric ? v * LB_KG : v / LB_KG).toFixed(1);
+      });
+      function unitLabel() { $('w-unit').textContent = isMetric() ? 'kg' : 'lb'; }
+      $('units').addEventListener('change', unitLabel);
+      unitLabel();
+      if (isMetric()) $('weight').value = 72.6; /* saved metric preference: start from the kg equivalent of the default */
+      wire(run);
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

@@ -87,18 +87,35 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
-    .tz-city { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; align-items: end; margin-bottom: 0.5rem; }
-    .tz-city .rm { background: transparent; border: 1px solid var(--border); color: var(--rose); width: 32px; height: 32px; cursor: pointer; }
-    .tz-grid-wrap { overflow-x: auto; margin: 1rem 0; }
-    .tz-grid { display: grid; grid-template-columns: 140px repeat(24, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.7rem; }
-    .tz-cell { padding: 0.4rem 0.3rem; background: var(--surface); text-align: center; color: var(--text-secondary); min-width: 32px; }
-    .tz-cell.label { text-align: left; color: var(--text-bright); font-weight: 500; padding-left: 0.6rem; }
-    .tz-cell.header { color: var(--text-dim); font-size: 0.65rem; }
-    .tz-cell.working { background: var(--teal-glow); color: var(--teal); }
-    .tz-cell.selected { background: var(--violet); color: var(--deep); font-weight: 600; cursor: pointer; }
-    .tz-cell.working.selected { background: var(--violet); }
-    .tz-cell.data { cursor: pointer; }
-    .tz-cell.data:hover { background: var(--deep); }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
+    .tz-city { display: grid; grid-template-columns: 1fr 44px; gap: 0.5rem; align-items: end; margin-bottom: 0.75rem; }
+    .tz-city .form-group select { min-height: 44px; }
+    .tz-city .rm { background: transparent; border: 1px solid var(--border); color: var(--rose); width: 44px; height: 44px; cursor: pointer; font-family: var(--font-mono); font-size: 1.1rem; }
+    .tz-city .rm:hover { border-color: var(--rose); }
+    .tz-city .rm:disabled { opacity: 0.35; cursor: not-allowed; }
+    .tz-grid-wrap { position: relative; overflow-x: auto; margin: 1rem 0; border: 1px solid var(--border); } /* relative: keeps the visually-hidden cell text inside the scroller */
+    .tz-table { border-collapse: collapse; font-family: var(--font-mono); font-size: 0.7rem; width: max-content; min-width: 100%; }
+    .tz-table th, .tz-table td { padding: 0.45rem 0.35rem; text-align: center; border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary); min-width: 46px; white-space: nowrap; }
+    .tz-table thead th { color: var(--text-dim); font-weight: 400; padding: 0; }
+    .tz-table thead th button { all: unset; display: block; box-sizing: border-box; width: 100%; min-height: 40px; padding: 0.35rem; cursor: pointer; text-align: center; }
+    .tz-table thead th.all-ok { color: var(--teal); }
+    .tz-table th[scope=row] { position: sticky; left: 0; z-index: 1; text-align: left; color: var(--text-bright); font-weight: 500; min-width: 120px; padding-left: 0.6rem; }
+    .tz-table th[scope=row] small { display: block; color: var(--text-dim); font-weight: 400; font-size: 0.62rem; }
+    .tz-table td.working { background: var(--teal-glow); color: var(--teal); font-weight: 600; }
+    .tz-table .sel { box-shadow: inset 0 0 0 2px var(--violet); }
+    .tz-table td.sel { background: var(--violet-glow); color: var(--text-bright); }
+    .tz-table td { cursor: pointer; }
+    .tz-day { display: block; font-size: 0.58rem; color: var(--text-dim); font-weight: 400; }
+    .tz-copy { background: var(--deep); padding: 1rem; overflow-x: auto; font-size: 0.85rem; color: var(--text-primary); white-space: pre; margin-bottom: 0.75rem; }
   </style>
 </head>
 <body>
@@ -131,40 +148,42 @@
 
       <div class="calc-card">
         <h1>Time Zone Meeting Planner</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Pick 2&ndash;5 cities and see an aligned 24-hour grid with working hours (9am&ndash;5pm) shaded. Click any hour to see the same moment in all zones. Uses browser Intl API for IANA time zones &mdash; DST is handled automatically.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Pick 2&ndash;5 cities and a date to see the day lined up hour by hour, with each city&apos;s working hours highlighted and the hours that suit everyone listed. Choose a time to get the same moment in every zone, ready to paste. Time zones come from your browser&apos;s built-in IANA time-zone data, so daylight-saving changes are applied for the date you pick.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded or saved.</div>
         <p class="calc-subhead">Cities</p>
 <div id="tz-list"></div>
-<button class="calc-btn calc-btn--secondary" onclick="addCity()" style="margin-bottom:1rem;">+ Add City</button>
+<button type="button" class="calc-btn calc-btn--secondary" id="add-city" style="margin-bottom:1rem;">+ Add City</button>
 
-<p class="calc-subhead">Base Date (for DST accuracy)</p>
+<p class="calc-subhead">Date and working hours</p>
 <div class="form-grid">
-  <div class="form-group"><label for="baseDate">Meeting Date</label><input type="date" id="baseDate"></div>
+  <div class="form-group"><label for="baseDate">Meeting date</label><input type="date" id="baseDate" min="1900-01-01" max="2200-12-31"></div>
+  <div class="form-group"><label for="workStart">Working hours start</label><select id="workStart"></select></div>
+  <div class="form-group"><label for="workEnd">Working hours end</label><select id="workEnd"></select></div>
 </div>
 
 <div class="calc-btn-row">
-  <button class="calc-btn" onclick="calc()">Build Grid</button>
-  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+  <button type="button" class="calc-btn" id="calc-btn">Build Grid</button>
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Reset</button>
 </div>
-<div class="calc-error" id="err"></div>
 
-<div class="calc-results" id="results" aria-live="polite">
-  <h4>24-Hour Grid (working hours 9am&ndash;5pm shaded)</h4>
-  <div class="tz-grid-wrap"><div class="tz-grid" id="grid"></div></div>
-  <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Click any cell to select that hour &mdash; the same moment is highlighted in every zone.</p>
-  <p class="calc-subhead">Copy This Meeting Time</p>
-  <div id="out-copy"></div>
+<div class="calc-results visible" id="results">
+  <h4 id="grid-title">The day, hour by hour</h4>
+  <div id="out-summary" aria-live="polite"></div>
+  <div class="form-group" style="margin-top:1rem;"><label for="slot">Meeting time</label><select id="slot"></select></div>
+  <div class="tz-grid-wrap" tabindex="0" role="region" aria-labelledby="grid-title"><table class="tz-table" id="grid"></table></div>
+  <p style="font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;">Columns follow the first city&apos;s day. Highlighted cells are inside working hours; a full hour has to fit. &ldquo;+1&rdquo; or &ldquo;&minus;1&rdquo; marks the next or previous calendar day. Click a column, or use the Meeting time menu, to pick a time.</p>
+  <p class="calc-subhead">Copy this meeting time</p>
+  <pre class="tz-copy" id="copy-text"></pre>
+  <button type="button" class="calc-btn calc-btn--secondary" id="copy-btn">Copy to Clipboard</button>
 </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Why the base date matters</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Time zones aren&apos;t fixed offsets &mdash; most Northern Hemisphere countries shift by 1 hour twice a year for daylight saving time (DST). London is UTC+0 in winter and UTC+1 in summer. Some zones don&apos;t observe DST (Arizona, most of Asia). Because DST transition dates differ by country, the difference between two cities can be different in different months.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This tool asks for a meeting date so it can use the correct DST state for each city on that specific day. Uses the browser&apos;s <code style="color:var(--teal);">Intl.DateTimeFormat</code> API with IANA time zone identifiers &mdash; no bundled data files, always current.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Working-hours shading</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Hours 9&ndash;17 (9am to 5pm) in each city&apos;s local time are shaded teal. Look for columns where all cities are shaded &mdash; those are the meeting windows that don&apos;t inconvenience anyone. If no such column exists (common for very spread-out teams), the least-bad options are usually early-morning or late-evening for one side.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Sharing a time</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Click any hour in the grid. The &ldquo;copy this meeting time&rdquo; area shows the same moment in all zones as plain text you can paste into a calendar invite or Slack.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Why the date matters</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Time zones aren&apos;t fixed offsets. Many places shift by an hour for daylight saving time, on different dates: the US changes on the second Sunday of March and first Sunday of November, the EU on the last Sundays of March and October, and much of the Southern Hemisphere the other way round. Others (most of Asia, Arizona) never change. So the gap between two cities can be different in different weeks, and on the changeover day itself one city&apos;s day has 23 or 25 hours, which the grid shows as one column fewer or more.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The tool works out each city&apos;s local time with the browser&apos;s <code style="color:var(--teal);">Intl.DateTimeFormat</code> API and IANA time-zone names such as <code style="color:var(--teal);">America/New_York</code>. There are no bundled tables, so results follow the time-zone data your browser ships with; keeping the browser updated keeps rule changes current. Places with half-hour or 45-minute offsets (India, Nepal, parts of Australia) show their real minutes.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Working-hours highlighting</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">An hour is highlighted when the whole hour falls inside the working hours you set, in that city&apos;s local time. Columns where every city is highlighted are listed above the grid. When there aren&apos;t any (common for teams spread across many zones), the summary shows the hours that suit the most people.</p>
 </section>
     </div>
 
@@ -202,109 +221,275 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function esc(t) { return String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]); }
+      const HOUR = 3600000;
 
       const COMMON_TZ = [
-  ['America/Los_Angeles','Los Angeles (PT)'],['America/Denver','Denver (MT)'],['America/Chicago','Chicago (CT)'],
-  ['America/New_York','New York (ET)'],['America/Toronto','Toronto'],['America/Mexico_City','Mexico City'],
-  ['America/Sao_Paulo','São Paulo'],['Europe/London','London'],['Europe/Paris','Paris'],['Europe/Berlin','Berlin'],
-  ['Europe/Moscow','Moscow'],['Africa/Cairo','Cairo'],['Africa/Johannesburg','Johannesburg'],
-  ['Asia/Dubai','Dubai'],['Asia/Kolkata','India'],['Asia/Bangkok','Bangkok'],['Asia/Singapore','Singapore'],
-  ['Asia/Shanghai','Shanghai'],['Asia/Tokyo','Tokyo'],['Asia/Seoul','Seoul'],
-  ['Australia/Sydney','Sydney'],['Australia/Perth','Perth'],['Pacific/Auckland','Auckland']
-];
-let cityIdx = 0;
-window.addCity = function(){
-  if (document.querySelectorAll('.tz-city').length >= 5) return;
-  const el = document.getElementById('tz-list');
-  const div = document.createElement('div');
-  div.className = 'tz-city';
-  let opts = '';
-  for (const [tz, name] of COMMON_TZ) opts += '<option value="'+tz+'">'+name+'</option>';
-  div.innerHTML = '<select>'+opts+'</select><button class="rm" onclick="this.parentNode.remove()">&times;</button>';
-  el.appendChild(div);
-  const sel = div.querySelector('select');
-  const defaults = ['America/New_York','Europe/London','Asia/Tokyo','America/Los_Angeles','Australia/Sydney'];
-  sel.value = defaults[cityIdx % defaults.length];
-  cityIdx++;
-};
-addCity(); addCity(); addCity();
-document.getElementById('baseDate').value = new Date().toISOString().slice(0,10);
+        ['America/Los_Angeles', 'Los Angeles'], ['America/Denver', 'Denver'], ['America/Phoenix', 'Phoenix'], ['America/Chicago', 'Chicago'],
+        ['America/New_York', 'New York'], ['America/Toronto', 'Toronto'], ['America/Mexico_City', 'Mexico City'], ['America/Bogota', 'Bogotá'],
+        ['America/Sao_Paulo', 'São Paulo'], ['UTC', 'UTC'], ['Europe/London', 'London'], ['Europe/Dublin', 'Dublin'], ['Europe/Lisbon', 'Lisbon'],
+        ['Europe/Paris', 'Paris'], ['Europe/Berlin', 'Berlin'], ['Europe/Madrid', 'Madrid'], ['Europe/Amsterdam', 'Amsterdam'], ['Europe/Stockholm', 'Stockholm'],
+        ['Europe/Warsaw', 'Warsaw'], ['Europe/Athens', 'Athens'], ['Europe/Istanbul', 'Istanbul'], ['Europe/Kyiv', 'Kyiv'], ['Europe/Moscow', 'Moscow'],
+        ['Africa/Lagos', 'Lagos'], ['Africa/Cairo', 'Cairo'], ['Africa/Nairobi', 'Nairobi'], ['Africa/Johannesburg', 'Johannesburg'],
+        ['Asia/Dubai', 'Dubai'], ['Asia/Karachi', 'Karachi'], ['Asia/Kolkata', 'India (Kolkata)'], ['Asia/Kathmandu', 'Kathmandu'], ['Asia/Dhaka', 'Dhaka'],
+        ['Asia/Bangkok', 'Bangkok'], ['Asia/Jakarta', 'Jakarta'], ['Asia/Singapore', 'Singapore'], ['Asia/Manila', 'Manila'], ['Asia/Shanghai', 'Shanghai'],
+        ['Asia/Hong_Kong', 'Hong Kong'], ['Asia/Taipei', 'Taipei'], ['Asia/Seoul', 'Seoul'], ['Asia/Tokyo', 'Tokyo'],
+        ['Australia/Perth', 'Perth'], ['Australia/Adelaide', 'Adelaide'], ['Australia/Brisbane', 'Brisbane'], ['Australia/Sydney', 'Sydney'],
+        ['Pacific/Auckland', 'Auckland'], ['Pacific/Honolulu', 'Honolulu'], ['America/Anchorage', 'Anchorage']
+      ];
+      const NAMES = Object.fromEntries(COMMON_TZ);
+      function zoneValid(tz) { try { new Intl.DateTimeFormat('en-US', { timeZone: tz }); return true; } catch (e) { return false; } }
+      let ALL_TZ = [];
+      try { if (typeof Intl.supportedValuesOf === 'function') ALL_TZ = Intl.supportedValuesOf('timeZone'); } catch (e) { ALL_TZ = []; }
+      const LOCAL_TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; } catch (e) { return 'UTC'; } })();
+      const label = (tz) => NAMES[tz] || tz.split('/').pop().replace(/_/g, ' ');
 
-let selectedUtcHour = null;
-function getHourInZone(baseDate, utcHour, tz){
-  const d = new Date(Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), utcHour, 0));
-  const parts = new Intl.DateTimeFormat('en-US',{timeZone:tz, hour:'numeric', minute:'2-digit', hour12:false, timeZoneName:'short', weekday:'short'}).formatToParts(d);
-  const h = parts.find(p=>p.type==='hour').value;
-  const wd = parts.find(p=>p.type==='weekday').value;
-  const tzn = parts.find(p=>p.type==='timeZoneName').value;
-  return {hour: parseInt(h,10), weekday: wd, name: tzn, date: d};
-}
-function build(){
-  const dateStr = document.getElementById('baseDate').value;
-  if (!dateStr) return;
-  const baseDate = new Date(dateStr + 'T00:00:00Z');
-  const cities = Array.from(document.querySelectorAll('.tz-city select')).map(s=>s.value);
-  if (cities.length < 2) { document.getElementById('grid').innerHTML = ''; return; }
+      /* Wall-clock parts of an instant in a zone (hourCycle h23 avoids a "24" hour at midnight). */
+      const fmtCache = {};
+      function parts(tz, ms) {
+        const f = fmtCache[tz] || (fmtCache[tz] = new Intl.DateTimeFormat('en-US', {
+          timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'
+        }));
+        const o = {};
+        for (const p of f.formatToParts(ms)) if (p.type !== 'literal') o[p.type] = parseInt(p.value, 10);
+        if (o.hour === 24) o.hour = 0;
+        return o;
+      }
+      function offsetMs(tz, ms) {
+        const p = parts(tz, ms);
+        const asUTC = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute, p.second);
+        return asUTC - Math.floor(ms / 1000) * 1000;
+      }
+      /* UTC instant of local midnight starting y-m-d in tz (two passes handle a DST change that day). */
+      function zonedMidnight(y, m, d, tz) {
+        const guess = Date.UTC(y, m - 1, d);
+        let t = guess - offsetMs(tz, guess);
+        const off2 = offsetMs(tz, t);
+        if (guess - off2 !== t) t = guess - off2;
+        return t;
+      }
+      function offsetLabel(tz, ms) {
+        const mins = Math.round(offsetMs(tz, ms) / 60000);
+        if (mins === 0) return 'UTC';
+        const s = mins > 0 ? '+' : '−', a = Math.abs(mins);
+        return 'UTC' + s + Math.floor(a / 60) + (a % 60 ? ':' + String(a % 60).padStart(2, '0') : '');
+      }
+      const pad = (n) => String(n).padStart(2, '0');
+      const dayKey = (p) => Date.UTC(p.year, p.month - 1, p.day) / 86400000;
 
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  // Header row: city label + 24 UTC hour columns
-  grid.appendChild(mkCell('label header', 'City / UTC →'));
-  for (let u=0;u<24;u++) grid.appendChild(mkCell('header', u.toString().padStart(2,'0')));
-  for (const tz of cities) {
-    const nameCell = mkCell('label', tz.split('/').pop().replace(/_/g,' '));
-    grid.appendChild(nameCell);
-    for (let u=0;u<24;u++) {
-      const info = getHourInZone(baseDate, u, tz);
-      const isWork = info.hour >= 9 && info.hour < 17;
-      const isSel = selectedUtcHour === u;
-      const cls = 'data' + (isWork?' working':'') + (isSel?' selected':'');
-      const cell = mkCell(cls, info.hour.toString().padStart(2,'0'));
-      cell.dataset.utc = u;
-      cell.addEventListener('click', ()=>{ selectedUtcHour = u; build(); updateCopy(); });
-      grid.appendChild(cell);
-    }
-  }
-}
-function mkCell(cls, text){
-  const d = document.createElement('div');
-  d.className = 'tz-cell ' + cls;
-  d.textContent = text;
-  return d;
-}
-function updateCopy(){
-  if (selectedUtcHour === null) { set('out-copy',''); return; }
-  const dateStr = document.getElementById('baseDate').value;
-  const baseDate = new Date(dateStr + 'T00:00:00Z');
-  const cities = Array.from(document.querySelectorAll('.tz-city select')).map(s=>s.value);
-  const d = new Date(Date.UTC(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), selectedUtcHour, 0));
-  let lines = [];
-  for (const tz of cities) {
-    const formatted = d.toLocaleString('en-US',{timeZone:tz, weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short'});
-    lines.push(tz.split('/').pop().replace(/_/g,' ') + ': ' + formatted);
-  }
-  const text = lines.join('\n');
-  set('out-copy', '<pre style="background:var(--deep);padding:1rem;overflow-x:auto;font-size:0.85rem;color:var(--text-primary);white-space:pre;">' + text.replace(/</g,'&lt;') + '</pre><button class="calc-btn calc-btn--secondary" onclick="copyText(this)">Copy to Clipboard</button>');
-}
-window.copyText = function(btn){
-  const pre = btn.previousElementSibling.textContent;
-  navigator.clipboard.writeText(pre).then(()=>{ btn.textContent = 'Copied!'; setTimeout(()=>btn.textContent='Copy to Clipboard',1500); });
-};
-window.calc = function(){ hideErr(); selectedUtcHour = null; build(); document.getElementById('results').classList.add('visible'); };
-window.clearForm = function(){
-  document.getElementById('tz-list').innerHTML = '';
-  cityIdx = 0; addCity(); addCity(); addCity();
-  document.getElementById('baseDate').value = new Date().toISOString().slice(0,10);
-  selectedUtcHour = null;
-  document.getElementById('results').classList.remove('visible');
-};
+      /* ---------- city rows ---------- */
+      let cityIdx = 0;
+      function buildOptions() {
+        let html = '<optgroup label="Common">';
+        for (const [tz, name] of COMMON_TZ) html += '<option value="' + tz + '">' + esc(name) + '</option>';
+        html += '</optgroup>';
+        if (ALL_TZ.length) {
+          html += '<optgroup label="All time zones">';
+          for (const tz of ALL_TZ) html += '<option value="' + esc(tz) + '">' + esc(tz.replace(/_/g, ' ')) + '</option>';
+          html += '</optgroup>';
+        }
+        return html;
+      }
+      const OPTIONS = buildOptions();
+      function addCity(tz, focus) {
+        if (document.querySelectorAll('.tz-city').length >= 5) return;
+        const id = 'city-' + (++cityIdx);
+        const div = document.createElement('div');
+        div.className = 'tz-city';
+        div.innerHTML = '<div class="form-group"><label for="' + id + '"></label><select id="' + id + '">' + OPTIONS + '</select></div>' +
+                        '<button type="button" class="rm">&times;</button>';
+        const sel = div.querySelector('select');
+        if (tz && !sel.querySelector('option[value="' + CSS.escape(tz) + '"]') && zoneValid(tz)) {
+          const o = document.createElement('option'); o.value = tz; o.textContent = tz.replace(/_/g, ' '); sel.insertBefore(o, sel.firstChild);
+        }
+        sel.value = tz || 'UTC';
+        $('tz-list').appendChild(div);
+        relabel();
+        if (focus) sel.focus();
+      }
+      function relabel() {
+        const rows = document.querySelectorAll('.tz-city');
+        rows.forEach((r, i) => {
+          r.querySelector('label').textContent = 'City ' + (i + 1) + (i === 0 ? ' (columns follow this city)' : '');
+          const rm = r.querySelector('.rm');
+          rm.setAttribute('aria-label', 'Remove city ' + (i + 1) + ', ' + label(r.querySelector('select').value));
+          rm.disabled = rows.length <= 2;
+        });
+        $('add-city').disabled = rows.length >= 5;
+      }
+      function defaultCities() {
+        const picks = [LOCAL_TZ];
+        for (const tz of ['America/New_York', 'Europe/London', 'Asia/Tokyo']) if (picks.length < 3 && picks.indexOf(tz) < 0) picks.push(tz);
+        return picks;
+      }
+      function hourOptions(sel, from, to, value) {
+        let h = '';
+        for (let i = from; i <= to; i++) h += '<option value="' + i + '">' + pad(i % 24) + ':00' + (i === 24 ? ' (midnight)' : '') + '</option>';
+        sel.innerHTML = h;
+        sel.value = String(value);
+      }
+      function todayIso() { const n = new Date(); return n.getFullYear() + '-' + pad(n.getMonth() + 1) + '-' + pad(n.getDate()); }
+
+      /* ---------- grid ---------- */
+      let selected = null; /* UTC ms of the chosen column */
+      let columns = [];
+      function build() {
+        const cities = Array.from(document.querySelectorAll('.tz-city select')).map((s) => s.value);
+        const dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec($('baseDate').value);
+        const ws = parseInt($('workStart').value, 10), we = parseInt($('workEnd').value, 10);
+        const summary = $('out-summary');
+        if (!dm) { summary.innerHTML = '<p class="calc-placeholder">Pick a meeting date to build the grid.</p>'; $('grid').innerHTML = ''; $('slot').innerHTML = ''; $('copy-text').textContent = ''; return; }
+        if (we <= ws) { summary.innerHTML = '<p class="calc-placeholder" style="color:var(--amber);">Working hours need to end after they start.</p>'; return; }
+        const y = +dm[1], m = +dm[2], d = +dm[3];
+        const home = cities[0];
+        const start = zonedMidnight(y, m, d, home);
+        const nextDay = new Date(Date.UTC(y, m - 1, d + 1));
+        const end = zonedMidnight(nextDay.getUTCFullYear(), nextDay.getUTCMonth() + 1, nextDay.getUTCDate(), home);
+        const homeDay = Date.UTC(y, m - 1, d) / 86400000;
+        columns = [];
+        for (let t = start; t < end; t += HOUR) columns.push(t);
+
+        /* Per city, per column: local time, day offset, and whether the full hour is inside working hours. */
+        const info = cities.map((tz) => columns.map((t) => {
+          const p = parts(tz, t);
+          const mins = p.hour * 60 + p.minute;
+          return { h: p.hour, mi: p.minute, day: dayKey(p) - homeDay, work: mins >= ws * 60 && mins + 60 <= we * 60 };
+        }));
+        const okCount = columns.map((_, c) => info.reduce((n, row) => n + (row[c].work ? 1 : 0), 0));
+        const best = Math.max.apply(null, okCount);
+        if (selected === null || columns.indexOf(selected) < 0) {
+          const firstAll = okCount.indexOf(cities.length);
+          selected = columns[firstAll >= 0 ? firstAll : okCount.indexOf(best)];
+        }
+        const selIdx = columns.indexOf(selected);
+
+        /* Summary of good hours, as runs of consecutive columns in the home city's time. */
+        const homeTime = (c) => pad(info[0][c].h) + ':' + pad(info[0][c].mi);
+        function runs(pred) {
+          const out = [];
+          for (let c = 0; c < columns.length; c++) {
+            if (!pred(c)) continue;
+            let e = c;
+            while (e + 1 < columns.length && pred(e + 1)) e++;
+            const endP = parts(home, columns[e] + HOUR);
+            out.push(homeTime(c) + '–' + pad(endP.hour) + ':' + pad(endP.minute));
+            c = e;
+          }
+          return out;
+        }
+        let sum = '';
+        const n = cities.length;
+        if (best === n) {
+          sum = 'Inside working hours for all ' + n + ' cities: <strong style="color:var(--teal);">' + runs((c) => okCount[c] === n).join(', ') + '</strong> (' + esc(label(home)) + ' time).';
+        } else if (best > 0) {
+          sum = 'No hour fits everyone&apos;s working hours. Closest: ' + best + ' of ' + n + ' cities at <strong style="color:var(--amber);">' + runs((c) => okCount[c] === best).join(', ') + '</strong> (' + esc(label(home)) + ' time).';
+        } else {
+          sum = 'None of these hours is inside working hours for any city.';
+        }
+        if (columns.length !== 24) sum += ' This date has ' + columns.length + ' hours in ' + esc(label(home)) + ' because of a clock change.';
+        summary.innerHTML = '<p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.6;">' + sum + '</p>';
+
+        /* Meeting time menu */
+        let opts = '';
+        columns.forEach((t, c) => {
+          opts += '<option value="' + t + '">' + homeTime(c) + ' ' + esc(label(home)) + ' — ' + okCount[c] + ' of ' + n + ' in working hours</option>';
+        });
+        const slot = $('slot');
+        if (slot.innerHTML !== opts) slot.innerHTML = opts;
+        slot.value = String(selected);
+
+        /* Table */
+        let h = '<caption class="visually-hidden">Local time in each city for each hour of ' + esc(label(home)) + '&apos;s day. Highlighted cells are inside working hours.</caption><thead><tr><th scope="col">' + esc(label(home)) + ' time</th>';
+        columns.forEach((t, c) => {
+          const all = okCount[c] === n;
+          h += '<th scope="col" class="' + (all ? 'all-ok' : '') + (c === selIdx ? ' sel' : '') + '"><button type="button" tabindex="-1" data-col="' + c + '">' + homeTime(c) + (all ? ' ✓' : '') + '</button></th>';
+        });
+        h += '</tr></thead><tbody>';
+        cities.forEach((tz, r) => {
+          h += '<tr><th scope="row">' + esc(label(tz)) + '<small>' + offsetLabel(tz, columns[selIdx]) + '</small></th>';
+          info[r].forEach((x, c) => {
+            const dayTag = x.day ? '<span class="tz-day">' + (x.day > 0 ? '+' : '−') + Math.abs(x.day) + '</span>' : '';
+            h += '<td data-col="' + c + '" class="' + (x.work ? 'working' : '') + (c === selIdx ? ' sel' : '') + '">' + pad(x.h) + ':' + pad(x.mi) + dayTag +
+                 (x.work ? '<span class="visually-hidden"> working hours</span>' : '') + '</td>';
+          });
+          h += '</tr>';
+        });
+        h += '</tbody>';
+        $('grid').innerHTML = h;
+
+        /* Copy text */
+        const when = new Date(selected);
+        const lines = cities.map((tz) => label(tz) + ': ' + when.toLocaleString('en-US', { timeZone: tz, weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', timeZoneName: 'short' }));
+        lines.push('UTC: ' + when.toISOString().slice(0, 16).replace('T', ' '));
+        $('copy-text').textContent = lines.join('\n');
+      }
+
+      /* Copy with a fallback for browsers without clipboard permission. */
+      function copyText(text, btn) {
+        const done = (ok) => {
+          btn.textContent = ok ? 'Copied' : 'Press Ctrl+C to copy';
+          if (!ok) { const r = document.createRange(); r.selectNodeContents($('copy-text')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+          setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+        };
+        const fallback = () => {
+          const ta = document.createElement('textarea');
+          ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select();
+          let ok = false;
+          try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+          ta.remove();
+          done(ok);
+        };
+        if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(() => done(true), fallback);
+        else fallback();
+      }
+
+      /* ---------- events ---------- */
+      $('tz-list').addEventListener('click', (e) => {
+        const btn = e.target.closest('.rm');
+        if (!btn || btn.disabled) return;
+        const r = btn.closest('.tz-city');
+        const next = r.nextElementSibling || r.previousElementSibling;
+        r.remove();
+        relabel();
+        build();
+        if (next) next.querySelector('select').focus();
+      });
+      $('tz-list').addEventListener('change', () => { relabel(); build(); });
+      $('add-city').addEventListener('click', () => {
+        const used = Array.from(document.querySelectorAll('.tz-city select')).map((s) => s.value);
+        const pick = ['America/Los_Angeles', 'Australia/Sydney', 'Asia/Kolkata', 'Europe/Berlin', 'America/Sao_Paulo'].find((tz) => used.indexOf(tz) < 0) || 'UTC';
+        addCity(pick, true);
+        build();
+      });
+      ['baseDate', 'workStart', 'workEnd'].forEach((id) => { $(id).addEventListener('change', build); $(id).addEventListener('input', build); });
+      $('slot').addEventListener('change', (e) => { selected = Number(e.target.value); build(); });
+      $('grid').addEventListener('click', (e) => {
+        const cell = e.target.closest('[data-col]');
+        if (!cell) return;
+        selected = columns[Number(cell.dataset.col)];
+        build();
+      });
+      $('baseDate').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); build(); } });
+      $('calc-btn').addEventListener('click', () => { build(); $('out-summary').scrollIntoView({ block: 'nearest' }); });
+      $('copy-btn').addEventListener('click', (e) => copyText($('copy-text').textContent, e.currentTarget));
+      $('clear-btn').addEventListener('click', () => {
+        $('tz-list').innerHTML = '';
+        defaultCities().forEach((tz) => addCity(tz));
+        $('baseDate').value = todayIso();
+        $('workStart').value = '9'; $('workEnd').value = '17';
+        selected = null;
+        build();
+      });
+
+      /* ---------- init ---------- */
+      hourOptions($('workStart'), 0, 23, 9);
+      hourOptions($('workEnd'), 1, 24, 17);
+      defaultCities().forEach((tz) => addCity(tz));
+      $('baseDate').value = todayIso();
+      build();
     })();
   </script>
   <script defer src="../js/ads.js"></script>

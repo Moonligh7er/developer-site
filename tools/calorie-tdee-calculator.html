@@ -84,6 +84,17 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .fieldset-reset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    .fieldset-reset legend { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); padding: 0; margin-bottom: 0.4rem; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -116,7 +127,7 @@
 
       <div class="calc-card">
         <h1>Calorie / TDEE Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Total Daily Energy Expenditure (TDEE) using the Mifflin-St Jeor BMR formula and an activity multiplier. Choose a goal preset to see the daily calorie target. Targets are clamped to a safety floor to avoid recommending unsupervised very-low-calorie intake.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Total Daily Energy Expenditure (TDEE) from the Mifflin-St Jeor BMR equation and an activity multiplier, plus a daily target for the goal you pick. Targets never go below a safety floor, so the tool won&apos;t suggest very-low-calorie intake on its own. Results update as you type.</p>
 
         <p class="calc-subhead">Body</p>
 <div class="form-grid">
@@ -126,66 +137,70 @@
       <option value="metric">Metric (cm + kg)</option>
     </select>
   </div>
-  <div class="form-group"><label for="sex">Sex (biological)</label>
+  <div class="form-group"><label for="sex">Sex (as the equation uses it)</label>
     <select id="sex">
       <option value="male">Male</option>
       <option value="female">Female</option>
     </select>
   </div>
-  <div class="form-group"><label for="age">Age</label><input type="number" id="age" placeholder="30" min="0" step="1"></div>
+  <div class="form-group"><label for="age">Age (years)</label><input type="number" id="age" value="30" min="18" max="100" step="1" inputmode="numeric"></div>
 </div>
 <div class="form-grid" id="imperial-fields">
-  <div class="form-group"><label for="ft">Height (feet)</label><input type="number" id="ft" placeholder="5" min="0" step="1"></div>
-  <div class="form-group"><label for="in">Height (inches)</label><input type="number" id="in" placeholder="10" min="0" step="any"></div>
-  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" placeholder="160" min="0" step="any"></div>
+  <fieldset class="form-group fieldset-reset"><legend>Height</legend>
+    <div class="split-2">
+      <div class="form-group"><label for="ft">Feet (ft)</label><input type="number" id="ft" value="5" min="0" max="8" step="1" inputmode="numeric"></div>
+      <div class="form-group"><label for="in">Inches (in)</label><input type="number" id="in" value="10" min="0" step="any" inputmode="decimal"></div>
+    </div>
+  </fieldset>
+  <div class="form-group"><label for="lb">Weight (lb)</label><input type="number" id="lb" value="160" min="0" step="any" inputmode="decimal"></div>
 </div>
-<div class="form-grid" id="metric-fields" style="display:none;">
-  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" placeholder="178" min="0" step="any"></div>
-  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" placeholder="72" min="0" step="any"></div>
+<div class="form-grid" id="metric-fields" hidden>
+  <div class="form-group"><label for="cm">Height (cm)</label><input type="number" id="cm" value="178" min="0" step="any" inputmode="decimal"></div>
+  <div class="form-group"><label for="kg">Weight (kg)</label><input type="number" id="kg" value="72.6" min="0" step="any" inputmode="decimal"></div>
 </div>
 <p class="calc-subhead">Activity &amp; Goal</p>
 <div class="form-grid">
-  <div class="form-group"><label for="activity">Activity Level</label>
+  <div class="form-group"><label for="activity">Activity level</label>
     <select id="activity">
-      <option value="1.2">Sedentary (desk job, little exercise)</option>
-      <option value="1.375" selected>Light (light exercise 1-3 days/wk)</option>
-      <option value="1.55">Moderate (moderate exercise 3-5 days/wk)</option>
-      <option value="1.725">Very active (hard exercise 6-7 days/wk)</option>
-      <option value="1.9">Extra active (physical job + training)</option>
+      <option value="1.2">Sedentary: desk job, little exercise (&times;1.2)</option>
+      <option value="1.375" selected>Light: exercise 1&ndash;3 days/week (&times;1.375)</option>
+      <option value="1.55">Moderate: exercise 3&ndash;5 days/week (&times;1.55)</option>
+      <option value="1.725">Very active: hard exercise 6&ndash;7 days/week (&times;1.725)</option>
+      <option value="1.9">Extra active: physical job plus training (&times;1.9)</option>
     </select>
   </div>
-  <div class="form-group"><label for="goal">Goal Preset</label>
+  <div class="form-group"><label for="goal">Goal</label>
     <select id="goal">
       <option value="0">Maintain</option>
-      <option value="-250">Mild loss (−250 kcal/day, ~0.5 lb/wk)</option>
-      <option value="-500" selected>Standard loss (−500 kcal/day, ~1 lb/wk)</option>
-      <option value="250">Mild gain (+250 kcal/day, ~0.5 lb/wk)</option>
-      <option value="500">Standard gain (+500 kcal/day, ~1 lb/wk)</option>
+      <option value="-250">Gentle loss: &minus;250 kcal/day (~0.5 lb / 0.23 kg a week)</option>
+      <option value="-500" selected>Steady loss: &minus;500 kcal/day (~1 lb / 0.45 kg a week)</option>
+      <option value="250">Gentle gain: +250 kcal/day (~0.5 lb / 0.23 kg a week)</option>
+      <option value="500">Steady gain: +500 kcal/day (~1 lb / 0.45 kg a week)</option>
     </select>
   </div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Your Daily Calorie Numbers</h4><div id="out-main"></div><p class="calc-subhead">Details</p><div id="out-detail"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Your daily calorie numbers</h4><div id="out-main"></div><p class="calc-subhead">Maintenance at each activity level</p><div id="out-detail"></div>
+          <p class="calc-note">An estimate, not medical advice. Treat it as a starting point to test against your own trend.</p>
         </div>
       </div>
 
       <section class="calc-card">
   <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How TDEE is calculated</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Two-step calculation. First, Basal Metabolic Rate (BMR) &mdash; calories your body burns at complete rest for basic function &mdash; is computed using the Mifflin-St Jeor equation, the most accurate published formula for most adults:</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Two steps. First, basal metabolic rate (BMR) &mdash; roughly what your body uses at complete rest &mdash; from the Mifflin-St Jeor equation (Mifflin et al., 1990). A 2005 systematic review found it estimated resting rate within 10% for more people than the other common equations:</p>
   <p style="color:var(--text-secondary);font-family:var(--font-mono);font-size:0.85rem;line-height:1.7;margin-bottom:1rem;padding-left:1.5rem;">Male: BMR = 10 × kg + 6.25 × cm − 5 × age + 5<br>Female: BMR = 10 × kg + 6.25 × cm − 5 × age − 161</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Then BMR is multiplied by an activity factor to estimate Total Daily Energy Expenditure &mdash; total calories burned in a normal day including movement, exercise, and digestion.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Goal deficits and safety floor</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">1 pound of body fat is roughly 3,500 kcal, so a 500 kcal/day deficit yields ~1 lb/week loss, and a 250 kcal deficit yields ~0.5 lb/week &mdash; the two most-cited &ldquo;safe&rdquo; rates. Very-low-calorie diets can produce faster loss but carry risks (muscle loss, nutrient deficiencies, gallstones, metabolic adaptation) and shouldn&apos;t be done without medical supervision.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This calculator floors the calorie target at 1,200 (women) / 1,500 (men). If your goal preset would land below these, the tool shows the floor with a note instead of the lower number. This isn&apos;t a hard medical threshold, but going lower without a doctor&apos;s guidance is not something a general-purpose calculator should silently recommend.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Then BMR is multiplied by an activity factor (1.2, 1.375, 1.55, 1.725 or 1.9). These are the conventional multipliers used with BMR equations for decades; they are broad categories rather than measured values, and they are the least precise part of the estimate. To compare equations, see the <a href="bmr-calculator.html" style="color:var(--teal);">BMR calculator</a>.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Goals and the safety floor</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The weekly-change figure uses the old rule of thumb that 1 lb of body fat is about 3,500 kcal (about 7,700 kcal per kg). It is reasonable for the first few weeks but overstates long-term change, because the body adapts as weight changes; the NIH <a href="https://www.niddk.nih.gov/bwp" target="_blank" rel="noopener" style="color:var(--teal);">Body Weight Planner</a> models that adaptation if you want a longer view. Very-low-calorie diets carry real risks (muscle loss, nutrient gaps, gallstones) and belong under medical supervision.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">So the target never drops below 1,200 kcal (female) or 1,500 kcal (male), a commonly used floor for unsupervised eating plans. If your goal would land lower, the tool shows the floor and says so. It isn&apos;t a hard medical threshold, just a line a general-purpose calculator shouldn&apos;t quietly cross.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">TDEE numbers are estimates</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Individual metabolism can differ from the Mifflin-St Jeor prediction by ±10-15%. Activity multipliers are rough categories. The best way to find your actual TDEE is to eat at your calculated maintenance for 2-3 weeks with consistent daily weigh-ins, then adjust based on the trend. Everyone&apos;s number is a starting hypothesis to test, not a fixed truth.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Real metabolism can differ from the Mifflin-St Jeor prediction by 10% or more, and activity factors add their own error. A practical check is to eat near the estimated maintenance for 2&ndash;3 weeks, watch the weekly average of your weigh-ins, and adjust. The number here is a starting hypothesis, not a fixed truth.</p>
 </section>
     </div>
 
@@ -227,75 +242,186 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+      'use strict';
+      /* Shared helpers (inline on each page). Exact conversions: 1 lb = 0.45359237 kg, 1 in = 2.54 cm. */
+      const LB_KG = 0.45359237, IN_CM = 2.54;
+      const $ = (id) => document.getElementById(id);
+      const NF = {};
+      function fmt(x, dp) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        dp = dp == null ? 0 : dp;
+        let r = Number(x.toFixed(dp));
+        if (r === 0) r = 0; /* never show -0 */
+        NF[dp] = NF[dp] || new Intl.NumberFormat('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+        return NF[dp].format(r);
+      }
+      function read(id) {
+        const e = $(id);
+        if (!e) return null;
+        if (e.validity && e.validity.badInput) return NaN;
+        const raw = e.value.trim();
+        if (raw === '') return null;
+        const v = Number(raw);
+        return Number.isFinite(v) ? v : NaN;
+      }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Validated read. Blank fields only get a message after an explicit Calculate / Enter. */
+      function field(id, lo, hi, unit, st, optional) {
+        const v = read(id);
+        if (v === null) {
+          if (!optional) { st.missing = true; if (st.strict) msg(id, 'Required.'); }
+          return null;
+        }
+        if (Number.isNaN(v) || v < lo || v > hi) {
+          msg(id, 'Enter a number from ' + lo.toLocaleString('en-US') + ' to ' + hi.toLocaleString('en-US') + (unit ? ' ' + unit : '') + '.');
+          st.bad = true;
+          return null;
+        }
+        return v;
+      }
+      function row(label, value, cls, extra) {
+        return '<div class="result-row' + (extra ? ' ' + extra : '') + '"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      const isMetric = () => $('units').value === 'metric';
+      /* Unit toggle: converts whatever is already typed and remembers the choice (a UI preference only). */
+      function setupUnits(convert) {
+        const sel = $('units');
+        try { const saved = localStorage.getItem('msl-units'); if (saved === 'metric' || saved === 'imperial') sel.value = saved; } catch (e) { /* storage blocked */ }
+        const show = () => {
+          const m = isMetric();
+          if ($('imperial-fields')) $('imperial-fields').hidden = m;
+          if ($('metric-fields')) $('metric-fields').hidden = !m;
+        };
+        sel.addEventListener('change', () => {
+          if (convert) convert(isMetric());
+          show();
+          try { localStorage.setItem('msl-units', sel.value); } catch (e) { /* storage blocked */ }
+        });
+        show();
+      }
+      function convertHeight(toMetric) {
+        if (toMetric) {
+          const ft = read('ft'), inch = read('in');
+          if (Number.isNaN(ft) || Number.isNaN(inch) || (ft === null && inch === null)) return;
+          const total = (ft || 0) * 12 + (inch || 0);
+          if (total > 0) $('cm').value = +(total * IN_CM).toFixed(1);
+        } else {
+          const cm = read('cm');
+          if (!(cm > 0)) return;
+          const total = cm / IN_CM;
+          let ft = Math.floor(total / 12), inch = +(total - ft * 12).toFixed(1);
+          if (inch >= 12) { ft += 1; inch = 0; }
+          $('ft').value = ft;
+          $('in').value = inch;
+        }
+      }
+      function convertWeight(toMetric) {
+        if (toMetric) { const lb = read('lb'); if (lb > 0) $('kg').value = +(lb * LB_KG).toFixed(2); }
+        else { const kg = read('kg'); if (kg > 0) $('lb').value = +(kg / LB_KG).toFixed(1); }
+      }
+      /* Height in cm from either unit system (adult range 90-272 cm / 35-107 in). */
+      function heightCm(st) {
+        if (isMetric()) return field('cm', 90, 272, 'cm', st);
+        const ft = read('ft'), inch = read('in');
+        if (ft === null && inch === null) { st.missing = true; if (st.strict) msg('ft', 'Required.'); return null; }
+        if (Number.isNaN(ft) || (ft !== null && (ft < 0 || ft > 8 || ft % 1 !== 0))) { msg('ft', 'Enter whole feet from 0 to 8.'); st.bad = true; return null; }
+        if (Number.isNaN(inch) || (inch !== null && (inch < 0 || inch > 107))) { msg('in', 'Enter inches from 0 to 107.'); st.bad = true; return null; }
+        const total = (ft || 0) * 12 + (inch || 0);
+        if (total < 35 || total > 107) { msg('in', 'Total height should be between 2 ft 11 in and 8 ft 11 in.'); st.bad = true; return null; }
+        return total * IN_CM;
+      }
+      function weightKg(st) {
+        if (isMetric()) return field('kg', 20, 650, 'kg', st);
+        const lb = field('lb', 44, 1430, 'lb', st);
+        return lb === null ? null : lb * LB_KG;
+      }
+      /* Live updates (debounced), Enter to calculate, Calculate + Clear buttons. */
+      function wire(run, clear) {
+        const card = document.querySelector('.calc-card');
+        let t = null;
+        const later = () => { clearTimeout(t); t = setTimeout(() => run(false), 200); };
+        card.addEventListener('input', (e) => { if (e.target.matches('input, select')) later(); });
+        card.addEventListener('change', (e) => { if (e.target.matches('select, input[type=checkbox]')) later(); });
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); clearTimeout(t); run(true); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); run(true); });
+        $('clear-btn').addEventListener('click', () => {
+          clearTimeout(t);
+          card.querySelectorAll('input[type=number], input[type=text]').forEach((e) => { e.value = ''; });
+          if (clear) clear();
+          clearMsgs();
+          run(false);
+          const first = card.querySelector('.form-grid:not([hidden]) input');
+          if (first) first.focus();
+        });
+      }
 
-      function toggleUnits(){
-  const m = s('units')==='metric';
-  document.getElementById('imperial-fields').style.display = m ? 'none' : '';
-  document.getElementById('metric-fields').style.display = m ? '' : 'none';
-}
-document.getElementById('units').addEventListener('change', toggleUnits);
+      /* BMR: Mifflin-St Jeor (Am J Clin Nutr 1990;51:241-7). Activity factors are the conventional
+         1.2 / 1.375 / 1.55 / 1.725 / 1.9 set. Weekly change: 3,500 kcal per lb (7,700 kcal per kg), a rough rule. */
+      const LEVELS = [[1.2, 'Sedentary'], [1.375, 'Light'], [1.55, 'Moderate'], [1.725, 'Very active'], [1.9, 'Extra active']];
+      const kcal = (x) => fmt(x, 0) + ' kcal/day';
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const age = field('age', 18, 100, 'years', st);
+        const cm = heightCm(st), kg = weightKg(st);
+        if (age === null || cm === null || kg === null) {
+          set('out-main', placeholder(st.bad ? 'Check the highlighted field above.' : 'Enter age, height and weight to see your numbers.'));
+          set('out-detail', '');
+          return;
+        }
+        const male = $('sex').value === 'male';
+        const bmr = 10 * kg + 6.25 * cm - 5 * age + (male ? 5 : -161);
+        const activity = parseFloat($('activity').value);
+        const tdee = bmr * activity;
+        const delta = parseFloat($('goal').value);
+        const raw = tdee + delta;
+        const floor = male ? 1500 : 1200;
+        const clamped = raw < floor;
+        const target = clamped ? floor : raw;
+        const actualDelta = target - tdee; /* what the shown target really implies */
+        const lbWeek = actualDelta * 7 / 3500;
+        const kgWeek = actualDelta * 7 / 7700;
+        let change;
+        if (Math.abs(lbWeek) < 0.05) change = 'About no change';
+        else change = '~' + fmt(Math.abs(lbWeek), 1) + ' lb (' + fmt(Math.abs(kgWeek), 2) + ' kg) ' + (lbWeek > 0 ? 'gain' : 'loss') + ' per week';
 
-function calc(){
-  hideErr();
-  const sex = s('sex'), age = n('age');
-  if (!age||age<=0) return showErr('Enter age.');
-  let kg, cm;
-  if (s('units')==='metric') {
-    kg = n('kg'); cm = n('cm');
-    if (!kg||!cm) return showErr('Enter height (cm) and weight (kg).');
-  } else {
-    const ft = n('ft')||0, inch = n('in')||0, lb = n('lb');
-    const totalIn = ft*12+inch;
-    if (totalIn<=0||!lb) return showErr('Enter height (ft+in) and weight (lb).');
-    kg = lb * LB_TO_KG;
-    cm = totalIn * IN_TO_CM;
-  }
-
-  const bmr = sex==='male'
-    ? 10*kg + 6.25*cm - 5*age + 5
-    : 10*kg + 6.25*cm - 5*age - 161;
-  const activity = parseFloat(s('activity'));
-  const tdee = bmr * activity;
-  const goalDelta = parseFloat(s('goal'));
-  const rawTarget = tdee + goalDelta;
-  const floor = sex==='male' ? 1500 : 1200;
-  const clamped = rawTarget < floor;
-  const target = clamped ? floor : rawTarget;
-
-  let main = '';
-  main += row('BMR (basal, at rest)', Math.round(bmr) + ' kcal/day');
-  main += row('TDEE (maintenance)', Math.round(tdee) + ' kcal/day', 'teal');
-  main += row('Goal preset', (goalDelta > 0 ? '+' : '') + goalDelta + ' kcal/day');
-  main += row('Recommended daily target', Math.round(target) + ' kcal/day', 'violet');
-  if (clamped) {
-    main += row('Note', 'Target clamped to ' + floor + ' floor — targets below aren\'t recommended without medical supervision', 'amber');
-  }
-  set('out-main', main);
-
-  let d = '';
-  d += row('Activity multiplier', activity + '×');
-  d += row('Weekly weight change (est.)', (goalDelta*7/3500).toFixed(1) + ' lb ' + (goalDelta>0?'gain':goalDelta<0?'loss':'change'));
-  d += row('Formula used', 'Mifflin-St Jeor');
-  set('out-detail', d);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['age','ft','in','lb','cm','kg'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        let main = '';
+        main += row('BMR (at rest)', kcal(bmr));
+        main += row('TDEE (maintenance) at &times;' + activity, kcal(tdee), 'teal');
+        main += row('Daily target for your goal', kcal(target), 'violet');
+        main += row('Estimated change (early weeks)', change);
+        if (clamped) {
+          main += '<p class="calc-note" style="color:var(--amber);">Your goal would put the target at ' + fmt(Math.max(raw, 0), 0) + ' kcal/day, below the ' + fmt(floor, 0) + ' kcal floor this tool uses, so it shows ' + fmt(floor, 0) + ' instead. Going lower is something to plan with a clinician.</p>';
+        }
+        set('out-main', main);
+        set('out-detail', LEVELS.map((l) => row(l[1] + ' (&times;' + l[0] + ')' + (l[0] === activity ? ' (selected)' : ''), kcal(bmr * l[0]), null, l[0] === activity ? 'result-row--you' : '')).join(''));
+      }
+      setupUnits((toMetric) => { convertHeight(toMetric); convertWeight(toMetric); });
+      wire(run);
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

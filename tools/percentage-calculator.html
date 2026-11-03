@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Percentage Calculator (3 Modes) | Moonlit Social Labs</title>
-  <meta name="description" content="Three percentage modes on one page: X% of Y, X is what % of Y, and percent change between two numbers. All in your browser.">
+  <title>Free Percentage Calculator (5 Modes) | Moonlit Social Labs</title>
+  <meta name="description" content="Five percentage modes on one page: X% of Y, X is what % of Y, percent change, adding or taking off a percent, and finding the whole from a part. All in your browser.">
   <meta name="keywords" content="percentage calculator, percent of number calculator, percent change calculator, percent increase decrease calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Percentage Calculator (3 Modes)",
-    "description": "Three percentage modes on one page: X% of Y, X is what % of Y, and percent change between two numbers. All in your browser.",
+    "name": "Free Percentage Calculator (5 Modes)",
+    "description": "Five percentage modes on one page: X% of Y, X is what % of Y, percent change, adding or taking off a percent, and finding the whole from a part. All in your browser.",
     "url": "https://moonligh7er.github.io/developer-site/tools/percentage-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Free Percentage Calculator (3 Modes)">
-  <meta property="og:description" content="Three percentage modes on one page: X% of Y, X is what % of Y, and percent change between two numbers. All in your browser.">
+  <meta property="og:title" content="Free Percentage Calculator (5 Modes)">
+  <meta property="og:description" content="Five percentage modes on one page: X% of Y, X is what % of Y, percent change, adding or taking off a percent, and finding the whole from a part. All in your browser.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/percentage-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Percentage Calculator (3 Modes)">
-  <meta name="twitter:description" content="Three percentage modes on one page: X% of Y, X is what % of Y, and percent change between two numbers. All in your browser.">
+  <meta name="twitter:title" content="Free Percentage Calculator (5 Modes)">
+  <meta name="twitter:description" content="Five percentage modes on one page: X% of Y, X is what % of Y, percent change, adding or taking off a percent, and finding the whole from a part. All in your browser.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,7 +77,7 @@
     .calc-error.visible { display: block; }
     .inline-warn { padding: 0.75rem 1rem; margin: 1rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; }
     .mode-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; }
+    .mode-tab { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.5rem 0.85rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-secondary); cursor: pointer; min-height: 44px; }
     .mode-tab.active { border-color: var(--teal); color: var(--teal); background: var(--teal-glow); }
     .mode-panel { display: none; }
     .mode-panel.active { display: block; }
@@ -87,6 +87,16 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
     
   </style>
 </head>
@@ -120,54 +130,75 @@
 
       <div class="calc-card">
         <h1>Percentage Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Three modes, one page &mdash; the three questions everyone actually needs to answer.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Five everyday percentage questions on one page. Pick one, type the numbers, and the answer updates as you go, with the working shown.</p>
         <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
-        <div class="mode-tabs">
-  <button class="mode-tab active" data-mode="of">X% of Y</button>
-  <button class="mode-tab" data-mode="what">X is what % of Y</button>
-  <button class="mode-tab" data-mode="change">% change</button>
+        <div class="mode-tabs" role="tablist" aria-label="Question type">
+  <button type="button" class="mode-tab active" role="tab" id="tab-of" aria-selected="true" aria-controls="mode-of" data-mode="of">X% of Y</button>
+  <button type="button" class="mode-tab" role="tab" id="tab-what" aria-selected="false" aria-controls="mode-what" tabindex="-1" data-mode="what">X is what % of Y</button>
+  <button type="button" class="mode-tab" role="tab" id="tab-change" aria-selected="false" aria-controls="mode-change" tabindex="-1" data-mode="change">% change</button>
+  <button type="button" class="mode-tab" role="tab" id="tab-adjust" aria-selected="false" aria-controls="mode-adjust" tabindex="-1" data-mode="adjust">Add / take off %</button>
+  <button type="button" class="mode-tab" role="tab" id="tab-whole" aria-selected="false" aria-controls="mode-whole" tabindex="-1" data-mode="whole">X is P% of what</button>
 </div>
 
-<div class="mode-panel active" id="mode-of">
+<div class="mode-panel active" id="mode-of" role="tabpanel" aria-labelledby="tab-of">
   <div class="form-grid">
-    <div class="form-group"><label for="of-x">X (percent)</label><input type="number" id="of-x" placeholder="15" step="any"></div>
-    <div class="form-group"><label for="of-y">Y (number)</label><input type="number" id="of-y" placeholder="200" step="any"></div>
+    <div class="form-group"><label for="of-x">X (percent, %)</label><input type="number" id="of-x" value="15" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="of-y">Y (number)</label><input type="number" id="of-y" value="200" step="any" inputmode="decimal"></div>
   </div>
 </div>
 
-<div class="mode-panel" id="mode-what">
+<div class="mode-panel" id="mode-what" role="tabpanel" aria-labelledby="tab-what" hidden>
   <div class="form-grid">
-    <div class="form-group"><label for="what-x">X (number)</label><input type="number" id="what-x" placeholder="45" step="any"></div>
-    <div class="form-group"><label for="what-y">Y (number)</label><input type="number" id="what-y" placeholder="300" step="any"></div>
+    <div class="form-group"><label for="what-x">X (part)</label><input type="number" id="what-x" value="45" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="what-y">Y (whole)</label><input type="number" id="what-y" value="300" step="any" inputmode="decimal"></div>
   </div>
 </div>
 
-<div class="mode-panel" id="mode-change">
+<div class="mode-panel" id="mode-change" role="tabpanel" aria-labelledby="tab-change" hidden>
   <div class="form-grid">
-    <div class="form-group"><label for="change-from">From</label><input type="number" id="change-from" placeholder="100" step="any"></div>
-    <div class="form-group"><label for="change-to">To</label><input type="number" id="change-to" placeholder="125" step="any"></div>
+    <div class="form-group"><label for="change-from">From (old value)</label><input type="number" id="change-from" value="100" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="change-to">To (new value)</label><input type="number" id="change-to" value="125" step="any" inputmode="decimal"></div>
+  </div>
+</div>
+
+<div class="mode-panel" id="mode-adjust" role="tabpanel" aria-labelledby="tab-adjust" hidden>
+  <div class="form-grid">
+    <div class="form-group"><label for="adj-y">Starting value</label><input type="number" id="adj-y" value="80" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="adj-x">Percent (%)</label><input type="number" id="adj-x" value="25" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="adj-dir">Direction</label>
+      <select id="adj-dir"><option value="up">Add it (e.g. tax, tip, markup)</option><option value="down">Take it off (e.g. discount)</option></select>
+    </div>
+  </div>
+</div>
+
+<div class="mode-panel" id="mode-whole" role="tabpanel" aria-labelledby="tab-whole" hidden>
+  <div class="form-grid">
+    <div class="form-group"><label for="whole-x">X (the part you know)</label><input type="number" id="whole-x" value="30" step="any" inputmode="decimal"></div>
+    <div class="form-group"><label for="whole-p">P (percent, %)</label><input type="number" id="whole-p" value="15" step="any" inputmode="decimal"></div>
   </div>
 </div>
 
 <div class="calc-btn-row">
-  <button class="calc-btn" onclick="calc()">Calculate</button>
-  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+  <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
 </div>
-<div class="calc-error" id="err"></div>
 
-<div class="calc-results" id="results" aria-live="polite">
+<div class="calc-results visible" id="results" aria-live="polite">
   <h4>Result</h4>
   <div id="out"></div>
 </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The three modes, explained</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>X% of Y:</strong> the most common question. What&apos;s 15% of $200? Answer: 15/100 × 200 = $30. Useful for tips, discounts, tax, commissions.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>X is what % of Y:</strong> the reverse question. If you got 45 out of 300 on a test, what percent is that? Answer: 45/300 × 100 = 15%. Useful for scores, ratios, market share.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Percent change:</strong> the delta between two numbers. Went from 100 to 125? That&apos;s a 25% increase. From 100 to 75 is a 25% decrease. Formula: (new − old) / old × 100. Note: percent change is <em>relative to the starting value</em>, so going from 50 to 100 is +100%, but going back from 100 to 50 is only −50% (same absolute change, different percentages).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common gotcha: percentage points vs. percent</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">If a rate goes from 4% to 5%, that&apos;s a 1 <em>percentage point</em> increase, but a 25% <em>relative</em> increase (1/4 = 25%). News stories frequently confuse these; they mean different things.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The five questions, explained</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>X% of Y:</strong> the most common one. 15% of 200 = 15 &times; 200 &divide; 100 = 30. Useful for tips, discounts, tax and commissions.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>X is what % of Y:</strong> the reverse. 45 out of 300 is 45 &divide; 300 &times; 100 = 15%. Useful for scores, ratios and shares.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Percent change:</strong> (new &minus; old) &divide; |old| &times; 100. From 100 to 125 is +25%; from 100 to 75 is &minus;25%. Change is measured against the starting value, so 50 &rarr; 100 is +100% but 100 &rarr; 50 is only &minus;50%. Dividing by the size of the old value keeps the sign meaningful when the old value is negative (&minus;50 &rarr; &minus;25 is a 50% increase). From zero there is no percent change to report.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Add / take off %:</strong> 80 plus 25% = 80 &times; 1.25 = 100; 80 minus 25% = 80 &times; 0.75 = 60. Taking off the same percent you added doesn&apos;t get you back where you started (100 minus 25% is 75), and the tool shows the percent that would.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>X is P% of what:</strong> finds the whole from a part. If 30 is 15% of something, the whole is 30 &divide; 15 &times; 100 = 200.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Percentage points vs. percent</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">If a rate goes from 4% to 5%, that&apos;s a 1 <em>percentage point</em> increase, but a 25% <em>relative</em> increase (1 &divide; 4 = 25%). News stories often mix these up; they mean different things.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Answers are shown to up to 6 decimal places, with trailing zeros dropped; very large or very small results switch to scientific notation.</p>
 </section>
     </div>
 
@@ -205,55 +236,144 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          input.setAttribute('aria-describedby', m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      /* Up to 6 decimals, trailing zeros dropped, thousands separators; scientific notation at the extremes.
+         Never shows -0, NaN or Infinity. */
+      function num(x) {
+        if (!Number.isFinite(x)) return '&ndash;';
+        const ax = Math.abs(x);
+        if (ax === 0) return '0';
+        if (ax >= 1e15 || ax < 1e-6) return x.toExponential(6).replace(/\.?0+e/, 'e').replace('e+', ' &times; 10^').replace('e-', ' &times; 10^-');
+        const r = Number(x.toFixed(6));
+        return r === 0 ? '0' : r.toLocaleString('en-US', { maximumFractionDigits: 6 });
+      }
+      /* Read a number field: null if blank (message only when strict), NaN if not a number. */
+      function val(id, st) {
+        const e = $(id);
+        if (e.validity && e.validity.badInput) { msg(id, 'Enter a number.'); st.bad = true; return null; }
+        const raw = e.value.trim();
+        if (raw === '') { st.missing = true; if (st.strict) msg(id, 'Required.'); return null; }
+        const v = Number(raw);
+        if (!Number.isFinite(v)) { msg(id, 'Enter a number.'); st.bad = true; return null; }
+        return v;
+      }
+      const tabs = Array.prototype.slice.call(document.querySelectorAll('.mode-tab'));
+      const mode = () => document.querySelector('.mode-tab[aria-selected="true"]').dataset.mode;
 
-      document.querySelectorAll('.mode-tab').forEach(t=>t.addEventListener('click',()=>{
-  document.querySelectorAll('.mode-tab').forEach(x=>x.classList.remove('active'));
-  t.classList.add('active');
-  document.querySelectorAll('.mode-panel').forEach(x=>x.classList.remove('active'));
-  document.getElementById('mode-'+t.dataset.mode).classList.add('active');
-  hideErr(); document.getElementById('results').classList.remove('visible');
-}));
-window.calc = function(){
-  hideErr();
-  const mode = document.querySelector('.mode-tab.active').dataset.mode;
-  let out = '';
-  if (mode==='of') {
-    const x = n('of-x'), y = n('of-y');
-    if (x===null||y===null) return showErr('Enter both values.');
-    const result = (x/100) * y;
-    out += row(x + '% of ' + y, fmt(result, 4), 'teal');
-    out += row('Calculation', x + '/100 × ' + y + ' = ' + fmt(result, 4));
-  } else if (mode==='what') {
-    const x = n('what-x'), y = n('what-y');
-    if (x===null||y===null||y===0) return showErr('Enter both values (Y must not be zero).');
-    const result = (x/y) * 100;
-    out += row(x + ' is what % of ' + y, fmt(result, 2) + '%', 'teal');
-    out += row('Calculation', x + '/' + y + ' × 100 = ' + fmt(result, 4) + '%');
-  } else {
-    const from = n('change-from'), to = n('change-to');
-    if (from===null||to===null||from===0) return showErr('Enter both values (starting value must not be zero).');
-    const change = ((to - from) / Math.abs(from)) * 100;
-    const dir = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'no change';
-    const cls = change > 0 ? 'teal' : change < 0 ? 'rose' : '';
-    out += row('Percent change', fmt(change, 2) + '%', cls);
-    out += row('Direction', dir);
-    out += row('Absolute change', fmt(to - from, 4));
-    out += row('Calculation', '(' + to + ' − ' + from + ') / ' + from + ' × 100');
-  }
-  set('out', out);
-  document.getElementById('results').classList.add('visible');
-};
-window.clearForm = function(){
-  ['of-x','of-y','what-x','what-y','change-from','change-to'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  hideErr(); document.getElementById('results').classList.remove('visible');
-};
+      function run(strict) {
+        clearMsgs();
+        const st = { strict: strict, missing: false, bad: false };
+        const m = mode();
+        let out = '';
+        const need = () => placeholder(st.bad ? 'Check the highlighted field above.' : 'Fill in both numbers to see the answer.');
+        if (m === 'of') {
+          const x = val('of-x', st), y = val('of-y', st);
+          if (x === null || y === null) return set('out', need());
+          const r = x * y / 100;
+          out += row(num(x) + '% of ' + num(y), num(r), 'teal');
+          out += row('Working', num(x) + ' &times; ' + num(y) + ' &divide; 100 = ' + num(r));
+        } else if (m === 'what') {
+          const x = val('what-x', st), y = val('what-y', st);
+          if (y === 0) { msg('what-y', 'The whole can’t be zero.'); st.bad = true; }
+          if (x === null || y === null || st.bad) return set('out', need());
+          const r = x / y * 100;
+          out += row(num(x) + ' is what % of ' + num(y), num(r) + '%', 'teal');
+          out += row('Working', num(x) + ' &divide; ' + num(y) + ' &times; 100 = ' + num(r) + '%');
+        } else if (m === 'change') {
+          const from = val('change-from', st), to = val('change-to', st);
+          if (from === 0) { msg('change-from', 'A change from zero has no percentage; try the difference instead.'); st.bad = true; }
+          if (from === null || to === null || st.bad) return set('out', need());
+          const c = (to - from) / Math.abs(from) * 100;
+          const dir = c > 0 ? 'Increase' : c < 0 ? 'Decrease' : 'No change';
+          out += row('Percent change', (c > 0 ? '+' : '') + num(c) + '%', c > 0 ? 'teal' : c < 0 ? 'rose' : '');
+          out += row('Direction', dir);
+          out += row('Difference (new &minus; old)', (to - from > 0 ? '+' : '') + num(to - from));
+          out += row('Working', '(' + num(to) + ' &minus; ' + num(from) + ') &divide; ' + num(Math.abs(from)) + ' &times; 100');
+          if (from < 0) out += '<p class="calc-note">The starting value is negative, so the change is measured against its size (' + num(Math.abs(from)) + ').</p>';
+        } else if (m === 'adjust') {
+          const y = val('adj-y', st), x = val('adj-x', st);
+          if (y === null || x === null) return set('out', need());
+          const up = $('adj-dir').value === 'up';
+          const amount = y * x / 100;
+          const r = up ? y + amount : y - amount;
+          out += row(num(y) + (up ? ' plus ' : ' minus ') + num(x) + '%', num(r), 'teal');
+          out += row('Amount ' + (up ? 'added' : 'taken off'), num(amount));
+          out += row('Working', num(y) + ' &times; ' + num(up ? 1 + x / 100 : 1 - x / 100) + ' = ' + num(r));
+          const back = up ? (100 + x !== 0 ? x / (100 + x) * 100 : NaN) : (100 - x !== 0 ? x / (100 - x) * 100 : NaN);
+          if (Number.isFinite(back) && x !== 0) out += row('To get back to ' + num(y), (up ? 'take off ' : 'add ') + num(back) + '%', 'violet');
+        } else {
+          const x = val('whole-x', st), p = val('whole-p', st);
+          if (p === 0) { msg('whole-p', 'The percent can’t be zero.'); st.bad = true; }
+          if (x === null || p === null || st.bad) return set('out', need());
+          const w = x / p * 100;
+          out += row(num(x) + ' is ' + num(p) + '% of', num(w), 'teal');
+          out += row('Working', num(x) + ' &divide; ' + num(p) + ' &times; 100 = ' + num(w));
+        }
+        set('out', out);
+      }
+
+      function selectTab(tab, focus) {
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+          const panel = $(t.getAttribute('aria-controls'));
+          panel.classList.toggle('active', on);
+          panel.hidden = !on;
+        });
+        if (focus) tab.focus();
+        run(false);
+      }
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => selectTab(t, false));
+        t.addEventListener('keydown', (e) => {
+          let next = null;
+          if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+          else if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+          else if (e.key === 'Home') next = tabs[0];
+          else if (e.key === 'End') next = tabs[tabs.length - 1];
+          if (next) { e.preventDefault(); selectTab(next, true); }
+        });
+      });
+      const card = document.querySelector('.calc-card');
+      card.addEventListener('input', (e) => { if (e.target.matches('input, select')) run(false); });
+      card.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); run(true); } });
+      $('calc-btn').addEventListener('click', () => run(true));
+      $('clear-btn').addEventListener('click', () => {
+        const panel = document.querySelector('.mode-panel.active');
+        panel.querySelectorAll('input').forEach((i) => { i.value = ''; });
+        clearMsgs();
+        run(false);
+        const first = panel.querySelector('input');
+        if (first) first.focus();
+      });
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

@@ -87,6 +87,16 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .result-row--you .result-label, .result-row--you .result-value { color: var(--teal); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 40px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 18px; height: 18px; accent-color: var(--teal); }
+    [hidden] { display: none !important; }
     
   </style>
 </head>
@@ -120,20 +130,23 @@
 
       <div class="calc-card">
         <h1>Age Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your date of birth and (optionally) a target date. Get exact age in years/months/days, total days lived, and countdown to next birthday.</p>
-        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded.</div>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter a date of birth and, if you like, the date to measure to. You get the exact age in years, months and days, the day of the week you were born, total days lived, and a countdown to the next birthday. Results update as you type.</p>
+        <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;">Processing happens entirely in your browser. Nothing is uploaded or saved.</div>
         <div class="form-grid">
-  <div class="form-group"><label for="dob">Date of Birth</label><input type="date" id="dob"></div>
-  <div class="form-group"><label for="on">Age On (optional)</label><input type="date" id="on"><span class="hint">Leave blank for today</span></div>
+  <div class="form-group"><label for="dob">Date of birth</label><input type="date" id="dob" min="0001-01-01" max="9999-12-31"></div>
+  <div class="form-group"><label for="on">Age on (optional)</label><input type="date" id="on" min="0001-01-01" max="9999-12-31" aria-describedby="on-hint"><span class="hint" id="on-hint">Leave blank for today</span></div>
+  <div class="form-group" id="leap-group" hidden><label for="leap">29 February birthday, in other years</label>
+    <select id="leap" aria-describedby="leap-hint"><option value="feb28">Counts on 28 February</option><option value="mar1">Counts on 1 March</option></select>
+    <span class="hint" id="leap-hint">Rules differ by country; England and Wales, for example, use 1 March for legal age.</span>
+  </div>
 </div>
 
 <div class="calc-btn-row">
-  <button class="calc-btn" onclick="calc()">Calculate</button>
-  <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+  <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+  <button type="button" class="calc-btn calc-btn--secondary" id="clear-btn">Clear</button>
 </div>
-<div class="calc-error" id="err"></div>
 
-<div class="calc-results" id="results" aria-live="polite">
+<div class="calc-results visible" id="results" aria-live="polite">
   <h4>Age</h4>
   <div id="out-main"></div>
   <p class="calc-subhead">Detail</p>
@@ -143,11 +156,12 @@
 
       <section class="calc-card">
   <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How age is calculated</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Years are the primary unit &mdash; if you were born on 1990-06-15 and today is 2026-09-04, you&apos;re 36 years old and some change. The &ldquo;some change&rdquo; is months and days, calculated by walking forward from your last completed birthday. Total days lived is a simple date arithmetic in milliseconds divided by 86,400,000 (ms per day), which handles leap years and DST automatically.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Years and months are counted the way people count birthdays: you gain a year on each birthday and a month on the same day-number each month. When that day doesn&apos;t exist (a 31st in a 30-day month), the month&apos;s last day counts instead. The remaining days are counted from the most recent such date. Born on 1990-06-15 and measured on 2026-09-04, that&apos;s 36 years, 2 months and 20 days.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Totals are whole calendar days on the Gregorian calendar, so leap years are included and clock changes for daylight saving can&apos;t shift the count. The hours figure is simply days &times; 24 and ignores the time of birth.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Leap-day birthdays</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">If you were born on February 29, this calculator treats February 28 as your birthday in non-leap years for age-increment purposes &mdash; the standard convention in most jurisdictions and legal age calculations.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">If you were born on 29 February, there&apos;s no single rule for non-leap years. Many people celebrate on 28 February; some legal systems (England and Wales, for example) treat you as reaching a new age on 1 March. When the date of birth is 29 February, the tool shows a choice; 28 February is the default.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Time zones</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">The tool uses your local browser time zone. If you were born in a different time zone from where you are now, the year/month calendar age doesn&apos;t care &mdash; birthdays are always local &mdash; but the total-days number can shift by ±1 depending on how the date entry is interpreted.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">&ldquo;Today&rdquo; is your device&apos;s local date. Dates are treated as calendar days, so being born in a different time zone from where you are now doesn&apos;t change the result.</p>
 </section>
     </div>
 
@@ -185,65 +199,153 @@
   <script src="../js/player.js"></script>
   <script>
     (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+      const shown = {};
+      function set(id, html) { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } }
+      function placeholder(text) { return '<p class="calc-placeholder">' + text + '</p>'; }
+      function msg(id, text) {
+        const input = $(id);
+        let m = $(id + '-msg');
+        if (!m) {
+          m = document.createElement('span');
+          m.className = 'field-msg';
+          m.id = id + '-msg';
+          input.closest('.form-group').appendChild(m);
+          const d = input.getAttribute('aria-describedby');
+          input.setAttribute('aria-describedby', (d ? d + ' ' : '') + m.id);
+        }
+        m.textContent = text || '';
+        m.hidden = !text;
+        if (text) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      }
+      function clearMsgs() {
+        document.querySelectorAll('.field-msg').forEach((m) => { m.textContent = ''; m.hidden = true; });
+        document.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
+      }
+      const int = (n) => n.toLocaleString('en-US');
+      const plural = (n, one, many) => int(n) + ' ' + (n === 1 ? one : (many || one + 's'));
 
-      window.calc = function(){
-  hideErr();
-  const dob = document.getElementById('dob').value;
-  if (!dob) return showErr('Enter date of birth.');
-  const onStr = document.getElementById('on').value;
-  const birth = new Date(dob + 'T00:00:00');
-  const on = onStr ? new Date(onStr + 'T00:00:00') : new Date();
-  if (on < birth) return showErr('Target date is before date of birth.');
+      /* Calendar dates as plain {y, m, d} (m = 1..12) with whole-day arithmetic on a proleptic
+         Gregorian day count, so time zones and DST can never shift a result by an hour or a day. */
+      function isLeap(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
+      function daysInMonth(y, m) { return [31, isLeap(y) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]; }
+      /* Days since 1970-01-01 (H. Hinnant's days_from_civil). */
+      function dayNum(dt) {
+        const y = dt.m <= 2 ? dt.y - 1 : dt.y;
+        const era = Math.floor(y / 400);
+        const yoe = y - era * 400;
+        const doy = Math.floor((153 * (dt.m + (dt.m > 2 ? -3 : 9)) + 2) / 5) + dt.d - 1;
+        const doe = yoe * 365 + Math.floor(yoe / 4) - Math.floor(yoe / 100) + doy;
+        return era * 146097 + doe - 719468;
+      }
+      function fromDayNum(z) {
+        z += 719468;
+        const era = Math.floor(z / 146097);
+        const doe = z - era * 146097;
+        const yoe = Math.floor((doe - Math.floor(doe / 1460) + Math.floor(doe / 36524) - Math.floor(doe / 146096)) / 365);
+        const doy = doe - (365 * yoe + Math.floor(yoe / 4) - Math.floor(yoe / 100));
+        const mp = Math.floor((5 * doy + 2) / 153);
+        const d = doy - Math.floor((153 * mp + 2) / 5) + 1;
+        const m = mp < 10 ? mp + 3 : mp - 9;
+        return { y: yoe + era * 400 + (m <= 2 ? 1 : 0), m: m, d: d };
+      }
+      const weekdayOf = (dt) => ((dayNum(dt) % 7) + 11) % 7; /* 0 = Sunday; 1970-01-01 was a Thursday */
+      function parseDate(s) {
+        const mt = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+        if (!mt) return null;
+        const y = +mt[1], m = +mt[2], d = +mt[3];
+        if (y < 1 || m < 1 || m > 12 || d < 1 || d > daysInMonth(y, m)) return null;
+        return { y: y, m: m, d: d };
+      }
+      function iso(dt) { return String(dt.y).padStart(4, '0') + '-' + String(dt.m).padStart(2, '0') + '-' + String(dt.d).padStart(2, '0'); }
+      function today() { const n = new Date(); return { y: n.getFullYear(), m: n.getMonth() + 1, d: n.getDate() }; }
+      const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function longDate(dt) { return DAYS[weekdayOf(dt)] + ', ' + MONTHS[dt.m - 1] + ' ' + dt.d + ', ' + dt.y; }
+      /* Same day k months later; a day that doesn't exist in the target month moves to its last day
+         (Jan 31 + 1 month = Feb 28 or 29). */
+      function addMonths(dt, k) {
+        const t = dt.y * 12 + (dt.m - 1) + k;
+        const y = Math.floor(t / 12), m = t - y * 12 + 1;
+        return { y: y, m: m, d: Math.min(dt.d, daysInMonth(y, m)) };
+      }
+      /* Whole months from a to b (a <= b) using an anniversary function, plus leftover days. */
+      function monthsAndDays(a, b, anniversary) {
+        let k = (b.y - a.y) * 12 + (b.m - a.m);
+        if (dayNum(anniversary(k)) > dayNum(b)) k--;
+        return { months: k, days: dayNum(b) - dayNum(anniversary(k)) };
+      }
 
-  // Compute years/months/days
-  let y = on.getFullYear() - birth.getFullYear();
-  let m = on.getMonth() - birth.getMonth();
-  let d = on.getDate() - birth.getDate();
-  if (d < 0) {
-    m--;
-    const prevMonth = new Date(on.getFullYear(), on.getMonth(), 0);
-    d += prevMonth.getDate();
-  }
-  if (m < 0) { y--; m += 12; }
+      function run(strict) {
+        clearMsgs();
+        const dobRaw = $('dob').value, onRaw = $('on').value;
+        const birth = parseDate(dobRaw);
+        const isLeapDay = !!birth && birth.m === 2 && birth.d === 29;
+        $('leap-group').hidden = !isLeapDay;
+        if (!birth) {
+          if (dobRaw || strict) msg('dob', dobRaw ? 'Enter a valid date between the years 1 and 9999.' : 'Enter a date of birth.');
+          set('out-main', placeholder('Enter a date of birth to see the age.'));
+          set('out-detail', '');
+          return;
+        }
+        const now = today();
+        let on = now;
+        if (onRaw) {
+          on = parseDate(onRaw);
+          if (!on) { msg('on', 'Enter a valid date between the years 1 and 9999.'); set('out-main', placeholder('Check the highlighted field above.')); set('out-detail', ''); return; }
+        }
+        if (dayNum(on) < dayNum(birth)) {
+          msg('dob', onRaw ? 'The date of birth is after the “age on” date.' : 'That date is in the future.');
+          set('out-main', placeholder('Check the highlighted field above.'));
+          set('out-detail', '');
+          return;
+        }
+        const march = isLeapDay && $('leap').value === 'mar1';
+        /* k-month anniversary of the birth date. For a 29 Feb birth under the 1 March rule,
+           yearly anniversaries in non-leap years fall on 1 March. */
+        const anniversary = (k) => {
+          const a = addMonths(birth, k);
+          if (march && k % 12 === 0 && a.m === 2 && a.d === 28) return { y: a.y, m: 3, d: 1 };
+          return a;
+        };
+        const md = monthsAndDays(birth, on, anniversary);
+        const years = Math.floor(md.months / 12), months = md.months % 12;
+        const totalDays = dayNum(on) - dayNum(birth);
 
-  const totalMs = on - birth;
-  const totalDays = Math.floor(totalMs / 86400000);
-  const totalWeeks = Math.floor(totalDays / 7);
-  const totalHours = Math.floor(totalMs / 3600000);
-  const totalMin = Math.floor(totalMs / 60000);
+        /* Next birthday on or after the "on" date. */
+        let nextYears = years;
+        let next = anniversary(nextYears * 12);
+        if (dayNum(next) < dayNum(on)) { nextYears++; next = anniversary(nextYears * 12); }
+        const until = dayNum(next) - dayNum(on);
 
-  // Next birthday
-  const nextBday = new Date(on.getFullYear(), birth.getMonth(), birth.getDate());
-  if (nextBday <= on) nextBday.setFullYear(on.getFullYear() + 1);
-  const daysToBday = Math.ceil((nextBday - on) / 86400000);
-  const bdayAge = nextBday.getFullYear() - birth.getFullYear();
-
-  set('out-main',
-    row('Age', y + ' years, ' + m + ' months, ' + d + ' days', 'teal') +
-    row('On', on.toDateString(), 'violet')
-  );
-
-  let d2 = '';
-  d2 += row('Total days lived', totalDays.toLocaleString());
-  d2 += row('Total weeks', totalWeeks.toLocaleString());
-  d2 += row('Total hours (approx)', totalHours.toLocaleString());
-  d2 += row('Total minutes (approx)', totalMin.toLocaleString());
-  d2 += row('Next birthday', nextBday.toDateString());
-  d2 += row('Days until next birthday', daysToBday + ' (turning ' + bdayAge + ')');
-  set('out-detail', d2);
-  document.getElementById('results').classList.add('visible');
-};
-window.clearForm = function(){
-  ['dob','on'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-  hideErr(); document.getElementById('results').classList.remove('visible');
-};
+        set('out-main',
+          row('Age', plural(years, 'year') + ', ' + plural(months, 'month') + ', ' + plural(md.days, 'day'), 'teal') +
+          row('Measured on', longDate(on) + (onRaw ? '' : ' (today)'), 'violet'));
+        let d = '';
+        d += row('Born on', longDate(birth));
+        d += row('In months', plural(md.months, 'month') + (md.days ? ', ' + plural(md.days, 'day') : ''));
+        d += row('In weeks', plural(Math.floor(totalDays / 7), 'week') + (totalDays % 7 ? ', ' + plural(totalDays % 7, 'day') : ''));
+        d += row('Total days', int(totalDays));
+        d += row('Total hours (days &times; 24)', int(totalDays * 24));
+        if (until === 0) d += row('Birthday', (years === 0 ? 'Born this day' : 'Today: turning ' + years), 'teal');
+        else d += row('Next birthday', longDate(next) + ' &middot; in ' + plural(until, 'day') + ' (turning ' + nextYears + ')');
+        set('out-detail', d);
+      }
+      (function wire() {
+        const card = document.querySelector('.calc-card');
+        card.addEventListener('input', () => run(false));
+        card.addEventListener('change', () => run(false));
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter' && e.target.matches('input')) { e.preventDefault(); run(true); } });
+        $('calc-btn').addEventListener('click', () => run(true));
+        $('clear-btn').addEventListener('click', () => { $('dob').value = ''; $('on').value = ''; $('leap').value = 'feb28'; clearMsgs(); run(false); $('dob').focus(); });
+      })();
+      /* Example on first load (the same date the explanation below uses). */
+      $('dob').value = '1990-06-15';
+      run(false);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

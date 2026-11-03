@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Regex Generator — Natural Language to Regex Converter | AI Regex Architect | Moonlit Social Labs</title>
-  <meta name="description" content="Free AI Regex Architect: describe what you want to match in plain English and get the exact regular expression with explanation. Natural language to regex converter. No signup, no API calls, 100% client-side.">
+  <title>Free Regex Generator — Plain English to Regex, Explained and Tested | Regex Architect | Moonlit Social Labs</title>
+  <meta name="description" content="Describe what you want to match in plain English and get a regular expression with a token-by-token explanation and a live tester. Common patterns come from a built-in library in your browser; anything else is written by AI (3 free a day) and checked against its own examples. No signup.">
   <meta name="keywords" content="free regex generator, natural language to regex, regex builder, regular expression generator, regex converter, regex tester, regex patterns, email regex, URL regex, phone number regex, regex explained">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "AI Regex Architect — Natural Language to Regex Generator",
-    "description": "Free natural language to regex converter. Describe what you want to match in plain English and get the exact regular expression with detailed explanation. 100% client-side, no API calls.",
+    "name": "Regex Architect — Plain English to Regex Generator",
+    "description": "Free plain-English to regex generator. A built-in pattern library runs in the browser; for anything else, AI writes the pattern and the page tests it against its own examples, with a token-by-token explanation and a live tester.",
     "url": "https://moonligh7er.github.io/developer-site/tools/regex-architect.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Regex Generator — Natural Language to Regex Converter">
-  <meta property="og:description" content="Describe what you want to match in plain English and get the exact regular expression with explanation. No signup, 100% client-side.">
+  <meta property="og:description" content="Describe what you want to match in plain English. Get the regular expression, a token-by-token explanation and a live tester. No signup.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/regex-architect.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Regex Architect | Moonlit Social Labs">
-  <meta name="twitter:description" content="Free natural language to regex converter. Describe what you want to match and get the exact regular expression with explanation.">
+  <meta name="twitter:title" content="Regex Architect | Moonlit Social Labs">
+  <meta name="twitter:description" content="Describe what you want to match in plain English. Get the regular expression, a token-by-token explanation and a live tester.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@
     /* ── Layout ── */
     .rx-hero {
       text-align: center;
-      padding: 1.5rem 0 0.75rem;
+      padding: 1.5rem 1rem 0.75rem;
     }
     .rx-hero .section-label {
       font-family: var(--font-mono);
@@ -472,8 +472,100 @@
       margin: 0;
     }
 
+    .ai-notice__header { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+    .ai-notice__pair { display: inline-flex; align-items: center; gap: 0.6rem; }
+    .ai-notice__dot--teal {
+      background: var(--teal);
+      box-shadow: 0 0 8px var(--teal-glow);
+      animation: none;
+    }
+    .ai-notice__title--teal { color: var(--teal); }
+
+    /* ── v2: library + AI ── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+    .rx-btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+    .rx-btn:disabled:hover { background: var(--teal); }
+    .rx-btn--outline:disabled:hover { background: transparent; color: var(--teal); }
+    .rx-btn:focus-visible, .rx-tag:focus-visible, .rx-input:focus-visible, .rx-editor__input:focus-visible { outline: 1px solid var(--teal); outline-offset: 2px; }
+    .rx-ai-opt {
+      display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+      font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim);
+      margin: -0.25rem 0 1rem;
+    }
+    .rx-ai-opt input { accent-color: var(--teal); }
+    .rx-status {
+      font-family: var(--font-mono); font-size: 0.7rem; line-height: 1.6;
+      color: var(--text-secondary); margin: 0 0 1rem; min-height: 1.1em;
+    }
+    .rx-status:empty { display: none; }
+    .rx-status--warn { color: var(--amber); }
+    .rx-status--busy::before {
+      content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--teal); margin-right: 0.5rem; vertical-align: middle;
+      animation: amberpulse 1s ease-in-out infinite;
+    }
+    .rx-source {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem;
+      font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .rx-source__tag {
+      letter-spacing: 0.15em; text-transform: uppercase;
+      border: 1px solid var(--border); padding: 0.15rem 0.5rem;
+    }
+    .rx-source__tag--ai { color: var(--amber); border-color: rgba(212,160,32,0.4); }
+    .rx-source__tag--lib { color: var(--teal); border-color: rgba(0,212,170,0.35); }
+    .rx-summary { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.75rem; }
+    .rx-editor {
+      display: flex; align-items: center; gap: 0.15rem;
+      background: var(--deep); border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem; margin-bottom: 0.5rem;
+      font-family: var(--font-mono); font-size: 1rem; color: var(--text-dim);
+    }
+    .rx-editor:focus-within { border-color: var(--teal); }
+    .rx-editor__input {
+      flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+      font-family: var(--font-mono); font-size: 1rem; color: var(--teal); caret-color: var(--teal);
+    }
+    .rx-editor__flags { color: var(--violet); white-space: nowrap; }
+    .rx-error { font-family: var(--font-mono); font-size: 0.7rem; color: var(--rose); margin-bottom: 0.5rem; }
+    .rx-error:empty { display: none; }
+    .rx-copy-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .rx-note { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); margin: -0.75rem 0 1rem; }
+    .rx-note:empty { display: none; }
+    .rx-checks { margin-bottom: 1.25rem; }
+    .rx-checks__verdict { font-family: var(--font-mono); font-size: 0.7rem; margin-bottom: 0.5rem; }
+    .rx-checks__verdict--pass { color: var(--teal); }
+    .rx-checks__verdict--fail { color: var(--amber); }
+    .rx-checks__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .rx-checks__col-title {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.35rem;
+    }
+    .rx-check {
+      font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.6;
+      color: var(--text-secondary); word-break: break-all; white-space: pre-wrap; padding: 0.1rem 0;
+    }
+    .rx-check::before { display: inline-block; width: 1.2em; }
+    .rx-check--pass::before { content: '\2713'; color: var(--teal); }
+    .rx-check--fail::before { content: '\2717'; color: var(--rose); }
+    .rx-check--fail { color: var(--text-bright); }
+    .rx-caveats { margin: 0 0 1.25rem; padding-left: 1.1rem; }
+    .rx-caveats li { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0.25rem; }
+    .rx-caveats:empty { display: none; }
+    .rx-test__results .rx-match--empty {
+      display: inline-block; width: 2px; height: 1em; vertical-align: text-bottom;
+      background: var(--teal); padding: 0; border: none;
+    }
+    .rx-groups__match { color: var(--text-dim); }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
+      .rx-checks__grid { grid-template-columns: 1fr; }
+      .rx-editor, .rx-editor__input { font-size: 0.85rem; }
       .rx-input-wrap {
         flex-direction: column;
         align-items: stretch;
@@ -507,20 +599,20 @@
     <!-- Hero -->
     <section class="rx-hero">
       <span class="section-label">Developer Utility</span>
-      <h1 class="heading-xl">AI Regex Architect</h1>
-      <p class="text-body">Describe what you want to match in plain English. Get the exact regular expression with a full breakdown. 100% client-side &mdash; no data leaves your browser.</p>
+      <h1 class="heading-xl">Regex Architect</h1>
+      <p class="text-body">Describe what you want to match in plain English. Get the regular expression, a token-by-token explanation, and a live tester. Common patterns come from a built-in library that runs in your browser; for anything else, AI writes the pattern and this page checks it against its own examples before you use it.</p>
     </section>
 
     <!-- Ad Unit: Top Leaderboard -->
     <div class="ad-container" data-ad-slot="top"></div>
 
-    <!-- AI Notice -->
+    <!-- How it works -->
     <div class="ai-notice">
       <div class="ai-notice__header">
-        <span class="ai-notice__dot"></span>
-        <span class="ai-notice__title">Demo Mode &mdash; AI Unavailable</span>
+        <span class="ai-notice__pair"><span class="ai-notice__dot ai-notice__dot--teal"></span><span class="ai-notice__title ai-notice__title--teal">Pattern library &mdash; runs in your browser</span></span>
+        <span class="ai-notice__pair"><span class="ai-notice__dot"></span><span class="ai-notice__title">AI generation &mdash; optional, 3 a day</span></span>
       </div>
-      <p class="ai-notice__body">This demo matches your query against 35+ built-in patterns via keyword lookup. The AI-augmented version (freeform natural-language generation for arbitrary patterns) is temporarily offline. If your request doesn't map to a known pattern, try the quick-tag buttons or the cheat sheet below.</p>
+      <p class="ai-notice__body">About 40 common patterns (email, URL, dates, IPs, UUIDs&hellip;) are answered instantly by a built-in library, and nothing leaves this page. When your description needs something the library doesn&rsquo;t have, the page sends <em>only your description</em> (plus your test text, if you tick the box) to the same API that powers Civic Filament: Persuasion Lab, which runs it through Claude and stores nothing. Every AI pattern comes with its own should-match and should-not-match examples, and your browser runs them before you see a verdict. Three AI generations a day per visitor; the library and tester are unlimited.</p>
     </div>
 
     <!-- Terminal -->
@@ -530,59 +622,82 @@
           <div class="rx-terminal__dot"></div>
           <div class="rx-terminal__dot"></div>
           <div class="rx-terminal__dot"></div>
-          <span class="rx-terminal__title">regex-architect v1.0</span>
+          <span class="rx-terminal__title">regex-architect v2.0</span>
         </div>
         <div class="rx-terminal__body">
 
           <!-- Quick Tags -->
-          <div class="rx-tags" id="rxTags">
-            <button class="rx-tag" data-query="match email addresses">email</button>
-            <button class="rx-tag" data-query="match URLs">URL</button>
-            <button class="rx-tag" data-query="match phone numbers">phone</button>
-            <button class="rx-tag" data-query="match IP addresses">IP address</button>
-            <button class="rx-tag" data-query="match dates in MM/DD/YYYY format">date MM/DD/YYYY</button>
-            <button class="rx-tag" data-query="match hex color codes">hex color</button>
-            <button class="rx-tag" data-query="match UUIDs">UUID</button>
-            <button class="rx-tag" data-query="match credit card numbers">credit card</button>
-            <button class="rx-tag" data-query="match HTML tags">HTML tags</button>
-            <button class="rx-tag" data-query="match hashtags">hashtags</button>
-            <button class="rx-tag" data-query="match semantic version numbers">semver</button>
-            <button class="rx-tag" data-query="match currency amounts">currency</button>
+          <div class="rx-tags" id="rxTags" aria-label="Common patterns">
+            <button type="button" class="rx-tag" data-query="match email addresses">email</button>
+            <button type="button" class="rx-tag" data-query="match URLs">URL</button>
+            <button type="button" class="rx-tag" data-query="match phone numbers">phone</button>
+            <button type="button" class="rx-tag" data-query="match IP addresses">IP address</button>
+            <button type="button" class="rx-tag" data-query="match dates in MM/DD/YYYY format">date MM/DD/YYYY</button>
+            <button type="button" class="rx-tag" data-query="match hex color codes">hex color</button>
+            <button type="button" class="rx-tag" data-query="match UUIDs">UUID</button>
+            <button type="button" class="rx-tag" data-query="match credit card numbers">credit card</button>
+            <button type="button" class="rx-tag" data-query="match HTML tags">HTML tags</button>
+            <button type="button" class="rx-tag" data-query="match hashtags">hashtags</button>
+            <button type="button" class="rx-tag" data-query="match semantic version numbers">semver</button>
+            <button type="button" class="rx-tag" data-query="match currency amounts">currency</button>
           </div>
 
           <!-- Input -->
           <div class="rx-input-wrap">
-            <span class="rx-prompt">regex&gt;</span>
-            <input type="text" class="rx-input" id="rxInput" placeholder="describe what you want to match... (e.g. &quot;match email addresses&quot;)" autocomplete="off" spellcheck="false">
-            <button class="rx-btn" id="rxGenerate">Generate</button>
+            <label class="rx-prompt" for="rxInput">regex&gt;</label>
+            <input type="text" class="rx-input" id="rxInput" maxlength="500" placeholder="describe what to match, e.g. &quot;order numbers like ORD-12345, just the digits&quot;" autocomplete="off" spellcheck="false">
+            <button type="button" class="rx-btn" id="rxGenerate">Generate</button>
           </div>
+          <label class="rx-ai-opt"><input type="checkbox" id="rxSendSample"> Send my test text with AI requests (first 1,000 characters) so the pattern fits it</label>
+
+          <p class="rx-status" id="rxStatus" role="status" aria-live="polite"></p>
 
           <!-- Flags -->
-          <div class="rx-flags">
+          <div class="rx-flags" role="group" aria-label="Flags">
             <span class="rx-flags__label">Flags:</span>
-            <label class="rx-flag"><input type="checkbox" id="flagG" checked><span>global (g)</span></label>
-            <label class="rx-flag"><input type="checkbox" id="flagI"><span>case-insensitive (i)</span></label>
-            <label class="rx-flag"><input type="checkbox" id="flagM"><span>multiline (m)</span></label>
+            <label class="rx-flag" title="Find every match, not just the first"><input type="checkbox" id="flagG" checked><span>global (g)</span></label>
+            <label class="rx-flag" title="Ignore upper/lower case"><input type="checkbox" id="flagI"><span>ignore case (i)</span></label>
+            <label class="rx-flag" title="^ and $ match at each line"><input type="checkbox" id="flagM"><span>multiline (m)</span></label>
+            <label class="rx-flag" title=". also matches newlines"><input type="checkbox" id="flagS"><span>dotall (s)</span></label>
+            <label class="rx-flag" title="Unicode mode: \p{...} escapes, code points"><input type="checkbox" id="flagU"><span>unicode (u)</span></label>
           </div>
 
           <!-- Output -->
-          <div class="rx-output" id="rxOutput">
-            <div class="rx-output__label">// generated pattern</div>
-            <div class="rx-output__pattern" id="rxPattern">
-              <button class="rx-btn rx-btn--sm rx-btn--outline rx-copy-btn" id="rxCopy" title="Copy regex">copy</button>
+          <div class="rx-output" id="rxOutput" aria-live="polite">
+            <div class="rx-source" id="rxSource"></div>
+            <p class="rx-summary" id="rxSummary"></p>
+
+            <div class="rx-output__label"><label for="rxPatternInput">// pattern (editable)</label></div>
+            <div class="rx-editor">
+              <span aria-hidden="true">/</span>
+              <input type="text" class="rx-editor__input" id="rxPatternInput" autocomplete="off" spellcheck="false" aria-describedby="rxPatternError">
+              <span class="rx-editor__flags" id="rxFlagsView">/g</span>
+            </div>
+            <div class="rx-error" id="rxPatternError"></div>
+            <div class="rx-copy-row">
+              <button type="button" class="rx-btn rx-btn--sm rx-btn--outline" id="rxCopyPattern">copy pattern</button>
+              <button type="button" class="rx-btn rx-btn--sm rx-btn--outline" id="rxCopyLiteral">copy as /js/ literal</button>
+              <button type="button" class="rx-btn rx-btn--sm rx-btn--outline" id="rxCopyCtor">copy as new RegExp()</button>
+            </div>
+
+            <div id="rxChecksWrap" hidden>
+              <div class="rx-output__label">// checked in your browser</div>
+              <div class="rx-checks" id="rxChecks"></div>
             </div>
 
             <div class="rx-output__label">// explanation</div>
+            <p class="rx-note" id="rxEditedNote"></p>
             <div class="rx-output__explain" id="rxExplain"></div>
+            <ul class="rx-caveats" id="rxCaveats"></ul>
 
             <!-- Test Area -->
             <div class="rx-test">
-              <div class="rx-output__label">// test your regex</div>
+              <div class="rx-output__label"><label for="rxTestInput">// test your regex</label></div>
               <textarea class="rx-test__textarea" id="rxTestInput" placeholder="Paste or type text here to test matches..." spellcheck="false"></textarea>
               <div class="rx-test__results" id="rxTestResults">Matches will appear here...</div>
-              <div class="rx-test__stats" id="rxTestStats">
+              <div class="rx-test__stats">
                 <span class="rx-test__stat">Matches: <strong id="rxMatchCount">0</strong></span>
-                <span class="rx-test__stat">Groups: <strong id="rxGroupCount">0</strong></span>
+                <span class="rx-test__stat">Capture groups: <strong id="rxGroupCount">0</strong></span>
               </div>
               <div class="rx-groups" id="rxGroups"></div>
             </div>
@@ -625,6 +740,7 @@
           <div class="rx-cheat__row"><code>(?=...)</code> <span>Positive lookahead</span></div>
           <div class="rx-cheat__row"><code>(?!...)</code> <span>Negative lookahead</span></div>
           <div class="rx-cheat__row"><code>(?&lt;=...)</code> <span>Positive lookbehind</span></div>
+          <div class="rx-cheat__row"><code>(?&lt;!...)</code> <span>Negative lookbehind</span></div>
         </div>
         <div class="rx-cheat__card">
           <div class="rx-cheat__card-title">Groups &amp; Alternation</div>
@@ -635,6 +751,8 @@
           <div class="rx-cheat__row"><code>[abc]</code> <span>Character set</span></div>
           <div class="rx-cheat__row"><code>[^abc]</code> <span>Negated set</span></div>
           <div class="rx-cheat__row"><code>[a-z]</code> <span>Range</span></div>
+          <div class="rx-cheat__row"><code>\1</code> <span>Backreference to group 1</span></div>
+          <div class="rx-cheat__row"><code>\k&lt;name&gt;</code> <span>Backreference to a named group</span></div>
         </div>
         <div class="rx-cheat__card">
           <div class="rx-cheat__card-title">Common Escape Sequences</div>
@@ -645,6 +763,7 @@
           <div class="rx-cheat__row"><code>\*</code> <span>Literal asterisk</span></div>
           <div class="rx-cheat__row"><code>\+</code> <span>Literal plus</span></div>
           <div class="rx-cheat__row"><code>\?</code> <span>Literal question mark</span></div>
+          <div class="rx-cheat__row"><code>\p{L}</code> <span>Any letter, any script (needs u)</span></div>
         </div>
         <div class="rx-cheat__card">
           <div class="rx-cheat__card-title">Flags</div>
@@ -654,6 +773,8 @@
           <div class="rx-cheat__row"><code>s</code> <span>Dotall (. matches \n)</span></div>
           <div class="rx-cheat__row"><code>u</code> <span>Unicode support</span></div>
           <div class="rx-cheat__row"><code>y</code> <span>Sticky (from lastIndex)</span></div>
+          <div class="rx-cheat__row"><code>d</code> <span>Match indices for each group</span></div>
+          <div class="rx-cheat__row"><code>v</code> <span>Unicode sets (newer u)</span></div>
         </div>
       </div>
     </div>
@@ -681,13 +802,14 @@
 
   <script>
   /* ════════════════════════════════════════════════════════════════
-     AI REGEX ARCHITECT — Rule-Based Natural Language to Regex Engine
-     100% Client-Side, Zero API Calls
+     REGEX ARCHITECT — plain English to regex
+     A keyword library answers common patterns in the browser; anything
+     else goes to the AI endpoint below (opt-in by description, 3 a day).
      ════════════════════════════════════════════════════════════════ */
   (function() {
     'use strict';
 
-    // ── Pattern Database (30+ patterns) ──
+    // ── Pattern library ──
     const PATTERNS = [
       {
         keywords: ['email', 'e-mail', 'mail address', 'email address'],
@@ -698,7 +820,8 @@
           { token: '[a-zA-Z0-9.-]+', desc: 'One or more domain name characters (letters, digits, dots, hyphens)' },
           { token: '\\.[a-zA-Z]{2,}', desc: 'A dot followed by the top-level domain (2 or more letters)' }
         ],
-        sample: 'Contact us at hello@example.com or support@example.org for help.'
+        sample: 'Contact us at hello@example.com or support@example.org for help. Not emails: user@localhost, @handle, name@site.',
+        caveats: ['Checks the shape of an address, not whether it exists. Full RFC 5322 syntax (quoted names, IP literals) is wider than this; for sign-ups, send a confirmation email instead of trusting any regex.']
       },
       {
         keywords: ['url', 'urls', 'web address', 'website', 'link', 'http'],
@@ -722,7 +845,8 @@
           { token: '\\d{3}', desc: 'Three-digit exchange number' },
           { token: '[-.\\s]?\\d{4}', desc: 'Optional separator followed by four-digit line number' }
         ],
-        sample: 'Call us at (555) 123-4567 or +1-800-555-0199 or 5551234567.'
+        sample: 'Call us at (555) 123-4567 or +1-800-555-0199 or 5551234567.',
+        caveats: ['North American (NANP) format only. For international numbers, describe the country and ask the AI, or store numbers in E.164 (+15551234567) and validate with a library such as libphonenumber.']
       },
       {
         keywords: ['ip', 'ip address', 'ipv4', 'ip v4'],
@@ -745,7 +869,8 @@
           { token: '[\\/\\-]', desc: 'Separator: slash or dash' },
           { token: '(?:19|20)\\d{2}', desc: 'Year: 1900-2099' }
         ],
-        sample: 'Dates: 01/15/2024, 12-25-2023, 06/01/1999, invalid: 13/32/2024'
+        sample: 'Dates: 01/15/2024, 12-25-2023, 06/01/1999, invalid: 13/32/2024',
+        caveats: ['Checks ranges, not the calendar: 02/31/2024 passes. Parse the date in code to reject impossible days.']
       },
       {
         keywords: ['date yyyy-mm-dd', 'iso date', 'date iso', 'date international'],
@@ -800,20 +925,22 @@
           { token: '{1,2}', desc: 'Matches once (3-digit) or twice (6-digit)' },
           { token: '\\b', desc: 'Word boundary to prevent partial matches' }
         ],
-        sample: 'Colors: #FF5733, #fff, #00ffc8, #333, not valid: #GGG'
+        sample: 'Colors: #FF5733, #fff, #00ffc8, #333, not valid: #GGG',
+        caveats: ['Matches 3- and 6-digit forms. The 4- and 8-digit forms with alpha (#fff8, #00ffc880) are not included.']
       },
       {
         keywords: ['credit card', 'card number', 'cc number', 'visa', 'mastercard'],
-        pattern: '\\b(?:4\\d{3}|5[1-5]\\d{2}|3[47]\\d{2}|6(?:011|5\\d{2}))[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b',
+        pattern: '\\b(?:(?:4\\d{3}|5[1-5]\\d{2}|2(?:22[1-9]|2[3-9]\\d|[3-6]\\d{2}|7[01]\\d|720)|6(?:011|5\\d{2}))(?:[ -]?\\d{4}){3}|3[47]\\d{2}[ -]?\\d{6}[ -]?\\d{5})\\b',
         explanation: [
-          { token: '\\b', desc: 'Word boundary' },
           { token: '4\\d{3}', desc: 'Visa: starts with 4' },
-          { token: '5[1-5]\\d{2}', desc: 'MasterCard: starts with 51-55' },
-          { token: '3[47]\\d{2}', desc: 'Amex: starts with 34 or 37' },
+          { token: '5[1-5]\\d{2}', desc: 'Mastercard: starts with 51-55' },
+          { token: '2(?:22[1-9]|2[3-9]\\d|[3-6]\\d{2}|7[01]\\d|720)', desc: 'Mastercard 2-series: 2221-2720' },
           { token: '6(?:011|5\\d{2})', desc: 'Discover: starts with 6011 or 65' },
-          { token: '[\\s-]?\\d{4}', desc: 'Groups of 4 digits with optional space/dash separator' }
+          { token: '(?:[ -]?\\d{4}){3}', desc: 'Three more groups of 4 digits, each with an optional space or dash' },
+          { token: '3[47]\\d{2}[ -]?\\d{6}[ -]?\\d{5}', desc: 'Amex: 34 or 37, then 15 digits grouped 4-6-5' }
         ],
-        sample: '4111 1111 1111 1111, 5500-0000-0000-0004, 371449635398431'
+        sample: '4111 1111 1111 1111, 5500-0000-0000-0004, 2221000000000009, 3714 496353 98431, not a card: 1234 5678 9012 3456',
+        caveats: ['Checks the length and issuer prefix only, not the Luhn checksum, so some matches are not real card numbers.']
       },
       {
         keywords: ['ssn', 'social security', 'social security number'],
@@ -862,13 +989,14 @@
       },
       {
         keywords: ['file extension', 'file type', 'filename extension'],
-        pattern: '\\.[a-zA-Z0-9]{1,10}$',
+        pattern: '\\.([a-zA-Z0-9]{1,10})$',
+        flags: 'gm',
         explanation: [
           { token: '\\.', desc: 'Literal dot before extension' },
-          { token: '[a-zA-Z0-9]{1,10}', desc: '1-10 alphanumeric characters for the extension' },
-          { token: '$', desc: 'End of string' }
+          { token: '([a-zA-Z0-9]{1,10})', desc: 'Capture group: 1-10 letters or digits (the extension)' },
+          { token: '$', desc: 'End of the line (one filename per line, m flag)' }
         ],
-        sample: 'report.pdf, image.png, script.js, data.json'
+        sample: 'report.pdf\narchive.tar.gz\nscript.js\nREADME\ndata.json'
       },
       {
         keywords: ['html tag', 'html tags', 'xml tag', 'markup tag', 'opening tag', 'closing tag'],
@@ -964,7 +1092,8 @@
           { token: '{7}', desc: 'First 7 groups with colons' },
           { token: '[0-9a-fA-F]{1,4}', desc: 'Eighth and final group' }
         ],
-        sample: 'IPv6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+        sample: 'IPv6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+        caveats: ['Full eight-group form only. Compressed addresses such as ::1 or 2001:db8::7334 are not matched; ask the AI if you need them.']
       },
       {
         keywords: ['semver', 'semantic version', 'version number', 'software version'],
@@ -979,25 +1108,30 @@
       },
       {
         keywords: ['password strength', 'strong password', 'password validation'],
-        pattern: '(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}',
+        pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9\\s]).{12,}$',
+        flags: 'gm',
         explanation: [
+          { token: '^', desc: 'Start of the line (one password per line, m flag)' },
           { token: '(?=.*[a-z])', desc: 'Lookahead: at least one lowercase letter' },
           { token: '(?=.*[A-Z])', desc: 'Lookahead: at least one uppercase letter' },
           { token: '(?=.*\\d)', desc: 'Lookahead: at least one digit' },
-          { token: '(?=.*[!@#$%^&*])', desc: 'Lookahead: at least one special character' },
-          { token: '.{8,}', desc: 'Minimum 8 characters total' }
+          { token: '(?=.*[^A-Za-z0-9\\s])', desc: 'Lookahead: at least one symbol' },
+          { token: '.{12,}$', desc: 'At least 12 characters, to the end of the line' }
         ],
-        sample: 'Passwords: P@ssw0rd!, weakpass, Strong#1Pass, 12345678'
+        sample: 'Correct-Horse-9-Battery\nP@ssw0rd!\nweakpassword\nStrong#1Password\n123456789012',
+        caveats: ['Length matters more than character mix: a long passphrase without symbols can be stronger than a short password that passes this check.']
       },
       {
         keywords: ['whitespace', 'spaces', 'blank', 'trim'],
-        pattern: '^\\s+|\\s+$',
+        pattern: '^[ \\t]+|[ \\t]+$',
+        flags: 'gm',
         explanation: [
-          { token: '^\\s+', desc: 'One or more whitespace characters at the start of string' },
+          { token: '^[ \\t]+', desc: 'Spaces or tabs at the start of a line' },
           { token: '|', desc: 'OR' },
-          { token: '\\s+$', desc: 'One or more whitespace characters at the end of string' }
+          { token: '[ \\t]+$', desc: 'Spaces or tabs at the end of a line' }
         ],
-        sample: '   hello world   '
+        sample: '   leading spaces\ntrailing spaces   \n\tboth sides\t\nnone',
+        caveats: ['Replace matches with an empty string to trim every line. For a single string, str.trim() does the same job.']
       },
       {
         keywords: ['integer', 'whole number', 'digits only', 'number only'],
@@ -1122,257 +1256,459 @@
       }
     ];
 
+    // ── AI generation ──
+    // POSTs { description, sample? } to the Persuasion Lab API's public regex endpoint (anonymous,
+    // nothing stored, 3 a day per IP) and gets back { pattern, flags, summary, explanation,
+    // shouldMatch, shouldNotMatch, sample, caveats } or { unsupported }. The server only checks that
+    // the pattern compiles; the examples are run here, in a worker, before the verdict is shown.
+    // Server prerequisite: https://moonligh7er.github.io must stay in CORS_ORIGINS on the API host.
+    const AI = {
+      endpoint: 'https://filament-api-production.up.railway.app/api/regex/public',
+      timeoutMs: 45000,
+      sampleChars: 1000
+    };
+    const AI_MESSAGES = {
+      AI_UNFUNDED: 'The AI service is temporarily unfunded, so AI generation is paused. The pattern library and the tester still work, and this attempt didn’t count toward your 3 a day.',
+      AI_PAUSED: 'Today’s AI budget is spent, so AI generation is paused until tomorrow (UTC). The library and the tester still work; this attempt didn’t count.',
+      AI_BUSY: 'The AI service is busy right now. Try again in a minute; this attempt didn’t count.',
+      AI_FAILED: 'The AI couldn’t produce a working pattern this time. Try rephrasing; this attempt didn’t count.'
+    };
+
     // ── DOM refs ──
-    const input = document.getElementById('rxInput');
-    const generateBtn = document.getElementById('rxGenerate');
-    const output = document.getElementById('rxOutput');
-    const patternEl = document.getElementById('rxPattern');
-    const explainEl = document.getElementById('rxExplain');
-    const copyBtn = document.getElementById('rxCopy');
-    const testInput = document.getElementById('rxTestInput');
-    const testResults = document.getElementById('rxTestResults');
-    const matchCountEl = document.getElementById('rxMatchCount');
-    const groupCountEl = document.getElementById('rxGroupCount');
-    const groupsEl = document.getElementById('rxGroups');
-    const flagG = document.getElementById('flagG');
-    const flagI = document.getElementById('flagI');
-    const flagM = document.getElementById('flagM');
+    const $ = (id) => document.getElementById(id);
+    const input = $('rxInput');
+    const generateBtn = $('rxGenerate');
+    const statusEl = $('rxStatus');
+    const sendSample = $('rxSendSample');
+    const output = $('rxOutput');
+    const sourceEl = $('rxSource');
+    const summaryEl = $('rxSummary');
+    const patternInput = $('rxPatternInput');
+    const flagsView = $('rxFlagsView');
+    const patternError = $('rxPatternError');
+    const checksWrap = $('rxChecksWrap');
+    const checksEl = $('rxChecks');
+    const editedNote = $('rxEditedNote');
+    const explainEl = $('rxExplain');
+    const caveatsEl = $('rxCaveats');
+    const testInput = $('rxTestInput');
+    const testResults = $('rxTestResults');
+    const matchCountEl = $('rxMatchCount');
+    const groupCountEl = $('rxGroupCount');
+    const groupsEl = $('rxGroups');
+    const FLAG_BOXES = { g: $('flagG'), i: $('flagI'), m: $('flagM'), s: $('flagS'), u: $('flagU') };
 
-    let currentPattern = null;
+    let current = null;      // { pattern, flags, summary, explanation, caveats, sample, shouldMatch, shouldNotMatch, source }
+    let autoSample = '';     // the sample text this page inserted, so it can be swapped when the user hasn't edited it
+    let aiBusy = false;
+    let remaining = null;    // AI generations left today, as last reported by the server
 
-    // ── Find matching pattern ──
+    // ── Helpers ──
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function setStatus(text, kind) {
+      statusEl.textContent = text || '';
+      statusEl.className = 'rx-status' + (kind ? ' rx-status--' + kind : '');
+    }
+    function getFlags() {
+      return Object.keys(FLAG_BOXES).filter((f) => FLAG_BOXES[f].checked).join('') + (current && current.extraFlags || '');
+    }
+    function setFlags(flags) {
+      Object.keys(FLAG_BOXES).forEach((f) => { FLAG_BOXES[f].checked = flags.includes(f); });
+      // Flags without a checkbox (d, y, v) ride along unchanged; u and v can't be combined.
+      if (current) current.extraFlags = flags.replace(/[gimsu]/g, '');
+      if (current && current.extraFlags.includes('v')) FLAG_BOXES.u.checked = false;
+    }
+    function leftToday() {
+      return remaining === null ? '' : ' ' + remaining + ' AI generation' + (remaining === 1 ? '' : 's') + ' left today.';
+    }
+
+    // Escape unescaped forward slashes so the source can sit between /.../ in JavaScript code.
+    function toLiteralSource(src) {
+      let out = '';
+      for (let i = 0; i < src.length; i++) {
+        const c = src[i];
+        if (c === '\\') { out += c + (src[i + 1] || ''); i++; }
+        else if (c === '/') out += '\\/';
+        else out += c;
+      }
+      return out;
+    }
+
+    // Capturing groups in source order, with their names (null when unnamed).
+    function groupNames(src) {
+      const names = [];
+      let inClass = false;
+      for (let i = 0; i < src.length; i++) {
+        const c = src[i];
+        if (c === '\\') { i++; continue; }
+        if (inClass) { if (c === ']') inClass = false; continue; }
+        if (c === '[') { inClass = true; continue; }
+        if (c !== '(') continue;
+        if (src[i + 1] !== '?') names.push(null);
+        else if (src[i + 2] === '<' && src[i + 3] !== '=' && src[i + 3] !== '!') {
+          const end = src.indexOf('>', i + 3);
+          names.push(end > 0 ? src.slice(i + 3, end) : null);
+        }
+      }
+      return names;
+    }
+
+    function copy(text, btn) {
+      const done = () => { const t = btn.textContent; btn.textContent = 'copied'; setTimeout(() => { btn.textContent = t; }, 1400); };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text) && done());
+      } else if (fallbackCopy(text)) done();
+    }
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    // ── Library lookup ──
+    // Words are matched whole (so "script" no longer finds "ip"), with a light plural stem. The
+    // library answers only when the description is essentially the keyword; anything with real
+    // extra conditions ("emails from gmail only") goes to the AI instead of a pattern that ignores them.
+    const STOP = new Set(('a an the all any every each some of in on for from to with that which who me my i ' +
+      'match matches matching find finds extract get grab detect validate validating check checks capture ' +
+      'regex regexp pattern patterns expression text string strings format formatted valid like such as please want need').split(' '));
+
+    function stem(w) {
+      if (w.length > 4 && w.endsWith('ies')) return w.slice(0, -3) + 'y';
+      if (w.length > 3 && /(?:ss|x|ch|sh)es$/.test(w)) return w.slice(0, -2);
+      if (w.length > 3 && w.endsWith('s') && !w.endsWith('ss')) return w.slice(0, -1);
+      return w;
+    }
+    function tokens(text) {
+      return text.toLowerCase().split(/[^a-z0-9@_\/-]+/).filter(Boolean).map(stem);
+    }
+
     function findPattern(query) {
-      const q = query.toLowerCase().trim();
-      if (!q) return null;
-
-      let bestMatch = null;
+      const q = tokens(query);
+      if (!q.length) return null;
+      const qset = new Set(q);
+      let best = null;
       let bestScore = 0;
-
+      let bestWords = null;
       for (const p of PATTERNS) {
         for (const kw of p.keywords) {
-          const kwLower = kw.toLowerCase();
-          // Exact match
-          if (q === kwLower || q === 'match ' + kwLower || q === 'find ' + kwLower ||
-              q === 'extract ' + kwLower || q === 'detect ' + kwLower ||
-              q === 'match all ' + kwLower || q === 'find all ' + kwLower) {
-            return p;
-          }
-          // Contains keyword
-          if (q.includes(kwLower)) {
-            const score = kwLower.length;
-            if (score > bestScore) {
-              bestScore = score;
-              bestMatch = p;
-            }
-          }
-          // Keyword words appear in query
-          const kwWords = kwLower.split(/\s+/);
-          const matchedWords = kwWords.filter(w => q.includes(w));
-          if (matchedWords.length === kwWords.length && kwWords.length > 0) {
-            const score = kwLower.length + 5;
-            if (score > bestScore) {
-              bestScore = score;
-              bestMatch = p;
-            }
-          }
+          const words = tokens(kw);
+          if (!words.length || !words.every((w) => qset.has(w))) continue;
+          const score = kw.length + words.length * 5;
+          if (score > bestScore) { bestScore = score; best = p; bestWords = new Set(words); }
         }
       }
-
-      return bestMatch;
+      if (!best) return null;
+      const extra = q.filter((w) => !STOP.has(w) && !bestWords.has(w) && !/^\d+$/.test(w));
+      return extra.length <= 1 ? best : null;
     }
 
-    // ── Build flags string ──
-    function getFlags() {
-      let f = '';
-      if (flagG.checked) f += 'g';
-      if (flagI.checked) f += 'i';
-      if (flagM.checked) f += 'm';
-      return f;
-    }
+    // ── Matching runs in a worker with a time limit, so a catastrophic-backtracking pattern can't freeze the tab ──
+    const WORKER_SRC = [
+      'onmessage = function (e) {',
+      '  var d = e.data, out = { id: d.id };',
+      '  try {',
+      '    if (d.kind === "verify") {',
+      '      var re = new RegExp(d.pattern, d.flags.replace(/[gy]/g, ""));',
+      '      out.match = d.shouldMatch.map(function (s) { return re.test(s); });',
+      '      out.reject = d.shouldNotMatch.map(function (s) { return !re.test(s); });',
+      '    } else {',
+      '      var rx = new RegExp(d.pattern, d.flags), text = d.text, list = [], m, cap = 2000;',
+      '      var unicode = /[uv]/.test(d.flags);',
+      '      if (rx.global || rx.sticky) {',
+      '        while ((m = rx.exec(text)) !== null && list.length < cap) {',
+      '          list.push({ i: m.index, t: m[0], g: m.slice(1), n: m.groups || null });',
+      '          if (m[0] === "") rx.lastIndex = m.index + (unicode && text.codePointAt(m.index) > 0xffff ? 2 : 1);',
+      '        }',
+      '        out.capped = list.length >= cap;',
+      '      } else if ((m = rx.exec(text)) !== null) {',
+      '        list.push({ i: m.index, t: m[0], g: m.slice(1), n: m.groups || null });',
+      '      }',
+      '      out.matches = list;',
+      '    }',
+      '  } catch (err) { out.error = err.message; }',
+      '  postMessage(out);',
+      '};'
+    ].join('\n');
 
-    // ── Render output ──
-    function renderPattern(match) {
-      currentPattern = match;
-      output.classList.add('active');
-
-      const flags = getFlags();
-      const displayPattern = '/' + match.pattern + '/' + flags;
-
-      // Pattern display
-      patternEl.innerHTML = '';
-      const patternText = document.createTextNode(displayPattern);
-      patternEl.appendChild(patternText);
-      // Re-add copy button
-      const btn = document.createElement('button');
-      btn.className = 'rx-btn rx-btn--sm rx-btn--outline rx-copy-btn';
-      btn.textContent = 'copy';
-      btn.title = 'Copy regex';
-      btn.addEventListener('click', function() {
-        navigator.clipboard.writeText(match.pattern).then(() => {
-          btn.textContent = 'copied!';
-          setTimeout(() => { btn.textContent = 'copy'; }, 1500);
+    const runner = (function () {
+      let worker = null;
+      let seq = 0;
+      const waiting = new Map();
+      function spawn() {
+        try {
+          const url = URL.createObjectURL(new Blob([WORKER_SRC], { type: 'text/javascript' }));
+          worker = new Worker(url);
+          URL.revokeObjectURL(url);
+          worker.onmessage = (e) => {
+            const job = waiting.get(e.data.id);
+            if (!job) return;
+            clearTimeout(job.timer);
+            waiting.delete(e.data.id);
+            job.resolve(e.data);
+          };
+        } catch (err) { worker = null; }
+      }
+      function inline(msg) {
+        // No worker support: run on the main thread (same logic, no time limit).
+        const fn = new Function('postMessage', 'var onmessage;' + WORKER_SRC + '\nreturn onmessage;');
+        let result = null;
+        fn((r) => { result = r; })({ data: msg });
+        return Promise.resolve(result);
+      }
+      return function run(msg, limitMs) {
+        if (!worker) spawn();
+        msg.id = ++seq;
+        if (!worker) return inline(msg);
+        return new Promise((resolve) => {
+          const timer = setTimeout(() => {
+            // Too slow: kill the worker (and anything else queued on it) and start fresh next time.
+            worker.terminate();
+            worker = null;
+            waiting.forEach((job) => job.resolve({ id: job.id, timeout: true }));
+            waiting.clear();
+          }, limitMs);
+          waiting.set(msg.id, { id: msg.id, resolve, timer });
+          worker.postMessage(msg);
         });
-      });
-      patternEl.appendChild(btn);
+      };
+    })();
 
-      // Explanation
-      explainEl.innerHTML = '';
-      for (const item of match.explanation) {
-        const div = document.createElement('div');
-        div.className = 'rx-output__explain-item';
-        div.innerHTML = '<code>' + escapeHtml(item.token) + '</code> &mdash; ' + escapeHtml(item.desc);
-        explainEl.appendChild(div);
-      }
-
-      // Set sample text if test area is empty
-      if (!testInput.value.trim() && match.sample) {
-        testInput.value = match.sample;
-      }
-
-      runTest();
-    }
-
-    // ── Escape HTML ──
-    function escapeHtml(str) {
-      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    // ── Run test matches ──
-    function runTest() {
-      if (!currentPattern) return;
-
-      const text = testInput.value;
-      if (!text) {
-        testResults.innerHTML = '<span style="color:var(--text-dim)">Matches will appear here...</span>';
-        matchCountEl.textContent = '0';
-        groupCountEl.textContent = '0';
-        groupsEl.innerHTML = '';
-        return;
-      }
-
-      const flags = getFlags();
-      let regex;
-      try {
-        regex = new RegExp(currentPattern.pattern, flags);
-      } catch (e) {
-        testResults.innerHTML = '<span style="color:var(--rose)">Invalid regex: ' + escapeHtml(e.message) + '</span>';
-        return;
-      }
-
-      // Find all matches and groups
-      const matches = [];
-      const groups = [];
-      let m;
-
-      if (flags.includes('g')) {
-        while ((m = regex.exec(text)) !== null) {
-          matches.push({ index: m.index, length: m[0].length, text: m[0] });
-          if (m.length > 1) {
-            const g = [];
-            for (let i = 1; i < m.length; i++) {
-              g.push(m[i]);
-            }
-            groups.push({ match: m[0], groups: g });
-          }
-          if (m[0].length === 0) { regex.lastIndex++; }
-        }
-      } else {
-        m = regex.exec(text);
-        if (m) {
-          matches.push({ index: m.index, length: m[0].length, text: m[0] });
-          if (m.length > 1) {
-            const g = [];
-            for (let i = 1; i < m.length; i++) {
-              g.push(m[i]);
-            }
-            groups.push({ match: m[0], groups: g });
-          }
-        }
-      }
-
-      // Highlight matches in text
-      if (matches.length === 0) {
-        testResults.innerHTML = '<span style="color:var(--text-dim)">No matches found.</span>';
-      } else {
-        let highlighted = '';
-        let lastIdx = 0;
-        for (const match of matches) {
-          highlighted += escapeHtml(text.slice(lastIdx, match.index));
-          highlighted += '<span class="rx-match">' + escapeHtml(text.slice(match.index, match.index + match.length)) + '</span>';
-          lastIdx = match.index + match.length;
-        }
-        highlighted += escapeHtml(text.slice(lastIdx));
-        testResults.innerHTML = highlighted;
-      }
-
-      // Stats
-      matchCountEl.textContent = matches.length;
-      groupCountEl.textContent = groups.reduce((sum, g) => sum + g.groups.length, 0);
-
-      // Captured groups
-      groupsEl.innerHTML = '';
-      if (groups.length > 0) {
-        for (const g of groups) {
-          for (let i = 0; i < g.groups.length; i++) {
-            const div = document.createElement('div');
-            div.className = 'rx-groups__item';
-            div.innerHTML = 'Group ' + (i + 1) + ': <code>' + escapeHtml(g.groups[i] || '(empty)') + '</code>';
-            groupsEl.appendChild(div);
-          }
-        }
-      }
-    }
-
-    // ── Not found response ──
-    function showNotFound(query) {
+    // ── Render a pattern (library or AI) ──
+    function show(entry) {
+      current = Object.assign({ summary: '', explanation: [], caveats: [], sample: '', shouldMatch: [], shouldNotMatch: [], extraFlags: '' }, entry);
       output.classList.add('active');
-      patternEl.innerHTML = '<span style="color:var(--rose)">// pattern not recognized</span>';
-      explainEl.innerHTML = '<div class="rx-output__explain-item" style="color:var(--text-dim)">Could not match "' + escapeHtml(query) + '" to a known pattern. Try keywords like: <span style="color:var(--teal)">email, URL, phone, IP address, date, time, hex color, credit card, SSN, ZIP code, MAC address, UUID, HTML tags, markdown links, variable names, currency, hashtags, mentions, IPv6, semver, password, domain, slug, camelCase, snake_case, base64, JWT, quoted string, CSS class</span></div>';
-      testResults.innerHTML = '';
+
+      setFlags(current.flags != null ? current.flags : getFlags());
+      patternInput.value = current.pattern;
+      current.original = current.pattern;
+
+      const tag = current.source === 'ai'
+        ? '<span class="rx-source__tag rx-source__tag--ai">AI &middot; Claude</span><span>Written for your description. Read the checks below before relying on it.</span>'
+        : '<span class="rx-source__tag rx-source__tag--lib">Library</span><span>From the built-in library. Not quite it?</span> <button type="button" class="rx-btn rx-btn--sm rx-btn--outline" id="rxAskAi">ask AI instead</button>';
+      sourceEl.innerHTML = tag;
+      const ask = $('rxAskAi');
+      if (ask) ask.addEventListener('click', () => generateWithAI(input.value.trim()));
+
+      summaryEl.textContent = current.summary || '';
+      summaryEl.hidden = !current.summary;
+      editedNote.textContent = '';
+
+      explainEl.innerHTML = current.explanation.map((item) =>
+        '<div class="rx-output__explain-item"><code>' + escapeHtml(item.token) + '</code> &mdash; ' + escapeHtml(item.desc) + '</div>'
+      ).join('');
+      caveatsEl.innerHTML = current.caveats.map((c) => '<li>' + escapeHtml(c) + '</li>').join('');
+
+      // Swap in the new sample unless the user has typed their own text.
+      if (current.sample && (!testInput.value.trim() || testInput.value === autoSample)) {
+        testInput.value = current.sample;
+        autoSample = current.sample;
+      }
+
+      onPatternChange();
+      verify();
+    }
+
+    function verify() {
+      if (!current || !current.shouldMatch.length && !current.shouldNotMatch.length) {
+        checksWrap.hidden = true;
+        return;
+      }
+      checksWrap.hidden = false;
+      checksEl.innerHTML = '<div class="rx-checks__verdict">Running the examples&hellip;</div>';
+      const pattern = patternInput.value;
+      runner({ kind: 'verify', pattern, flags: getFlags(), shouldMatch: current.shouldMatch, shouldNotMatch: current.shouldNotMatch }, 1500).then((r) => {
+        if (!current || patternInput.value !== pattern) return;
+        if (r.timeout || r.error) {
+          checksEl.innerHTML = '<div class="rx-checks__verdict rx-checks__verdict--fail">' +
+            escapeHtml(r.timeout ? 'The examples took too long to run: this pattern may backtrack catastrophically. Don’t use it on untrusted input.' : 'Couldn’t run the examples: ' + r.error) + '</div>';
+          return;
+        }
+        const passM = r.match.filter(Boolean).length;
+        const passR = r.reject.filter(Boolean).length;
+        const all = passM === r.match.length && passR === r.reject.length;
+        const verdict = all
+          ? 'Matches all ' + r.match.length + ' examples and rejects all ' + r.reject.length + ' near misses.'
+          : 'Only ' + passM + ' of ' + r.match.length + ' examples match and ' + passR + ' of ' + r.reject.length + ' near misses are rejected. Check the pattern before using it.';
+        const col = (title, list, results) => '<div><div class="rx-checks__col-title">' + title + '</div>' +
+          list.map((s, i) => '<div class="rx-check ' + (results[i] ? 'rx-check--pass' : 'rx-check--fail') + '">' + (s === '' ? '<em>(empty string)</em>' : escapeHtml(s)) + '</div>').join('') + '</div>';
+        checksEl.innerHTML = '<div class="rx-checks__verdict ' + (all ? 'rx-checks__verdict--pass' : 'rx-checks__verdict--fail') + '">' + verdict + '</div>' +
+          '<div class="rx-checks__grid">' + col('Should match', current.shouldMatch, r.match) + col('Should not match', current.shouldNotMatch, r.reject) + '</div>';
+      });
+    }
+
+    // ── Pattern edits, flag changes ──
+    function onPatternChange() {
+      if (!current) return;
+      const flags = getFlags();
+      flagsView.textContent = '/' + flags;
+      try {
+        new RegExp(patternInput.value, flags);
+        patternError.textContent = '';
+      } catch (e) {
+        patternError.textContent = e.message;
+      }
+      editedNote.textContent = patternInput.value !== current.original ? 'You’ve edited the pattern; this explanation describes the original.' : '';
+      scheduleTest();
+    }
+
+    // ── Live tester ──
+    let testTimer = null;
+    function scheduleTest() {
+      clearTimeout(testTimer);
+      testTimer = setTimeout(runTest, 120);
+    }
+
+    function clearResults(message) {
+      testResults.innerHTML = '<span style="color:var(--text-dim)">' + message + '</span>';
       matchCountEl.textContent = '0';
       groupCountEl.textContent = '0';
       groupsEl.innerHTML = '';
-      currentPattern = null;
     }
 
-    // ── Event: Generate ──
+    function runTest() {
+      if (!current) return;
+      const text = testInput.value;
+      const pattern = patternInput.value;
+      const flags = getFlags();
+      if (patternError.textContent) { clearResults('Fix the pattern to see matches.'); return; }
+      if (!text) { clearResults('Matches will appear here...'); return; }
+      runner({ kind: 'test', pattern, flags, text }, 1000).then((r) => {
+        if (testInput.value !== text || patternInput.value !== pattern || getFlags() !== flags) return; // stale
+        if (r.timeout) { clearResults('This pattern took over a second on this text, so the run was stopped. It may backtrack catastrophically.'); testResults.firstChild.style.color = 'var(--amber)'; return; }
+        if (r.error) { testResults.innerHTML = '<span style="color:var(--rose)">' + escapeHtml(r.error) + '</span>'; return; }
+        renderMatches(text, pattern, r.matches, r.capped);
+      });
+    }
+
+    function renderMatches(text, pattern, matches, capped) {
+      if (!matches.length) { clearResults('No matches found.'); return; }
+      let html = '';
+      let last = 0;
+      for (const m of matches) {
+        html += escapeHtml(text.slice(last, m.i));
+        html += m.t === '' ? '<span class="rx-match rx-match--empty" title="empty match"></span>' : '<span class="rx-match">' + escapeHtml(m.t) + '</span>';
+        last = m.i + m.t.length;
+      }
+      testResults.innerHTML = html + escapeHtml(text.slice(last));
+      matchCountEl.textContent = matches.length.toLocaleString() + (capped ? '+' : '');
+      const groupCount = matches[0].g.length;
+      groupCountEl.textContent = groupCount;
+
+      groupsEl.innerHTML = '';
+      if (!groupCount) return;
+      const names = groupNames(pattern);
+      const label = (idx) => names[idx] || '$' + (idx + 1);
+      const rows = matches.slice(0, 50).map((m, mi) =>
+        '<div class="rx-groups__item"><span class="rx-groups__match">Match ' + (mi + 1) + ':</span> ' +
+        m.g.map((v, gi) => label(gi) + ' <code>' + (v === undefined ? '(no match)' : escapeHtml(v) || '(empty)') + '</code>').join(' &middot; ') + '</div>'
+      );
+      if (matches.length > 50) rows.push('<div class="rx-groups__item rx-groups__match">&hellip; ' + (matches.length - 50) + ' more</div>');
+      groupsEl.innerHTML = rows.join('');
+    }
+
+    // ── Generate: library first, AI for everything else ──
     function handleGenerate() {
       const query = input.value.trim();
-      if (!query) return;
-
+      if (!query) { input.focus(); setStatus('Describe what you want to match first.', 'warn'); return; }
       const match = findPattern(query);
       if (match) {
-        renderPattern(match);
-      } else {
-        showNotFound(query);
+        setStatus('');
+        show(Object.assign({ source: 'library' }, match));
+        return;
       }
+      generateWithAI(query);
     }
 
-    generateBtn.addEventListener('click', handleGenerate);
-    input.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') handleGenerate();
-    });
+    function generateWithAI(description) {
+      if (aiBusy) return;
+      if (!description || description.length < 3) { setStatus('Describe what you want to match first (a few words is enough).', 'warn'); input.focus(); return; }
+      if (remaining === 0) { setStatus('You’ve used today’s 3 AI generations. The library and the tester still work.', 'warn'); return; }
+      aiBusy = true;
+      generateBtn.disabled = true;
+      setStatus('Asking Claude for a pattern (usually 5–15 seconds)…', 'busy');
 
-    // ── Event: Quick tags ──
-    document.getElementById('rxTags').addEventListener('click', function(e) {
+      const body = { description: description.slice(0, 500) };
+      if (sendSample.checked && testInput.value.trim() && testInput.value !== autoSample) body.sample = testInput.value.slice(0, AI.sampleChars);
+
+      const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), AI.timeoutMs) : null;
+
+      fetch(AI.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: ctrl ? ctrl.signal : undefined
+      })
+        .then((resp) => resp.json().catch(() => null).then((j) => ({ status: resp.status, ok: resp.ok, body: j })))
+        .then((x) => {
+          const b = x.body || {};
+          if (typeof b.remainingToday === 'number') remaining = b.remainingToday;
+          else if (b.data && typeof b.data.remainingToday === 'number') remaining = b.data.remainingToday;
+
+          if (x.status === 429) {
+            remaining = 0;
+            const hours = b.resetInSeconds ? Math.max(1, Math.round(b.resetInSeconds / 3600)) : null;
+            setStatus((b.message || 'You’ve used today’s 3 AI generations.') + (hours ? ' Resets in about ' + hours + ' hour' + (hours === 1 ? '' : 's') + '.' : ''), 'warn');
+            return;
+          }
+          if (!x.ok || !b.success) {
+            setStatus(AI_MESSAGES[b.error] || b.message || ('The AI service answered with an error (HTTP ' + x.status + '). The library and the tester still work.'), 'warn');
+            return;
+          }
+          if (b.data.unsupported) {
+            setStatus(b.data.unsupported + leftToday(), 'warn');
+            return;
+          }
+          setStatus('Pattern written by Claude.' + leftToday());
+          show(Object.assign({ source: 'ai' }, b.data.result));
+        })
+        .catch((err) => {
+          setStatus(err && err.name === 'AbortError'
+            ? 'The AI took too long to answer. Try again in a minute.'
+            : 'Couldn’t reach the AI service. Check your connection; the library and the tester still work.', 'warn');
+        })
+        .then(() => {
+          clearTimeout(timer);
+          aiBusy = false;
+          generateBtn.disabled = false;
+        });
+    }
+
+    // ── Events ──
+    generateBtn.addEventListener('click', handleGenerate);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleGenerate(); });
+
+    $('rxTags').addEventListener('click', (e) => {
       const tag = e.target.closest('.rx-tag');
       if (!tag) return;
       input.value = tag.dataset.query;
       handleGenerate();
     });
 
-    // ── Event: Live test ──
-    testInput.addEventListener('input', runTest);
+    patternInput.addEventListener('input', () => { onPatternChange(); verify(); });
+    testInput.addEventListener('input', scheduleTest);
+    Object.keys(FLAG_BOXES).forEach((f) => FLAG_BOXES[f].addEventListener('change', () => {
+      if (f === 'u' && FLAG_BOXES.u.checked && current && current.extraFlags) current.extraFlags = current.extraFlags.replace('v', '');
+      onPatternChange();
+      verify();
+    }));
 
-    // ── Event: Flags change ──
-    [flagG, flagI, flagM].forEach(function(cb) {
-      cb.addEventListener('change', function() {
-        if (currentPattern) renderPattern(currentPattern);
-      });
-    });
+    $('rxCopyPattern').addEventListener('click', function () { copy(patternInput.value, this); });
+    $('rxCopyLiteral').addEventListener('click', function () { copy('/' + toLiteralSource(patternInput.value) + '/' + getFlags(), this); });
+    $('rxCopyCtor').addEventListener('click', function () { copy('new RegExp(' + JSON.stringify(patternInput.value) + ', ' + JSON.stringify(getFlags()) + ')', this); });
 
-    // ── Focus input on load ──
-    input.focus();
+    input.focus({ preventScroll: true });
 
   })();
   </script>

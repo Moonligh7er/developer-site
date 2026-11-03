@@ -293,7 +293,7 @@
             </svg>
             <span class="gauge-score" id="gauge-score">0</span>
           </div>
-          <p class="score-verdict" id="score-verdict"></p>
+          <p class="score-verdict" id="score-verdict" role="status" aria-live="polite"></p>
           <p class="score-desc" id="score-desc"></p>
           <div class="chips">
             <span class="chip chip--violet" id="chip-band"></span>
@@ -336,7 +336,7 @@
         <!-- AI deep scan -->
         <div class="panel panel--amber ai-panel" id="ai-panel">
           <p class="panel__label">AI deep scan</p>
-          <p class="ai-status" id="ai-status"></p>
+          <p class="ai-status" id="ai-status" role="status" aria-live="polite"></p>
           <div id="ai-result"></div>
         </div>
 
@@ -413,6 +413,13 @@
       endpoint: 'https://filament-api-production.up.railway.app/api/defense/public',
       maxChars: 3000
     };
+    // Failures on the service's side don't count against the visitor's 3 a day; the API hands the scan back.
+    var AI_ERRORS = {
+      AI_UNFUNDED: 'The AI service is temporarily unfunded, so deep scans are paused. This attempt didn’t count toward your 3 a day.',
+      AI_PAUSED: 'Today’s AI budget is spent, so deep scans are paused until tomorrow (UTC). This attempt didn’t count.',
+      AI_BUSY: 'The AI service is busy right now. Try again in a minute; this attempt didn’t count.',
+      AI_FAILED: 'The deep scan failed this time. Try again in a minute; this attempt didn’t count.'
+    };
 
     // Encyclopedia links. Ids in PENDING resolve to entries that are drafted but not yet published;
     // link those to the encyclopedia index until they land (then remove them from this set).
@@ -459,6 +466,11 @@
       fill.style.stroke = gaugeColor(score);
       fill.style.strokeDashoffset = c - (score / 100) * c;
       var scoreEl = el('gauge-score');
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        scoreEl.textContent = score;
+        scoreEl.style.color = gaugeColor(score);
+        return;
+      }
       var t0 = performance.now();
       (function tick(now) {
         var p = Math.min((now - t0) / 800, 1);
@@ -638,17 +650,25 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input: lastText.slice(0, AI_MODE.maxChars) })
-      }).then(function (resp) { return resp.json().then(function (j) { return { ok: resp.ok, status: resp.status, body: j }; }); })
+      }).then(function (resp) { return resp.json().catch(function () { return null; }).then(function (j) { return { ok: resp.ok, status: resp.status, body: j }; }); })
         .then(function (x) {
-          if (!x.ok || !x.body || !x.body.success) {
-            el('ai-status').textContent = (x.body && (x.body.message || x.body.error)) || ('Deep scan unavailable (HTTP ' + x.status + ').');
-            if (x.status !== 429) aiBtn.disabled = false;
+          var b = x.body || {};
+          var left = typeof b.remainingToday === 'number' ? b.remainingToday : (b.data && typeof b.data.remainingToday === 'number' ? b.data.remainingToday : null);
+          var leftText = left === null ? '' : ' ' + left + ' deep scan' + (left === 1 ? '' : 's') + ' left today.';
+          if (x.status === 429) {
+            var hours = b.resetInSeconds ? Math.max(1, Math.round(b.resetInSeconds / 3600)) : null;
+            el('ai-status').textContent = (b.message || 'You’ve used today’s 3 deep scans.') + (hours ? ' Resets in about ' + hours + ' hour' + (hours === 1 ? '' : 's') + '.' : '');
             return;
           }
-          el('ai-status').textContent = 'Contextual analysis by Claude via Civic Filament: Persuasion Lab. Treat as a second opinion, not a verdict.';
-          renderAiResult(x.body.data);
+          if (!x.ok || !b.success) {
+            el('ai-status').textContent = (AI_ERRORS[b.error] || b.message || ('Deep scan unavailable (HTTP ' + x.status + ').')) + ' The pattern results above still stand.';
+            aiBtn.disabled = false;
+            return;
+          }
+          el('ai-status').textContent = 'Contextual analysis by Claude via Civic Filament: Persuasion Lab. Treat as a second opinion, not a verdict.' + leftText;
+          renderAiResult(b.data);
         })
-        .catch(function () { el('ai-status').textContent = 'Deep scan unavailable right now. The pattern results above still stand.'; aiBtn.disabled = false; });
+        .catch(function () { el('ai-status').textContent = 'Couldn’t reach the deep-scan service. Check your connection; the pattern results above still stand.'; aiBtn.disabled = false; });
     }
 
     // ---------- events ----------

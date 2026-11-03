@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Insulation R-Value Calculator (Batts, Rolls, Blown-In) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate insulation quantity by area and target R-value. Supports fiberglass batts, mineral wool, and blown-in cellulose. Includes DOE climate zone reference.">
+  <meta name="description" content="Insulation depth and quantity for a target R-value, with ENERGY STAR recommended levels by climate zone (2021 IECC basis). Batts, blown-in cellulose or fiberglass, and spray foam.">
   <meta name="keywords" content="insulation calculator, R-value calculator, insulation batts calculator, blown-in insulation calculator, attic insulation calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Insulation R-Value Calculator (Batts, Rolls, Blown-In)",
-    "description": "Calculate insulation quantity by area and target R-value. Supports fiberglass batts, mineral wool, and blown-in cellulose. Includes DOE climate zone reference.",
+    "description": "Insulation depth and quantity for a target R-value, with ENERGY STAR recommended levels by climate zone (2021 IECC basis). Batts, blown-in cellulose or fiberglass, and spray foam.",
     "url": "https://moonligh7er.github.io/developer-site/tools/insulation-r-value-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Insulation R-Value Calculator (Batts, Rolls, Blown-In)">
-  <meta property="og:description" content="Calculate insulation quantity by area and target R-value. Supports fiberglass batts, mineral wool, and blown-in cellulose. Includes DOE climate zone reference.">
+  <meta property="og:description" content="Insulation depth and quantity for a target R-value, with ENERGY STAR recommended levels by climate zone (2021 IECC basis). Batts, blown-in cellulose or fiberglass, and spray foam.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/insulation-r-value-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Insulation R-Value Calculator (Batts, Rolls, Blown-In)">
-  <meta name="twitter:description" content="Calculate insulation quantity by area and target R-value. Supports fiberglass batts, mineral wool, and blown-in cellulose. Includes DOE climate zone reference.">
+  <meta name="twitter:description" content="Insulation depth and quantity for a target R-value, with ENERGY STAR recommended levels by climate zone (2021 IECC basis). Batts, blown-in cellulose or fiberglass, and spray foam.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -112,69 +150,152 @@
 
       <div class="calc-card">
         <h1>Insulation R-Value Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter area, target R-value, and material type. Returns batts, rolls, or blown-in bags. Climate zone reference table included.</p>
+        <p class="calc-intro">Pick your climate zone and where the insulation goes to load the ENERGY STAR recommended R-value, or type your own. Choose a material to see the depth needed and roughly how many batts or bags to buy.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (sq ft, in)</option>
+              <option value="metric">Metric (m², cm)</option>
             </select>
           </div>
         </div>
 
-        <p class="calc-subhead">Area &amp; Target</p>
-<div class="form-grid">
-  <div class="form-group"><label for="area">Area to Insulate (sq ft or m²)</label><input type="number" id="area" placeholder="1200" min="0" step="any"></div>
-  <div class="form-group"><label for="targetR">Target R-Value</label><input type="number" id="targetR" placeholder="49" min="0" step="any"><span class="hint">Attic Zone 1: R30, Zone 5: R49, Zone 7: R60</span></div>
-</div>
-<p class="calc-subhead">Material</p>
-<div class="form-grid">
-  <div class="form-group"><label for="material">Insulation Type</label>
-    <select id="material">
-      <option value="fiberglass-batt">Fiberglass batt (R-3.14 per inch)</option>
-      <option value="mineral-wool">Mineral wool batt (R-3.7 per inch)</option>
-      <option value="cellulose-blown">Cellulose, blown-in (R-3.5 per inch)</option>
-      <option value="fiberglass-blown">Fiberglass, blown-in (R-2.5 per inch)</option>
-      <option value="foam-spray">Spray foam, closed-cell (R-6.5 per inch)</option>
-    </select>
-  </div>
-</div>
+        <p class="calc-subhead">Where &amp; how much</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="area">Area to insulate <span data-u="sqft"></span></label>
+            <input type="number" id="area" value="1000" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="area-hint area-err">
+            <span class="hint" id="area-hint">Attic floor or floor area, not the roof slope.</span>
+            <span class="field-err" id="area-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="zone">Climate zone</label>
+            <select id="zone">
+              <option value="1">Zone 1 (south Florida, Hawaii)</option>
+              <option value="2">Zone 2 (Gulf Coast, Phoenix)</option>
+              <option value="3">Zone 3 (Atlanta, Dallas, Los Angeles)</option>
+              <option value="4ab" selected>Zone 4A / 4B (Washington DC, St. Louis, Albuquerque)</option>
+              <option value="4c56">Zone 4C, 5 or 6 (Seattle, Chicago, Denver, Minneapolis)</option>
+              <option value="78">Zone 7 or 8 (northern Minnesota, Alaska)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="location">Where</label>
+            <select id="location">
+              <option value="attic0" selected>Attic with no insulation</option>
+              <option value="attic34">Attic with 3&ndash;4 in already (add on top)</option>
+              <option value="floor">Floor over an unheated space</option>
+              <option value="custom">Other / my own target</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="targetR">R-value to add <span class="u-static">R</span></label>
+            <input type="number" id="targetR" value="60" min="0" max="100" step="any" inputmode="decimal" aria-describedby="targetR-hint targetR-err">
+            <span class="hint" id="targetR-hint">Filled in from the ENERGY STAR table; type your own to override.</span>
+            <span class="field-err" id="targetR-err"></span>
+          </div>
+        </div>
+        <p class="calc-subhead">Material</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="material">Insulation type</label>
+            <select id="material">
+              <option value="fiberglass-batt" selected>Fiberglass batts</option>
+              <option value="mineral-wool">Mineral wool batts</option>
+              <option value="cellulose-blown">Cellulose, blown-in</option>
+              <option value="fiberglass-blown">Fiberglass, blown-in</option>
+              <option value="foam-open">Spray foam, open-cell</option>
+              <option value="foam-closed">Spray foam, closed-cell</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rPerIn">R per inch <span class="u-static">R/in</span></label>
+            <input type="number" id="rPerIn" value="3.1" min="0" max="10" step="any" inputmode="decimal" aria-describedby="rPerIn-hint rPerIn-err">
+            <span class="hint" id="rPerIn-hint">Typical value for the type picked; the product label has the exact figure.</span>
+            <span class="field-err" id="rPerIn-err"></span>
+          </div>
+        </div>
+        <div id="batt-fields">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="battR">Batt product</label>
+            <select id="battR">
+              <option value="11">R-11</option>
+              <option value="13">R-13</option>
+              <option value="15">R-15</option>
+              <option value="19">R-19</option>
+              <option value="21">R-21</option>
+              <option value="30" selected>R-30</option>
+              <option value="38">R-38</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="pkg">Coverage per package <span data-u="sqft"></span></label>
+            <input type="number" id="pkg" value="40" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="pkg-hint pkg-err">
+            <span class="hint" id="pkg-hint">Printed on every bag. Varies a lot by brand, R-value and width.</span>
+            <span class="field-err" id="pkg-err"></span>
+          </div>
+        </div>
+        </div>
+        <div id="blown-fields" hidden>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="bagCov">Bag coverage at R-30 <span data-u="sqft"></span></label>
+            <input type="number" id="bagCov" value="25" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="bagCov-hint bagCov-err">
+            <span class="hint" id="bagCov-hint">From the bag&apos;s coverage chart. Coverage scales with 30 ÷ your R-value.</span>
+            <span class="field-err" id="bagCov-err"></span>
+          </div>
+        </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Estimate</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">DOE climate zone recommendations (attics)</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The Department of Energy publishes recommended R-values by climate zone for uninsulated attics:</p>
-  <ul style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;padding-left:1.5rem;">
-    <li>Zone 1 (southernmost FL/HI): R30&ndash;R49</li>
-    <li>Zone 2 (southern US): R30&ndash;R60</li>
-    <li>Zones 3&ndash;4 (central US): R38&ndash;R60</li>
-    <li>Zones 5&ndash;6 (northern US, mountain west): R49&ndash;R60</li>
-    <li>Zone 7 (Alaska interior, high altitude): R49&ndash;R60+</li>
-  </ul>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Existing attics with some insulation can use lower add-on values. Check <a href="https://www.energystar.gov/saveathome/seal_insulate/identify-problems-you-want-fix/diy-checks-inspections/insulation-r-values" target="_blank" rel="noopener" style="color:var(--teal);">ENERGY STAR&apos;s current guidance</a> for your specific ZIP code and application (attic vs. wall vs. floor).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">R per inch by material</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Fiberglass batts: ~3.14 per inch. Mineral wool: ~3.7 per inch (denser, better sound). Cellulose blown-in: ~3.5 per inch. Blown fiberglass: ~2.5 per inch. Closed-cell spray foam: ~6.5 per inch (highest per inch, also acts as air barrier). Open-cell foam: ~3.7 per inch. This calculator uses the material you select to compute required depth.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Batts vs. blown-in</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Batts are quick for open cavities but leave gaps around wires and pipes if not cut carefully. Blown-in fills irregular spaces better but requires a blower (rentable from big-box stores with bag purchases). For attic tops, blown-in cellulose or fiberglass is usually the best labor-per-dollar option.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>ENERGY STAR recommended levels</h2>
+        <p>For existing wood-framed homes, ENERGY STAR recommends adding insulation to these levels. The figures are based on the 2021 International Energy Conservation Code (Table R402.1.3).</p>
+        <div class="table-wrap">
+        <table class="ref-table">
+        <caption class="sr-only">ENERGY STAR recommended R-values to add, by climate zone</caption>
+        <thead><tr><th scope="col">Zone</th><th scope="col">Attic, uninsulated</th><th scope="col">Attic, 3&ndash;4 in existing</th><th scope="col">Floor</th></tr></thead>
+        <tbody>
+        <tr><td>1</td><td>R-30</td><td>R-25</td><td>R-13</td></tr>
+        <tr><td>2</td><td>R-49</td><td>R-38</td><td>R-13</td></tr>
+        <tr><td>3</td><td>R-49</td><td>R-38</td><td>R-19</td></tr>
+        <tr><td>4A and 4B</td><td>R-60</td><td>R-49</td><td>R-19</td></tr>
+        <tr><td>4C, 5 and 6</td><td>R-60</td><td>R-49</td><td>R-30</td></tr>
+        <tr><td>7 and 8</td><td>R-60</td><td>R-49</td><td>R-38</td></tr>
+        </tbody>
+        </table>
+        </div>
+        <p>Walls: when siding comes off, ENERGY STAR suggests blowing insulation into empty cavities and adding R-5 insulative sheathing in zone 3, or R-5 to R-10 in zones 4&ndash;8. Wall cavities are limited by stud depth: 2&times;4 walls hold R-13 to R-15 batts, 2&times;6 walls R-19 to R-21. Find your zone and ZIP-specific advice on <a href="https://www.energystar.gov/saveathome/seal_insulate/identify-problems-you-want-fix/diy-checks-inspections/insulation-r-values" target="_blank" rel="noopener">ENERGY STAR&apos;s insulation page</a>.</p>
+        <h3>How it works</h3>
+        <p><code>depth = R-value ÷ R per inch</code>. Batts come at fixed R-values, so the calculator stacks layers of the product you pick until it reaches the target, then divides the total batt area by the package coverage. Blown-in bags cover less area as the R-value goes up: <code>bags = area × R ÷ (30 × coverage at R-30)</code>, which tracks bag charts closely up to about R-38 and runs slightly optimistic above that. Spray foam is quoted in board feet (1 sq ft at 1 in thick).</p>
+        <h3>Typical R per inch</h3>
+        <p>Fiberglass batts about 2.9&ndash;3.8 (high-density up to about 4.3). Mineral wool batts about 3.7&ndash;4.3. Blown cellulose about 3.2&ndash;3.8 settled. Blown fiberglass about 2.2&ndash;2.9. Open-cell spray foam about 3.5&ndash;3.8. Closed-cell spray foam about 6&ndash;7. Blown-in material settles, so install to the bag&apos;s initial thickness to end up at the settled thickness.</p>
+        <p class="sources">Sources: ENERGY STAR &ldquo;Recommended Home Insulation R-Values&rdquo; (2021 IECC basis); manufacturer coverage charts for blown cellulose. Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>A planning estimate. Air sealing, ventilation baffles and the product&apos;s own coverage chart matter as much as the R-value. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -216,69 +337,293 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const a=n('area'), R=n('targetR'), mat=s('material');
-  if (!a||a<=0) return showErr('Enter area.');
-  if (!R||R<=0) return showErr('Enter target R-value.');
-  const aSqFt = isMetric() ? a/SQFT_TO_SQM : a;
-  const rPerInch = {'fiberglass-batt':3.14,'mineral-wool':3.7,'cellulose-blown':3.5,'fiberglass-blown':2.5,'foam-spray':6.5}[mat];
-  const requiredDepth = R / rPerInch;
-  // Batt coverage: typical R30 batt covers 32 sq ft, ~64 sq ft for R13
-  // Roll of R13 = ~88 sq ft; R19 = ~48 sq ft
-  // Blown-in: ~40 sq ft per bag at R30
-  let qtyLabel = '', qtyValue = '';
-  if (mat.includes('batt') || mat.includes('mineral')) {
-    const battCoverage = 32; // typical R30 batt
-    const bags = ceil(aSqFt / battCoverage);
-    qtyLabel = 'Batts / bundles';
-    qtyValue = bags + ' bundles (approx; check product label)';
-  } else if (mat.includes('blown')) {
-    // 1 bag of blown cellulose covers ~40 sq ft at R30. Scale by R.
-    const coverageAtR = 40 * (30 / R);
-    const bags = ceil(aSqFt / coverageAtR);
-    qtyLabel = 'Blown-in bags';
-    qtyValue = bags + ' bags';
-  } else {
-    // Spray foam - sold as board feet or by contractor
-    const boardFt = aSqFt * requiredDepth;
-    qtyLabel = 'Board feet (contractor install)';
-    qtyValue = fmt(boardFt,0) + ' bf';
-  }
-  let h = '';
-  h += row('Required depth', requiredDepth.toFixed(1)+'" ('+(requiredDepth*IN_TO_CM).toFixed(1)+' cm)', 'teal');
-  h += row('Target R-value', 'R-'+R.toFixed(0));
-  h += row('Material R per inch', 'R-'+rPerInch.toFixed(2)+' / inch');
-  h += row(qtyLabel, qtyValue, 'violet');
-  h += row('Area to cover', fmt(aSqFt,0)+' sq ft');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['area','targetR'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; imperial base units) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // ENERGY STAR recommended R-values to add (existing wood-framed homes; based on 2021 IECC Table R402.1.3). Checked 2026-11.
+      var RECOMMENDED = {
+        '1': { attic0: 30, attic34: 25, floor: 13 }, '2': { attic0: 49, attic34: 38, floor: 13 },
+        '3': { attic0: 49, attic34: 38, floor: 19 }, '4ab': { attic0: 60, attic34: 49, floor: 19 },
+        '4c56': { attic0: 60, attic34: 49, floor: 30 }, '78': { attic0: 60, attic34: 49, floor: 38 }
+      };
+      // Typical R per inch (DOE / manufacturer ranges); the field is editable.
+      var MATERIALS = {
+        'fiberglass-batt': { r: 3.1, kind: 'batt' }, 'mineral-wool': { r: 4.0, kind: 'batt' },
+        'cellulose-blown': { r: 3.5, kind: 'blown', cov30: 25 }, 'fiberglass-blown': { r: 2.5, kind: 'blown', cov30: 40 },
+        'foam-open': { r: 3.7, kind: 'foam' }, 'foam-closed': { r: 6.5, kind: 'foam' }
+      };
+      function estimate(p) {
+        var kind = MATERIALS[p.material].kind;
+        var out = { kind: kind, depthIn: p.targetR / p.rPerIn };
+        out.cuFt = p.areaSqFt * out.depthIn / 12;
+        if (kind === 'batt') {
+          out.layers = up(p.targetR / p.battR);
+          out.achievedR = out.layers * p.battR;
+          out.packages = up(p.areaSqFt * out.layers / p.pkgSqFt);
+        } else if (kind === 'blown') {
+          out.bagCoverage = p.bagCov30 * 30 / p.targetR;
+          out.bags = up(p.areaSqFt / out.bagCoverage);
+        } else {
+          out.boardFeet = p.areaSqFt * out.depthIn;
+        }
+        return out;
+      }
+      /* ===== end math ===== */
+
+      var lastMaterial = null;
+      function sync(fromUser) {
+        var mat = sel('material'), info = MATERIALS[mat];
+        if (mat !== lastMaterial) {
+          if (lastMaterial !== null || fromUser) {
+            $('rPerIn').value = info.r;
+            if (info.cov30) {
+              var c = metric() ? Number((info.cov30 * 0.09290304).toFixed(2)) : info.cov30;
+              $('bagCov').value = c; $('bagCov')._unitMemo = null;
+            }
+          }
+          lastMaterial = mat;
+        }
+        $('batt-fields').hidden = info.kind !== 'batt';
+        $('blown-fields').hidden = info.kind !== 'blown';
+      }
+      function loadTarget() {
+        var loc = sel('location');
+        if (loc !== 'custom') { $('targetR').value = RECOMMENDED[sel('zone')][loc]; setErr('targetR', ''); }
+      }
+      function compute() {
+        sync(false);
+        var mat = sel('material'), kind = MATERIALS[mat].kind;
+        var p = {
+          areaSqFt: field('area', { gt: 0 }),
+          targetR: field('targetR', { gt: 0, max: 100, maxMsg: 'Over R-100 is beyond any normal assembly.' }),
+          rPerIn: field('rPerIn', { gt: 0, max: 10, maxMsg: 'No common insulation is over R-8 per inch.' }),
+          material: mat,
+          battR: Number(sel('battR')),
+          pkgSqFt: kind === 'batt' ? field('pkg', { gt: 0 }) : 1,
+          bagCov30: kind === 'blown' ? field('bagCov', { gt: 0 }) : 1
+        };
+        if (errors) return null;
+        var r = estimate(p), m = metric(), rows = [], notes = [];
+        var loc = sel('location');
+        rows.push(['R-value to add', 'R-' + fmt(p.targetR, p.targetR % 1 ? 1 : 0) + (loc !== 'custom' ? ' (ENERGY STAR, ' + $('zone').options[$('zone').selectedIndex].text.replace(/ \(.*/, '') + ')' : ''), 'teal']);
+        rows.push(['Depth needed', m ? fmt(r.depthIn * 2.54, 1) + ' cm (' + fmt(r.depthIn, 1) + ' in)' : fmt(r.depthIn, 1) + ' in (' + fmt(r.depthIn * 2.54, 1) + ' cm)', 'teal']);
+        if (r.kind === 'batt') {
+          rows.push(['Batt layers', r.layers + ' ' + plural(r.layers, 'layer') + ' of R-' + p.battR + ' (R-' + r.achievedR + ' total)', 'violet']);
+          rows.push(['Packages', fmt(r.packages, 0) + ' ' + plural(r.packages, 'package') + ' at ' + area(p.pkgSqFt) + ' each', 'violet']);
+          if (r.layers > 1) notes.push('Lay the second layer of batts across the first (unfaced, no vapor retarder between layers).');
+        } else if (r.kind === 'blown') {
+          rows.push(['Bags', fmt(r.bags, 0) + ' ' + plural(r.bags, 'bag') + ' (about ' + area(r.bagCoverage) + ' per bag at this R-value)', 'violet']);
+          notes.push('Install to the bag chart’s initial thickness so it settles to the target; most charts also list a minimum bag count per 1,000 sq ft.');
+        } else {
+          rows.push(['Spray foam', fmt(r.boardFeet, 0) + ' board feet (1 sq ft × 1 in each)', 'violet']);
+          notes.push('Spray foam is usually installed by a contractor and quoted per board foot.');
+        }
+        rows.push(['Material R per inch', 'R-' + fmt(p.rPerIn, 2) + ' per inch']);
+        rows.push(['Area', area(p.areaSqFt)]);
+        if (loc === 'attic34') notes.push('These are amounts to add on top of the 3–4 in already there.');
+        notes.push('Seal air leaks and keep soffit vents clear with baffles before adding attic insulation.');
+        return { rows: rows, notes: notes };
+      }
+      document.getElementById('zone').addEventListener('change', loadTarget);
+      document.getElementById('location').addEventListener('change', loadTarget);
+      document.getElementById('targetR').addEventListener('input', function () { $('location').value = 'custom'; });
+      document.getElementById('material').addEventListener('change', function () { sync(true); });
+      init(compute, 'Insulation estimate', function () { lastMaterial = null; sync(false); lastMaterial = sel('material'); loadTarget(); });
     })();
   </script>
   <script defer src="../js/ads.js"></script>

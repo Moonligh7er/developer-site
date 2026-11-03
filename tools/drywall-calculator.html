@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Drywall Calculator (Sheets, Screws, Mud, Tape) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate drywall sheet count, screws, joint compound, and tape from wall + ceiling area. Supports 4×8, 4×10, 4×12 sheets and imperial/metric.">
+  <meta name="description" content="Drywall sheet count from room dimensions or total area, plus screws, joint compound and tape at USG-published finishing rates. 4×8, 4×10, 4×12 and 1200 mm metric sheets.">
   <meta name="keywords" content="drywall calculator, sheetrock calculator, drywall sheet calculator, joint compound calculator, drywall screws calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Drywall Calculator (Sheets, Screws, Mud, Tape)",
-    "description": "Calculate drywall sheet count, screws, joint compound, and tape from wall + ceiling area. Supports 4×8, 4×10, 4×12 sheets and imperial/metric.",
+    "description": "Drywall sheet count from room dimensions or total area, plus screws, joint compound and tape at USG-published finishing rates. 4×8, 4×10, 4×12 and 1200 mm metric sheets.",
     "url": "https://moonligh7er.github.io/developer-site/tools/drywall-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Drywall Calculator (Sheets, Screws, Mud, Tape)">
-  <meta property="og:description" content="Calculate drywall sheet count, screws, joint compound, and tape from wall + ceiling area. Supports 4×8, 4×10, 4×12 sheets and imperial/metric.">
+  <meta property="og:description" content="Drywall sheet count from room dimensions or total area, plus screws, joint compound and tape at USG-published finishing rates. 4×8, 4×10, 4×12 and 1200 mm metric sheets.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/drywall-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Drywall Calculator (Sheets, Screws, Mud, Tape)">
-  <meta name="twitter:description" content="Calculate drywall sheet count, screws, joint compound, and tape from wall + ceiling area. Supports 4×8, 4×10, 4×12 sheets and imperial/metric.">
+  <meta name="twitter:description" content="Drywall sheet count from room dimensions or total area, plus screws, joint compound and tape at USG-published finishing rates. 4×8, 4×10, 4×12 and 1200 mm metric sheets.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -112,60 +150,135 @@
 
       <div class="calc-card">
         <h1>Drywall Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter wall and ceiling area to get sheet count for 4×8, 4×10, or 4×12 sheets, plus screws, joint compound, and tape. Includes an adjustable waste factor.</p>
+        <p class="calc-intro">Measure a room or type in total areas. You get sheets for the size you pick, plus screws, joint compound and tape. The waste factor is yours to set.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (ft, sq ft)</option>
+              <option value="metric">Metric (m, m²)</option>
             </select>
           </div>
         </div>
 
-        <p class="calc-subhead">Area to Cover</p>
-<div class="form-grid">
-  <div class="form-group"><label for="wallArea">Wall Area (sq ft or m²)</label><input type="number" id="wallArea" placeholder="800" min="0" step="any"></div>
-  <div class="form-group"><label for="ceilArea">Ceiling Area (sq ft or m²)</label><input type="number" id="ceilArea" placeholder="200" min="0" step="any"></div>
-</div>
-<p class="calc-subhead">Sheet Size &amp; Waste</p>
-<div class="form-grid">
-  <div class="form-group"><label for="sheetSize">Sheet Size</label>
-    <select id="sheetSize">
-      <option value="32">4×8 (32 sq ft)</option>
-      <option value="40">4×10 (40 sq ft)</option>
-      <option value="48">4×12 (48 sq ft)</option>
-    </select>
-  </div>
-  <div class="form-group"><label for="waste">Waste Factor (%)</label><input type="number" id="waste" value="10" min="0" step="any"><span class="hint">Default 10%; use 15% for cut-heavy layouts</span></div>
-</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="mode">Measure by</label>
+            <select id="mode">
+              <option value="room" selected>Room dimensions</option>
+              <option value="area">Total areas</option>
+            </select>
+          </div>
+        </div>
+        <div id="room-fields">
+        <p class="calc-subhead">Room</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="roomL">Room length <span data-u="ft"></span></label>
+            <input type="number" id="roomL" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="roomL-err">
+            <span class="field-err" id="roomL-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="roomW">Room width <span data-u="ft"></span></label>
+            <input type="number" id="roomW" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="roomW-err">
+            <span class="field-err" id="roomW-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="roomH">Wall height <span data-u="ft"></span></label>
+            <input type="number" id="roomH" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="roomH-err">
+            <span class="field-err" id="roomH-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="doors">Doors <span class="u-static">count</span></label>
+            <input type="number" id="doors" value="1" min="0" step="1" inputmode="numeric" aria-describedby="doors-hint doors-err">
+            <span class="hint" id="doors-hint">Each door takes off about 21 sq ft (1.95 m²).</span>
+            <span class="field-err" id="doors-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="windows">Windows <span class="u-static">count</span></label>
+            <input type="number" id="windows" value="2" min="0" step="1" inputmode="numeric" aria-describedby="windows-hint windows-err">
+            <span class="hint" id="windows-hint">Each window takes off about 15 sq ft (1.39 m²).</span>
+            <span class="field-err" id="windows-err"></span>
+          </div>
+          <div class="form-group">
+            <span class="form-group__label-spacer" aria-hidden="true"></span>
+            <label class="check-row" for="ceiling"><input type="checkbox" id="ceiling" checked> Include the ceiling</label>
+          </div>
+        </div>
+        </div>
+        <div id="area-fields" hidden>
+        <p class="calc-subhead">Areas</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="wallArea">Wall area <span data-u="sqft"></span></label>
+            <input type="number" id="wallArea" value="800" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="wallArea-err">
+            <span class="field-err" id="wallArea-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="ceilArea">Ceiling area <span data-u="sqft"></span></label>
+            <input type="number" id="ceilArea" value="200" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="ceilArea-err">
+            <span class="field-err" id="ceilArea-err"></span>
+          </div>
+        </div>
+        </div>
+        <p class="calc-subhead">Sheets &amp; waste</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="sheetSize">Sheet size</label>
+            <select id="sheetSize">
+              <option value="32" selected>4 × 8 ft (32 sq ft)</option>
+              <option value="40">4 × 10 ft (40 sq ft)</option>
+              <option value="48">4 × 12 ft (48 sq ft)</option>
+              <option value="31.000062">1200 × 2400 mm (2.88 m²)</option>
+              <option value="34.875070">1200 × 2700 mm (3.24 m²)</option>
+              <option value="38.750078">1200 × 3000 mm (3.60 m²)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="waste">Waste factor <span class="u-static">%</span></label>
+            <input type="number" id="waste" value="10" min="0" max="100" step="any" inputmode="decimal" aria-describedby="waste-hint waste-err">
+            <span class="hint" id="waste-hint">10% for a plain rectangular room; 15% when there are lots of cuts (closets, short walls, angled ceilings).</span>
+            <span class="field-err" id="waste-err"></span>
+          </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Estimate</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How to estimate drywall</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Total wall area (perimeter × height, minus doors/windows) plus ceiling area (length × width for each room) gives you the coverage. Divide by sheet size (32 sq ft for standard 4×8, 40 for 4×10, 48 for 4×12), then add waste. 10% waste covers a rectangular room; go 15% if the layout has lots of cuts (short walls, closets, angled ceilings).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Ancillary materials</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Screws: ~1 screw every 12" on studs = roughly 30-40 screws per 4×8 sheet. Buy a 5 lb box (about 1,400 screws) for a typical bedroom. Joint compound: budget 1 gallon per 100-150 sq ft of drywall for the first two coats plus finishing. Tape: about 350 linear feet per 1000 sq ft of drywall coverage.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Bigger sheets save labor</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">4×12 sheets have fewer joints to tape and mud, so pros usually pick the largest sheet that fits through your door and up your stairs. 4×8 is easier for DIY solo work.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>How it works</h2>
+        <p>Room mode: <code>walls = 2 × (length + width) × height − 21 sq ft per door − 15 sq ft per window</code>, plus <code>length × width</code> for the ceiling. Then <code>sheets = ceil(area × (1 + waste) ÷ sheet area)</code>, always rounded up to whole sheets.</p>
+        <h3>Finishing materials</h3>
+        <ul>
+        <li><strong>Joint compound:</strong> about 10 gallons of ready-mixed all-purpose compound per 1,000 sq ft of board (USG), sold in 4.5-gallon pails.</li>
+        <li><strong>Tape:</strong> about 370 ft of paper tape per 1,000 sq ft of board (USG), in 250 or 500 ft rolls.</li>
+        <li><strong>Screws:</strong> roughly one screw per square foot (32 per 4 × 8 sheet). That follows from typical spacing: 16 in on wall studs and 12 in on ceiling joists, the IRC maximums for screws. A 1 lb box of 1&frac14; in screws holds roughly 250&ndash;300; check the box.</li>
+        </ul>
+        <p>Finishing materials are based on the board area itself, not the waste allowance.</p>
+        <h3>Bigger sheets save labor</h3>
+        <p>4 × 12 sheets leave fewer joints to tape and mud, so pros usually pick the largest sheet that fits through the door and up the stairs. 4 × 8 is easier to handle alone.</p>
+        <p class="sources">Sources: USG Sheetrock paper joint tape and all-purpose compound coverage figures; IRC Table R702.3.5 fastener spacing. Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>Material quantities for planning and pricing. Openings, ceiling height and layout change real waste. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -207,59 +320,265 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const wall=n('wallArea')||0, ceil2=n('ceilArea')||0, sz=parseFloat(s('sheetSize')), w=(n('waste')||0)/100;
-  const total = wall + ceil2;
-  if (total <= 0) return showErr('Enter wall or ceiling area.');
-  // Metric mode: convert m² to sq ft for sheet math, then present in both
-  const totalSqFt = isMetric() ? total / SQFT_TO_SQM : total;
-  const sheets = ceil(totalSqFt * (1+w) / sz);
-  const sheetLabel = sz===32?'4×8':sz===40?'4×10':'4×12';
-  // Screws: ~40 per 4x8, scale by sheet area
-  const screws = ceil(sheets * (40 * sz / 32));
-  const screwsBoxes = Math.ceil(screws/1400); // 5 lb box = ~1400 screws
-  // Mud: 1 gal per ~125 sq ft covered
-  const mudGal = Math.ceil((totalSqFt * (1+w)) / 125);
-  const mudBuckets = Math.ceil(mudGal / 4.5); // 4.5 gal buckets standard
-  // Tape: 350 lf per 1000 sq ft
-  const tapeLF = Math.ceil((totalSqFt * (1+w)) / 1000 * 350);
-  const tapeRolls = Math.ceil(tapeLF / 250); // 250 ft rolls standard
-  let h = '';
-  h += row('Sheets ('+sheetLabel+')', sheets+' sheets', 'teal');
-  h += row('Total coverage needed', fmt(totalSqFt,0)+' sq ft'+(isMetric()?' ('+fmt(total,1)+' m²)':''));
-  h += row('Waste factor applied', (w*100).toFixed(0)+'%');
-  h += row('Drywall screws', fmt(screws,0)+' screws (~'+screwsBoxes+' × 5 lb box)', 'violet');
-  h += row('Joint compound', mudGal+' gallons (~'+mudBuckets+' × 4.5 gal bucket)', 'violet');
-  h += row('Drywall tape', tapeLF+' linear feet (~'+tapeRolls+' × 250 ft roll)', 'violet');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['wallArea','ceilArea'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('waste').value='10';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; imperial base units) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // Finishing rates per 1,000 sq ft of board: ~10 gal ready-mixed all-purpose compound and ~370 ft paper tape (USG);
+      // ~1 screw per sq ft (16 in o.c. walls / 12 in o.c. ceilings, IRC Table R702.3.5). Checked 2026-11.
+      var DOOR_SQFT = 21, WINDOW_SQFT = 15;
+      function roomAreas(p) {
+        var walls = 2 * (p.lengthFt + p.widthFt) * p.heightFt - p.doors * DOOR_SQFT - p.windows * WINDOW_SQFT;
+        return { walls: Math.max(walls, 0), ceiling: p.ceiling ? p.lengthFt * p.widthFt : 0, openings: p.doors * DOOR_SQFT + p.windows * WINDOW_SQFT };
+      }
+      function estimate(p) {
+        var net = p.wallSqFt + p.ceilSqFt;
+        var sheets = up(net * (1 + p.wastePct / 100) / p.sheetSqFt);
+        var mudGal = net / 1000 * 10;
+        var tapeFt = net / 1000 * 370;
+        var screws = up(net);
+        return {
+          net: net, sheets: sheets, mudGal: mudGal, pails: up(mudGal / 4.5),
+          tapeFt: tapeFt, rolls250: up(tapeFt / 250), screws: screws, screwLb: up(screws / 250)
+        };
+      }
+      /* ===== end math ===== */
+
+      function syncMode() {
+        var room = sel('mode') === 'room';
+        $('room-fields').hidden = !room;
+        $('area-fields').hidden = room;
+      }
+      function compute() {
+        syncMode();
+        var wall, ceil, extra = null;
+        if (sel('mode') === 'room') {
+          var rp = {
+            lengthFt: field('roomL', { gt: 0 }), widthFt: field('roomW', { gt: 0 }), heightFt: field('roomH', { gt: 0, max: 40, maxMsg: 'Over 40 ft; check the unit.' }),
+            doors: field('doors', { min: 0, int: true }), windows: field('windows', { min: 0, int: true }), ceiling: $('ceiling').checked
+          };
+          if (errors) return null;
+          var ra = roomAreas(rp);
+          wall = ra.walls; ceil = ra.ceiling; extra = ra;
+        } else {
+          wall = field('wallArea', { min: 0 });
+          ceil = field('ceilArea', { min: 0 });
+          if (errors) return null;
+          if (wall + ceil <= 0) { setErr('wallArea', 'Enter a wall or ceiling area above 0.'); return null; }
+        }
+        var waste = field('waste', { min: 0, max: 100 });
+        if (errors) return null;
+        var sheetSel = $('sheetSize');
+        var r = estimate({ wallSqFt: wall, ceilSqFt: ceil, sheetSqFt: parseFloat(sheetSel.value), wastePct: waste });
+        if (r.net <= 0) { setErr('roomL', 'Doors and windows cover the whole wall; check the numbers.'); return null; }
+        var m = metric(), rows = [];
+        rows.push(['Sheets (' + sheetSel.options[sheetSel.selectedIndex].text.replace(/ \(.*/, '') + ')', fmt(r.sheets, 0) + ' ' + plural(r.sheets, 'sheet'), 'teal']);
+        rows.push(['Board area (walls + ceiling)', area(r.net) + (m ? '' : ' (' + fmt(r.net * 0.09290304, 1) + ' m²)')]);
+        if (extra) {
+          rows.push(['Walls after openings', area(extra.walls)]);
+          if (extra.ceiling) rows.push(['Ceiling', area(extra.ceiling)]);
+        }
+        rows.push(['Waste factor applied to sheets', pct(waste)]);
+        rows.push(['Joint compound', (m ? fmt(r.mudGal * 3.785411784, 1) + ' L' : fmt(r.mudGal, 1) + ' gal') + ' (' + r.pails + ' × 4.5 gal pail' + (r.pails === 1 ? '' : 's') + ')', 'violet']);
+        rows.push(['Paper tape', (m ? fmt(r.tapeFt * 0.3048, 0) + ' m' : fmt(r.tapeFt, 0) + ' ft') + ' (' + r.rolls250 + ' × 250 ft roll' + (r.rolls250 === 1 ? '' : 's') + ')', 'violet']);
+        rows.push(['Drywall screws', 'about ' + fmt(r.screws, 0) + ' (roughly ' + r.screwLb + ' lb of 1¼ in screws)', 'violet']);
+        return { rows: rows, notes: ['Add corner bead, primer and a spare sheet or two for damage in transit.'] };
+      }
+      init(compute, 'Drywall estimate', syncMode);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

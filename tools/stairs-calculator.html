@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Stair Calculator (Rise, Run, Stringer) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta name="description" content="Riser count and height, total run, stringer length and stair angle from total rise, with IRC riser/tread checks and the 2R+T comfort rule. Geometry only; verify locally.">
   <meta name="keywords" content="stair calculator, stair stringer calculator, rise run calculator, staircase calculator, step calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Stair Calculator (Rise, Run, Stringer)",
-    "description": "Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.",
+    "description": "Riser count and height, total run, stringer length and stair angle from total rise, with IRC riser/tread checks and the 2R+T comfort rule. Geometry only; verify locally.",
     "url": "https://moonligh7er.github.io/developer-site/tools/stairs-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Stair Calculator (Rise, Run, Stringer)">
-  <meta property="og:description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta property="og:description" content="Riser count and height, total run, stringer length and stair angle from total rise, with IRC riser/tread checks and the 2R+T comfort rule. Geometry only; verify locally.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/stairs-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Stair Calculator (Rise, Run, Stringer)">
-  <meta name="twitter:description" content="Calculate step count, riser height, tread depth, and stringer length from total rise. Shows common comfort ranges — verify against your local code.">
+  <meta name="twitter:description" content="Riser count and height, total run, stringer length and stair angle from total rise, with IRC riser/tread checks and the 2R+T comfort rule. Geometry only; verify locally.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -112,50 +150,85 @@
 
       <div class="calc-card">
         <h1>Stair Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter total rise (floor-to-floor height) and get step count, riser height, tread depth, total run, and stringer length. Common comfort ranges shown for reference &mdash; verify against your local building code.</p>
+        <p class="calc-intro">Enter the total rise (finished floor to finished floor) and the largest riser you&apos;ll accept. The calculator picks the fewest equal risers that stay at or under that height, then checks the result against the IRC residential limits (or IBC commercial limits) and the 2R+T comfort rule.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (in)</option>
+              <option value="metric">Metric (cm)</option>
             </select>
           </div>
         </div>
 
         <div class="form-grid">
-  <div class="form-group"><label for="rise">Total Rise (in or cm)</label><input type="number" id="rise" placeholder="108" min="0" step="any"><span class="hint">Floor-to-floor height (e.g., 108" = 9 ft)</span></div>
-  <div class="form-group"><label for="targetRiser">Target Riser Height (in or cm)</label><input type="number" id="targetRiser" placeholder="7.5" min="0" step="any"><span class="hint">Common comfort range: 7"-7¾"</span></div>
-  <div class="form-group"><label for="tread">Tread Depth (in or cm)</label><input type="number" id="tread" placeholder="11" min="0" step="any"><span class="hint">Common: 10"-11½"</span></div>
-</div>
+          <div class="form-group">
+            <label for="rise">Total rise <span data-u="in"></span></label>
+            <input type="number" id="rise" value="108" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="rise-hint rise-err">
+            <span class="hint" id="rise-hint">Finished floor to finished floor. 108 in = 9 ft.</span>
+            <span class="field-err" id="rise-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="maxRiser">Maximum riser height <span data-u="in"></span></label>
+            <input type="number" id="maxRiser" value="7.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="maxRiser-hint maxRiser-err">
+            <span class="hint" id="maxRiser-hint">IRC limit is 7&frac34; in (19.7 cm); 7&ndash;7&frac12; in tends to feel comfortable.</span>
+            <span class="field-err" id="maxRiser-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="tread">Tread depth (nosing to nosing) <span data-u="in"></span></label>
+            <input type="number" id="tread" value="10.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="tread-hint tread-err">
+            <span class="hint" id="tread-hint">IRC minimum 10 in (25.4 cm); IBC commercial minimum 11 in.</span>
+            <span class="field-err" id="tread-err"></span>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="code">Check against</label>
+            <select id="code">
+              <option value="irc" selected>IRC (one- and two-family homes)</option>
+              <option value="ibc">IBC (commercial / multifamily)</option>
+            </select>
+          </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Stair layout</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How stair math works</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Step count is total rise divided by target riser height, rounded to a whole number. Actual riser height is then total rise ÷ step count &mdash; it will rarely equal your target exactly because it has to divide evenly. Total run is step count minus 1 (there&apos;s no tread on the top landing) multiplied by tread depth. Stringer length is the hypotenuse: <code style="font-family:var(--font-mono);color:var(--teal);">√(rise² + run²)</code>.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common comfort ranges (verify your local code)</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The most-cited residential rules of thumb: <strong>riser 7&ndash;7¾"</strong>, <strong>tread 10&ndash;11½"</strong>, <strong>2R+T = 24&ndash;25"</strong> as an ergonomic guideline. IRC (International Residential Code) commonly cited as max 7¾" riser and min 10" tread for residential. Commercial codes are stricter. Uniformity matters more than the exact number &mdash; every step in a flight must be within 3/8" of every other step or people trip.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>This calculator does not verify code compliance.</strong> Codes vary by jurisdiction, use type (residential vs. commercial), and code adoption year. Check with your local building department or a licensed contractor before construction.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What&apos;s not included</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Landings, headroom clearance, handrail requirements, nosing dimensions, stringer material selection or span, structural attachment. Geometry only.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>How the stair math works</h2>
+        <p><code>risers = ceil(total rise ÷ max riser)</code>, so every riser is equal and none is taller than your limit. <code>riser height = total rise ÷ risers</code>. There is one fewer tread than risers because the upper floor is the last step, so <code>total run = (risers − 1) × tread</code>. The stringer estimate is the diagonal <code>√(rise² + run²)</code>; buy the next standard board length up and lay out the cuts before trusting it.</p>
+        <h3>Code limits used for the checks</h3>
+        <ul>
+        <li><strong>IRC R311.7.5</strong> (2021/2024 International Residential Code): riser 7&frac34; in max, tread 10 in min, nosing &frac34;&ndash;1&frac14; in required when the tread is under 11 in, and risers or treads in one flight may differ by no more than &frac38; in.</li>
+        <li><strong>IRC R311.7.3</strong>: a single flight may rise at most 151 in (12 ft 7 in) before a landing. <strong>R311.7.2</strong>: headroom at least 6 ft 8 in.</li>
+        <li><strong>IBC 1011.5.2</strong> (commercial): riser between 4 and 7 in, tread 11 in min.</li>
+        </ul>
+        <h3>The 2R+T comfort rule</h3>
+        <p>Two risers plus one tread between about 24 and 25 in (610&ndash;635 mm) matches a natural walking stride. It is an ergonomic guideline, not a code requirement, so the calculator reports it separately from the code checks.</p>
+        <h3>What&apos;s not included</h3>
+        <p>Landings, headroom clearance under the floor above, handrails and guards, stair width, nosing projection, stringer material and spans, and structural attachment. Your local code may amend the model codes above, so check with your building department.</p>
+        <p class="sources">Sources: 2021 and 2024 IRC sections R311.7.2, R311.7.3 and R311.7.5; 2021 IBC section 1011.5.2. Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Geometry only &mdash; does not verify code compliance. Common comfort ranges shown are guidelines, not code.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>Geometry and a quick check against model-code numbers, not a code compliance review. Local amendments, landings, headroom and guards still need checking. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -197,56 +270,276 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const rise=n('rise'), target=n('targetRiser'), tread=n('tread');
-  if (!rise||!target||!tread||rise<=0||target<=0||tread<=0) return showErr('Enter total rise, target riser, and tread depth.');
-  const riseIn = isMetric() ? rise/IN_TO_CM : rise;
-  const targetIn = isMetric() ? target/IN_TO_CM : target;
-  const treadIn = isMetric() ? tread/IN_TO_CM : tread;
-  const stepCount = Math.round(riseIn / targetIn);
-  if (stepCount < 1) return showErr('Rise too small vs. target riser height.');
-  const actualRiser = riseIn / stepCount;
-  const totalRun = (stepCount - 1) * treadIn;
-  const stringerLen = Math.sqrt(riseIn*riseIn + totalRun*totalRun);
-  const twoRplusT = 2*actualRiser + treadIn;
-  const inRange = actualRiser >= 7 && actualRiser <= 7.75 && treadIn >= 10 && treadIn <= 11.5;
-  let h = '';
-  h += row('Number of steps (risers)', stepCount+' steps', 'teal');
-  h += row('Actual riser height', actualRiser.toFixed(2)+'" ('+(actualRiser*IN_TO_CM).toFixed(1)+' cm)', 'teal');
-  h += row('Tread depth', treadIn.toFixed(2)+'" ('+(treadIn*IN_TO_CM).toFixed(1)+' cm)');
-  h += row('Total run (horizontal)', totalRun.toFixed(1)+'" ('+(totalRun*IN_TO_CM/100).toFixed(2)+' m)', 'violet');
-  h += row('Stringer length (hypotenuse)', stringerLen.toFixed(1)+'" ('+(stringerLen*IN_TO_CM/100).toFixed(2)+' m)', 'violet');
-  h += row('2R + T formula', twoRplusT.toFixed(2)+'" (comfort range 24-25")');
-  h += row('Common code range check', inRange ? 'Within common range' : 'Outside common range — verify local code', inRange ? 'teal' : 'amber');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['rise','targetRiser','tread'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; inches) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // Code numbers: IRC R311.7.5.1 riser <= 7.75 in, R311.7.5.2 tread >= 10 in, R311.7.5.3 nosing when tread < 11 in,
+      // R311.7.3 flight rise <= 151 in; IBC 1011.5.2 riser 4-7 in, tread >= 11 in, IBC 1011.8 flight rise <= 144 in.
+      // 2R+T 24-25 in is an ergonomic rule, not code. Checked 2026-11.
+      var CODES = {
+        irc: { name: 'IRC', riserMax: 7.75, riserMin: 0, treadMin: 10, flightMax: 151 },
+        ibc: { name: 'IBC', riserMax: 7, riserMin: 4, treadMin: 11, flightMax: 144 }
+      };
+      var BOARD_FT = [8, 10, 12, 14, 16, 18, 20];
+      function estimate(p) {
+        var c = CODES[p.code] || CODES.irc;
+        var risers = Math.max(1, up(p.riseIn / p.maxRiserIn));
+        var riser = p.riseIn / risers;
+        var treads = risers - 1;
+        var run = treads * p.treadIn;
+        var stringer = Math.sqrt(p.riseIn * p.riseIn + run * run);
+        var board = null;
+        for (var i = 0; i < BOARD_FT.length; i++) { if (BOARD_FT[i] * 12 >= stringer - 0.01) { board = BOARD_FT[i]; break; } }
+        var tol = 1e-3; // inches; ignores unit-conversion crumbs
+        return {
+          code: c, risers: risers, treads: treads, riserIn: riser, runIn: run, stringerIn: stringer, boardFt: board,
+          angleDeg: treads > 0 ? Math.atan2(riser, p.treadIn) * 180 / Math.PI : null,
+          twoRT: 2 * riser + p.treadIn,
+          riserOk: riser <= c.riserMax + tol && riser >= c.riserMin - tol,
+          treadOk: p.treadIn >= c.treadMin - tol,
+          comfortOk: 2 * riser + p.treadIn >= 24 - tol && 2 * riser + p.treadIn <= 25 + tol,
+          nosingNeeded: p.code !== 'ibc' && p.treadIn < 11 - tol,
+          landingNeeded: p.riseIn > c.flightMax + tol
+        };
+      }
+      // Nearest 1/16 in, written as a tape-measure fraction.
+      function frac16(x) {
+        var whole = Math.floor(x), n = Math.round((x - whole) * 16);
+        if (n === 16) { whole += 1; n = 0; }
+        if (n === 0) return whole + ' in';
+        var d = 16;
+        while (n % 2 === 0) { n /= 2; d /= 2; }
+        return (whole ? whole + ' ' : '') + n + '/' + d + ' in';
+      }
+      /* ===== end math ===== */
+
+      function compute() {
+        var p = {
+          riseIn: field('rise', { gt: 0, max: 600, maxMsg: 'Over 50 ft; check the unit.' }),
+          maxRiserIn: field('maxRiser', { gt: 0, max: 12, maxMsg: 'Risers over 12 in aren’t a stair; check the unit.' }),
+          treadIn: field('tread', { gt: 0, max: 30, maxMsg: 'Over 30 in; check the unit.' }),
+          code: sel('code')
+        };
+        if (errors) return null;
+        var r = estimate(p), m = metric(), c = r.code, rows = [], notes = [];
+        var lim = function (x) { return m ? fmt(x * 2.54, 1) + ' cm' : String(x).replace('7.75', '7¾') + ' in'; };
+        var band = m ? '610–635 mm' : '24–25 in';
+        var riserTxt = m ? lenIn(r.riserIn, 1) + ' (' + fmt(r.riserIn * 25.4, 0) + ' mm)' : fmt(r.riserIn, 2) + ' in (about ' + frac16(r.riserIn) + ')';
+        rows.push(['Risers (steps)', r.risers + ' ' + plural(r.risers, 'riser'), 'teal']);
+        rows.push(['Riser height', riserTxt, 'teal']);
+        rows.push(['Treads', r.treads + ' ' + plural(r.treads, 'tread') + ' at ' + lenIn(p.treadIn, m ? 1 : 2)]);
+        if (r.treads > 0) {
+          rows.push(['Total run (horizontal)', lenIn(r.runIn, 1) + (m ? '' : ' (' + fmt(r.runIn / 12, 2) + ' ft)'), 'violet']);
+          rows.push(['Stair angle', fmt(r.angleDeg, 1) + '°']);
+          rows.push(['Stringer diagonal (approx.)', m ? fmt(r.stringerIn * 2.54 / 100, 2) + ' m' : fmt(r.stringerIn, 1) + ' in (' + fmt(r.stringerIn / 12, 2) + ' ft)', 'violet']);
+          rows.push(['Stringer stock', r.boardFt ? r.boardFt + ' ft boards' + (m ? ' (' + fmt(r.boardFt * 0.3048, 2) + ' m)' : '') : 'Longer than 20 ft; plan a landing']);
+          rows.push(['2R + T comfort check', (m ? fmt(r.twoRT * 25.4, 0) + ' mm' : fmt(r.twoRT, 2) + ' in') + (r.comfortOk ? ' — within ' + band : r.twoRT < 24 ? ' — below ' + band + ' (shallow, long stride)' : ' — above ' + band + ' (steep or deep)'), r.comfortOk ? 'teal' : 'amber']);
+        }
+        var rLim = c.riserMin ? lim(c.riserMin) + ' to ' + lim(c.riserMax) : 'max ' + lim(c.riserMax);
+        rows.push([c.name + ' riser check', (r.riserOk ? 'OK' : 'Fails') + ' (' + rLim + ')', r.riserOk ? 'teal' : 'rose']);
+        if (r.treads > 0) rows.push([c.name + ' tread check', (r.treadOk ? 'OK' : 'Fails') + ' (min ' + lim(c.treadMin) + ')', r.treadOk ? 'teal' : 'rose']);
+        if (r.landingNeeded) rows.push(['Landing', 'Needed: one flight may rise at most ' + lim(c.flightMax), 'rose']);
+        if (r.nosingNeeded && r.treads > 0) notes.push('Treads under 11 in need a nosing of 3/4 to 1-1/4 in under the IRC.');
+        if (r.treads === 0) notes.push('One riser means a single step with no treads to count.');
+        notes.push('Keep every riser and tread within 3/8 in of the others in the flight. Headroom needs at least 6 ft 8 in (IRC).');
+        return { rows: rows, notes: notes };
+      }
+      init(compute, 'Stair layout');
     })();
   </script>
   <script defer src="../js/ads.js"></script>

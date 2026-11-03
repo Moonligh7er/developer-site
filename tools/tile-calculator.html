@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Tile Calculator (Boxes, Grout, Thinset) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate tile count, boxes, thinset, and grout from area + tile size + grout gap. Waste factor defaults to 10% (15% for diagonal layouts).">
+  <meta name="description" content="Tile count and boxes from area, tile size and grout joint, plus thinset by trowel size and grout by joint volume. Adjustable waste factor (10% straight, 15% diagonal). Imperial and metric.">
   <meta name="keywords" content="tile calculator, tile square footage calculator, grout calculator, thinset calculator, tile spacing calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Tile Calculator (Boxes, Grout, Thinset)",
-    "description": "Calculate tile count, boxes, thinset, and grout from area + tile size + grout gap. Waste factor defaults to 10% (15% for diagonal layouts).",
+    "description": "Tile count and boxes from area, tile size and grout joint, plus thinset by trowel size and grout by joint volume. Adjustable waste factor (10% straight, 15% diagonal). Imperial and metric.",
     "url": "https://moonligh7er.github.io/developer-site/tools/tile-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Tile Calculator (Boxes, Grout, Thinset)">
-  <meta property="og:description" content="Calculate tile count, boxes, thinset, and grout from area + tile size + grout gap. Waste factor defaults to 10% (15% for diagonal layouts).">
+  <meta property="og:description" content="Tile count and boxes from area, tile size and grout joint, plus thinset by trowel size and grout by joint volume. Adjustable waste factor (10% straight, 15% diagonal). Imperial and metric.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/tile-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Tile Calculator (Boxes, Grout, Thinset)">
-  <meta name="twitter:description" content="Calculate tile count, boxes, thinset, and grout from area + tile size + grout gap. Waste factor defaults to 10% (15% for diagonal layouts).">
+  <meta name="twitter:description" content="Tile count and boxes from area, tile size and grout joint, plus thinset by trowel size and grout by joint volume. Adjustable waste factor (10% straight, 15% diagonal). Imperial and metric.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -112,56 +150,107 @@
 
       <div class="calc-card">
         <h1>Tile Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter the area to tile, tile dimensions, grout joint width, and tiles-per-box to get exactly how many tiles + boxes + grout + thinset you need. Waste defaults to 10%; use 15% for diagonal layouts.</p>
+        <p class="calc-intro">Enter the area, the tile size and the grout joint. You get tiles and boxes (rounded up), thinset for your trowel size, and grout worked out from the actual joint volume.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (sq ft, in)</option>
+              <option value="metric">Metric (m², cm, mm)</option>
             </select>
           </div>
         </div>
 
-        <p class="calc-subhead">Area &amp; Tile</p>
-<div class="form-grid">
-  <div class="form-group"><label for="area">Area to Tile (sq ft or m²)</label><input type="number" id="area" placeholder="100" min="0" step="any"></div>
-  <div class="form-group"><label for="tileW">Tile Width (in or cm)</label><input type="number" id="tileW" placeholder="12" min="0" step="any"></div>
-  <div class="form-group"><label for="tileH">Tile Height (in or cm)</label><input type="number" id="tileH" placeholder="12" min="0" step="any"></div>
-  <div class="form-group"><label for="grout">Grout Gap (in or mm)</label><input type="number" id="grout" placeholder="0.125" min="0" step="any"><span class="hint">1/8" = 0.125"; 1/16" = 0.0625"</span></div>
-</div>
-<p class="calc-subhead">Packaging &amp; Waste</p>
-<div class="form-grid">
-  <div class="form-group"><label for="tilesPerBox">Tiles per Box</label><input type="number" id="tilesPerBox" placeholder="10" min="1" step="1"></div>
-  <div class="form-group"><label for="waste">Waste Factor (%)</label><input type="number" id="waste" value="10" min="0" step="any"><span class="hint">10% straight, 15% diagonal</span></div>
-</div>
+        <p class="calc-subhead">Area &amp; tile</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="area">Area to tile <span data-u="sqft"></span></label>
+            <input type="number" id="area" value="100" min="0" step="any" inputmode="decimal" data-dim="sqft" aria-describedby="area-hint area-err">
+            <span class="hint" id="area-hint">Length × width of the floor or wall. Measure each section and add them up.</span>
+            <span class="field-err" id="area-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="tileW">Tile width <span data-u="in"></span></label>
+            <input type="number" id="tileW" value="12" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="tileW-err">
+            <span class="field-err" id="tileW-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="tileH">Tile length <span data-u="in"></span></label>
+            <input type="number" id="tileH" value="12" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="tileH-err">
+            <span class="field-err" id="tileH-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="grout">Grout joint <span data-u="inmm"></span></label>
+            <input type="number" id="grout" value="0.125" min="0" step="any" inputmode="decimal" data-dim="inmm" aria-describedby="grout-hint grout-err">
+            <span class="hint" id="grout-hint">1/16 in = 0.0625; 1/8 in = 0.125; 3/16 in = 0.1875. Use 0 for click-lock planks.</span>
+            <span class="field-err" id="grout-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="thick">Tile thickness <span data-u="inmm"></span></label>
+            <input type="number" id="thick" value="0.375" min="0" step="any" inputmode="decimal" data-dim="inmm" aria-describedby="thick-hint thick-err">
+            <span class="hint" id="thick-hint">Used for grout volume. Most floor tile is 5/16&ndash;3/8 in (8&ndash;10 mm).</span>
+            <span class="field-err" id="thick-err"></span>
+          </div>
+        </div>
+        <p class="calc-subhead">Packaging, waste &amp; setting</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="tilesPerBox">Tiles per box <span class="u-static">count</span></label>
+            <input type="number" id="tilesPerBox" value="10" min="1" step="1" inputmode="numeric" aria-describedby="tilesPerBox-err">
+            <span class="field-err" id="tilesPerBox-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="waste">Waste factor <span class="u-static">%</span></label>
+            <input type="number" id="waste" value="10" min="0" max="100" step="any" inputmode="decimal" aria-describedby="waste-hint waste-err">
+            <span class="hint" id="waste-hint">10% straight lay; 15% diagonal or herringbone; up to 20% for rooms with many cuts.</span>
+            <span class="field-err" id="waste-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="trowel">Trowel notch</label>
+            <select id="trowel" aria-describedby="trowel-hint">
+              <option value="auto" selected>Match to tile size</option>
+              <option value="85">1/4 × 1/4 in square (~85 sq ft per 50 lb)</option>
+              <option value="60">1/4 × 3/8 in square (~60 sq ft per 50 lb)</option>
+              <option value="40">1/2 × 1/2 in U-notch (~40 sq ft per 50 lb)</option>
+            </select>
+            <span class="hint" id="trowel-hint">Auto: 1/4 × 1/4 under 8 in, 1/4 × 3/8 for 8&ndash;16 in, 1/2 × 1/2 above 16 in.</span>
+          </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Estimate</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How the tile math works</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Each tile covers (tile width + grout gap) × (tile height + grout gap) of floor space including the joint. Divide the total area by the effective tile area to get tile count, then add waste. Straight (grid) layouts waste ~10%; diagonal layouts waste ~15% because every edge tile gets cut. Complex layouts (bathrooms with cuts around toilets, corners, niches) can push waste to 20%.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Thinset and grout coverage</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Thinset mortar coverage varies with trowel size: a ¼" × ¼" square notch trowel (typical for 12×12 tile) gets you about 90 sq ft per 50 lb bag. A ½" × ½" trowel for larger tiles drops that to about 45 sq ft per bag. Grout coverage depends on gap width and tile size: 1/8" grout joints on 12×12 tile give you about 200 sq ft per 25 lb bag of unsanded grout. This calculator uses conservative averages; check your specific product&apos;s coverage rate on the bag.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Buy extra from the same lot</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Tile color varies slightly between manufacturing lots. Buy your entire quantity (including waste) at once from the same lot number, and pick up 1&ndash;2 extra boxes to store for repairs &mdash; matching a broken tile years later is often impossible.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>How the tile math works</h2>
+        <p>Each tile occupies its own size plus one grout joint in each direction: <code>(width + joint) × (length + joint)</code>. <code>tiles = ceil(area ÷ that footprint × (1 + waste))</code> and <code>boxes = ceil(tiles ÷ tiles per box)</code>. The hub page&apos;s Flooring / Tile calculator uses the same formula, so both give the same count.</p>
+        <h3>Thinset</h3>
+        <p>Coverage per 50 lb bag depends on the trowel notch. The figures used are the low end of a manufacturer chart (Custom Building Products): about 85&ndash;95 sq ft with a 1/4 × 1/4 in square notch and 60&ndash;67 sq ft with 1/4 × 3/8 in. Large-format tile with a 1/2 in notch drops to about 40 sq ft. Back-buttering, uneven floors and tile backs all use more; the bag&apos;s own chart wins.</p>
+        <h3>Grout</h3>
+        <p>Grout fills the joints, so it is worked out from their volume: <code>kg/m² = (L + W) ÷ (L × W) × joint × thickness × 1.7</code>, with sizes in millimetres and 1.7 kg/dm³ as a typical cement-grout density. Small tiles and wide joints use far more grout than large tiles with tight joints. The waste factor is applied to thinset and grout too, for mixing and cleanup loss.</p>
+        <h3>Buy from one lot</h3>
+        <p>Tile color varies slightly between production lots. Buy the full quantity at once from the same lot, and keep a box for future repairs.</p>
+        <p class="sources">Sources: Custom Building Products thinset coverage charts; standard grout consumption formula used by grout makers. Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>A planning estimate. Tile layout, trowel technique and the product&apos;s own coverage chart set the real quantities. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -203,64 +292,261 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const area=n('area'), tw=n('tileW'), th=n('tileH'), gr=n('grout')||0, tpb=n('tilesPerBox'), w=(n('waste')||0)/100;
-  if (!area||area<=0) return showErr('Enter area.');
-  if (!tw||!th||tw<=0||th<=0) return showErr('Enter tile dimensions.');
-  if (!tpb||tpb<=0) return showErr('Enter tiles per box.');
-  // Convert to consistent units — use sq ft internally
-  const areaSqFt = isMetric() ? area / SQFT_TO_SQM : area;
-  // Tile dimensions to inches (convert if metric — user enters cm)
-  const twIn = isMetric() ? tw / IN_TO_CM : tw;
-  const thIn = isMetric() ? th / IN_TO_CM : th;
-  // Grout in inches (metric input is mm)
-  const grIn = isMetric() ? gr / 25.4 : gr;
-  // Effective tile size including grout
-  const effW = twIn + grIn;
-  const effH = thIn + grIn;
-  const tileAreaSqFt = (effW * effH) / 144; // in² to ft²
-  const tilesNeeded = ceil(areaSqFt / tileAreaSqFt * (1+w));
-  const boxes = ceil(tilesNeeded / tpb);
-  // Thinset: ~90 sq ft per 50 lb bag (¼" trowel)
-  const thinsetBags = ceil(areaSqFt * (1+w) / 90);
-  // Grout: 200 sq ft per 25 lb bag at 1/8" on 12x12; adjust roughly
-  const groutBags = ceil(areaSqFt * (1+w) / 200);
-  let h = '';
-  h += row('Tiles needed', tilesNeeded+' tiles', 'teal');
-  h += row('Boxes to buy', boxes+' boxes', 'teal');
-  h += row('Area to tile', fmt(areaSqFt,0)+' sq ft'+(isMetric()?' ('+fmt(area,2)+' m²)':''));
-  h += row('Waste factor applied', (w*100).toFixed(0)+'%');
-  h += row('Thinset mortar', thinsetBags+' × 50 lb bags', 'violet');
-  h += row('Grout', groutBags+' × 25 lb bags', 'violet');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['area','tileW','tileH','grout','tilesPerBox'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('waste').value='10';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; imperial base units) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // tileCount() is shared word-for-word with the Flooring / Tile tab on construction-calculators.html.
+      function tileCount(areaSqFt, tileWIn, tileHIn, jointIn, perBox, wastePct) {
+        var effSqFt = (tileWIn + jointIn) * (tileHIn + jointIn) / 144;
+        var tiles = up(areaSqFt / effSqFt * (1 + wastePct / 100));
+        return { effSqFt: effSqFt, tiles: tiles, boxes: up(tiles / perBox), boxSqFt: perBox * tileWIn * tileHIn / 144 };
+      }
+      // Thinset per 50 lb bag (low end of Custom Building Products charts): 1/4x1/4 sq ~85, 1/4x3/8 sq ~60, 1/2x1/2 U ~40 sq ft.
+      // Grout: kg/m2 = (L+W)/(L*W) * J * T * 1.7 (mm, 1.7 kg/dm3 typical cement grout). Checked 2026-11.
+      function trowelFor(tileWIn, tileHIn) {
+        var big = Math.max(tileWIn, tileHIn);
+        return big < 8 ? 85 : big <= 16 ? 60 : 40;
+      }
+      function estimate(p) {
+        var t = tileCount(p.areaSqFt, p.tileWIn, p.tileHIn, p.jointIn, p.perBox, p.wastePct);
+        var withWaste = p.areaSqFt * (1 + p.wastePct / 100);
+        var coverage = p.trowel === 'auto' ? trowelFor(p.tileWIn, p.tileHIn) : Number(p.trowel);
+        var L = p.tileWIn * 25.4, W = p.tileHIn * 25.4, J = p.jointIn * 25.4, T = p.thickIn * 25.4;
+        var groutKgM2 = J > 0 ? (L + W) / (L * W) * J * T * 1.7 : 0;
+        var groutLb = groutKgM2 * 0.09290304 / 0.45359237 * withWaste;
+        return {
+          tiles: t.tiles, boxes: t.boxes, boxSqFt: t.boxSqFt, effSqFt: t.effSqFt,
+          thinsetCoverage: coverage, thinsetBags: up(withWaste / coverage),
+          groutLb: groutLb, groutKg: groutLb * 0.45359237
+        };
+      }
+      /* ===== end math ===== */
+
+      function compute() {
+        var p = {
+          areaSqFt: field('area', { gt: 0 }),
+          tileWIn: field('tileW', { gt: 0, max: 120, maxMsg: 'Over 10 ft; check the unit.' }),
+          tileHIn: field('tileH', { gt: 0, max: 120, maxMsg: 'Over 10 ft; check the unit.' }),
+          jointIn: field('grout', { min: 0, max: 1, maxMsg: 'Joints over 1 in are unusual; check the unit.' }),
+          thickIn: field('thick', { gt: 0, max: 3, maxMsg: 'Over 3 in thick; check the unit.' }),
+          perBox: field('tilesPerBox', { gt: 0, int: true }),
+          wastePct: field('waste', { min: 0, max: 100 }),
+          trowel: sel('trowel')
+        };
+        if (errors) return null;
+        var r = estimate(p), m = metric(), rows = [];
+        rows.push(['Tiles (incl. ' + pct(p.wastePct) + ' waste)', fmt(r.tiles, 0) + ' ' + plural(r.tiles, 'tile'), 'teal']);
+        var perBox = m ? fmt(r.boxSqFt * 0.09290304, 2) + ' m²' : fmt(r.boxSqFt, 1) + ' sq ft';
+        rows.push(['Boxes to buy', fmt(r.boxes, 0) + ' ' + plural(r.boxes, 'box', 'boxes') + ' (' + perBox + ' per box)', 'teal']);
+        rows.push(['Area to tile', area(p.areaSqFt)]);
+        rows.push(['Thinset mortar', fmt(r.thinsetBags, 0) + ' × 50 lb ' + plural(r.thinsetBags, 'bag') + ' (at ~' + (m ? fmt(r.thinsetCoverage * 0.09290304, 1) + ' m²' : r.thinsetCoverage + ' sq ft') + ' per bag)', 'violet']);
+        if (p.jointIn > 0) {
+          var gBags = Math.max(1, up((m ? r.groutKg / 5 : r.groutLb / 25)));
+          var g = (m ? fmt(r.groutKg, 1) + ' kg (' + gBags + ' × 5 kg ' : fmt(r.groutLb, 1) + ' lb (' + gBags + ' × 25 lb ') + plural(gBags, 'bag') + ')';
+          rows.push(['Grout', g, 'violet']);
+        } else {
+          rows.push(['Grout', 'None (no joint)']);
+        }
+        var notes = ['Keep at least one spare box from the same lot for repairs.'];
+        if (p.jointIn > 0 && p.jointIn < 0.125) notes.push('Joints under 1/8 in usually take unsanded grout, often sold in smaller bags.');
+        return { rows: rows, notes: notes };
+      }
+      init(compute, 'Tile estimate');
     })();
   </script>
   <script defer src="../js/ads.js"></script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Construction Calculators — Concrete, Paint, Flooring, Lumber &amp; More</title>
-  <meta name="description" content="Free construction calculators for concrete, paint coverage, flooring/tile, lumber estimation, fence post spacing, and wallpaper. Accurate math, no signup required.">
+  <meta name="description" content="Free construction calculators for concrete, paint coverage, flooring/tile, lumber, fence posts and wallpaper. Formulas and assumptions shown, imperial or metric, no signup.">
   <meta name="keywords" content="concrete calculator, paint calculator, flooring calculator, lumber calculator, fence post calculator, wallpaper calculator, construction calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -48,7 +48,7 @@
     /* ---- Page-specific styles ---- */
     .calc-hero {
       text-align: center;
-      padding: 1.5rem 0 0.75rem;
+      padding: 1.5rem 1rem 0.75rem;
     }
     .calc-hero__label {
       font-family: var(--font-mono);
@@ -73,7 +73,7 @@
       font-family: var(--font-sans);
       font-size: 0.95rem;
       color: var(--text-secondary);
-      max-width: 55ch;
+      max-width: 60ch;
       margin: 0 auto;
       line-height: 1.6;
     }
@@ -86,13 +86,50 @@
       min-height: 90px;
     }
 
+    /* Units switch (applies to every tab) */
+    .calc-units {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+    }
+    .calc-units__label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-right: 0.75rem;
+    }
+    .calc-units__btn {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      min-height: 40px;
+      padding: 0.5rem 1.1rem;
+      background: var(--surface);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .calc-units__btn + .calc-units__btn { border-left: none; }
+    .calc-units__btn.active {
+      background: var(--teal-glow);
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+
     /* Tab bar */
     .calc-tabs {
       display: flex;
       flex-wrap: wrap;
       gap: 0.25rem;
       max-width: 900px;
-      margin: 2rem auto 0;
+      margin: 1.25rem auto 0;
       padding: 0 1rem;
       justify-content: center;
     }
@@ -105,6 +142,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       padding: 0.6rem 1rem;
+      min-height: 40px;
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
@@ -134,6 +172,10 @@
     .calc-panel.active {
       display: block;
     }
+    .calc-panel:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 2px;
+    }
     .calc-panel__title {
       font-family: var(--font-display);
       font-size: 1.3rem;
@@ -159,12 +201,22 @@
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
+      min-width: 0;
+    }
+    .calc-field[hidden] {
+      display: none;
     }
     .calc-field label {
       font-family: var(--font-mono);
       font-size: 0.65rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .calc-field label [data-u],
+    .calc-field label .u-static {
+      text-transform: none;
+      letter-spacing: 0.04em;
       color: var(--text-dim);
     }
     .calc-field input,
@@ -175,6 +227,7 @@
       font-family: var(--font-mono);
       font-size: 0.85rem;
       padding: 0.75rem 1rem;
+      min-height: 44px;
       outline: none;
       transition: border-color 0.2s;
       width: 100%;
@@ -183,6 +236,9 @@
     .calc-field input:focus,
     .calc-field select:focus {
       border-color: var(--teal);
+    }
+    .calc-field input[aria-invalid="true"] {
+      border-color: var(--rose);
     }
     .calc-field select {
       cursor: pointer;
@@ -193,32 +249,48 @@
       background-position: right 1rem center;
       padding-right: 2.5rem;
     }
-
-    /* Unit toggle */
-    .unit-toggle {
-      display: inline-flex;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      margin-bottom: 1rem;
+    .calc-field--check {
+      justify-content: flex-end;
     }
-    .unit-toggle button {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.5rem 1rem;
-      background: var(--surface);
-      color: var(--text-dim);
-      border: none;
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 44px;
       cursor: pointer;
-      transition: all 0.2s;
+      text-transform: none !important;
+      letter-spacing: 0.04em !important;
+      font-size: 0.75rem !important;
     }
-    .unit-toggle button.active {
-      background: var(--teal-glow);
-      color: var(--teal);
+    .check-row input {
+      width: 1.15rem;
+      height: 1.15rem;
+      min-height: 0;
+      accent-color: var(--teal);
+    }
+    .calc-hint {
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: var(--text-dim);
+    }
+    .field-err {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--rose);
+    }
+    .field-err:empty {
+      display: none;
+    }
+    .field-err::before {
+      content: '! ';
     }
 
-    /* Calculate button */
+    /* Buttons */
+    .calc-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
     .calc-btn {
       font-family: var(--font-mono);
       font-size: 0.7rem;
@@ -228,6 +300,7 @@
       background: linear-gradient(135deg, var(--teal), var(--violet));
       border: none;
       padding: 0.85rem 2.5rem;
+      min-height: 44px;
       cursor: pointer;
       transition: all 0.25s;
       font-weight: 500;
@@ -235,6 +308,37 @@
     .calc-btn:hover {
       box-shadow: 0 0 20px rgba(0,212,170,0.3), 0 0 40px rgba(139,92,246,0.15);
       transform: translateY(-1px);
+    }
+    .calc-btn--ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 0.85rem 1.5rem;
+    }
+    .calc-btn--ghost:hover {
+      color: var(--violet);
+      border-color: var(--violet);
+      box-shadow: none;
+    }
+    .calc-copy {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.9rem;
+      min-height: 40px;
+      cursor: pointer;
+    }
+    .calc-copy:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+    .calc-copy:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
 
     /* Results */
@@ -245,15 +349,35 @@
     .calc-results.visible {
       display: block;
     }
-    .calc-results__title {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-dim);
+    .calc-results__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
       margin-bottom: 0.75rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border);
+    }
+    .calc-results__title {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin: 0;
+    }
+    .calc-results__empty {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    .calc-results__notes p {
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+      margin: 0.75rem 0 0;
     }
     .result-grid {
       display: grid;
@@ -264,6 +388,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       padding: 1rem 1.25rem;
+      min-width: 0;
     }
     .result-item__label {
       font-family: var(--font-mono);
@@ -278,6 +403,11 @@
       font-size: 1.3rem;
       font-weight: 500;
       color: var(--teal);
+      overflow-wrap: anywhere;
+    }
+    .result-item__value--text {
+      font-size: 0.9rem;
+      color: var(--text-primary);
     }
     .result-item__unit {
       font-size: 0.7rem;
@@ -285,16 +415,55 @@
       margin-left: 0.25rem;
     }
 
+    /* How it works */
+    .calc-howto {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+    .calc-howto summary {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+      cursor: pointer;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+    }
+    .calc-howto p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin: 0.75rem 0 0;
+    }
+    .calc-howto code {
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      color: var(--teal);
+      overflow-wrap: anywhere;
+    }
+    .calc-howto a {
+      color: var(--teal);
+    }
+
     /* Reference table */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+      -webkit-overflow-scrolling: touch;
+    }
     .ref-table {
       width: 100%;
+      min-width: 420px;
       border-collapse: collapse;
-      margin-top: 1rem;
       font-family: var(--font-mono);
       font-size: 0.75rem;
     }
     .ref-table th {
       text-align: left;
+      font-weight: 400;
       font-size: 0.6rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -307,8 +476,84 @@
       color: var(--text-secondary);
       border-bottom: 1px solid var(--border);
     }
-    .ref-table tr:hover td {
-      color: var(--text-primary);
+    .ref-table td:first-child {
+      color: var(--teal);
+    }
+
+    /* Disclaimer and cross-links */
+    .tool-disclaimer {
+      max-width: 900px;
+      margin: 1.5rem auto 0;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .tool-disclaimer p {
+      margin: 0;
+    }
+    .tool-disclaimer strong {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .tool-disclaimer a {
+      color: var(--teal);
+    }
+    .calc-more {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      padding: 1.5rem 2rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .calc-more__title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+    .calc-more__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.5rem;
+    }
+    .calc-more__grid a {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.55rem 0.75rem;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .calc-more__grid a:hover {
+      color: var(--teal);
+      border-color: var(--teal);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     /* Responsive */
@@ -324,6 +569,23 @@
         padding: 0.5rem 0.6rem;
       }
       .result-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .result-item {
+        padding: 0.85rem;
+      }
+      .result-item__value {
+        font-size: 1.05rem;
+      }
+      .tool-disclaimer,
+      .calc-more {
+        margin-left: 1rem;
+        margin-right: 1rem;
+      }
+      .calc-more {
+        padding: 1.25rem;
+      }
+      .calc-more__grid {
         grid-template-columns: 1fr 1fr;
       }
     }
@@ -364,328 +626,534 @@
     <section class="calc-hero">
       <span class="calc-hero__label">Construction</span>
       <h1 class="calc-hero__heading">Construction Calculators</h1>
-      <p class="calc-hero__sub">Estimate materials for concrete, paint, flooring, lumber, fencing, and wallpaper. Accurate math, imperial and metric support, zero signup.</p>
+      <p class="calc-hero__sub">Estimate materials for concrete, paint, flooring, lumber, fencing and wallpaper. Each tab shows its formula and assumptions, works in imperial or metric, and asks for nothing but numbers.</p>
     </section>
 
     <!-- Ad: top -->
     <div class="ad-container ad-slot" data-ad-slot="top"></div>
 
+    <div class="calc-units" role="group" aria-label="Units for all calculators">
+      <span class="calc-units__label" aria-hidden="true">Units</span>
+      <button type="button" class="calc-units__btn active" data-units="imperial" aria-pressed="true">Imperial</button>
+      <button type="button" class="calc-units__btn" data-units="metric" aria-pressed="false">Metric</button>
+    </div>
+
     <!-- Tab bar -->
-    <div class="calc-tabs" role="tablist">
-      <button class="calc-tab active" role="tab" aria-selected="true" data-tab="concrete">Concrete</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-tab="paint">Paint</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-tab="flooring">Flooring / Tile</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-tab="lumber">Lumber</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-tab="fence">Fence Posts</button>
-      <button class="calc-tab" role="tab" aria-selected="false" data-tab="wallpaper">Wallpaper</button>
+    <div class="calc-tabs" role="tablist" aria-label="Calculators">
+      <button type="button" class="calc-tab active" role="tab" id="tab-concrete" aria-controls="panel-concrete" aria-selected="true" tabindex="0" data-tab="concrete">Concrete</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-paint" aria-controls="panel-paint" aria-selected="false" tabindex="-1" data-tab="paint">Paint</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-flooring" aria-controls="panel-flooring" aria-selected="false" tabindex="-1" data-tab="flooring">Flooring / Tile</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-lumber" aria-controls="panel-lumber" aria-selected="false" tabindex="-1" data-tab="lumber">Lumber</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-fence" aria-controls="panel-fence" aria-selected="false" tabindex="-1" data-tab="fence">Fence Posts</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-wallpaper" aria-controls="panel-wallpaper" aria-selected="false" tabindex="-1" data-tab="wallpaper">Wallpaper</button>
     </div>
 
     <!-- Calculator Panels -->
     <div class="calc-container">
 
       <!-- ========== 1. CONCRETE ========== -->
-      <div class="calc-panel active" id="panel-concrete" role="tabpanel">
+      <div class="calc-panel active" id="panel-concrete" role="tabpanel" aria-labelledby="tab-concrete" tabindex="0" data-panel="concrete">
         <h2 class="calc-panel__title">Concrete Calculator</h2>
-        <p class="calc-panel__desc">Calculate how much concrete you need for slabs, footings, and pours. Get cubic yards, cubic meters, and bag counts.</p>
-
-        <div class="unit-toggle" id="concrete-units">
-          <button class="active" data-unit="ft" onclick="setConcreteUnit('ft')">Feet</button>
-          <button data-unit="m" onclick="setConcreteUnit('m')">Meters</button>
-        </div>
+        <p class="calc-panel__desc">Volume of concrete for a slab or footing, or for round columns and post holes, with ready-mix and pre-mixed bag counts.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="conc-length">Length (<span class="conc-unit-label">ft</span>)</label>
-            <input type="number" id="conc-length" step="any" min="0" placeholder="10">
+            <label for="conc-shape">Shape</label>
+            <select id="conc-shape">
+              <option value="slab" selected>Slab or footing</option>
+              <option value="round">Round post hole / column</option>
+            </select>
+          </div>
+          <div class="calc-field" id="conc-length-wrap">
+            <label for="conc-length">Length <span data-u="ft"></span></label>
+            <input type="number" id="conc-length" value="10" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="conc-length-err">
+            <span class="field-err" id="conc-length-err"></span>
+          </div>
+          <div class="calc-field" id="conc-width-wrap">
+            <label for="conc-width">Width <span data-u="ft"></span></label>
+            <input type="number" id="conc-width" value="10" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="conc-width-err">
+            <span class="field-err" id="conc-width-err"></span>
+          </div>
+          <div class="calc-field" id="conc-depth-wrap">
+            <label for="conc-depth">Thickness <span data-u="in"></span></label>
+            <input type="number" id="conc-depth" value="4" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="conc-depth-hint conc-depth-err">
+            <span class="calc-hint" id="conc-depth-hint">Patios and walks 4 in; driveways 4&ndash;6 in.</span>
+            <span class="field-err" id="conc-depth-err"></span>
+          </div>
+          <div class="calc-field" id="conc-dia-wrap" hidden>
+            <label for="conc-dia">Diameter <span data-u="in"></span></label>
+            <input type="number" id="conc-dia" value="10" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="conc-dia-err">
+            <span class="field-err" id="conc-dia-err"></span>
+          </div>
+          <div class="calc-field" id="conc-hole-wrap" hidden>
+            <label for="conc-hole">Depth or height <span data-u="in"></span></label>
+            <input type="number" id="conc-hole" value="36" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="conc-hole-hint conc-hole-err">
+            <span class="calc-hint" id="conc-hole-hint">Post holes usually go below the frost line.</span>
+            <span class="field-err" id="conc-hole-err"></span>
+          </div>
+          <div class="calc-field" id="conc-qty-wrap" hidden>
+            <label for="conc-qty">How many <span class="u-static">count</span></label>
+            <input type="number" id="conc-qty" value="4" min="1" step="1" inputmode="numeric" aria-describedby="conc-qty-err">
+            <span class="field-err" id="conc-qty-err"></span>
+          </div>
+        </div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label for="conc-waste">Extra for waste <span class="u-static">%</span></label>
+            <input type="number" id="conc-waste" value="10" min="0" step="any" inputmode="decimal" aria-describedby="conc-waste-hint conc-waste-err">
+            <span class="calc-hint" id="conc-waste-hint">Spillage, uneven ground, form bulge. 5&ndash;10% is common.</span>
+            <span class="field-err" id="conc-waste-err"></span>
           </div>
           <div class="calc-field">
-            <label for="conc-width">Width (<span class="conc-unit-label">ft</span>)</label>
-            <input type="number" id="conc-width" step="any" min="0" placeholder="10">
+            <label for="conc-price60">Price per 60 lb bag <span class="u-static">$</span></label>
+            <input type="number" id="conc-price60" value="5.50" min="0" step="any" inputmode="decimal" aria-describedby="conc-price60-err">
+            <span class="field-err" id="conc-price60-err"></span>
           </div>
           <div class="calc-field">
-            <label for="conc-depth">Depth (<span class="conc-unit-label">ft</span>)</label>
-            <input type="number" id="conc-depth" step="any" min="0" placeholder="0.33">
-          </div>
-          <div class="calc-field">
-            <label for="conc-price60">Price per 60lb Bag ($)</label>
-            <input type="number" id="conc-price60" step="any" min="0" value="5.50" placeholder="5.50">
-          </div>
-          <div class="calc-field">
-            <label for="conc-price80">Price per 80lb Bag ($)</label>
-            <input type="number" id="conc-price80" step="any" min="0" value="6.50" placeholder="6.50">
+            <label for="conc-price80">Price per 80 lb bag <span class="u-static">$</span></label>
+            <input type="number" id="conc-price80" value="6.50" min="0" step="any" inputmode="decimal" aria-describedby="conc-price80-err">
+            <span class="field-err" id="conc-price80-err"></span>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcConcrete()">Calculate</button>
-
-        <div class="calc-results" id="concrete-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="concrete-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
+
+        <div class="calc-results visible" id="concrete-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="concrete-result-grid"></div>
+            <div class="calc-results__notes" id="concrete-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p><code>volume = length × width × thickness</code> (or <code>π × (diameter ÷ 2)² × depth × count</code> for round forms), plus the waste allowance. 1 yd³ = 27 ft³ = 0.7646 m³. Pre-mixed bag yields are the published figures for standard concrete mix: 80 lb &rarr; 0.60 ft³, 60 lb &rarr; 0.45 ft³, 40 lb &rarr; 0.30 ft³. Ready-mix trucks deliver in quarter-yard steps, so that line rounds up. For post holes, the post itself takes up a little room; the estimate ignores that, which leaves a small margin.</p>
+        </details>
       </div>
 
       <!-- ========== 2. PAINT ========== -->
-      <div class="calc-panel" id="panel-paint" role="tabpanel">
+      <div class="calc-panel" id="panel-paint" role="tabpanel" aria-labelledby="tab-paint" tabindex="0" data-panel="paint">
         <h2 class="calc-panel__title">Paint Coverage Calculator</h2>
-        <p class="calc-panel__desc">Estimate how much paint you need based on room dimensions, doors, windows, and number of coats.</p>
+        <p class="calc-panel__desc">How much paint a room needs from its size, openings, coats and the coverage printed on the can.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="paint-length">Room Length (ft)</label>
-            <input type="number" id="paint-length" step="any" min="0" placeholder="12">
+            <label for="paint-length">Room length <span data-u="ft"></span></label>
+            <input type="number" id="paint-length" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="paint-length-err">
+            <span class="field-err" id="paint-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="paint-width">Room Width (ft)</label>
-            <input type="number" id="paint-width" step="any" min="0" placeholder="10">
+            <label for="paint-width">Room width <span data-u="ft"></span></label>
+            <input type="number" id="paint-width" value="10" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="paint-width-err">
+            <span class="field-err" id="paint-width-err"></span>
           </div>
           <div class="calc-field">
-            <label for="paint-height">Wall Height (ft)</label>
-            <input type="number" id="paint-height" step="any" min="0" placeholder="8">
+            <label for="paint-height">Wall height <span data-u="ft"></span></label>
+            <input type="number" id="paint-height" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="paint-height-err">
+            <span class="field-err" id="paint-height-err"></span>
           </div>
           <div class="calc-field">
-            <label for="paint-doors">Number of Doors</label>
-            <input type="number" id="paint-doors" step="1" min="0" value="1" placeholder="1">
+            <label for="paint-doors">Doors <span class="u-static">count</span></label>
+            <input type="number" id="paint-doors" value="1" min="0" step="1" inputmode="numeric" aria-describedby="paint-doors-err">
+            <span class="field-err" id="paint-doors-err"></span>
           </div>
           <div class="calc-field">
-            <label for="paint-windows">Number of Windows</label>
-            <input type="number" id="paint-windows" step="1" min="0" value="2" placeholder="2">
+            <label for="paint-windows">Windows <span class="u-static">count</span></label>
+            <input type="number" id="paint-windows" value="2" min="0" step="1" inputmode="numeric" aria-describedby="paint-windows-err">
+            <span class="field-err" id="paint-windows-err"></span>
           </div>
           <div class="calc-field">
-            <label for="paint-coats">Number of Coats</label>
-            <input type="number" id="paint-coats" step="1" min="1" value="2" placeholder="2">
+            <label for="paint-coats">Coats <span class="u-static">count</span></label>
+            <input type="number" id="paint-coats" value="2" min="1" step="1" inputmode="numeric" aria-describedby="paint-coats-err">
+            <span class="field-err" id="paint-coats-err"></span>
+          </div>
+          <div class="calc-field">
+            <label for="paint-cover">Coverage <span data-u="sqftPerGal"></span></label>
+            <input type="number" id="paint-cover" value="350" min="0" step="any" inputmode="decimal" data-dim="sqftPerGal" aria-describedby="paint-cover-hint paint-cover-err">
+            <span class="calc-hint" id="paint-cover-hint">From the can; most interior paint says 250&ndash;400 sq ft per gallon.</span>
+            <span class="field-err" id="paint-cover-err"></span>
+          </div>
+          <div class="calc-field calc-field--check">
+            <label class="check-row" for="paint-ceiling"><input type="checkbox" id="paint-ceiling"> Include the ceiling</label>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcPaint()">Calculate</button>
-
-        <div class="calc-results" id="paint-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="paint-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
+
+        <div class="calc-results visible" id="paint-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="paint-result-grid"></div>
+            <div class="calc-results__notes" id="paint-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p><code>walls = 2 × (length + width) × height</code>, minus about 21 sq ft (1.95 m²) per door and 15 sq ft (1.39 m²) per window, plus the ceiling if ticked. Multiply by coats and divide by the can&apos;s coverage. The default 350 sq ft per gallon (about 8.6 m² per liter) is a typical label figure for smooth, primed walls; rough or porous surfaces and big color changes use more.</p>
+        </details>
       </div>
 
       <!-- ========== 3. FLOORING / TILE ========== -->
-      <div class="calc-panel" id="panel-flooring" role="tabpanel">
+      <div class="calc-panel" id="panel-flooring" role="tabpanel" aria-labelledby="tab-flooring" tabindex="0" data-panel="flooring">
         <h2 class="calc-panel__title">Flooring / Tile Calculator</h2>
-        <p class="calc-panel__desc">Calculate tiles or planks needed for your floor, including waste factor and box estimates.</p>
+        <p class="calc-panel__desc">Tiles or planks and boxes for a rectangular room, including the grout joint and a waste factor.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="floor-length">Room Length (ft)</label>
-            <input type="number" id="floor-length" step="any" min="0" placeholder="12">
+            <label for="floor-length">Room length <span data-u="ft"></span></label>
+            <input type="number" id="floor-length" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="floor-length-err">
+            <span class="field-err" id="floor-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="floor-width">Room Width (ft)</label>
-            <input type="number" id="floor-width" step="any" min="0" placeholder="10">
+            <label for="floor-width">Room width <span data-u="ft"></span></label>
+            <input type="number" id="floor-width" value="10" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="floor-width-err">
+            <span class="field-err" id="floor-width-err"></span>
           </div>
           <div class="calc-field">
-            <label for="tile-length">Tile/Plank Length (in)</label>
-            <input type="number" id="tile-length" step="any" min="0" placeholder="12">
+            <label for="tile-length">Tile / plank length <span data-u="in"></span></label>
+            <input type="number" id="tile-length" value="12" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="tile-length-err">
+            <span class="field-err" id="tile-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="tile-width">Tile/Plank Width (in)</label>
-            <input type="number" id="tile-width" step="any" min="0" placeholder="12">
+            <label for="tile-width">Tile / plank width <span data-u="in"></span></label>
+            <input type="number" id="tile-width" value="12" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="tile-width-err">
+            <span class="field-err" id="tile-width-err"></span>
           </div>
           <div class="calc-field">
-            <label for="tile-gap">Gap / Grout Width (in)</label>
-            <input type="number" id="tile-gap" step="any" min="0" value="0.125" placeholder="0.125">
+            <label for="tile-gap">Grout joint <span data-u="inmm"></span></label>
+            <input type="number" id="tile-gap" value="0.125" min="0" step="any" inputmode="decimal" data-dim="inmm" aria-describedby="tile-gap-hint tile-gap-err">
+            <span class="calc-hint" id="tile-gap-hint">1/8 in = 0.125. Use 0 for click-lock planks.</span>
+            <span class="field-err" id="tile-gap-err"></span>
           </div>
           <div class="calc-field">
-            <label for="tile-per-box">Tiles per Box</label>
-            <input type="number" id="tile-per-box" step="1" min="1" value="10" placeholder="10">
+            <label for="tile-per-box">Pieces per box <span class="u-static">count</span></label>
+            <input type="number" id="tile-per-box" value="10" min="1" step="1" inputmode="numeric" aria-describedby="tile-per-box-err">
+            <span class="field-err" id="tile-per-box-err"></span>
+          </div>
+          <div class="calc-field">
+            <label for="floor-waste">Waste factor <span class="u-static">%</span></label>
+            <input type="number" id="floor-waste" value="10" min="0" step="any" inputmode="decimal" aria-describedby="floor-waste-hint floor-waste-err">
+            <span class="calc-hint" id="floor-waste-hint">10% straight; 15% diagonal or herringbone.</span>
+            <span class="field-err" id="floor-waste-err"></span>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcFlooring()">Calculate</button>
-
-        <div class="calc-results" id="flooring-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="flooring-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
+
+        <div class="calc-results visible" id="flooring-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="flooring-result-grid"></div>
+            <div class="calc-results__notes" id="flooring-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p>Each piece covers <code>(length + joint) × (width + joint)</code>. <code>pieces = ceil(room area ÷ that × (1 + waste))</code>, <code>boxes = ceil(pieces ÷ per box)</code>. This is the same formula as the <a href="tile-calculator.html">Tile calculator</a>, which also works out thinset and grout, so the two pages agree for the same inputs.</p>
+        </details>
       </div>
 
       <!-- ========== 4. LUMBER ========== -->
-      <div class="calc-panel" id="panel-lumber" role="tabpanel">
+      <div class="calc-panel" id="panel-lumber" role="tabpanel" aria-labelledby="tab-lumber" tabindex="0" data-panel="lumber">
         <h2 class="calc-panel__title">Lumber Estimator</h2>
-        <p class="calc-panel__desc">Estimate board feet and number of boards needed for decks, fences, framing walls, or shelving.</p>
+        <p class="calc-panel__desc">Boards and board feet for decking, a board fence, a framed wall or shelving.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="lumber-project">Project Type</label>
-            <select id="lumber-project" onchange="updateLumberFields()">
-              <option value="deck">Deck</option>
-              <option value="fence">Fence</option>
-              <option value="wall">Framing Wall</option>
+            <label for="lumber-project">Project</label>
+            <select id="lumber-project">
+              <option value="deck" selected>Deck boards</option>
+              <option value="fence">Fence boards (vertical)</option>
+              <option value="wall">Framing wall (16 in o.c.)</option>
               <option value="shelving">Shelving</option>
             </select>
           </div>
           <div class="calc-field">
-            <label for="lumber-length" id="lumber-length-label">Length (ft)</label>
-            <input type="number" id="lumber-length" step="any" min="0" placeholder="12">
+            <label for="lumber-length" id="lumber-length-label">Length along the boards <span data-u="ft"></span></label>
+            <input type="number" id="lumber-length" value="16" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="lumber-length-err">
+            <span class="field-err" id="lumber-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="lumber-width" id="lumber-width-label">Width (ft)</label>
-            <input type="number" id="lumber-width" step="any" min="0" placeholder="10">
+            <label for="lumber-width" id="lumber-width-label">Width across the boards <span data-u="ft"></span></label>
+            <input type="number" id="lumber-width" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="lumber-width-err">
+            <span class="field-err" id="lumber-width-err"></span>
           </div>
-          <div class="calc-field" id="lumber-height-wrap">
-            <label for="lumber-height" id="lumber-height-label">Height (ft)</label>
-            <input type="number" id="lumber-height" step="any" min="0" placeholder="8">
+          <div class="calc-field" id="lumber-height-wrap" hidden>
+            <label for="lumber-height">Number of shelves <span class="u-static">count</span></label>
+            <input type="number" id="lumber-height" value="5" min="1" step="1" inputmode="numeric" aria-describedby="lumber-height-err">
+            <span class="field-err" id="lumber-height-err"></span>
           </div>
+        </div>
+        <div class="calc-grid">
           <div class="calc-field">
-            <label for="lumber-board">Board Size</label>
+            <label for="lumber-board">Board size (nominal)</label>
             <select id="lumber-board">
-              <option value="2x4">2 x 4</option>
-              <option value="2x6" selected>2 x 6</option>
-              <option value="2x8">2 x 8</option>
-              <option value="2x10">2 x 10</option>
-              <option value="2x12">2 x 12</option>
-              <option value="4x4">4 x 4</option>
+              <option value="2x4">2 × 4 (1.5 × 3.5 in actual)</option>
+              <option value="2x6" selected>2 × 6 (1.5 × 5.5 in actual)</option>
+              <option value="2x8">2 × 8 (1.5 × 7.25 in actual)</option>
+              <option value="2x10">2 × 10 (1.5 × 9.25 in actual)</option>
+              <option value="2x12">2 × 12 (1.5 × 11.25 in actual)</option>
+              <option value="4x4">4 × 4 (3.5 × 3.5 in actual)</option>
+              <option value="1x6">1 × 6 (0.75 × 5.5 in actual)</option>
             </select>
           </div>
           <div class="calc-field">
-            <label for="lumber-boardlen">Board Length (ft)</label>
-            <input type="number" id="lumber-boardlen" step="any" min="1" value="8" placeholder="8">
+            <label for="lumber-boardlen">Board length <span data-u="ft"></span></label>
+            <input type="number" id="lumber-boardlen" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="lumber-boardlen-hint lumber-boardlen-err">
+            <span class="calc-hint" id="lumber-boardlen-hint">The stock length you&apos;ll buy: 8, 10, 12, 16 ft&hellip;</span>
+            <span class="field-err" id="lumber-boardlen-err"></span>
+          </div>
+          <div class="calc-field" id="lumber-gap-wrap">
+            <label for="lumber-gap">Gap between boards <span data-u="inmm"></span></label>
+            <input type="number" id="lumber-gap" value="0.1875" min="0" step="any" inputmode="decimal" data-dim="inmm" aria-describedby="lumber-gap-hint lumber-gap-err">
+            <span class="calc-hint" id="lumber-gap-hint">3/16 in (about 5 mm) is typical for decking.</span>
+            <span class="field-err" id="lumber-gap-err"></span>
           </div>
           <div class="calc-field">
-            <label for="lumber-price">Price per Board ($)</label>
-            <input type="number" id="lumber-price" step="any" min="0" value="7.00" placeholder="7.00">
+            <label for="lumber-waste">Waste factor <span class="u-static">%</span></label>
+            <input type="number" id="lumber-waste" value="10" min="0" step="any" inputmode="decimal" aria-describedby="lumber-waste-err">
+            <span class="field-err" id="lumber-waste-err"></span>
+          </div>
+          <div class="calc-field">
+            <label for="lumber-price">Price per board <span class="u-static">$</span></label>
+            <input type="number" id="lumber-price" value="7.00" min="0" step="any" inputmode="decimal" aria-describedby="lumber-price-err">
+            <span class="field-err" id="lumber-price-err"></span>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcLumber()">Calculate</button>
-
-        <div class="calc-results" id="lumber-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="lumber-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
 
-        <div style="margin-top:1.5rem;">
-          <div class="calc-results__title">Common Lumber Dimensions Reference</div>
+        <div class="calc-results visible" id="lumber-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="lumber-result-grid"></div>
+            <div class="calc-results__notes" id="lumber-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p><strong>Deck:</strong> <code>rows = ceil(width ÷ (board width + gap))</code>, each row <code>ceil(length ÷ board length)</code> boards, the same formula as the <a href="deck-calculator.html">Deck calculator</a>. <strong>Fence:</strong> one board per <code>board width + gap</code>, cut to fence height (several pieces per board when they fit). <strong>Wall:</strong> studs at 16 in on center plus one at the end, and three plate runs (one bottom, two top). <strong>Shelving:</strong> boards side by side to make the shelf depth, cut to shelf length.</p>
+          <p>Board feet use <em>nominal</em> sizes, the way lumber is priced: <code>thickness (in) × width (in) × length (ft) ÷ 12</code>, so a 2 × 6 × 8 ft is 8 board feet. Actual sizes are smaller (a 2 × 6 is 1.5 × 5.5 in); the actual width is what&apos;s used to count boards.</p>
+          <div class="table-wrap">
           <table class="ref-table">
-            <thead>
-              <tr><th>Nominal</th><th>Actual (in)</th><th>Board Feet per 8ft</th><th>Common Use</th></tr>
-            </thead>
-            <tbody>
-              <tr><td style="color:var(--teal);">2 x 4</td><td>1.5 x 3.5</td><td>5.33</td><td>Framing, studs</td></tr>
-              <tr><td style="color:var(--teal);">2 x 6</td><td>1.5 x 5.5</td><td>8.00</td><td>Decking, joists</td></tr>
-              <tr><td style="color:var(--teal);">2 x 8</td><td>1.5 x 7.25</td><td>10.67</td><td>Floor joists, headers</td></tr>
-              <tr><td style="color:var(--teal);">2 x 10</td><td>1.5 x 9.25</td><td>13.33</td><td>Floor joists, beams</td></tr>
-              <tr><td style="color:var(--teal);">2 x 12</td><td>1.5 x 11.25</td><td>16.00</td><td>Ridge boards, stair stringers</td></tr>
-              <tr><td style="color:var(--teal);">4 x 4</td><td>3.5 x 3.5</td><td>10.67</td><td>Posts, supports</td></tr>
-            </tbody>
+          <caption class="sr-only">Common lumber dimensions</caption>
+          <thead><tr><th scope="col">Nominal</th><th scope="col">Actual (in)</th><th scope="col">Board feet per 8 ft</th><th scope="col">Common use</th></tr></thead>
+          <tbody>
+          <tr><td>2 × 4</td><td>1.5 × 3.5</td><td>5.33</td><td>Framing, studs</td></tr>
+          <tr><td>2 × 6</td><td>1.5 × 5.5</td><td>8.00</td><td>Decking, joists</td></tr>
+          <tr><td>2 × 8</td><td>1.5 × 7.25</td><td>10.67</td><td>Floor joists, headers</td></tr>
+          <tr><td>2 × 10</td><td>1.5 × 9.25</td><td>13.33</td><td>Floor joists, beams</td></tr>
+          <tr><td>2 × 12</td><td>1.5 × 11.25</td><td>16.00</td><td>Stair stringers, beams</td></tr>
+          <tr><td>4 × 4</td><td>3.5 × 3.5</td><td>10.67</td><td>Posts, supports</td></tr>
+          <tr><td>1 × 6</td><td>0.75 × 5.5</td><td>4.00</td><td>Fence boards, trim</td></tr>
+          </tbody>
           </table>
-        </div>
+          </div>
+        </details>
       </div>
 
       <!-- ========== 5. FENCE POSTS ========== -->
-      <div class="calc-panel" id="panel-fence" role="tabpanel">
+      <div class="calc-panel" id="panel-fence" role="tabpanel" aria-labelledby="tab-fence" tabindex="0" data-panel="fence">
         <h2 class="calc-panel__title">Fence Post Spacing Calculator</h2>
-        <p class="calc-panel__desc">Plan your fence layout with accurate post counts, rail sections, and picket estimates.</p>
+        <p class="calc-panel__desc">Posts, rails and pickets for a fence line.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="fence-length">Total Fence Length (ft)</label>
-            <input type="number" id="fence-length" step="any" min="0" placeholder="100">
+            <label for="fence-length">Total fence length <span data-u="ft"></span></label>
+            <input type="number" id="fence-length" value="100" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="fence-length-err">
+            <span class="field-err" id="fence-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="fence-spacing">Post Spacing (ft)</label>
-            <input type="number" id="fence-spacing" step="any" min="0.5" value="8" placeholder="8">
+            <label for="fence-spacing">Post spacing (max) <span data-u="ft"></span></label>
+            <input type="number" id="fence-spacing" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="fence-spacing-hint fence-spacing-err">
+            <span class="calc-hint" id="fence-spacing-hint">6&ndash;8 ft is typical for wood fences.</span>
+            <span class="field-err" id="fence-spacing-err"></span>
           </div>
           <div class="calc-field">
-            <label for="fence-corners">Corner / End Posts</label>
-            <input type="number" id="fence-corners" step="1" min="0" value="2" placeholder="2">
+            <label for="fence-corners">Corners <span class="u-static">count</span></label>
+            <input type="number" id="fence-corners" value="0" min="0" step="1" inputmode="numeric" aria-describedby="fence-corners-hint fence-corners-err">
+            <span class="calc-hint" id="fence-corners-hint">Each corner can add a short section, so one extra section is counted per corner.</span>
+            <span class="field-err" id="fence-corners-err"></span>
           </div>
           <div class="calc-field">
-            <label for="fence-rails">Rails per Section</label>
+            <label for="fence-rails">Rails per section</label>
             <select id="fence-rails">
-              <option value="2">2 Rails</option>
-              <option value="3" selected>3 Rails</option>
+              <option value="2">2 rails</option>
+              <option value="3" selected>3 rails</option>
+              <option value="4">4 rails</option>
             </select>
           </div>
           <div class="calc-field">
-            <label for="fence-picket-w">Picket Width (in)</label>
-            <input type="number" id="fence-picket-w" step="any" min="0.5" value="3.5" placeholder="3.5">
+            <label for="fence-picket-w">Picket width <span data-u="in"></span></label>
+            <input type="number" id="fence-picket-w" value="3.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="fence-picket-w-err">
+            <span class="field-err" id="fence-picket-w-err"></span>
           </div>
           <div class="calc-field">
-            <label for="fence-picket-gap">Picket Gap (in)</label>
-            <input type="number" id="fence-picket-gap" step="any" min="0" value="1.5" placeholder="1.5">
+            <label for="fence-picket-gap">Gap between pickets <span data-u="in"></span></label>
+            <input type="number" id="fence-picket-gap" value="1.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="fence-picket-gap-hint fence-picket-gap-err">
+            <span class="calc-hint" id="fence-picket-gap-hint">Use 0 for a privacy fence.</span>
+            <span class="field-err" id="fence-picket-gap-err"></span>
+          </div>
+          <div class="calc-field">
+            <label for="fence-waste">Extra pickets <span class="u-static">%</span></label>
+            <input type="number" id="fence-waste" value="5" min="0" step="any" inputmode="decimal" aria-describedby="fence-waste-hint fence-waste-err">
+            <span class="calc-hint" id="fence-waste-hint">For splits, culls and cuts.</span>
+            <span class="field-err" id="fence-waste-err"></span>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcFence()">Calculate</button>
-
-        <div class="calc-results" id="fence-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="fence-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
+
+        <div class="calc-results visible" id="fence-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="fence-result-grid"></div>
+            <div class="calc-results__notes" id="fence-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p><code>sections = ceil(length ÷ spacing) + corners</code> and <code>posts = sections + 1</code> for a fence with two ends. If the fence closes on itself (a full loop), subtract one post. Two of the posts are end posts and each corner gets a corner post; the rest are line posts. <code>rails = sections × rails per section</code>; <code>pickets = ceil(length ÷ (picket width + gap))</code> plus the extra. Gates need their own posts and hardware.</p>
+        </details>
       </div>
 
       <!-- ========== 6. WALLPAPER ========== -->
-      <div class="calc-panel" id="panel-wallpaper" role="tabpanel">
+      <div class="calc-panel" id="panel-wallpaper" role="tabpanel" aria-labelledby="tab-wallpaper" tabindex="0" data-panel="wallpaper">
         <h2 class="calc-panel__title">Wallpaper Calculator</h2>
-        <p class="calc-panel__desc">Estimate wallpaper rolls needed, accounting for doors, windows, and pattern repeat waste.</p>
+        <p class="calc-panel__desc">Rolls of wallpaper by the strip method, with pattern repeat and trimming allowance.</p>
 
         <div class="calc-grid">
           <div class="calc-field">
-            <label for="wp-length">Room Length (ft)</label>
-            <input type="number" id="wp-length" step="any" min="0" placeholder="12">
+            <label for="wp-length">Room length <span data-u="ft"></span></label>
+            <input type="number" id="wp-length" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="wp-length-err">
+            <span class="field-err" id="wp-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-width">Room Width (ft)</label>
-            <input type="number" id="wp-width" step="any" min="0" placeholder="10">
+            <label for="wp-width">Room width <span data-u="ft"></span></label>
+            <input type="number" id="wp-width" value="10" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="wp-width-err">
+            <span class="field-err" id="wp-width-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-height">Wall Height (ft)</label>
-            <input type="number" id="wp-height" step="any" min="0" placeholder="8">
+            <label for="wp-height">Wall height <span data-u="ft"></span></label>
+            <input type="number" id="wp-height" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="wp-height-err">
+            <span class="field-err" id="wp-height-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-doors">Number of Doors</label>
-            <input type="number" id="wp-doors" step="1" min="0" value="1" placeholder="1">
+            <label for="wp-doors">Doors <span class="u-static">count</span></label>
+            <input type="number" id="wp-doors" value="1" min="0" step="1" inputmode="numeric" aria-describedby="wp-doors-err">
+            <span class="field-err" id="wp-doors-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-windows">Number of Windows</label>
-            <input type="number" id="wp-windows" step="1" min="0" value="2" placeholder="2">
+            <label for="wp-windows">Windows <span class="u-static">count</span></label>
+            <input type="number" id="wp-windows" value="2" min="0" step="1" inputmode="numeric" aria-describedby="wp-windows-err">
+            <span class="field-err" id="wp-windows-err"></span>
+          </div>
+        </div>
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label for="wp-roll-width">Roll width <span data-u="in"></span></label>
+            <input type="number" id="wp-roll-width" value="20.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="wp-roll-width-hint wp-roll-width-err">
+            <span class="calc-hint" id="wp-roll-width-hint">US double roll 20.5 in × 33 ft; European roll 53 cm × 10.05 m.</span>
+            <span class="field-err" id="wp-roll-width-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-roll-width">Roll Width (in)</label>
-            <input type="number" id="wp-roll-width" step="any" min="1" value="20.5" placeholder="20.5">
+            <label for="wp-roll-length">Roll length <span data-u="ft"></span></label>
+            <input type="number" id="wp-roll-length" value="33" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="wp-roll-length-err">
+            <span class="field-err" id="wp-roll-length-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-roll-length">Roll Length (ft)</label>
-            <input type="number" id="wp-roll-length" step="any" min="1" value="33" placeholder="33">
+            <label for="wp-pattern">Pattern repeat <span data-u="in"></span></label>
+            <input type="number" id="wp-pattern" value="0" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="wp-pattern-hint wp-pattern-err">
+            <span class="calc-hint" id="wp-pattern-hint">0 for no repeat. Printed on the label.</span>
+            <span class="field-err" id="wp-pattern-err"></span>
           </div>
           <div class="calc-field">
-            <label for="wp-pattern">Pattern Repeat (in)</label>
-            <input type="number" id="wp-pattern" step="any" min="0" value="0" placeholder="0 = none">
+            <label for="wp-trim">Trim allowance per strip <span data-u="in"></span></label>
+            <input type="number" id="wp-trim" value="4" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="wp-trim-hint wp-trim-err">
+            <span class="calc-hint" id="wp-trim-hint">About 2 in top and bottom for trimming.</span>
+            <span class="field-err" id="wp-trim-err"></span>
           </div>
         </div>
 
-        <button class="calc-btn" onclick="calcWallpaper()">Calculate</button>
-
-        <div class="calc-results" id="wallpaper-results">
-          <div class="calc-results__title">Results</div>
-          <div class="result-grid" id="wallpaper-result-grid"></div>
+        <div class="calc-actions">
+          <button type="button" class="calc-btn" data-action="calc">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--ghost" data-action="reset">Reset</button>
         </div>
+
+        <div class="calc-results visible" id="wallpaper-results">
+          <div class="calc-results__head">
+            <h3 class="calc-results__title">Estimate</h3>
+            <button type="button" class="calc-copy" data-action="copy">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div class="result-grid" id="wallpaper-result-grid"></div>
+            <div class="calc-results__notes" id="wallpaper-notes"></div>
+          </div>
+        </div>
+
+        <details class="calc-howto">
+          <summary>How it works</summary>
+          <p><code>strips = ceil(perimeter ÷ roll width)</code>. Each strip is the wall height plus the trim allowance, rounded up to a whole number of pattern repeats so the design lines up. <code>strips per roll = floor(roll length ÷ strip length)</code> and <code>rolls = ceil(strips ÷ strips per roll)</code>. Doors and windows only change the wall area shown: the short pieces above and below them rarely save a whole strip, so the roll count is for the full perimeter. That leaves a little spare for repairs.</p>
+        </details>
       </div>
 
     </div><!-- /calc-container -->
 
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>Material estimates for planning and pricing, not professional advice. Check quantities with your supplier, and local codes and a professional for anything structural. <a href="../disclaimer.html">Full disclaimers</a>.</p>
+    </aside>
+
     <!-- Cross-link to deep pages (hybrid pattern) -->
-    <aside style="max-width:900px;margin:2rem auto 0;padding:1.5rem 2rem;border:1px solid var(--border);background:var(--surface);">
-      <p style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;">Also as dedicated pages &mdash; 12 more construction calculators</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.5rem;">
-        <a href="drywall-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Drywall</a>
-        <a href="tile-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Tile</a>
-        <a href="gravel-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Gravel</a>
-        <a href="mulch-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Mulch</a>
-        <a href="roofing-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Roofing / Shingles</a>
-        <a href="deck-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Deck Materials</a>
-        <a href="stairs-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Stairs (Rise/Run)</a>
-        <a href="asphalt-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Asphalt</a>
-        <a href="insulation-r-value-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Insulation R-Value</a>
-        <a href="btu-hvac-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">BTU / HVAC Sizing</a>
-        <a href="sod-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Sod</a>
-        <a href="retaining-wall-calculator.html" style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-secondary);text-decoration:none;padding:0.55rem 0.75rem;border:1px solid var(--border);text-align:center;">Retaining Wall</a>
+    <aside class="calc-more">
+      <p class="calc-more__title">Also as dedicated pages &mdash; 12 more construction calculators</p>
+      <div class="calc-more__grid">
+        <a href="drywall-calculator.html">Drywall</a>
+        <a href="tile-calculator.html">Tile</a>
+        <a href="gravel-calculator.html">Gravel</a>
+        <a href="mulch-calculator.html">Mulch</a>
+        <a href="roofing-calculator.html">Roofing / Shingles</a>
+        <a href="deck-calculator.html">Deck Materials</a>
+        <a href="stairs-calculator.html">Stairs (Rise/Run)</a>
+        <a href="asphalt-calculator.html">Asphalt</a>
+        <a href="insulation-r-value-calculator.html">Insulation R-Value</a>
+        <a href="btu-hvac-calculator.html">BTU / HVAC Sizing</a>
+        <a href="sod-calculator.html">Sod</a>
+        <a href="retaining-wall-calculator.html">Retaining Wall</a>
       </div>
     </aside>
 
@@ -728,407 +1196,462 @@
   <script>
     /* ================================================
        CONSTRUCTION CALCULATORS — ALL INLINE JS
+       Every calculator works in imperial base units (ft, in, sq ft);
+       metric entries are converted on the way in and on the way out.
        ================================================ */
+    (function () {
+      'use strict';
+      var $ = function (id) { return document.getElementById(id); };
 
-    // Utility: format number with commas
-    function fmt(n, decimals) {
-      if (decimals === undefined) decimals = 2;
-      return Number(n).toLocaleString('en-US', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals
-      });
-    }
-
-    // Utility: render results into a grid
-    function renderResults(gridId, resultsId, items) {
-      var grid = document.getElementById(gridId);
-      var container = document.getElementById(resultsId);
-      var html = '';
-      for (var i = 0; i < items.length; i++) {
-        html += '<div class="result-item">' +
-          '<div class="result-item__label">' + items[i].label + '</div>' +
-          '<div class="result-item__value">' + items[i].value +
-          (items[i].unit ? '<span class="result-item__unit">' + items[i].unit + '</span>' : '') +
-          '</div></div>';
+      /* ===== math (pure; imperial base units) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // Pre-mixed concrete bag yields (cu ft) as published for standard concrete mix (e.g. Quikrete). Checked 2026-11.
+      var BAG_YIELD = { 40: 0.30, 60: 0.45, 80: 0.60 };
+      function concreteEstimate(p) {
+        var cuFtNet = p.shape === 'round'
+          ? Math.PI * Math.pow(p.diaIn / 24, 2) * (p.holeIn / 12) * p.qty
+          : p.lengthFt * p.widthFt * (p.depthIn / 12);
+        var cuFt = cuFtNet * (1 + p.wastePct / 100);
+        var bags60 = up(cuFt / BAG_YIELD[60]), bags80 = up(cuFt / BAG_YIELD[80]);
+        return {
+          cuFtNet: cuFtNet, cuFt: cuFt, cuYd: cuFt / 27, m3: cuFt * 0.028316846592,
+          readyMixYd: up(cuFt / 27 * 4) / 4,
+          readyMixM3: up(cuFt * 0.028316846592 * 10) / 10,
+          bags40: up(cuFt / BAG_YIELD[40]), bags60: bags60, bags80: bags80,
+          cost60: bags60 * p.price60, cost80: bags80 * p.price80
+        };
       }
-      grid.innerHTML = html;
-      container.classList.add('visible');
-    }
+      var DOOR_SQFT = 21, WINDOW_SQFT = 15;
+      function paintEstimate(p) {
+        var walls = 2 * (p.lengthFt + p.widthFt) * p.heightFt;
+        var openings = p.doors * DOOR_SQFT + p.windows * WINDOW_SQFT;
+        var perCoat = Math.max(walls - openings, 0) + (p.ceiling ? p.lengthFt * p.widthFt : 0);
+        var gallons = perCoat * p.coats / p.coverSqFtPerGal;
+        return { walls: walls, openings: Math.min(openings, walls), perCoat: perCoat, total: perCoat * p.coats, gallons: gallons, liters: gallons * 3.785411784 };
+      }
+      // tileCount() is shared word-for-word with tile-calculator.html.
+      function tileCount(areaSqFt, tileWIn, tileHIn, jointIn, perBox, wastePct) {
+        var effSqFt = (tileWIn + jointIn) * (tileHIn + jointIn) / 144;
+        var tiles = up(areaSqFt / effSqFt * (1 + wastePct / 100));
+        return { effSqFt: effSqFt, tiles: tiles, boxes: up(tiles / perBox), boxSqFt: perBox * tileWIn * tileHIn / 144 };
+      }
+      // deckBoards() is shared word-for-word with deck-calculator.html.
+      function deckBoards(lengthFt, widthFt, boardWIn, gapIn, boardLenFt, wastePct) {
+        var rows = up(widthFt * 12 / (boardWIn + gapIn));
+        var perRow = up(lengthFt / boardLenFt);
+        return { rows: rows, perRow: perRow, boards: up(rows * perRow * (1 + wastePct / 100)) };
+      }
+      // Nominal [thickness, width] for board feet and actual [thickness, width] for layout, in inches.
+      var BOARDS = {
+        '2x4': { nom: [2, 4], act: [1.5, 3.5] }, '2x6': { nom: [2, 6], act: [1.5, 5.5] }, '2x8': { nom: [2, 8], act: [1.5, 7.25] },
+        '2x10': { nom: [2, 10], act: [1.5, 9.25] }, '2x12': { nom: [2, 12], act: [1.5, 11.25] }, '4x4': { nom: [4, 4], act: [3.5, 3.5] },
+        '1x6': { nom: [1, 6], act: [0.75, 5.5] }
+      };
+      // Pieces of a given length that fit in one board, or boards needed per piece when the piece is longer.
+      function cutBoards(pieces, pieceFt, boardLenFt) {
+        if (pieceFt <= boardLenFt + 1e-3) return up(pieces / Math.floor(boardLenFt / pieceFt + 1e-3));
+        return pieces * up(pieceFt / boardLenFt);
+      }
+      function lumberEstimate(p) {
+        var b = BOARDS[p.board], actW = b.act[1], raw, layout, studs = 0;
+        if (p.project === 'deck') {
+          var d = deckBoards(p.lengthFt, p.widthFt, actW, p.gapIn, p.boardLenFt, 0);
+          raw = d.boards; layout = d.rows + ' rows × ' + d.perRow + ' per row';
+        } else if (p.project === 'fence') {
+          var positions = up(p.lengthFt * 12 / (actW + p.gapIn));
+          raw = cutBoards(positions, p.widthFt, p.boardLenFt); layout = positions + ' boards cut to fence height';
+        } else if (p.project === 'wall') {
+          studs = up(p.lengthFt * 12 / 16) + 1;
+          var plates = 3 * up(p.lengthFt / p.boardLenFt);
+          raw = studs + plates; layout = studs + ' studs + ' + plates + ' plate boards';
+        } else {
+          var across = up(p.widthFt * 12 / actW);
+          raw = cutBoards(across * p.shelves, p.lengthFt, p.boardLenFt); layout = p.shelves + ' shelves × ' + across + ' boards wide';
+        }
+        var boards = up(raw * (1 + p.wastePct / 100));
+        var bdFt = boards * b.nom[0] * b.nom[1] * p.boardLenFt / 12;
+        return { raw: raw, boards: boards, boardFeet: bdFt, layout: layout, cost: boards * p.price, studShort: p.project === 'wall' && p.widthFt > p.boardLenFt + 1e-3 };
+      }
+      function fenceEstimate(p) {
+        var sections = up(p.lengthFt / p.spacingFt) + p.corners;
+        var posts = sections + 1;
+        var picketsNet = up(p.lengthFt * 12 / (p.picketWIn + p.gapIn));
+        return {
+          sections: sections, posts: posts, endCorner: Math.min(posts, 2 + p.corners), linePosts: Math.max(posts - 2 - p.corners, 0),
+          rails: sections * p.rails, picketsNet: picketsNet, pickets: up(picketsNet * (1 + p.wastePct / 100))
+        };
+      }
+      function wallpaperEstimate(p) {
+        var perimeterFt = 2 * (p.lengthFt + p.widthFt);
+        var strips = up(perimeterFt * 12 / p.rollWIn);
+        var drop = p.heightFt * 12 + p.trimIn;
+        if (p.repeatIn > 0) drop = up(drop / p.repeatIn) * p.repeatIn;
+        var perRoll = Math.floor(p.rollLenFt * 12 / drop + 1e-3);
+        return {
+          perimeterFt: perimeterFt, strips: strips, dropIn: drop, perRoll: perRoll,
+          rolls: perRoll > 0 ? up(strips / perRoll) : null,
+          netArea: Math.max(perimeterFt * p.heightFt - p.doors * DOOR_SQFT - p.windows * WINDOW_SQFT, 0)
+        };
+      }
+      /* ===== end math ===== */
 
-    // ---- TAB SWITCHING ----
-    (function() {
-      var tabs = document.querySelectorAll('.calc-tab');
-      for (var i = 0; i < tabs.length; i++) {
-        tabs[i].addEventListener('click', function() {
-          var target = this.getAttribute('data-tab');
-          // Deactivate all tabs & panels
-          for (var j = 0; j < tabs.length; j++) {
-            tabs[j].classList.remove('active');
-            tabs[j].setAttribute('aria-selected', 'false');
-          }
-          var panels = document.querySelectorAll('.calc-panel');
-          for (var j = 0; j < panels.length; j++) {
-            panels[j].classList.remove('active');
-          }
-          // Activate selected
-          this.classList.add('active');
-          this.setAttribute('aria-selected', 'true');
-          document.getElementById('panel-' + target).classList.add('active');
+      /* ---- units ---- */
+      var DIMS = {
+        ft:   { imp: 'ft', met: 'm', f: 0.3048, dp: 3 },
+        in:   { imp: 'in', met: 'cm', f: 2.54, dp: 2 },
+        inmm: { imp: 'in', met: 'mm', f: 25.4, dp: 1 },
+        sqftPerGal: { imp: 'sq ft/gal', met: 'm²/L', f: 0.09290304 / 3.785411784, dp: 1 }
+      };
+      var units = 'imperial';
+      function metric() { return units === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        return cleanNum(Number(x.toFixed(dp))).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      function areaTxt(sqft, dp) { return metric() ? [fmt(sqft * 0.09290304, dp == null ? 1 : dp), 'm²'] : [fmt(sqft, dp == null ? 0 : dp), 'sq ft']; }
+      function lenFtTxt(ft) { return metric() ? fmt(ft * 0.3048, 2) + ' m' : fmt(ft, ft % 1 ? 2 : 0) + ' ft'; }
+      function lenInTxt(inches) { return metric() ? fmt(inches * 2.54, 1) + ' cm' : fmt(inches, inches % 1 ? 2 : 0) + ' in'; }
+
+      function labelUnits() {
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = metric() ? d.met : d.imp;
         });
       }
-    })();
-
-    // ============================================
-    // 1. CONCRETE CALCULATOR
-    // ============================================
-    var concreteUnit = 'ft';
-
-    function setConcreteUnit(unit) {
-      concreteUnit = unit;
-      var btns = document.querySelectorAll('#concrete-units button');
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].classList.toggle('active', btns[i].getAttribute('data-unit') === unit);
-      }
-      var labels = document.querySelectorAll('.conc-unit-label');
-      for (var i = 0; i < labels.length; i++) {
-        labels[i].textContent = unit;
-      }
-    }
-
-    function calcConcrete() {
-      var length = parseFloat(document.getElementById('conc-length').value) || 0;
-      var width  = parseFloat(document.getElementById('conc-width').value) || 0;
-      var depth  = parseFloat(document.getElementById('conc-depth').value) || 0;
-      var price60 = parseFloat(document.getElementById('conc-price60').value) || 0;
-      var price80 = parseFloat(document.getElementById('conc-price80').value) || 0;
-
-      // Convert to feet if meters
-      var lf = length, wf = width, df = depth;
-      if (concreteUnit === 'm') {
-        lf = length * 3.28084;
-        wf = width * 3.28084;
-        df = depth * 3.28084;
+      // Convert every unit-bearing field so the estimates stay put; switching straight back restores what was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('.calc-panel input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
       }
 
-      var cubicFeet = lf * wf * df;
-      var cubicYards = cubicFeet / 27;
-      var cubicMeters = cubicFeet * 0.0283168;
-
-      // 60lb bag = 0.45 cubic feet, 80lb bag = 0.6 cubic feet
-      var bags60 = Math.ceil(cubicFeet / 0.45);
-      var bags80 = Math.ceil(cubicFeet / 0.6);
-
-      var cost60 = bags60 * price60;
-      var cost80 = bags80 * price80;
-
-      renderResults('concrete-result-grid', 'concrete-results', [
-        { label: 'Cubic Feet',        value: fmt(cubicFeet),   unit: 'ft\u00B3' },
-        { label: 'Cubic Yards',       value: fmt(cubicYards),  unit: 'yd\u00B3' },
-        { label: 'Cubic Meters',      value: fmt(cubicMeters), unit: 'm\u00B3' },
-        { label: '60lb Bags Needed',  value: fmt(bags60, 0),   unit: 'bags' },
-        { label: '80lb Bags Needed',  value: fmt(bags80, 0),   unit: 'bags' },
-        { label: 'Cost (60lb Bags)',  value: '$' + fmt(cost60), unit: '' },
-        { label: 'Cost (80lb Bags)',  value: '$' + fmt(cost80), unit: '' }
-      ]);
-    }
-
-    // ============================================
-    // 2. PAINT COVERAGE CALCULATOR
-    // ============================================
-    function calcPaint() {
-      var length  = parseFloat(document.getElementById('paint-length').value) || 0;
-      var width   = parseFloat(document.getElementById('paint-width').value) || 0;
-      var height  = parseFloat(document.getElementById('paint-height').value) || 0;
-      var doors   = parseInt(document.getElementById('paint-doors').value) || 0;
-      var windows = parseInt(document.getElementById('paint-windows').value) || 0;
-      var coats   = parseInt(document.getElementById('paint-coats').value) || 1;
-
-      // Perimeter * height = total wall area
-      var perimeter = 2 * (length + width);
-      var totalWallArea = perimeter * height;
-
-      // Subtract doors (21 sqft each) and windows (15 sqft each)
-      var deductions = (doors * 21) + (windows * 15);
-      var paintableArea = Math.max(totalWallArea - deductions, 0);
-
-      // Apply coats
-      var totalCoverage = paintableArea * coats;
-
-      // 350 sqft per gallon standard
-      var gallons = totalCoverage / 350;
-      // 1 gallon = 3.78541 liters
-      var liters = gallons * 3.78541;
-
-      renderResults('paint-result-grid', 'paint-results', [
-        { label: 'Total Wall Area',   value: fmt(totalWallArea, 1),  unit: 'sq ft' },
-        { label: 'Paintable Area',    value: fmt(paintableArea, 1),  unit: 'sq ft' },
-        { label: 'Total Coverage (' + coats + ' coat' + (coats > 1 ? 's' : '') + ')',
-          value: fmt(totalCoverage, 1), unit: 'sq ft' },
-        { label: 'Gallons Needed',    value: fmt(Math.ceil(gallons * 10) / 10, 1), unit: 'gal' },
-        { label: 'Liters Needed',     value: fmt(Math.ceil(liters * 10) / 10, 1),  unit: 'L' }
-      ]);
-    }
-
-    // ============================================
-    // 3. FLOORING / TILE CALCULATOR
-    // ============================================
-    function calcFlooring() {
-      var roomL    = parseFloat(document.getElementById('floor-length').value) || 0;
-      var roomW    = parseFloat(document.getElementById('floor-width').value) || 0;
-      var tileL    = parseFloat(document.getElementById('tile-length').value) || 0;
-      var tileW    = parseFloat(document.getElementById('tile-width').value) || 0;
-      var gap      = parseFloat(document.getElementById('tile-gap').value) || 0;
-      var perBox   = parseInt(document.getElementById('tile-per-box').value) || 1;
-
-      // Room area in sq inches then convert
-      var roomAreaSqFt = roomL * roomW;
-
-      // Tile area in sq inches (tile + gap on two sides)
-      var effectiveTileL = tileL + gap;
-      var effectiveTileW = tileW + gap;
-      var tileAreaSqIn = effectiveTileL * effectiveTileW;
-      var tileAreaSqFt = tileAreaSqIn / 144;
-
-      var tilesNeeded = Math.ceil(roomAreaSqFt / tileAreaSqFt);
-      var wastePercent = 0.10;
-      var tilesWithWaste = Math.ceil(tilesNeeded * (1 + wastePercent));
-      var boxesNeeded = Math.ceil(tilesWithWaste / perBox);
-
-      // Coverage per box in sqft (using actual tile area, not effective)
-      var actualTileAreaSqFt = (tileL * tileW) / 144;
-      var coveragePerBox = actualTileAreaSqFt * perBox;
-
-      renderResults('flooring-result-grid', 'flooring-results', [
-        { label: 'Total Room Area',        value: fmt(roomAreaSqFt, 1),      unit: 'sq ft' },
-        { label: 'Tiles / Planks Needed',  value: fmt(tilesNeeded, 0),       unit: 'pcs' },
-        { label: 'With 10% Waste',         value: fmt(tilesWithWaste, 0),    unit: 'pcs' },
-        { label: 'Coverage per Box',       value: fmt(coveragePerBox, 1),    unit: 'sq ft' },
-        { label: 'Boxes Needed',           value: fmt(boxesNeeded, 0),       unit: 'boxes' }
-      ]);
-    }
-
-    // ============================================
-    // 4. LUMBER ESTIMATOR
-    // ============================================
-    function updateLumberFields() {
-      var project = document.getElementById('lumber-project').value;
-      var heightWrap = document.getElementById('lumber-height-wrap');
-      var lengthLabel = document.getElementById('lumber-length-label');
-      var widthLabel  = document.getElementById('lumber-width-label');
-      var heightLabel = document.getElementById('lumber-height-label');
-
-      heightWrap.style.display = '';
-      switch(project) {
-        case 'deck':
-          lengthLabel.textContent = 'Deck Length (ft)';
-          widthLabel.textContent  = 'Deck Width (ft)';
-          heightWrap.style.display = 'none';
-          break;
-        case 'fence':
-          lengthLabel.textContent = 'Fence Length (ft)';
-          widthLabel.textContent  = 'Fence Height (ft)';
-          heightWrap.style.display = 'none';
-          break;
-        case 'wall':
-          lengthLabel.textContent = 'Wall Length (ft)';
-          widthLabel.textContent  = 'Wall Height (ft)';
-          heightWrap.style.display = 'none';
-          break;
-        case 'shelving':
-          lengthLabel.textContent = 'Shelf Length (ft)';
-          widthLabel.textContent  = 'Shelf Depth (ft)';
-          heightLabel.textContent = 'Number of Shelves';
-          break;
+      /* ---- fields with inline validation (values returned in imperial base units) ---- */
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
       }
-    }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, 'Must be more than 0.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'That looks too large; check the unit.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function clearErrs(panel) { panel.querySelectorAll('input').forEach(function (el) { if (el.id) setErr(el.id, ''); }); errors = 0; }
 
-    function getBoardDims(size) {
-      // Nominal to actual inches (thickness x width)
-      var map = {
-        '2x4':  [1.5, 3.5],
-        '2x6':  [1.5, 5.5],
-        '2x8':  [1.5, 7.25],
-        '2x10': [1.5, 9.25],
-        '2x12': [1.5, 11.25],
-        '4x4':  [3.5, 3.5]
+      /* ---- the six calculators: each returns { items: [[label, value, unit, cls]], notes: [] } or null ---- */
+      var CALCS = {
+        concrete: function () {
+          var shape = $('conc-shape').value, round = shape === 'round';
+          ['conc-length', 'conc-width', 'conc-depth'].forEach(function (id) { $(id + '-wrap').hidden = round; });
+          ['conc-dia', 'conc-hole', 'conc-qty'].forEach(function (id) { $(id + '-wrap').hidden = !round; });
+          var p = { shape: shape };
+          if (round) {
+            p.diaIn = field('conc-dia', { gt: 0, max: 120 });
+            p.holeIn = field('conc-hole', { gt: 0, max: 600 });
+            p.qty = field('conc-qty', { min: 1, int: true, max: 10000 });
+          } else {
+            p.lengthFt = field('conc-length', { gt: 0, max: 5000 });
+            p.widthFt = field('conc-width', { gt: 0, max: 5000 });
+            p.depthIn = field('conc-depth', { gt: 0, max: 120, maxMsg: 'Over 10 ft thick; check the unit.' });
+          }
+          p.wastePct = field('conc-waste', { min: 0, max: 100 });
+          p.price60 = field('conc-price60', { min: 0, optional: true, fallback: 0 });
+          p.price80 = field('conc-price80', { min: 0, optional: true, fallback: 0 });
+          if (errors) return null;
+          var r = concreteEstimate(p), m = metric(), items = [];
+          items.push(['Concrete (incl. ' + pct(p.wastePct) + ' waste)', m ? fmt(r.m3, 2) : fmt(r.cuYd, 2), m ? 'm³' : 'yd³', 'main']);
+          items.push([m ? 'Same in cubic yards' : 'Same in cubic meters', m ? fmt(r.cuYd, 2) : fmt(r.m3, 2), m ? 'yd³' : 'm³']);
+          items.push(['Cubic feet', fmt(r.cuFt, 1), 'ft³']);
+          items.push(['Ready-mix order', m ? fmt(r.readyMixM3, 1) : fmt(r.readyMixYd, 2), m ? 'm³ (next 0.1)' : 'yd³ (next ¼)']);
+          items.push(['80 lb (36 kg) bags', fmt(r.bags80, 0), 'bags']);
+          items.push(['60 lb (27 kg) bags', fmt(r.bags60, 0), 'bags']);
+          items.push(['40 lb (18 kg) bags', fmt(r.bags40, 0), 'bags']);
+          if (p.price80 > 0) items.push(['Cost in 80 lb bags', money(r.cost80), '']);
+          if (p.price60 > 0) items.push(['Cost in 60 lb bags', money(r.cost60), '']);
+          var notes = [];
+          if (r.cuYd > 1) notes.push('Above about a cubic yard, ready-mix delivery is usually less work than mixing bags by hand.');
+          return { items: items, notes: notes };
+        },
+        paint: function () {
+          var p = {
+            lengthFt: field('paint-length', { gt: 0, max: 1000 }), widthFt: field('paint-width', { gt: 0, max: 1000 }),
+            heightFt: field('paint-height', { gt: 0, max: 100 }),
+            doors: field('paint-doors', { min: 0, int: true }), windows: field('paint-windows', { min: 0, int: true }),
+            coats: field('paint-coats', { min: 1, int: true, max: 10 }),
+            coverSqFtPerGal: field('paint-cover', { gt: 0, max: 2000 }), ceiling: $('paint-ceiling').checked
+          };
+          if (errors) return null;
+          var r = paintEstimate(p), m = metric(), items = [];
+          if (r.perCoat <= 0) { setErr('paint-doors', 'Doors and windows cover all the wall; check the numbers.'); return null; }
+          var buy;
+          if (m) buy = [fmt(up(r.liters * 2) / 2, 1), 'L (to the next ½ L)'];
+          else if (r.gallons < 1) { var q = up(r.gallons * 4); buy = [String(q), plural(q, 'quart')]; }
+          else { var g = up(r.gallons); buy = [String(g), plural(g, 'gallon')]; }
+          items.push(['Paint needed', m ? fmt(r.liters, 1) : fmt(r.gallons, 2), m ? 'L' : 'gal', 'main']);
+          items.push(['Buy', buy[0], buy[1], 'main']);
+          var a = areaTxt(r.walls); items.push(['Wall area', a[0], a[1]]);
+          a = areaTxt(r.perCoat); items.push(['Paintable area per coat' + (p.ceiling ? ' (incl. ceiling)' : ''), a[0], a[1]]);
+          a = areaTxt(r.total); items.push(['Total for ' + p.coats + ' ' + plural(p.coats, 'coat'), a[0], a[1]]);
+          return { items: items, notes: ['Primer, trim and doors are extra. Keep a little of each color for touch-ups.'] };
+        },
+        flooring: function () {
+          var L = field('floor-length', { gt: 0, max: 1000 }), W = field('floor-width', { gt: 0, max: 1000 });
+          var tl = field('tile-length', { gt: 0, max: 120 }), tw = field('tile-width', { gt: 0, max: 120 });
+          var gap = field('tile-gap', { min: 0, max: 1, maxMsg: 'Joints over 1 in are unusual; check the unit.' });
+          var per = field('tile-per-box', { min: 1, int: true }), waste = field('floor-waste', { min: 0, max: 100 });
+          if (errors) return null;
+          var areaSqFt = L * W, t = tileCount(areaSqFt, tw, tl, gap, per, waste), m = metric(), items = [];
+          items.push(['Pieces (incl. ' + pct(waste) + ' waste)', fmt(t.tiles, 0), 'pcs', 'main']);
+          items.push(['Boxes to buy', fmt(t.boxes, 0), plural(t.boxes, 'box', 'boxes'), 'main']);
+          var a = areaTxt(areaSqFt, m ? 2 : 1); items.push(['Room area', a[0], a[1]]);
+          a = areaTxt(t.boxSqFt, m ? 2 : 1); items.push(['Coverage per box', a[0], a[1]]);
+          return { items: items, notes: ['For thinset and grout, use the Tile calculator; it gives the same piece count.'] };
+        },
+        lumber: function () {
+          var project = $('lumber-project').value;
+          var labels = {
+            deck: ['Length along the boards', 'Width across the boards'], fence: ['Fence length', 'Fence height'],
+            wall: ['Wall length', 'Wall height'], shelving: ['Shelf length', 'Shelf depth']
+          }[project];
+          $('lumber-length-label').firstChild.textContent = labels[0] + ' ';
+          $('lumber-width-label').firstChild.textContent = labels[1] + ' ';
+          $('lumber-height-wrap').hidden = project !== 'shelving';
+          $('lumber-gap-wrap').hidden = !(project === 'deck' || project === 'fence');
+          var p = {
+            project: project, board: $('lumber-board').value,
+            lengthFt: field('lumber-length', { gt: 0, max: 1000 }), widthFt: field('lumber-width', { gt: 0, max: 1000 }),
+            shelves: project === 'shelving' ? field('lumber-height', { min: 1, int: true, max: 1000 }) : 1,
+            boardLenFt: field('lumber-boardlen', { gt: 0, max: 40 }),
+            gapIn: (project === 'deck' || project === 'fence') ? field('lumber-gap', { min: 0, max: 6 }) : 0,
+            wastePct: field('lumber-waste', { min: 0, max: 100 }),
+            price: field('lumber-price', { min: 0, optional: true, fallback: 0 })
+          };
+          if (errors) return null;
+          var r = lumberEstimate(p), m = metric(), items = [], notes = [];
+          if (r.studShort) { setErr('lumber-boardlen', 'Studs need boards at least as long as the wall is tall.'); return null; }
+          items.push(['Boards (incl. ' + pct(p.wastePct) + ' waste)', fmt(r.boards, 0), p.board.replace('x', '×') + ' × ' + lenFtTxt(p.boardLenFt), 'main']);
+          items.push(['Board feet (nominal)', fmt(r.boardFeet, 1), 'bd ft' + (m ? ' (' + fmt(r.boardFeet * 0.002359737, 3) + ' m³)' : '')]);
+          items.push(['Layout', r.layout, '', 'text']);
+          if (p.price > 0) items.push(['Estimated cost', money(r.cost), '']);
+          if (p.project === 'deck') notes.push('Same decking count as the Deck calculator, which also counts joists and screws.');
+          if (p.project === 'wall') notes.push('Add studs for corners, door and window openings (king, jack and cripple studs) and headers.');
+          return { items: items, notes: notes };
+        },
+        fence: function () {
+          var p = {
+            lengthFt: field('fence-length', { gt: 0, max: 100000 }), spacingFt: field('fence-spacing', { gt: 0, max: 20, maxMsg: 'Posts more than 20 ft apart is unusual; check the unit.' }),
+            corners: field('fence-corners', { min: 0, int: true, max: 1000 }), rails: Number($('fence-rails').value),
+            picketWIn: field('fence-picket-w', { gt: 0, max: 24 }), gapIn: field('fence-picket-gap', { min: 0, max: 24 }),
+            wastePct: field('fence-waste', { min: 0, max: 100 })
+          };
+          if (errors) return null;
+          var r = fenceEstimate(p), items = [];
+          items.push(['Posts', fmt(r.posts, 0), plural(r.posts, 'post'), 'main']);
+          items.push(['End and corner posts', fmt(r.endCorner, 0), plural(r.endCorner, 'post')]);
+          items.push(['Line posts', fmt(r.linePosts, 0), plural(r.linePosts, 'post')]);
+          items.push(['Sections', fmt(r.sections, 0), plural(r.sections, 'section')]);
+          items.push(['Rails', fmt(r.rails, 0), plural(r.rails, 'rail'), 'main']);
+          items.push(['Pickets (incl. ' + pct(p.wastePct) + ' extra)', fmt(r.pickets, 0), plural(r.pickets, 'picket'), 'main']);
+          return { items: items, notes: ['A fence that closes on itself needs one post fewer. Gates need their own posts and hardware.'] };
+        },
+        wallpaper: function () {
+          var p = {
+            lengthFt: field('wp-length', { gt: 0, max: 1000 }), widthFt: field('wp-width', { gt: 0, max: 1000 }), heightFt: field('wp-height', { gt: 0, max: 100 }),
+            doors: field('wp-doors', { min: 0, int: true }), windows: field('wp-windows', { min: 0, int: true }),
+            rollWIn: field('wp-roll-width', { gt: 0, max: 200 }), rollLenFt: field('wp-roll-length', { gt: 0, max: 500 }),
+            repeatIn: field('wp-pattern', { min: 0, max: 200 }), trimIn: field('wp-trim', { min: 0, max: 48 })
+          };
+          if (errors) return null;
+          var r = wallpaperEstimate(p), items = [];
+          if (r.rolls == null) { setErr('wp-roll-length', 'The roll is shorter than one strip (' + lenInTxt(r.dropIn) + '); a taller wall needs longer rolls.'); return null; }
+          items.push(['Rolls', fmt(r.rolls, 0), plural(r.rolls, 'roll'), 'main']);
+          items.push(['Strips (drops)', fmt(r.strips, 0), plural(r.strips, 'strip')]);
+          items.push(['Strip length', lenInTxt(r.dropIn), p.repeatIn > 0 ? '(matched to repeat)' : '', 'text']);
+          items.push(['Strips per roll', fmt(r.perRoll, 0), '']);
+          var a = areaTxt(r.netArea); items.push(['Wall area after openings', a[0], a[1]]);
+          return { items: items, notes: ['Buy all rolls from one batch (lot) number; colors vary slightly between batches.'] };
+        }
       };
-      return map[size] || [1.5, 5.5];
-    }
 
-    function calcLumber() {
-      var project   = document.getElementById('lumber-project').value;
-      var length    = parseFloat(document.getElementById('lumber-length').value) || 0;
-      var width     = parseFloat(document.getElementById('lumber-width').value) || 0;
-      var height    = parseFloat(document.getElementById('lumber-height').value) || 0;
-      var boardSize = document.getElementById('lumber-board').value;
-      var boardLen  = parseFloat(document.getElementById('lumber-boardlen').value) || 8;
-      var price     = parseFloat(document.getElementById('lumber-price').value) || 0;
-
-      var dims = getBoardDims(boardSize);
-      var boardWidthFt = dims[1] / 12;
-      var boardThickIn = dims[0];
-      var boardWidthIn = dims[1];
-
-      var boardFeet = 0;
-      var numBoards = 0;
-      var description = '';
-
-      switch(project) {
-        case 'deck':
-          // Decking boards across the width, running along the length
-          // Number of boards across = width / boardWidthFt (with small gap)
-          var effectiveBoardWidth = (boardWidthIn + 0.25) / 12; // 1/4" gap
-          var boardsAcross = Math.ceil(width / effectiveBoardWidth);
-          // Each board needs to cover the deck length; how many board-lengths per run?
-          var boardsPerRun = Math.ceil(length / boardLen);
-          numBoards = boardsAcross * boardsPerRun;
-          // Board feet: (thickness_in * width_in * length_ft) / 12 per board
-          boardFeet = numBoards * (boardThickIn * boardWidthIn * boardLen) / 12;
-          description = boardsAcross + ' rows x ' + boardsPerRun + ' boards/row';
-          break;
-
-        case 'fence':
-          // Vertical boards (pickets) along the length, width = fence height
-          var picketWidthFt = (boardWidthIn + 0.25) / 12;
-          numBoards = Math.ceil(length / picketWidthFt);
-          // Each board is fence-height long; we use standard board lengths
-          var boardsPerPicket = Math.ceil(width / boardLen);
-          numBoards = numBoards * boardsPerPicket;
-          boardFeet = numBoards * (boardThickIn * boardWidthIn * boardLen) / 12;
-          description = 'Vertical boards for ' + fmt(length, 0) + ' ft fence';
-          break;
-
-        case 'wall':
-          // Studs every 16" on center + top plate + bottom plate
-          var studs = Math.ceil((length * 12) / 16) + 1;
-          // Top and bottom plates (double top plate)
-          var plateBoardsNeeded = Math.ceil(length / boardLen) * 3; // 2 top + 1 bottom
-          numBoards = studs + plateBoardsNeeded;
-          boardFeet = numBoards * (boardThickIn * boardWidthIn * boardLen) / 12;
-          description = studs + ' studs + ' + plateBoardsNeeded + ' plate boards';
-          break;
-
-        case 'shelving':
-          // Each shelf = length x depth board(s)
-          var shelves = height || 1;
-          var boardsPerShelf = Math.ceil(width / boardWidthFt);
-          var lengthBoards = Math.ceil(length / boardLen);
-          numBoards = Math.ceil(boardsPerShelf * lengthBoards * shelves);
-          boardFeet = numBoards * (boardThickIn * boardWidthIn * boardLen) / 12;
-          description = shelves + ' shelves, ' + boardsPerShelf + ' boards wide';
-          break;
+      /* ---- rendering, copy, reset ---- */
+      var lastText = {}, timers = {};
+      function run(key) {
+        clearTimeout(timers[key]);
+        var panel = $('panel-' + key);
+        errors = 0;
+        var res = CALCS[key]();
+        var grid = $(key + '-result-grid'), notes = $(key + '-notes'), copy = panel.querySelector('[data-action="copy"]');
+        if (errors || !res) {
+          grid.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.innerHTML = ''; copy.disabled = true; lastText[key] = ''; return;
+        }
+        var html = '', text = panel.querySelector('.calc-panel__title').textContent + '\n';
+        res.items.forEach(function (it) {
+          html += '<div class="result-item"><div class="result-item__label">' + esc(it[0]) + '</div>' +
+            '<div class="result-item__value' + (it[3] === 'text' ? ' result-item__value--text' : '') + '">' + esc(it[1]) +
+            (it[2] ? '<span class="result-item__unit">' + esc(it[2]) + '</span>' : '') + '</div></div>';
+          text += it[0] + ': ' + it[1] + (it[2] ? ' ' + it[2] : '') + '\n';
+        });
+        grid.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) { var el = document.createElement('p'); el.textContent = n; notes.appendChild(el); text += n + '\n'; });
+        copy.disabled = false;
+        lastText[key] = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function runAll() { Object.keys(CALCS).forEach(run); }
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        setTimeout(function () { btn.textContent = label; }, 1600);
+      }
+      function resetPanel(panel) {
+        panel.querySelectorAll('input, select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else {
+            el.value = el.defaultValue;
+            el._unitMemo = null;
+            // Defaults are written in imperial; show them in the active system and keep the exact value.
+            if (metric() && el.getAttribute('data-dim') && el.value !== '') {
+              var d = DIMS[el.getAttribute('data-dim')];
+              el.value = String(Number((parseFloat(el.defaultValue) * d.f).toFixed(d.dp)));
+              el._unitMemo = { sys: 'imperial', val: el.defaultValue, shown: el.value };
+            }
+          }
+        });
+        clearErrs(panel);
+        run(panel.getAttribute('data-panel'));
       }
 
-      var totalCost = numBoards * price;
-
-      renderResults('lumber-result-grid', 'lumber-results', [
-        { label: 'Board Feet',          value: fmt(boardFeet, 1),    unit: 'bd ft' },
-        { label: 'Boards Needed (' + boardSize + ')',
-          value: fmt(numBoards, 0), unit: '@ ' + boardLen + ' ft' },
-        { label: 'Layout',              value: description,          unit: '' },
-        { label: 'Estimated Cost',      value: '$' + fmt(totalCost), unit: '' }
-      ]);
-    }
-
-    // Initialize lumber field labels
-    updateLumberFields();
-
-    // ============================================
-    // 5. FENCE POST SPACING CALCULATOR
-    // ============================================
-    function calcFence() {
-      var totalLength = parseFloat(document.getElementById('fence-length').value) || 0;
-      var spacing     = parseFloat(document.getElementById('fence-spacing').value) || 8;
-      var corners     = parseInt(document.getElementById('fence-corners').value) || 0;
-      var railsPer    = parseInt(document.getElementById('fence-rails').value) || 2;
-      var picketW     = parseFloat(document.getElementById('fence-picket-w').value) || 3.5;
-      var picketGap   = parseFloat(document.getElementById('fence-picket-gap').value) || 0;
-
-      // Number of sections = total length / spacing
-      var sections = Math.ceil(totalLength / spacing);
-      // Line posts = sections - 1 (the posts between corner/end posts), plus corners
-      // Total posts = sections + 1 (start + end + in-between)
-      var totalPosts = sections + 1;
-      // Corner posts are included in the total count already
-      // But user specifies extra corner posts to account for
-      // Actually: total posts along the line = sections + 1
-      // Corner/end posts are part of that total
-      // If the user says 2 corner posts, that means 2 of the totalPosts are corner posts
-      // The rest are line posts. No extra addition needed — corners are already counted.
-
-      // Rails: each section gets railsPer rails
-      var totalRails = sections * railsPer;
-
-      // Pickets across the entire fence length
-      // Each picket + gap occupies (picketW + picketGap) inches
-      var totalLengthIn = totalLength * 12;
-      var picketSpacing = picketW + picketGap;
-      var totalPickets = Math.ceil(totalLengthIn / picketSpacing);
-
-      renderResults('fence-result-grid', 'fence-results', [
-        { label: 'Total Posts',          value: fmt(totalPosts, 0),   unit: 'posts' },
-        { label: 'Sections',             value: fmt(sections, 0),     unit: 'sections' },
-        { label: 'Corner / End Posts',   value: fmt(corners, 0),      unit: '(included)' },
-        { label: 'Line Posts',           value: fmt(Math.max(totalPosts - corners, 0), 0), unit: 'posts' },
-        { label: 'Total Rails',          value: fmt(totalRails, 0),   unit: 'rails' },
-        { label: 'Pickets Needed',       value: fmt(totalPickets, 0), unit: 'pickets' },
-        { label: 'Materials Summary',    value: fmt(totalPosts, 0) + ' posts, ' + fmt(totalRails, 0) + ' rails, ' + fmt(totalPickets, 0) + ' pickets', unit: '' }
-      ]);
-    }
-
-    // ============================================
-    // 6. WALLPAPER CALCULATOR
-    // ============================================
-    function calcWallpaper() {
-      var roomL       = parseFloat(document.getElementById('wp-length').value) || 0;
-      var roomW       = parseFloat(document.getElementById('wp-width').value) || 0;
-      var wallH       = parseFloat(document.getElementById('wp-height').value) || 0;
-      var doors       = parseInt(document.getElementById('wp-doors').value) || 0;
-      var windows     = parseInt(document.getElementById('wp-windows').value) || 0;
-      var rollWidthIn = parseFloat(document.getElementById('wp-roll-width').value) || 20.5;
-      var rollLenFt   = parseFloat(document.getElementById('wp-roll-length').value) || 33;
-      var patternIn   = parseFloat(document.getElementById('wp-pattern').value) || 0;
-
-      var rollWidthFt = rollWidthIn / 12;
-
-      // Total wall area
-      var perimeter = 2 * (roomL + roomW);
-      var totalWallArea = perimeter * wallH;
-
-      // Deductions: doors = 21 sqft each, windows = 15 sqft each
-      var deductions = (doors * 21) + (windows * 15);
-      var adjustedArea = Math.max(totalWallArea - deductions, 0);
-
-      // Strips needed: perimeter / roll width
-      var stripsNeeded = Math.ceil(perimeter / rollWidthFt);
-
-      // Strip height (in feet) — accounts for pattern repeat waste
-      var stripHeight = wallH;
-      if (patternIn > 0) {
-        var patternFt = patternIn / 12;
-        // Each strip must be a multiple of the pattern repeat
-        stripHeight = Math.ceil(wallH / patternFt) * patternFt;
+      // Switching the lumber project loads dimensions that make sense for it (imperial defaults, shown in the active units).
+      var LUMBER_DEFAULTS = { deck: [16, 12], fence: [50, 6], wall: [10, 8], shelving: [4, 1] };
+      function setFt(id, ft) {
+        var el = $(id);
+        el.value = metric() ? String(Number((ft * 0.3048).toFixed(3))) : String(ft);
+        el._unitMemo = metric() ? { sys: 'imperial', val: String(ft), shown: el.value } : null;
       }
+      $('lumber-project').addEventListener('change', function () {
+        var d = LUMBER_DEFAULTS[this.value];
+        setFt('lumber-length', d[0]); setFt('lumber-width', d[1]);
+        if (this.value === 'shelving' && $('lumber-height').value.trim() === '') $('lumber-height').value = 5;
+      });
 
-      // Strips per roll
-      var stripsPerRoll = Math.floor(rollLenFt / stripHeight);
-      if (stripsPerRoll < 1) stripsPerRoll = 1;
+      /* ---- wiring ---- */
+      document.querySelectorAll('.calc-panel').forEach(function (panel) {
+        var key = panel.getAttribute('data-panel');
+        panel.addEventListener('input', function () { clearTimeout(timers[key]); timers[key] = setTimeout(function () { run(key); }, 150); });
+        panel.addEventListener('change', function (e) { if (e.target.tagName !== 'INPUT' || e.target.type === 'checkbox') run(key); });
+        panel.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(key); }
+        });
+        panel.querySelector('[data-action="calc"]').addEventListener('click', function () { run(key); });
+        panel.querySelector('[data-action="reset"]').addEventListener('click', function () { resetPanel(panel); });
+        panel.querySelector('[data-action="copy"]').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText[key]) return;
+          copyText(lastText[key]).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+      });
+      document.querySelectorAll('.calc-units__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var next = btn.getAttribute('data-units');
+          if (next === units) return;
+          convertFields(next === 'metric');
+          units = next;
+          document.querySelectorAll('.calc-units__btn').forEach(function (b) {
+            var on = b.getAttribute('data-units') === units;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+          labelUnits();
+          runAll();
+        });
+      });
 
-      // Rolls needed
-      var rollsNeeded = Math.ceil(stripsNeeded / stripsPerRoll);
+      // Tabs: click, plus arrow keys / Home / End with a roving tabindex.
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.calc-tab'));
+      function selectTab(tab, focus) {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.classList.toggle('active', on);
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+          $('panel-' + t.getAttribute('data-tab')).classList.toggle('active', on);
+        });
+        if (focus) tab.focus();
+      }
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { selectTab(tab, false); });
+        tab.addEventListener('keydown', function (e) {
+          var j = null;
+          if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+          else if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+          else if (e.key === 'Home') j = 0;
+          else if (e.key === 'End') j = tabs.length - 1;
+          if (j !== null) { e.preventDefault(); selectTab(tabs[j], true); }
+        });
+      });
 
-      // Usable area per roll (accounting for pattern waste)
-      var usablePerRoll = stripsPerRoll * rollWidthFt * wallH;
-
-      renderResults('wallpaper-result-grid', 'wallpaper-results', [
-        { label: 'Total Wall Area',      value: fmt(totalWallArea, 1),  unit: 'sq ft' },
-        { label: 'Adjusted Area',        value: fmt(adjustedArea, 1),   unit: 'sq ft' },
-        { label: 'Strips Needed',        value: fmt(stripsNeeded, 0),   unit: 'strips' },
-        { label: 'Strip Height',         value: fmt(stripHeight, 2),    unit: 'ft' + (patternIn > 0 ? ' (w/ pattern)' : '') },
-        { label: 'Strips per Roll',      value: fmt(stripsPerRoll, 0),  unit: '' },
-        { label: 'Rolls Needed',         value: fmt(rollsNeeded, 0),    unit: 'rolls' }
-      ]);
-    }
+      labelUnits();
+      runAll();
+    })();
   </script>
   <script defer src="../js/ads.js"></script>
 </body>

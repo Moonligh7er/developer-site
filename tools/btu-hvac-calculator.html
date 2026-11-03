@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free BTU / HVAC Sizing Calculator (Rough Estimate) | Moonlit Social Labs</title>
-  <meta name="description" content="Estimate BTU/hr requirement for heating and cooling by room size, insulation quality, sun exposure, and climate. Returns a range, not a single number.">
+  <meta name="description" content="Rough room cooling size from the ENERGY STAR room AC chart and its official adjustments, plus a rule-of-thumb heating range by climate zone. Not a Manual J load calculation.">
   <meta name="keywords" content="BTU calculator, HVAC sizing calculator, AC BTU calculator, room air conditioner BTU calculator, heating BTU calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free BTU / HVAC Sizing Calculator (Rough Estimate)",
-    "description": "Estimate BTU/hr requirement for heating and cooling by room size, insulation quality, sun exposure, and climate. Returns a range, not a single number.",
+    "description": "Rough room cooling size from the ENERGY STAR room AC chart and its official adjustments, plus a rule-of-thumb heating range by climate zone. Not a Manual J load calculation.",
     "url": "https://moonligh7er.github.io/developer-site/tools/btu-hvac-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free BTU / HVAC Sizing Calculator (Rough Estimate)">
-  <meta property="og:description" content="Estimate BTU/hr requirement for heating and cooling by room size, insulation quality, sun exposure, and climate. Returns a range, not a single number.">
+  <meta property="og:description" content="Rough room cooling size from the ENERGY STAR room AC chart and its official adjustments, plus a rule-of-thumb heating range by climate zone. Not a Manual J load calculation.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/btu-hvac-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free BTU / HVAC Sizing Calculator (Rough Estimate)">
-  <meta name="twitter:description" content="Estimate BTU/hr requirement for heating and cooling by room size, insulation quality, sun exposure, and climate. Returns a range, not a single number.">
+  <meta name="twitter:description" content="Rough room cooling size from the ENERGY STAR room AC chart and its official adjustments, plus a rule-of-thumb heating range by climate zone. Not a Manual J load calculation.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -108,80 +146,120 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="calc-standalone-wrap">
-      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; BTU / HVAC Sizing Calculator</p>
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; BTU / HVAC Calculator</p>
 
       <div class="calc-card">
         <h1>BTU / HVAC Sizing Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A rough sizing estimate for heating and cooling. Enter room dimensions, insulation quality, sun exposure, and climate zone. Result is a range, not a single number &mdash; proper HVAC sizing requires a Manual J calculation by a licensed HVAC professional.</p>
+        <p class="calc-intro">A rough size for one room. Cooling starts from the ENERGY STAR room air conditioner chart and its official adjustments; ceiling height, insulation and climate are rules of thumb on top. Heating is a rule-of-thumb range. None of this is a Manual J load calculation, which is what a central system should be sized from.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (ft, BTU/hr)</option>
+              <option value="metric">Metric (m, kW)</option>
             </select>
           </div>
         </div>
 
         <p class="calc-subhead">Room</p>
-<div class="form-grid">
-  <div class="form-group"><label for="length">Length (ft or m)</label><input type="number" id="length" placeholder="15" min="0" step="any"></div>
-  <div class="form-group"><label for="width">Width (ft or m)</label><input type="number" id="width" placeholder="12" min="0" step="any"></div>
-  <div class="form-group"><label for="ceiling">Ceiling Height (ft or m)</label><input type="number" id="ceiling" placeholder="8" min="0" step="any"></div>
-</div>
-<p class="calc-subhead">Environment</p>
-<div class="form-grid">
-  <div class="form-group"><label for="insulation">Insulation Quality</label>
-    <select id="insulation">
-      <option value="0.85">Excellent (new construction, high R)</option>
-      <option value="1.0" selected>Average</option>
-      <option value="1.2">Poor (older, drafty)</option>
-    </select>
-  </div>
-  <div class="form-group"><label for="sun">Sun Exposure</label>
-    <select id="sun">
-      <option value="0.9">Heavily shaded</option>
-      <option value="1.0" selected>Average</option>
-      <option value="1.15">Sunny side</option>
-      <option value="1.3">Kitchen or sun-facing all day</option>
-    </select>
-  </div>
-  <div class="form-group"><label for="climate">Climate Zone</label>
-    <select id="climate">
-      <option value="0.8">Cool (Pacific NW coast, Zone 5+)</option>
-      <option value="1.0" selected>Moderate</option>
-      <option value="1.2">Warm (southern US)</option>
-      <option value="1.35">Hot / humid (FL, TX Gulf, PHX)</option>
-    </select>
-  </div>
-</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="length">Length <span data-u="ft"></span></label>
+            <input type="number" id="length" value="15" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="length-err">
+            <span class="field-err" id="length-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="width">Width <span data-u="ft"></span></label>
+            <input type="number" id="width" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="width-err">
+            <span class="field-err" id="width-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="ceiling">Ceiling height <span data-u="ft"></span></label>
+            <input type="number" id="ceiling" value="8" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="ceiling-hint ceiling-err">
+            <span class="hint" id="ceiling-hint">The ENERGY STAR chart assumes 8 ft (2.4 m).</span>
+            <span class="field-err" id="ceiling-err"></span>
+          </div>
+        </div>
+        <p class="calc-subhead">ENERGY STAR adjustments</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="sun">Sun exposure</label>
+            <select id="sun">
+              <option value="0.9">Heavily shaded (−10%)</option>
+              <option value="1" selected>Average</option>
+              <option value="1.1">Very sunny (+10%)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="people">People who regularly use the room <span class="u-static">count</span></label>
+            <input type="number" id="people" value="2" min="1" step="1" inputmode="numeric" aria-describedby="people-hint people-err">
+            <span class="hint" id="people-hint">Add 600 BTU/hr for each person beyond two.</span>
+            <span class="field-err" id="people-err"></span>
+          </div>
+          <div class="form-group">
+            <span class="form-group__label-spacer" aria-hidden="true"></span>
+            <label class="check-row" for="kitchen"><input type="checkbox" id="kitchen"> This is a kitchen (+4,000 BTU/hr)</label>
+          </div>
+        </div>
+        <p class="calc-subhead">Rules of thumb (not ENERGY STAR)</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="insulation">Insulation and air sealing</label>
+            <select id="insulation">
+              <option value="0.85">Good (newer, tight; −15%)</option>
+              <option value="1" selected>Average</option>
+              <option value="1.2">Poor (older, drafty; +20%)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="zone">IECC climate zone</label>
+            <select id="zone" aria-describedby="zone-hint">
+              <option value="1">Zone 1 (south Florida, Hawaii)</option>
+              <option value="2">Zone 2 (Gulf Coast, Phoenix)</option>
+              <option value="3">Zone 3 (Atlanta, Dallas, Los Angeles)</option>
+              <option value="4" selected>Zone 4 (Washington DC, St. Louis, Seattle)</option>
+              <option value="5">Zone 5 (Chicago, Denver, Boston)</option>
+              <option value="6">Zone 6 (Minneapolis, Burlington VT)</option>
+              <option value="7">Zones 7&ndash;8 (northern Minnesota, Alaska)</option>
+            </select>
+            <span class="hint" id="zone-hint">Find yours on the DOE/ENERGY STAR climate zone map (linked below).</span>
+          </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Rough sizing</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Rough BTU rules of thumb</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A common starting point for room air conditioner sizing is 20 BTU/hr per square foot of floor area. That gets adjusted up or down for ceiling height above 8 ft, insulation quality, sun exposure, and climate zone. This calculator combines those adjustments and returns a range (typically ±15% of the midpoint) because the exact number depends on things it can&apos;t see: window count and quality, air infiltration, occupancy, appliance heat gain, and duct condition.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why oversizing is a real problem</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">HVAC oversizing is more common than undersizing and it&apos;s worse than most people realize. An oversized AC cools the air quickly, hits the thermostat cut-off, and shuts off before dehumidifying properly &mdash; you end up with a room that feels cold and clammy. Oversized systems also short-cycle, which wears out the compressor faster and wastes energy on the startup surge. Right-sized systems run longer, quieter cycles that dehumidify better and cost less to operate over their lifetime.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Manual J is the actual answer</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">For any whole-home HVAC installation, the industry-standard sizing method is Manual J from ACCA (Air Conditioning Contractors of America). It accounts for every window, insulation type, orientation, and infiltration rate. A rough estimate like this one is fine for buying a window unit or portable AC. Do not use it to size a central system &mdash; hire a contractor who does Manual J.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>Where the numbers come from</h2>
+        <p><strong>Cooling, official part:</strong> the ENERGY STAR room air conditioner chart maps floor area to capacity (for example 150&ndash;250 sq ft &rarr; 6,000 BTU/hr; 450&ndash;550 &rarr; 12,000; 1,000&ndash;1,200 &rarr; 21,000; up to 2,500 sq ft &rarr; 34,000), assuming an 8 ft ceiling. Its adjustments: heavily shaded &minus;10%, very sunny +10%, +600 BTU/hr per regular occupant beyond two, +4,000 BTU/hr for a kitchen.</p>
+        <p><strong>Cooling, rules of thumb added here:</strong> capacity scales with ceiling height above 8 ft; insulation shifts it &minus;15% to +20%; climate zone shifts it from +15% (zone 1) to &minus;10% (zones 6&ndash;8). These are judgement calls, not ENERGY STAR figures, and the results list each factor used.</p>
+        <p><strong>Heating:</strong> the HVAC trade&apos;s rule of thumb of roughly 30&ndash;60 BTU/hr per square foot, rising with the climate zone (about 30&ndash;35 in zone 1 up to 55&ndash;60 in zones 6&ndash;8). Good insulation puts you at the low end, poor at the high end. It tends to run high for newer, tight homes.</p>
+        <h3>Why oversizing is a real problem</h3>
+        <p>An oversized air conditioner cools the air fast, reaches the thermostat setting and shuts off before it has pulled out much humidity, so the room feels cold and clammy. It also short-cycles, which wears the compressor and wastes energy. A right-sized unit runs longer, quieter cycles.</p>
+        <h3>Manual J is the actual answer</h3>
+        <p>For central systems and heat pumps, the standard method is ACCA Manual J, which accounts for every window, wall, orientation and air leak. A rough number like this is fine for choosing a window or portable unit. Don&apos;t size a central system from it; ask the contractor for a Manual J.</p>
+        <p class="sources">Sources: <a href="https://www.energystar.gov/products/room_air_conditioners" target="_blank" rel="noopener">ENERGY STAR room air conditioner sizing chart</a>; heating range from common HVAC-industry rules of thumb; climate zones from the <a href="https://www.energystar.gov/saveathome/seal_insulate/identify-problems-you-want-fix/diy-checks-inspections/insulation-r-values" target="_blank" rel="noopener">DOE/ENERGY STAR climate zone map</a>. Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Rough sizing estimate only &mdash; proper HVAC sizing requires a Manual J calculation by a professional.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>A rule-of-thumb starting point for one room, not a load calculation or professional advice. Size central equipment from a Manual J. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -223,55 +301,275 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const l=n('length'), w2=n('width'), h2=n('ceiling'), ins=parseFloat(s('insulation')), sun=parseFloat(s('sun')), cli=parseFloat(s('climate'));
-  if (!l||!w2||!h2||l<=0||w2<=0||h2<=0) return showErr('Enter room dimensions.');
-  const lFt = isMetric() ? l/FT_TO_M : l;
-  const wFt = isMetric() ? w2/FT_TO_M : w2;
-  const hFt = isMetric() ? h2/FT_TO_M : h2;
-  const areaSqFt = lFt * wFt;
-  // Base 20 BTU/sq ft, ceiling adjustment (linear above 8ft), then multipliers
-  const ceilingAdj = hFt > 8 ? (hFt / 8) : 1;
-  const baseBTU = areaSqFt * 20 * ceilingAdj * ins * sun * cli;
-  // Return a range: ±15%
-  const low = Math.round(baseBTU * 0.85 / 500) * 500;
-  const mid = Math.round(baseBTU / 500) * 500;
-  const high = Math.round(baseBTU * 1.15 / 500) * 500;
-  let h = '';
-  h += row('Estimated BTU range (cooling)', fmt(low,0)+' – '+fmt(high,0)+' BTU/hr', 'teal');
-  h += row('Midpoint estimate', fmt(mid,0)+' BTU/hr', 'violet');
-  h += row('Room area', fmt(areaSqFt,0)+' sq ft');
-  h += row('Room volume', fmt(areaSqFt * hFt,0)+' cu ft');
-  h += row('Base rate applied', '20 BTU/sq ft × adjustments');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['length','width','ceiling'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; imperial base units) ===== */
+      // ENERGY STAR room AC sizing chart (8 ft ceiling): [lower sq ft (inclusive), upper (exclusive), BTU/hr]. Checked 2026-11.
+      var CHART = [
+        [100, 150, 5000], [150, 250, 6000], [250, 300, 7000], [300, 350, 8000], [350, 400, 9000], [400, 450, 10000],
+        [450, 550, 12000], [550, 700, 14000], [700, 1000, 18000], [1000, 1200, 21000], [1200, 1400, 23000],
+        [1400, 1500, 24000], [1500, 2000, 30000], [2000, 2500, 34000]
+      ];
+      // Rules of thumb (not ENERGY STAR): cooling climate factor and heating BTU/hr per sq ft range by IECC zone.
+      var ZONES = {
+        1: { cool: 1.15, heat: [30, 35] }, 2: { cool: 1.10, heat: [35, 40] }, 3: { cool: 1.05, heat: [40, 45] },
+        4: { cool: 1.00, heat: [45, 50] }, 5: { cool: 0.95, heat: [50, 55] }, 6: { cool: 0.90, heat: [55, 60] },
+        7: { cool: 0.90, heat: [55, 60] }
+      };
+      // Suggested size: smallest common size within 2% of (or above) the estimate.
+      var SIZES = [5000, 6000, 7000, 8000, 9000, 10000, 12000, 14000, 15000, 18000, 21000, 23000, 24000, 25000, 30000, 34000, 36000];
+      function chartBtu(sqft) {
+        if (sqft < CHART[0][0]) return { btu: CHART[0][2], band: 'under 100 sq ft (smallest chart size)' };
+        for (var i = 0; i < CHART.length; i++) {
+          if (sqft >= CHART[i][0] && sqft < CHART[i][1]) return { btu: CHART[i][2], band: CHART[i][0] + '–' + CHART[i][1] + ' sq ft' };
+        }
+        return null; // beyond the room-AC chart
+      }
+      function estimate(p) {
+        var sqft = p.lengthFt * p.widthFt;
+        var ceilingF = p.ceilingFt > 8 ? p.ceilingFt / 8 : 1;
+        var z = ZONES[p.zone];
+        var c = chartBtu(sqft), cool = null, size = null;
+        if (c) {
+          cool = c.btu * p.sun * ceilingF * p.insulation * z.cool + 600 * Math.max(0, p.people - 2) + (p.kitchen ? 4000 : 0);
+          for (var i = 0; i < SIZES.length; i++) { if (SIZES[i] >= cool * 0.98) { size = SIZES[i]; break; } }
+        }
+        var heatLo = sqft * z.heat[0] * ceilingF, heatHi = sqft * z.heat[1] * ceilingF;
+        var t = p.insulation < 1 ? 0 : p.insulation > 1 ? 1 : 0.5;
+        return {
+          sqft: sqft, cuft: sqft * p.ceilingFt, ceilingF: ceilingF, chart: c, cool: cool, size: size,
+          coolLo: cool == null ? null : cool * 0.85, coolHi: cool == null ? null : cool * 1.15,
+          heatLo: heatLo, heatHi: heatHi, heat: heatLo + (heatHi - heatLo) * t
+        };
+      }
+      /* ===== end math ===== */
+
+      var W_PER_BTUH = 0.29307107;
+      function power(btu) {
+        var b = fmt(Math.round(btu / 100) * 100, 0) + ' BTU/hr', k = fmt(btu * W_PER_BTUH / 1000, 2) + ' kW';
+        return metric() ? k + ' (' + b + ')' : b + ' (' + k + ')';
+      }
+      function compute() {
+        var p = {
+          lengthFt: field('length', { gt: 0, max: 200, maxMsg: 'Over 200 ft; check the unit.' }),
+          widthFt: field('width', { gt: 0, max: 200, maxMsg: 'Over 200 ft; check the unit.' }),
+          ceilingFt: field('ceiling', { gt: 0, max: 40, maxMsg: 'Over 40 ft; check the unit.' }),
+          people: field('people', { min: 1, int: true, max: 100 }),
+          sun: Number(sel('sun')), kitchen: $('kitchen').checked,
+          insulation: Number(sel('insulation')), zone: Number(sel('zone'))
+        };
+        if (errors) return null;
+        var r = estimate(p), rows = [], notes = [];
+        if (r.cool != null) {
+          rows.push(['Cooling estimate', power(r.cool), 'teal']);
+          rows.push(['Plausible range (±15%)', fmt(Math.round(r.coolLo / 100) * 100, 0) + '–' + fmt(Math.round(r.coolHi / 100) * 100, 0) + ' BTU/hr']);
+          rows.push(['Suggested common unit size', r.size ? fmt(r.size, 0) + ' BTU/hr (' + fmt(r.size / 12000, 2) + ' tons)' : 'Over 36,000 BTU/hr; get a Manual J', 'teal']);
+          rows.push(['ENERGY STAR chart starting point', fmt(r.chart.btu, 0) + ' BTU/hr for ' + r.chart.band]);
+        } else {
+          rows.push(['Cooling estimate', 'Over 2,500 sq ft: beyond the room-AC chart. That is whole-house sizing; get a Manual J.', 'amber']);
+        }
+        rows.push(['Heating, rule of thumb', power(r.heat), 'violet']);
+        rows.push(['Heating range for this zone', fmt(Math.round(r.heatLo / 100) * 100, 0) + '–' + fmt(Math.round(r.heatHi / 100) * 100, 0) + ' BTU/hr']);
+        rows.push(['Room', area(r.sqft) + ', ' + (metric() ? fmt(r.cuft * 0.028316846592, 1) + ' m³' : fmt(r.cuft, 0) + ' cu ft')]);
+        var f = ['sun ×' + p.sun, 'ceiling ×' + fmt(r.ceilingF, 2), 'insulation ×' + p.insulation, 'climate ×' + ZONES[p.zone].cool];
+        rows.push(['Factors applied to cooling', f.join(', ')]);
+        notes.push('Rule-of-thumb sizing for a single room. For central air, a furnace or a heat pump, ask for a Manual J load calculation.');
+        return { rows: rows, notes: notes };
+      }
+      init(compute, 'Rough HVAC sizing');
     })();
   </script>
   <script defer src="../js/ads.js"></script>

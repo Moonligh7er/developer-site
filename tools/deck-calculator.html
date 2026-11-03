@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Deck Materials Calculator (Boards, Joists, Fasteners) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate deck board count, joist count at specified spacing, and screws/hidden fasteners from deck dimensions and board size.">
+  <meta name="description" content="Deck board, joist and fastener counts from deck size, board width, gap and board length, plus a rough joist-span check against IRC Table R507.6. Materials only; not a structural design.">
   <meta name="keywords" content="deck calculator, deck board calculator, deck materials calculator, deck joist calculator, deck screw calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Deck Materials Calculator (Boards, Joists, Fasteners)",
-    "description": "Calculate deck board count, joist count at specified spacing, and screws/hidden fasteners from deck dimensions and board size.",
+    "description": "Deck board, joist and fastener counts from deck size, board width, gap and board length, plus a rough joist-span check against IRC Table R507.6. Materials only; not a structural design.",
     "url": "https://moonligh7er.github.io/developer-site/tools/deck-calculator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Deck Materials Calculator (Boards, Joists, Fasteners)">
-  <meta property="og:description" content="Calculate deck board count, joist count at specified spacing, and screws/hidden fasteners from deck dimensions and board size.">
+  <meta property="og:description" content="Deck board, joist and fastener counts from deck size, board width, gap and board length, plus a rough joist-span check against IRC Table R507.6. Materials only; not a structural design.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/deck-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Deck Materials Calculator (Boards, Joists, Fasteners)">
-  <meta name="twitter:description" content="Calculate deck board count, joist count at specified spacing, and screws/hidden fasteners from deck dimensions and board size.">
+  <meta name="twitter:description" content="Deck board, joist and fastener counts from deck size, board width, gap and board length, plus a rough joist-span check against IRC Table R507.6. Materials only; not a structural design.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,44 +49,82 @@
     .calc-breadcrumb a { color: var(--teal); text-decoration: none; }
     .calc-card { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
     .calc-card h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--text-bright); margin-bottom: 0.75rem; }
+    .calc-intro { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
     .calc-subhead { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--violet); margin: 1.5rem 0 0.75rem; }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
     .form-group label { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); }
-    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; }
+    .form-group label [data-u], .form-group label .u-static { text-transform: none; letter-spacing: 0.05em; color: var(--text-dim); }
+    .form-group input, .form-group select { font-family: var(--font-mono); font-size: 0.95rem; background: var(--deep); border: 1px solid var(--border); color: var(--text-primary); padding: 0.65rem 0.85rem; outline: none; width: 100%; box-sizing: border-box; min-height: 44px; }
     .form-group input:focus, .form-group select:focus { border-color: var(--teal); box-shadow: 0 0 8px var(--teal-dim); }
-    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); }
-    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; cursor: pointer; }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group .hint { font-size: 0.75rem; color: var(--text-dim); line-height: 1.45; }
+    .field-err { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-err:empty { display: none; }
+    .field-err::before { content: '! '; }
+    .form-group__label-spacer { min-height: 0.95rem; }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 2rem; min-height: 44px; cursor: pointer; }
     .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
     .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
     .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); }
+    .calc-btn--small { padding: 0.5rem 1rem; font-size: 0.65rem; letter-spacing: 0.15em; min-height: 40px; }
     .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; display: none; }
-    .calc-results.visible { display: block; }
-    .calc-results h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
-    .result-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+    .calc-results { background: var(--panel); border: 1px solid var(--border); padding: 1.5rem; margin-top: 1.5rem; }
+    .calc-results__head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .calc-results__head h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin: 0; }
+    .calc-results__empty { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+    .calc-results__notes p { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin: 0.75rem 0 0; }
+    .calc-results__notes:empty { display: none; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.25rem 1rem; flex-wrap: wrap; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
     .result-row:last-child { border-bottom: none; }
     .result-label { font-size: 0.9rem; color: var(--text-secondary); }
-    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; }
+    .result-value { font-family: var(--font-mono); font-size: 1rem; color: var(--text-bright); font-weight: 500; text-align: right; margin-left: auto; overflow-wrap: anywhere; }
     .result-value--teal { color: var(--teal); }
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
+    .calc-howto h2 { font-family: var(--font-display); font-size: 1.2rem; font-weight: 400; color: var(--text-bright); margin-bottom: 1rem; }
+    .calc-howto h3 { font-family: var(--font-display); font-size: 1rem; font-weight: 400; color: var(--text-bright); margin: 1.5rem 0 0.5rem; }
+    .calc-howto p, .calc-howto li { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+    .calc-howto p { margin-bottom: 1rem; }
+    .calc-howto ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .calc-howto code { font-family: var(--font-mono); color: var(--teal); font-size: 0.85em; overflow-wrap: anywhere; }
+    .calc-howto a { color: var(--teal); }
+    .calc-howto .sources { font-size: 0.8rem; color: var(--text-dim); }
+    .table-wrap { overflow-x: auto; margin: 0 0 1rem; -webkit-overflow-scrolling: touch; }
+    .ref-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.75rem; min-width: 420px; }
+    .ref-table th { text-align: left; font-weight: 400; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); }
+    .ref-table td { padding: 0.5rem 0.6rem; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .tool-disclaimer { max-width: 900px; margin: 1.5rem auto 0; padding: 1rem 1.25rem; border: 1px solid var(--border); background: var(--surface); font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); }
+    .tool-disclaimer p { margin: 0; }
+    .tool-disclaimer strong { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.5rem; font-weight: 400; }
+    .tool-disclaimer a { color: var(--teal); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
     .calc-other { max-width: 900px; margin: 3rem auto 0; padding: 2rem; border: 1px solid var(--border); background: var(--surface); }
     .calc-other__title { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
-    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
+    .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; min-height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
-    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .calc-standalone-wrap { padding: 0 1rem; }
+      .calc-card { padding: 1.25rem; }
+      .calc-results { padding: 1rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group__label-spacer { display: none; }
+      .calc-other { padding: 1.25rem; margin-left: 1rem; margin-right: 1rem; }
+      .tool-disclaimer { margin-left: 1rem; margin-right: 1rem; }
+      .calc-other__grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
-  <div class="page-transition"></div>
-  <div class="page-loader"></div>
+  <div class="page-transition" aria-hidden="true"></div>
+  <div class="page-loader" aria-hidden="true"></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="rain-canvas" aria-hidden="true" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -108,72 +146,152 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="calc-standalone-wrap">
-      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; Deck Materials Calculator</p>
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="construction-calculators.html">Construction</a> &rarr; Deck Calculator</p>
 
       <div class="calc-card">
         <h1>Deck Materials Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter deck dimensions, board size, gap, and joist spacing to get board count, joist count, and fastener count. Materials only &mdash; no structural analysis.</p>
+        <p class="calc-intro">Enter the deck size, the decking board and the joist layout. You get decking boards, joists and fasteners, plus a rough check of the joist span against the IRC deck table. Materials only; not a structural design.</p>
 
         <div class="form-grid">
           <div class="form-group">
             <label for="units">Units</label>
-            <select id="units" onchange="calc && document.getElementById('results').classList.contains('visible') && calc()">
-              <option value="imperial">Imperial (ft, in, cu yd)</option>
-              <option value="metric">Metric (m, cm, m³)</option>
+            <select id="units">
+              <option value="imperial" selected>Imperial (ft, in)</option>
+              <option value="metric">Metric (m, cm, mm)</option>
             </select>
           </div>
         </div>
 
-        <p class="calc-subhead">Deck Dimensions</p>
-<div class="form-grid">
-  <div class="form-group"><label for="length">Deck Length (ft or m)</label><input type="number" id="length" placeholder="16" min="0" step="any"></div>
-  <div class="form-group"><label for="width">Deck Width (ft or m)</label><input type="number" id="width" placeholder="12" min="0" step="any"></div>
-</div>
-<p class="calc-subhead">Boards &amp; Joists</p>
-<div class="form-grid">
-  <div class="form-group"><label for="boardW">Board Width (in or cm)</label><input type="number" id="boardW" placeholder="5.5" min="0" step="any"><span class="hint">2×6 = 5.5", 5/4×6 = 5.5", Trex = 5.5"</span></div>
-  <div class="form-group"><label for="gap">Board Gap (in or mm)</label><input type="number" id="gap" placeholder="0.1875" min="0" step="any"><span class="hint">3/16" = 0.1875" typical</span></div>
-  <div class="form-group"><label for="joistSpace">Joist Spacing (in on center)</label>
-    <select id="joistSpace">
-      <option value="12">12" OC (heavy load / diagonal)</option>
-      <option value="16" selected>16" OC (typical)</option>
-      <option value="24">24" OC (max for many decking types)</option>
-    </select>
-  </div>
-  <div class="form-group"><label for="fastener">Fastener Type</label>
-    <select id="fastener">
-      <option value="screw" selected>Deck screws (2 per joist)</option>
-      <option value="hidden">Hidden fasteners (1 clip per joist)</option>
-    </select>
-  </div>
-  <div class="form-group"><label for="waste">Waste Factor (%)</label><input type="number" id="waste" value="10" min="0" step="any"></div>
-</div>
+        <p class="calc-subhead">Deck</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="length">Length along the boards <span data-u="ft"></span></label>
+            <input type="number" id="length" value="16" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="length-hint length-err">
+            <span class="hint" id="length-hint">The direction the decking runs (usually parallel to the house).</span>
+            <span class="field-err" id="length-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="width">Width across the boards <span data-u="ft"></span></label>
+            <input type="number" id="width" value="12" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="width-hint width-err">
+            <span class="hint" id="width-hint">The joists run this way, from ledger to beam.</span>
+            <span class="field-err" id="width-err"></span>
+          </div>
+        </div>
+        <p class="calc-subhead">Decking</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="boardW">Board face width <span data-u="in"></span></label>
+            <input type="number" id="boardW" value="5.5" min="0" step="any" inputmode="decimal" data-dim="in" aria-describedby="boardW-hint boardW-err">
+            <span class="hint" id="boardW-hint">2×6 and 5/4×6 = 5.5 in (14 cm); most composite = 5.5 in.</span>
+            <span class="field-err" id="boardW-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="gap">Gap between boards <span data-u="inmm"></span></label>
+            <input type="number" id="gap" value="0.1875" min="0" step="any" inputmode="decimal" data-dim="inmm" aria-describedby="gap-hint gap-err">
+            <span class="hint" id="gap-hint">3/16 in = 0.1875 in (about 5 mm) is typical. Follow the maker for composites.</span>
+            <span class="field-err" id="gap-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="boardLen">Board length you&apos;ll buy <span data-u="ft"></span></label>
+            <input type="number" id="boardLen" value="16" min="0" step="any" inputmode="decimal" data-dim="ft" aria-describedby="boardLen-hint boardLen-err">
+            <span class="hint" id="boardLen-hint">Common lengths: 8, 10, 12, 16, 20 ft.</span>
+            <span class="field-err" id="boardLen-err"></span>
+          </div>
+          <div class="form-group">
+            <label for="waste">Waste factor <span class="u-static">%</span></label>
+            <input type="number" id="waste" value="10" min="0" max="100" step="any" inputmode="decimal" aria-describedby="waste-hint waste-err">
+            <span class="hint" id="waste-hint">10% for a square deck; 15% for picture framing or diagonal boards.</span>
+            <span class="field-err" id="waste-err"></span>
+          </div>
+        </div>
+        <p class="calc-subhead">Framing &amp; fasteners</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="joistSpace">Joist spacing</label>
+            <select id="joistSpace" aria-describedby="joistSpace-hint">
+              <option value="12">12 in on center</option>
+              <option value="16" selected>16 in on center</option>
+              <option value="24">24 in on center</option>
+            </select>
+            <span class="hint" id="joistSpace-hint">Diagonal decking and many composites need 12 in; check the board maker.</span>
+          </div>
+          <div class="form-group">
+            <label for="joistSize">Joist size</label>
+            <select id="joistSize">
+              <option value="2x6">2 × 6</option>
+              <option value="2x8">2 × 8</option>
+              <option value="2x10" selected>2 × 10</option>
+              <option value="2x12">2 × 12</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="species">Joist species (No. 2, treated)</label>
+            <select id="species">
+              <option value="sp" selected>Southern pine</option>
+              <option value="df">Douglas fir-larch / hem-fir / SPF</option>
+              <option value="rw">Redwood / western cedar / ponderosa / red pine</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fastener">Fasteners</label>
+            <select id="fastener">
+              <option value="screw" selected>Deck screws (2 per board per joist)</option>
+              <option value="hidden">Hidden clips (1 per board per joist)</option>
+            </select>
+          </div>
+        </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Materials Needed</h4>
-          <div id="out-main"></div>
-          
+        <div class="calc-results" id="results">
+          <div class="calc-results__head">
+            <h2>Estimate</h2>
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" id="copy-btn">Copy results</button>
+          </div>
+          <div aria-live="polite">
+            <div id="out-main"></div>
+            <div class="calc-results__notes" id="out-notes"></div>
+          </div>
+          <span class="sr-only" role="status" id="copy-status"></span>
         </div>
       </div>
 
-      <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Board and joist math</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Boards run perpendicular to joists. The number of boards is the deck width (perpendicular to board direction) divided by (board width + gap). Joist count depends on spacing: 16" on center means one joist every 16 inches along the deck length, plus one extra at the far end. This calculator assumes standard framing without special conditions (cantilevers, angled sections, framed openings).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Fasteners</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Screws: 2 per board per joist. A typical 12×16 deck uses 400&ndash;600 deck screws &mdash; buy a 5 lb bucket. Hidden fasteners (Camo, Tiger Claw, etc.) use 1 clip per board per joist, plus starter clips at the perimeter. Hidden systems cost more but leave a clean board face.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not compute</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Beam sizing, joist span, ledger board attachment, footings and posts, stair stringers, railing components, or code compliance. These are structural questions that depend on your load, span, species, exposure, and local code &mdash; hire a licensed deck builder or an engineer if you&apos;re building anything above ground level. The materials count here is for planning and pricing, not for engineering the frame.</p>
-</section>
+      <section class="calc-card calc-howto">
+        <h2>Board and joist math</h2>
+        <p><code>rows = ceil(width × 12 ÷ (board width + gap))</code>; each row needs <code>ceil(length ÷ board length)</code> boards; the waste factor is added and the total rounded up. Joists: <code>ceil(length × 12 ÷ spacing) + 1</code>, each as long as the deck is wide. Screws: two per board at every joist crossing; hidden clips: one. The Lumber tab on the hub page uses the same decking formula.</p>
+        <h3>Joist span check (rough guidance)</h3>
+        <p>The check compares your deck width, treated as a simple span from ledger to one beam with no cantilever, with IRC Table R507.6. Those spans assume No. 2 grade, wet service, 40 psf live load plus 10 psf dead load (and snow load no greater than 40 psf). Higher snow loads, other grades, cantilevers, hot tubs and planters all shorten the span. Beams (Table R507.5), posts, footings, ledger attachment and guards have their own tables. Use this as a first look, then check the current code your jurisdiction has adopted, the AWC <em>Prescriptive Residential Wood Deck Construction Guide</em> (DCA 6), or a deck builder or engineer.</p>
+        <div class="table-wrap">
+        <table class="ref-table">
+        <caption class="sr-only">Maximum deck joist spans without cantilever, IRC Table R507.6 (feet-inches)</caption>
+        <thead><tr><th scope="col">Species</th><th scope="col">Size</th><th scope="col">12 in o.c.</th><th scope="col">16 in o.c.</th><th scope="col">24 in o.c.</th></tr></thead>
+        <tbody>
+        <tr><td rowspan="4">Southern pine</td><td>2×6</td><td>9&prime;11&Prime;</td><td>9&prime;0&Prime;</td><td>7&prime;7&Prime;</td></tr>
+        <tr><td>2×8</td><td>13&prime;1&Prime;</td><td>11&prime;10&Prime;</td><td>9&prime;8&Prime;</td></tr>
+        <tr><td>2×10</td><td>16&prime;2&Prime;</td><td>14&prime;0&Prime;</td><td>11&prime;5&Prime;</td></tr>
+        <tr><td>2×12</td><td>18&prime;0&Prime;</td><td>16&prime;6&Prime;</td><td>13&prime;6&Prime;</td></tr>
+        <tr><td rowspan="4">Douglas fir-larch, hem-fir, spruce-pine-fir</td><td>2×6</td><td>9&prime;6&Prime;</td><td>8&prime;8&Prime;</td><td>7&prime;2&Prime;</td></tr>
+        <tr><td>2×8</td><td>12&prime;6&Prime;</td><td>11&prime;1&Prime;</td><td>9&prime;1&Prime;</td></tr>
+        <tr><td>2×10</td><td>15&prime;8&Prime;</td><td>13&prime;7&Prime;</td><td>11&prime;1&Prime;</td></tr>
+        <tr><td>2×12</td><td>18&prime;0&Prime;</td><td>15&prime;9&Prime;</td><td>12&prime;10&Prime;</td></tr>
+        <tr><td rowspan="4">Redwood, western cedars, ponderosa pine, red pine</td><td>2×6</td><td>8&prime;10&Prime;</td><td>8&prime;0&Prime;</td><td>7&prime;0&Prime;</td></tr>
+        <tr><td>2×8</td><td>11&prime;8&Prime;</td><td>10&prime;7&Prime;</td><td>8&prime;8&Prime;</td></tr>
+        <tr><td>2×10</td><td>14&prime;11&Prime;</td><td>13&prime;0&Prime;</td><td>10&prime;7&Prime;</td></tr>
+        <tr><td>2×12</td><td>17&prime;5&Prime;</td><td>15&prime;1&Prime;</td><td>12&prime;4&Prime;</td></tr>
+        </tbody>
+        </table>
+        </div>
+        <h3>Fasteners</h3>
+        <p>Two screws per board per joist is the usual face-screw pattern. Hidden clip systems use one clip per crossing plus starter clips at the edges; check the maker&apos;s count per box.</p>
+        <p class="sources">Source: 2021 IRC Table R507.6, deck joist spans for common lumber species (no cantilever). Checked November 2026.</p>
+      </section>
     </div>
 
-    <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Material estimates only. Verify quantities before purchasing and consult local building codes and professionals for structural or code questions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Materials count only. Does not perform span, load, or engineering calculations &mdash; consult a licensed deck builder or engineer for structural design.</p>
+    <aside class="tool-disclaimer" role="note">
+      <p><strong>Estimate only</strong>A materials list and a rough span comparison, not a structural design or code review. Anything raised off the ground needs ledger, beam, post and footing details checked against your local code. <a href="../disclaimer.html">Full disclaimers</a>.</p>
     </aside>
 
     <aside class="calc-other">
@@ -215,57 +333,259 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function ceil(x){return Math.ceil(x);}
-function ceilRound(x, step){return Math.ceil(x/step)*step;}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-// Unit conversions
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, SQFT_TO_SQM = 0.092903, CUFT_TO_CUM = 0.0283168, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
-function areaUnitLabel(){return isMetric()?'m²':'sq ft';}
-function volumeUnitLabel(){return isMetric()?'m³':'cu yd';}
-function lengthUnitLabel(){return isMetric()?'m':'ft';}
-function weightUnitLabel(){return isMetric()?'kg':'lb';}
-
-      function calc(){
-  hideErr();
-  const l=n('length'), w2=n('width'), bw=n('boardW'), gap=n('gap')||0, joistSp=parseFloat(s('joistSpace')), fast=s('fastener'), wf=(n('waste')||0)/100;
-  if (!l||!w2||!bw||l<=0||w2<=0||bw<=0) return showErr('Enter deck dimensions and board width.');
-  const lFt = isMetric() ? l/FT_TO_M : l;
-  const wFt = isMetric() ? w2/FT_TO_M : w2;
-  const bwIn = isMetric() ? bw/IN_TO_CM : bw;
-  const gapIn = isMetric() ? gap/25.4 : gap;
-  const effBoardWIn = bwIn + gapIn;
-  const boardsAcross = ceil((wFt*12) / effBoardWIn);
-  const boardsWithWaste = ceil(boardsAcross * (1+wf));
-  // Joists at N inches OC across length; +1 for end
-  const joists = ceil((lFt*12) / joistSp) + 1;
-  const fasteners = fast==='screw' ? boardsAcross * joists * 2 : boardsAcross * joists;
-  const fastenerLabel = fast==='screw' ? 'Deck screws' : 'Hidden fastener clips';
-  let h = '';
-  h += row('Deck boards (with waste)', boardsWithWaste+' boards @ '+lFt.toFixed(0)+' ft long', 'teal');
-  h += row('Joists (assumed length equal to deck width)', joists+' joists @ '+wFt.toFixed(0)+' ft long', 'teal');
-  h += row(fastenerLabel, fmt(fasteners,0), 'violet');
-  h += row('Deck area', fmt(lFt*wFt,0)+' sq ft');
-  h += row('Boards across width (pre-waste)', boardsAcross);
-  h += row('Joist spacing', joistSp+'" OC');
-  h += row('Waste factor applied', (wf*100).toFixed(0)+'%');
-  set('out-main', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['length','width','boardW','gap'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('waste').value='10';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+    (function () {
+      'use strict';
+      /* ===== shared page helpers (same block on every standalone construction calculator) ===== */
+      var $ = function (id) { return document.getElementById(id); };
+      // Imperial -> metric factor for each kind of field (exact by definition where one exists).
+      var DIMS = {
+        ft:     { imp: 'ft',       met: 'm',        f: 0.3048,         dp: 3 },
+        in:     { imp: 'in',       met: 'cm',       f: 2.54,           dp: 2 },
+        inmm:   { imp: 'in',       met: 'mm',       f: 25.4,           dp: 1 },
+        sqft:   { imp: 'sq ft',    met: 'm²',  f: 0.09290304,     dp: 3 },
+        pcf:    { imp: 'lb/ft³', met: 'kg/m³', f: 16.018463374, dp: 0 },
+        tpy:    { imp: 'tons/yd³', met: 't/m³', f: 1.186552734, dp: 2 },   // 0.90718474 t per ton / 0.764554857984 m3 per yd3
+        perTon: { imp: '$/ton',    met: '$/tonne',  f: 1.102311311,    dp: 2 },
+        perYd:  { imp: '$/yd³', met: '$/m³', f: 1.307950619, dp: 2 }
       };
+      var DEBOUNCE_MS = 150, timer = null, lastText = '', computeFn = null, resultTitle = '';
+
+      function metric() { return $('units').value === 'metric'; }
+      function cleanNum(x) { return (Object.is(x, -0) || Math.abs(x) < 1e-12) ? 0 : x; }
+      function fmt(x, dp) {
+        if (typeof x !== 'number' || !isFinite(x)) return '—';
+        dp = dp == null ? 2 : dp;
+        var r = Number(x.toFixed(dp));
+        return cleanNum(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+      }
+      var usd = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      function money(x) { return isFinite(x) ? usd.format(cleanNum(x)) : '—'; }
+      function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+      function pct(x) { return cleanNum(Number(x.toFixed(1))).toLocaleString('en-US') + '%'; }
+      function plural(n, one, many) { return n === 1 ? one : (many || one + 's'); }
+      // Show a length in the active system: imperial value in, text out.
+      function lenFt(ft, dp) { return metric() ? fmt(ft * 0.3048, dp == null ? 2 : dp) + ' m' : fmt(ft, dp == null ? 1 : dp) + ' ft'; }
+      function lenIn(inches, dp) { return metric() ? fmt(inches * 2.54, dp == null ? 1 : dp) + ' cm' : fmt(inches, dp == null ? 2 : dp) + ' in'; }
+      function area(sqft) { return metric() ? fmt(sqft * 0.09290304, 1) + ' m²' : fmt(sqft, 0) + ' sq ft'; }
+      function vol(cuft) {
+        var yd = fmt(cuft / 27, 2) + ' yd³', m3 = fmt(cuft * 0.028316846592, 2) + ' m³';
+        return metric() ? m3 + ' (' + yd + ')' : yd + ' (' + m3 + ')';
+      }
+
+      function labelUnits() {
+        var m = metric();
+        document.querySelectorAll('[data-u]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-u')];
+          if (d) el.textContent = m ? d.met : d.imp;
+        });
+      }
+      // Convert every unit-bearing field when the unit system changes, so the estimate stays the same.
+      // Switching straight back restores the exact value that was typed.
+      function convertFields(toMetric) {
+        var from = toMetric ? 'imperial' : 'metric', to = toMetric ? 'metric' : 'imperial';
+        document.querySelectorAll('input[data-dim]').forEach(function (el) {
+          var d = DIMS[el.getAttribute('data-dim')];
+          if (!d || el.value.trim() === '') return;
+          var prev = el._unitMemo;
+          if (prev && prev.sys === to && prev.shown === el.value) {
+            el.value = prev.val;      // back to exactly what was typed
+            el._unitMemo = null;
+            return;
+          }
+          var v = parseFloat(el.value);
+          if (!isFinite(v)) return;
+          var out = String(Number((toMetric ? v * d.f : v / d.f).toFixed(toMetric ? d.dp : Math.max(d.dp, 3))));
+          el._unitMemo = { sys: from, val: el.value, shown: out };
+          el.value = out;
+        });
+      }
+
+      // Field reading with inline validation. Values come back in imperial base units.
+      var errors = 0;
+      function setErr(id, msg) {
+        var el = $(id), box = $(id + '-err');
+        if (el) el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (box) box.textContent = msg || '';
+        if (msg) errors++;
+      }
+      function field(id, rule) {
+        rule = rule || {};
+        var el = $(id), raw = el.value.trim();
+        if (raw === '') {
+          if (rule.optional) { setErr(id, ''); return rule.fallback != null ? rule.fallback : null; }
+          setErr(id, 'Enter a number.'); return NaN;
+        }
+        var v = Number(raw);
+        if (!isFinite(v)) { setErr(id, 'Enter a number.'); return NaN; }
+        if (rule.int && Math.floor(v) !== v) { setErr(id, 'Use a whole number.'); return NaN; }
+        // Limits are written in imperial base units, so compare after converting.
+        var d = DIMS[el.getAttribute('data-dim')];
+        var b = (d && metric()) ? v / d.f : v;
+        // An untouched, unit-converted value is a rounded display of what was typed: use the exact original.
+        var memo = el._unitMemo;
+        if (d && memo && memo.shown === el.value) b = memo.sys === 'imperial' ? Number(memo.val) : Number(memo.val) / d.f;
+        if (rule.gt != null && !(b > rule.gt)) { setErr(id, rule.gt === 0 ? 'Must be more than 0.' : 'Must be more than ' + rule.gt + '.'); return NaN; }
+        if (rule.min != null && b < rule.min) { setErr(id, rule.min === 0 ? 'Can’t be negative.' : 'Must be at least ' + rule.min + '.'); return NaN; }
+        if (rule.max != null && b > rule.max) { setErr(id, rule.maxMsg || 'Must be ' + rule.max + ' or less.'); return NaN; }
+        setErr(id, '');
+        return b;
+      }
+      function sel(id) { return $(id).value; }
+
+      function render(res) {
+        var out = $('out-main'), notes = $('out-notes'), copyBtn = $('copy-btn');
+        if (!res) {
+          out.innerHTML = '<p class="calc-results__empty">Fix the highlighted field above to see the estimate.</p>';
+          notes.textContent = '';
+          copyBtn.disabled = true;
+          lastText = '';
+          return;
+        }
+        var html = '', text = resultTitle + '\n';
+        res.rows.forEach(function (r) {
+          html += '<div class="result-row' + (r[2] ? ' result-row--' + r[2] : '') + '"><span class="result-label">' + esc(r[0]) +
+            '</span><span class="result-value' + (r[2] ? ' result-value--' + r[2] : '') + '">' + esc(r[1]) + '</span></div>';
+          text += r[0] + ': ' + r[1] + '\n';
+        });
+        out.innerHTML = html;
+        notes.innerHTML = '';
+        (res.notes || []).forEach(function (n) {
+          var p = document.createElement('p');
+          p.textContent = n;
+          notes.appendChild(p);
+          text += n + '\n';
+        });
+        copyBtn.disabled = false;
+        lastText = text + 'Estimate only. ' + location.href.split('#')[0];
+      }
+      function run() {
+        clearTimeout(timer);
+        errors = 0;
+        var res = computeFn();
+        render(errors ? null : res);
+      }
+      function schedule() { clearTimeout(timer); timer = setTimeout(run, DEBOUNCE_MS); }
+
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).catch(function () { return fallbackCopy(text); });
+        }
+        return new Promise(function (resolve) { fallbackCopy(text); resolve(); });
+      }
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.top = '-1000px'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+        document.body.removeChild(ta);
+        if (!ok) throw new Error('copy failed');
+      }
+      function flash(btn, msg) {
+        var label = btn.getAttribute('data-label') || btn.textContent;
+        btn.setAttribute('data-label', label);
+        btn.textContent = msg;
+        $('copy-status').textContent = msg;
+        setTimeout(function () { btn.textContent = label; $('copy-status').textContent = ''; }, 1600);
+      }
+      function resetAll() {
+        document.querySelectorAll('.calc-card input, .calc-card select').forEach(function (el) {
+          if (el.type === 'checkbox') el.checked = el.defaultChecked;
+          else if (el.tagName === 'SELECT') {
+            var i = 0;
+            Array.prototype.forEach.call(el.options, function (o, k) { if (o.defaultSelected) i = k; });
+            el.selectedIndex = i;
+          } else el.value = el.defaultValue;
+          el._unitMemo = null;
+          if (el.id) setErr(el.id, '');
+        });
+        labelUnits();
+        if (typeof onReset === 'function') onReset();
+        run();
+      }
+      var onReset = null;
+      function init(fn, title, resetHook) {
+        computeFn = fn; resultTitle = title; onReset = resetHook || null;
+        var card = document.querySelector('.calc-card');
+        $('units').addEventListener('change', function () { convertFields(metric()); labelUnits(); run(); });
+        card.addEventListener('input', function (e) { if (e.target.id !== 'units') schedule(); });
+        card.addEventListener('change', function (e) { if (e.target.id !== 'units' && e.target.tagName !== 'INPUT') run(); });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) { e.preventDefault(); run(); }
+        });
+        $('calc-btn').addEventListener('click', run);
+        $('reset-btn').addEventListener('click', resetAll);
+        $('copy-btn').addEventListener('click', function () {
+          var btn = this;
+          if (!lastText) return;
+          copyText(lastText).then(function () { flash(btn, 'Copied'); }, function () { flash(btn, 'Copy failed'); });
+        });
+        labelUnits();
+        run();
+      }
+      /* ===== end shared helpers ===== */
+
+      /* ===== math (pure; imperial base units) ===== */
+      // Round up to whole units, ignoring floating-point noise (e.g. 100 / 1 * 1.1 = 110.00000000000001).
+      function up(x) { return x <= 0 ? 0 : Math.max(1, Math.ceil(x - 1e-6)); }
+      // deckBoards() is shared word-for-word with the Lumber tab (deck mode) on construction-calculators.html.
+      function deckBoards(lengthFt, widthFt, boardWIn, gapIn, boardLenFt, wastePct) {
+        var rows = up(widthFt * 12 / (boardWIn + gapIn));
+        var perRow = up(lengthFt / boardLenFt);
+        return { rows: rows, perRow: perRow, boards: up(rows * perRow * (1 + wastePct / 100)) };
+      }
+      // 2021 IRC Table R507.6 deck joist spans, no cantilever, in inches (No. 2, wet service, 40 psf live + 10 psf dead,
+      // L/360; ground snow load <= 40 psf). Keys: species group -> size -> [12, 16, 24 in o.c.]. Checked 2026-11.
+      var SPANS = {
+        sp: { '2x6': [119, 108, 91], '2x8': [157, 142, 116], '2x10': [194, 168, 137], '2x12': [216, 198, 162] },
+        df: { '2x6': [114, 104, 86], '2x8': [150, 133, 109], '2x10': [188, 163, 133], '2x12': [216, 189, 154] },
+        rw: { '2x6': [106, 96, 84], '2x8': [140, 127, 104], '2x10': [179, 156, 127], '2x12': [209, 181, 148] }
+      };
+      function estimate(p) {
+        var d = deckBoards(p.lengthFt, p.widthFt, p.boardWIn, p.gapIn, p.boardLenFt, p.wastePct);
+        var joists = up(p.lengthFt * 12 / p.spacingIn) + 1;
+        var crossings = d.rows * joists;
+        var maxSpanIn = SPANS[p.species][p.joistSize][{ 12: 0, 16: 1, 24: 2 }[p.spacingIn]];
+        return {
+          rows: d.rows, perRow: d.perRow, boards: d.boards, joists: joists,
+          fasteners: p.fastener === 'screw' ? crossings * 2 : crossings,
+          areaSqFt: p.lengthFt * p.widthFt, maxSpanIn: maxSpanIn, spanOk: p.widthFt * 12 <= maxSpanIn + 0.05
+        };
+      }
+      function ftIn(inches) { var f = Math.floor(inches / 12), i = Math.round(inches - f * 12); if (i === 12) { f++; i = 0; } return f + ' ft ' + i + ' in'; }
+      /* ===== end math ===== */
+
+      function compute() {
+        var p = {
+          lengthFt: field('length', { gt: 0, max: 200, maxMsg: 'Over 200 ft; check the unit.' }),
+          widthFt: field('width', { gt: 0, max: 200, maxMsg: 'Over 200 ft; check the unit.' }),
+          boardWIn: field('boardW', { gt: 0, max: 24, maxMsg: 'Over 24 in; check the unit.' }),
+          gapIn: field('gap', { min: 0, max: 1, maxMsg: 'Gaps over 1 in are unusual; check the unit.' }),
+          boardLenFt: field('boardLen', { gt: 0, max: 40, maxMsg: 'Over 40 ft; check the unit.' }),
+          wastePct: field('waste', { min: 0, max: 100 }),
+          spacingIn: Number(sel('joistSpace')),
+          joistSize: sel('joistSize'),
+          species: sel('species'),
+          fastener: sel('fastener')
+        };
+        if (errors) return null;
+        var r = estimate(p), m = metric(), rows = [], notes = [];
+        rows.push(['Decking boards (incl. ' + pct(p.wastePct) + ' waste)', fmt(r.boards, 0) + ' ' + plural(r.boards, 'board') + ' × ' + lenFt(p.boardLenFt, m ? 2 : 0), 'teal']);
+        rows.push(['Layout', r.rows + ' ' + plural(r.rows, 'row') + ' × ' + r.perRow + ' ' + plural(r.perRow, 'board') + ' per row']);
+        rows.push(['Joists', r.joists + ' × ' + lenFt(p.widthFt, m ? 2 : 1) + ' at ' + (m ? fmt(p.spacingIn * 2.54, 1) + ' cm' : p.spacingIn + ' in') + ' on center', 'teal']);
+        rows.push([p.fastener === 'screw' ? 'Deck screws' : 'Hidden clips', 'about ' + fmt(r.fasteners, 0), 'violet']);
+        rows.push(['Deck area', area(r.areaSqFt)]);
+        var spanTxt = (m ? fmt(r.maxSpanIn * 2.54 / 100, 2) + ' m' : ftIn(r.maxSpanIn));
+        rows.push(['Joist span check (rough)', (r.spanOk ? 'Within ' : 'Over ') + 'the IRC table limit of ' + spanTxt + ' for ' + p.joistSize.replace('x', '×') + ' at ' + p.spacingIn + ' in', r.spanOk ? 'teal' : 'rose']);
+        if (!r.spanOk) notes.push('Try a deeper joist, closer spacing, or a beam partway across, then confirm with your local code or a deck builder.');
+        if (r.perRow > 1) notes.push('Boards in each row are butt-joined over a joist; stagger the joints and add a sister block where needed.');
+        notes.push('Rim and band joists, beams, posts, ledger hardware and joist hangers are not counted.');
+        return { rows: rows, notes: notes };
+      }
+      init(compute, 'Deck materials estimate');
     })();
   </script>
   <script defer src="../js/ads.js"></script>

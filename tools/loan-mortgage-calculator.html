@@ -468,6 +468,95 @@
       border-color: var(--teal);
       box-shadow: 0 0 8px var(--teal-dim);
     }
+
+    /* ── Quality pass (2026-11) ── */
+    .calc-card h1, .calc-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-results h2, .calc-results h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .calc-intro { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .calc-dedicated { margin: -0.5rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .calc-dedicated a { display: inline-block; padding: 0.6rem 0; color: var(--teal); text-decoration: none; }
+    .calc-dedicated a:hover { color: var(--text-bright); }
+    .calc-card [hidden] { display: none !important; }
+    .calc-btn, .calc-tab, .mode-toggle button { min-height: 44px; }
+    .calc-btn:disabled, .remove-debt:disabled { opacity: 0.4; cursor: not-allowed; }
+    .calc-btn--small { font-size: 0.65rem; padding: 0.5rem 1rem; }
+    .debt-row .remove-debt { width: 44px; height: 44px; }
+    .debt-row__title {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: -0.25rem;
+    }
+    .debt-row + .debt-row { border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .debt-add { margin-bottom: 1.25rem; }
+    .field-hint { font-size: 0.72rem; line-height: 1.4; color: var(--text-dim); }
+    .field-error { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4; color: var(--rose); }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group--wide { grid-column: 1 / -1; }
+    .check-row { display: flex; align-items: flex-start; gap: 0.65rem; }
+    .check-row input[type="checkbox"] { width: 20px; height: 20px; margin: 0.15rem 0 0; flex: 0 0 auto; accent-color: var(--teal); }
+    .form-group .check-row label { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0; text-transform: none; line-height: 1.5; color: var(--text-secondary); }
+    .calc-results { transition: opacity 0.2s ease; }
+    .calc-results.is-stale { opacity: 0.45; }
+    .result-row { gap: 1rem; }
+    .result-label { flex: 1 1 auto; min-width: 0; }
+    .result-value { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: break-word; }
+    .result-note { color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6; margin-top: 0.75rem; }
+    .result-note--warn { color: var(--amber); }
+    .payoff-order { margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.7; }
+    .growth-table-wrap, .table-scroll { overflow-x: auto; }
+    .growth-table th, .growth-table td, .bracket-table th, .bracket-table td { white-space: nowrap; }
+    .calc-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .calc-how summary {
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .calc-how p, .calc-how li { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .calc-how p { margin-top: 0.75rem; }
+    .calc-how ul { margin: 0.75rem 0 0 1.1rem; }
+    .calc-how li + li { margin-top: 0.5rem; }
+    .calc-how code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--teal); }
+    .calc-how strong { color: var(--text-primary); font-weight: 500; }
+    .calc-sources { font-size: 0.75rem !important; color: var(--text-dim) !important; }
+    .calc-note { color: var(--text-dim); font-size: 0.75rem; font-style: italic; margin-top: 1rem; line-height: 1.6; }
+    @media (max-width: 600px) {
+      .result-row { flex-wrap: wrap; }
+      .result-value { margin-left: auto; }
+      .calc-btn { flex: 1 1 auto; padding: 0.75rem 1rem; }
+      .calc-other { padding: 1.25rem; }
+      .growth-table th, .growth-table td { padding: 0.4rem 0.5rem; }
+      .debt-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+      .debt-row__title { grid-column: 1 / 3; grid-row: 1; align-self: center; margin: 0; }
+      .debt-row__remove { grid-column: 3; grid-row: 1; justify-self: end; }
+      .debt-row .form-group { grid-row: 2; }
+      .debt-row .form-group label { font-size: 0.6rem; letter-spacing: 0.06em; }
+      .debt-row .form-group input { padding: 0.65rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -498,96 +587,97 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="calc-standalone-wrap">
-      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Loan Mortgage Calculator</p>
-      <div class="calc-panel" id="panel-loan" role="tabpanel">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Loan &amp; Mortgage Calculator</p>
+      <div class="calc-panel" id="panel-loan">
         <div class="calc-card">
-          <h1 style="font-family:var(--font-display);font-size:1.6rem;font-weight:400;color:var(--text-bright);margin-bottom:0.75rem;">Mortgage Calculator</h1>
-          <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Full PITI + PMI + extra-payment calculator. Enter your home price and down payment (or a loan amount directly) and see the true monthly cost of ownership plus how much interest an extra monthly payment saves.</p>
+          <h1 id="h-loan">Mortgage Calculator</h1>
+          <p class="calc-intro">Principal, interest, property tax, insurance and PMI in one monthly figure, with a yearly amortization table and what an extra monthly payment saves. Enter a home price and down payment, or a loan amount directly.</p>
 
-          <p class="calc-subhead">Loan Basics</p>
+          <p class="calc-subhead">Loan basics</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ln-home-price">Home Price ($)</label>
-              <input type="number" id="ln-home-price" placeholder="400000" min="0" step="any" aria-describedby="ln-home-price-help">
-              <span id="ln-home-price-help" style="font-size:0.7rem;color:var(--text-dim);">Optional. Used for PMI + down-payment calc.</span>
+              <label for="ln-home-price">Home price ($)</label>
+              <input type="number" id="ln-home-price" value="400000" min="0" step="any" aria-describedby="ln-home-price-help">
+              <span class="field-hint" id="ln-home-price-help">Used for the down payment and PMI. Optional if you enter a loan amount.</span>
             </div>
             <div class="form-group">
-              <label for="ln-down-payment">Down Payment ($)</label>
-              <input type="number" id="ln-down-payment" placeholder="80000" min="0" step="any">
+              <label for="ln-down-payment">Down payment ($)</label>
+              <input type="number" id="ln-down-payment" value="40000" min="0" step="any" aria-describedby="ln-down-help">
+              <span class="field-hint" id="ln-down-help">&nbsp;</span>
             </div>
             <div class="form-group">
-              <label for="ln-amount">Loan Amount ($)</label>
-              <input type="number" id="ln-amount" placeholder="320000" min="0" step="any" aria-describedby="ln-amount-help">
-              <span id="ln-amount-help" style="font-size:0.7rem;color:var(--text-dim);">Auto-fills if you enter home price + down payment.</span>
+              <label for="ln-amount">Loan amount ($)</label>
+              <input type="number" id="ln-amount" placeholder="360000" min="0" step="any" aria-describedby="ln-amount-help">
+              <span class="field-hint" id="ln-amount-help">Leave blank to use home price minus down payment.</span>
             </div>
             <div class="form-group">
-              <label for="ln-rate">Interest Rate (% APR)</label>
-              <input type="number" id="ln-rate" placeholder="6.5" min="0" step="any">
+              <label for="ln-rate">Interest rate (% APR)</label>
+              <input type="number" id="ln-rate" value="6.5" min="0" max="30" step="any">
             </div>
             <div class="form-group">
-              <label for="ln-term">Term (Years)</label>
-              <input type="number" id="ln-term" placeholder="30" min="1" step="1">
+              <label for="ln-term">Term (years)</label>
+              <input type="number" id="ln-term" value="30" min="1" max="50" step="1">
             </div>
           </div>
 
-          <p class="calc-subhead">Taxes, Insurance &amp; PMI (Optional)</p>
+          <p class="calc-subhead">Taxes, insurance &amp; PMI (optional)</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ln-tax-annual">Property Tax ($/year)</label>
-              <input type="number" id="ln-tax-annual" placeholder="4800" min="0" step="any">
+              <label for="ln-tax-annual">Property tax ($/year)</label>
+              <input type="number" id="ln-tax-annual" value="4800" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="ln-ins-annual">Homeowners Insurance ($/year)</label>
-              <input type="number" id="ln-ins-annual" placeholder="1500" min="0" step="any">
+              <label for="ln-ins-annual">Home insurance ($/year)</label>
+              <input type="number" id="ln-ins-annual" value="1500" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="ln-pmi-rate">PMI Rate (%/year)</label>
-              <input type="number" id="ln-pmi-rate" placeholder="0.55" min="0" step="any" aria-describedby="ln-pmi-help">
-              <span id="ln-pmi-help" style="font-size:0.7rem;color:var(--text-dim);">Applied while loan balance &gt; 80% of home price. Set to 0 to disable.</span>
+              <label for="ln-pmi-rate">PMI rate (%/year)</label>
+              <input type="number" id="ln-pmi-rate" value="0.55" min="0" max="5" step="any" aria-describedby="ln-pmi-help">
+              <span class="field-hint" id="ln-pmi-help">Of the loan amount, charged while the balance is above 80% of the home price. 0 leaves it out.</span>
             </div>
           </div>
 
-          <p class="calc-subhead">Extra Payment (Optional)</p>
+          <p class="calc-subhead">Extra payment (optional)</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ln-extra">Extra Monthly Payment ($)</label>
-              <input type="number" id="ln-extra" placeholder="200" min="0" step="any" aria-describedby="ln-extra-help">
-              <span id="ln-extra-help" style="font-size:0.7rem;color:var(--text-dim);">Applied to principal every month. Shows months + interest saved.</span>
+              <label for="ln-extra">Extra principal ($/month)</label>
+              <input type="number" id="ln-extra" value="100" min="0" step="any" aria-describedby="ln-extra-help">
+              <span class="field-hint" id="ln-extra-help">Added to principal every month, starting with the first payment.</span>
             </div>
           </div>
 
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcMortgage()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearMortgage()">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="ln-error"></div>
-          <div class="calc-results" id="ln-results" aria-live="polite">
-            <h4>Monthly Payment (PITI + PMI)</h4>
-            <div id="ln-output-monthly"></div>
-            <p class="calc-subhead">Loan Totals</p>
+          <div class="calc-error" id="ln-error" role="alert"></div>
+          <div class="calc-results" id="ln-results">
+            <h2>Monthly payment</h2>
+            <div id="ln-output-monthly" aria-live="polite"></div>
+            <p class="calc-subhead">Loan totals</p>
             <div id="ln-output-totals"></div>
             <div id="ln-output-extra"></div>
-            <p class="calc-subhead">Amortization Summary (Yearly)</p>
-            <div class="growth-table-wrap" id="ln-table-wrap"></div>
+            <p class="calc-subhead">Amortization summary (yearly)</p>
+            <div class="growth-table-wrap" id="ln-table-wrap" tabindex="0" role="region" aria-label="Yearly amortization summary"></div>
           </div>
         </div>
 
         <!-- Supporting content for SEO + user education -->
         <section class="calc-card" style="margin-top:2rem;">
           <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this calculator works</h2>
-          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The monthly principal-and-interest payment comes from the standard amortization formula: <code style="font-family:var(--font-mono);color:var(--teal);">M = P &middot; r(1+r)<sup>n</sup> / ((1+r)<sup>n</sup> &minus; 1)</code>, where <em>P</em> is the loan amount, <em>r</em> is the monthly interest rate (APR / 12), and <em>n</em> is the total number of payments (years &times; 12). This is the same formula every US mortgage lender uses.</p>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The monthly principal-and-interest payment uses the standard formula for a fixed-rate loan: <code style="font-family:var(--font-mono);color:var(--teal);">M = P &middot; r(1+r)<sup>n</sup> / ((1+r)<sup>n</sup> &minus; 1)</code>, where <em>P</em> is the loan amount, <em>r</em> is the monthly rate (APR &divide; 12), and <em>n</em> is the number of payments (years &times; 12). As on a lender's schedule, the payment and each month's interest are rounded to the cent, and the last payment is adjusted so the balance ends at exactly $0.</p>
 
           <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What is PITI?</h3>
-          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">PITI stands for <strong>P</strong>rincipal, <strong>I</strong>nterest, <strong>T</strong>axes, and <strong>I</strong>nsurance &mdash; the four components of a typical monthly mortgage payment when your lender collects taxes and insurance in escrow. Property tax and homeowners insurance are annualized amounts divided by 12 and added to your monthly principal-and-interest payment. Most lenders qualify you against your total PITI, not just P&amp;I.</p>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">PITI stands for <strong>P</strong>rincipal, <strong>I</strong>nterest, <strong>T</strong>axes, and <strong>I</strong>nsurance, the four parts of a typical monthly mortgage payment when your lender collects taxes and insurance in escrow. Yearly property tax and homeowners insurance are divided by 12 and added to principal and interest. Lenders usually qualify you against the full PITI, not just P&amp;I.</p>
 
           <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What is PMI?</h3>
-          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Private Mortgage Insurance protects the lender when you borrow more than 80% of the home&apos;s value (i.e., you put less than 20% down). PMI is typically 0.3% to 1.5% of the original loan amount per year, paid monthly. Federal law generally requires lenders to cancel PMI automatically once your loan balance reaches 78% of the original home price, or on request at 80%. This calculator drops PMI once the amortized balance crosses the 80% threshold.</p>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Private mortgage insurance protects the lender when you borrow more than 80% of the home&apos;s value (less than 20% down). It typically costs about 0.3% to 1.5% of the original loan a year, paid monthly. Under the Homeowners Protection Act you can ask the lender to cancel it once the balance reaches 80% of the home&apos;s original value, and it ends automatically at 78% on the original schedule. This calculator charges PMI on each payment while the balance at the start of that month is above 80% of the home price, as if you ask for cancellation as soon as you can.</p>
 
-          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Do extra payments really help?</h3>
-          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">On a 30-year fixed mortgage at typical rates, an extra $100&ndash;$200 per month applied to principal can shave several years off the term and tens of thousands off total interest &mdash; because interest is charged on the remaining balance, so faster principal reduction compounds. This calculator shows exactly how many months you save and how much interest disappears at whatever extra amount you enter.</p>
+          <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Do extra payments help?</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Usually, yes. Interest is charged on the remaining balance, so every extra dollar of principal stops accruing interest from then on. On a 30-year loan even $100&ndash;$200 a month tends to take years off the term. The results show the time, interest and PMI saved for the amount you enter; check that your lender applies extra payments to principal and charges no prepayment penalty.</p>
 
           <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not include</h3>
-          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">HOA fees, closing costs, points, adjustable-rate resets, prepayment penalties, escrow shortages, and lender-specific fees are not modeled. The output is a clean baseline; a real Loan Estimate from a lender will differ. This is a planning tool, not a quote.</p>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">HOA fees, closing costs, points, adjustable-rate resets, prepayment penalties, escrow shortages, rising tax or insurance bills, and lender-specific fees are not modeled. The output is a clean baseline; a real Loan Estimate from a lender will differ. A planning tool, not a quote.</p>
         </section>
       </div>
     </div>
@@ -598,11 +688,11 @@
       <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest Calculator</a>
       <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff Calculator</a>
       <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal Calculator</a>
-      <a href="roi-calculator.html" class="calc-other__link">Roi Calculator</a>
+      <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
       <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax Calculator</a>
-      <a href="fire-calculator.html" class="calc-other__link">Fire Calculator</a>
+      <a href="fire-calculator.html" class="calc-other__link">FIRE Calculator</a>
       <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle Calculator</a>
-      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto Dca Calculator</a>
+      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA Calculator</a>
     </div>
   </aside>
 
@@ -631,197 +721,111 @@
   <script src="../js/player.js"></script>
   <script src="financial-calculators-core.js"></script>
   <script>
-    /* Enhanced mortgage calc — PITI + PMI + extra payments.
-       Overrides the basic calcLoan() from the shared core JS on this page only. */
+    /* Mortgage page: PITI + PMI + extra payments, built on the shared
+       FinCalc amortization (cent-exact, last payment adjusted). */
     (function () {
-      function n(id) {
-        const el = document.getElementById(id);
-        if (!el || el.value === '') return null;
-        const v = parseFloat(el.value);
-        return isNaN(v) ? null : v;
-      }
-      function fmtMoney(x) {
-        if (!isFinite(x)) return '$0.00';
-        return '$' + x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
-      function fmtInt(x) { return Math.round(x).toLocaleString('en-US'); }
-      function showErr(msg) {
-        const e = document.getElementById('ln-error');
-        e.textContent = msg;
-        e.classList.add('visible');
-        document.getElementById('ln-results').classList.remove('visible');
-      }
-      function hideErr() {
-        document.getElementById('ln-error').classList.remove('visible');
-      }
-      function row(label, value, cls) {
-        cls = cls ? ' result-value--' + cls : '';
-        return '<div class="result-row"><span class="result-label">' + label + '</span>' +
-               '<span class="result-value' + cls + '">' + value + '</span></div>';
-      }
+      var FC = window.FinCalc, D = FC.dom, M = FC.math;
+      function $(id) { return document.getElementById(id); }
+      var row = D.row;
 
-      /* Standard amortization: monthly P&I */
-      function monthlyPI(P, rMonthly, n) {
-        if (rMonthly === 0) return P / n;
-        return P * (rMonthly * Math.pow(1 + rMonthly, n)) / (Math.pow(1 + rMonthly, n) - 1);
-      }
+      function run(quiet) {
+        D.hidePanelError('ln-error');
+        var v = D.readFields({
+          'ln-home-price': { key: 'price', min: 0, max: 1e9, optional: true },
+          'ln-down-payment': { key: 'down', min: 0, max: 1e9, optional: true },
+          'ln-amount': { key: 'loan', gt: 0, max: 1e8, optional: true, msg: 'Enter a loan amount above $0, up to $100 million, or leave it blank.' },
+          'ln-rate': { key: 'rate', min: 0, max: 30, msg: 'Enter a rate from 0 to 30%.' },
+          'ln-term': { key: 'years', gt: 0, max: 50, msg: 'Enter a term up to 50 years.' },
+          'ln-tax-annual': { key: 'tax', min: 0, max: 1e7, def: 0 },
+          'ln-ins-annual': { key: 'ins', min: 0, max: 1e7, def: 0 },
+          'ln-pmi-rate': { key: 'pmiRate', min: 0, max: 5, def: 0, msg: 'Enter 0 to 5%.' },
+          'ln-extra': { key: 'extra', min: 0, max: 1e7, def: 0 }
+        }, quiet);
+        if (!v) return D.failResults('ln-results', quiet);
 
-      /* Amortize with optional extra monthly payment and optional PMI.
-         Returns totals + a per-year summary.
-         pmiMonthlyBase = monthly PMI when active; homePriceForPmiDropoff = null to disable PMI drop-off. */
-      function amortize(P, rMonthly, nMonths, monthlyPay, extraMonthly, pmiMonthlyBase, pmi80Threshold) {
-        let balance = P;
-        let totalInterest = 0;
-        let totalPmi = 0;
-        let months = 0;
-        const yearly = [];
-        let yearP = 0, yearI = 0, yearPmi = 0;
+        var derived = v.price != null && v.down != null ? v.price - v.down : null;
+        $('ln-down-help').innerHTML = v.price && v.down != null && v.down <= v.price
+          ? FC.pct(v.down / v.price * 100, 1) + ' of the home price' : '&nbsp;';
+        $('ln-amount-help').textContent = derived != null && derived > 0
+          ? 'Leave blank to use price minus down payment (' + FC.money0(derived) + ').'
+          : 'Leave blank to use home price minus down payment.';
+        $('ln-amount').placeholder = derived != null && derived > 0 ? String(Math.round(derived)) : '360000';
 
-        while (balance > 0.005 && months < nMonths) {
-          const intPmt = balance * rMonthly;
-          let prinPmt = monthlyPay - intPmt;
-          if (prinPmt < 0) prinPmt = 0; // negative-amortization guard
-          const extra = extraMonthly || 0;
-          const totalPrin = Math.min(balance, prinPmt + extra);
-
-          balance -= totalPrin;
-          totalInterest += intPmt;
-          yearI += intPmt;
-          yearP += totalPrin;
-
-          const pmiActive = pmi80Threshold !== null && balance > pmi80Threshold;
-          const pmiThisMonth = pmiActive ? pmiMonthlyBase : 0;
-          totalPmi += pmiThisMonth;
-          yearPmi += pmiThisMonth;
-
-          months++;
-          if (months % 12 === 0 || balance < 0.005) {
-            yearly.push({
-              year: Math.ceil(months / 12),
-              principal: yearP,
-              interest: yearI,
-              pmi: yearPmi,
-              balance: balance < 0.005 ? 0 : balance,
-            });
-            yearP = 0; yearI = 0; yearPmi = 0;
-          }
+        if (v.price != null && v.down != null && v.down > v.price) {
+          if (!quiet) D.setFieldError($('ln-down-payment'), 'The down payment is more than the home price.');
+          return D.failResults('ln-results', quiet);
         }
-        return { totalInterest, totalPmi, months, yearly };
-      }
-
-      window.calcMortgage = function () {
-        hideErr();
-        let homePrice = n('ln-home-price');
-        const downPayment = n('ln-down-payment');
-        let loanAmt = n('ln-amount');
-        const rate = n('ln-rate');
-        const years = n('ln-term');
-        const taxAnnual = n('ln-tax-annual') || 0;
-        const insAnnual = n('ln-ins-annual') || 0;
-        const pmiRate = n('ln-pmi-rate') || 0;
-        const extra = n('ln-extra') || 0;
-
-        // Auto-derive loan amount if user gave home price + down payment
-        if (loanAmt === null && homePrice !== null && downPayment !== null) {
-          loanAmt = Math.max(0, homePrice - downPayment);
+        var loan = v.loan != null ? v.loan : derived;
+        if (loan == null || loan <= 0) {
+          if (!quiet) D.showPanelError('ln-error', 'Enter a home price and down payment, or a loan amount.');
+          return D.failResults('ln-results', quiet);
         }
-        // Auto-derive home price if user gave loan amount + down payment
-        if (homePrice === null && loanAmt !== null && downPayment !== null) {
-          homePrice = loanAmt + downPayment;
+        var price = v.price != null && v.price > 0 ? v.price : (v.down != null ? loan + v.down : null);
+        var months = Math.max(1, Math.round(v.years * 12));
+
+        /* PMI only with a known price, LTV above 80% and a rate above 0. */
+        var pmiMonthly = 0, pmiAbove = null;
+        if (price && v.pmiRate > 0 && loan / price > 0.80) {
+          pmiMonthly = Math.round(v.pmiRate / 100 * loan / 12 * 100) / 100;
+          pmiAbove = price * 0.80;
         }
-
-        if (loanAmt === null || loanAmt <= 0) return showErr('Enter a loan amount, or a home price + down payment.');
-        if (rate === null || rate < 0) return showErr('Enter a valid interest rate.');
-        if (years === null || years <= 0) return showErr('Enter a valid term in years.');
-
-        const rMonthly = (rate / 100) / 12;
-        const nMonths = Math.round(years * 12);
-        const piMonthly = monthlyPI(loanAmt, rMonthly, nMonths);
-
-        // PMI logic: only if home price known + LTV > 80% + rate > 0
-        let pmiMonthly = 0;
-        let pmi80Threshold = null;
-        if (homePrice && homePrice > 0 && pmiRate > 0 && loanAmt / homePrice > 0.80) {
-          pmiMonthly = (pmiRate / 100) * loanAmt / 12;
-          pmi80Threshold = homePrice * 0.80;
-        }
-
-        const taxMonthly = taxAnnual / 12;
-        const insMonthly = insAnnual / 12;
-        const totalMonthly = piMonthly + taxMonthly + insMonthly + pmiMonthly;
-
-        /* Monthly breakdown */
-        let monthlyHtml = '';
-        monthlyHtml += row('Principal &amp; Interest', fmtMoney(piMonthly), 'teal');
-        if (taxMonthly > 0) monthlyHtml += row('Property Tax', fmtMoney(taxMonthly));
-        if (insMonthly > 0) monthlyHtml += row('Homeowners Insurance', fmtMoney(insMonthly));
-        if (pmiMonthly > 0) monthlyHtml += row('PMI (until 80% LTV)', fmtMoney(pmiMonthly), 'amber');
-        monthlyHtml += row('<strong>Total Monthly Payment</strong>', '<strong>' + fmtMoney(totalMonthly) + '</strong>', 'violet');
-        document.getElementById('ln-output-monthly').innerHTML = monthlyHtml;
-
-        /* Amortize baseline (no extra) */
-        const base = amortize(loanAmt, rMonthly, nMonths, piMonthly, 0, pmiMonthly, pmi80Threshold);
-        const baseTotalPaid = piMonthly * base.months + base.totalPmi + (taxMonthly + insMonthly) * base.months;
-
-        /* Amortize with extra payment */
-        const withExtra = extra > 0
-          ? amortize(loanAmt, rMonthly, nMonths, piMonthly, extra, pmiMonthly, pmi80Threshold)
+        var base = M.amortize(loan, v.rate, months, { pmiMonthly: pmiMonthly, pmiAbove: pmiAbove });
+        var plan = v.extra > 0
+          ? M.amortize(loan, v.rate, months, { pmiMonthly: pmiMonthly, pmiAbove: pmiAbove, extra: v.extra })
           : base;
+        var taxM = v.tax / 12, insM = v.ins / 12;
+        var pmiMonths = 0;
+        plan.rows.forEach(function (r) { if (r.pmi > 0) pmiMonths++; });
+        var firstMonth = base.payment + taxM + insM + (pmiMonths > 0 ? pmiMonthly : 0);
 
-        const totalPaidLifetime = piMonthly * withExtra.months + withExtra.totalPmi + (taxMonthly + insMonthly) * withExtra.months + extra * withExtra.months;
+        var html = row('Principal &amp; interest', FC.money(base.payment), 'teal');
+        if (taxM > 0) html += row('Property tax', FC.money(taxM));
+        if (insM > 0) html += row('Homeowners insurance', FC.money(insM));
+        if (pmiMonths > 0) html += row('PMI (first ' + FC.num(pmiMonths) + ' payments)', FC.money(pmiMonthly), 'amber');
+        html += row('<strong>Total monthly payment</strong>', '<strong>' + FC.money(firstMonth) + '</strong>', 'violet');
+        if (v.extra > 0) html += row('With your extra principal', FC.money(firstMonth + v.extra), 'violet');
+        if (pmiMonths > 0) html += row('After PMI ends' + (v.extra > 0 ? ' (with extra)' : ''), FC.money(firstMonth - pmiMonthly + v.extra));
+        $('ln-output-monthly').innerHTML = html;
 
-        /* Totals block */
-        let totalsHtml = '';
-        totalsHtml += row('Loan Amount', fmtMoney(loanAmt));
-        if (homePrice) {
-          const ltv = ((loanAmt / homePrice) * 100).toFixed(1);
-          totalsHtml += row('Home Price', fmtMoney(homePrice));
-          totalsHtml += row('Loan-to-Value (LTV)', ltv + '%', ltv > 80 ? 'amber' : 'teal');
+        var t = row('Loan amount', FC.money(loan));
+        if (price) {
+          var ltv = loan / price * 100;
+          t += row('Home price', FC.money(price)) + row('Loan-to-value (LTV)', FC.pct(ltv, 1), ltv > 80 ? 'amber' : 'teal');
         }
-        totalsHtml += row('Total Interest Paid', fmtMoney(withExtra.totalInterest), 'rose');
-        if (withExtra.totalPmi > 0) totalsHtml += row('Total PMI Paid', fmtMoney(withExtra.totalPmi), 'amber');
-        totalsHtml += row('Payoff Time', Math.floor(withExtra.months / 12) + ' yrs ' + (withExtra.months % 12) + ' mo');
-        totalsHtml += row('Total of All Payments', fmtMoney(totalPaidLifetime));
-        document.getElementById('ln-output-totals').innerHTML = totalsHtml;
+        t += row('Payoff time', FC.duration(plan.months) + ' (' + FC.num(plan.months) + ' payments)');
+        var lastRegular = plan.payment + v.extra;
+        if (plan.months > 1 && Math.abs(plan.finalPayment - lastRegular) >= 0.01) t += row('Final payment (adjusted to clear the balance)', FC.money(plan.finalPayment));
+        t += row('Total interest', FC.money(plan.totalInterest), 'rose');
+        if (plan.totalPmi > 0) t += row('Total PMI', FC.money(plan.totalPmi), 'amber');
+        t += row('Principal + interest paid', FC.money(plan.totalPaid));
+        if (taxM + insM > 0) t += row('Tax + insurance while the loan is open', FC.money((taxM + insM) * plan.months));
+        t += row('Total of all payments', FC.money(plan.totalPaid + plan.totalPmi + (taxM + insM) * plan.months));
+        $('ln-output-totals').innerHTML = t;
 
-        /* Extra payment savings */
-        const extraHtml = document.getElementById('ln-output-extra');
-        if (extra > 0 && base.months > withExtra.months) {
-          const monthsSaved = base.months - withExtra.months;
-          const interestSaved = base.totalInterest - withExtra.totalInterest;
-          let e = '<p class="calc-subhead">Extra Payment Impact</p>';
-          e += row('Extra Payment Per Month', fmtMoney(extra), 'violet');
-          e += row('Months Saved', fmtInt(monthsSaved) + ' months (' + (monthsSaved / 12).toFixed(1) + ' yrs)', 'teal');
-          e += row('Interest Saved', fmtMoney(interestSaved), 'teal');
-          extraHtml.innerHTML = e;
-        } else {
-          extraHtml.innerHTML = '';
+        var e = '';
+        if (v.extra > 0 && base.months > plan.months) {
+          e = '<p class="calc-subhead">Extra payment impact</p>' +
+            row('Extra principal per month', FC.money(v.extra), 'violet') +
+            row('Time saved', FC.duration(base.months - plan.months), 'teal') +
+            row('Interest saved', FC.money(base.totalInterest - plan.totalInterest), 'teal');
+          if (base.totalPmi > plan.totalPmi) e += row('PMI saved', FC.money(base.totalPmi - plan.totalPmi), 'teal');
         }
+        $('ln-output-extra').innerHTML = e;
 
-        /* Yearly table */
-        let tbl = '<table class="growth-table"><thead><tr><th>Year</th><th>Principal</th><th>Interest</th>';
-        if (withExtra.totalPmi > 0) tbl += '<th>PMI</th>';
-        tbl += '<th>Balance</th></tr></thead><tbody>';
-        for (const y of withExtra.yearly) {
-          tbl += '<tr><td>' + y.year + '</td><td>' + fmtMoney(y.principal) + '</td><td>' + fmtMoney(y.interest) + '</td>';
-          if (withExtra.totalPmi > 0) tbl += '<td>' + fmtMoney(y.pmi) + '</td>';
-          tbl += '<td>' + fmtMoney(y.balance) + '</td></tr>';
-        }
-        tbl += '</tbody></table>';
-        document.getElementById('ln-table-wrap').innerHTML = tbl;
-
-        document.getElementById('ln-results').classList.add('visible');
-      };
-
-      window.clearMortgage = function () {
-        ['ln-home-price','ln-down-payment','ln-amount','ln-rate','ln-term',
-         'ln-tax-annual','ln-ins-annual','ln-pmi-rate','ln-extra'].forEach(function (id) {
-          const el = document.getElementById(id);
-          if (el) el.value = '';
-        });
-        hideErr();
-        document.getElementById('ln-results').classList.remove('visible');
-      };
+        var hasPmi = plan.totalPmi > 0;
+        var head = ['Year', 'Principal', 'Interest'];
+        if (hasPmi) head.push('PMI');
+        head.push('Balance');
+        $('ln-table-wrap').innerHTML = D.table(head, M.byYear(plan.rows).map(function (y) {
+          var cells = [y.year, FC.money(y.principal), FC.money(y.interest)];
+          if (hasPmi) cells.push(FC.money(y.pmi));
+          cells.push(FC.money(y.balance));
+          return cells;
+        }));
+        D.showResults('ln-results');
+        return true;
+      }
+      D.wire($('panel-loan'), run);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

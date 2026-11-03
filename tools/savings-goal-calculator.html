@@ -468,6 +468,95 @@
       border-color: var(--teal);
       box-shadow: 0 0 8px var(--teal-dim);
     }
+
+    /* ── Quality pass (2026-11) ── */
+    .calc-card h1, .calc-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-results h2, .calc-results h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .calc-intro { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .calc-dedicated { margin: -0.5rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .calc-dedicated a { display: inline-block; padding: 0.6rem 0; color: var(--teal); text-decoration: none; }
+    .calc-dedicated a:hover { color: var(--text-bright); }
+    .calc-card [hidden] { display: none !important; }
+    .calc-btn, .calc-tab, .mode-toggle button { min-height: 44px; }
+    .calc-btn:disabled, .remove-debt:disabled { opacity: 0.4; cursor: not-allowed; }
+    .calc-btn--small { font-size: 0.65rem; padding: 0.5rem 1rem; }
+    .debt-row .remove-debt { width: 44px; height: 44px; }
+    .debt-row__title {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: -0.25rem;
+    }
+    .debt-row + .debt-row { border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .debt-add { margin-bottom: 1.25rem; }
+    .field-hint { font-size: 0.72rem; line-height: 1.4; color: var(--text-dim); }
+    .field-error { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4; color: var(--rose); }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group--wide { grid-column: 1 / -1; }
+    .check-row { display: flex; align-items: flex-start; gap: 0.65rem; }
+    .check-row input[type="checkbox"] { width: 20px; height: 20px; margin: 0.15rem 0 0; flex: 0 0 auto; accent-color: var(--teal); }
+    .form-group .check-row label { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0; text-transform: none; line-height: 1.5; color: var(--text-secondary); }
+    .calc-results { transition: opacity 0.2s ease; }
+    .calc-results.is-stale { opacity: 0.45; }
+    .result-row { gap: 1rem; }
+    .result-label { flex: 1 1 auto; min-width: 0; }
+    .result-value { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: break-word; }
+    .result-note { color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6; margin-top: 0.75rem; }
+    .result-note--warn { color: var(--amber); }
+    .payoff-order { margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.7; }
+    .growth-table-wrap, .table-scroll { overflow-x: auto; }
+    .growth-table th, .growth-table td, .bracket-table th, .bracket-table td { white-space: nowrap; }
+    .calc-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .calc-how summary {
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .calc-how p, .calc-how li { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .calc-how p { margin-top: 0.75rem; }
+    .calc-how ul { margin: 0.75rem 0 0 1.1rem; }
+    .calc-how li + li { margin-top: 0.5rem; }
+    .calc-how code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--teal); }
+    .calc-how strong { color: var(--text-primary); font-weight: 500; }
+    .calc-sources { font-size: 0.75rem !important; color: var(--text-dim) !important; }
+    .calc-note { color: var(--text-dim); font-size: 0.75rem; font-style: italic; margin-top: 1rem; line-height: 1.6; }
+    @media (max-width: 600px) {
+      .result-row { flex-wrap: wrap; }
+      .result-value { margin-left: auto; }
+      .calc-btn { flex: 1 1 auto; padding: 0.75rem 1rem; }
+      .calc-other { padding: 1.25rem; }
+      .growth-table th, .growth-table td { padding: 0.4rem 0.5rem; }
+      .debt-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+      .debt-row__title { grid-column: 1 / 3; grid-row: 1; align-self: center; margin: 0; }
+      .debt-row__remove { grid-column: 3; grid-row: 1; justify-self: end; }
+      .debt-row .form-group { grid-row: 2; }
+      .debt-row .form-group label { font-size: 0.6rem; letter-spacing: 0.06em; }
+      .debt-row .form-group input { padding: 0.65rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -499,40 +588,50 @@
 
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Savings Goal Calculator</p>
-      <div class="calc-panel" id="panel-savings" role="tabpanel">
+      <div class="calc-panel" id="panel-savings">
         <div class="calc-card">
-          <h3>Savings Goal Calculator</h3>
-          <div class="mode-toggle" id="sav-mode-toggle">
-            <button class="active" data-mode="goal" onclick="switchSavMode('goal')">Find Monthly Contribution</button>
-            <button data-mode="final" onclick="switchSavMode('final')">Find Final Amount</button>
+          <h1 id="h-savings">Savings Goal Calculator</h1>
+          <p class="calc-intro">Work out the monthly amount that reaches a goal by a date, or what a steady monthly amount grows to. Count what you've already saved.</p>
+          <div class="mode-toggle" id="sav-mode-toggle" role="group" aria-label="What to calculate">
+            <button type="button" class="active" data-mode="goal" aria-pressed="true">Monthly amount needed</button>
+            <button type="button" data-mode="final" aria-pressed="false">What I'll end up with</button>
           </div>
           <div class="form-grid">
             <div class="form-group" id="sav-target-group">
-              <label for="sav-target">Target Amount ($)</label>
-              <input type="number" id="sav-target" placeholder="50000" min="0" step="any">
+              <label for="sav-target">Savings goal ($)</label>
+              <input type="number" id="sav-target" value="30000" min="0" step="any">
             </div>
-            <div class="form-group" id="sav-contrib-group" style="display:none;">
-              <label for="sav-contrib">Monthly Contribution ($)</label>
-              <input type="number" id="sav-contrib" placeholder="500" min="0" step="any">
-            </div>
-            <div class="form-group">
-              <label for="sav-time">Timeline (Years)</label>
-              <input type="number" id="sav-time" placeholder="10" min="0" step="any">
+            <div class="form-group" id="sav-contrib-group" hidden>
+              <label for="sav-contrib">Monthly contribution ($)</label>
+              <input type="number" id="sav-contrib" value="500" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="sav-rate">Annual Return (%)</label>
-              <input type="number" id="sav-rate" placeholder="7" min="0" step="any">
+              <label for="sav-start">Already saved ($)</label>
+              <input type="number" id="sav-start" value="2000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-time">Timeline (years)</label>
+              <input type="number" id="sav-time" value="5" min="0" max="100" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-rate">Annual return (%)</label>
+              <input type="number" id="sav-rate" value="4" min="0" max="100" step="any">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcSavings()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('savings')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="sav-error"></div>
+          <div class="calc-error" id="sav-error" role="alert"></div>
           <div class="calc-results" id="sav-results">
-            <h4>Results</h4>
-            <div id="sav-output"></div>
+            <h2>Results</h2>
+            <div id="sav-output" aria-live="polite"></div>
           </div>
+          <details class="calc-how" open>
+            <summary>How it works</summary>
+            <p>Deposits go in at the end of each month and the balance compounds monthly at the annual return &divide; 12. To reach a goal G in m months with s already saved, the monthly amount is <code>(G &minus; s(1 + i)<sup>m</sup>) &middot; i / ((1 + i)<sup>m</sup> &minus; 1)</code>, where i is the monthly rate; at 0% it is what's left divided by the months.</p>
+            <p>A savings account, a bond fund and a stock fund behave very differently over five years, so treat the steady return as a planning assumption. Taxes, fees and inflation are not included; if the goal is a future price, such as a house deposit or tuition, raise the target to allow for inflation.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -541,13 +640,13 @@
     <p class="calc-other__title">Also Available &mdash; 8 Other Calculators</p>
     <div class="calc-other__grid">
       <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest Calculator</a>
-      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan Mortgage Calculator</a>
+      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan &amp; Mortgage Calculator</a>
       <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff Calculator</a>
-      <a href="roi-calculator.html" class="calc-other__link">Roi Calculator</a>
+      <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
       <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax Calculator</a>
-      <a href="fire-calculator.html" class="calc-other__link">Fire Calculator</a>
+      <a href="fire-calculator.html" class="calc-other__link">FIRE Calculator</a>
       <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle Calculator</a>
-      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto Dca Calculator</a>
+      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA Calculator</a>
     </div>
   </aside>
 

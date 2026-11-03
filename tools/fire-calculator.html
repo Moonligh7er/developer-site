@@ -468,6 +468,95 @@
       border-color: var(--teal);
       box-shadow: 0 0 8px var(--teal-dim);
     }
+
+    /* ── Quality pass (2026-11) ── */
+    .calc-card h1, .calc-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-results h2, .calc-results h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .calc-intro { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .calc-dedicated { margin: -0.5rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .calc-dedicated a { display: inline-block; padding: 0.6rem 0; color: var(--teal); text-decoration: none; }
+    .calc-dedicated a:hover { color: var(--text-bright); }
+    .calc-card [hidden] { display: none !important; }
+    .calc-btn, .calc-tab, .mode-toggle button { min-height: 44px; }
+    .calc-btn:disabled, .remove-debt:disabled { opacity: 0.4; cursor: not-allowed; }
+    .calc-btn--small { font-size: 0.65rem; padding: 0.5rem 1rem; }
+    .debt-row .remove-debt { width: 44px; height: 44px; }
+    .debt-row__title {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: -0.25rem;
+    }
+    .debt-row + .debt-row { border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .debt-add { margin-bottom: 1.25rem; }
+    .field-hint { font-size: 0.72rem; line-height: 1.4; color: var(--text-dim); }
+    .field-error { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4; color: var(--rose); }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group--wide { grid-column: 1 / -1; }
+    .check-row { display: flex; align-items: flex-start; gap: 0.65rem; }
+    .check-row input[type="checkbox"] { width: 20px; height: 20px; margin: 0.15rem 0 0; flex: 0 0 auto; accent-color: var(--teal); }
+    .form-group .check-row label { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0; text-transform: none; line-height: 1.5; color: var(--text-secondary); }
+    .calc-results { transition: opacity 0.2s ease; }
+    .calc-results.is-stale { opacity: 0.45; }
+    .result-row { gap: 1rem; }
+    .result-label { flex: 1 1 auto; min-width: 0; }
+    .result-value { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: break-word; }
+    .result-note { color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6; margin-top: 0.75rem; }
+    .result-note--warn { color: var(--amber); }
+    .payoff-order { margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.7; }
+    .growth-table-wrap, .table-scroll { overflow-x: auto; }
+    .growth-table th, .growth-table td, .bracket-table th, .bracket-table td { white-space: nowrap; }
+    .calc-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .calc-how summary {
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .calc-how p, .calc-how li { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .calc-how p { margin-top: 0.75rem; }
+    .calc-how ul { margin: 0.75rem 0 0 1.1rem; }
+    .calc-how li + li { margin-top: 0.5rem; }
+    .calc-how code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--teal); }
+    .calc-how strong { color: var(--text-primary); font-weight: 500; }
+    .calc-sources { font-size: 0.75rem !important; color: var(--text-dim) !important; }
+    .calc-note { color: var(--text-dim); font-size: 0.75rem; font-style: italic; margin-top: 1rem; line-height: 1.6; }
+    @media (max-width: 600px) {
+      .result-row { flex-wrap: wrap; }
+      .result-value { margin-left: auto; }
+      .calc-btn { flex: 1 1 auto; padding: 0.75rem 1rem; }
+      .calc-other { padding: 1.25rem; }
+      .growth-table th, .growth-table td { padding: 0.4rem 0.5rem; }
+      .debt-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+      .debt-row__title { grid-column: 1 / 3; grid-row: 1; align-self: center; margin: 0; }
+      .debt-row__remove { grid-column: 3; grid-row: 1; justify-self: end; }
+      .debt-row .form-group { grid-row: 2; }
+      .debt-row .form-group label { font-size: 0.6rem; letter-spacing: 0.06em; }
+      .debt-row .form-group input { padding: 0.65rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -498,48 +587,65 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="calc-standalone-wrap">
-      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Fire Calculator</p>
-      <div class="calc-panel" id="panel-fire" role="tabpanel">
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; FIRE Calculator</p>
+      <div class="calc-panel" id="panel-fire">
         <div class="calc-card">
-          <h3>FIRE Calculator (Financial Independence)</h3>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Calculate your FI number, years to financial independence, and the four withdrawal tiers (Lean, Regular, Fat, Coast FIRE).</p>
+          <h1 id="h-fire">FIRE Calculator (Financial Independence)</h1>
+          <p class="calc-intro">Your FI number, how long until you reach it, and the Lean, Fat and Coast variants. Everything is shown in today's dollars, using your return minus inflation.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="fire-expenses">Annual Expenses ($)</label>
-              <input type="number" id="fire-expenses" placeholder="40000" min="0" step="any">
+              <label for="fire-expenses">Spending per year ($)</label>
+              <input type="number" id="fire-expenses" value="40000" min="0" step="any" aria-describedby="fire-expenses-hint">
+              <span class="field-hint" id="fire-expenses-hint">In retirement, in today's dollars.</span>
             </div>
             <div class="form-group">
-              <label for="fire-rate">Safe Withdrawal Rate (%)</label>
-              <input type="number" id="fire-rate" placeholder="4" min="0.5" max="10" step="any" value="4">
+              <label for="fire-rate">Safe withdrawal rate (%)</label>
+              <input type="number" id="fire-rate" value="4" min="0.5" max="20" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-current">Current Net Worth ($)</label>
-              <input type="number" id="fire-current" placeholder="50000" min="0" step="any">
+              <label for="fire-current">Invested today ($)</label>
+              <input type="number" id="fire-current" value="50000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-contrib">Annual Savings ($)</label>
-              <input type="number" id="fire-contrib" placeholder="30000" min="0" step="any">
+              <label for="fire-contrib">Savings per year ($)</label>
+              <input type="number" id="fire-contrib" value="30000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-return">Expected Return (%)</label>
-              <input type="number" id="fire-return" placeholder="7" min="0" step="any" value="7">
+              <label for="fire-return">Expected return (%/yr)</label>
+              <input type="number" id="fire-return" value="7" min="-50" max="50" step="any" aria-describedby="fire-return-hint">
+              <span class="field-hint" id="fire-return-hint">Before inflation.</span>
             </div>
             <div class="form-group">
-              <label for="fire-age">Current Age</label>
-              <input type="number" id="fire-age" placeholder="30" min="0" max="100" step="1">
+              <label for="fire-inflation">Inflation (%/yr)</label>
+              <input type="number" id="fire-inflation" value="3" min="-10" max="30" step="any" aria-describedby="fire-inflation-hint">
+              <span class="field-hint" id="fire-inflation-hint">Set to 0 if your return above is already after inflation.</span>
+            </div>
+            <div class="form-group">
+              <label for="fire-age">Current age (optional)</label>
+              <input type="number" id="fire-age" value="30" min="0" max="120" step="1">
+            </div>
+            <div class="form-group">
+              <label for="fire-coast-age">Coast FI target age</label>
+              <input type="number" id="fire-coast-age" value="65" min="0" max="120" step="1">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcFIRE()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('fire')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="fire-error"></div>
+          <div class="calc-error" id="fire-error" role="alert"></div>
           <div class="calc-results" id="fire-results">
-            <h4>FIRE Summary</h4>
-            <div id="fire-output"></div>
-            <p class="calc-subhead">Year-by-Year Growth</p>
-            <div class="growth-table-wrap" id="fire-table-wrap"></div>
+            <h2>FIRE summary</h2>
+            <div id="fire-output" aria-live="polite"></div>
+            <p class="calc-subhead">Year by year</p>
+            <div class="growth-table-wrap" id="fire-table-wrap" tabindex="0" role="region" aria-label="Year-by-year balance"></div>
           </div>
+          <details class="calc-how" open>
+            <summary>How it works</summary>
+            <p><strong>FI number</strong> = yearly spending &divide; withdrawal rate. At 4% that is 25&times; spending. The 4% figure comes from studies of past US markets over 30-year retirements; many people plan on 3&ndash;3.5% for longer ones.</p>
+            <p>Everything is in today's dollars. The real return is <code>(1 + return) &divide; (1 + inflation) &minus; 1</code>, your yearly savings are assumed to rise with inflation, and the balance grows month by month with savings added each month. Time to FI is the first month the balance reaches the FI number. The future-dollar column adds inflation back, which is closer to what a statement would show.</p>
+            <p><strong>Coast FI</strong> is what you'd need invested today for growth alone to reach the FI number by the age you set. <strong>Lean</strong> and <strong>Fat</strong> use 75% and 200% of your spending; they are loose conventions, not rules. Real returns arrive unevenly, and a bad first few years of retirement matter more than the average.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -548,13 +654,13 @@
     <p class="calc-other__title">Also Available &mdash; 8 Other Calculators</p>
     <div class="calc-other__grid">
       <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest Calculator</a>
-      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan Mortgage Calculator</a>
+      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan &amp; Mortgage Calculator</a>
       <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff Calculator</a>
       <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal Calculator</a>
-      <a href="roi-calculator.html" class="calc-other__link">Roi Calculator</a>
+      <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
       <a href="freelancer-tax-calculator.html" class="calc-other__link">Freelancer Tax Calculator</a>
       <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle Calculator</a>
-      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto Dca Calculator</a>
+      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA Calculator</a>
     </div>
   </aside>
 

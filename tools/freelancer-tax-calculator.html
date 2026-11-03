@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Freelancer Tax Estimator — 2025 US Self-Employment | Moonlit Social Labs</title>
-  <meta name="description" content="Estimate self-employment tax, federal income tax, state tax, and quarterly payments for US freelancers. Includes bracket breakdown and take-home estimate.">
+  <title>Free Freelancer Tax Estimator — 2026 US Self-Employment | Moonlit Social Labs</title>
+  <meta name="description" content="Estimate 2026 self-employment tax, federal income tax with the QBI deduction, an approximate state tax, and quarterly payments for US freelancers. Bracket breakdown and take-home estimate.">
   <meta name="keywords" content="freelancer tax calculator, self employment tax calculator, 1099 tax calculator, quarterly tax estimator, freelance tax estimator, SE tax calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Freelancer Tax Estimator — 2025 US Self-Employment",
-    "description": "Estimate self-employment tax, federal income tax, state tax, and quarterly payments for US freelancers. Includes bracket breakdown and take-home estimate.",
+    "name": "Free Freelancer Tax Estimator — 2026 US Self-Employment",
+    "description": "Estimate 2026 self-employment tax, federal income tax with the QBI deduction, an approximate state tax, and quarterly payments for US freelancers. Bracket breakdown and take-home estimate.",
     "url": "https://moonligh7er.github.io/developer-site/tools/freelancer-tax-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Free Freelancer Tax Estimator — 2025 US Self-Employment">
-  <meta property="og:description" content="Estimate self-employment tax, federal income tax, state tax, and quarterly payments for US freelancers. Includes bracket breakdown and take-home estimate.">
+  <meta property="og:title" content="Free Freelancer Tax Estimator — 2026 US Self-Employment">
+  <meta property="og:description" content="Estimate 2026 self-employment tax, federal income tax with the QBI deduction, an approximate state tax, and quarterly payments for US freelancers. Bracket breakdown and take-home estimate.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/freelancer-tax-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Freelancer Tax Estimator — 2025 US Self-Employment">
-  <meta name="twitter:description" content="Estimate self-employment tax, federal income tax, state tax, and quarterly payments for US freelancers. Includes bracket breakdown and take-home estimate.">
+  <meta name="twitter:title" content="Free Freelancer Tax Estimator — 2026 US Self-Employment">
+  <meta name="twitter:description" content="Estimate 2026 self-employment tax, federal income tax with the QBI deduction, an approximate state tax, and quarterly payments for US freelancers. Bracket breakdown and take-home estimate.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -468,6 +468,95 @@
       border-color: var(--teal);
       box-shadow: 0 0 8px var(--teal-dim);
     }
+
+    /* ── Quality pass (2026-11) ── */
+    .calc-card h1, .calc-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-results h2, .calc-results h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .calc-intro { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .calc-dedicated { margin: -0.5rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .calc-dedicated a { display: inline-block; padding: 0.6rem 0; color: var(--teal); text-decoration: none; }
+    .calc-dedicated a:hover { color: var(--text-bright); }
+    .calc-card [hidden] { display: none !important; }
+    .calc-btn, .calc-tab, .mode-toggle button { min-height: 44px; }
+    .calc-btn:disabled, .remove-debt:disabled { opacity: 0.4; cursor: not-allowed; }
+    .calc-btn--small { font-size: 0.65rem; padding: 0.5rem 1rem; }
+    .debt-row .remove-debt { width: 44px; height: 44px; }
+    .debt-row__title {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: -0.25rem;
+    }
+    .debt-row + .debt-row { border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .debt-add { margin-bottom: 1.25rem; }
+    .field-hint { font-size: 0.72rem; line-height: 1.4; color: var(--text-dim); }
+    .field-error { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4; color: var(--rose); }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group--wide { grid-column: 1 / -1; }
+    .check-row { display: flex; align-items: flex-start; gap: 0.65rem; }
+    .check-row input[type="checkbox"] { width: 20px; height: 20px; margin: 0.15rem 0 0; flex: 0 0 auto; accent-color: var(--teal); }
+    .form-group .check-row label { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0; text-transform: none; line-height: 1.5; color: var(--text-secondary); }
+    .calc-results { transition: opacity 0.2s ease; }
+    .calc-results.is-stale { opacity: 0.45; }
+    .result-row { gap: 1rem; }
+    .result-label { flex: 1 1 auto; min-width: 0; }
+    .result-value { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: break-word; }
+    .result-note { color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6; margin-top: 0.75rem; }
+    .result-note--warn { color: var(--amber); }
+    .payoff-order { margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.7; }
+    .growth-table-wrap, .table-scroll { overflow-x: auto; }
+    .growth-table th, .growth-table td, .bracket-table th, .bracket-table td { white-space: nowrap; }
+    .calc-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .calc-how summary {
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .calc-how p, .calc-how li { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .calc-how p { margin-top: 0.75rem; }
+    .calc-how ul { margin: 0.75rem 0 0 1.1rem; }
+    .calc-how li + li { margin-top: 0.5rem; }
+    .calc-how code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--teal); }
+    .calc-how strong { color: var(--text-primary); font-weight: 500; }
+    .calc-sources { font-size: 0.75rem !important; color: var(--text-dim) !important; }
+    .calc-note { color: var(--text-dim); font-size: 0.75rem; font-style: italic; margin-top: 1rem; line-height: 1.6; }
+    @media (max-width: 600px) {
+      .result-row { flex-wrap: wrap; }
+      .result-value { margin-left: auto; }
+      .calc-btn { flex: 1 1 auto; padding: 0.75rem 1rem; }
+      .calc-other { padding: 1.25rem; }
+      .growth-table th, .growth-table td { padding: 0.4rem 0.5rem; }
+      .debt-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+      .debt-row__title { grid-column: 1 / 3; grid-row: 1; align-self: center; margin: 0; }
+      .debt-row__remove { grid-column: 3; grid-row: 1; justify-self: end; }
+      .debt-row .form-group { grid-row: 2; }
+      .debt-row .form-group label { font-size: 0.6rem; letter-spacing: 0.06em; }
+      .debt-row .form-group input { padding: 0.65rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -499,86 +588,117 @@
 
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Freelancer Tax Calculator</p>
-      <div class="calc-panel" id="panel-tax" role="tabpanel">
+      <div class="calc-panel" id="panel-tax">
         <div class="calc-card">
-          <h3>Freelancer Tax Estimator (2025 US)</h3>
+          <h1 id="h-tax">Freelancer Tax Estimator (2026, US)</h1>
+          <p class="calc-intro">A 2026 estimate of self-employment tax, federal income tax (with the QBI deduction), an approximate state tax, and the quarterly payments that cover them.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="tax-income">Gross Income ($)</label>
-              <input type="number" id="tax-income" placeholder="100000" min="0" step="any">
+              <label for="tax-income">Gross income ($/year)</label>
+              <input type="number" id="tax-income" value="100000" min="0" step="any" aria-describedby="tax-income-hint">
+              <span class="field-hint" id="tax-income-hint">Freelance income before expenses.</span>
             </div>
             <div class="form-group">
-              <label for="tax-expenses">Business Expenses ($)</label>
-              <input type="number" id="tax-expenses" placeholder="15000" min="0" step="any">
+              <label for="tax-expenses">Expenses ($/year)</label>
+              <input type="number" id="tax-expenses" value="15000" min="0" step="any" aria-describedby="tax-expenses-hint">
+              <span class="field-hint" id="tax-expenses-hint">Deductible business costs.</span>
             </div>
             <div class="form-group">
-              <label for="tax-status">Filing Status</label>
+              <label for="tax-status">Filing status</label>
               <select id="tax-status">
-                <option value="single">Single</option>
-                <option value="married">Married Filing Jointly</option>
+                <option value="single" selected>Single</option>
+                <option value="mfj">Married filing jointly</option>
+                <option value="hoh">Head of household</option>
+                <option value="mfs">Married filing separately</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="tax-state">State</label>
+              <label for="tax-state">State (approx. rate)</label>
               <select id="tax-state">
-                <option value="none">No State Income Tax</option>
-                <option value="AL">Alabama (5.00%)</option>
-                <option value="AZ">Arizona (2.50%)</option>
-                <option value="AR">Arkansas (4.40%)</option>
-                <option value="CA">California (est. 9.30%)</option>
-                <option value="CO">Colorado (4.40%)</option>
-                <option value="CT">Connecticut (5.00%)</option>
-                <option value="DE">Delaware (6.60%)</option>
-                <option value="GA">Georgia (5.49%)</option>
-                <option value="HI">Hawaii (8.25%)</option>
-                <option value="ID">Idaho (5.80%)</option>
-                <option value="IL">Illinois (4.95%)</option>
-                <option value="IN">Indiana (3.05%)</option>
-                <option value="IA">Iowa (5.70%)</option>
-                <option value="KS">Kansas (5.70%)</option>
-                <option value="KY">Kentucky (4.00%)</option>
-                <option value="LA">Louisiana (4.25%)</option>
-                <option value="ME">Maine (7.15%)</option>
-                <option value="MD">Maryland (5.75%)</option>
-                <option value="MA">Massachusetts (5.00%)</option>
-                <option value="MI">Michigan (4.25%)</option>
-                <option value="MN">Minnesota (7.85%)</option>
-                <option value="MS">Mississippi (5.00%)</option>
-                <option value="MO">Missouri (4.95%)</option>
-                <option value="MT">Montana (5.90%)</option>
-                <option value="NE">Nebraska (5.84%)</option>
-                <option value="NJ">New Jersey (6.37%)</option>
-                <option value="NM">New Mexico (5.90%)</option>
-                <option value="NY">New York (est. 6.85%)</option>
-                <option value="NC">North Carolina (4.50%)</option>
-                <option value="ND">North Dakota (2.50%)</option>
-                <option value="OH">Ohio (3.50%)</option>
-                <option value="OK">Oklahoma (4.75%)</option>
-                <option value="OR">Oregon (9.00%)</option>
-                <option value="PA">Pennsylvania (3.07%)</option>
-                <option value="RI">Rhode Island (5.99%)</option>
-                <option value="SC">South Carolina (6.40%)</option>
-                <option value="UT">Utah (4.65%)</option>
-                <option value="VT">Vermont (7.60%)</option>
-                <option value="VA">Virginia (5.75%)</option>
-                <option value="WV">West Virginia (5.12%)</option>
-                <option value="WI">Wisconsin (5.30%)</option>
-                <option value="DC">Washington DC (8.50%)</option>
+                <option value="none" selected>None (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
+                <option value="AL">Alabama (~4.95%)</option>
+                <option value="AZ">Arizona (~2.50%)</option>
+                <option value="AR">Arkansas (~3.78%)</option>
+                <option value="CA">California (~4.55%)</option>
+                <option value="CO">Colorado (~4.40%)</option>
+                <option value="CT">Connecticut (~4.50%)</option>
+                <option value="DE">Delaware (~5.24%)</option>
+                <option value="DC">District of Columbia (~6.37%)</option>
+                <option value="GA">Georgia (~5.19%)</option>
+                <option value="HI">Hawaii (~6.12%)</option>
+                <option value="ID">Idaho (~4.96%)</option>
+                <option value="IL">Illinois (~4.95%)</option>
+                <option value="IN">Indiana (~2.95%)</option>
+                <option value="IA">Iowa (~3.80%)</option>
+                <option value="KS">Kansas (~5.46%)</option>
+                <option value="KY">Kentucky (~3.50%)</option>
+                <option value="LA">Louisiana (~3.00%)</option>
+                <option value="ME">Maine (~6.46%)</option>
+                <option value="MD">Maryland (~4.68%)</option>
+                <option value="MA">Massachusetts (~5.00%)</option>
+                <option value="MI">Michigan (~4.25%)</option>
+                <option value="MN">Minnesota (~6.16%)</option>
+                <option value="MS">Mississippi (~3.47%)</option>
+                <option value="MO">Missouri (~4.46%)</option>
+                <option value="MT">Montana (~5.05%)</option>
+                <option value="NE">Nebraska (~4.15%)</option>
+                <option value="NJ">New Jersey (~3.54%)</option>
+                <option value="NM">New Mexico (~4.18%)</option>
+                <option value="NY">New York (~5.18%)</option>
+                <option value="NC">North Carolina (~3.99%)</option>
+                <option value="ND">North Dakota (~0.69%)</option>
+                <option value="OH">Ohio (~1.79%)</option>
+                <option value="OK">Oklahoma (~4.21%)</option>
+                <option value="OR">Oregon (~8.32%)</option>
+                <option value="PA">Pennsylvania (~3.07%)</option>
+                <option value="RI">Rhode Island (~3.75%)</option>
+                <option value="SC">South Carolina (~5.13%)</option>
+                <option value="UT">Utah (~4.50%)</option>
+                <option value="VT">Vermont (~4.46%)</option>
+                <option value="VA">Virginia (~5.41%)</option>
+                <option value="WV">West Virginia (~3.70%)</option>
+                <option value="WI">Wisconsin (~4.50%)</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label for="tax-state-rate">State tax rate (%)</label>
+              <input type="number" id="tax-state-rate" value="0" min="0" max="20" step="any" aria-describedby="tax-state-rate-hint">
+              <span class="field-hint" id="tax-state-rate-hint">Filled in from the state list. Overwrite it if you know your rate.</span>
+            </div>
+            <div class="form-group form-group--wide">
+              <div class="check-row">
+                <input type="checkbox" id="tax-sstb">
+                <label for="tax-sstb">My work is a specified service business (consulting, law, accounting, health, financial services, performing arts, athletics, or a business built on the owner's reputation or skill). This only changes the result when taxable income tops $201,750 ($403,500 joint).</label>
+              </div>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcTax()">Estimate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('tax')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Estimate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="tax-error"></div>
+          <div class="calc-error" id="tax-error" role="alert"></div>
           <div class="calc-results" id="tax-results">
-            <h4>Tax Estimate</h4>
-            <div id="tax-output"></div>
-            <p class="calc-subhead">Federal Tax Bracket Breakdown</p>
-            <div id="tax-brackets"></div>
-            <p style="color:var(--text-dim);font-size:0.75rem;font-style:italic;margin-top:1rem;">This is an estimate for informational purposes only. Consult a tax professional for advice specific to your situation.</p>
+            <h2>Tax estimate</h2>
+            <div id="tax-output" aria-live="polite"></div>
+            <p class="calc-subhead">Federal bracket breakdown</p>
+            <div class="table-scroll" id="tax-brackets" tabindex="0" role="region" aria-label="Federal bracket breakdown"></div>
+            <p class="calc-note">2026 estimated payments are due April 15, June 15 and September 15, 2026, and January 15, 2027. This is an estimate for planning, not tax advice; a tax professional can account for the rest of your situation.</p>
           </div>
+          <details class="calc-how" open>
+            <summary>How it works</summary>
+            <ul>
+              <li><strong>Self-employment tax:</strong> 15.3% of 92.35% of net profit: 12.4% Social Security on earnings up to the 2026 wage base of $184,500, plus 2.9% Medicare on all of it. There is no SE tax if that 92.35% figure is under $400.</li>
+              <li><strong>Additional Medicare tax:</strong> 0.9% on self-employment earnings above $200,000 ($250,000 joint, $125,000 separate). It is separate from SE tax and not half-deductible.</li>
+              <li><strong>Adjusted gross income:</strong> profit minus half of the SE tax.</li>
+              <li><strong>Standard deduction (2026):</strong> $16,100 single or married filing separately, $32,200 joint, $24,150 head of household.</li>
+              <li><strong>QBI deduction (&sect;199A):</strong> 20% of profit after the SE-tax deduction, capped at 20% of taxable income. Above $201,750 of taxable income ($403,500 joint) it phases out over the next $75,000 ($150,000 joint): in a straight line here, because a solo freelancer usually pays no W-2 wages, and faster for a specified service business, which loses it entirely above that range. From 2026 there is a $400 minimum when your active-business QBI is at least $1,000.</li>
+              <li><strong>Federal income tax:</strong> the 2026 rate schedule, 10% to 37%. Below $100,000 of taxable income the IRS tax table works in $50 bands, so a return can differ by a few dollars.</li>
+              <li><strong>State:</strong> one approximate rate &times; (AGI &minus; standard deduction). The list fills in each state's 2026 flat rate, or for graduated-rate states the average rate on $75,000 of single taxable income. Local and city income taxes are not included.</li>
+              <li><strong>Quarterly payments:</strong> the yearly total &divide; 4. Paying at least 90% of this year's tax, or 100% of last year's (110% if last year's AGI was over $150,000), in four even parts generally avoids an underpayment penalty.</li>
+            </ul>
+            <p>Assumes this freelance profit is your only income and you take the standard deduction. Not included: W-2 wages (which share the Social Security wage base), credits, itemized deductions, retirement contributions, the self-employed health insurance deduction, the 2025&ndash;2028 senior deduction, and AMT.</p>
+            <p class="calc-sources">Figures for tax year 2026, checked November 2026. Sources: IRS Rev. Proc. 2025-32 (brackets, standard deduction, QBI thresholds); the Social Security Administration's 2026 wage base announcement; 26 U.S.C. &sect;199A as amended by Pub. L. 119-21; Tax Foundation, state income tax rates and brackets as of January 1, 2026.</p>
+          </details>
         </div>
       </div>
     </div>
@@ -587,20 +707,21 @@
     <p class="calc-other__title">Also Available &mdash; 8 Other Calculators</p>
     <div class="calc-other__grid">
       <a href="compound-interest-calculator.html" class="calc-other__link">Compound Interest Calculator</a>
-      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan Mortgage Calculator</a>
+      <a href="loan-mortgage-calculator.html" class="calc-other__link">Loan &amp; Mortgage Calculator</a>
       <a href="debt-payoff-calculator.html" class="calc-other__link">Debt Payoff Calculator</a>
       <a href="savings-goal-calculator.html" class="calc-other__link">Savings Goal Calculator</a>
-      <a href="roi-calculator.html" class="calc-other__link">Roi Calculator</a>
-      <a href="fire-calculator.html" class="calc-other__link">Fire Calculator</a>
+      <a href="roi-calculator.html" class="calc-other__link">ROI Calculator</a>
+      <a href="fire-calculator.html" class="calc-other__link">FIRE Calculator</a>
       <a href="side-hustle-calculator.html" class="calc-other__link">Side Hustle Calculator</a>
-      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto Dca Calculator</a>
+      <a href="crypto-dca-calculator.html" class="calc-other__link">Crypto DCA Calculator</a>
     </div>
   </aside>
 
     <!-- Ad Unit: Bottom Leaderboard -->
     <div class="ad-container" style="margin-top:2rem;" data-ad-slot="bottom"></div>
     <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-  <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.<p style="margin:0.5rem 0 0;font-size:0.8rem;color:var(--text-dim);">Based on published tax rates as of 2026; your actual withholding depends on your W&#8209;4 and local taxes.</p></p>
+  <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>.</p>
+  <p style="margin:0.5rem 0 0;font-size:0.8rem;color:var(--text-dim);">Federal figures are for tax year 2026 (IRS Rev. Proc. 2025-32 and the 2026 Social Security wage base), checked November 2026. State and local taxes are rough approximations.</p>
 </aside>
   </main>
 

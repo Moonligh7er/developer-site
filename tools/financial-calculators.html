@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Financial Calculators — 9 Tools: Compound Interest, FIRE, DCA, Debt, Tax &amp; More | Moonlit Social Labs</title>
-  <meta name="description" content="9 free financial calculators: compound interest, loan/mortgage, debt payoff (avalanche vs snowball), savings goal, ROI/CAGR, freelancer tax estimator, FIRE calculator, side hustle profit, and crypto DCA simulator. No signup required.">
+  <meta name="description" content="9 free financial calculators: compound interest, loan/mortgage, debt payoff (avalanche vs snowball), savings goal, ROI/CAGR, 2026 freelancer tax estimator, FIRE calculator, side hustle profit, and crypto DCA simulator. No signup; runs in your browser.">
   <meta name="keywords" content="compound interest calculator, mortgage calculator, debt payoff calculator, savings goal calculator, ROI calculator, freelancer tax calculator, FIRE calculator, financial independence calculator, side hustle calculator, crypto DCA calculator, dollar cost averaging simulator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -415,6 +415,95 @@
       .form-grid { grid-template-columns: 1fr; }
       .debt-row { grid-template-columns: 1fr; }
     }
+
+    /* ── Quality pass (2026-11) ── */
+    .calc-card h1, .calc-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text-bright);
+      margin-bottom: 1rem;
+    }
+    .calc-card h1 { font-size: 1.6rem; }
+    .calc-results h2, .calc-results h3 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1rem;
+    }
+    .calc-intro { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .calc-dedicated { margin: -0.5rem 0 1.25rem; font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; }
+    .calc-dedicated a { display: inline-block; padding: 0.6rem 0; color: var(--teal); text-decoration: none; }
+    .calc-dedicated a:hover { color: var(--text-bright); }
+    .calc-card [hidden] { display: none !important; }
+    .calc-btn, .calc-tab, .mode-toggle button { min-height: 44px; }
+    .calc-btn:disabled, .remove-debt:disabled { opacity: 0.4; cursor: not-allowed; }
+    .calc-btn--small { font-size: 0.65rem; padding: 0.5rem 1rem; }
+    .debt-row .remove-debt { width: 44px; height: 44px; }
+    .debt-row__title {
+      grid-column: 1 / -1;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: -0.25rem;
+    }
+    .debt-row + .debt-row { border-top: 1px solid var(--border); padding-top: 0.75rem; }
+    .debt-add { margin-bottom: 1.25rem; }
+    .field-hint { font-size: 0.72rem; line-height: 1.4; color: var(--text-dim); }
+    .field-error { font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.4; color: var(--rose); }
+    .form-group input[aria-invalid="true"] { border-color: var(--rose); }
+    .form-group--wide { grid-column: 1 / -1; }
+    .check-row { display: flex; align-items: flex-start; gap: 0.65rem; }
+    .check-row input[type="checkbox"] { width: 20px; height: 20px; margin: 0.15rem 0 0; flex: 0 0 auto; accent-color: var(--teal); }
+    .form-group .check-row label { font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 0; text-transform: none; line-height: 1.5; color: var(--text-secondary); }
+    .calc-results { transition: opacity 0.2s ease; }
+    .calc-results.is-stale { opacity: 0.45; }
+    .result-row { gap: 1rem; }
+    .result-label { flex: 1 1 auto; min-width: 0; }
+    .result-value { flex: 0 1 auto; min-width: 0; text-align: right; overflow-wrap: break-word; }
+    .result-note { color: var(--text-secondary); font-size: 0.8rem; line-height: 1.6; margin-top: 0.75rem; }
+    .result-note--warn { color: var(--amber); }
+    .payoff-order { margin: 0.5rem 0 0 1.25rem; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.7; }
+    .growth-table-wrap, .table-scroll { overflow-x: auto; }
+    .growth-table th, .growth-table td, .bracket-table th, .bracket-table td { white-space: nowrap; }
+    .calc-how { margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.5rem; }
+    .calc-how summary {
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal);
+    }
+    .calc-how p, .calc-how li { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; }
+    .calc-how p { margin-top: 0.75rem; }
+    .calc-how ul { margin: 0.75rem 0 0 1.1rem; }
+    .calc-how li + li { margin-top: 0.5rem; }
+    .calc-how code { font-family: var(--font-mono); font-size: 0.8rem; color: var(--teal); }
+    .calc-how strong { color: var(--text-primary); font-weight: 500; }
+    .calc-sources { font-size: 0.75rem !important; color: var(--text-dim) !important; }
+    .calc-note { color: var(--text-dim); font-size: 0.75rem; font-style: italic; margin-top: 1rem; line-height: 1.6; }
+    @media (max-width: 600px) {
+      .result-row { flex-wrap: wrap; }
+      .result-value { margin-left: auto; }
+      .calc-btn { flex: 1 1 auto; padding: 0.75rem 1rem; }
+      .calc-other { padding: 1.25rem; }
+      .growth-table th, .growth-table td { padding: 0.4rem 0.5rem; }
+      .debt-row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+      .debt-row__title { grid-column: 1 / 3; grid-row: 1; align-self: center; margin: 0; }
+      .debt-row__remove { grid-column: 3; grid-row: 1; justify-self: end; }
+      .debt-row .form-group { grid-row: 2; }
+      .debt-row .form-group label { font-size: 0.6rem; letter-spacing: 0.06em; }
+      .debt-row .form-group input { padding: 0.65rem 0.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -441,23 +530,23 @@
     <section class="calc-hero">
       <span class="section-label">Finance</span>
       <h1 class="heading-xl">Financial Calculators</h1>
-      <p class="text-body">Nine essential money calculators &mdash; compound interest, loan payments, debt payoff, savings goals, ROI, freelancer taxes, FIRE (financial independence), side hustle profit, and crypto dollar-cost averaging. All math runs locally in your browser.</p>
+      <p class="text-body">Nine money calculators &mdash; compound interest, loan payments, debt payoff, savings goals, ROI, freelancer taxes, FIRE (financial independence), side hustle profit, and crypto dollar-cost averaging. All the math runs in your browser; nothing you type is sent or saved.</p>
     </section>
 
     <!-- ── Ad: Top Leaderboard ── -->
     <div class="ad-container" data-ad-slot="top"></div>
 
     <!-- ── Tab Bar ── -->
-    <div class="calc-tabs" role="tablist">
-      <button class="calc-tab active" role="tab" data-tab="compound" aria-selected="true">Compound Interest</button>
-      <button class="calc-tab" role="tab" data-tab="loan" aria-selected="false">Loan / Mortgage</button>
-      <button class="calc-tab" role="tab" data-tab="debt" aria-selected="false">Debt Payoff</button>
-      <button class="calc-tab" role="tab" data-tab="savings" aria-selected="false">Savings Goal</button>
-      <button class="calc-tab" role="tab" data-tab="roi" aria-selected="false">ROI</button>
-      <button class="calc-tab" role="tab" data-tab="tax" aria-selected="false">Freelancer Tax</button>
-      <button class="calc-tab" role="tab" data-tab="fire" aria-selected="false">FIRE</button>
-      <button class="calc-tab" role="tab" data-tab="hustle" aria-selected="false">Side Hustle</button>
-      <button class="calc-tab" role="tab" data-tab="dca" aria-selected="false">Crypto DCA</button>
+    <div class="calc-tabs" role="tablist" aria-label="Calculators">
+      <button type="button" class="calc-tab active" role="tab" id="tab-compound" data-tab="compound" aria-controls="panel-compound" aria-selected="true">Compound Interest</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-loan" data-tab="loan" aria-controls="panel-loan" aria-selected="false" tabindex="-1">Loan / Mortgage</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-debt" data-tab="debt" aria-controls="panel-debt" aria-selected="false" tabindex="-1">Debt Payoff</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-savings" data-tab="savings" aria-controls="panel-savings" aria-selected="false" tabindex="-1">Savings Goal</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-roi" data-tab="roi" aria-controls="panel-roi" aria-selected="false" tabindex="-1">ROI</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-tax" data-tab="tax" aria-controls="panel-tax" aria-selected="false" tabindex="-1">Freelancer Tax</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-fire" data-tab="fire" aria-controls="panel-fire" aria-selected="false" tabindex="-1">FIRE</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-hustle" data-tab="hustle" aria-controls="panel-hustle" aria-selected="false" tabindex="-1">Side Hustle</button>
+      <button type="button" class="calc-tab" role="tab" id="tab-dca" data-tab="dca" aria-controls="panel-dca" aria-selected="false" tabindex="-1">Crypto DCA</button>
     </div>
 
     <!-- ── Calculator Panels ── -->
@@ -466,292 +555,369 @@
       <!-- ═══════════════════════════════════════ -->
       <!-- 1. COMPOUND INTEREST                    -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel active" id="panel-compound" role="tabpanel">
+      <div class="calc-panel active" id="panel-compound" role="tabpanel" aria-labelledby="tab-compound">
         <div class="calc-card">
-          <h3>Compound Interest Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="compound-interest-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <h2 id="h-compound">Compound Interest Calculator</h2>
+          <p class="calc-dedicated"><a href="compound-interest-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">See how a starting amount and a monthly contribution grow with compound interest. Choose how often interest compounds and whether you add money at the start or end of each month.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ci-principal">Principal ($)</label>
-              <input type="number" id="ci-principal" placeholder="10000" min="0" step="any">
+              <label for="ci-principal">Starting amount ($)</label>
+              <input type="number" id="ci-principal" value="10000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="ci-rate">Annual Rate (%)</label>
-              <input type="number" id="ci-rate" placeholder="7" min="0" step="any">
+              <label for="ci-rate">Annual interest rate (%)</label>
+              <input type="number" id="ci-rate" value="7" min="0" max="100" step="any">
             </div>
             <div class="form-group">
-              <label for="ci-time">Time (Years)</label>
-              <input type="number" id="ci-time" placeholder="10" min="0" step="any">
+              <label for="ci-time">Time (years)</label>
+              <input type="number" id="ci-time" value="10" min="0" max="100" step="any">
             </div>
             <div class="form-group">
               <label for="ci-freq">Compounding</label>
               <select id="ci-freq">
                 <option value="1">Annually</option>
-                <option value="2">Semi-Annually</option>
+                <option value="2">Semi-annually</option>
                 <option value="4">Quarterly</option>
                 <option value="12" selected>Monthly</option>
                 <option value="365">Daily</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="ci-contrib">Monthly Contribution ($)</label>
-              <input type="number" id="ci-contrib" placeholder="0" min="0" step="any">
+              <label for="ci-contrib">Monthly contribution ($)</label>
+              <input type="number" id="ci-contrib" value="200" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="ci-timing">Contributions made at</label>
+              <select id="ci-timing">
+                <option value="end" selected>End of each month</option>
+                <option value="begin">Start of each month</option>
+              </select>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcCompound()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('compound')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="ci-error"></div>
+          <div class="calc-error" id="ci-error" role="alert"></div>
           <div class="calc-results" id="ci-results">
-            <h4>Results</h4>
-            <div id="ci-output"></div>
-            <div class="growth-table-wrap" id="ci-table-wrap"></div>
+            <h3>Results</h3>
+            <div id="ci-output" aria-live="polite"></div>
+            <div class="growth-table-wrap" id="ci-table-wrap" tabindex="0" role="region" aria-label="Year-by-year growth"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>Each month the balance grows by the effective monthly rate for your compounding choice, <code>g = (1 + r/n)<sup>n/12</sup></code>, and your contribution is added; a start-of-month contribution also earns that month's growth. At every compounding date this matches the textbook <code>P(1 + r/n)<sup>nt</sup></code>, and contributions earn the same effective rate from the month they go in, which is how most calculators handle monthly deposits into an account that compounds less often.</p>
+            <p>The effective annual rate shows what the compounding is worth: 7% compounded monthly works out to 7.229% a year. The rate is held constant and taxes, fees and inflation are left out, so the result is in future dollars, not today's.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 2. LOAN / MORTGAGE                      -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-loan" role="tabpanel">
+      <div class="calc-panel" id="panel-loan" role="tabpanel" aria-labelledby="tab-loan" hidden>
         <div class="calc-card">
-          <h3>Loan / Mortgage Payment Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="loan-mortgage-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <h2 id="h-loan">Loan Payment Calculator</h2>
+          <p class="calc-dedicated"><a href="loan-mortgage-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">Monthly payment, total interest and a yearly amortization summary for a fixed-rate loan. For taxes, insurance, PMI and extra payments, open the dedicated mortgage page.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="ln-amount">Loan Amount ($)</label>
-              <input type="number" id="ln-amount" placeholder="250000" min="0" step="any">
+              <label for="ln-amount">Loan amount ($)</label>
+              <input type="number" id="ln-amount" value="250000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="ln-rate">Interest Rate (%)</label>
-              <input type="number" id="ln-rate" placeholder="6.5" min="0" step="any">
+              <label for="ln-rate">Interest rate (% APR)</label>
+              <input type="number" id="ln-rate" value="6.5" min="0" max="100" step="any">
             </div>
             <div class="form-group">
-              <label for="ln-term">Term (Years)</label>
-              <input type="number" id="ln-term" placeholder="30" min="1" step="1">
+              <label for="ln-term">Term (years)</label>
+              <input type="number" id="ln-term" value="30" min="1" max="50" step="any">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcLoan()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('loan')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="ln-error"></div>
+          <div class="calc-error" id="ln-error" role="alert"></div>
           <div class="calc-results" id="ln-results">
-            <h4>Results</h4>
-            <div id="ln-output"></div>
-            <p class="calc-subhead">Amortization Summary (Yearly)</p>
-            <div class="growth-table-wrap" id="ln-table-wrap"></div>
+            <h3>Results</h3>
+            <div id="ln-output" aria-live="polite"></div>
+            <p class="calc-subhead">Amortization summary (yearly)</p>
+            <div class="growth-table-wrap" id="ln-table-wrap" tabindex="0" role="region" aria-label="Yearly amortization summary"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>Payment <code>M = P &middot; r / (1 &minus; (1 + r)<sup>&minus;n</sup>)</code>, where r is the APR &divide; 12 and n is the number of monthly payments; a 0% loan simply divides the balance by n. As on a lender's schedule, the payment is rounded to the cent, each month's interest is rounded to the cent, and the last payment is adjusted so the balance ends at exactly $0, which is why it can differ from the others by a few cents.</p>
+            <p>Fixed-rate loans only. Property tax, insurance, PMI and lender fees are not included here; the dedicated mortgage page adds them, along with extra payments.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 3. DEBT PAYOFF                          -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-debt" role="tabpanel">
+      <div class="calc-panel" id="panel-debt" role="tabpanel" aria-labelledby="tab-debt" hidden>
         <div class="calc-card">
-          <h3>Debt Payoff Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="debt-payoff-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Enter one or more debts. With multiple debts, you'll see an avalanche vs. snowball comparison.</p>
+          <h2 id="h-debt">Debt Payoff Calculator</h2>
+          <p class="calc-dedicated"><a href="debt-payoff-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">List your debts and what you can pay each month. With two or more debts you'll see the avalanche and snowball orders side by side, with payoff dates and total interest.</p>
           <div class="debt-rows" id="debt-rows">
-            <div class="debt-row" data-index="0">
-              <div class="form-group">
-                <label>Balance ($)</label>
-                <input type="number" class="debt-balance" placeholder="5000" min="0" step="any">
-              </div>
-              <div class="form-group">
-                <label>Rate (%)</label>
-                <input type="number" class="debt-rate" placeholder="18" min="0" step="any">
-              </div>
-              <div class="form-group">
-                <label>Min Payment ($)</label>
-                <input type="number" class="debt-payment" placeholder="150" min="0" step="any">
-              </div>
-              <div>
-                <button class="remove-debt" onclick="removeDebt(this)" title="Remove">&times;</button>
-              </div>
+            <div class="debt-row" role="group" aria-label="Debt 1">
+              <span class="debt-row__title">Debt 1</span>
+              <div class="form-group"><label for="debt-bal-1">Balance ($)</label><input type="number" id="debt-bal-1" class="debt-balance" min="0" step="any" placeholder="5000" value="6500"></div>
+              <div class="form-group"><label for="debt-apr-1">APR (%)</label><input type="number" id="debt-apr-1" class="debt-rate" min="0" max="100" step="any" placeholder="18" value="24.99"></div>
+              <div class="form-group"><label for="debt-min-1">Minimum ($/month)</label><input type="number" id="debt-min-1" class="debt-payment" min="0" step="any" placeholder="150" value="160"></div>
+              <div class="debt-row__remove"><button type="button" class="remove-debt" aria-label="Remove debt 1">&times;</button></div>
+            </div>
+            <div class="debt-row" role="group" aria-label="Debt 2">
+              <span class="debt-row__title">Debt 2</span>
+              <div class="form-group"><label for="debt-bal-2">Balance ($)</label><input type="number" id="debt-bal-2" class="debt-balance" min="0" step="any" placeholder="5000" value="2000"></div>
+              <div class="form-group"><label for="debt-apr-2">APR (%)</label><input type="number" id="debt-apr-2" class="debt-rate" min="0" max="100" step="any" placeholder="18" value="11.5"></div>
+              <div class="form-group"><label for="debt-min-2">Minimum ($/month)</label><input type="number" id="debt-min-2" class="debt-payment" min="0" step="any" placeholder="150" value="65"></div>
+              <div class="debt-row__remove"><button type="button" class="remove-debt" aria-label="Remove debt 2">&times;</button></div>
+            </div>
+            <div class="debt-row" role="group" aria-label="Debt 3">
+              <span class="debt-row__title">Debt 3</span>
+              <div class="form-group"><label for="debt-bal-3">Balance ($)</label><input type="number" id="debt-bal-3" class="debt-balance" min="0" step="any" placeholder="5000" value="9000"></div>
+              <div class="form-group"><label for="debt-apr-3">APR (%)</label><input type="number" id="debt-apr-3" class="debt-rate" min="0" max="100" step="any" placeholder="18" value="7.5"></div>
+              <div class="form-group"><label for="debt-min-3">Minimum ($/month)</label><input type="number" id="debt-min-3" class="debt-payment" min="0" step="any" placeholder="150" value="280"></div>
+              <div class="debt-row__remove"><button type="button" class="remove-debt" aria-label="Remove debt 3">&times;</button></div>
             </div>
           </div>
-          <div style="margin-bottom:1.25rem;">
-            <button class="calc-btn calc-btn--secondary" onclick="addDebtRow()" style="font-size:0.65rem;padding:0.5rem 1rem;">+ Add Debt</button>
+          <div class="debt-add">
+            <button type="button" class="calc-btn calc-btn--secondary calc-btn--small" data-fc-action="add-debt">+ Add a debt</button>
           </div>
           <div class="form-grid">
             <div class="form-group">
-              <label for="debt-extra">Extra Monthly Payment ($)</label>
-              <input type="number" id="debt-extra" placeholder="0" min="0" step="any">
+              <label for="debt-extra">Extra monthly payment ($)</label>
+              <input type="number" id="debt-extra" value="200" min="0" step="any" aria-describedby="debt-extra-hint">
+              <span class="field-hint" id="debt-extra-hint">On top of all the minimums.</span>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcDebt()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('debt')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="debt-error"></div>
+          <div class="calc-error" id="debt-error" role="alert"></div>
           <div class="calc-results" id="debt-results">
-            <h4>Results</h4>
-            <div id="debt-output"></div>
+            <h3>Results</h3>
+            <div id="debt-output" aria-live="polite"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>Your monthly budget is the sum of the minimums plus the extra amount, and it stays the same until everything is paid. Each month interest is added to every balance (APR &divide; 12), each debt gets its minimum, and the rest of the budget goes to one target debt. When a debt is cleared, its minimum rolls into the next target; that roll-over is what makes both methods work.</p>
+            <p><strong>Avalanche</strong> targets the highest APR first and usually costs the least interest. <strong>Snowball</strong> targets the smallest balance first and clears whole accounts sooner, which some people find easier to stick with. Minimums are held fixed here; real card minimums shrink as the balance falls and card interest is usually charged daily, so a statement can differ a little.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 4. SAVINGS GOAL                         -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-savings" role="tabpanel">
+      <div class="calc-panel" id="panel-savings" role="tabpanel" aria-labelledby="tab-savings" hidden>
         <div class="calc-card">
-          <h3>Savings Goal Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="savings-goal-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <div class="mode-toggle" id="sav-mode-toggle">
-            <button class="active" data-mode="goal" onclick="switchSavMode('goal')">Find Monthly Contribution</button>
-            <button data-mode="final" onclick="switchSavMode('final')">Find Final Amount</button>
+          <h2 id="h-savings">Savings Goal Calculator</h2>
+          <p class="calc-dedicated"><a href="savings-goal-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">Work out the monthly amount that reaches a goal by a date, or what a steady monthly amount grows to. Count what you've already saved.</p>
+          <div class="mode-toggle" id="sav-mode-toggle" role="group" aria-label="What to calculate">
+            <button type="button" class="active" data-mode="goal" aria-pressed="true">Monthly amount needed</button>
+            <button type="button" data-mode="final" aria-pressed="false">What I'll end up with</button>
           </div>
           <div class="form-grid">
             <div class="form-group" id="sav-target-group">
-              <label for="sav-target">Target Amount ($)</label>
-              <input type="number" id="sav-target" placeholder="50000" min="0" step="any">
+              <label for="sav-target">Savings goal ($)</label>
+              <input type="number" id="sav-target" value="30000" min="0" step="any">
             </div>
-            <div class="form-group" id="sav-contrib-group" style="display:none;">
-              <label for="sav-contrib">Monthly Contribution ($)</label>
-              <input type="number" id="sav-contrib" placeholder="500" min="0" step="any">
-            </div>
-            <div class="form-group">
-              <label for="sav-time">Timeline (Years)</label>
-              <input type="number" id="sav-time" placeholder="10" min="0" step="any">
+            <div class="form-group" id="sav-contrib-group" hidden>
+              <label for="sav-contrib">Monthly contribution ($)</label>
+              <input type="number" id="sav-contrib" value="500" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="sav-rate">Annual Return (%)</label>
-              <input type="number" id="sav-rate" placeholder="7" min="0" step="any">
+              <label for="sav-start">Already saved ($)</label>
+              <input type="number" id="sav-start" value="2000" min="0" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-time">Timeline (years)</label>
+              <input type="number" id="sav-time" value="5" min="0" max="100" step="any">
+            </div>
+            <div class="form-group">
+              <label for="sav-rate">Annual return (%)</label>
+              <input type="number" id="sav-rate" value="4" min="0" max="100" step="any">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcSavings()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('savings')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="sav-error"></div>
+          <div class="calc-error" id="sav-error" role="alert"></div>
           <div class="calc-results" id="sav-results">
-            <h4>Results</h4>
-            <div id="sav-output"></div>
+            <h3>Results</h3>
+            <div id="sav-output" aria-live="polite"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>Deposits go in at the end of each month and the balance compounds monthly at the annual return &divide; 12. To reach a goal G in m months with s already saved, the monthly amount is <code>(G &minus; s(1 + i)<sup>m</sup>) &middot; i / ((1 + i)<sup>m</sup> &minus; 1)</code>, where i is the monthly rate; at 0% it is what's left divided by the months.</p>
+            <p>A savings account, a bond fund and a stock fund behave very differently over five years, so treat the steady return as a planning assumption. Taxes, fees and inflation are not included; if the goal is a future price, such as a house deposit or tuition, raise the target to allow for inflation.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 5. ROI                                  -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-roi" role="tabpanel">
+      <div class="calc-panel" id="panel-roi" role="tabpanel" aria-labelledby="tab-roi" hidden>
         <div class="calc-card">
-          <h3>Investment Return (ROI) Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="roi-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <h2 id="h-roi">Investment Return (ROI) Calculator</h2>
+          <p class="calc-dedicated"><a href="roi-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">Total return and the annualized return (CAGR) on an investment, from what you put in, what it is worth now, and how long you held it.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="roi-initial">Initial Investment ($)</label>
-              <input type="number" id="roi-initial" placeholder="10000" min="0" step="any">
+              <label for="roi-initial">Initial investment ($)</label>
+              <input type="number" id="roi-initial" value="10000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="roi-final">Final Value ($)</label>
-              <input type="number" id="roi-final" placeholder="25000" min="0" step="any">
+              <label for="roi-final">Final value ($)</label>
+              <input type="number" id="roi-final" value="25000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="roi-years">Time Period (Years)</label>
-              <input type="number" id="roi-years" placeholder="5" min="0" step="any">
+              <label for="roi-years">Time held (years)</label>
+              <input type="number" id="roi-years" value="5" min="0" step="any" aria-describedby="roi-years-hint">
+              <span class="field-hint" id="roi-years-hint">Decimals work: 6 months = 0.5.</span>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcROI()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('roi')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="roi-error"></div>
+          <div class="calc-error" id="roi-error" role="alert"></div>
           <div class="calc-results" id="roi-results">
-            <h4>Results</h4>
-            <div id="roi-output"></div>
+            <h3>Results</h3>
+            <div id="roi-output" aria-live="polite"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p><strong>ROI</strong> = (final &minus; initial) &divide; initial: the total change, however long it took. <strong>CAGR</strong> = (final &divide; initial)<sup>1/years</sup> &minus; 1: the steady yearly rate that turns the initial amount into the final one. A 150% gain over five years is a 20.1% CAGR, not 30% a year, because growth compounds.</p>
+            <p>Both assume one amount in at the start and one value at the end. If you added or withdrew money along the way, or received dividends or rent, fold them into the final value or use a money-weighted return (IRR) instead. Fees and taxes are not deducted.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 6. FREELANCER TAX ESTIMATOR             -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-tax" role="tabpanel">
+      <div class="calc-panel" id="panel-tax" role="tabpanel" aria-labelledby="tab-tax" hidden>
         <div class="calc-card">
-          <h3>Freelancer Tax Estimator (2025 US)</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="freelancer-tax-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
+          <h2 id="h-tax">Freelancer Tax Estimator (2026, US)</h2>
+          <p class="calc-dedicated"><a href="freelancer-tax-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">A 2026 estimate of self-employment tax, federal income tax (with the QBI deduction), an approximate state tax, and the quarterly payments that cover them.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="tax-income">Gross Income ($)</label>
-              <input type="number" id="tax-income" placeholder="100000" min="0" step="any">
+              <label for="tax-income">Gross income ($/year)</label>
+              <input type="number" id="tax-income" value="100000" min="0" step="any" aria-describedby="tax-income-hint">
+              <span class="field-hint" id="tax-income-hint">Freelance income before expenses.</span>
             </div>
             <div class="form-group">
-              <label for="tax-expenses">Business Expenses ($)</label>
-              <input type="number" id="tax-expenses" placeholder="15000" min="0" step="any">
+              <label for="tax-expenses">Expenses ($/year)</label>
+              <input type="number" id="tax-expenses" value="15000" min="0" step="any" aria-describedby="tax-expenses-hint">
+              <span class="field-hint" id="tax-expenses-hint">Deductible business costs.</span>
             </div>
             <div class="form-group">
-              <label for="tax-status">Filing Status</label>
+              <label for="tax-status">Filing status</label>
               <select id="tax-status">
-                <option value="single">Single</option>
-                <option value="married">Married Filing Jointly</option>
+                <option value="single" selected>Single</option>
+                <option value="mfj">Married filing jointly</option>
+                <option value="hoh">Head of household</option>
+                <option value="mfs">Married filing separately</option>
               </select>
             </div>
             <div class="form-group">
-              <label for="tax-state">State</label>
+              <label for="tax-state">State (approx. rate)</label>
               <select id="tax-state">
-                <option value="none">No State Income Tax</option>
-                <option value="AL">Alabama (5.00%)</option>
-                <option value="AZ">Arizona (2.50%)</option>
-                <option value="AR">Arkansas (4.40%)</option>
-                <option value="CA">California (est. 9.30%)</option>
-                <option value="CO">Colorado (4.40%)</option>
-                <option value="CT">Connecticut (5.00%)</option>
-                <option value="DE">Delaware (6.60%)</option>
-                <option value="GA">Georgia (5.49%)</option>
-                <option value="HI">Hawaii (8.25%)</option>
-                <option value="ID">Idaho (5.80%)</option>
-                <option value="IL">Illinois (4.95%)</option>
-                <option value="IN">Indiana (3.05%)</option>
-                <option value="IA">Iowa (5.70%)</option>
-                <option value="KS">Kansas (5.70%)</option>
-                <option value="KY">Kentucky (4.00%)</option>
-                <option value="LA">Louisiana (4.25%)</option>
-                <option value="ME">Maine (7.15%)</option>
-                <option value="MD">Maryland (5.75%)</option>
-                <option value="MA">Massachusetts (5.00%)</option>
-                <option value="MI">Michigan (4.25%)</option>
-                <option value="MN">Minnesota (7.85%)</option>
-                <option value="MS">Mississippi (5.00%)</option>
-                <option value="MO">Missouri (4.95%)</option>
-                <option value="MT">Montana (5.90%)</option>
-                <option value="NE">Nebraska (5.84%)</option>
-                <option value="NJ">New Jersey (6.37%)</option>
-                <option value="NM">New Mexico (5.90%)</option>
-                <option value="NY">New York (est. 6.85%)</option>
-                <option value="NC">North Carolina (4.50%)</option>
-                <option value="ND">North Dakota (2.50%)</option>
-                <option value="OH">Ohio (3.50%)</option>
-                <option value="OK">Oklahoma (4.75%)</option>
-                <option value="OR">Oregon (9.00%)</option>
-                <option value="PA">Pennsylvania (3.07%)</option>
-                <option value="RI">Rhode Island (5.99%)</option>
-                <option value="SC">South Carolina (6.40%)</option>
-                <option value="UT">Utah (4.65%)</option>
-                <option value="VT">Vermont (7.60%)</option>
-                <option value="VA">Virginia (5.75%)</option>
-                <option value="WV">West Virginia (5.12%)</option>
-                <option value="WI">Wisconsin (5.30%)</option>
-                <option value="DC">Washington DC (8.50%)</option>
+                <option value="none" selected>None (AK, FL, NV, NH, SD, TN, TX, WA, WY)</option>
+                <option value="AL">Alabama (~4.95%)</option>
+                <option value="AZ">Arizona (~2.50%)</option>
+                <option value="AR">Arkansas (~3.78%)</option>
+                <option value="CA">California (~4.55%)</option>
+                <option value="CO">Colorado (~4.40%)</option>
+                <option value="CT">Connecticut (~4.50%)</option>
+                <option value="DE">Delaware (~5.24%)</option>
+                <option value="DC">District of Columbia (~6.37%)</option>
+                <option value="GA">Georgia (~5.19%)</option>
+                <option value="HI">Hawaii (~6.12%)</option>
+                <option value="ID">Idaho (~4.96%)</option>
+                <option value="IL">Illinois (~4.95%)</option>
+                <option value="IN">Indiana (~2.95%)</option>
+                <option value="IA">Iowa (~3.80%)</option>
+                <option value="KS">Kansas (~5.46%)</option>
+                <option value="KY">Kentucky (~3.50%)</option>
+                <option value="LA">Louisiana (~3.00%)</option>
+                <option value="ME">Maine (~6.46%)</option>
+                <option value="MD">Maryland (~4.68%)</option>
+                <option value="MA">Massachusetts (~5.00%)</option>
+                <option value="MI">Michigan (~4.25%)</option>
+                <option value="MN">Minnesota (~6.16%)</option>
+                <option value="MS">Mississippi (~3.47%)</option>
+                <option value="MO">Missouri (~4.46%)</option>
+                <option value="MT">Montana (~5.05%)</option>
+                <option value="NE">Nebraska (~4.15%)</option>
+                <option value="NJ">New Jersey (~3.54%)</option>
+                <option value="NM">New Mexico (~4.18%)</option>
+                <option value="NY">New York (~5.18%)</option>
+                <option value="NC">North Carolina (~3.99%)</option>
+                <option value="ND">North Dakota (~0.69%)</option>
+                <option value="OH">Ohio (~1.79%)</option>
+                <option value="OK">Oklahoma (~4.21%)</option>
+                <option value="OR">Oregon (~8.32%)</option>
+                <option value="PA">Pennsylvania (~3.07%)</option>
+                <option value="RI">Rhode Island (~3.75%)</option>
+                <option value="SC">South Carolina (~5.13%)</option>
+                <option value="UT">Utah (~4.50%)</option>
+                <option value="VT">Vermont (~4.46%)</option>
+                <option value="VA">Virginia (~5.41%)</option>
+                <option value="WV">West Virginia (~3.70%)</option>
+                <option value="WI">Wisconsin (~4.50%)</option>
               </select>
+            </div>
+            <div class="form-group">
+              <label for="tax-state-rate">State tax rate (%)</label>
+              <input type="number" id="tax-state-rate" value="0" min="0" max="20" step="any" aria-describedby="tax-state-rate-hint">
+              <span class="field-hint" id="tax-state-rate-hint">Filled in from the state list. Overwrite it if you know your rate.</span>
+            </div>
+            <div class="form-group form-group--wide">
+              <div class="check-row">
+                <input type="checkbox" id="tax-sstb">
+                <label for="tax-sstb">My work is a specified service business (consulting, law, accounting, health, financial services, performing arts, athletics, or a business built on the owner's reputation or skill). This only changes the result when taxable income tops $201,750 ($403,500 joint).</label>
+              </div>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcTax()">Estimate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('tax')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Estimate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="tax-error"></div>
+          <div class="calc-error" id="tax-error" role="alert"></div>
           <div class="calc-results" id="tax-results">
-            <h4>Tax Estimate</h4>
-            <div id="tax-output"></div>
-            <p class="calc-subhead">Federal Tax Bracket Breakdown</p>
-            <div id="tax-brackets"></div>
-            <p style="color:var(--text-dim);font-size:0.75rem;font-style:italic;margin-top:1rem;">This is an estimate for informational purposes only. Consult a tax professional for advice specific to your situation.</p>
+            <h3>Tax estimate</h3>
+            <div id="tax-output" aria-live="polite"></div>
+            <p class="calc-subhead">Federal bracket breakdown</p>
+            <div class="table-scroll" id="tax-brackets" tabindex="0" role="region" aria-label="Federal bracket breakdown"></div>
+            <p class="calc-note">2026 estimated payments are due April 15, June 15 and September 15, 2026, and January 15, 2027. This is an estimate for planning, not tax advice; a tax professional can account for the rest of your situation.</p>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <ul>
+              <li><strong>Self-employment tax:</strong> 15.3% of 92.35% of net profit: 12.4% Social Security on earnings up to the 2026 wage base of $184,500, plus 2.9% Medicare on all of it. There is no SE tax if that 92.35% figure is under $400.</li>
+              <li><strong>Additional Medicare tax:</strong> 0.9% on self-employment earnings above $200,000 ($250,000 joint, $125,000 separate). It is separate from SE tax and not half-deductible.</li>
+              <li><strong>Adjusted gross income:</strong> profit minus half of the SE tax.</li>
+              <li><strong>Standard deduction (2026):</strong> $16,100 single or married filing separately, $32,200 joint, $24,150 head of household.</li>
+              <li><strong>QBI deduction (&sect;199A):</strong> 20% of profit after the SE-tax deduction, capped at 20% of taxable income. Above $201,750 of taxable income ($403,500 joint) it phases out over the next $75,000 ($150,000 joint): in a straight line here, because a solo freelancer usually pays no W-2 wages, and faster for a specified service business, which loses it entirely above that range. From 2026 there is a $400 minimum when your active-business QBI is at least $1,000.</li>
+              <li><strong>Federal income tax:</strong> the 2026 rate schedule, 10% to 37%. Below $100,000 of taxable income the IRS tax table works in $50 bands, so a return can differ by a few dollars.</li>
+              <li><strong>State:</strong> one approximate rate &times; (AGI &minus; standard deduction). The list fills in each state's 2026 flat rate, or for graduated-rate states the average rate on $75,000 of single taxable income. Local and city income taxes are not included.</li>
+              <li><strong>Quarterly payments:</strong> the yearly total &divide; 4. Paying at least 90% of this year's tax, or 100% of last year's (110% if last year's AGI was over $150,000), in four even parts generally avoids an underpayment penalty.</li>
+            </ul>
+            <p>Assumes this freelance profit is your only income and you take the standard deduction. Not included: W-2 wages (which share the Social Security wage base), credits, itemized deductions, retirement contributions, the self-employed health insurance deduction, the 2025&ndash;2028 senior deduction, and AMT.</p>
+            <p class="calc-sources">Figures for tax year 2026, checked November 2026. Sources: IRS Rev. Proc. 2025-32 (brackets, standard deduction, QBI thresholds); the Social Security Administration's 2026 wage base announcement; 26 U.S.C. &sect;199A as amended by Pub. L. 119-21; Tax Foundation, state income tax rates and brackets as of January 1, 2026.</p>
+          </details>
         </div>
       </div>
 
@@ -759,148 +925,184 @@
       <!-- ═══════════════════════════════════════ -->
       <!-- 7. FIRE CALCULATOR                      -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-fire" role="tabpanel">
+      <div class="calc-panel" id="panel-fire" role="tabpanel" aria-labelledby="tab-fire" hidden>
         <div class="calc-card">
-          <h3>FIRE Calculator (Financial Independence)</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="fire-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Calculate your FI number, years to financial independence, and the four withdrawal tiers (Lean, Regular, Fat, Coast FIRE).</p>
+          <h2 id="h-fire">FIRE Calculator (Financial Independence)</h2>
+          <p class="calc-dedicated"><a href="fire-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">Your FI number, how long until you reach it, and the Lean, Fat and Coast variants. Everything is shown in today's dollars, using your return minus inflation.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="fire-expenses">Annual Expenses ($)</label>
-              <input type="number" id="fire-expenses" placeholder="40000" min="0" step="any">
+              <label for="fire-expenses">Spending per year ($)</label>
+              <input type="number" id="fire-expenses" value="40000" min="0" step="any" aria-describedby="fire-expenses-hint">
+              <span class="field-hint" id="fire-expenses-hint">In retirement, in today's dollars.</span>
             </div>
             <div class="form-group">
-              <label for="fire-rate">Safe Withdrawal Rate (%)</label>
-              <input type="number" id="fire-rate" placeholder="4" min="0.5" max="10" step="any" value="4">
+              <label for="fire-rate">Safe withdrawal rate (%)</label>
+              <input type="number" id="fire-rate" value="4" min="0.5" max="20" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-current">Current Net Worth ($)</label>
-              <input type="number" id="fire-current" placeholder="50000" min="0" step="any">
+              <label for="fire-current">Invested today ($)</label>
+              <input type="number" id="fire-current" value="50000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-contrib">Annual Savings ($)</label>
-              <input type="number" id="fire-contrib" placeholder="30000" min="0" step="any">
+              <label for="fire-contrib">Savings per year ($)</label>
+              <input type="number" id="fire-contrib" value="30000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="fire-return">Expected Return (%)</label>
-              <input type="number" id="fire-return" placeholder="7" min="0" step="any" value="7">
+              <label for="fire-return">Expected return (%/yr)</label>
+              <input type="number" id="fire-return" value="7" min="-50" max="50" step="any" aria-describedby="fire-return-hint">
+              <span class="field-hint" id="fire-return-hint">Before inflation.</span>
             </div>
             <div class="form-group">
-              <label for="fire-age">Current Age</label>
-              <input type="number" id="fire-age" placeholder="30" min="0" max="100" step="1">
+              <label for="fire-inflation">Inflation (%/yr)</label>
+              <input type="number" id="fire-inflation" value="3" min="-10" max="30" step="any" aria-describedby="fire-inflation-hint">
+              <span class="field-hint" id="fire-inflation-hint">Set to 0 if your return above is already after inflation.</span>
+            </div>
+            <div class="form-group">
+              <label for="fire-age">Current age (optional)</label>
+              <input type="number" id="fire-age" value="30" min="0" max="120" step="1">
+            </div>
+            <div class="form-group">
+              <label for="fire-coast-age">Coast FI target age</label>
+              <input type="number" id="fire-coast-age" value="65" min="0" max="120" step="1">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcFIRE()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('fire')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="fire-error"></div>
+          <div class="calc-error" id="fire-error" role="alert"></div>
           <div class="calc-results" id="fire-results">
-            <h4>FIRE Summary</h4>
-            <div id="fire-output"></div>
-            <p class="calc-subhead">Year-by-Year Growth</p>
-            <div class="growth-table-wrap" id="fire-table-wrap"></div>
+            <h3>FIRE summary</h3>
+            <div id="fire-output" aria-live="polite"></div>
+            <p class="calc-subhead">Year by year</p>
+            <div class="growth-table-wrap" id="fire-table-wrap" tabindex="0" role="region" aria-label="Year-by-year balance"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p><strong>FI number</strong> = yearly spending &divide; withdrawal rate. At 4% that is 25&times; spending. The 4% figure comes from studies of past US markets over 30-year retirements; many people plan on 3&ndash;3.5% for longer ones.</p>
+            <p>Everything is in today's dollars. The real return is <code>(1 + return) &divide; (1 + inflation) &minus; 1</code>, your yearly savings are assumed to rise with inflation, and the balance grows month by month with savings added each month. Time to FI is the first month the balance reaches the FI number. The future-dollar column adds inflation back, which is closer to what a statement would show.</p>
+            <p><strong>Coast FI</strong> is what you'd need invested today for growth alone to reach the FI number by the age you set. <strong>Lean</strong> and <strong>Fat</strong> use 75% and 200% of your spending; they are loose conventions, not rules. Real returns arrive unevenly, and a bad first few years of retirement matter more than the average.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 8. SIDE HUSTLE PROFIT                   -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-hustle" role="tabpanel">
+      <div class="calc-panel" id="panel-hustle" role="tabpanel" aria-labelledby="tab-hustle" hidden>
         <div class="calc-card">
-          <h3>Side Hustle Profit Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="side-hustle-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Calculate true profit, effective hourly rate, and time-value-adjusted return on a side hustle. Factors in taxes, expenses, platform fees, and opportunity cost.</p>
+          <h2 id="h-hustle">Side Hustle Profit Calculator</h2>
+          <p class="calc-dedicated"><a href="side-hustle-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">True monthly profit and hourly rate for a side hustle after platform fees, expenses and tax, with an optional comparison against your day job.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="hustle-revenue">Monthly Revenue ($)</label>
-              <input type="number" id="hustle-revenue" placeholder="3000" min="0" step="any">
+              <label for="hustle-revenue">Revenue ($/month)</label>
+              <input type="number" id="hustle-revenue" value="3000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="hustle-expenses">Monthly Expenses ($)</label>
-              <input type="number" id="hustle-expenses" placeholder="500" min="0" step="any">
+              <label for="hustle-expenses">Expenses ($/month)</label>
+              <input type="number" id="hustle-expenses" value="500" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="hustle-fees">Platform Fees (%)</label>
-              <input type="number" id="hustle-fees" placeholder="0" min="0" max="100" step="any" value="0">
+              <label for="hustle-fees">Platform fees (%)</label>
+              <input type="number" id="hustle-fees" value="10" min="0" max="100" step="any" aria-describedby="hustle-fees-hint">
+              <span class="field-hint" id="hustle-fees-hint">Share of revenue the platform keeps.</span>
             </div>
             <div class="form-group">
-              <label for="hustle-tax">Tax Rate (%)</label>
-              <input type="number" id="hustle-tax" placeholder="25" min="0" max="100" step="any" value="25">
+              <label for="hustle-tax">Tax rate on profit (%)</label>
+              <input type="number" id="hustle-tax" value="25" min="0" max="100" step="any" aria-describedby="hustle-tax-hint">
+              <span class="field-hint" id="hustle-tax-hint">US side income usually owes 15.3% self-employment tax plus income tax.</span>
             </div>
             <div class="form-group">
-              <label for="hustle-hours">Hours per Month</label>
-              <input type="number" id="hustle-hours" placeholder="40" min="0" step="any">
+              <label for="hustle-hours">Hours worked (per month)</label>
+              <input type="number" id="hustle-hours" value="40" min="0" step="any" aria-describedby="hustle-hours-hint">
+              <span class="field-hint" id="hustle-hours-hint">Include admin, marketing and travel time.</span>
             </div>
             <div class="form-group">
-              <label for="hustle-dayjob">Day Job Rate ($/hr, optional)</label>
-              <input type="number" id="hustle-dayjob" placeholder="50" min="0" step="any">
+              <label for="hustle-dayjob">Day job pay ($/hour)</label>
+              <input type="number" id="hustle-dayjob" value="35" min="0" step="any" aria-describedby="hustle-dayjob-hint">
+              <span class="field-hint" id="hustle-dayjob-hint">Before tax. Optional.</span>
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcHustle()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('hustle')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="hustle-error"></div>
+          <div class="calc-error" id="hustle-error" role="alert"></div>
           <div class="calc-results" id="hustle-results">
-            <h4>Side Hustle Breakdown</h4>
-            <div id="hustle-output"></div>
+            <h3>Side hustle breakdown</h3>
+            <div id="hustle-output" aria-live="polite"></div>
           </div>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>Platform fees = revenue &times; fee %. Profit before tax = revenue &minus; fees &minus; expenses. Tax is set aside on profit only, at your rate. In the US, side income usually owes 15.3% self-employment tax on top of income tax, so 25&ndash;35% is a common all-in guess; the <a href="freelancer-tax-calculator.html" style="color:var(--teal);">freelancer tax estimator</a> can narrow it down.</p>
+            <p>Hourly rates divide by the hours you enter, so count the unpaid time too. The day-job comparison uses before-tax pay on both sides; it leaves out benefits such as health insurance or a retirement match, which make a salaried hour worth more than its pay rate.</p>
+          </details>
         </div>
       </div>
 
       <!-- ═══════════════════════════════════════ -->
       <!-- 9. CRYPTO DCA                           -->
       <!-- ═══════════════════════════════════════ -->
-      <div class="calc-panel" id="panel-dca" role="tabpanel">
+      <div class="calc-panel" id="panel-dca" role="tabpanel" aria-labelledby="tab-dca" hidden>
         <div class="calc-card">
-          <h3>Crypto DCA (Dollar-Cost Averaging) Calculator</h3>
-          <p style="margin-top:0.25rem;margin-bottom:1.25rem;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;"><a href="crypto-dca-calculator.html" style="color:var(--teal);text-decoration:none">&rarr; Open dedicated page</a></p>
-          <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:1.25rem;">Model a dollar-cost-averaging strategy. Enter your buy price sequence or use a constant average growth assumption. Compare against lump-sum buying.</p>
+          <h2 id="h-dca">Crypto DCA (Dollar-Cost Averaging) Calculator</h2>
+          <p class="calc-dedicated"><a href="crypto-dca-calculator.html">&rarr; Open dedicated page</a></p>
+          <p class="calc-intro">Model buying a fixed dollar amount on a schedule while the price trends from a start price to an end price with swings along the way, and compare it with investing the same total on day one.</p>
           <div class="form-grid">
             <div class="form-group">
-              <label for="dca-amount">Amount per Buy ($)</label>
-              <input type="number" id="dca-amount" placeholder="100" min="0" step="any">
+              <label for="dca-amount">Amount per buy ($)</label>
+              <input type="number" id="dca-amount" value="100" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="dca-freq">Buy Frequency</label>
+              <label for="dca-freq">Buy frequency</label>
               <select id="dca-freq">
-                <option value="7">Weekly</option>
-                <option value="14">Bi-weekly</option>
-                <option value="30" selected>Monthly</option>
-                <option value="90">Quarterly</option>
+                <option value="52">Weekly (52 a year)</option>
+                <option value="26">Every two weeks (26 a year)</option>
+                <option value="12" selected>Monthly (12 a year)</option>
+                <option value="4">Quarterly (4 a year)</option>
               </select>
             </div>
             <div class="form-group">
               <label for="dca-duration">Duration (months)</label>
-              <input type="number" id="dca-duration" placeholder="24" min="1" step="1">
+              <input type="number" id="dca-duration" value="24" min="1" max="600" step="1">
             </div>
             <div class="form-group">
-              <label for="dca-start">Start Price ($)</label>
-              <input type="number" id="dca-start" placeholder="30000" min="0" step="any">
+              <label for="dca-start">Start price ($ per coin)</label>
+              <input type="number" id="dca-start" value="30000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="dca-end">End Price ($)</label>
-              <input type="number" id="dca-end" placeholder="60000" min="0" step="any">
+              <label for="dca-end">End price ($ per coin)</label>
+              <input type="number" id="dca-end" value="60000" min="0" step="any">
             </div>
             <div class="form-group">
-              <label for="dca-volatility">Volatility (0-100%)</label>
-              <input type="number" id="dca-volatility" placeholder="40" min="0" max="200" step="any" value="40">
+              <label for="dca-volatility">Price swing (&plusmn;%)</label>
+              <input type="number" id="dca-volatility" value="40" min="0" max="90" step="any" aria-describedby="dca-volatility-hint">
+              <span class="field-hint" id="dca-volatility-hint">Around the trend, 0 to 90. Two full swings over the period.</span>
+            </div>
+            <div class="form-group">
+              <label for="dca-fee">Fee per buy (%)</label>
+              <input type="number" id="dca-fee" value="0" min="0" max="10" step="any">
             </div>
           </div>
           <div class="calc-btn-row">
-            <button class="calc-btn" onclick="calcDCA()">Calculate</button>
-            <button class="calc-btn calc-btn--secondary" onclick="clearPanel('dca')">Clear</button>
+            <button type="button" class="calc-btn" data-fc-action="calc">Calculate</button>
+            <button type="button" class="calc-btn calc-btn--secondary" data-fc-action="reset">Reset</button>
           </div>
-          <div class="calc-error" id="dca-error"></div>
+          <div class="calc-error" id="dca-error" role="alert"></div>
           <div class="calc-results" id="dca-results">
-            <h4>DCA Simulation</h4>
-            <div id="dca-output"></div>
-            <p class="calc-subhead">Buy History (price path is deterministic sine wave + trend)</p>
-            <div class="growth-table-wrap" id="dca-table-wrap"></div>
+            <h3>DCA simulation</h3>
+            <div id="dca-output" aria-live="polite"></div>
+            <p class="calc-subhead">Buy history (a smooth model path, not real prices)</p>
+            <div class="growth-table-wrap" id="dca-table-wrap" tabindex="0" role="region" aria-label="Buy history"></div>
           </div>
-          <p style="color:var(--text-dim);font-size:0.72rem;font-style:italic;margin-top:1rem;">This is a deterministic simulation for education only, not investment advice. Real crypto markets do not follow smooth paths.</p>
+          <p class="calc-note">A deterministic simulation for learning, not investment advice. Real crypto prices do not follow smooth paths.</p>
+          <details class="calc-how">
+            <summary>How it works</summary>
+            <p>A teaching model, not a forecast. The price moves in a straight line from the start price to the end price with two smooth up-and-down swings of the size you choose. You buy a fixed dollar amount at the start of each period, the fee comes off each buy, and everything is valued at the end price.</p>
+            <p>Average cost = total spent &divide; coins bought. Because a fixed amount buys more coins when the price is low, this lands below the plain average of the prices. Lump sum puts the same total in on day one at the start price, with one fee. In a market that mostly rises, lump sum tends to come out ahead; DCA mainly limits the regret of bad timing.</p>
+          </details>
         </div>
       </div>
 

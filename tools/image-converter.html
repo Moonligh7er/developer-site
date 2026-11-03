@@ -91,6 +91,23 @@
     .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
     input[type=range] { width: 100%; }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    /* Additions shared by the four image tools */
+    .form-group input:focus-visible, .form-group select:focus-visible, .file-drop:focus-visible, .calc-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .calc-btn { min-height: 44px; }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .file-drop p + p { margin-top: 0.35rem; }
+    .support-line { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin: -0.25rem 0 1rem; line-height: 1.5; }
+    .status-line { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); min-height: 1.2em; margin: 0.5rem 0 0; }
+    .form-group input[type=color] { padding: 0.2rem; height: 44px; cursor: pointer; }
+    .form-group input[type=range] { padding: 0; border: none; background: transparent; accent-color: var(--teal); min-height: 44px; }
+    .form-group .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; }
+    .form-group .check-row input { width: 18px; height: 18px; padding: 0; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; flex-wrap: wrap; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .tool-note { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; margin-top: 0.75rem; }
+    .tool-note--warn { color: var(--amber); }
+    .preview-box canvas { background: repeating-conic-gradient(#1a1a30 0% 25%, #0f0f1a 0% 50%) 50% / 16px 16px; }
+    .hidden { display: none !important; }
     
   </style>
 </head>
@@ -124,55 +141,66 @@
 
       <div class="calc-card">
         <h1>Image Format Converter</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Convert between JPG, PNG, WebP, and (browser permitting) AVIF. Choose your target format, set quality for lossy outputs, download. AVIF support is feature-detected &mdash; option is hidden if your browser can&apos;t encode it.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Convert between JPEG, PNG, WebP and (where your browser can save it) AVIF. Pick a target format, set the quality for lossy formats, check the preview, download. Formats your browser can&rsquo;t save are shown but switched off, so you never get a different format than you asked for.</p>
         <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Files stay in your browser.</strong> Everything on this page &mdash; loading, processing, encoding &mdash; runs locally. Your images are never uploaded to any server. Re-encoding also strips EXIF metadata (camera model, GPS coordinates), which is a privacy win.</div>
-        <div class="file-drop" id="drop" tabindex="0" role="button" aria-label="Choose image">
-  <p><strong style="color:var(--teal);">Click here or drop an image</strong></p>
-  <p>Any format your browser can read</p>
-  <input type="file" id="file" accept="image/*" style="display:none;">
-</div>
-<div class="form-grid">
-  <div class="form-group">
-    <label for="format">Convert To</label>
-    <select id="format">
-      <option value="image/png">PNG (lossless)</option>
-      <option value="image/jpeg">JPG</option>
-      <option value="image/webp">WebP</option>
-      <option value="image/avif" id="avif-opt" style="display:none;">AVIF (best compression)</option>
-    </select>
-    <span class="hint" id="avif-note" style="display:none;">AVIF encoding not supported in this browser — option hidden.</span>
-  </div>
-  <div class="form-group" id="quality-group">
-    <label for="quality">Quality (lossy formats)</label>
-    <div class="slider-row">
-      <input type="range" id="quality" min="1" max="100" value="90">
-      <span id="qualityVal" style="font-family:var(--font-mono);color:var(--teal);min-width:2.5rem;text-align:right;">90</span>
-    </div>
-  </div>
-</div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
+        <div class="file-drop" id="drop" tabindex="0" role="button" aria-describedby="drop-help">
+          <p><strong style="color:var(--teal);">Choose an image, drop it here, or paste it</strong></p>
+          <p id="drop-help">Any format your browser can open &middot; HEIC in Safari only &middot; up to 100 MB</p>
+          <input type="file" id="file" accept="image/*,.heic,.heif,.avif" hidden>
+        </div>
+        <p class="support-line" id="support">Checking which formats this browser can open and save&hellip;</p>
+        <div class="calc-btn-row">
+          <button type="button" class="calc-btn calc-btn--secondary" id="sample-btn">Try a sample image</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="format">Convert to</label>
+            <select id="format">
+              <option value="image/png">PNG (lossless, keeps transparency)</option>
+              <option value="image/jpeg">JPEG (photos, works everywhere)</option>
+              <option value="image/webp" selected>WebP (smaller, keeps transparency)</option>
+              <option value="image/avif" id="avif-opt" disabled>AVIF (checking support&hellip;)</option>
+            </select>
+          </div>
+          <div class="form-group" id="quality-group">
+            <label for="quality">Quality (1&ndash;100)</label>
+            <div class="slider-row">
+              <input type="range" id="quality" min="1" max="100" value="90">
+              <output id="qualityVal" for="quality" style="font-family:var(--font-mono);color:var(--teal);min-width:2.5rem;text-align:right;">90</output>
+            </div>
+            <span class="hint">Only for JPEG, WebP and AVIF. PNG is always lossless.</span>
+          </div>
+          <div class="form-group hidden" id="bg-group">
+            <label for="bg">Fill transparent areas with</label>
+            <input type="color" id="bg" value="#ffffff">
+            <span class="hint">This image has see-through areas and JPEG can&rsquo;t store transparency.</span>
+          </div>
+        </div>
+        <div class="calc-error" id="err" role="alert"></div>
+        <p class="status-line" id="status" aria-live="polite"></p>
+        <div class="calc-results" id="results">
           <h4>Converted</h4>
-<div class="preview-wrap">
-  <div class="preview-box"><h5>Original</h5><canvas id="orig-canvas"></canvas><p class="preview-meta" id="orig-meta"></p></div>
-  <div class="preview-box"><h5>Converted</h5><canvas id="conv-canvas"></canvas><p class="preview-meta" id="conv-meta"></p></div>
-</div>
-<div id="stats"></div>
-<div class="calc-btn-row" style="margin-top:1rem;">
-  <button class="calc-btn" onclick="doDownload()">Download Converted</button>
-</div>
+          <div class="preview-wrap">
+            <div class="preview-box"><h5>Original</h5><canvas id="orig-canvas" role="img" aria-label="Original image preview"></canvas><p class="preview-meta" id="orig-meta"></p></div>
+            <div class="preview-box"><h5>Converted</h5><canvas id="conv-canvas" role="img" aria-label="Converted image preview"></canvas><p class="preview-meta" id="conv-meta"></p></div>
+          </div>
+          <div id="stats" aria-live="polite"></div>
+          <p class="tool-note tool-note--warn hidden" id="convert-note"></p>
+          <div class="calc-btn-row" style="margin-top:1rem;">
+            <button type="button" class="calc-btn" id="download-btn" disabled>Download converted</button>
+          </div>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Which format when</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>PNG:</strong> lossless. Best for screenshots, diagrams, images with sharp edges or text, and anything that needs transparency. Files are much bigger than JPG for photographs.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>JPG:</strong> lossy. Best for photographs, especially when file size matters and you don&apos;t need transparency. Old standard, works everywhere. Quality 80-90 is nearly indistinguishable from the original for most viewers.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>WebP:</strong> Google&apos;s modern format. Supports both lossy and lossless modes plus transparency. Typically 25-35% smaller than JPG at equivalent quality. Universal browser support since 2020.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>AVIF:</strong> the newest format, based on AV1 video codec. Typically 50%+ smaller than JPG at equivalent quality. Browser <em>decode</em> support is broad; browser <em>encode</em> support (needed for this tool) is spotty &mdash; the option is hidden on browsers that can&apos;t encode it.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Transparency + format changes</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Converting a PNG or WebP with a transparent background to JPG replaces transparency with a solid color (usually white or black depending on browser). If you need to keep transparency, target PNG, WebP, or AVIF.</p>
-</section>
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Which format when</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>PNG:</strong> lossless. Best for screenshots, diagrams, images with sharp edges or text, and anything that needs transparency. Files are much bigger than JPEG for photographs.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>JPEG:</strong> lossy. Best for photographs when file size matters and you don&apos;t need transparency. The old standard that works everywhere. Quality 80&ndash;90 is hard to tell from the original for most viewers.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>WebP:</strong> Google&apos;s format with lossy and lossless modes plus transparency. Typically 25&ndash;35% smaller than JPEG at similar quality, and every current browser displays it (Safari since 2020). Some older desktop software still can&apos;t open it.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>AVIF:</strong> the newest of the four, based on the AV1 video codec, and often smaller still than WebP. Current browsers can <em>display</em> it, but fewer can <em>create</em> it, which this page needs; the option is switched off where yours can&apos;t.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Transparency, animation and quality</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">JPEG can&apos;t store transparency, so converting a see-through PNG or WebP to JPEG fills those areas with a colour you choose (white by default). PNG, WebP and AVIF keep transparency. Animated GIFs and WebPs keep only their first frame. Converting a lossy file (JPEG) to PNG doesn&apos;t bring back lost detail; it just stores what&apos;s left without further loss. Converting lossy to lossy (JPEG to WebP) loses a little more each time, so convert from the best original you have. Colour profiles are converted to standard sRGB, and the photo&apos;s rotation tag is applied so pictures stay upright.</p>
+      </section>
     </div>
 
     <aside class="calc-other">
@@ -205,124 +233,365 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      
-// Shared image utilities. Files never leave the browser.
-async function loadImage(file){
-  // createImageBitmap with imageOrientation:'from-image' respects EXIF rotation on iOS/Android photos
-  try {
-    return await createImageBitmap(file, { imageOrientation: 'from-image' });
-  } catch(e) {
-    // Fallback: HTMLImageElement (won't fix EXIF but works)
-    return await new Promise((res, rej) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => { URL.revokeObjectURL(url); res(img); };
-      img.onerror = rej;
-      img.src = url;
-    });
-  }
-}
-function bytesToHuman(b){
-  if (b < 1024) return b + ' B';
-  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/(1024*1024)).toFixed(2) + ' MB';
-}
-function detectAvifSupport(){
-  return new Promise(res => {
-    const c = document.createElement('canvas');
-    c.width = c.height = 2;
-    if (!c.toBlob) return res(false);
-    c.toBlob(b => res(!!b && b.type === 'image/avif'), 'image/avif');
-    setTimeout(()=>res(false), 500);
-  });
-}
-function downloadBlob(blob, name){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-}
-function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
-function extFromType(type){ return type.split('/')[1].replace('jpeg','jpg'); }
+    (function () {
+      'use strict';
+      /* ---- Shared image utilities (the same block is in image-compressor, -converter, -resizer and -cropper).
+         Everything runs in this tab: files are decoded, drawn and re-encoded locally and never uploaded. ---- */
+      const MAX_FILE_BYTES = 100 * 1024 * 1024;
+      // 16,384 x 16,384: the largest canvas area Chrome and Firefox allow. Safari on iPhone/iPad allows less;
+      // there the encode step fails and we say so instead of freezing.
+      const MAX_PIXELS = 268435456;
+      const MIME_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' };
+      const MIME_LABEL = { 'image/jpeg': 'JPEG', 'image/png': 'PNG', 'image/webp': 'WebP', 'image/avif': 'AVIF', 'image/gif': 'GIF', 'image/bmp': 'BMP', 'image/heic': 'HEIC', 'image/heif': 'HEIF', 'image/svg+xml': 'SVG', 'image/tiff': 'TIFF', 'image/x-icon': 'ICO', 'image/vnd.microsoft.icon': 'ICO' };
+      // 1x1 test images used to check which formats this browser can open (Modernizr's feature tests).
+      const PROBE = {
+        'image/webp': 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
+        'image/avif': 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A='
+      };
+      const $ = id => document.getElementById(id);
 
+      function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+      function fmtDims(w, h) { return fmtInt(w) + ' × ' + fmtInt(h) + ' px'; }
+      function fmtBytes(b) {
+        b = Math.max(0, Math.round(b));
+        if (b < 1024) return fmtInt(b) + ' B';
+        if (b < 1024 * 1024) return (b / 1024).toLocaleString('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + ' KB';
+        return (b / 1048576).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) + ' MB';
+      }
+      // "-63.2%" style change, with a real minus sign and never "-0.0%".
+      function fmtChange(before, after) {
+        if (!before) return '';
+        const pct = (after - before) / before * 100;
+        const r = Math.round(pct * 10) / 10;
+        if (r === 0) return '0%';
+        return (r > 0 ? '+' : '−') + Math.abs(r).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+      }
+      function typeLabel(file) {
+        if (MIME_LABEL[file.type]) return MIME_LABEL[file.type];
+        const m = /\.([a-z0-9]+)$/i.exec(file.name || '');
+        return m ? m[1].toUpperCase() : 'image';
+      }
+      function baseName(name) {
+        let b = String(name || '').replace(/\.[^.\\/]+$/, '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').trim();
+        if (!b || b === 'image') b = 'image';
+        return b.slice(0, 80);
+      }
+      function canDecode(uri) {
+        return new Promise(res => {
+          const img = new Image();
+          img.onload = () => res(img.width > 0);
+          img.onerror = () => res(false);
+          img.src = uri;
+        });
+      }
+      function canEncode(type) {
+        return new Promise(res => {
+          const c = document.createElement('canvas');
+          c.width = c.height = 2;
+          if (!c.toBlob) return res(false);
+          // Browsers that can't encode a type quietly return PNG instead, so check the type we got back.
+          c.toBlob(b => res(!!b && b.type === type), type, 0.8);
+        });
+      }
+      async function detectSupport() {
+        const [webpD, avifD, webpE, avifE] = await Promise.all([
+          canDecode(PROBE['image/webp']), canDecode(PROBE['image/avif']), canEncode('image/webp'), canEncode('image/avif')
+        ]);
+        return {
+          decode: { 'image/webp': webpD, 'image/avif': avifD },
+          encode: { 'image/jpeg': true, 'image/png': true, 'image/webp': webpE, 'image/avif': avifE }
+        };
+      }
+      function supportSummary(s) {
+        const opens = ['JPEG', 'PNG', 'GIF', 'BMP'];
+        if (s.decode['image/webp']) opens.push('WebP');
+        if (s.decode['image/avif']) opens.push('AVIF');
+        const saves = ['JPEG', 'PNG'];
+        if (s.encode['image/webp']) saves.push('WebP');
+        if (s.encode['image/avif']) saves.push('AVIF');
+        return 'This browser can open ' + opens.join(', ') + ' (HEIC only in Safari) and save ' + saves.join(', ') + '.';
+      }
+      function decodeFailureMessage(file) {
+        const n = (file.name || '').toLowerCase(), t = file.type || '';
+        if (/hei[cf]/.test(t) || /\.hei[cf]$/.test(n)) return 'This browser can’t open HEIC/HEIF photos. Safari on Mac, iPhone and iPad can; Chrome, Edge and Firefox can’t yet. On an iPhone, Settings → Camera → Formats → Most Compatible saves new photos as JPEG.';
+        if (/avif/.test(t) || /\.avif$/.test(n)) return 'This browser can’t open AVIF files. Current Chrome, Edge, Firefox and Safari can.';
+        if (/tiff?/.test(t) || /\.tiff?$/.test(n)) return 'Only Safari can open TIFF files. Export the image as PNG or JPEG first.';
+        if (/\.(psd|raw|cr2|cr3|nef|arw|dng|orf|rw2)$/.test(n)) return 'Browsers can’t open camera RAW or Photoshop files. Export a JPEG or PNG first.';
+        if (t && !t.startsWith('image/')) return 'That file isn’t an image (' + t + ').';
+        return 'Couldn’t read this file as an image. It may be damaged, or in a format this browser can’t open.';
+      }
+      // Decodes off the main thread where the browser allows it and applies the EXIF orientation tag,
+      // so phone photos come out the right way up.
+      async function decodeImage(file) {
+        if (typeof createImageBitmap === 'function') {
+          try { return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (e) { /* try an <img> next */ }
+        }
+        const url = URL.createObjectURL(file);
+        try {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = url;
+          await img.decode();
+          return img;
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+      function imageSize(src) { return { w: src.naturalWidth || src.width, h: src.naturalHeight || src.height }; }
+      function releaseImage(src) { if (src && typeof src.close === 'function') src.close(); }
+      function freeCanvas(c) { if (c) { c.width = 0; c.height = 0; } }
+      // Checks a small copy of the image for any pixel that isn't fully opaque.
+      function hasTransparency(src, w, h) {
+        const s = Math.min(1, 256 / Math.max(w, h));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(w * s));
+        c.height = Math.max(1, Math.round(h * s));
+        const x = c.getContext('2d', { willReadFrequently: true });
+        x.drawImage(src, 0, 0, c.width, c.height);
+        const d = x.getImageData(0, 0, c.width, c.height).data;
+        let found = false;
+        for (let i = 3; i < d.length; i += 4) { if (d[i] < 255) { found = true; break; } }
+        freeCanvas(c);
+        return found;
+      }
+      // Big reductions are done in halving steps; one huge downscale step skips pixels and looks jagged.
+      function drawScaled(ctx, src, sx, sy, sw, sh, dw, dh) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        let cur = src, cx = sx, cy = sy, cw = sw, ch = sh;
+        const temps = [];
+        while (cw / 2 >= dw && ch / 2 >= dh) {
+          const c = document.createElement('canvas');
+          c.width = Math.max(dw, Math.round(cw / 2));
+          c.height = Math.max(dh, Math.round(ch / 2));
+          const x = c.getContext('2d');
+          x.imageSmoothingEnabled = true;
+          x.imageSmoothingQuality = 'high';
+          x.drawImage(cur, cx, cy, cw, ch, 0, 0, c.width, c.height);
+          temps.push(c);
+          cur = c; cx = 0; cy = 0; cw = c.width; ch = c.height;
+        }
+        ctx.drawImage(cur, cx, cy, cw, ch, 0, 0, dw, dh);
+        temps.forEach(freeCanvas);
+      }
+      // o: { sx, sy, sw, sh (source rect, optional), w, h (output size), type, quality (0-1), background (for JPEG) }
+      async function renderToBlob(src, o) {
+        const size = imageSize(src);
+        const sx = o.sx || 0, sy = o.sy || 0, sw = o.sw || size.w, sh = o.sh || size.h;
+        const w = Math.max(1, Math.round(o.w || sw)), h = Math.max(1, Math.round(o.h || sh));
+        if (w * h > MAX_PIXELS) throw new Error('That output (' + fmtDims(w, h) + ') is larger than a browser canvas can hold.');
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        if (!ctx) { freeCanvas(c); throw new Error('This browser couldn’t make a ' + fmtDims(w, h) + ' canvas. Try a smaller size.'); }
+        if (o.type === 'image/jpeg') {
+          // JPEG has no transparency: paint the chosen background first so see-through areas don't turn black.
+          ctx.fillStyle = o.background || '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+        }
+        drawScaled(ctx, src, sx, sy, sw, sh, w, h);
+        const lossy = o.type !== 'image/png';
+        const blob = await new Promise(res => c.toBlob(res, o.type, lossy ? o.quality : undefined));
+        freeCanvas(c);
+        if (!blob) throw new Error('The browser ran out of room encoding ' + fmtDims(w, h) + '. Try a smaller size (the Image Resizer can shrink it first).');
+        return blob;
+      }
+      // Fits the image into a preview canvas no larger than maxDim on its long side.
+      function drawPreview(canvas, src, maxDim) {
+        const { w, h } = imageSize(src);
+        const s = Math.min(1, maxDim / Math.max(w, h));
+        canvas.width = Math.max(1, Math.round(w * s));
+        canvas.height = Math.max(1, Math.round(h * s));
+        const x = canvas.getContext('2d');
+        x.clearRect(0, 0, canvas.width, canvas.height);
+        drawScaled(x, src, 0, 0, w, h, canvas.width, canvas.height);
+      }
+      function downloadBlob(blob, name) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // Give slow devices time to start the download before the URL is released.
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+      function pickFile(dt) {
+        if (!dt) return null;
+        if (dt.files && dt.files.length) return dt.files[0];
+        for (const item of (dt.items || [])) {
+          if (item.kind === 'file') { const f = item.getAsFile(); if (f) return f; }
+        }
+        return null;
+      }
+      // Click or keyboard on the drop zone opens the picker; drag-and-drop and paste (Ctrl/Cmd+V) also work.
+      function wireFileInput(onFile) {
+        const drop = $('drop'), input = $('file');
+        drop.addEventListener('click', () => input.click());
+        drop.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+        });
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) onFile(input.files[0]);
+          input.value = '';
+        });
+        ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+        ['dragleave', 'dragend'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('dragover')));
+        drop.addEventListener('drop', e => {
+          e.preventDefault();
+          drop.classList.remove('dragover');
+          const f = pickFile(e.dataTransfer);
+          if (f) onFile(f);
+        });
+        // A drop that misses the zone would otherwise open the file in the tab and leave the page.
+        window.addEventListener('dragover', e => e.preventDefault());
+        window.addEventListener('drop', e => e.preventDefault());
+        document.addEventListener('paste', e => {
+          const f = pickFile(e.clipboardData);
+          if (f && /^image\//.test(f.type)) { e.preventDefault(); onFile(f); }
+        });
+      }
+      // A synthetic test picture (gradient, shapes, text and a see-through corner) for trying the tool.
+      function makeSample() {
+        const w = 1600, h = 1000;
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const x = c.getContext('2d');
+        const g = x.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#0b1a3a'); g.addColorStop(0.55, '#1d6f8f'); g.addColorStop(1, '#f2b45a');
+        x.fillStyle = g;
+        x.fillRect(0, 0, w, h);
+        for (let i = 0; i < 40; i++) {
+          x.beginPath();
+          x.arc((i * 397) % w, (i * 211) % h, 20 + (i * 13) % 90, 0, Math.PI * 2);
+          x.fillStyle = 'hsla(' + ((i * 37) % 360) + ', 70%, 60%, 0.35)';
+          x.fill();
+        }
+        x.fillStyle = '#ffffff';
+        x.font = '600 120px "Space Grotesk", sans-serif';
+        x.fillText('Sample 1600×1000', 90, h - 120);
+        x.clearRect(w - 360, 0, 360, 260); // transparent corner
+        return new Promise((res, rej) => c.toBlob(b => {
+          freeCanvas(c);
+          b ? res(new File([b], 'sample.png', { type: 'image/png' })) : rej(new Error('sample'));
+        }, 'image/png'));
+      }
+      /* ---- end of shared block ---- */
 
-      const err = document.getElementById('err');
-      const results = document.getElementById('results');
-      function showErr(m){ err.textContent = m; err.classList.add('visible'); results.classList.remove('visible'); }
-      function hideErr(){ err.classList.remove('visible'); }
-      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
-      function row(label,value,cls){ cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+      const err = $('err'), results = $('results'), statusEl = $('status');
+      function showErr(m) { err.textContent = m; err.classList.add('visible'); }
+      function hideErr() { err.classList.remove('visible'); }
+      function setStatus(m) { statusEl.textContent = m; }
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
 
-      let currentImage = null, currentBlob = null;
-detectAvifSupport().then(supported => {
-  if (supported) {
-    document.getElementById('avif-opt').style.display = '';
-  } else {
-    document.getElementById('avif-note').style.display = '';
-  }
-});
-const drop = document.getElementById('drop'), fileInput = document.getElementById('file');
-drop.addEventListener('click', () => fileInput.click());
-drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
-drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
-drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); });
-const qualitySlider = document.getElementById('quality'), qualityVal = document.getElementById('qualityVal');
-qualitySlider.addEventListener('input', () => { qualityVal.textContent = qualitySlider.value; if (currentImage) render(); });
-document.getElementById('format').addEventListener('change', () => {
-  document.getElementById('quality-group').style.display = document.getElementById('format').value === 'image/png' ? 'none' : '';
-  if (currentImage) render();
-});
+      const fmtSel = $('format'), quality = $('quality'), qualityVal = $('qualityVal');
+      const bgGroup = $('bg-group'), bgInput = $('bg'), downloadBtn = $('download-btn'), note = $('convert-note');
+      const state = { src: null, file: null, w: 0, h: 0, alpha: false, blob: null, out: null };
+      let busy = false, pending = false, timer = 0;
 
-async function handle(file){
-  hideErr();
-  if (!file.type.startsWith('image/')) return showErr('Please choose an image file.');
-  if (file.size > 50*1024*1024) return showErr('File exceeds 50MB.');
-  try {
-    currentImage = await loadImage(file);
-    currentImage._origName = file.name;
-    currentImage._origSize = file.size;
-    currentImage._origType = file.type;
-    drawOrig();
-    render();
-    results.classList.add('visible');
-  } catch(e) { showErr('Could not load: ' + e.message); }
-}
-function drawOrig(){
-  const c = document.getElementById('orig-canvas');
-  const maxDim = 400;
-  const scale = Math.min(1, maxDim / Math.max(currentImage.width, currentImage.height));
-  c.width = currentImage.width * scale; c.height = currentImage.height * scale;
-  c.getContext('2d').drawImage(currentImage, 0, 0, c.width, c.height);
-  set('orig-meta', currentImage._origName + '<br>' + currentImage._origType + ' &middot; ' + bytesToHuman(currentImage._origSize));
-}
-async function render(){
-  const format = document.getElementById('format').value;
-  const quality = parseInt(qualitySlider.value, 10) / 100;
-  const oc = document.createElement('canvas');
-  oc.width = currentImage.width; oc.height = currentImage.height;
-  oc.getContext('2d').drawImage(currentImage, 0, 0);
-  currentBlob = await new Promise(res => oc.toBlob(res, format, format === 'image/png' ? undefined : quality));
-  if (!currentBlob) return showErr('Conversion failed. Format may not be supported for encoding.');
-  const bm = await createImageBitmap(currentBlob);
-  const c = document.getElementById('conv-canvas');
-  const maxDim = 400;
-  const scale = Math.min(1, maxDim / Math.max(bm.width, bm.height));
-  c.width = bm.width * scale; c.height = bm.height * scale;
-  c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height);
-  set('conv-meta', currentBlob.type + '<br>' + bytesToHuman(currentBlob.size));
-  const saved = currentImage._origSize - currentBlob.size;
-  const pct = ((saved / currentImage._origSize) * 100).toFixed(1);
-  set('stats', row('Original', currentImage._origType + ' &middot; ' + bytesToHuman(currentImage._origSize)) + row('Converted', currentBlob.type + ' &middot; ' + bytesToHuman(currentBlob.size), 'teal') + row('Size change', bytesToHuman(Math.abs(saved)) + ' (' + (saved>0?'-':'+') + Math.abs(pct) + '%)'));
-}
-window.doDownload = function(){
-  if (!currentBlob) return showErr('Convert an image first.');
-  const base = stripExt(currentImage._origName);
-  downloadBlob(currentBlob, base + '.' + extFromType(currentBlob.type));
-};
+      detectSupport().then(s => {
+        $('support').textContent = supportSummary(s);
+        const avif = $('avif-opt');
+        avif.disabled = !s.encode['image/avif'];
+        avif.textContent = s.encode['image/avif'] ? 'AVIF (often smallest)' : 'AVIF (this browser can’t save it)';
+        if (!s.encode['image/webp']) {
+          const webp = fmtSel.querySelector('option[value="image/webp"]');
+          webp.disabled = true;
+          webp.textContent = 'WebP (this browser can’t save it)';
+          if (fmtSel.value === 'image/webp') fmtSel.value = 'image/png';
+        }
+        updateControls();
+        if (state.src) schedule(0);
+      });
+
+      wireFileInput(load);
+      $('sample-btn').addEventListener('click', () => makeSample().then(load).catch(() => showErr('Couldn’t make the sample image in this browser.')));
+      quality.addEventListener('input', () => { qualityVal.textContent = quality.value; schedule(250); });
+      fmtSel.addEventListener('change', () => { updateControls(); schedule(0); });
+      bgInput.addEventListener('input', () => schedule(250));
+      downloadBtn.addEventListener('click', () => {
+        if (!state.blob) return;
+        const ext = MIME_EXT[state.blob.type];
+        const sameExt = (state.file.name || '').toLowerCase().endsWith('.' + ext) || (ext === 'jpg' && /\.jpe?g$/i.test(state.file.name || ''));
+        downloadBlob(state.blob, baseName(state.file.name) + (sameExt ? '-converted' : '') + '.' + ext);
+      });
+
+      function updateControls() {
+        $('quality-group').classList.toggle('hidden', fmtSel.value === 'image/png');
+        bgGroup.classList.toggle('hidden', !(state.alpha && fmtSel.value === 'image/jpeg'));
+      }
+
+      async function load(file) {
+        hideErr();
+        if (file.size > MAX_FILE_BYTES) return showErr('That file is ' + fmtBytes(file.size) + '. This tool holds the whole image in memory, so the limit is 100 MB.');
+        setStatus('Reading ' + (file.name || 'image') + '…');
+        let src;
+        try { src = await decodeImage(file); } catch (e) { setStatus(''); return showErr(decodeFailureMessage(file)); }
+        const { w, h } = imageSize(src);
+        if (!w || !h) { releaseImage(src); setStatus(''); return showErr(decodeFailureMessage(file)); }
+        if (w * h > MAX_PIXELS) { releaseImage(src); setStatus(''); return showErr('This image is ' + fmtDims(w, h) + ', more than a browser canvas can hold. Try a smaller image.'); }
+        releaseImage(state.src);
+        releaseImage(state.out);
+        Object.assign(state, { src, file, w, h, blob: null, out: null, alpha: file.type !== 'image/jpeg' && hasTransparency(src, w, h) });
+        $('orig-meta').innerHTML = (file.name ? escapeHtml(file.name) + '<br>' : '') + typeLabel(file) + ' &middot; ' + fmtDims(w, h) + ' &middot; ' + fmtBytes(file.size);
+        drawPreview($('orig-canvas'), src, 400);
+        updateControls();
+        results.classList.add('visible');
+        schedule(0);
+      }
+
+      function schedule(delay) {
+        if (!state.src) return;
+        clearTimeout(timer);
+        timer = setTimeout(run, delay);
+      }
+
+      async function run() {
+        if (busy) { pending = true; return; }
+        busy = true;
+        const type = fmtSel.value, q = parseInt(quality.value, 10);
+        setStatus('Converting to ' + MIME_LABEL[type] + '…');
+        downloadBtn.disabled = true;
+        try {
+          const blob = await renderToBlob(state.src, { type, quality: q / 100, background: bgInput.value });
+          if (blob.type !== type) throw new Error('This browser saved ' + (MIME_LABEL[blob.type] || blob.type) + ' instead of ' + MIME_LABEL[type] + ', so that conversion isn’t available here.');
+          const out = await createImageBitmap(blob);
+          releaseImage(state.out);
+          Object.assign(state, { blob, out });
+          hideErr();
+          showResult(type, q);
+          setStatus('');
+        } catch (e) {
+          setStatus('');
+          showErr(e && e.message ? e.message : 'Conversion failed in this browser.');
+        } finally {
+          busy = false;
+          if (pending) { pending = false; run(); }
+        }
+      }
+
+      function showResult(type, q) {
+        const { blob, file, w, h } = state;
+        const label = MIME_LABEL[type] + (type === 'image/png' ? '' : ' &middot; quality ' + q);
+        $('conv-meta').innerHTML = label + ' &middot; ' + fmtBytes(blob.size);
+        const diff = blob.size - file.size;
+        $('stats').innerHTML =
+          row('Original', typeLabel(file) + ' &middot; ' + fmtDims(w, h) + ' &middot; ' + fmtBytes(file.size)) +
+          row('Converted', MIME_LABEL[type] + ' &middot; ' + fmtDims(w, h) + ' &middot; ' + fmtBytes(blob.size), 'teal') +
+          row('Size change', (diff > 0 ? '+' : diff < 0 ? '−' : '') + fmtBytes(Math.abs(diff)) + ' (' + fmtChange(file.size, blob.size) + ')', diff > 0 ? 'amber' : 'teal');
+        const notes = [];
+        if (file.type === type) notes.push('The source is already ' + MIME_LABEL[type] + '; this re-encodes it' + (type === 'image/png' ? '.' : ' and loses a little quality.'));
+        if (file.type === 'image/gif') notes.push('Animated GIFs keep only their first frame.');
+        if (type === 'image/png' && /jpeg|webp|avif/.test(file.type)) notes.push('PNG stores the pixels exactly, so a converted photo is usually much larger than the original.');
+        note.textContent = notes.join(' ');
+        note.classList.toggle('hidden', !notes.length);
+        drawPreview($('conv-canvas'), state.out, 400);
+        downloadBtn.disabled = false;
+      }
     })();
   </script>
   <script defer src="../js/ads.js"></script>

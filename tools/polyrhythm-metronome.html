@@ -93,6 +93,7 @@
       font-size: 0.7rem;
       letter-spacing: 0.06em;
       padding: 0.4rem 0.75rem;
+      min-height: 40px;
       cursor: pointer;
       transition: all 0.25s ease;
     }
@@ -114,7 +115,9 @@
     }
     #pm-canvas {
       display: block;
-      max-width: 100%;
+      width: min(100%, 400px);
+      height: auto;
+      aspect-ratio: 1;
     }
 
     /* ── Layers ── */
@@ -170,6 +173,7 @@
       font-family: var(--font-mono);
       font-size: 0.75rem;
       padding: 0.35rem 0.5rem;
+      min-height: 40px;
       outline: none;
       transition: border-color 0.2s;
     }
@@ -193,8 +197,10 @@
       margin-top: 0.5rem;
     }
     .pm-beat {
-      width: 28px;
-      height: 28px;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      background: transparent;
       border-radius: 50%;
       border: 2px solid var(--border);
       cursor: pointer;
@@ -202,7 +208,7 @@
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 0.55rem;
+      font-size: 0.65rem;
       color: var(--text-dim);
       transition: all 0.2s ease;
       position: relative;
@@ -288,12 +294,26 @@
       min-width: 16px;
       text-align: center;
     }
-    .pm-grid__cell {
+    .pm-grid__track {
+      position: relative;
       flex: 1;
-      height: 18px;
+      height: 22px;
+    }
+    .pm-grid__cell {
+      position: absolute;
+      top: 0;
+      height: 100%;
       border-radius: 2px;
-      transition: all 0.15s ease;
-      min-width: 4px;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+      min-width: 3px;
+    }
+    .pm-grid__cell--ghost { opacity: 0.55; }
+    .pm-grid__cell--silent { opacity: 0.2; }
+    .pm-grid__tick {
+      position: absolute;
+      top: 6px;
+      height: 10px;
+      border-left: 1px solid var(--text-faint, #4a4a60);
     }
     .pm-grid__cell--a {
       background: rgba(0,212,170,0.12);
@@ -346,7 +366,8 @@
       color: var(--text-bright);
       font-family: var(--font-mono);
       font-size: 1rem;
-      width: 60px;
+      width: 64px;
+      min-height: 44px;
       text-align: center;
       padding: 0.3rem;
       outline: none;
@@ -362,9 +383,11 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding: 0.5rem 1rem;
+      min-height: 44px;
       cursor: pointer;
       transition: all 0.25s ease;
     }
+    .pm-btn--step { width: 44px; padding: 0; font-size: 1rem; }
     .pm-btn:hover {
       border-color: var(--border-glow);
       color: var(--text-bright);
@@ -428,12 +451,38 @@
       margin-bottom: 1rem;
     }
 
+    /* ── Mode, messages, focus ── */
+    .pm-mode {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0.75rem 1rem;
+      margin: 0 auto 1.25rem;
+      max-width: 720px;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .pm-mode legend { padding: 0 0.4rem; }
+    .pm-mode__opt { display: flex; gap: 0.6rem; align-items: flex-start; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; cursor: pointer; min-height: 40px; padding-top: 0.5rem; }
+    .pm-mode__opt input { accent-color: var(--teal); margin-top: 0.25rem; flex: none; width: 18px; height: 18px; }
+    .pm-mode__opt strong { color: var(--text-bright); font-weight: 500; }
+    .pm-err { color: var(--rose); font-family: var(--font-mono); font-size: 0.75rem; text-align: center; min-height: 0; margin: -0.75rem 0 0.5rem; }
+    .pm-err:empty { display: none; }
+    .pm-hint { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-dim); text-align: center; line-height: 1.6; margin: -0.75rem auto 1rem; max-width: 70ch; }
+    .pm-summary { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); text-align: center; line-height: 1.6; margin: 0 auto 1.25rem; max-width: 70ch; }
+    .pm-slider, .pm-swing-slider { accent-color: var(--teal); min-height: 24px; }
+    .pm-preset-btn:focus-visible, .pm-btn:focus-visible, .pm-beat:focus-visible, .pm-bpm-input:focus-visible,
+    .pm-layer__select:focus-visible, .pm-layer__input:focus-visible, .pm-slider:focus-visible, .pm-swing-slider:focus-visible, .pm-mode__opt input:focus-visible {
+      outline: 2px solid var(--teal);
+      outline-offset: 2px;
+    }
+    .pm-layer__row { flex-wrap: wrap; }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       .pm-hero { padding: 1rem 0 0.5rem; }
       .pm-layers { grid-template-columns: 1fr; }
       .pm-controls { gap: 0.6rem; }
-      .pm-beat { width: 24px; height: 24px; font-size: 0.5rem; }
+      .pm-app { padding: 0 1rem 2rem; }
     }
   </style>
 </head>
@@ -473,36 +522,48 @@
     <div class="pm-app">
 
       <!-- Presets -->
-      <div class="pm-presets" role="radiogroup" aria-label="Polyrhythm presets">
-        <button class="pm-preset-btn active" data-preset="hemiola">Hemiola (3:2)</button>
-        <button class="pm-preset-btn" data-preset="afrocuban">Afro-Cuban (3:2)</button>
-        <button class="pm-preset-btn" data-preset="westafrican">West African (4:3)</button>
-        <button class="pm-preset-btn" data-preset="progrock">Prog Rock (7:4)</button>
-        <button class="pm-preset-btn" data-preset="carnatic">Carnatic (5:4)</button>
-        <button class="pm-preset-btn" data-preset="balkan">Balkan (7/8+4/4)</button>
-        <button class="pm-preset-btn" data-preset="gnawa">Gnawa (6:4)</button>
+      <div class="pm-presets" role="group" aria-label="Presets">
+        <button type="button" class="pm-preset-btn active" data-preset="hemiola" aria-pressed="true">Hemiola (3:2)</button>
+        <button type="button" class="pm-preset-btn" data-preset="afrocuban" aria-pressed="false">Afro-Cuban (3:2)</button>
+        <button type="button" class="pm-preset-btn" data-preset="westafrican" aria-pressed="false">West African (4:3)</button>
+        <button type="button" class="pm-preset-btn" data-preset="progrock" aria-pressed="false">Prog Rock (7:4)</button>
+        <button type="button" class="pm-preset-btn" data-preset="carnatic" aria-pressed="false">Carnatic (5:4)</button>
+        <button type="button" class="pm-preset-btn" data-preset="balkan" aria-pressed="false">Balkan (7/8 vs 4/4 polymeter)</button>
+        <button type="button" class="pm-preset-btn" data-preset="gnawa" aria-pressed="false">Gnawa (6:4)</button>
       </div>
+
+      <!-- How the two layers relate -->
+      <fieldset class="pm-mode">
+        <legend class="pm-ctrl-label">How the layers line up</legend>
+        <label class="pm-mode__opt"><input type="radio" name="pm-mode" value="poly" checked> <span><strong>Polyrhythm</strong> &mdash; A and B share one cycle; A&rsquo;s beats are spread evenly over B&rsquo;s (3 against 2)</span></label>
+        <label class="pm-mode__opt"><input type="radio" name="pm-mode" value="meter"> <span><strong>Polymeter</strong> &mdash; A and B share one pulse; bars of different lengths drift and realign</span></label>
+      </fieldset>
 
       <!-- Global Controls -->
       <div class="pm-controls">
         <div class="pm-ctrl-group">
-          <span class="pm-ctrl-label">BPM</span>
-          <input type="number" id="pm-bpm" class="pm-bpm-input" value="120" min="30" max="300">
+          <label class="pm-ctrl-label" for="pm-bpm" id="pm-bpm-label">BPM (Layer B beat)</label>
+          <button type="button" class="pm-btn pm-btn--step" id="pm-bpm-down" aria-label="Slower by 1 BPM">&minus;</button>
+          <input type="number" id="pm-bpm" class="pm-bpm-input" value="100" min="30" max="300" step="1" inputmode="numeric" aria-describedby="pm-bpm-err">
+          <button type="button" class="pm-btn pm-btn--step" id="pm-bpm-up" aria-label="Faster by 1 BPM">+</button>
         </div>
         <div class="pm-ctrl-group">
-          <span class="pm-ctrl-label">Swing</span>
-          <input type="range" id="pm-swing" class="pm-swing-slider" min="0" max="100" value="0">
-          <span id="pm-swing-val" class="pm-ctrl-label" style="color:var(--amber);min-width:28px;">0%</span>
+          <label class="pm-ctrl-label" for="pm-swing">Swing</label>
+          <input type="range" id="pm-swing" class="pm-swing-slider" min="0" max="100" value="0" aria-describedby="pm-swing-hint">
+          <output id="pm-swing-val" for="pm-swing" class="pm-ctrl-label" style="color:var(--amber);min-width:36px;">0%</output>
         </div>
-        <button id="pm-play" class="pm-btn pm-btn--play">Play</button>
-        <button id="pm-stop" class="pm-btn pm-btn--stop">Stop</button>
-        <button id="pm-reset" class="pm-btn">Reset</button>
-        <button id="pm-tap" class="pm-btn pm-btn--tap">Tap Tempo</button>
+        <button type="button" id="pm-play" class="pm-btn pm-btn--play" aria-pressed="false">Play</button>
+        <button type="button" id="pm-stop" class="pm-btn pm-btn--stop">Stop</button>
+        <button type="button" id="pm-reset" class="pm-btn">Reset</button>
+        <button type="button" id="pm-tap" class="pm-btn pm-btn--tap" aria-describedby="pm-tap-status">Tap Tempo</button>
       </div>
+      <p class="pm-err" id="pm-bpm-err" role="alert"></p>
+      <p class="pm-hint" id="pm-swing-hint">Swing delays every second pulse of each layer; 100% is a full triplet (2:1) feel. <span id="pm-tap-status" aria-live="polite"></span></p>
+      <p class="pm-summary" id="pm-summary" aria-live="polite"></p>
 
       <!-- Circular Visualization -->
       <div class="pm-viz-wrap">
-        <canvas id="pm-canvas" width="400" height="400"></canvas>
+        <canvas id="pm-canvas" width="400" height="400" role="img" aria-label="Circular view of both layers"></canvas>
       </div>
 
       <!-- Layers -->
@@ -511,7 +572,7 @@
         <div class="pm-layer pm-layer--a">
           <div class="pm-layer__title">Layer A</div>
           <div class="pm-layer__row">
-            <span class="pm-layer__label">Time Sig</span>
+            <label class="pm-layer__label" for="pm-sig-a">Time sig</label>
             <select id="pm-sig-a" class="pm-layer__select">
               <option value="2/4">2/4</option>
               <option value="3/4" selected>3/4</option>
@@ -525,23 +586,23 @@
               <option value="15/8">15/8</option>
               <option value="custom">Custom</option>
             </select>
-            <input type="number" id="pm-custom-a-num" class="pm-layer__input" min="1" max="32" value="3" style="display:none;" placeholder="Num">
-            <span id="pm-custom-a-slash" style="display:none;color:var(--text-dim);">/</span>
-            <input type="number" id="pm-custom-a-den" class="pm-layer__input" min="1" max="32" value="4" style="display:none;" placeholder="Den">
+            <input type="number" id="pm-custom-a-num" class="pm-layer__input" min="1" max="32" value="3" hidden aria-label="Layer A custom beats per bar">
+            <span id="pm-custom-a-slash" hidden style="color:var(--text-dim);">/</span>
+            <input type="number" id="pm-custom-a-den" class="pm-layer__input" min="1" max="32" value="4" hidden aria-label="Layer A custom beat note value">
           </div>
           <div class="pm-layer__row">
-            <span class="pm-layer__label">Volume</span>
+            <label class="pm-layer__label" for="pm-vol-a">Volume</label>
             <input type="range" id="pm-vol-a" class="pm-slider" min="0" max="100" value="80">
           </div>
-          <div class="pm-layer__label" style="margin-top:0.4rem;">Accent Pattern <span style="font-size:0.55rem;color:var(--text-dim);">(click to cycle: strong / weak / ghost / silent)</span></div>
-          <div class="pm-accents" id="pm-accents-a"></div>
+          <div class="pm-layer__label" style="margin-top:0.4rem;" id="pm-accents-a-label">Accent pattern <span style="font-size:0.6rem;letter-spacing:0.05em;text-transform:none;">(tap a beat to cycle strong / weak / ghost / silent)</span></div>
+          <div class="pm-accents" id="pm-accents-a" role="group" aria-labelledby="pm-accents-a-label"></div>
         </div>
 
         <!-- Layer B -->
         <div class="pm-layer pm-layer--b">
           <div class="pm-layer__title">Layer B</div>
           <div class="pm-layer__row">
-            <span class="pm-layer__label">Time Sig</span>
+            <label class="pm-layer__label" for="pm-sig-b">Time sig</label>
             <select id="pm-sig-b" class="pm-layer__select">
               <option value="2/4" selected>2/4</option>
               <option value="3/4">3/4</option>
@@ -555,32 +616,39 @@
               <option value="15/8">15/8</option>
               <option value="custom">Custom</option>
             </select>
-            <input type="number" id="pm-custom-b-num" class="pm-layer__input" min="1" max="32" value="2" style="display:none;" placeholder="Num">
-            <span id="pm-custom-b-slash" style="display:none;color:var(--text-dim);">/</span>
-            <input type="number" id="pm-custom-b-den" class="pm-layer__input" min="1" max="32" value="4" style="display:none;" placeholder="Den">
+            <input type="number" id="pm-custom-b-num" class="pm-layer__input" min="1" max="32" value="2" hidden aria-label="Layer B custom beats per bar">
+            <span id="pm-custom-b-slash" hidden style="color:var(--text-dim);">/</span>
+            <input type="number" id="pm-custom-b-den" class="pm-layer__input" min="1" max="32" value="4" hidden aria-label="Layer B custom beat note value">
           </div>
           <div class="pm-layer__row">
-            <span class="pm-layer__label">Volume</span>
+            <label class="pm-layer__label" for="pm-vol-b">Volume</label>
             <input type="range" id="pm-vol-b" class="pm-slider" min="0" max="100" value="70">
           </div>
-          <div class="pm-layer__label" style="margin-top:0.4rem;">Accent Pattern <span style="font-size:0.55rem;color:var(--text-dim);">(click to cycle: strong / weak / ghost / silent)</span></div>
-          <div class="pm-accents" id="pm-accents-b"></div>
+          <div class="pm-layer__label" style="margin-top:0.4rem;" id="pm-accents-b-label">Accent pattern <span style="font-size:0.6rem;letter-spacing:0.05em;text-transform:none;">(tap a beat to cycle strong / weak / ghost / silent)</span></div>
+          <div class="pm-accents" id="pm-accents-b" role="group" aria-labelledby="pm-accents-b-label"></div>
         </div>
       </div>
+      <p class="pm-hint" id="pm-sig-hint"></p>
 
       <!-- Linear Beat Grid -->
       <div class="pm-grid">
-        <div class="pm-grid__title">Beat Grid</div>
-        <div class="pm-grid__row" id="pm-grid-a"></div>
-        <div class="pm-grid__row" id="pm-grid-b"></div>
+        <div class="pm-grid__title" id="pm-grid-title">Beat grid</div>
+        <div class="pm-grid__row"><span class="pm-grid__label" style="color:var(--teal);">A</span><div class="pm-grid__track" id="pm-grid-a"></div></div>
+        <div class="pm-grid__row"><span class="pm-grid__label" style="color:var(--violet);">B</span><div class="pm-grid__track" id="pm-grid-b"></div></div>
+        <div class="pm-grid__row" id="pm-grid-sub-row"><span class="pm-grid__label">&middot;</span><div class="pm-grid__track" id="pm-grid-sub"></div></div>
+        <p class="pm-hint" id="pm-grid-note" style="margin:0.5rem 0 0;"></p>
       </div>
 
       <!-- Info / SEO -->
       <section class="pm-info">
-        <h2>What is a Polyrhythm?</h2>
-        <p>A polyrhythm is the simultaneous use of two or more conflicting rhythms that don't easily resolve into each other. For example, playing three evenly-spaced beats against two (3:2, known as a hemiola) is the most fundamental polyrhythm in music. These cross-rhythms appear across West African drumming, Afro-Cuban son clave, Indian Carnatic music, Balkan folk traditions, progressive rock, and contemporary handpan performance.</p>
-        <h2>How to Use This Metronome</h2>
-        <p>Select a preset or choose custom time signatures for each layer. Click the accent circles to cycle between strong accents, weak accents, ghost notes, and silent beats. The circular visualization shows both layers as concentric rings with a rotating playhead, while the linear grid below provides a timeline view. Use the swing slider to add a shuffle feel, and tap the Tap Tempo button to set BPM by feel.</p>
+        <h2>What is a polyrhythm?</h2>
+        <p>A polyrhythm is two evenly spaced pulses running in the same span of time, such as three beats against two (3:2, the hemiola). Count the smallest grid both fit into &mdash; for 3:2 that&rsquo;s 6 &mdash; and A lands on every 2nd step while B lands on every 3rd. These cross-rhythms run through West African drumming, Afro-Cuban music, Indian Carnatic rhythm, Balkan folk, progressive rock and handpan playing.</p>
+        <h2>Polyrhythm vs. polymeter</h2>
+        <p><strong>Polyrhythm mode</strong> fits Layer A&rsquo;s beats evenly into the time of Layer B&rsquo;s beats, so both start together every cycle; only the top number of each time signature matters, and the BPM is Layer B&rsquo;s beat. <strong>Polymeter mode</strong> plays both layers on the same note grid (the BPM is the quarter note; an x/8 layer pulses twice as fast), so bars of different lengths drift apart and meet again after the number of beats shown above the circle &mdash; 7/8 against 4/4 realigns every 8 bars of 7/8.</p>
+        <h2>How to use it</h2>
+        <p>Pick a preset or set each layer&rsquo;s time signature. Tap the accent circles to cycle strong, weak, ghost and silent beats. The circle shows both layers as rings with a playhead; the grid below lays one cycle out in a line. Tap Tempo (or press T) sets the BPM from your taps; Space starts and stops. Sound starts only when you press Play.</p>
+        <h2>How the timing works</h2>
+        <p>Every click is scheduled on the Web Audio clock about a tenth of a second ahead (a lookahead scheduler), and each note&rsquo;s time is worked out from its position in the cycle rather than by adding up intervals, so the pulse doesn&rsquo;t drift and doesn&rsquo;t depend on the page&rsquo;s frame rate. A background timer only wakes the scheduler; it never decides when a note sounds.</p>
       </section>
 
     </div>
@@ -611,652 +679,504 @@
     'use strict';
 
     /* ================================================================
-       PRESETS
+       PRESETS (mode: 'poly' = shared cycle, 'meter' = shared pulse)
        ================================================================ */
     const PRESETS = {
-      hemiola: {
-        name: 'Hemiola',
-        a: { sig: '3/4', accents: ['strong','weak','weak'] },
-        b: { sig: '2/4', accents: ['strong','weak'] },
-        bpm: 100
-      },
-      afrocuban: {
-        name: 'Afro-Cuban',
-        a: { sig: '3/4', accents: ['strong','ghost','weak'] },
-        b: { sig: '2/4', accents: ['strong','ghost'] },
-        bpm: 110
-      },
-      westafrican: {
-        name: 'West African',
-        a: { sig: '4/4', accents: ['strong','weak','weak','weak'] },
-        b: { sig: '3/4', accents: ['strong','weak','weak'] },
-        bpm: 105
-      },
-      progrock: {
-        name: 'Prog Rock',
-        a: { sig: '7/8', accents: ['strong','weak','weak','strong','weak','strong','weak'] },
-        b: { sig: '4/4', accents: ['strong','weak','weak','weak'] },
-        bpm: 130
-      },
-      carnatic: {
-        name: 'Carnatic',
-        a: { sig: '5/4', accents: ['strong','weak','weak','strong','weak'] },
-        b: { sig: '4/4', accents: ['strong','weak','weak','weak'] },
-        bpm: 90
-      },
-      balkan: {
-        name: 'Balkan',
-        a: { sig: '7/8', accents: ['strong','weak','weak','strong','weak','strong','weak'] },
-        b: { sig: '4/4', accents: ['strong','weak','strong','weak'] },
-        bpm: 140
-      },
-      gnawa: {
-        name: 'Gnawa',
-        a: { sig: '6/8', accents: ['strong','weak','weak','strong','weak','weak'] },
-        b: { sig: '4/4', accents: ['strong','weak','strong','weak'] },
-        bpm: 95
-      }
+      hemiola:     { mode: 'poly',  bpm: 100, a: { sig: '3/4', accents: ['strong','weak','weak'] }, b: { sig: '2/4', accents: ['strong','weak'] } },
+      afrocuban:   { mode: 'poly',  bpm: 110, a: { sig: '3/4', accents: ['strong','ghost','weak'] }, b: { sig: '2/4', accents: ['strong','ghost'] } },
+      westafrican: { mode: 'poly',  bpm: 105, a: { sig: '4/4', accents: ['strong','weak','weak','weak'] }, b: { sig: '3/4', accents: ['strong','weak','weak'] } },
+      progrock:    { mode: 'poly',  bpm: 130, a: { sig: '7/8', accents: ['strong','weak','weak','strong','weak','strong','weak'] }, b: { sig: '4/4', accents: ['strong','weak','weak','weak'] } },
+      carnatic:    { mode: 'poly',  bpm: 90,  a: { sig: '5/4', accents: ['strong','weak','weak','strong','weak'] }, b: { sig: '4/4', accents: ['strong','weak','weak','weak'] } },
+      balkan:      { mode: 'meter', bpm: 140, a: { sig: '7/8', accents: ['strong','weak','weak','strong','weak','strong','weak'] }, b: { sig: '4/4', accents: ['strong','weak','strong','weak'] } },
+      gnawa:       { mode: 'poly',  bpm: 95,  a: { sig: '6/8', accents: ['strong','weak','weak','strong','weak','weak'] }, b: { sig: '4/4', accents: ['strong','weak','strong','weak'] } }
     };
+    const ACCENT_CYCLE = ['strong', 'weak', 'ghost', 'silent'];
+    const LOOKAHEAD = 0.12;   // seconds of audio scheduled ahead of the clock
+    const TICK_MS = 25;       // how often the scheduler wakes up
+    const START_DELAY = 0.06; // first note slightly in the future so it is never late
 
     /* ================================================================
        STATE
        ================================================================ */
-    let audioCtx = null;
+    let mode = 'poly', bpm = 100, swing = 0;
+    const layers = {
+      a: { key: 'a', num: 3, den: 4, accents: ['strong','weak','weak'], vol: 0.8 },
+      b: { key: 'b', num: 2, den: 4, accents: ['strong','weak'], vol: 0.7 }
+    };
+    let audioCtx = null, master = null, session = null, ticker = null;
     let isPlaying = false;
-    let bpm = 120;
-    let swing = 0; // 0-100
-    let animFrameId = null;
-    let startTime = 0;
-    let nextNoteTimeA = 0;
-    let nextNoteTimeB = 0;
-    let currentBeatA = 0;
-    let currentBeatB = 0;
-    let scheduledEventsA = [];
-    let scheduledEventsB = [];
-    const SCHEDULE_AHEAD = 0.1; // seconds
-    const LOOK_AHEAD = 25; // ms
+    // Beat clock: beat position (in quarter notes, or Layer B beats in polyrhythm mode) <-> audio time.
+    let anchorTime = 0, anchorBeat = 0, secPerBeat = 0.6, horizon = 0;
+    let played = [];          // scheduled notes, for the visuals: { layer, n, step, time, acc }
+    const next = { a: 0, b: 0 };
+    let animId = 0;
 
-    const layerA = { accents: ['strong','weak','weak'], num: 3, den: 4, vol: 0.8 };
-    const layerB = { accents: ['strong','weak'], num: 2, den: 4, vol: 0.7 };
-
-    /* ================================================================
-       DOM REFS
-       ================================================================ */
     const $ = id => document.getElementById(id);
-    const bpmInput = $('pm-bpm');
-    const swingSlider = $('pm-swing');
-    const swingVal = $('pm-swing-val');
-    const playBtn = $('pm-play');
-    const stopBtn = $('pm-stop');
-    const resetBtn = $('pm-reset');
-    const tapBtn = $('pm-tap');
-    const sigSelectA = $('pm-sig-a');
-    const sigSelectB = $('pm-sig-b');
-    const volA = $('pm-vol-a');
-    const volB = $('pm-vol-b');
-    const accentsContA = $('pm-accents-a');
-    const accentsContB = $('pm-accents-b');
-    const gridRowA = $('pm-grid-a');
-    const gridRowB = $('pm-grid-b');
-    const canvas = $('pm-canvas');
-    const ctx = canvas.getContext('2d');
+    const bpmInput = $('pm-bpm'), swingSlider = $('pm-swing'), swingVal = $('pm-swing-val');
+    const playBtn = $('pm-play'), canvas = $('pm-canvas'), ctx = canvas.getContext('2d');
+    const sigSel = { a: $('pm-sig-a'), b: $('pm-sig-b') };
+    const accentsEl = { a: $('pm-accents-a'), b: $('pm-accents-b') };
 
     /* ================================================================
-       HELPERS
+       RHYTHM MATHS
        ================================================================ */
-    function parseSig(val) {
-      const [n, d] = val.split('/').map(Number);
-      return { num: n, den: d };
-    }
+    function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+    function lcm(a, b) { return a / gcd(a, b) * b; }
+    function parseSig(val) { const [n, d] = val.split('/').map(Number); return { num: n, den: d }; }
 
-    function getBeatDuration(layer) {
-      // Duration of one beat in seconds
-      // For x/4 time, a beat = quarter note = 60/bpm
-      // For x/8 time, a beat = eighth note = 30/bpm
-      const quarterDur = 60 / bpm;
-      return layer.den === 8 ? quarterDur / 2 : quarterDur;
+    // Length of one pulse of a layer, in beats.
+    function pulseBeats(L) {
+      if (mode === 'poly') return L.key === 'b' ? 1 : layers.b.num / layers.a.num;
+      return 4 / L.den; // polymeter: beat = quarter note; x/8 pulses are half a beat
     }
-
-    function getMeasureDuration(layer) {
-      return getBeatDuration(layer) * layer.num;
+    function barBeats(L) { return pulseBeats(L) * L.num; }
+    // Beats until both layers start a bar together again.
+    function cycleBeats() {
+      if (mode === 'poly') return layers.b.num;
+      const D = lcm(layers.a.den, layers.b.den);          // common note unit: 1/D whole note
+      const ua = layers.a.num * D / layers.a.den, ub = layers.b.num * D / layers.b.den;
+      return lcm(ua, ub) * 4 / D;
     }
-
-    function getSwingOffset(beatIndex, layer) {
-      if (swing === 0) return 0;
-      // Apply swing to even-numbered beats (0-indexed odd beats get pushed later)
-      if (beatIndex % 2 === 1) {
-        const swingAmount = (swing / 100) * 0.5 * getBeatDuration(layer);
-        return swingAmount;
-      }
-      return 0;
+    // Pulse n of a layer sits at n * pulse beats; every 2nd pulse in a bar is pushed late by the swing amount.
+    function pulseBeat(L, n) {
+      const p = pulseBeats(L), step = n % L.num;
+      return n * p + (step % 2 === 1 ? (swing / 100) * p / 3 : 0);
     }
+    const beatToTime = b => anchorTime + (b - anchorBeat) * secPerBeat;
+    const timeToBeat = t => anchorBeat + (t - anchorTime) / secPerBeat;
 
     /* ================================================================
-       ACCENT PATTERN UI
+       SOUND (Web Audio). Nothing is created until Play or Tap is pressed.
        ================================================================ */
-    const ACCENT_CYCLE = ['strong', 'weak', 'ghost', 'silent'];
-
-    function renderAccents(container, layer, layerKey) {
-      container.innerHTML = '';
-      layer.accents.forEach((acc, i) => {
-        const el = document.createElement('div');
-        el.className = 'pm-beat pm-beat--' + acc;
-        el.textContent = acc === 'strong' ? 'S' : acc === 'weak' ? 'W' : acc === 'ghost' ? 'G' : '';
-        el.setAttribute('aria-label', 'Beat ' + (i+1) + ': ' + acc);
-        el.addEventListener('click', () => {
-          const idx = ACCENT_CYCLE.indexOf(layer.accents[i]);
-          layer.accents[i] = ACCENT_CYCLE[(idx + 1) % 4];
-          renderAccents(container, layer, layerKey);
-          clearPresetActive();
-        });
-        container.appendChild(el);
-      });
-    }
-
-    function buildAccentsForSig(layer, sigVal) {
-      const { num, den } = parseSig(sigVal);
-      layer.num = num;
-      layer.den = den;
-      // Default accent pattern: strong on beat 1, weak elsewhere
-      layer.accents = Array.from({ length: num }, (_, i) => i === 0 ? 'strong' : 'weak');
-    }
-
-    function clearPresetActive() {
-      document.querySelectorAll('.pm-preset-btn').forEach(b => b.classList.remove('active'));
-    }
-
-    /* ================================================================
-       LINEAR GRID
-       ================================================================ */
-    function renderGrid() {
-      gridRowA.innerHTML = '<span class="pm-grid__label" style="color:var(--teal);">A</span>';
-      gridRowB.innerHTML = '<span class="pm-grid__label" style="color:var(--violet);">B</span>';
-      for (let i = 0; i < layerA.num; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'pm-grid__cell pm-grid__cell--a';
-        cell.id = 'grid-a-' + i;
-        gridRowA.appendChild(cell);
-      }
-      for (let i = 0; i < layerB.num; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'pm-grid__cell pm-grid__cell--b';
-        cell.id = 'grid-b-' + i;
-        gridRowB.appendChild(cell);
-      }
-    }
-
-    function updateGridHighlight() {
-      document.querySelectorAll('.pm-grid__cell').forEach(c => c.classList.remove('active'));
-      const cellA = $('grid-a-' + currentBeatA);
-      const cellB = $('grid-b-' + currentBeatB);
-      if (cellA) cellA.classList.add('active');
-      if (cellB) cellB.classList.add('active');
-    }
-
-    /* ================================================================
-       SOUND GENERATION (Web Audio API)
-       ================================================================ */
-    function ensureAudioCtx() {
+    function ensureAudio() {
       if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return false;
+        audioCtx = new AC({ latencyHint: 'interactive' });
+        master = audioCtx.createGain();
+        master.gain.value = 0.9;
+        master.connect(audioCtx.destination);
       }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return true;
     }
 
-    function playTone(time, layer, accentType, isLayerA) {
-      if (accentType === 'silent') return;
-
-      const baseFreq = isLayerA ? 880 : 440;
-      const waveform = isLayerA ? 'triangle' : 'square';
-
-      let gain = layer.vol;
-      let freq = baseFreq;
-      let duration = 0.06;
-
-      if (accentType === 'strong') {
-        gain *= 1.0;
-        freq *= 1.0;
-        duration = 0.08;
-      } else if (accentType === 'weak') {
-        gain *= 0.6;
-        freq *= 0.95;
-        duration = 0.06;
-      } else if (accentType === 'ghost') {
-        gain *= 0.25;
-        freq *= 0.9;
-        duration = 0.04;
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      osc.type = waveform;
+    function playClick(time, L, acc) {
+      if (acc === 'silent' || L.vol <= 0) return;
+      const isA = L.key === 'a';
+      const base = isA ? 880 : 440;
+      const shape = { strong: [1.0, 1.0, 0.08], weak: [0.6, 0.95, 0.06], ghost: [0.25, 0.9, 0.04] }[acc] || [0.6, 0.95, 0.06];
+      const freq = base * shape[1], dur = shape[2], peak = L.vol * shape[0] * 0.4;
+      const osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+      osc.type = isA ? 'triangle' : 'square';
       osc.frequency.setValueAtTime(freq, time);
-
-      // For strong accents, add a slight frequency sweep for timbre
-      if (accentType === 'strong') {
-        osc.frequency.exponentialRampToValueAtTime(freq * 0.7, time + duration);
-      }
-
-      gainNode.gain.setValueAtTime(gain * 0.4, time);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, time + duration);
-
-      osc.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
+      if (acc === 'strong') osc.frequency.exponentialRampToValueAtTime(freq * 0.7, time + dur);
+      g.gain.setValueAtTime(0.0001, time);
+      g.gain.linearRampToValueAtTime(peak, time + 0.002);       // 2 ms attack avoids a click artefact
+      g.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+      osc.connect(g);
+      g.connect(session);
       osc.start(time);
-      osc.stop(time + duration + 0.01);
+      osc.stop(time + dur + 0.02);
     }
 
     /* ================================================================
-       SCHEDULER
+       LOOKAHEAD SCHEDULER: the timer only wakes it; note times come from the audio clock.
        ================================================================ */
-    function scheduleNote(layer, beat, time, isLayerA) {
-      const acc = layer.accents[beat] || 'weak';
-      playTone(time, layer, acc, isLayerA);
-      // Store scheduled event for visualization
-      const events = isLayerA ? scheduledEventsA : scheduledEventsB;
-      events.push({ beat, time, acc });
-      // Keep only recent events
-      if (events.length > 64) events.splice(0, 32);
-    }
-
-    function scheduler() {
-      if (!isPlaying || !audioCtx) return;
-
+    function schedule() {
+      if (!isPlaying) return;
       const now = audioCtx.currentTime;
-
-      while (nextNoteTimeA < now + SCHEDULE_AHEAD) {
-        scheduleNote(layerA, currentBeatA, nextNoteTimeA, true);
-        const swingOff = getSwingOffset(currentBeatA, layerA);
-        nextNoteTimeA += getBeatDuration(layerA) + swingOff;
-        currentBeatA = (currentBeatA + 1) % layerA.num;
-      }
-
-      while (nextNoteTimeB < now + SCHEDULE_AHEAD) {
-        scheduleNote(layerB, currentBeatB, nextNoteTimeB, false);
-        const swingOff = getSwingOffset(currentBeatB, layerB);
-        nextNoteTimeB += getBeatDuration(layerB) + swingOff;
-        currentBeatB = (currentBeatB + 1) % layerB.num;
-      }
-    }
-
-    let schedulerTimerId = null;
-
-    function startScheduler() {
-      schedulerTimerId = setInterval(scheduler, LOOK_AHEAD);
-    }
-
-    function stopScheduler() {
-      if (schedulerTimerId !== null) {
-        clearInterval(schedulerTimerId);
-        schedulerTimerId = null;
-      }
-    }
-
-    /* ================================================================
-       CIRCULAR VISUALIZATION
-       ================================================================ */
-    const DPR = window.devicePixelRatio || 1;
-    function initCanvas() {
-      const size = 400;
-      canvas.width = size * DPR;
-      canvas.height = size * DPR;
-      canvas.style.width = size + 'px';
-      canvas.style.height = size + 'px';
-      ctx.scale(DPR, DPR);
-    }
-
-    function drawVisualization() {
-      const W = 400, H = 400;
-      const cx = W / 2, cy = H / 2;
-      ctx.clearRect(0, 0, W, H);
-
-      const radiusA = 140;
-      const radiusB = 100;
-      const now = audioCtx ? audioCtx.currentTime : 0;
-
-      // Measure durations
-      const measDurA = getMeasureDuration(layerA);
-      const measDurB = getMeasureDuration(layerB);
-      // Use LCM-based cycle length for the playhead
-      const cycleDur = lcmDuration(measDurA, measDurB);
-
-      // Elapsed time within cycle
-      const elapsed = isPlaying ? (now - startTime) % cycleDur : 0;
-      const playheadAngle = (elapsed / cycleDur) * Math.PI * 2 - Math.PI / 2;
-
-      // Draw concentric rings
-      ctx.strokeStyle = 'rgba(26,26,48,0.6)';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.arc(cx, cy, radiusA, 0, Math.PI * 2); ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy, radiusB, 0, Math.PI * 2); ctx.stroke();
-
-      // Draw beat dots — Layer A
-      drawBeatDots(cx, cy, radiusA, layerA, true, elapsed, measDurA);
-      // Draw beat dots — Layer B
-      drawBeatDots(cx, cy, radiusB, layerB, false, elapsed, measDurB);
-
-      // Draw playhead
-      if (isPlaying) {
-        const nhx = cx + Math.cos(playheadAngle) * (radiusA + 20);
-        const nhy = cy + Math.sin(playheadAngle) * (radiusA + 20);
-        ctx.strokeStyle = 'rgba(232,232,240,0.3)';
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(nhx, nhy);
-        ctx.stroke();
-
-        // Playhead tip glow
-        ctx.beginPath();
-        ctx.arc(nhx, nhy, 4, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(232,232,240,0.6)';
-        ctx.fill();
-      }
-
-      // Center dot
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(232,232,240,0.2)';
-      ctx.fill();
-
-      // Update grid highlight
-      if (isPlaying) updateGridHighlight();
-
-      // Update accent circle highlights
-      if (isPlaying) updateAccentHighlights(now);
-
-      animFrameId = requestAnimationFrame(drawVisualization);
-    }
-
-    function drawBeatDots(cx, cy, radius, layer, isA, elapsed, measDur) {
-      const n = layer.num;
-      const teal = { r: 0, g: 212, b: 170 };
-      const violet = { r: 139, g: 92, b: 246 };
-      const col = isA ? teal : violet;
-
-      for (let i = 0; i < n; i++) {
-        const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
-        const x = cx + Math.cos(angle) * radius;
-        const y = cy + Math.sin(angle) * radius;
-
-        const acc = layer.accents[i];
-        let dotRadius = acc === 'strong' ? 7 : acc === 'weak' ? 5 : acc === 'ghost' ? 3.5 : 2;
-        let alpha = acc === 'strong' ? 0.9 : acc === 'weak' ? 0.5 : acc === 'ghost' ? 0.25 : 0.1;
-
-        // Check if this beat just fired (within last ~150ms)
-        const beatTime = (i / n) * measDur;
-        const elapsedInMeasure = elapsed % measDur;
-        const timeSinceBeat = elapsedInMeasure - beatTime;
-        const justFired = isPlaying && timeSinceBeat >= 0 && timeSinceBeat < 0.15;
-
-        if (justFired && acc !== 'silent') {
-          dotRadius *= 1.6;
-          alpha = 1.0;
-          // Glow
-          ctx.beginPath();
-          ctx.arc(x, y, dotRadius * 2.5, 0, Math.PI * 2);
-          const grad = ctx.createRadialGradient(x, y, 0, x, y, dotRadius * 2.5);
-          grad.addColorStop(0, `rgba(${col.r},${col.g},${col.b},0.4)`);
-          grad.addColorStop(1, `rgba(${col.r},${col.g},${col.b},0)`);
-          ctx.fillStyle = grad;
-          ctx.fill();
-        }
-
-        ctx.beginPath();
-        ctx.arc(x, y, dotRadius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${alpha})`;
-        ctx.fill();
-
-        // Beat number
-        if (acc !== 'silent') {
-          ctx.fillStyle = justFired ? `rgba(${col.r},${col.g},${col.b},0.9)` : `rgba(${col.r},${col.g},${col.b},0.35)`;
-          ctx.font = '9px "JetBrains Mono", monospace';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          // Place number slightly outside the ring
-          const labelR = radius + (isA ? 16 : -16);
-          const lx = cx + Math.cos(angle) * labelR;
-          const ly = cy + Math.sin(angle) * labelR;
-          ctx.fillText(i + 1, lx, ly);
+      horizon = now + LOOKAHEAD;
+      for (const key of ['a', 'b']) {
+        const L = layers[key];
+        for (;;) {
+          const t = beatToTime(pulseBeat(L, next[key]));
+          if (t >= horizon) break;
+          const step = next[key] % L.num;
+          const acc = L.accents[step] || 'weak';
+          if (t >= now - 0.005) playClick(t, L, acc);       // skip anything already in the past (e.g. after a stall)
+          played.push({ layer: key, n: next[key], step, time: t, acc });
+          next[key]++;
         }
       }
+      if (played.length > 256) played = played.slice(-128);
     }
 
-    // Check for simultaneous hits and show combined glow
-    function checkCoincidence(cx, cy) {
-      // Handled visually by overlapping glows when both layers fire near the same angle
+    // A Worker timer keeps ticking when the tab is in the background (main-thread timers get throttled).
+    function startTicker() {
+      try {
+        const src = 'let id=0;onmessage=e=>{clearInterval(id);if(e.data>0)id=setInterval(()=>postMessage(0),e.data);};';
+        const url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+        const w = new Worker(url);
+        URL.revokeObjectURL(url);
+        w.onmessage = schedule;
+        w.postMessage(TICK_MS);
+        ticker = { stop: () => w.terminate() };
+      } catch (e) {
+        const id = setInterval(schedule, TICK_MS);
+        ticker = { stop: () => clearInterval(id) };
+      }
     }
 
-    function lcmDuration(a, b) {
-      // LCM of two durations (float-safe with reasonable precision)
-      // Use beat counts: LCM of numA and numB measures
-      const stepsA = layerA.num;
-      const stepsB = layerB.num;
-      const lcmSteps = lcm(stepsA, stepsB);
-      // The cycle is lcmSteps beats of each layer
-      // Actually, the cycle = LCM of measure durations
-      // For simplicity: cycle = LCM(numA, numB) / numA * measDurA
-      return (lcmSteps / stepsA) * a;
-    }
-
-    function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
-    function lcm(a, b) { return (a * b) / gcd(a, b); }
-
-    function updateAccentHighlights(now) {
-      // Highlight the beat circles in the accent pattern
-      document.querySelectorAll('#pm-accents-a .pm-beat').forEach((el, i) => {
-        el.classList.toggle('pm-beat--active', i === currentBeatA);
-      });
-      document.querySelectorAll('#pm-accents-b .pm-beat').forEach((el, i) => {
-        el.classList.toggle('pm-beat--active', i === currentBeatB);
-      });
-    }
-
-    /* ================================================================
-       TRANSPORT CONTROLS
-       ================================================================ */
     function startPlayback() {
       if (isPlaying) return;
-      ensureAudioCtx();
+      if (!ensureAudio()) { $('pm-bpm-err').textContent = 'This browser has no Web Audio support, so the metronome can’t play.'; return; }
+      session = audioCtx.createGain();
+      session.connect(master);
       isPlaying = true;
-      currentBeatA = 0;
-      currentBeatB = 0;
-      startTime = audioCtx.currentTime;
-      nextNoteTimeA = startTime;
-      nextNoteTimeB = startTime;
-      scheduledEventsA = [];
-      scheduledEventsB = [];
-      startScheduler();
+      secPerBeat = 60 / bpm;
+      anchorTime = audioCtx.currentTime + START_DELAY;
+      anchorBeat = 0;
+      horizon = anchorTime;
+      next.a = next.b = 0;
+      played = [];
+      schedule();
+      startTicker();
       playBtn.textContent = 'Playing';
-      playBtn.style.opacity = '0.6';
+      playBtn.setAttribute('aria-pressed', 'true');
+      if (!animId) animId = requestAnimationFrame(frame);
     }
 
     function stopPlayback() {
+      if (!isPlaying) return;
       isPlaying = false;
-      stopScheduler();
-      currentBeatA = 0;
-      currentBeatB = 0;
+      if (ticker) { ticker.stop(); ticker = null; }
+      // Cut notes already queued ahead of the clock, with a short fade instead of a click.
+      const s = session, t = audioCtx.currentTime;
+      s.gain.setValueAtTime(s.gain.value, t);
+      s.gain.linearRampToValueAtTime(0, t + 0.02);
+      setTimeout(() => s.disconnect(), 80);
+      session = null;
+      played = [];
       playBtn.textContent = 'Play';
-      playBtn.style.opacity = '1';
-      // Clear highlights
-      document.querySelectorAll('.pm-beat--active').forEach(el => el.classList.remove('pm-beat--active'));
-      document.querySelectorAll('.pm-grid__cell.active').forEach(el => el.classList.remove('active'));
+      playBtn.setAttribute('aria-pressed', 'false');
+      document.querySelectorAll('.pm-beat--active, .pm-grid__cell.active').forEach(el => el.classList.remove('pm-beat--active', 'active'));
+      draw(0);
     }
 
-    function resetAll() {
-      stopPlayback();
-      bpm = 120;
-      swing = 0;
-      bpmInput.value = 120;
-      swingSlider.value = 0;
-      swingVal.textContent = '0%';
-      applyPreset('hemiola');
+    function restartIfPlaying() { if (isPlaying) { stopPlayback(); startPlayback(); } }
+
+    // Tempo changes take effect from the end of what is already scheduled, without a restart.
+    function setBpm(v) {
+      bpm = v;
+      bpmInput.value = v;
+      if (isPlaying) {
+        anchorBeat = timeToBeat(horizon);
+        anchorTime = horizon;
+      }
+      secPerBeat = 60 / bpm;
+      updateSummary();
     }
 
     /* ================================================================
-       PRESET APPLICATION
+       VISUALS
        ================================================================ */
+    const SIZE = 400;
+    function initCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = SIZE * dpr;
+      canvas.height = SIZE * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // The note currently sounding in each layer (accounting for output latency).
+    function sounding() {
+      const cur = { a: null, b: null };
+      if (!isPlaying) return cur;
+      const t = audioCtx.currentTime - (audioCtx.outputLatency || audioCtx.baseLatency || 0);
+      for (const n of played) if (n.time <= t) cur[n.layer] = n;
+      return cur;
+    }
+
+    function frame() {
+      animId = 0;
+      if (!isPlaying) return;
+      const t = audioCtx.currentTime - (audioCtx.outputLatency || audioCtx.baseLatency || 0);
+      draw(Math.max(0, timeToBeat(t)));
+      animId = requestAnimationFrame(frame);
+    }
+
+    function draw(beat) {
+      const W = SIZE, cx = W / 2, cy = W / 2, rA = 140, rB = 100;
+      ctx.clearRect(0, 0, W, W);
+      ctx.strokeStyle = 'rgba(122,122,144,0.35)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, cy, rA, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, rB, 0, Math.PI * 2); ctx.stroke();
+      const cur = sounding();
+      // Polyrhythm: both rings span one cycle. Polymeter: each ring is one bar of its own layer.
+      const span = { a: mode === 'poly' ? cycleBeats() : barBeats(layers.a), b: mode === 'poly' ? cycleBeats() : barBeats(layers.b) };
+      drawRing(layers.a, cx, cy, rA, [0, 212, 170], cur.a, span.a, beat);
+      drawRing(layers.b, cx, cy, rB, [139, 92, 246], cur.b, span.b, beat);
+      if (isPlaying) {
+        const hands = mode === 'poly' ? [[span.a, rA + 20]] : [[span.a, rA + 20], [span.b, rB - 18]];
+        for (const [sp, len] of hands) {
+          const ang = ((beat % sp) / sp) * Math.PI * 2 - Math.PI / 2;
+          const hx = cx + Math.cos(ang) * len, hy = cy + Math.sin(ang) * len;
+          ctx.strokeStyle = 'rgba(232,232,240,0.35)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(hx, hy); ctx.stroke();
+          ctx.beginPath(); ctx.arc(hx, hy, 4, 0, Math.PI * 2); ctx.fillStyle = 'rgba(232,232,240,0.7)'; ctx.fill();
+        }
+      }
+      ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(232,232,240,0.25)'; ctx.fill();
+      highlight(cur);
+    }
+
+    function drawRing(L, cx, cy, r, col, curNote, span, beat) {
+      const p = pulseBeats(L);
+      const count = Math.round(span / p);
+      for (let i = 0; i < count; i++) {
+        const step = i % L.num;
+        const ang = (pulseBeat(L, i) / span) * Math.PI * 2 - Math.PI / 2;
+        const x = cx + Math.cos(ang) * r, y = cy + Math.sin(ang) * r;
+        const acc = L.accents[step];
+        let dot = acc === 'strong' ? 7 : acc === 'weak' ? 5 : acc === 'ghost' ? 3.5 : 2;
+        let alpha = acc === 'strong' ? 0.9 : acc === 'weak' ? 0.55 : acc === 'ghost' ? 0.3 : 0.12;
+        const lit = curNote && acc !== 'silent' && curNote.step === i && (audioCtx.currentTime - curNote.time) < 0.15;
+        if (lit) {
+          dot *= 1.6; alpha = 1;
+          const g = ctx.createRadialGradient(x, y, 0, x, y, dot * 2.5);
+          g.addColorStop(0, 'rgba(' + col + ',0.45)'); g.addColorStop(1, 'rgba(' + col + ',0)');
+          ctx.beginPath(); ctx.arc(x, y, dot * 2.5, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+        }
+        ctx.beginPath(); ctx.arc(x, y, dot, 0, Math.PI * 2); ctx.fillStyle = 'rgba(' + col + ',' + alpha + ')'; ctx.fill();
+        if (acc !== 'silent' && count <= 24) {
+          ctx.fillStyle = 'rgba(' + col + ',' + (lit ? 0.95 : 0.5) + ')';
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          const lr = r + (L.key === 'a' ? 17 : -17);
+          ctx.fillText(String(step + 1), cx + Math.cos(ang) * lr, cy + Math.sin(ang) * lr);
+        }
+      }
+    }
+
+    function highlight(cur) {
+      for (const key of ['a', 'b']) {
+        const step = cur[key] ? cur[key].step : -1;
+        accentsEl[key].querySelectorAll('.pm-beat').forEach((el, i) => el.classList.toggle('pm-beat--active', i === step));
+        const cells = document.querySelectorAll('#pm-grid-' + key + ' .pm-grid__cell');
+        const at = cur[key] ? cur[key].n % cells.length : -1;
+        cells.forEach((el, i) => el.classList.toggle('active', i === at));
+      }
+    }
+
+    /* ================================================================
+       UI BUILDERS
+       ================================================================ */
+    function renderAccents(key) {
+      const L = layers[key], box = accentsEl[key];
+      box.innerHTML = '';
+      L.accents.forEach((acc, i) => {
+        const el = document.createElement('button');
+        el.type = 'button';
+        el.className = 'pm-beat pm-beat--' + acc;
+        el.textContent = acc === 'strong' ? 'S' : acc === 'weak' ? 'W' : acc === 'ghost' ? 'G' : '·';
+        el.setAttribute('aria-label', 'Layer ' + key.toUpperCase() + ' beat ' + (i + 1) + ': ' + acc + '. Activate to change.');
+        el.addEventListener('click', () => {
+          L.accents[i] = ACCENT_CYCLE[(ACCENT_CYCLE.indexOf(L.accents[i]) + 1) % ACCENT_CYCLE.length];
+          renderAccents(key);
+          box.querySelectorAll('.pm-beat')[i].focus();
+          clearPresetActive();
+          renderGrid();
+          if (!isPlaying) draw(0);
+        });
+        box.appendChild(el);
+      });
+    }
+
+    // One cycle laid out in a line; positions are true time proportions.
+    function renderGrid() {
+      const span = cycleBeats();
+      const capped = (span / pulseBeats(layers.a) > 96 || span / pulseBeats(layers.b) > 96);
+      const show = capped ? Math.max(barBeats(layers.a), barBeats(layers.b)) : span;
+      for (const key of ['a', 'b']) {
+        const L = layers[key], p = pulseBeats(L), track = $('pm-grid-' + key);
+        track.innerHTML = '';
+        const count = Math.round(show / p);
+        for (let i = 0; i < count; i++) {
+          const c = document.createElement('div');
+          c.className = 'pm-grid__cell pm-grid__cell--' + key + ' pm-grid__cell--' + (L.accents[i % L.num] || 'weak');
+          c.style.left = (pulseBeat(L, i) / show * 100) + '%';
+          c.style.width = 'calc(' + (p / show * 100) + '% - 3px)';
+          track.appendChild(c);
+        }
+      }
+      const subRow = $('pm-grid-sub-row'), sub = $('pm-grid-sub'), note = $('pm-grid-note');
+      sub.innerHTML = '';
+      if (mode === 'poly') {
+        const A = layers.a.num, B = layers.b.num, n = lcm(A, B);
+        subRow.hidden = n > 96;
+        if (n <= 96) for (let i = 0; i < n; i++) {
+          const c = document.createElement('div');
+          c.className = 'pm-grid__tick';
+          c.style.left = (i / n * 100) + '%';
+          c.style.width = 'calc(' + (100 / n) + '% - 2px)';
+          sub.appendChild(c);
+        }
+        const hitsA = Array.from({ length: A }, (_, i) => i * n / A + 1), hitsB = Array.from({ length: B }, (_, i) => i * n / B + 1);
+        note.textContent = A + ':' + B + ' on a grid of ' + n + ' equal steps: A plays steps ' + hitsA.join(', ') + '; B plays steps ' + hitsB.join(', ') + '.';
+        $('pm-grid-title').textContent = 'Beat grid · one cycle';
+      } else {
+        subRow.hidden = true;
+        note.textContent = capped ? 'The full realignment cycle is long, so the grid shows the first ' + fmt(show) + ' beats.' : 'Both layers start a bar together again after ' + fmt(span) + ' beats.';
+        $('pm-grid-title').textContent = capped ? 'Beat grid · opening bars' : 'Beat grid · one realignment cycle';
+      }
+    }
+
+    function fmt(x, dp) { return x.toLocaleString('en-US', { maximumFractionDigits: dp === undefined ? 2 : dp }); }
+
+    function updateSummary() {
+      const A = layers.a, B = layers.b;
+      const msA = pulseBeats(A) * 60000 / bpm, msB = pulseBeats(B) * 60000 / bpm;
+      const cyc = cycleBeats() * 60 / bpm;
+      let s;
+      if (mode === 'poly') {
+        s = A.num + ' against ' + B.num + ': Layer B beat every ' + fmt(msB, 0) + ' ms, Layer A beat every ' + fmt(msA, 1) + ' ms; one cycle lasts ' + fmt(cyc, 2) + ' s.';
+      } else {
+        const barsA = cycleBeats() / barBeats(A), barsB = cycleBeats() / barBeats(B);
+        s = 'Quarter note = ' + bpm + ' BPM. A pulses every ' + fmt(msA, 0) + ' ms (' + A.num + '/' + A.den + '), B every ' + fmt(msB, 0) + ' ms (' + B.num + '/' + B.den + '). They realign every ' + fmt(barsA, 2) + ' bar' + (barsA === 1 ? '' : 's') + ' of A = ' + fmt(barsB, 2) + ' bar' + (barsB === 1 ? '' : 's') + ' of B (' + fmt(cyc, 2) + ' s).';
+      }
+      $('pm-summary').textContent = s;
+      $('pm-bpm-label').textContent = mode === 'poly' ? 'BPM (Layer B beat)' : 'BPM (quarter note)';
+      $('pm-sig-hint').textContent = mode === 'poly' ? 'Polyrhythm mode uses the top number of each time signature (beats per cycle); the bottom number matters in polymeter mode.' : '';
+    }
+
+    function clearPresetActive() {
+      document.querySelectorAll('.pm-preset-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+    }
+
+    function readSig(key) {
+      const L = layers[key], val = sigSel[key].value, custom = val === 'custom';
+      ['num', 'den'].forEach(p => { $('pm-custom-' + key + '-' + p).hidden = !custom; });
+      $('pm-custom-' + key + '-slash').hidden = !custom;
+      let n, d;
+      if (custom) {
+        n = Math.round(Number($('pm-custom-' + key + '-num').value));
+        d = Math.round(Number($('pm-custom-' + key + '-den').value));
+        if (!(n >= 1 && n <= 32)) n = L.num;
+        if (!(d >= 1 && d <= 32)) d = L.den;
+      } else {
+        ({ num: n, den: d } = parseSig(val));
+      }
+      const changed = n !== L.num;
+      L.num = n; L.den = d;
+      if (changed || L.accents.length !== n) L.accents = Array.from({ length: n }, (_, i) => i === 0 ? 'strong' : 'weak');
+    }
+
+    function refreshAll() {
+      renderAccents('a'); renderAccents('b');
+      renderGrid(); updateSummary();
+      if (!isPlaying) draw(0);
+    }
+
     function applyPreset(key) {
       const p = PRESETS[key];
       if (!p) return;
-
-      // Set BPM
-      bpm = p.bpm;
-      bpmInput.value = p.bpm;
-
-      // Layer A
-      sigSelectA.value = p.a.sig;
-      handleSigChange('a', p.a.sig);
-      layerA.accents = [...p.a.accents];
-
-      // Layer B
-      sigSelectB.value = p.b.sig;
-      handleSigChange('b', p.b.sig);
-      layerB.accents = [...p.b.accents];
-
-      renderAccents(accentsContA, layerA, 'a');
-      renderAccents(accentsContB, layerB, 'b');
-      renderGrid();
-
-      // Highlight preset button
-      document.querySelectorAll('.pm-preset-btn').forEach(b => {
-        b.classList.toggle('active', b.dataset.preset === key);
-      });
-
-      // If playing, restart to apply changes
-      if (isPlaying) {
-        stopPlayback();
-        startPlayback();
+      setMode(p.mode, true);
+      for (const k of ['a', 'b']) {
+        sigSel[k].value = p[k].sig;
+        readSig(k);
+        layers[k].accents = p[k].accents.slice();
       }
+      setBpm(p.bpm);
+      document.querySelectorAll('.pm-preset-btn').forEach(b => {
+        const on = b.dataset.preset === key;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      refreshAll();
+      restartIfPlaying();
     }
 
-    function handleSigChange(layerKey, val) {
-      const layer = layerKey === 'a' ? layerA : layerB;
-      const customNum = $(layerKey === 'a' ? 'pm-custom-a-num' : 'pm-custom-b-num');
-      const customDen = $(layerKey === 'a' ? 'pm-custom-a-den' : 'pm-custom-b-den');
-      const customSlash = $(layerKey === 'a' ? 'pm-custom-a-slash' : 'pm-custom-b-slash');
-
-      if (val === 'custom') {
-        customNum.style.display = '';
-        customDen.style.display = '';
-        customSlash.style.display = '';
-        layer.num = parseInt(customNum.value) || 4;
-        layer.den = parseInt(customDen.value) || 4;
-      } else {
-        customNum.style.display = 'none';
-        customDen.style.display = 'none';
-        customSlash.style.display = 'none';
-        const { num, den } = parseSig(val);
-        layer.num = num;
-        layer.den = den;
-      }
-      layer.accents = Array.from({ length: layer.num }, (_, i) => i === 0 ? 'strong' : 'weak');
+    function setMode(m, silent) {
+      mode = m;
+      document.querySelectorAll('input[name="pm-mode"]').forEach(r => { r.checked = r.value === m; });
+      if (!silent) { clearPresetActive(); refreshAll(); restartIfPlaying(); }
     }
 
     /* ================================================================
-       TAP TEMPO
+       TAP TEMPO: average of the last few intervals; a pause of 2 s starts over.
        ================================================================ */
-    let tapTimes = [];
+    let taps = [];
     function handleTap() {
       const now = performance.now();
-      tapTimes.push(now);
-      // Keep only last 6 taps
-      if (tapTimes.length > 6) tapTimes.shift();
-      if (tapTimes.length >= 2) {
-        let sum = 0;
-        for (let i = 1; i < tapTimes.length; i++) {
-          sum += tapTimes[i] - tapTimes[i - 1];
-        }
-        const avgMs = sum / (tapTimes.length - 1);
-        const tappedBpm = Math.round(60000 / avgMs);
-        bpm = Math.max(30, Math.min(300, tappedBpm));
-        bpmInput.value = bpm;
-      }
-      // Reset if gap > 2s
-      if (tapTimes.length >= 2 && tapTimes[tapTimes.length - 1] - tapTimes[tapTimes.length - 2] > 2000) {
-        tapTimes = [now];
-      }
+      if (taps.length && now - taps[taps.length - 1] > 2000) taps = [];
+      taps.push(now);
+      if (taps.length > 8) taps.shift();
+      const status = $('pm-tap-status');
+      if (taps.length < 2) { status.textContent = 'Tap again…'; return; }
+      const iv = [];
+      for (let i = 1; i < taps.length; i++) iv.push(taps[i] - taps[i - 1]);
+      const avg = iv.reduce((s, v) => s + v, 0) / iv.length;
+      const v = Math.max(30, Math.min(300, Math.round(60000 / avg)));
+      setBpm(v);
+      clearBpmErr();
+      status.textContent = 'Tapped ' + v + ' BPM from ' + taps.length + ' taps.';
     }
 
+    function clearBpmErr() { $('pm-bpm-err').textContent = ''; bpmInput.removeAttribute('aria-invalid'); }
+
     /* ================================================================
-       EVENT BINDINGS
+       EVENTS
        ================================================================ */
-    playBtn.addEventListener('click', startPlayback);
-    stopBtn.addEventListener('click', stopPlayback);
-    resetBtn.addEventListener('click', resetAll);
-    tapBtn.addEventListener('click', handleTap);
+    playBtn.addEventListener('click', () => isPlaying ? stopPlayback() : startPlayback());
+    $('pm-stop').addEventListener('click', stopPlayback);
+    $('pm-reset').addEventListener('click', () => {
+      stopPlayback();
+      swing = 0; swingSlider.value = 0; swingVal.textContent = '0%';
+      $('pm-vol-a').value = 80; $('pm-vol-b').value = 70; layers.a.vol = 0.8; layers.b.vol = 0.7;
+      clearBpmErr();
+      applyPreset('hemiola');
+    });
+    $('pm-tap').addEventListener('click', handleTap);
 
     bpmInput.addEventListener('input', () => {
-      bpm = Math.max(30, Math.min(300, parseInt(bpmInput.value) || 120));
+      const raw = bpmInput.value.trim(), v = Number(raw);
+      if (raw === '' || !isFinite(v) || v < 30 || v > 300) {
+        $('pm-bpm-err').textContent = 'BPM must be between 30 and 300.';
+        bpmInput.setAttribute('aria-invalid', 'true');
+        return;
+      }
+      clearBpmErr();
+      bpm = Math.round(v);
+      setBpm(bpm);
+      clearPresetActive();
     });
+    bpmInput.addEventListener('change', () => { if (bpmInput.getAttribute('aria-invalid') === 'true') { bpmInput.value = bpm; clearBpmErr(); } });
+    $('pm-bpm-down').addEventListener('click', () => { setBpm(Math.max(30, bpm - 1)); clearBpmErr(); });
+    $('pm-bpm-up').addEventListener('click', () => { setBpm(Math.min(300, bpm + 1)); clearBpmErr(); });
 
     swingSlider.addEventListener('input', () => {
-      swing = parseInt(swingSlider.value);
+      swing = parseInt(swingSlider.value, 10);
       swingVal.textContent = swing + '%';
-    });
-
-    volA.addEventListener('input', () => { layerA.vol = parseInt(volA.value) / 100; });
-    volB.addEventListener('input', () => { layerB.vol = parseInt(volB.value) / 100; });
-
-    sigSelectA.addEventListener('change', () => {
-      handleSigChange('a', sigSelectA.value);
-      renderAccents(accentsContA, layerA, 'a');
       renderGrid();
-      clearPresetActive();
-      if (isPlaying) { stopPlayback(); startPlayback(); }
     });
-    sigSelectB.addEventListener('change', () => {
-      handleSigChange('b', sigSelectB.value);
-      renderAccents(accentsContB, layerB, 'b');
-      renderGrid();
-      clearPresetActive();
-      if (isPlaying) { stopPlayback(); startPlayback(); }
-    });
+    $('pm-vol-a').addEventListener('input', e => { layers.a.vol = parseInt(e.target.value, 10) / 100; });
+    $('pm-vol-b').addEventListener('input', e => { layers.b.vol = parseInt(e.target.value, 10) / 100; });
 
-    // Custom sig inputs
+    document.querySelectorAll('input[name="pm-mode"]').forEach(r => r.addEventListener('change', () => { if (r.checked) setMode(r.value); }));
+
     ['a', 'b'].forEach(k => {
-      const numEl = $(k === 'a' ? 'pm-custom-a-num' : 'pm-custom-b-num');
-      const denEl = $(k === 'a' ? 'pm-custom-a-den' : 'pm-custom-b-den');
-      const layer = k === 'a' ? layerA : layerB;
-      const cont = k === 'a' ? accentsContA : accentsContB;
-      [numEl, denEl].forEach(el => {
-        el.addEventListener('input', () => {
-          layer.num = Math.max(1, Math.min(32, parseInt(numEl.value) || 1));
-          layer.den = Math.max(1, Math.min(32, parseInt(denEl.value) || 4));
-          layer.accents = Array.from({ length: layer.num }, (_, i) => i === 0 ? 'strong' : 'weak');
-          renderAccents(cont, layer, k);
-          renderGrid();
-          clearPresetActive();
-          if (isPlaying) { stopPlayback(); startPlayback(); }
-        });
-      });
+      sigSel[k].addEventListener('change', () => { readSig(k); clearPresetActive(); refreshAll(); restartIfPlaying(); });
+      ['num', 'den'].forEach(p => $('pm-custom-' + k + '-' + p).addEventListener('change', () => { readSig(k); clearPresetActive(); refreshAll(); restartIfPlaying(); }));
     });
 
-    // Preset buttons
-    document.querySelectorAll('.pm-preset-btn').forEach(btn => {
-      btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
-    });
+    document.querySelectorAll('.pm-preset-btn').forEach(btn => btn.addEventListener('click', () => applyPreset(btn.dataset.preset)));
 
-    // Keyboard shortcut: space to toggle play/stop
-    document.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-      if (e.code === 'Space') {
-        e.preventDefault();
-        isPlaying ? stopPlayback() : startPlayback();
-      }
+    // Space = play/stop, T = tap (not while typing or when a button has focus).
+    document.addEventListener('keydown', e => {
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || tag === 'BUTTON' || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.code === 'Space') { e.preventDefault(); isPlaying ? stopPlayback() : startPlayback(); }
+      else if (e.key === 't' || e.key === 'T') { e.preventDefault(); handleTap(); }
     });
 
     /* ================================================================
-       INIT
+       INIT (no AudioContext yet: the browser stays silent until Play)
        ================================================================ */
     initCanvas();
     applyPreset('hemiola');
-    drawVisualization();
-
   })();
   </script>
   <script defer src="../js/ads.js"></script>

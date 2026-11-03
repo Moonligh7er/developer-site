@@ -1,371 +1,259 @@
 {
-  "retrieved": "2026-09-05",
+  "retrieved": "2026-11-03",
+  "currency": "USD",
+  "unit": "per million tokens",
   "review_cadence": "quarterly",
   "sources": {
-    "Anthropic": "https://claude.com/pricing",
+    "Anthropic": "https://platform.claude.com/docs/en/about-claude/pricing",
     "OpenAI": "https://developers.openai.com/api/docs/pricing",
-    "Google": "https://ai.google.dev/gemini-api/docs/pricing",
+    "Google": "https://aistudio.google.com/docs/pricing",
     "DeepSeek": "https://api-docs.deepseek.com/quick_start/pricing/",
-    "xAI": "https://docs.x.ai/docs/models"
+    "xAI": "https://docs.x.ai/developers/models"
   },
   "notes": [
-    "Prices are USD per million tokens (input / output).",
-    "Cached-input pricing shown where the provider publishes a public rate.",
-    "Context window is the maximum combined input+output the model accepts.",
-    "Where a provider has multi-tier pricing (Google >200k prompts, xAI extended, DeepSeek peak/off-peak), the standard/off-peak tier is listed here.",
-    "Verify with the provider before committing to production spend — pricing shifts monthly."
+    "Prices are USD per million tokens, copied by hand from each provider's official pricing page on the retrieved date.",
+    "input / output: standard (non-batch) rates. cached_input: the price of reading a cached prompt prefix. cache_write: writing the cache (Anthropic 5-minute, OpenAI 30-minute); cache_write_long: Anthropic 1-hour or OpenAI 12-hour writes.",
+    "batch_input / batch_output / batch_cached_input: asynchronous Batch API rates where the provider publishes them (absent = not offered or not published; batch_cached_input null = no cache discount in batch, so cached tokens bill at batch_input).",
+    "long_context: higher rates that apply to a whole request once its prompt is over 'over' tokens.",
+    "changes: scheduled price changes the provider has announced; the calculator switches to them on the 'from' date.",
+    "Context is the provider's stated context window in tokens.",
+    "DeepSeek is listed at its peak (weekday business-hours) rate; its off-peak rate is exactly half.",
+    "Verify with the provider before committing to production spend; prices change often."
   ],
   "models": [
     {
-      "provider": "Anthropic",
-      "family": "Fable",
-      "name": "Fable 5.1",
-      "id": "claude-fable-5-1",
-      "input": 10.00,
-      "output": 50.00,
-      "cached_input": 0.25,
-      "cache_write": 12.50,
-      "context": 200000,
-      "notes": "Highest-capability Claude tier."
+      "provider": "Anthropic", "family": "Fable", "name": "Claude Fable 5.1", "id": "claude-fable-5-1",
+      "input": 10.00, "output": 50.00, "cached_input": 0.25, "cache_write": 12.50, "cache_write_long": 20.00,
+      "batch_input": 5.00, "batch_output": 25.00, "batch_cached_input": 0.125, "context": 1000000,
+      "notes": "Most capable widely released Claude model. Cache reads are 0.025x input. US-only inference costs 1.1x."
     },
     {
-      "provider": "Anthropic",
-      "family": "Opus",
-      "name": "Opus 5",
-      "id": "claude-opus-5",
-      "input": 5.00,
-      "output": 25.00,
-      "cached_input": 0.50,
-      "cache_write": 6.25,
-      "context": 200000,
-      "notes": "Flagship reasoning. Fast mode 2x standard."
+      "provider": "Anthropic", "family": "Opus", "name": "Claude Opus 5.5", "id": "claude-opus-5-5",
+      "input": 4.00, "output": 20.00, "cached_input": 0.20, "cache_write": 5.00, "cache_write_long": 8.00,
+      "batch_input": 2.00, "batch_output": 10.00, "batch_cached_input": 0.1, "context": 1000000,
+      "notes": "Fast mode $8 / $40. US-only inference costs 1.1x."
     },
     {
-      "provider": "Anthropic",
-      "family": "Sonnet",
-      "name": "Sonnet 5",
-      "id": "claude-sonnet-5",
-      "input": 2.00,
-      "output": 10.00,
-      "cached_input": 0.20,
-      "cache_write": 2.50,
-      "context": 200000,
-      "notes": "Balanced default. Best cost/capability ratio in Claude lineup."
+      "provider": "Anthropic", "family": "Sonnet", "name": "Claude Sonnet 5.5", "id": "claude-sonnet-5-5",
+      "input": 2.00, "output": 10.00, "cached_input": 0.10, "cache_write": 2.50, "cache_write_long": 4.00,
+      "batch_input": 1.00, "batch_output": 5.00, "batch_cached_input": 0.05, "context": 1000000,
+      "notes": "US-only inference costs 1.1x."
     },
     {
-      "provider": "Anthropic",
-      "family": "Haiku",
-      "name": "Haiku 4.5",
-      "id": "claude-haiku-4-5",
-      "input": 1.00,
-      "output": 5.00,
-      "cached_input": 0.10,
-      "cache_write": 1.25,
-      "context": 200000,
-      "notes": "Fast, low-cost. US-only inference at 1.1x."
+      "provider": "Anthropic", "family": "Haiku", "name": "Claude Haiku 5.5", "id": "claude-haiku-5-5",
+      "input": 0.10, "output": 0.50, "cached_input": 0.01, "cache_write": 0.125, "cache_write_long": 0.20,
+      "batch_input": 0.05, "batch_output": 0.25, "batch_cached_input": 0.005, "context": 1000000,
+      "long_context": { "over": 100000, "input": 0.50, "output": 2.50, "cached_input": 0.05, "batch_input": 0.25, "batch_output": 1.25, "batch_cached_input": 0.025 },
+      "notes": "Prompts over 100K tokens are billed at $0.50 / $2.50 for the whole request."
     },
 
     {
-      "provider": "OpenAI",
-      "family": "GPT-6",
-      "name": "GPT-6 Astra",
-      "id": "gpt-6-astra",
-      "input": 10.00,
-      "output": 50.00,
-      "cached_input": 1.00,
-      "context": 272000,
-      "notes": "Flagship generation."
+      "provider": "OpenAI", "family": "GPT-6", "name": "GPT-6 Astra", "id": "gpt-6-astra",
+      "input": 10.00, "output": 50.00, "cached_input": 1.00, "cache_write": 12.50, "cache_write_long": 25.00,
+      "batch_input": 5.00, "batch_output": 25.00, "batch_cached_input": 0.5, "context": 1050000,
+      "long_context": { "over": 272000, "input": 20.00, "output": 75.00, "cached_input": 2.00, "batch_input": 10.00, "batch_output": 37.50, "batch_cached_input": 1 },
+      "notes": "Flagship. Prompts over 272K tokens cost more."
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.6",
-      "name": "GPT-5.6 Sol",
-      "id": "gpt-5.6-sol",
-      "input": 4.00,
-      "output": 20.00,
-      "cached_input": 0.40,
-      "context": 272000,
-      "notes": "Promotional pricing through 2026-11-21."
+      "provider": "OpenAI", "family": "GPT-6", "name": "GPT-6.1 Sol", "id": "gpt-6.1-sol",
+      "input": 2.00, "output": 10.00, "cached_input": 0.10, "cache_write": 2.50, "cache_write_long": 5.00,
+      "batch_input": 1.00, "batch_output": 5.00, "batch_cached_input": 0.05, "context": 1050000,
+      "long_context": { "over": 272000, "input": 4.00, "output": 15.00, "cached_input": 0.20, "batch_input": 2.00, "batch_output": 7.50, "batch_cached_input": 0.1 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.6",
-      "name": "GPT-5.6 Terra",
-      "id": "gpt-5.6-terra",
-      "input": 2.00,
-      "output": 12.00,
-      "cached_input": 0.20,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-6", "name": "GPT-6.1 Terra", "id": "gpt-6.1-terra",
+      "input": 1.00, "output": 5.00, "cached_input": 0.05, "cache_write": 1.25, "cache_write_long": 2.50,
+      "batch_input": 0.50, "batch_output": 2.50, "batch_cached_input": 0.025, "context": 1050000,
+      "long_context": { "over": 272000, "input": 2.00, "output": 7.50, "cached_input": 0.10, "batch_input": 1.00, "batch_output": 3.75, "batch_cached_input": 0.05 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.6",
-      "name": "GPT-5.6 Luna",
-      "id": "gpt-5.6-luna",
-      "input": 0.20,
-      "output": 1.20,
-      "cached_input": 0.02,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-6", "name": "GPT-6 Luna", "id": "gpt-6-luna",
+      "input": 0.10, "output": 0.50, "cached_input": 0.01, "cache_write": 0.125, "cache_write_long": 0.25,
+      "batch_input": 0.05, "batch_output": 0.25, "batch_cached_input": 0.005, "context": 1050000,
+      "long_context": { "over": 272000, "input": 0.20, "output": 0.75, "cached_input": 0.02, "batch_input": 0.10, "batch_output": 0.375, "batch_cached_input": 0.01 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.5",
-      "name": "GPT-5.5",
-      "id": "gpt-5.5",
-      "input": 5.00,
-      "output": 30.00,
-      "cached_input": 0.50,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-6", "name": "GPT-6 Sol", "id": "gpt-6-sol",
+      "input": 2.00, "output": 10.00, "cached_input": 0.20, "cache_write": 2.50, "cache_write_long": 5.00,
+      "batch_input": 1.00, "batch_output": 5.00, "batch_cached_input": 0.1, "context": 1050000,
+      "long_context": { "over": 272000, "input": 4.00, "output": 15.00, "cached_input": 0.40, "batch_input": 2.00, "batch_output": 7.50, "batch_cached_input": 0.2 },
+      "notes": "OpenAI points to GPT-6.1 Sol as the newer Sol model."
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.4",
-      "name": "GPT-5.4",
-      "id": "gpt-5.4",
-      "input": 2.50,
-      "output": 15.00,
-      "cached_input": 0.25,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.6", "name": "GPT-5.6 Sol", "id": "gpt-5.6-sol",
+      "input": 4.00, "output": 20.00, "cached_input": 0.40, "cache_write": 5.00, "cache_write_long": 10.00,
+      "batch_input": 2.00, "batch_output": 10.00, "batch_cached_input": 0.2, "context": 1050000,
+      "long_context": { "over": 272000, "input": 8.00, "output": 30.00, "cached_input": 0.80, "batch_input": 4.00, "batch_output": 15.00, "batch_cached_input": 0.4 },
+      "notes": "Promotional pricing at least through 2026-11-21; OpenAI hasn't published the price after that."
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.4",
-      "name": "GPT-5.4 Mini",
-      "id": "gpt-5.4-mini",
-      "input": 0.75,
-      "output": 4.50,
-      "cached_input": 0.075,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.6", "name": "GPT-5.6 Terra", "id": "gpt-5.6-terra",
+      "input": 2.00, "output": 12.00, "cached_input": 0.20, "cache_write": 2.50, "cache_write_long": 5.00,
+      "batch_input": 1.00, "batch_output": 6.00, "batch_cached_input": 0.1, "context": 1050000,
+      "long_context": { "over": 272000, "input": 4.00, "output": 18.00, "cached_input": 0.40, "batch_input": 2.00, "batch_output": 9.00, "batch_cached_input": 0.2 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5.4",
-      "name": "GPT-5.4 Nano",
-      "id": "gpt-5.4-nano",
-      "input": 0.20,
-      "output": 1.25,
-      "cached_input": 0.02,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.6", "name": "GPT-5.6 Luna", "id": "gpt-5.6-luna",
+      "input": 0.20, "output": 1.20, "cached_input": 0.02, "cache_write": 0.25, "cache_write_long": 0.50,
+      "batch_input": 0.10, "batch_output": 0.60, "batch_cached_input": 0.01, "context": 1050000,
+      "long_context": { "over": 272000, "input": 0.40, "output": 1.80, "cached_input": 0.04, "batch_input": 0.20, "batch_output": 0.90, "batch_cached_input": 0.02 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5",
-      "name": "GPT-5",
-      "id": "gpt-5",
-      "input": 1.25,
-      "output": 10.00,
-      "cached_input": 0.125,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.5", "name": "GPT-5.5", "id": "gpt-5.5",
+      "input": 5.00, "output": 30.00, "cached_input": 0.50,
+      "batch_input": 2.50, "batch_output": 15.00, "batch_cached_input": 0.25, "context": 1050000,
+      "long_context": { "over": 272000, "input": 10.00, "output": 45.00, "cached_input": 1.00, "batch_input": 5.00, "batch_output": 22.50, "batch_cached_input": 0.5 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5",
-      "name": "GPT-5 Mini",
-      "id": "gpt-5-mini",
-      "input": 0.25,
-      "output": 2.00,
-      "cached_input": 0.025,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.4", "name": "GPT-5.4", "id": "gpt-5.4",
+      "input": 2.50, "output": 15.00, "cached_input": 0.25,
+      "batch_input": 1.25, "batch_output": 7.50, "batch_cached_input": 0.13, "context": 1050000,
+      "long_context": { "over": 272000, "input": 5.00, "output": 22.50, "cached_input": 0.50, "batch_input": 2.50, "batch_output": 11.25, "batch_cached_input": 0.25 }
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-5",
-      "name": "GPT-5 Nano",
-      "id": "gpt-5-nano",
-      "input": 0.05,
-      "output": 0.40,
-      "cached_input": 0.005,
-      "context": 272000
+      "provider": "OpenAI", "family": "GPT-5.4", "name": "GPT-5.4 Mini", "id": "gpt-5.4-mini",
+      "input": 0.75, "output": 4.50, "cached_input": 0.075,
+      "batch_input": 0.375, "batch_output": 2.25, "batch_cached_input": 0.0375, "context": 400000
     },
     {
-      "provider": "OpenAI",
-      "family": "o-series",
-      "name": "o3",
-      "id": "o3",
-      "input": 2.00,
-      "output": 8.00,
-      "cached_input": 0.50,
-      "context": 200000,
-      "notes": "Reasoning model."
+      "provider": "OpenAI", "family": "GPT-5.4", "name": "GPT-5.4 Nano", "id": "gpt-5.4-nano",
+      "input": 0.20, "output": 1.25, "cached_input": 0.02,
+      "batch_input": 0.10, "batch_output": 0.625, "batch_cached_input": 0.01, "context": 400000
     },
     {
-      "provider": "OpenAI",
-      "family": "o-series",
-      "name": "o3-mini",
-      "id": "o3-mini",
-      "input": 1.10,
-      "output": 4.40,
-      "cached_input": 0.55,
-      "context": 200000,
-      "notes": "Reasoning model."
+      "provider": "OpenAI", "family": "GPT-5", "name": "GPT-5", "id": "gpt-5",
+      "input": 1.25, "output": 10.00, "cached_input": 0.125,
+      "batch_input": 0.625, "batch_output": 5.00, "batch_cached_input": 0.0625, "context": 400000
     },
     {
-      "provider": "OpenAI",
-      "family": "o-series",
-      "name": "o4-mini",
-      "id": "o4-mini",
-      "input": 1.10,
-      "output": 4.40,
-      "cached_input": 0.275,
-      "context": 200000,
-      "notes": "Reasoning model."
+      "provider": "OpenAI", "family": "GPT-5", "name": "GPT-5 Mini", "id": "gpt-5-mini",
+      "input": 0.25, "output": 2.00, "cached_input": 0.025,
+      "batch_input": 0.125, "batch_output": 1.00, "batch_cached_input": 0.0125, "context": 400000
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-4o",
-      "name": "GPT-4o",
-      "id": "gpt-4o",
-      "input": 2.50,
-      "output": 10.00,
-      "cached_input": 1.25,
-      "context": 128000,
-      "notes": "Legacy multimodal, still widely used."
+      "provider": "OpenAI", "family": "GPT-5", "name": "GPT-5 Nano", "id": "gpt-5-nano",
+      "input": 0.05, "output": 0.40, "cached_input": 0.005,
+      "batch_input": 0.025, "batch_output": 0.20, "batch_cached_input": 0.0025, "context": 400000
     },
     {
-      "provider": "OpenAI",
-      "family": "GPT-4o",
-      "name": "GPT-4o Mini",
-      "id": "gpt-4o-mini",
-      "input": 0.15,
-      "output": 0.60,
-      "cached_input": 0.075,
-      "context": 128000,
-      "notes": "Legacy — cheap workhorse."
+      "provider": "OpenAI", "family": "o-series", "name": "o3", "id": "o3",
+      "input": 2.00, "output": 8.00, "cached_input": 0.50,
+      "batch_input": 1.00, "batch_output": 4.00, "batch_cached_input": null, "context": 200000,
+      "notes": "Reasoning model; reasoning tokens bill as output."
+    },
+    {
+      "provider": "OpenAI", "family": "GPT-4.1", "name": "GPT-4.1", "id": "gpt-4.1",
+      "input": 2.00, "output": 8.00, "cached_input": 0.50,
+      "batch_input": 1.00, "batch_output": 4.00, "batch_cached_input": null, "context": 1047576
+    },
+    {
+      "provider": "OpenAI", "family": "GPT-4o", "name": "GPT-4o", "id": "gpt-4o",
+      "input": 2.50, "output": 10.00, "cached_input": 1.25,
+      "batch_input": 1.25, "batch_output": 5.00, "batch_cached_input": null, "context": 128000,
+      "notes": "Older multimodal model."
+    },
+    {
+      "provider": "OpenAI", "family": "GPT-4o", "name": "GPT-4o Mini", "id": "gpt-4o-mini",
+      "input": 0.15, "output": 0.60, "cached_input": 0.075,
+      "batch_input": 0.075, "batch_output": 0.30, "batch_cached_input": null, "context": 128000,
+      "notes": "Older low-cost model."
     },
 
     {
-      "provider": "Google",
-      "family": "Gemini 3.8",
-      "name": "Gemini 3.8 Flash",
-      "id": "gemini-3.8-flash",
-      "input": 0.75,
-      "output": 3.75,
-      "cached_input": 0.075,
-      "context": 1000000,
-      "notes": "Promotional pricing through 2026-12-31 (then $1.50 / $7.50)."
+      "provider": "Google", "family": "Gemini 4", "name": "Gemini 4 Argon", "id": "gemini-4-argon",
+      "input": 2.00, "output": 10.00, "cached_input": 0.10,
+      "batch_input": 1.00, "batch_output": 5.00, "batch_cached_input": 0.05, "context": 1000000,
+      "changes": [ { "from": "2026-12-01", "input": 4.00, "output": 20.00, "cached_input": 0.20, "batch_input": 2.00, "batch_output": 10.00, "batch_cached_input": 0.1 } ],
+      "notes": "Introductory price through 2026-11-30; $4.00 / $20.00 from 2026-12-01. Implicit caching only. Output includes thinking tokens."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 3.7",
-      "name": "Gemini 3.7 Flash",
-      "id": "gemini-3.7-flash",
-      "input": 0.75,
-      "output": 3.75,
-      "context": 1000000,
-      "notes": "Promotional pricing through 2026-12-31 (then $1.50 / $7.50)."
+      "provider": "Google", "family": "Gemini 3.8", "name": "Gemini 3.8 Flash", "id": "gemini-3.8-flash",
+      "input": 0.75, "output": 3.75, "cached_input": 0.075,
+      "batch_input": 0.375, "batch_output": 1.875, "batch_cached_input": 0.0375, "context": 1000000,
+      "changes": [ { "from": "2027-01-01", "input": 1.50, "output": 7.50, "cached_input": 0.15, "batch_input": 0.75, "batch_output": 3.75, "batch_cached_input": 0.075 } ],
+      "notes": "Introductory price through 2026-12-31; $1.50 / $7.50 from 2027-01-01. Cache storage billed per hour."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 3.5",
-      "name": "Gemini 3.5 Flash",
-      "id": "gemini-3.5-flash",
-      "input": 1.50,
-      "output": 9.00,
-      "context": 1000000
+      "provider": "Google", "family": "Gemini 3.6", "name": "Gemini 3.6 Flash", "id": "gemini-3.6-flash",
+      "input": 0.75, "output": 3.75, "cached_input": 0.075,
+      "batch_input": 0.375, "batch_output": 1.875, "batch_cached_input": 0.0375, "context": 1000000,
+      "changes": [ { "from": "2027-01-01", "input": 1.50, "output": 7.50, "cached_input": 0.15, "batch_input": 0.75, "batch_output": 3.75, "batch_cached_input": 0.075 } ],
+      "notes": "Previous-generation Flash. Introductory price through 2026-12-31; $1.50 / $7.50 from 2027-01-01."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 3.1",
-      "name": "Gemini 3.1 Flash-Lite",
-      "id": "gemini-3.1-flash-lite",
-      "input": 0.25,
-      "output": 1.50,
-      "context": 1000000,
-      "notes": "Audio input priced separately at $0.50/MTok."
+      "provider": "Google", "family": "Gemini 3.5", "name": "Gemini 3.5 Flash-Lite", "id": "gemini-3.5-flash-lite",
+      "input": 0.30, "output": 2.50, "cached_input": 0.03,
+      "batch_input": 0.15, "batch_output": 1.25, "batch_cached_input": 0.015, "context": 1000000,
+      "notes": "Same input price for text, image, video and audio."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 2.5",
-      "name": "Gemini 2.5 Pro",
-      "id": "gemini-2.5-pro",
-      "input": 1.25,
-      "output": 10.00,
-      "context": 2000000,
-      "notes": "Prompts >200k tokens are billed at $2.50 / $15.00."
+      "provider": "Google", "family": "Gemini 3.1", "name": "Gemini 3.1 Pro (preview)", "id": "gemini-3.1-pro-preview",
+      "input": 2.00, "output": 12.00, "cached_input": 0.20,
+      "batch_input": 1.00, "batch_output": 6.00, "batch_cached_input": 0.2, "context": 1000000,
+      "long_context": { "over": 200000, "input": 4.00, "output": 18.00, "cached_input": 0.40, "batch_input": 2.00, "batch_output": 9.00, "batch_cached_input": 0.4 },
+      "notes": "Preview model. Prompts over 200K tokens are billed at $4.00 / $18.00."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 2.5",
-      "name": "Gemini 2.5 Flash",
-      "id": "gemini-2.5-flash",
-      "input": 0.30,
-      "output": 2.50,
-      "context": 1000000,
-      "notes": "Audio input priced separately at $1.00/MTok."
+      "provider": "Google", "family": "Gemini 3.1", "name": "Gemini 3.1 Flash-Lite", "id": "gemini-3.1-flash-lite",
+      "input": 0.25, "output": 1.50, "cached_input": 0.025,
+      "batch_input": 0.125, "batch_output": 0.75, "batch_cached_input": 0.0125, "context": 1000000,
+      "notes": "Audio input $0.50/MTok."
     },
     {
-      "provider": "Google",
-      "family": "Gemini 2.5",
-      "name": "Gemini 2.5 Flash-Lite",
-      "id": "gemini-2.5-flash-lite",
-      "input": 0.10,
-      "output": 0.40,
-      "context": 1000000,
-      "notes": "Cheapest tier. Audio input priced separately at $0.30/MTok."
+      "provider": "Google", "family": "Gemini 2.5", "name": "Gemini 2.5 Flash-Lite", "id": "gemini-2.5-flash-lite",
+      "input": 0.10, "output": 0.40, "cached_input": 0.01,
+      "batch_input": 0.05, "batch_output": 0.20, "batch_cached_input": 0.01, "context": 1000000,
+      "notes": "Older model, still served. Audio input $0.30/MTok."
     },
 
     {
-      "provider": "DeepSeek",
-      "family": "DeepSeek V4",
-      "name": "DeepSeek V4 Pro",
-      "id": "deepseek-v4-pro",
-      "input": 0.66,
-      "output": 1.98,
-      "cached_input": 0.022,
-      "context": 1000000,
-      "notes": "Off-peak pricing. Peak hours (01-04 & 06-10 UTC weekdays) charge 2x."
+      "provider": "DeepSeek", "family": "DeepSeek V4", "name": "DeepSeek V4 Pro", "id": "deepseek-v4-pro",
+      "input": 1.32, "output": 3.96, "cached_input": 0.044, "context": 1000000,
+      "off_peak": { "input": 0.66, "output": 1.98, "cached_input": 0.022 },
+      "notes": "Peak rate (01-04 and 06-10 UTC, Mon-Fri). Off-peak, including weekends, is half: $0.66 / $1.98."
     },
     {
-      "provider": "DeepSeek",
-      "family": "DeepSeek V4",
-      "name": "DeepSeek V4 Flash",
-      "id": "deepseek-v4-flash",
-      "input": 0.22,
-      "output": 0.66,
-      "cached_input": 0.007,
-      "context": 1000000,
-      "notes": "Off-peak pricing. Peak hours charge 2x."
+      "provider": "DeepSeek", "family": "DeepSeek V4.1", "name": "DeepSeek V4.1 Flash", "id": "deepseek-flash",
+      "input": 0.30, "output": 1.20, "cached_input": 0.006, "context": 1000000,
+      "off_peak": { "input": 0.15, "output": 0.60, "cached_input": 0.003 },
+      "notes": "Model name deepseek-flash. Peak rate; off-peak is half: $0.15 / $0.60."
     },
 
     {
-      "provider": "xAI",
-      "family": "Grok 4",
-      "name": "Grok 4.6",
-      "id": "grok-4.6",
-      "input": 2.00,
-      "output": 6.00,
-      "context": 500000,
-      "notes": "Standard tier (prompts <200k). Extended-context pricing doubles."
+      "provider": "xAI", "family": "Grok 4", "name": "Grok 4.7", "id": "grok-4.7",
+      "input": 2.00, "output": 6.00, "cached_input": 0.50, "context": 500000,
+      "long_context": { "over": 199999, "input": 4.00, "output": 12.00, "cached_input": 1.00 },
+      "notes": "Prompts of 200K tokens or more are billed at double rates for the whole request."
     },
     {
-      "provider": "xAI",
-      "family": "Grok 4",
-      "name": "Grok 4.5",
-      "id": "grok-4.5",
-      "input": 2.00,
-      "output": 6.00,
-      "context": 500000,
-      "notes": "Standard tier. Extended pricing 2x."
+      "provider": "xAI", "family": "Grok 4", "name": "Grok 4.6", "id": "grok-4.6",
+      "input": 2.00, "output": 6.00, "cached_input": 0.50, "context": 500000,
+      "long_context": { "over": 199999, "input": 4.00, "output": 12.00, "cached_input": 1.00 },
+      "notes": "Prompts of 200K tokens or more are billed at double rates."
     },
     {
-      "provider": "xAI",
-      "family": "Grok 4",
-      "name": "Grok 4.3",
-      "id": "grok-4.3",
-      "input": 1.25,
-      "output": 2.50,
-      "context": 1000000,
-      "notes": "Standard tier. Extended pricing 2x."
+      "provider": "xAI", "family": "Grok 4", "name": "Grok 4.5", "id": "grok-4.5",
+      "input": 2.00, "output": 6.00, "cached_input": 0.30, "context": 500000,
+      "long_context": { "over": 199999, "input": 4.00, "output": 12.00, "cached_input": 0.60 },
+      "notes": "Prompts of 200K tokens or more are billed at double rates."
     },
     {
-      "provider": "xAI",
-      "family": "Grok Build",
-      "name": "Grok Build 0.1",
-      "id": "grok-build-0.1",
-      "input": 1.00,
-      "output": 2.00,
-      "context": 256000,
-      "notes": "Coding-focused. Standard tier."
+      "provider": "xAI", "family": "Grok 4", "name": "Grok 4.3", "id": "grok-4.3",
+      "input": 1.25, "output": 2.50, "cached_input": 0.20, "context": 1000000,
+      "long_context": { "over": 199999, "input": 2.50, "output": 5.00, "cached_input": 0.40 },
+      "notes": "Prompts of 200K tokens or more are billed at double rates."
+    },
+    {
+      "provider": "xAI", "family": "Grok 4", "name": "Grok 4.20", "id": "grok-4.20-0309-reasoning",
+      "input": 1.25, "output": 2.50, "cached_input": 0.20, "context": 1000000,
+      "long_context": { "over": 199999, "input": 2.50, "output": 5.00, "cached_input": 0.40 },
+      "notes": "Reasoning and non-reasoning variants are priced the same."
+    },
+    {
+      "provider": "xAI", "family": "Grok Build", "name": "Grok Build 0.1", "id": "grok-build-0.1",
+      "input": 1.00, "output": 2.00, "cached_input": 0.20, "context": 256000,
+      "long_context": { "over": 199999, "input": 2.00, "output": 4.00, "cached_input": 0.40 },
+      "notes": "Coding-focused."
     }
   ]
 }

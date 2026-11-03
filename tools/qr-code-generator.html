@@ -81,6 +81,18 @@
     .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
     .calc-error.visible { display: block; }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .form-group input:focus-visible, .form-group select:focus-visible, .form-group textarea:focus-visible, .mode-tab:focus-visible, .calc-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .calc-btn { min-height: 44px; }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .calc-btn--secondary:hover:not(:disabled) { border-color: var(--violet); color: var(--violet); }
+    .mode-tab { min-height: 44px; }
+    .form-group .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; }
+    .form-group .check-row input { width: 18px; height: 18px; padding: 0; accent-color: var(--teal); flex: none; }
+    .form-group input[type=file] { font-size: 0.8rem; }
+    .qr-preview canvas { width: min(100%, 360px); height: auto; image-rendering: pixelated; }
+    .scan-check { font-family: var(--font-mono); font-size: 0.75rem; line-height: 1.6; margin: 0.75rem auto 0; max-width: 60ch; color: var(--text-secondary); }
+    .scan-check--pass { color: var(--teal); }
+    .scan-check--fail { color: var(--amber); }
   </style>
 </head>
 <body>
@@ -113,102 +125,105 @@
 
       <div class="calc-card">
         <h1>QR Code Generator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1rem;">Generate QR codes for URLs, plain text, WiFi credentials, vCards, and email links. Custom colors, error correction level, optional center logo overlay, PNG + SVG downloads.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1rem;">Make QR codes for links, plain text, Wi-Fi logins, contact cards (vCard) and pre-filled emails. Choose colours, error correction and quiet zone, add a centre logo if you like, and download PNG or SVG. The preview updates as you type, and the page checks whether the result reads back.</p>
         <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Fully in your browser.</strong> Nothing is uploaded &mdash; not the content you encode, not the logo you add, nothing.</div>
 
-        <div class="mode-tabs">
-          <button class="mode-tab active" data-mode="url">URL</button>
-          <button class="mode-tab" data-mode="text">Plain Text</button>
-          <button class="mode-tab" data-mode="wifi">WiFi</button>
-          <button class="mode-tab" data-mode="vcard">vCard</button>
-          <button class="mode-tab" data-mode="email">Email</button>
+        <div class="mode-tabs" role="tablist" aria-label="What the code contains">
+          <button type="button" class="mode-tab active" role="tab" id="tab-url" aria-selected="true" aria-controls="mode-url" data-mode="url">URL</button>
+          <button type="button" class="mode-tab" role="tab" id="tab-text" aria-selected="false" aria-controls="mode-text" data-mode="text" tabindex="-1">Plain Text</button>
+          <button type="button" class="mode-tab" role="tab" id="tab-wifi" aria-selected="false" aria-controls="mode-wifi" data-mode="wifi" tabindex="-1">Wi-Fi</button>
+          <button type="button" class="mode-tab" role="tab" id="tab-vcard" aria-selected="false" aria-controls="mode-vcard" data-mode="vcard" tabindex="-1">vCard</button>
+          <button type="button" class="mode-tab" role="tab" id="tab-email" aria-selected="false" aria-controls="mode-email" data-mode="email" tabindex="-1">Email</button>
         </div>
 
-        <div class="mode-panel active" id="mode-url">
-          <div class="form-group"><label for="urlInput">URL</label><input type="url" id="urlInput" placeholder="https://example.com" value="https://moonligh7er.github.io/developer-site/"></div>
+        <div class="mode-panel active" id="mode-url" role="tabpanel" aria-labelledby="tab-url">
+          <div class="form-group"><label for="urlInput">URL</label><input type="url" id="urlInput" placeholder="https://example.com" value="https://moonligh7er.github.io/developer-site/" autocomplete="url"><span class="hint" id="url-hint"></span></div>
         </div>
-        <div class="mode-panel" id="mode-text">
-          <div class="form-group"><label for="textInput">Text</label><textarea id="textInput" placeholder="Any text up to about 2900 characters"></textarea></div>
+        <div class="mode-panel" id="mode-text" role="tabpanel" aria-labelledby="tab-text" hidden>
+          <div class="form-group"><label for="textInput">Text</label><textarea id="textInput" placeholder="Any text. Up to 2,953 bytes at error-correction level L; less at higher levels."></textarea></div>
         </div>
-        <div class="mode-panel" id="mode-wifi">
+        <div class="mode-panel" id="mode-wifi" role="tabpanel" aria-labelledby="tab-wifi" hidden>
           <div class="form-grid">
-            <div class="form-group"><label for="wifiSsid">Network Name (SSID)</label><input type="text" id="wifiSsid" placeholder="MyWiFi"></div>
-            <div class="form-group"><label for="wifiPass">Password</label><input type="text" id="wifiPass" placeholder="password123"></div>
-            <div class="form-group"><label for="wifiEnc">Encryption</label>
-              <select id="wifiEnc"><option value="WPA">WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">None</option></select>
+            <div class="form-group"><label for="wifiSsid">Network name (SSID)</label><input type="text" id="wifiSsid" placeholder="MyWiFi" autocomplete="off"></div>
+            <div class="form-group"><label for="wifiPass">Password</label><input type="text" id="wifiPass" placeholder="password123" autocomplete="off" spellcheck="false"><span class="hint" id="wifi-hint"></span></div>
+            <div class="form-group"><label for="wifiEnc">Security</label>
+              <select id="wifiEnc"><option value="WPA">WPA / WPA2 / WPA3</option><option value="WEP">WEP (old)</option><option value="nopass">None (open network)</option></select>
             </div>
-            <div class="form-group"><label><input type="checkbox" id="wifiHidden"> Hidden network</label></div>
+            <div class="form-group"><span class="hint" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);">Visibility</span><label class="check-row" for="wifiHidden"><input type="checkbox" id="wifiHidden"> Hidden network</label></div>
           </div>
         </div>
-        <div class="mode-panel" id="mode-vcard">
+        <div class="mode-panel" id="mode-vcard" role="tabpanel" aria-labelledby="tab-vcard" hidden>
           <div class="form-grid">
-            <div class="form-group"><label for="vcName">Full Name</label><input type="text" id="vcName" placeholder="Michael Wylde"></div>
-            <div class="form-group"><label for="vcOrg">Organization</label><input type="text" id="vcOrg" placeholder="Moonlit Social Labs"></div>
-            <div class="form-group"><label for="vcTitle">Title</label><input type="text" id="vcTitle" placeholder="Founder"></div>
-            <div class="form-group"><label for="vcPhone">Phone</label><input type="tel" id="vcPhone" placeholder="+1-555-123-4567"></div>
-            <div class="form-group"><label for="vcEmail">Email</label><input type="email" id="vcEmail" placeholder="you@example.com"></div>
-            <div class="form-group"><label for="vcUrl">Website</label><input type="url" id="vcUrl" placeholder="https://example.com"></div>
+            <div class="form-group"><label for="vcName">Full name</label><input type="text" id="vcName" placeholder="Michael Wylde" autocomplete="off"></div>
+            <div class="form-group"><label for="vcOrg">Organization</label><input type="text" id="vcOrg" placeholder="Moonlit Social Labs" autocomplete="off"></div>
+            <div class="form-group"><label for="vcTitle">Title</label><input type="text" id="vcTitle" placeholder="Founder" autocomplete="off"></div>
+            <div class="form-group"><label for="vcPhone">Phone</label><input type="tel" id="vcPhone" placeholder="+1 555 123 4567" autocomplete="off"></div>
+            <div class="form-group"><label for="vcEmail">Email</label><input type="email" id="vcEmail" placeholder="you@example.com" autocomplete="off"></div>
+            <div class="form-group"><label for="vcUrl">Website</label><input type="url" id="vcUrl" placeholder="https://example.com" autocomplete="off"></div>
           </div>
         </div>
-        <div class="mode-panel" id="mode-email">
+        <div class="mode-panel" id="mode-email" role="tabpanel" aria-labelledby="tab-email" hidden>
           <div class="form-grid">
-            <div class="form-group"><label for="emTo">To</label><input type="email" id="emTo" placeholder="you@example.com"></div>
-            <div class="form-group"><label for="emSubj">Subject</label><input type="text" id="emSubj"></div>
+            <div class="form-group"><label for="emTo">To</label><input type="email" id="emTo" placeholder="you@example.com" autocomplete="off"></div>
+            <div class="form-group"><label for="emSubj">Subject</label><input type="text" id="emSubj" autocomplete="off"></div>
           </div>
           <div class="form-group"><label for="emBody">Body</label><textarea id="emBody"></textarea></div>
         </div>
 
         <p class="calc-subhead">Appearance</p>
         <div class="form-grid">
-          <div class="form-group"><label for="size">Size (pixels)</label><input type="number" id="size" value="512" min="128" max="2048" step="1"></div>
-          <div class="form-group"><label for="ecLevel">Error Correction</label>
-            <select id="ecLevel">
-              <option value="L">Low (7% recovery)</option>
-              <option value="M" selected>Medium (15% recovery)</option>
-              <option value="Q">Quartile (25% recovery)</option>
-              <option value="H">High (30% recovery)</option>
+          <div class="form-group"><label for="size">Size (pixels)</label><input type="number" id="size" value="512" min="128" max="4096" step="1" inputmode="numeric" aria-describedby="size-err size-hint"><span class="hint" id="size-hint">Rounded down so every module is a whole number of pixels.</span><span class="calc-error" id="size-err"></span></div>
+          <div class="form-group"><label for="ecLevel">Error correction</label>
+            <select id="ecLevel" aria-describedby="ec-hint">
+              <option value="L">L &mdash; recovers ~7% damage</option>
+              <option value="M" selected>M &mdash; recovers ~15%</option>
+              <option value="Q">Q &mdash; recovers ~25%</option>
+              <option value="H">H &mdash; recovers ~30%</option>
             </select>
-            <span class="hint">Higher = more scannable when damaged/covered by logo</span>
+            <span class="hint" id="ec-hint">Higher survives more damage or a logo, but makes a denser code.</span>
           </div>
+          <div class="form-group"><label for="quiet">Quiet zone (modules)</label><input type="number" id="quiet" value="4" min="0" max="16" step="1" inputmode="numeric" aria-describedby="quiet-hint"><span class="hint" id="quiet-hint">The blank border. The QR standard asks for 4.</span></div>
           <div class="form-group"><label for="fgColor">Foreground</label><input type="color" id="fgColor" value="#000000"></div>
           <div class="form-group"><label for="bgColor">Background</label><input type="color" id="bgColor" value="#ffffff"></div>
         </div>
-        <div class="contrast-warn" id="contrastWarn">⚠ Low contrast between foreground and background — scanners may struggle. Use dark foreground on light background for reliability.</div>
+        <div class="contrast-warn" id="contrastWarn" role="status"></div>
 
-        <p class="calc-subhead">Logo Overlay (Optional)</p>
+        <p class="calc-subhead">Logo overlay (optional)</p>
         <div class="form-grid">
-          <div class="form-group"><label for="logoFile">Logo Image</label><input type="file" id="logoFile" accept="image/*"><span class="hint">Placed in center, ~20% of QR size. Auto-bumps EC to H.</span></div>
-          <div class="form-group"><label for="logoSize">Logo Size (%)</label><input type="number" id="logoSize" value="20" min="10" max="30" step="1"></div>
+          <div class="form-group"><label for="logoFile">Logo image</label><input type="file" id="logoFile" accept="image/*"><span class="hint">Placed in the centre on a background-coloured pad. Adding one raises error correction to H.</span></div>
+          <div class="form-group"><label for="logoSize">Logo width (% of code)</label><input type="number" id="logoSize" value="20" min="10" max="30" step="1" inputmode="numeric"><span class="calc-error" id="logoSize-err"></span></div>
+          <div class="form-group"><span class="hint" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);">&nbsp;</span><button type="button" class="calc-btn calc-btn--secondary" id="logoRemove" disabled>Remove logo</button></div>
         </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="generate()">Generate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="downloadPNG()">Download PNG</button>
-          <button class="calc-btn calc-btn--secondary" onclick="downloadSVG()">Download SVG</button>
+          <button type="button" class="calc-btn" id="genBtn">Generate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="pngBtn">Download PNG</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="svgBtn">Download SVG</button>
         </div>
-        <div class="calc-error" id="err"></div>
+        <div class="calc-error" id="err" role="alert"></div>
 
         <div class="qr-preview">
-          <canvas id="qrCanvas"></canvas>
-          <p id="qr-meta" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-dim);margin-top:1rem;"></p>
+          <canvas id="qrCanvas" role="img" aria-label="Generated QR code"></canvas>
+          <p id="qr-meta" aria-live="polite" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);margin-top:1rem;line-height:1.6;"></p>
+          <p id="scan-check" class="scan-check" aria-live="polite"></p>
         </div>
       </div>
 
       <section class="calc-card">
         <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Error correction levels</h2>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">QR codes have four error-correction levels (Reed-Solomon coding). Higher levels use more of the code&apos;s data capacity for recovery bits, so the code holds less information at the same size &mdash; but it survives more damage and lower-quality scans.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">QR codes carry Reed&ndash;Solomon error correction at one of four levels. Higher levels spend more of the code on recovery data, so the same content needs a bigger, denser code &mdash; but it survives more damage and rougher scans. The percentages are the share of codewords that can be restored.</p>
         <ul style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;padding-left:1.5rem;">
-          <li><strong>L (Low):</strong> ~7% of data can be recovered if damaged. Use for pristine screen QR codes with no logo.</li>
-          <li><strong>M (Medium):</strong> ~15%. Default choice for most cases.</li>
-          <li><strong>Q (Quartile):</strong> ~25%. Print QR codes exposed to wear.</li>
-          <li><strong>H (High):</strong> ~30%. Required when overlaying a center logo &mdash; the logo covers part of the code, and the EC bits reconstruct it.</li>
+          <li><strong>L (Low):</strong> ~7%. Clean on-screen codes with lots of content.</li>
+          <li><strong>M (Medium):</strong> ~15%. A sensible default.</li>
+          <li><strong>Q (Quartile):</strong> ~25%. Printed codes that may get scuffed.</li>
+          <li><strong>H (High):</strong> ~30%. Use with a centre logo &mdash; the logo hides part of the code and error correction fills it back in.</li>
         </ul>
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Center logos</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Adding a center logo covers ~15-25% of the code&apos;s data area. This is only reliably scannable at error-correction level H (30% recovery). This tool automatically bumps EC to H when you add a logo. Keep logo size ≤ 20-25% of the QR&apos;s width; larger logos may not scan on older phone cameras.</p>
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Content types + capacity</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The QR spec supports numeric-only, alphanumeric, byte, and Kanji modes. This tool uses byte mode for everything, which handles Unicode. Maximum capacity in byte mode with H-level EC is ~1273 characters; with L-level EC it&apos;s ~2953. Larger content means denser (harder to scan) codes &mdash; keep URLs short with a URL shortener if you&apos;re near the limit.</p>
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Formats supported</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;"><strong>URL:</strong> any http/https link. <strong>WiFi:</strong> encodes as <code style="color:var(--teal);">WIFI:T:WPA;S:name;P:pass;;</code> &mdash; phone scans join the network directly on iOS 11+ and Android 10+. <strong>vCard:</strong> exports as vCard 3.0. Scans open the phone contact-add flow. <strong>Email:</strong> encodes as a mailto: URI with subject + body pre-filled.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Quiet zone, contrast and the scan check</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Readers find a code by its blank border, so the standard (ISO/IEC 18004) asks for a quiet zone four modules wide; smaller borders often still work on screens but fail in print next to other graphics. Dark modules on a light background scan most reliably; light-on-dark (inverted) codes and low-contrast colour pairs fail on some readers, so the page warns about both. After each change the page tries to read the code back. Where the browser has a built-in QR reader (the BarcodeDetector API, mainly Chrome on Android, macOS and ChromeOS) it decodes the image and compares the text with what you typed. Elsewhere it checks that every module came out the right colour and estimates how much a logo covers. Either way, test with a phone before you print a thousand copies.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Content types and capacity</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This tool encodes everything in byte mode as UTF-8, so accents, non-Latin scripts and emoji work with current phone readers. The largest QR code (version 40) holds 2,953 bytes at level L, 2,331 at M, 1,663 at Q and 1,273 at H; non-English characters take 2&ndash;4 bytes each. More content means a denser, harder-to-scan code, so keep links short where you can.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Formats</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;"><strong>URL:</strong> any web link; include <code style="color:var(--teal);">https://</code> so phones open it as a link. <strong>Wi-Fi:</strong> encoded as <code style="color:var(--teal);">WIFI:T:WPA;S:name;P:password;;</code> with special characters escaped; current iPhone and Android camera apps offer to join the network. <strong>vCard:</strong> a vCard 3.0 contact; scanning opens the phone&apos;s add-contact screen. <strong>Email:</strong> a <code style="color:var(--teal);">mailto:</code> link with the subject and body filled in. <strong>SVG</strong> downloads stay sharp at any print size; <strong>PNG</strong> downloads are exactly the pixel size shown.</p>
       </section>
     </div>
 
@@ -233,180 +248,344 @@
   <script src="../js/player.js"></script>
   <script src="lib/qrcode-generator.js"></script>
   <script>
-    (function() {
-      let logoImage = null;
-      let currentQR = null;
-      const err = document.getElementById('err');
-      function showErr(m){ err.textContent = m; err.classList.add('visible'); }
-      function hideErr(){ err.classList.remove('visible'); }
-      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
+    (function () {
+      'use strict';
+      // Encode text as UTF-8 bytes. The library's default keeps only the low byte of each character,
+      // which garbles accents, non-Latin scripts and emoji.
+      qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
 
-      document.querySelectorAll('.mode-tab').forEach(t => t.addEventListener('click', () => {
-        document.querySelectorAll('.mode-tab').forEach(x => x.classList.remove('active'));
-        t.classList.add('active');
-        document.querySelectorAll('.mode-panel').forEach(x => x.classList.remove('active'));
-        document.getElementById('mode-' + t.dataset.mode).classList.add('active');
-      }));
+      // Byte-mode capacity of the largest code (version 40), from ISO/IEC 18004 table 7.
+      const MAX_BYTES = { L: 2953, M: 2331, Q: 1663, H: 1273 };
+      const RECOVERY = { L: 7, M: 15, Q: 25, H: 30 };
+      const $ = id => document.getElementById(id);
+      const err = $('err');
+      function showErr(m) { err.textContent = m; err.classList.add('visible'); }
+      function hideErr() { err.classList.remove('visible'); }
+      function fieldErr(id, m) { const e = $(id + '-err'); e.textContent = m || ''; e.classList.toggle('visible', !!m); $(id).setAttribute('aria-invalid', m ? 'true' : 'false'); }
+      function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
-      document.getElementById('logoFile').addEventListener('change', async e => {
-        if (!e.target.files[0]) { logoImage = null; return; }
-        try {
-          logoImage = await createImageBitmap(e.target.files[0]);
-          // Auto-bump EC to H
-          document.getElementById('ecLevel').value = 'H';
-        } catch(err) { showErr('Could not load logo: ' + err.message); }
+      let logo = null;      // { bitmap, dataUrl, w, h }
+      let current = null;   // { qr, content, ec, modulePx, quiet, fg, bg, n, size }
+      let timer = 0, checkId = 0;
+
+      /* ---------- Tabs (arrow keys move between them) ---------- */
+      const tabs = Array.from(document.querySelectorAll('.mode-tab'));
+      function selectTab(t, focus) {
+        tabs.forEach(x => {
+          const on = x === t;
+          x.classList.toggle('active', on);
+          x.setAttribute('aria-selected', on ? 'true' : 'false');
+          x.tabIndex = on ? 0 : -1;
+          const panel = $('mode-' + x.dataset.mode);
+          panel.classList.toggle('active', on);
+          panel.hidden = !on;
+        });
+        if (focus) t.focus();
+        schedule(0);
+      }
+      tabs.forEach((t, i) => {
+        t.addEventListener('click', () => selectTab(t));
+        t.addEventListener('keydown', e => {
+          const d = { ArrowRight: 1, ArrowLeft: -1, Home: -i, End: tabs.length - 1 - i }[e.key];
+          if (d === undefined) return;
+          e.preventDefault();
+          selectTab(tabs[(i + d + tabs.length) % tabs.length], true);
+        });
       });
 
-      function getContent(){
+      /* ---------- Content builders ---------- */
+      // Wi-Fi string escaping per the ZXing "WIFI:" convention: backslash-escape \ ; , " :
+      function wifiEsc(s) {
+        const e = s.replace(/([\\;,":])/g, '\\$1');
+        // A value made only of hex digits could be read as hex bytes, so quote it.
+        return /^[0-9A-Fa-f]+$/.test(s) && s.length % 2 === 0 ? '"' + e + '"' : e;
+      }
+      // vCard 3.0 text escaping (RFC 2426 section 4): backslash, comma, semicolon, newline.
+      function vcEsc(s) { return s.replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;').replace(/\r?\n/g, '\\n'); }
+      function val(id) { return $(id).value.trim(); }
+
+      function getContent() {
         const mode = document.querySelector('.mode-tab.active').dataset.mode;
-        if (mode === 'url') return document.getElementById('urlInput').value;
-        if (mode === 'text') return document.getElementById('textInput').value;
+        if (mode === 'url') {
+          const u = val('urlInput');
+          $('url-hint').textContent = u && !/^[a-z][a-z0-9+.-]*:/i.test(u) ? 'Tip: start with https:// so phones open it as a link.' : '';
+          return { mode, text: u, name: hostSlug(u) };
+        }
+        if (mode === 'text') { const t = $('textInput').value; return { mode, text: t, name: t.split(/\s+/).slice(0, 4).join(' ') || 'text' }; }
         if (mode === 'wifi') {
-          const ssid = document.getElementById('wifiSsid').value;
-          const pass = document.getElementById('wifiPass').value;
-          const enc = document.getElementById('wifiEnc').value;
-          const hidden = document.getElementById('wifiHidden').checked;
-          if (!ssid) return '';
-          const esc = s => s.replace(/([\\";,:])/g,'\\\\$1');
-          let s = 'WIFI:';
-          s += 'T:' + enc + ';';
-          s += 'S:' + esc(ssid) + ';';
-          if (enc !== 'nopass') s += 'P:' + esc(pass) + ';';
-          if (hidden) s += 'H:true;';
-          s += ';';
-          return s;
+          const ssid = $('wifiSsid').value, pass = $('wifiPass').value, enc = $('wifiEnc').value;
+          let hint = '';
+          if (enc === 'WPA' && pass && (pass.length < 8 || pass.length > 63)) hint = 'WPA passwords are 8\u201363 characters; double-check this one.';
+          if (enc !== 'nopass' && !pass) hint = 'No password entered.';
+          $('wifi-hint').textContent = hint;
+          if (!ssid) return { mode, text: '', missing: 'Enter the network name (SSID).' };
+          let s = 'WIFI:T:' + enc + ';S:' + wifiEsc(ssid) + ';';
+          if (enc !== 'nopass') s += 'P:' + wifiEsc(pass) + ';';
+          if ($('wifiHidden').checked) s += 'H:true;';
+          return { mode, text: s + ';', name: 'wifi ' + ssid };
         }
         if (mode === 'vcard') {
-          const n = document.getElementById('vcName').value;
-          if (!n) return '';
-          let s = 'BEGIN:VCARD\r\nVERSION:3.0\r\n';
-          s += 'FN:' + n + '\r\n';
-          const parts = n.split(' ');
-          if (parts.length >= 2) s += 'N:' + parts.slice(1).join(' ') + ';' + parts[0] + ';;;\r\n';
-          const org = document.getElementById('vcOrg').value; if (org) s += 'ORG:' + org + '\r\n';
-          const t = document.getElementById('vcTitle').value; if (t) s += 'TITLE:' + t + '\r\n';
-          const p = document.getElementById('vcPhone').value; if (p) s += 'TEL:' + p + '\r\n';
-          const e = document.getElementById('vcEmail').value; if (e) s += 'EMAIL:' + e + '\r\n';
-          const u = document.getElementById('vcUrl').value; if (u) s += 'URL:' + u + '\r\n';
-          s += 'END:VCARD';
-          return s;
+          const n = val('vcName');
+          if (!n) return { mode, text: '', missing: 'Enter a name for the contact card.' };
+          const parts = n.split(/\s+/);
+          const family = parts.length > 1 ? parts[parts.length - 1] : n;
+          const given = parts.length > 1 ? parts.slice(0, -1).join(' ') : '';
+          const lines = ['BEGIN:VCARD', 'VERSION:3.0', 'N:' + vcEsc(family) + ';' + vcEsc(given) + ';;;', 'FN:' + vcEsc(n)];
+          if (val('vcOrg')) lines.push('ORG:' + vcEsc(val('vcOrg')));
+          if (val('vcTitle')) lines.push('TITLE:' + vcEsc(val('vcTitle')));
+          if (val('vcPhone')) lines.push('TEL;TYPE=CELL:' + val('vcPhone'));
+          if (val('vcEmail')) lines.push('EMAIL;TYPE=INTERNET:' + val('vcEmail'));
+          if (val('vcUrl')) lines.push('URL:' + val('vcUrl'));
+          lines.push('END:VCARD');
+          return { mode, text: lines.join('\r\n'), name: 'contact ' + n };
         }
-        if (mode === 'email') {
-          const to = document.getElementById('emTo').value;
-          const subj = document.getElementById('emSubj').value;
-          const body = document.getElementById('emBody').value;
-          if (!to) return '';
-          let url = 'mailto:' + encodeURIComponent(to);
-          const params = [];
-          if (subj) params.push('subject=' + encodeURIComponent(subj));
-          if (body) params.push('body=' + encodeURIComponent(body));
-          if (params.length) url += '?' + params.join('&');
-          return url;
-        }
-        return '';
+        // mailto: per RFC 6068 (line breaks in the body are sent as CRLF)
+        const to = val('emTo'), subj = $('emSubj').value, body = $('emBody').value;
+        if (!to) return { mode, text: '', missing: 'Enter the address the email goes to.' };
+        let url = 'mailto:' + encodeURIComponent(to).replace(/%40/g, '@').replace(/%2C/gi, ',');
+        const q = [];
+        if (subj) q.push('subject=' + encodeURIComponent(subj));
+        if (body) q.push('body=' + encodeURIComponent(body.replace(/\r?\n/g, '\r\n')));
+        if (q.length) url += '?' + q.join('&');
+        return { mode, text: url, name: 'email ' + to.split('@')[0] };
+      }
+      function hostSlug(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u.slice(0, 30); } }
+      function slug(s) { return 'qr-' + (String(s).toLowerCase().normalize('NFKD').replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'code'); }
+
+      /* ---------- Colour checks (WCAG relative luminance) ---------- */
+      function linLum(r, g, b) {
+        return [r, g, b].map(v => v / 255)
+          .map(v => v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))
+          .reduce((s, v, i) => s + v * [0.2126, 0.7152, 0.0722][i], 0);
+      }
+      function lum(hex) { return linLum(parseInt(hex.substr(1, 2), 16), parseInt(hex.substr(3, 2), 16), parseInt(hex.substr(5, 2), 16)); }
+      function contrastRatio(a, b) { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); }
+
+      /* ---------- Generate ---------- */
+      function readNum(id, min, max, fallback) {
+        const raw = $(id).value.trim(), v = Number(raw);
+        if (raw === '' || !isFinite(v) || v < min || v > max) return { v: fallback, bad: true };
+        return { v: Math.round(v), bad: false };
       }
 
-      function contrastRatio(fg, bg){
-        // WCAG relative luminance
-        function lum(hex){
-          const rgb = [1,3,5].map(i => parseInt(hex.substr(i,2),16)/255);
-          return rgb.map(v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4))
-            .reduce((s,v,i) => s + v * [0.2126,0.7152,0.0722][i], 0);
-        }
-        const l1 = lum(fg), l2 = lum(bg);
-        return (Math.max(l1,l2) + 0.05) / (Math.min(l1,l2) + 0.05);
-      }
-
-      window.generate = function(){
+      function generate() {
         hideErr();
-        const content = getContent();
-        if (!content) return showErr('Enter content to encode.');
-        const ec = document.getElementById('ecLevel').value;
-        const size = parseInt(document.getElementById('size').value, 10) || 512;
-        const fg = document.getElementById('fgColor').value;
-        const bg = document.getElementById('bgColor').value;
-        // Contrast warning
-        const cr = contrastRatio(fg, bg);
-        document.getElementById('contrastWarn').classList.toggle('visible', cr < 3);
+        const c = getContent();
+        const size = readNum('size', 128, 4096, 512);
+        fieldErr('size', size.bad ? 'Use 128\u20134,096 pixels.' : '');
+        const quiet = readNum('quiet', 0, 16, 4).v;
+        $('quiet-hint').textContent = quiet < 4 ? 'Below the standard 4 modules: may fail in print or next to other graphics.' : 'The blank border. The QR standard asks for 4.';
+        const ls = readNum('logoSize', 10, 30, 20);
+        fieldErr('logoSize', ls.bad ? 'Use 10\u201330%.' : '');
+        const fg = $('fgColor').value, bg = $('bgColor').value;
+        const cr = contrastRatio(fg, bg), inverted = lum(fg) > lum(bg);
+        const warn = $('contrastWarn');
+        const msgs = [];
+        if (cr < 3) msgs.push('\u26a0 Contrast is only ' + cr.toFixed(1) + ':1 \u2014 many scanners will struggle. Use a dark foreground on a light background.');
+        else if (cr < 4.5) msgs.push('\u26a0 Contrast is ' + cr.toFixed(1) + ':1. It may scan, but darker modules on a lighter background are more reliable.');
+        if (inverted) msgs.push('\u26a0 Light modules on a dark background (inverted) don\u2019t scan on some readers.');
+        warn.textContent = msgs.join(' ');
+        warn.classList.toggle('visible', msgs.length > 0);
 
-        // Pick smallest QR version that fits — start with typeNumber 0 (auto)
+        if (!c.text) {
+          current = null;
+          clearCanvas();
+          $('qr-meta').textContent = '';
+          $('scan-check').textContent = '';
+          return showErr(c.missing || 'Enter something to encode.');
+        }
+        const ec = $('ecLevel').value;
+        const bytes = new TextEncoder().encode(c.text).length;
+        if (bytes > MAX_BYTES[ec]) {
+          current = null;
+          clearCanvas();
+          $('scan-check').textContent = '';
+          $('qr-meta').textContent = '';
+          return showErr('Too long for a QR code at level ' + ec + ': ' + fmtInt(bytes) + ' bytes, and the maximum is ' + fmtInt(MAX_BYTES[ec]) + '.' + (ec !== 'L' && bytes <= MAX_BYTES.L ? ' A lower error-correction level would fit it.' : ' Shorten the content.'));
+        }
+        let qr;
         try {
-          const qr = qrcode(0, ec);
-          qr.addData(content);
+          qr = qrcode(0, ec);
+          qr.addData(c.text, 'Byte');
           qr.make();
-          currentQR = { qr, size, fg, bg, content, ec };
-          renderCanvas();
-        } catch(e) {
-          showErr('QR generation failed: ' + e.message + ' (content may be too long)');
+        } catch (e) {
+          current = null;
+          return showErr('Couldn\u2019t build the code: ' + (e && e.message ? e.message : e));
         }
-      };
-
-      function renderCanvas(){
-        if (!currentQR) return;
-        const { qr, size, fg, bg } = currentQR;
-        const c = document.getElementById('qrCanvas');
-        c.width = size; c.height = size;
-        const ctx = c.getContext('2d');
-        ctx.fillStyle = bg;
-        ctx.fillRect(0, 0, size, size);
-        const modules = qr.getModuleCount();
-        const cell = size / modules;
-        ctx.fillStyle = fg;
-        for (let r=0; r<modules; r++) {
-          for (let ct=0; ct<modules; ct++) {
-            if (qr.isDark(r, ct)) {
-              ctx.fillRect(ct*cell, r*cell, cell + 0.5, cell + 0.5);
-            }
-          }
-        }
-        // Logo overlay
-        if (logoImage) {
-          const lPct = parseInt(document.getElementById('logoSize').value, 10) / 100;
-          const lSize = size * lPct;
-          const lx = (size - lSize) / 2;
-          // White background box for logo readability
-          const pad = lSize * 0.08;
-          ctx.fillStyle = bg;
-          ctx.fillRect(lx - pad, lx - pad, lSize + 2*pad, lSize + 2*pad);
-          ctx.drawImage(logoImage, lx, lx, lSize, lSize);
-        }
-        set('qr-meta', 'Version ' + qr.getTypeNumber() + ' &middot; ' + modules + '×' + modules + ' modules &middot; EC level ' + currentQR.ec + ' &middot; ' + currentQR.content.length + ' chars');
+        const n = qr.getModuleCount();
+        const modulePx = Math.max(1, Math.floor(size.v / (n + 2 * quiet)));
+        current = { qr, content: c.text, name: c.name, ec, modulePx, quiet, fg, bg, n, bytes, logoPct: ls.v / 100, size: modulePx * (n + 2 * quiet) };
+        render();
       }
 
-      window.downloadPNG = function(){
-        if (!currentQR) return showErr('Generate a QR code first.');
-        const c = document.getElementById('qrCanvas');
-        c.toBlob(blob => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = 'qrcode.png';
-          document.body.appendChild(a); a.click();
-          document.body.removeChild(a);
-          setTimeout(()=>URL.revokeObjectURL(url), 1000);
-        }, 'image/png');
-      };
-      window.downloadSVG = function(){
-        if (!currentQR) return showErr('Generate a QR code first.');
-        const { qr, size, fg, bg } = currentQR;
-        const modules = qr.getModuleCount();
-        const cell = size / modules;
-        let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><rect width="100%" height="100%" fill="' + bg + '"/><g fill="' + fg + '">';
-        for (let r=0; r<modules; r++) {
-          for (let ct=0; ct<modules; ct++) {
-            if (qr.isDark(r, ct)) svg += '<rect x="' + (ct*cell).toFixed(2) + '" y="' + (r*cell).toFixed(2) + '" width="' + cell.toFixed(2) + '" height="' + cell.toFixed(2) + '"/>';
+      function clearCanvas() { const cv = $('qrCanvas'); cv.width = 1; cv.height = 1; }
+
+      function logoBox(cur) {
+        if (!logo) return null;
+        const area = cur.n * cur.modulePx;
+        const side = Math.round(area * cur.logoPct);
+        const pad = Math.max(cur.modulePx, Math.round(side * 0.08));
+        const box = side + 2 * pad;
+        const x0 = Math.round((cur.size - box) / 2);
+        const s = Math.min(side / logo.w, side / logo.h);
+        const lw = logo.w * s, lh = logo.h * s;
+        return { box, x0, lx: x0 + pad + (side - lw) / 2, ly: x0 + pad + (side - lh) / 2, lw, lh };
+      }
+
+      function render() {
+        const cur = current;
+        const cv = $('qrCanvas');
+        cv.width = cv.height = cur.size;
+        const ctx = cv.getContext('2d', { willReadFrequently: true }); // the scan check reads pixels back after every render
+        ctx.imageSmoothingEnabled = true;
+        ctx.fillStyle = cur.bg;
+        ctx.fillRect(0, 0, cur.size, cur.size);
+        ctx.fillStyle = cur.fg;
+        const m = cur.modulePx, off = cur.quiet * m;
+        for (let r = 0; r < cur.n; r++) {
+          for (let col = 0; col < cur.n; col++) {
+            if (cur.qr.isDark(r, col)) ctx.fillRect(off + col * m, off + r * m, m, m);
           }
         }
-        svg += '</g></svg>';
-        const blob = new Blob([svg], { type: 'image/svg+xml' });
+        const lb = logoBox(cur);
+        if (lb) {
+          ctx.fillStyle = cur.bg;
+          ctx.fillRect(lb.x0, lb.x0, lb.box, lb.box);
+          ctx.drawImage(logo.bitmap, lb.lx, lb.ly, lb.lw, lb.lh);
+        }
+        const v = cur.qr.getTypeNumber ? cur.qr.getTypeNumber() : Math.round((cur.n - 17) / 4);
+        $('qr-meta').innerHTML = 'Version ' + v + ' &middot; ' + cur.n + '\u00d7' + cur.n + ' modules &middot; level ' + cur.ec + ' &middot; ' + fmtInt(cur.bytes) + ' bytes (UTF-8)<br>' +
+          'Output ' + fmtInt(cur.size) + '\u00d7' + fmtInt(cur.size) + ' px &middot; ' + m + ' px per module &middot; quiet zone ' + cur.quiet + (m < 3 ? '<br><span style="color:var(--amber);">Modules are under 3 px; use the SVG or a larger size for print.</span>' : '');
+        cv.setAttribute('aria-label', 'QR code for: ' + cur.content.slice(0, 120));
+        scanCheck(cur);
+      }
+
+      /* ---------- Does it read back? ---------- */
+      async function scanCheck(cur) {
+        const id = ++checkId;
+        const cv = $('qrCanvas');
+        if ('BarcodeDetector' in window) {
+          try {
+            const formats = await window.BarcodeDetector.getSupportedFormats();
+            if (formats.includes('qr_code')) {
+              const codes = await new window.BarcodeDetector({ formats: ['qr_code'] }).detect(cv);
+              if (id !== checkId) return;
+              const ok = codes.some(c => c.rawValue === cur.content);
+              setCheck(ok ? 'pass' : 'fail', ok
+                ? '\u2713 Scan check passed: this browser\u2019s built-in QR reader decoded the image and the text matches exactly.'
+                : codes.length ? '\u2717 The reader decoded a code but the text differs from what you entered.' : '\u2717 This browser\u2019s QR reader couldn\u2019t find a code in the image. Try more contrast, a smaller logo or a bigger quiet zone.');
+              return;
+            }
+          } catch (e) { /* fall back to the module check below */ }
+        }
+        // No built-in reader: read every module back from the pixels and compare with the intended pattern.
+        const ctx = cv.getContext('2d', { willReadFrequently: true });
+        const data = ctx.getImageData(0, 0, cur.size, cur.size).data;
+        const fgL = lum(cur.fg), bgL = lum(cur.bg);
+        let wrong = 0;
+        const m = cur.modulePx, off = cur.quiet * m, half = Math.floor(m / 2);
+        for (let r = 0; r < cur.n; r++) {
+          for (let col = 0; col < cur.n; col++) {
+            const i = ((off + r * m + half) * cur.size + (off + col * m + half)) * 4;
+            const l = linLum(data[i], data[i + 1], data[i + 2]);
+            const dark = Math.abs(l - fgL) < Math.abs(l - bgL);
+            if (dark !== cur.qr.isDark(r, col)) wrong++;
+          }
+        }
+        if (id !== checkId) return;
+        const pct = wrong / (cur.n * cur.n) * 100;
+        const lowContrast = contrastRatio(cur.fg, cur.bg) < 3;
+        const budget = RECOVERY[cur.ec];
+        let state, msg;
+        if (wrong === 0 && !lowContrast) { state = 'pass'; msg = '\u2713 Every module rendered as intended.'; }
+        else if (pct <= budget / 2 && !lowContrast) { state = 'pass'; msg = '\u2713 ' + pct.toFixed(1) + '% of modules are covered (logo), within what level ' + cur.ec + ' (~' + budget + '%) can usually restore.'; }
+        else { state = 'fail'; msg = '\u26a0 ' + (lowContrast ? 'Colours are too close for a reliable read. ' : '') + pct.toFixed(1) + '% of modules are covered or unclear, close to or over what level ' + cur.ec + ' (~' + budget + '%) can restore. Shrink the logo or raise error correction.'; }
+        setCheck(state, msg + ' This browser has no built-in QR reader, so this is a pixel check, not a full decode \u2014 test with a phone before printing.');
+      }
+      function setCheck(state, msg) {
+        const out = $('scan-check');
+        out.textContent = msg;
+        out.className = 'scan-check scan-check--' + state;
+      }
+
+      /* ---------- Downloads ---------- */
+      function save(blob, name) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url; a.download = 'qrcode.svg';
-        document.body.appendChild(a); a.click();
-        document.body.removeChild(a);
-        setTimeout(()=>URL.revokeObjectURL(url), 1000);
-      };
+        a.href = url; a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+      function downloadPNG() {
+        if (!current) return showErr('Enter something to encode first.');
+        $('qrCanvas').toBlob(b => b ? save(b, slug(current.name) + '.png') : showErr('This browser couldn\u2019t export the PNG.'), 'image/png');
+      }
+      // One path, one run of dark modules per subpath; crisp at any scale.
+      function downloadSVG() {
+        if (!current) return showErr('Enter something to encode first.');
+        const cur = current, total = cur.n + 2 * cur.quiet;
+        let d = '';
+        for (let r = 0; r < cur.n; r++) {
+          let col = 0;
+          while (col < cur.n) {
+            if (!cur.qr.isDark(r, col)) { col++; continue; }
+            const start = col;
+            while (col < cur.n && cur.qr.isDark(r, col)) col++;
+            d += 'M' + (start + cur.quiet) + ' ' + (r + cur.quiet) + 'h' + (col - start) + 'v1h-' + (col - start) + 'z';
+          }
+        }
+        let svg = '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + cur.size + '" height="' + cur.size + '" viewBox="0 0 ' + total + ' ' + total + '" shape-rendering="crispEdges">' +
+          '<title>' + escapeHtml(cur.content.slice(0, 200)) + '</title>' +
+          '<rect width="' + total + '" height="' + total + '" fill="' + cur.bg + '"/><path fill="' + cur.fg + '" d="' + d + '"/>';
+        const lb = logoBox(cur);
+        if (lb) {
+          const k = 1 / cur.modulePx; // canvas pixels to module units
+          svg += '<rect x="' + (lb.x0 * k).toFixed(3) + '" y="' + (lb.x0 * k).toFixed(3) + '" width="' + (lb.box * k).toFixed(3) + '" height="' + (lb.box * k).toFixed(3) + '" fill="' + cur.bg + '"/>' +
+            '<image x="' + (lb.lx * k).toFixed(3) + '" y="' + (lb.ly * k).toFixed(3) + '" width="' + (lb.lw * k).toFixed(3) + '" height="' + (lb.lh * k).toFixed(3) + '" preserveAspectRatio="xMidYMid meet" href="' + logo.dataUrl + '" xlink:href="' + logo.dataUrl + '"/>';
+        }
+        svg += '</svg>\n';
+        save(new Blob([svg], { type: 'image/svg+xml' }), slug(cur.name) + '.svg');
+      }
 
-      // Initial generate
+      /* ---------- Logo ---------- */
+      $('logoFile').addEventListener('change', async e => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        if (f.size > 5 * 1024 * 1024) { e.target.value = ''; return showErr('Use a logo under 5 MB.'); }
+        try {
+          const dataUrl = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(f); });
+          const img = new Image();
+          img.src = dataUrl;
+          await img.decode();
+          logo = { bitmap: img, dataUrl, w: img.naturalWidth || 1, h: img.naturalHeight || 1 };
+          $('ecLevel').value = 'H';
+          $('ec-hint').textContent = 'Raised to H because a logo covers part of the code.';
+          $('logoRemove').disabled = false;
+          schedule(0);
+        } catch (x) {
+          e.target.value = '';
+          showErr('Couldn\u2019t read that logo image.');
+        }
+      });
+      $('logoRemove').addEventListener('click', () => {
+        logo = null;
+        $('logoFile').value = '';
+        $('logoRemove').disabled = true;
+        $('ec-hint').textContent = 'Higher survives more damage or a logo, but makes a denser code.';
+        schedule(0);
+      });
+
+      /* ---------- Wiring ---------- */
+      function schedule(delay) { clearTimeout(timer); timer = setTimeout(generate, delay === undefined ? 150 : delay); }
+      document.querySelectorAll('.calc-card input:not([type=file]), .calc-card textarea, .calc-card select').forEach(el => {
+        el.addEventListener(el.tagName === 'SELECT' || el.type === 'checkbox' ? 'change' : 'input', () => schedule());
+        if (el.tagName === 'INPUT') el.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); schedule(0); } });
+      });
+      $('genBtn').addEventListener('click', () => schedule(0));
+      $('pngBtn').addEventListener('click', downloadPNG);
+      $('svgBtn').addEventListener('click', downloadSVG);
+
       generate();
     })();
   </script>

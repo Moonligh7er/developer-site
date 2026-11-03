@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Entropy Visualizer &amp; True Random Number Generator &mdash; CSPRNG | Moonlit Social Labs</title>
-  <meta name="description" content="Visualize cryptographic entropy in real time. Generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips using the Web Crypto API. No data leaves your device.">
-  <meta name="keywords" content="random number generator, entropy visualizer, secure password generator, UUID generator, dice roller, CSPRNG, Web Crypto API, true random">
+  <title>Free Entropy Visualizer &amp; Secure Random Generator (Web Crypto CSPRNG) | Moonlit Social Labs</title>
+  <meta name="description" content="Stir your mouse or touch movements into a randomness pool and generate secure random numbers, passwords, UUIDs, dice rolls and coin flips with the Web Crypto API, with live chi-square and Shannon entropy checks. Nothing leaves your device.">
+  <meta name="keywords" content="random number generator, entropy visualizer, secure password generator, UUID generator, dice roller, CSPRNG, Web Crypto API, Shannon entropy, chi-square test">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html">
@@ -13,8 +13,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Entropy Visualizer & True Random Number Generator",
-    "description": "Visualize cryptographic entropy and generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips using the Web Crypto API.",
+    "name": "Entropy Visualizer & Secure Random Generator",
+    "description": "Generate secure random numbers, passwords, UUIDs, dice rolls and coin flips with the Web Crypto API, mix in pointer motion, and check the output with chi-square and Shannon entropy.",
     "url": "https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -24,13 +24,13 @@
   </script>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Entropy Visualizer & True Random Number Generator">
-  <meta property="og:description" content="Visualize cryptographic entropy in real time. Generate secure random numbers, passwords, UUIDs, dice rolls, and coin flips. Everything runs client-side.">
+  <meta property="og:title" content="Entropy Visualizer & Secure Random Generator">
+  <meta property="og:description" content="Secure random numbers, passwords, UUIDs, dice and coins from the Web Crypto API, with your motion mixed in and live chi-square and entropy checks. Everything runs client-side.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/entropy-visualizer.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Entropy Visualizer & True Random Number Generator">
-  <meta name="twitter:description" content="Visualize cryptographic entropy in real time. Secure random generators powered by Web Crypto API.">
+  <meta name="twitter:title" content="Entropy Visualizer & Secure Random Generator">
+  <meta name="twitter:description" content="Secure random generators on the Web Crypto API, with live chi-square and Shannon entropy checks.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,16 +42,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    :root {
-      --void: #07070d; --deep: #0a0a14; --surface: #0f0f1a; --panel: #141422;
-      --border: #1a1a30; --border-glow: #1e1e3a;
-      --text-primary: #c8c8d4; --text-secondary: #7a7a90; --text-dim: #4a4a60; --text-bright: #e8e8f0;
-      --teal: #00d4aa; --teal-dim: #00a88440; --teal-glow: #00d4aa18;
-      --violet: #8b5cf6; --violet-dim: #8b5cf640; --violet-glow: #8b5cf618;
-      --amber: #d4a020; --amber-dim: #d4a02040; --rose: #c44a8a;
-      --font-mono: 'JetBrains Mono', monospace; --font-sans: 'Inter', sans-serif; --font-display: 'Space Grotesk', sans-serif;
-    }
-
     .ev-hero {
       text-align: center;
       padding: 1.5rem 0 0.75rem;
@@ -159,9 +149,25 @@
       margin: 0 auto 2rem;
       padding: 0 1rem;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
     }
+    .ev-quality__note, .ev-meter__note, .ev-gen__hint {
+      grid-column: 1 / -1;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin: 0.25rem 0 0;
+    }
+    .ev-meter__note { margin-top: 0.5rem; }
+    .ev-gen__hint { margin: 0 0 0.75rem; }
+    .ev-field-err { color: var(--rose); font-family: var(--font-mono); font-size: 0.75rem; margin: -0.25rem 0 0.75rem; }
+    .ev-canvas-container canvas { touch-action: none; }
+    .ev-btn, .ev-tabs__btn, .ev-output__copy, .ev-gen select, .ev-gen input[type="number"] { min-height: 40px; }
+    .ev-gen__check { min-height: 40px; }
+    .ev-gen__check input[type="checkbox"] { width: 18px; height: 18px; }
+    .ev-btn:focus-visible, .ev-tabs__btn:focus-visible, .ev-output__copy:focus-visible,
+    .ev-gen input:focus-visible, .ev-gen select:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
     .ev-quality__card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -285,7 +291,8 @@
       border: 1px solid var(--border);
       color: var(--text-bright);
       padding: 0.5rem 0.75rem;
-      width: 100px;
+      width: 120px;
+      max-width: 100%;
       outline: none;
     }
     .ev-gen input[type="number"]:focus,
@@ -696,7 +703,7 @@
     <section class="ev-hero">
       <span class="ev-hero__label">Cryptography</span>
       <h1 class="ev-hero__heading">Entropy Visualizer</h1>
-      <p class="ev-hero__sub">True randomness from the void</p>
+      <p class="ev-hero__sub">Secure randomness, made visible</p>
     </section>
 
     <!-- Ad: top -->
@@ -705,115 +712,127 @@
     <!-- Entropy Visualization Canvas -->
     <section class="ev-canvas-wrap">
       <div class="ev-canvas-container">
-        <canvas id="entropy-canvas"></canvas>
-        <div id="canvas-hint" class="ev-canvas-hint">Move your cursor to generate entropy</div>
+        <canvas id="entropy-canvas" aria-label="Interactive canvas: moving over it stirs your motion into the randomness pool"></canvas>
+        <div id="canvas-hint" class="ev-canvas-hint">Move your cursor or drag a finger here</div>
       </div>
     </section>
 
-    <!-- Entropy Pool Meter -->
+    <!-- Motion pool meter -->
     <section class="ev-meter">
-      <div class="ev-meter__bar-wrap">
+      <div class="ev-meter__bar-wrap" id="entropy-meter" role="progressbar" aria-label="Motion data mixed into the pool" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div id="entropy-bar" class="ev-meter__bar"></div>
       </div>
       <div class="ev-meter__label">
-        <span>Entropy Pool</span>
-        <span id="entropy-pct">0%</span>
+        <span>Motion data mixed in</span>
+        <span id="entropy-pct">0 / 2,048 bytes</span>
       </div>
+      <p class="ev-meter__note">This counts bytes of pointer position and timing stirred into the pool, not bits of true entropy: your movements are only partly unpredictable. The numbers below are secure with or without it, because the OS generator does the heavy lifting.</p>
     </section>
 
     <!-- Randomness Quality Display -->
-    <section class="ev-quality">
+    <section class="ev-quality" aria-live="polite">
       <div class="ev-quality__card">
-        <div class="ev-quality__title">Bit Distribution</div>
+        <div class="ev-quality__title">Bit balance</div>
         <div id="bit-counts" class="ev-quality__value" style="font-size:0.8rem;">0s: 0 &nbsp; 1s: 0</div>
-        <div class="ev-bit-bar">
+        <div class="ev-bit-bar" aria-hidden="true">
           <div id="bit-bar-zero" class="ev-bit-bar__zero" style="width:50%;"></div>
           <div id="bit-bar-one" class="ev-bit-bar__one" style="width:50%;"></div>
         </div>
-        <div id="bit-ratio" class="ev-quality__sub">Ratio: --</div>
+        <div id="bit-ratio" class="ev-quality__sub">Generate something to start sampling</div>
       </div>
       <div class="ev-quality__card">
-        <div class="ev-quality__title">Chi-Square Uniformity</div>
+        <div class="ev-quality__title">Chi-square uniformity</div>
         <div id="chi-value" class="ev-quality__value" style="font-size:0.8rem;">
-          <span id="chi-dot" class="ev-chi-indicator"></span>
+          <span id="chi-dot" class="ev-chi-indicator" aria-hidden="true"></span>
           <span id="chi-num">--</span>
         </div>
-        <div id="chi-verdict" class="ev-quality__sub">Click "Quick test" or generate data</div>
-        <button id="chi-quick-test" type="button" onclick="runQuickChiTest()" style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--text-secondary);padding:0.3rem 0.6rem;cursor:pointer;transition:border-color 0.2s,color 0.2s;">Run Quick Test</button>
+        <div id="chi-verdict" class="ev-quality__sub">Run the quick test or generate data</div>
+        <button id="chi-quick-test" type="button" class="ev-btn ev-btn--small" style="margin-top:0.6rem;">Run quick test (4,096 bytes)</button>
       </div>
+      <div class="ev-quality__card">
+        <div class="ev-quality__title">Shannon entropy</div>
+        <div id="ent-num" class="ev-quality__value" style="font-size:0.8rem;">--</div>
+        <div id="ent-sub" class="ev-quality__sub">Measured on the same sample</div>
+      </div>
+      <p class="ev-quality__note">All three read the last 4,096 bytes this page&rsquo;s generator produced. Under 1,280 bytes they work on 4-bit nibbles (16 values); from 1,280 bytes on whole bytes (256 values), so every bin expects at least 5 hits. The p-value is the chance a perfect generator would look at least this uneven; a good one still falls outside 0.01&ndash;0.99 about 2% of the time.</p>
     </section>
 
     <!-- Generator Tabs -->
     <section class="ev-tabs">
-      <div class="ev-tabs__nav" role="tablist">
-        <button class="ev-tabs__btn active" data-tab="integer" role="tab" aria-selected="true">Integer</button>
-        <button class="ev-tabs__btn" data-tab="float" role="tab" aria-selected="false">Float</button>
-        <button class="ev-tabs__btn" data-tab="bytes" role="tab" aria-selected="false">Bytes</button>
-        <button class="ev-tabs__btn" data-tab="password" role="tab" aria-selected="false">Password</button>
-        <button class="ev-tabs__btn" data-tab="dice" role="tab" aria-selected="false">Dice</button>
-        <button class="ev-tabs__btn" data-tab="coin" role="tab" aria-selected="false">Coin</button>
-        <button class="ev-tabs__btn" data-tab="uuid" role="tab" aria-selected="false">UUID</button>
+      <div class="ev-tabs__nav" role="tablist" aria-label="Generators">
+        <button type="button" class="ev-tabs__btn active" id="tabbtn-integer" data-tab="integer" role="tab" aria-selected="true" aria-controls="tab-integer">Integer</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-float" data-tab="float" role="tab" aria-selected="false" aria-controls="tab-float" tabindex="-1">Decimal</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-bytes" data-tab="bytes" role="tab" aria-selected="false" aria-controls="tab-bytes" tabindex="-1">Bytes</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-password" data-tab="password" role="tab" aria-selected="false" aria-controls="tab-password" tabindex="-1">Password</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-dice" data-tab="dice" role="tab" aria-selected="false" aria-controls="tab-dice" tabindex="-1">Dice</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-coin" data-tab="coin" role="tab" aria-selected="false" aria-controls="tab-coin" tabindex="-1">Coin</button>
+        <button type="button" class="ev-tabs__btn" id="tabbtn-uuid" data-tab="uuid" role="tab" aria-selected="false" aria-controls="tab-uuid" tabindex="-1">UUID</button>
       </div>
 
       <!-- Integer Generator -->
-      <div id="tab-integer" class="ev-tabs__panel active" role="tabpanel">
+      <div id="tab-integer" class="ev-tabs__panel active" role="tabpanel" aria-labelledby="tabbtn-integer">
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="int-min">Min</label>
-            <input type="number" id="int-min" value="0">
+            <input type="number" id="int-min" value="1" step="1" inputmode="numeric">
             <label class="ev-gen__label" for="int-max">Max</label>
-            <input type="number" id="int-max" value="100">
-            <button class="ev-btn" onclick="generateInteger()">Generate</button>
+            <input type="number" id="int-max" value="100" step="1" inputmode="numeric">
+            <button type="button" class="ev-btn" onclick="generateInteger()">Generate</button>
           </div>
+          <p class="ev-field-err" id="int-err" role="alert" hidden></p>
+          <p class="ev-gen__hint">Both ends included. Whole numbers up to &plusmn;9,007,199,254,740,991; every value in the range is equally likely (rejection sampling, no modulo bias).</p>
           <div id="int-output" class="ev-output">
-            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
-            <span class="ev-output__text">--</span>
+            <button type="button" class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text" aria-live="polite">--</span>
           </div>
         </div>
       </div>
 
-      <!-- Float Generator -->
-      <div id="tab-float" class="ev-tabs__panel" role="tabpanel">
+      <!-- Decimal Generator -->
+      <div id="tab-float" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-float" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
-            <label class="ev-gen__label" for="float-prec">Precision</label>
-            <input type="number" id="float-prec" value="6" min="1" max="17">
-            <button class="ev-btn" onclick="generateFloat()">Generate</button>
+            <label class="ev-gen__label" for="float-prec">Decimal places</label>
+            <input type="number" id="float-prec" value="6" min="1" max="15" step="1" inputmode="numeric">
+            <button type="button" class="ev-btn" onclick="generateFloat()">Generate</button>
           </div>
+          <p class="ev-field-err" id="float-err" role="alert" hidden></p>
+          <p class="ev-gen__hint">A number from 0 up to (not including) 1, uniform across every value with that many decimal places. 1&ndash;15 places.</p>
           <div id="float-output" class="ev-output">
-            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
-            <span class="ev-output__text">--</span>
+            <button type="button" class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text" aria-live="polite">--</span>
           </div>
         </div>
       </div>
 
       <!-- Bytes Generator -->
-      <div id="tab-bytes" class="ev-tabs__panel" role="tabpanel">
+      <div id="tab-bytes" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-bytes" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="bytes-len">Length</label>
             <select id="bytes-len">
-              <option value="16">16 bytes</option>
-              <option value="32" selected>32 bytes</option>
-              <option value="64">64 bytes</option>
+              <option value="16">16 bytes (128 bits)</option>
+              <option value="32" selected>32 bytes (256 bits)</option>
+              <option value="64">64 bytes (512 bits)</option>
               <option value="128">128 bytes</option>
               <option value="256">256 bytes</option>
             </select>
-            <button class="ev-btn" onclick="generateBytes()">Generate</button>
+            <button type="button" class="ev-btn" onclick="generateBytes()">Generate</button>
           </div>
+          <p class="ev-gen__hint">Shown as hexadecimal, two characters per byte.</p>
           <div id="bytes-output" class="ev-output">
-            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
-            <span class="ev-output__text">--</span>
+            <button type="button" class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text" aria-live="polite">--</span>
           </div>
         </div>
       </div>
 
       <!-- Password Generator -->
-      <div id="tab-password" class="ev-tabs__panel" role="tabpanel">
+      <div id="tab-password" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-password" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="pw-len">Length</label>
-            <input type="number" id="pw-len" value="20" min="4" max="128">
+            <input type="number" id="pw-len" value="20" min="4" max="128" step="1" inputmode="numeric">
           </div>
           <div class="ev-gen__row">
             <label class="ev-gen__check"><input type="checkbox" id="pw-upper" checked> Uppercase</label>
@@ -822,21 +841,23 @@
             <label class="ev-gen__check"><input type="checkbox" id="pw-symbols" checked> Symbols</label>
           </div>
           <div class="ev-gen__row">
-            <button class="ev-btn" onclick="generatePassword()">Generate</button>
+            <button type="button" class="ev-btn" onclick="generatePassword()">Generate</button>
           </div>
+          <p class="ev-field-err" id="pw-err" role="alert" hidden></p>
           <div id="pw-output" class="ev-output">
-            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
-            <span class="ev-output__text">--</span>
+            <button type="button" class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text" aria-live="polite">--</span>
           </div>
+          <p class="ev-gen__hint" id="pw-strength"></p>
         </div>
       </div>
 
       <!-- Dice Roller -->
-      <div id="tab-dice" class="ev-tabs__panel" role="tabpanel">
+      <div id="tab-dice" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-dice" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="dice-count">Count</label>
-            <input type="number" id="dice-count" value="1" min="1" max="100">
+            <input type="number" id="dice-count" value="2" min="1" max="100" step="1" inputmode="numeric">
             <label class="ev-gen__label" for="dice-type">Type</label>
             <select id="dice-type">
               <option value="4">d4</option>
@@ -848,46 +869,46 @@
               <option value="100">d100</option>
               <option value="custom">Custom</option>
             </select>
-            <input type="number" id="dice-custom" value="6" min="2" max="1000" style="display:none;width:80px;">
-            <button class="ev-btn" onclick="rollDice()">Roll</button>
+            <span id="dice-custom-wrap" hidden><label class="ev-gen__label" for="dice-custom">Sides</label> <input type="number" id="dice-custom" value="6" min="2" max="1000000" step="1" inputmode="numeric" style="width:100px;"></span>
+            <button type="button" class="ev-btn" onclick="rollDice()">Roll</button>
           </div>
-          <div id="dice-output" class="ev-output">
-            <span class="ev-output__text">
-              <div class="ev-dice-results" id="dice-results"></div>
-              <div class="ev-stats" id="dice-stats">--</div>
-            </span>
+          <p class="ev-field-err" id="dice-err" role="alert" hidden></p>
+          <div id="dice-output" class="ev-output" aria-live="polite">
+            <div class="ev-dice-results" id="dice-results"></div>
+            <div class="ev-stats" id="dice-stats">--</div>
           </div>
         </div>
       </div>
 
       <!-- Coin Flipper -->
-      <div id="tab-coin" class="ev-tabs__panel" role="tabpanel">
+      <div id="tab-coin" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-coin" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="coin-count">Flips</label>
-            <input type="number" id="coin-count" value="1" min="1" max="1000">
-            <button class="ev-btn" onclick="flipCoins()">Flip</button>
+            <input type="number" id="coin-count" value="10" min="1" max="1000" step="1" inputmode="numeric">
+            <button type="button" class="ev-btn" onclick="flipCoins()">Flip</button>
           </div>
-          <div id="coin-output" class="ev-output">
-            <span class="ev-output__text">
-              <div class="ev-coins" id="coin-results"></div>
-              <div class="ev-stats" id="coin-stats">--</div>
-            </span>
+          <p class="ev-field-err" id="coin-err" role="alert" hidden></p>
+          <div id="coin-output" class="ev-output" aria-live="polite">
+            <div class="ev-coins" id="coin-results"></div>
+            <div class="ev-stats" id="coin-stats">--</div>
           </div>
         </div>
       </div>
 
       <!-- UUID Generator -->
-      <div id="tab-uuid" class="ev-tabs__panel" role="tabpanel">
+      <div id="tab-uuid" class="ev-tabs__panel" role="tabpanel" aria-labelledby="tabbtn-uuid" hidden>
         <div class="ev-gen">
           <div class="ev-gen__row">
             <label class="ev-gen__label" for="uuid-count">Count</label>
-            <input type="number" id="uuid-count" value="1" min="1" max="50">
-            <button class="ev-btn" onclick="generateUUIDs()">Generate</button>
+            <input type="number" id="uuid-count" value="1" min="1" max="50" step="1" inputmode="numeric">
+            <button type="button" class="ev-btn" onclick="generateUUIDs()">Generate</button>
           </div>
+          <p class="ev-field-err" id="uuid-err" role="alert" hidden></p>
+          <p class="ev-gen__hint">Version 4 (random) UUIDs per RFC 9562: 122 random bits plus the fixed version and variant bits.</p>
           <div id="uuid-output" class="ev-output" style="white-space:pre-wrap;">
-            <button class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
-            <span class="ev-output__text">--</span>
+            <button type="button" class="ev-output__copy" onclick="copyOutput(this)">Copy</button>
+            <span class="ev-output__text" aria-live="polite">--</span>
           </div>
         </div>
       </div>
@@ -902,29 +923,29 @@
         <!-- ═════════ PLAIN LANGUAGE ═════════ -->
         <h3 class="ev-explain__h3">The plain-language version</h3>
 
-        <p class="ev-explain__p">When a program calls something like <code>Math.random()</code>, it's not actually rolling dice. It's reading from a pre-baked script of numbers produced by a math formula, starting from a predictable seed (usually something like "the current millisecond"). If someone figures out the recipe and where you started reading, they can predict every number you'll ever get &mdash; past, present, and future.</p>
+        <p class="ev-explain__p">When a program calls something like <code>Math.random()</code>, it's not actually rolling dice. It runs a short math formula (xorshift128+ in Chrome, Firefox and Safari) from a hidden starting state. The formula is so simple that a handful of outputs is enough to work out that state, and from there every earlier and later number can be computed.</p>
 
-        <p class="ev-explain__p">That sounds abstract until you remember what it has actually been used to do: drain online poker sites, empty crypto wallets whose private keys were generated from weak randomness, and hijack "unguessable" password reset links. For anything where unpredictability matters &mdash; passwords, keys, secrets, fair drawings &mdash; <code>Math.random()</code> is not safe.</p>
+        <p class="ev-explain__p">That sounds abstract until you remember what weak randomness has actually been used to do: predict online poker shuffles, empty crypto wallets whose private keys came from weak generators, and guess &ldquo;unguessable&rdquo; password-reset links. For anything where unpredictability matters &mdash; passwords, keys, secrets, fair drawings &mdash; <code>Math.random()</code> is not safe.</p>
 
-        <p class="ev-explain__p">This tool gets its randomness from somewhere fundamentally different: the <strong>physical, chaotic state of your device and your own movements</strong>. Nobody can predict it. Nobody can replay it. Not even you.</p>
+        <p class="ev-explain__p">This tool gets its randomness from somewhere different: your operating system&rsquo;s <strong>cryptographic generator, which is seeded from hardware noise</strong>, with <strong>your own movements</strong> stirred in on top. An outsider has no practical way to predict it or replay it.</p>
 
         <div class="ev-story">
-          <p class="ev-story__metaphor">Imagine you need to pick a number between 1 and a trillion and bet your house on nobody guessing it. With <strong>Math.random()</strong>, you're essentially saying &quot;I'll roll a die that was pre-rolled in a warehouse last year, and I'll pick the die based on what time I walk in.&quot; A sufficiently motivated attacker can walk the warehouse, read all the dice, and check what time you arrived. With <strong>true entropy</strong>, you're saying &quot;I'll pick a number based on the exact trajectory a dust mote took in a sunbeam in my kitchen while I was thinking about it.&quot; Nobody can replay your kitchen. Nobody can replay the dust mote. And even you can't reproduce it &mdash; which is the whole point. Unpredictable to everyone, including the person generating it.</p>
+          <p class="ev-story__metaphor">Imagine you need to pick a number between 1 and a trillion and bet your house on nobody guessing it. With <strong>Math.random()</strong>, you're essentially saying &quot;I'll roll a die that was pre-rolled in a warehouse last year, and I'll pick the die based on what time I walk in.&quot; A sufficiently motivated attacker can walk the warehouse, read all the dice, and check what time you arrived. With <strong>physical entropy</strong>, you're saying &quot;I'll pick a number based on the exact trajectory a dust mote took in a sunbeam in my kitchen while I was thinking about it.&quot; Nobody can replay your kitchen. Nobody can replay the dust mote. And even you can't reproduce it &mdash; which is the whole point. Unpredictable to everyone, including the person generating it.</p>
         </div>
 
-        <p class="ev-explain__p">That's the core idea. This tool's &quot;kitchen&quot; is your computer and your hand. Every mouse movement, every microsecond of timing, every thermal fluctuation in the CPU, every hardware interrupt &mdash; all of it gets fed into the randomness. Your numbers come from a process that literally cannot be simulated or replayed.</p>
+        <p class="ev-explain__p">That's the core idea. This tool's &quot;kitchen&quot; is your computer and your hand: hardware interrupt timing and the chip&rsquo;s built-in random number generator feed the operating system&rsquo;s pool, and your mouse or finger movements feed a second pool on this page. Your numbers come from a process an attacker can&rsquo;t practically simulate or replay.</p>
 
         <!-- ═════════ TECHNICAL ═════════ -->
         <h3 class="ev-explain__h3">The technical version</h3>
 
-        <p class="ev-explain__p">Every number this page generates is produced by a <strong>two-source mixing pipeline</strong>. Both sources have to be broken independently for the output to become predictable &mdash; a property cryptographers call <em>defense in depth</em>.</p>
+        <p class="ev-explain__p">Every number this page generates goes through a <strong>two-source mixing pipeline</strong>. The operating system&rsquo;s generator does the real work; the motion layer is an extra, an example of what security people call <em>defense in depth</em>.</p>
 
         <div class="ev-pipeline">
           <div class="ev-pipeline__step">
             <div class="ev-pipeline__n">1</div>
             <div class="ev-pipeline__body">
               <div class="ev-pipeline__title">OS Entropy Pool</div>
-              <p>Your operating system continuously collects entropy from hardware noise &mdash; CPU timing jitter, interrupt timing, disk and network event timing, and on modern chips a dedicated hardware RNG like Intel RDRAND or ARM TRNG. Browsers expose this through <code>crypto.getRandomValues()</code>, a Cryptographically Secure PRNG (CSPRNG). This is the gold-standard randomness used by banks, certificate authorities, and crypto wallets.</p>
+              <p>Your operating system continuously collects entropy from hardware noise &mdash; CPU timing jitter, interrupt timing, disk and network event timing, and on modern chips a dedicated hardware RNG like Intel RDRAND or ARM TRNG. Browsers expose this through <code>crypto.getRandomValues()</code>, a Cryptographically Secure PRNG (CSPRNG). It&rsquo;s the same kind of OS randomness that TLS, password managers and key generation rely on.</p>
             </div>
           </div>
 
@@ -932,7 +953,7 @@
             <div class="ev-pipeline__n">2</div>
             <div class="ev-pipeline__body">
               <div class="ev-pipeline__title">Mouse &amp; Touch Entropy Pool</div>
-              <p>As you move your cursor or finger across the canvas, every event feeds the X/Y coordinates and a microsecond-precision timestamp into a 256-byte pool via XOR mixing. The exact trajectory of your motion is unpredictable to anyone who isn't watching you in real time &mdash; even you can't reproduce it.</p>
+              <p>As you move your cursor or finger across the canvas, every event feeds the X/Y coordinates and a high-resolution timestamp (browsers round it to somewhere between a few microseconds and a millisecond) into a 256-byte pool via XOR mixing. The exact path is hard to predict for anyone not watching you, though it carries far less entropy than its byte count suggests.</p>
             </div>
           </div>
 
@@ -948,21 +969,21 @@
             <div class="ev-pipeline__n">4</div>
             <div class="ev-pipeline__body">
               <div class="ev-pipeline__title">secureFill() &mdash; The Actual Generation</div>
-              <p>When you click a generator button, the tool calls <code>secureFill(buffer)</code>. It pulls base randomness from <code>crypto.getRandomValues()</code>, then XORs every byte with the current mixing key. XOR with a uniformly random key is provably as strong as either source alone &mdash; if the OS CSPRNG were somehow weakened, your mouse entropy still protects you; if your mouse entropy were low (a fresh page load, no motion yet), the CSPRNG still protects you.</p>
+              <p>When you click a generator button, the tool calls <code>secureFill(buffer)</code>. It pulls base randomness from <code>crypto.getRandomValues()</code>, then XORs every byte with the current 32-byte mixing key (repeating the key for longer outputs). XOR-ing in a value that&rsquo;s independent of the OS output can&rsquo;t make that output any less random, so the result is at least as unpredictable as <code>crypto.getRandomValues()</code> on its own &mdash; even with no motion at all. The protection the other way is partial: if the OS generator were broken, the short, slowly changing key would add some unpredictability, not a full second generator.</p>
             </div>
           </div>
 
           <div class="ev-pipeline__step">
             <div class="ev-pipeline__n">5</div>
             <div class="ev-pipeline__body">
-              <div class="ev-pipeline__title">Forward-Secure Key Rotation</div>
-              <p>Immediately after generation, the mixing key is rotated by XOR-ing it with a fresh OS sample. This means observing one output gives an attacker no information about the next &mdash; the key has already moved on. This is the property cryptographers call <strong>forward secrecy</strong>.</p>
+              <div class="ev-pipeline__title">Key Rotation</div>
+              <p>Immediately after each generation, the mixing key is XOR-ed with a fresh OS sample, so the same key never masks two separate outputs. (The OS generator already makes each output independent of the last; this just keeps the extra layer from repeating itself.) Every byte <code>secureFill</code> returns also feeds the bit-balance, chi-square and Shannon entropy readouts above.</p>
             </div>
           </div>
         </div>
 
         <h3 class="ev-explain__h3">Side-by-side comparison</h3>
-        <p class="ev-explain__p">Each column adds a layer of protection over the previous one. All four of the non-<code>Math.random()</code> options are cryptographically secure in practice &mdash; the later columns are defense in depth for paranoid and high-stakes use cases.</p>
+        <p class="ev-explain__p">Each column adds inputs to the previous one. All three non-<code>Math.random()</code> options are cryptographically secure in practice; the extra sources are defense in depth, and they all still run on the same operating system and browser.</p>
         <div class="ev-compare">
           <table class="ev-compare__table">
             <thead>
@@ -1014,15 +1035,15 @@
                 <td>Survives a catastrophic CSPRNG flaw?</td>
                 <td>N/A &mdash; no CSPRNG</td>
                 <td><span class="ev-compare__no">No</span> &mdash; single point of failure</td>
-                <td><span class="ev-compare__ok">Partially</span> &mdash; user motion still adds unpredictability</td>
-                <td><span class="ev-compare__yes">Yes</span> &mdash; three physical sources remain</td>
+                <td><span class="ev-compare__ok">Partially</span> &mdash; user motion still adds some unpredictability</td>
+                <td><span class="ev-compare__ok">Partially</span> &mdash; three sensor sources still add unpredictability</td>
               </tr>
               <tr>
                 <td>Survives a catastrophic hardware RNG flaw (e.g. RDRAND backdoor)?</td>
                 <td>N/A</td>
-                <td><span class="ev-compare__ok">Depends</span> &mdash; OS pool mixes other sources, usually OK</td>
-                <td><span class="ev-compare__yes">Yes</span></td>
-                <td><span class="ev-compare__yes">Yes</span> (strongest)</td>
+                <td><span class="ev-compare__ok">Usually</span> &mdash; the OS pool mixes many other sources</td>
+                <td><span class="ev-compare__ok">Usually</span> &mdash; same OS pool, plus your motion</td>
+                <td><span class="ev-compare__ok">Usually</span> &mdash; same OS pool, plus sensor noise</td>
               </tr>
               <tr>
                 <td>Forward secrecy (observing now leaks nothing about the past)?</td>
@@ -1036,7 +1057,7 @@
                 <td><span class="ev-compare__no">No</span></td>
                 <td><span class="ev-compare__yes">Yes</span> &mdash; OS reseeds</td>
                 <td><span class="ev-compare__yes">Yes</span> &mdash; key rotates + reseeds</td>
-                <td><span class="ev-compare__yes">Yes</span> (strongest)</td>
+                <td><span class="ev-compare__yes">Yes</span></td>
               </tr>
               <tr>
                 <td>Requires user permission?</td>
@@ -1064,7 +1085,7 @@
                 <td><span class="ev-compare__yes">Yes</span></td>
                 <td><span class="ev-compare__yes">Yes</span> (overkill)</td>
                 <td><span class="ev-compare__yes">Yes</span> (overkill)</td>
-                <td><span class="ev-compare__yes">Yes</span> (absurd overkill)</td>
+                <td><span class="ev-compare__yes">Yes</span> (overkill)</td>
               </tr>
               <tr>
                 <td>Good enough for passwords / session tokens</td>
@@ -1084,31 +1105,31 @@
                 <td>Good enough for high-stakes fair drawings (lottery, gambling, auditable randomness)</td>
                 <td><span class="ev-compare__no">No</span></td>
                 <td><span class="ev-compare__ok">Yes, but not auditable</span></td>
-                <td><span class="ev-compare__yes">Yes</span></td>
-                <td><span class="ev-compare__yes">Yes, with visual audit trail</span></td>
+                <td><span class="ev-compare__ok">Yes, but not auditable</span></td>
+                <td><span class="ev-compare__ok">Yes, with a visual trail (not a cryptographic audit)</span></td>
               </tr>
               <tr>
                 <td>Good enough for nation-state adversaries</td>
                 <td><span class="ev-compare__no">No</span></td>
                 <td><span class="ev-compare__ok">Usually</span> &mdash; depends on OS &amp; hardware trust</td>
-                <td><span class="ev-compare__yes">Yes</span> &mdash; defense in depth</td>
-                <td><span class="ev-compare__yes">Yes</span> &mdash; highest assurance</td>
+                <td><span class="ev-compare__ok">Same as column 2</span> &mdash; runs on the same OS and browser</td>
+                <td><span class="ev-compare__ok">Same as column 2</span> &mdash; more inputs, same OS and browser</td>
               </tr>
               <tr>
                 <td>Typical callers / examples</td>
                 <td>Games, UI animations, JS tutorials</td>
                 <td>Most web apps, banks, SSL/TLS, cloud SDKs</td>
-                <td>This tool, privacy-focused password managers</td>
-                <td>Entropic Tarot, high-assurance key generation, HSMs</td>
+                <td>This tool; key generators that also collect mouse movement (KeePass does)</td>
+                <td>Entropic Tarot and other apps that mix in sensor noise</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <h3 class="ev-explain__h3">Verify it yourself</h3>
-        <p class="ev-explain__p">Every piece of this is in the page's source. No external calls, no server roundtrip, no hidden dependencies. Open DevTools, find <code>secureFill</code>, and watch the two-source mixing happen on every click. The Chi-Square Uniformity readout above samples the generated bits and measures whether they look uniformly distributed across all 256 byte values &mdash; a basic but meaningful statistical test that a broken generator would fail.</p>
+        <p class="ev-explain__p">Every piece of this is in the page's source. No external calls, no server roundtrip, no hidden dependencies. Open DevTools, find <code>secureFill</code>, and watch the two-source mixing happen on every click. The readouts under the canvas test every byte the generator has produced: the share of 0 and 1 bits, a chi-square goodness-of-fit test across 16 or 256 bins with its p-value, and the Shannon entropy in bits per symbol (8 is the maximum for bytes). These are basic checks that a badly broken generator would fail; passing them doesn&rsquo;t prove security, which comes from how the generator is built.</p>
 
-        <p class="ev-explain__caveat"><strong>The honest fine print:</strong> <code>crypto.getRandomValues()</code> alone is already cryptographically secure for every realistic purpose. The mouse-entropy mixing layer is defense in depth, not a replacement. If the browser's CSPRNG were catastrophically compromised (never documented in any mainstream browser), your mouse movements would still add unpredictability an attacker cannot see. It's belt-and-suspenders engineering, not a workaround for a known flaw.</p>
+        <p class="ev-explain__caveat"><strong>The honest fine print:</strong> <code>crypto.getRandomValues()</code> alone is already cryptographically secure for every realistic purpose. The mouse-entropy mixing layer is defense in depth, not a replacement. If the browser's CSPRNG were catastrophically compromised (we know of no such case in a mainstream browser), your mouse movements would still add some unpredictability an attacker can't see. It's belt-and-suspenders engineering, not a workaround for a known flaw.</p>
       </div>
     </section>
 
@@ -1122,7 +1143,7 @@
         </div>
         <h3 style="font-family:var(--font-display);font-size:1.2rem;color:var(--text-bright);margin-bottom:0.5rem;">Entropic Tarot</h3>
         <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Tarot readings powered by true device entropy — cryptographic randomness from physical sensors, not Math.random(). Every card drawn from genuine chaos.</p>
-        <a href="https://entropic-tarot-production.up.railway.app" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);text-decoration:none;">Learn More &rarr;</a>
+        <a href="https://entropic-tarot.app/" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);text-decoration:none;">Learn More &rarr;</a>
       </div>
     </section>
 
@@ -1151,25 +1172,23 @@
   <script>
   (function() {
     'use strict';
+    const $ = id => document.getElementById(id);
+    const fmtInt = n => Math.round(n).toLocaleString('en-US');
 
     /* =========================================================
-       ENTROPY POOL — XOR-mixed mouse data
-       Fed to secureFill() as a second, independent source of
-       randomness. Every generation XORs the OS CSPRNG output
-       with bytes derived from a SHA-256 hash of this pool,
-       giving defense in depth: the output is unpredictable
-       even if either source were compromised.
+       MOTION POOL — XOR-mixed pointer data.
+       Fed to secureFill() as a second source: every generation XORs
+       the OS CSPRNG output with a key derived from a SHA-256 hash of
+       this pool. The OS generator does the real work; this is an extra layer.
        ========================================================= */
     const entropyPool = new Uint8Array(256);
     let entropyIndex = 0;
-    let entropyCount = 0;
-    const ENTROPY_GOAL = 2048;
+    let poolBytes = 0;          // bytes of pointer data stirred in (not bits of entropy)
+    const POOL_GOAL = 2048;
 
-    // 32-byte mixing key. Refreshed asynchronously on every
-    // mouse event (via SHA-256 of the pool + timestamp + current key)
-    // and rotated synchronously after every generation.
+    // 32-byte mixing key. Refreshed asynchronously on pointer moves
+    // (SHA-256 of the pool + timestamp + current key) and rotated after every generation.
     const mixingKey = new Uint8Array(32);
-    let mixingKeyReady = false;
     let mixingRefreshPending = false;
 
     function feedEntropy(x, y, t) {
@@ -1178,109 +1197,87 @@
         y & 0xFF, (y >> 8) & 0xFF,
         t & 0xFF, (t >> 8) & 0xFF, (t >> 16) & 0xFF, (t >> 24) & 0xFF
       ];
-      for (let i = 0; i < data.length; i++) {
-        entropyPool[(entropyIndex + i) % 256] ^= data[i];
-      }
+      for (let i = 0; i < data.length; i++) entropyPool[(entropyIndex + i) % 256] ^= data[i];
       entropyIndex = (entropyIndex + data.length) % 256;
-      entropyCount = Math.min(entropyCount + data.length, ENTROPY_GOAL);
+      poolBytes = Math.min(poolBytes + data.length, POOL_GOAL);
       updateMeter();
-      // Kick off async mixing key refresh (throttled — only one in flight)
       scheduleMixingRefresh();
     }
 
-    // Build a buffer that feeds the hash: pool + current key + high-res time
     function buildMixerInput() {
-      const t = performance.now();
       const input = new Uint8Array(256 + 32 + 8);
       input.set(entropyPool, 0);
       input.set(mixingKey, 256);
-      const view = new DataView(input.buffer, 288, 8);
-      view.setFloat64(0, t);
+      new DataView(input.buffer, 288, 8).setFloat64(0, performance.now());
       return input;
     }
 
-    // Refresh the 32-byte mixing key by hashing the pool state.
-    // Async because crypto.subtle.digest returns a Promise — we
-    // fire and forget; generators use whatever key is current.
+    // crypto.subtle.digest is async: fire and forget; generators use whatever key is current.
     function scheduleMixingRefresh() {
-      if (mixingRefreshPending) return;
+      if (mixingRefreshPending || !(window.crypto && crypto.subtle)) return;
       mixingRefreshPending = true;
       crypto.subtle.digest('SHA-256', buildMixerInput()).then(function(hashBuf) {
-        const hash = new Uint8Array(hashBuf);
-        for (let i = 0; i < 32; i++) mixingKey[i] = hash[i];
-        mixingKeyReady = true;
+        mixingKey.set(new Uint8Array(hashBuf));
         mixingRefreshPending = false;
-      }).catch(function() {
-        mixingRefreshPending = false;
-      });
+      }).catch(function() { mixingRefreshPending = false; });
     }
-    // Prime the key once on load so the very first generation mixes
-    // non-zero bytes even before the user has moved the mouse.
+    // Prime the key once so the first generation already mixes non-zero bytes.
+    crypto.getRandomValues(mixingKey);
     scheduleMixingRefresh();
 
     /* =========================================================
-       secureFill — the ONE function every generator uses
-       Combines OS CSPRNG with the mouse-derived mixing key and
-       mutates the key after each call (forward secrecy).
+       secureFill — the ONE function every generator uses.
+       OS CSPRNG output XOR the mixing key (repeated for buffers over
+       32 bytes), then the key is rotated so it never masks two outputs.
+       Every byte it returns is also fed to the statistics below.
        ========================================================= */
     function secureFill(buf) {
-      // 1. Pull base randomness from the OS CSPRNG
       crypto.getRandomValues(buf);
-      // 2. XOR in the mixing key (cycled if buf is larger than 32 bytes)
-      for (let i = 0; i < buf.length; i++) {
-        buf[i] ^= mixingKey[i % 32];
-      }
-      // 3. Synchronous rotation: mutate the key with a fresh OS sample
-      //    so a single observed output cannot be linked to the next.
+      for (let i = 0; i < buf.length; i++) buf[i] ^= mixingKey[i % 32];
       const rot = new Uint8Array(32);
       crypto.getRandomValues(rot);
       for (let i = 0; i < 32; i++) mixingKey[i] ^= rot[i];
-      // 4. Kick the async SHA-256 refresh so the pool stirs back in
       scheduleMixingRefresh();
+      recordSample(buf);
     }
 
     function updateMeter() {
-      const pct = Math.min(100, (entropyCount / ENTROPY_GOAL) * 100);
-      document.getElementById('entropy-bar').style.width = pct + '%';
-      document.getElementById('entropy-pct').textContent = Math.round(pct) + '%';
+      const pct = Math.min(100, (poolBytes / POOL_GOAL) * 100);
+      $('entropy-bar').style.width = pct + '%';
+      $('entropy-pct').textContent = fmtInt(poolBytes) + ' / ' + fmtInt(POOL_GOAL) + ' bytes';
+      $('entropy-meter').setAttribute('aria-valuenow', String(Math.round(pct)));
     }
 
     /* =========================================================
-       CANVAS ENTROPY VISUALIZATION
+       CANVAS VISUALIZATION (decorative; uses Math.random for particles only)
        ========================================================= */
-    const canvas = document.getElementById('entropy-canvas');
+    const canvas = $('entropy-canvas');
     const ctx = canvas.getContext('2d');
-    const hint = document.getElementById('canvas-hint');
+    const hint = $('canvas-hint');
     let particles = [];
     let hintVisible = true;
-    let canvasRect;
 
     function resizeCanvas() {
-      canvasRect = canvas.getBoundingClientRect();
-      canvas.width = canvasRect.width * window.devicePixelRatio;
-      canvas.height = canvasRect.height * window.devicePixelRatio;
-      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      const r = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
     class Particle {
       constructor(x, y, vx, vy, color) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
-        this.color = color;
+        this.x = x; this.y = y; this.vx = vx; this.vy = vy; this.color = color;
         this.alpha = 0.9;
         this.decay = 0.003 + Math.random() * 0.008;
         this.size = 1.5 + Math.random() * 2.5;
       }
       update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.vx *= 0.995;
-        this.vy *= 0.995;
-        this.vy += 0.01; // subtle gravity
+        this.x += this.vx; this.y += this.vy;
+        this.vx *= 0.995; this.vy *= 0.995;
+        this.vy += 0.01;
         this.alpha -= this.decay;
       }
       draw(c) {
@@ -1291,68 +1288,32 @@
       }
     }
 
-    const COLORS = [
-      'rgba(0,212,170,ALPHA)',   // teal
-      'rgba(139,92,246,ALPHA)',  // violet
-      'rgba(0,168,132,ALPHA)',   // teal-dim
-      'rgba(110,70,200,ALPHA)',  // violet-dim
-      'rgba(0,240,190,ALPHA)',   // teal-bright
-    ];
+    const COLORS = ['rgba(0,212,170,ALPHA)', 'rgba(139,92,246,ALPHA)', 'rgba(0,168,132,ALPHA)', 'rgba(110,70,200,ALPHA)', 'rgba(0,240,190,ALPHA)'];
+    let animating = false;
 
-    canvas.addEventListener('mousemove', function(e) {
-      if (hintVisible) {
-        hint.classList.add('hidden');
-        hintVisible = false;
-      }
+    // Pointer events cover mouse, pen and touch. Timestamps use the finest resolution the browser allows.
+    canvas.addEventListener('pointermove', function(e) {
+      if (hintVisible) { hint.classList.add('hidden'); hintVisible = false; }
       const rect = canvas.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const my = e.clientY - rect.top;
-      feedEntropy(e.clientX, e.clientY, performance.now() | 0);
-      // spawn particles
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      feedEntropy(Math.round(e.clientX), Math.round(e.clientY), Math.floor(performance.now() * 1000));
       const count = 2 + Math.floor(Math.random() * 3);
       for (let i = 0; i < count; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 0.3 + Math.random() * 1.5;
-        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        particles.push(new Particle(
-          mx, my,
+        const angle = Math.random() * Math.PI * 2, speed = 0.3 + Math.random() * 1.5;
+        particles.push(new Particle(mx, my,
           Math.cos(angle) * speed + (e.movementX || 0) * 0.1,
           Math.sin(angle) * speed + (e.movementY || 0) * 0.1,
-          color
-        ));
+          COLORS[Math.floor(Math.random() * COLORS.length)]));
       }
-      // cap particles
       if (particles.length > 600) particles = particles.slice(-500);
+      if (!animating) { animating = true; requestAnimationFrame(animate); }
     });
-
-    // Touch support
-    canvas.addEventListener('touchmove', function(e) {
-      e.preventDefault();
-      if (hintVisible) {
-        hint.classList.add('hidden');
-        hintVisible = false;
-      }
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const mx = touch.clientX - rect.left;
-      const my = touch.clientY - rect.top;
-      feedEntropy(touch.clientX | 0, touch.clientY | 0, performance.now() | 0);
-      const count = 2 + Math.floor(Math.random() * 3);
-      for (let i = 0; i < count; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 0.3 + Math.random() * 1.5;
-        const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-        particles.push(new Particle(mx, my, Math.cos(angle) * speed, Math.sin(angle) * speed, color));
-      }
-      if (particles.length > 600) particles = particles.slice(-500);
-    }, { passive: false });
 
     function drawConnections(c, parts) {
       const maxDist = 80;
       for (let i = 0; i < parts.length; i++) {
         for (let j = i + 1; j < parts.length; j++) {
-          const dx = parts[i].x - parts[j].x;
-          const dy = parts[i].y - parts[j].y;
+          const dx = parts[i].x - parts[j].x, dy = parts[i].y - parts[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < maxDist) {
             const alpha = (1 - dist / maxDist) * Math.min(parts[i].alpha, parts[j].alpha) * 0.3;
@@ -1367,39 +1328,23 @@
       }
     }
 
-    function animate() {
-      const w = canvas.getBoundingClientRect().width;
-      const h = canvas.getBoundingClientRect().height;
+    function drawBackground(w, h) {
       ctx.clearRect(0, 0, w, h);
-
-      // Background subtle grid
       ctx.strokeStyle = 'rgba(26,26,48,0.3)';
       ctx.lineWidth = 0.5;
-      const gridSize = 40;
-      for (let x = 0; x < w; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
-      }
-      for (let y = 0; y < h; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
+      for (let x = 0; x < w; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      for (let y = 0; y < h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    }
 
-      // Update and draw particles
+    // Runs only while particles are alive, so an idle page isn't redrawing 60 times a second.
+    function animate() {
+      const r = canvas.getBoundingClientRect();
+      drawBackground(r.width, r.height);
       for (let i = particles.length - 1; i >= 0; i--) {
         particles[i].update();
-        if (particles[i].alpha <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
+        if (particles[i].alpha <= 0) { particles.splice(i, 1); continue; }
         particles[i].draw(ctx);
       }
-
-      // Draw connections among nearby live particles (sample to avoid O(n^2) on large sets)
       if (particles.length > 0) {
         let sample = particles;
         if (particles.length > 150) {
@@ -1408,402 +1353,375 @@
           for (let i = 0; i < particles.length; i += step) sample.push(particles[i]);
         }
         drawConnections(ctx, sample);
+        requestAnimationFrame(animate);
+      } else {
+        animating = false;
       }
-
-      requestAnimationFrame(animate);
     }
-    animate();
+    drawBackground(canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height);
 
     /* =========================================================
-       TABS
+       TABS (arrow keys move between tabs)
        ========================================================= */
-    document.querySelectorAll('.ev-tabs__btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.ev-tabs__btn').forEach(function(b) {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        document.querySelectorAll('.ev-tabs__panel').forEach(function(p) {
-          p.classList.remove('active');
-        });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    const tabBtns = Array.from(document.querySelectorAll('.ev-tabs__btn'));
+    function selectTab(btn, focus) {
+      tabBtns.forEach(function(b) {
+        const on = b === btn;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+        b.tabIndex = on ? 0 : -1;
+        const panel = $('tab-' + b.dataset.tab);
+        panel.classList.toggle('active', on);
+        panel.hidden = !on;
+      });
+      if (focus) btn.focus();
+    }
+    tabBtns.forEach(function(btn, i) {
+      btn.addEventListener('click', function() { selectTab(btn); });
+      btn.addEventListener('keydown', function(e) {
+        const d = { ArrowRight: 1, ArrowLeft: -1, Home: -i, End: tabBtns.length - 1 - i }[e.key];
+        if (d === undefined) return;
+        e.preventDefault();
+        selectTab(tabBtns[(i + d + tabBtns.length) % tabBtns.length], true);
       });
     });
 
-    // Dice custom toggle
-    document.getElementById('dice-type').addEventListener('change', function() {
-      document.getElementById('dice-custom').style.display = this.value === 'custom' ? 'inline-block' : 'none';
+    $('dice-type').addEventListener('change', function() {
+      const custom = this.value === 'custom';
+      $('dice-custom-wrap').hidden = !custom;
     });
 
     /* =========================================================
        CRYPTO HELPERS
        ========================================================= */
+    // Uniform integer in [min, max] by rejection sampling; exact for ranges up to 2^53.
     function secureRandomInt(min, max) {
-      // Generates a uniform random integer in [min, max] using rejection sampling
       const range = max - min + 1;
-      if (range <= 0) return min;
-      const bitsNeeded = Math.ceil(Math.log2(range)) || 1;
-      const bytesNeeded = Math.ceil(bitsNeeded / 8);
-      const mask = (1 << bitsNeeded) - 1;
-      const buf = new Uint8Array(bytesNeeded);
-      while (true) {
+      if (range <= 1) return min;
+      let bits = Math.ceil(Math.log2(range));
+      while (Math.pow(2, bits) < range) bits++;        // guard against log2 rounding down
+      const bytes = Math.ceil(bits / 8);
+      const topMask = 0xFF >> (bytes * 8 - bits);
+      const buf = new Uint8Array(bytes);
+      for (;;) {
         secureFill(buf);
-        let val = 0;
-        for (let i = 0; i < bytesNeeded; i++) {
-          val = (val << 8) | buf[i];
-        }
-        val = val & mask;
-        if (val < range) return min + val;
+        buf[0] &= topMask;                              // keep exactly `bits` bits, so no precision is lost
+        let v = 0;
+        for (let i = 0; i < bytes; i++) v = v * 256 + buf[i];
+        if (v < range) return min + v;
       }
-    }
-
-    function secureRandomFloat(precision) {
-      // 53 bits of randomness for a float in [0, 1)
-      const buf = new Uint8Array(7);
-      secureFill(buf);
-      let val = 0;
-      for (let i = 0; i < 7; i++) {
-        val = val * 256 + buf[i];
-      }
-      // Use 53 bits (max safe integer bits)
-      val = val % (Math.pow(2, 53));
-      return val / Math.pow(2, 53);
     }
 
     /* =========================================================
-       RANDOMNESS QUALITY TRACKING
+       STATISTICS on every byte secureFill has produced (last 4,096)
        ========================================================= */
-    let bitHistory = []; // array of 0s and 1s
-    const MAX_BIT_HISTORY = 8192;
+    const HISTORY = 4096;
+    const history = new Uint8Array(HISTORY);
+    let histLen = 0, histPos = 0, statsQueued = false;
 
-    function trackBits(bytes) {
+    function recordSample(bytes) {
       for (let i = 0; i < bytes.length; i++) {
-        for (let b = 7; b >= 0; b--) {
-          bitHistory.push((bytes[i] >> b) & 1);
-        }
+        history[histPos] = bytes[i];
+        histPos = (histPos + 1) % HISTORY;
+        if (histLen < HISTORY) histLen++;
       }
-      if (bitHistory.length > MAX_BIT_HISTORY) {
-        bitHistory = bitHistory.slice(-MAX_BIT_HISTORY);
+      // One update after the current burst of generation (e.g. 1,000 coin flips), not one per call.
+      if (!statsQueued) { statsQueued = true; queueMicrotask(updateQualityDisplay); }
+    }
+
+    function lnGamma(z) { // Lanczos approximation (g = 7, n = 9)
+      const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+      if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - lnGamma(1 - z);
+      z -= 1;
+      let x = c[0];
+      for (let i = 1; i < g + 2; i++) x += c[i] / (z + i);
+      const t = z + g + 0.5;
+      return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+    }
+    // Regularized upper incomplete gamma Q(a, x) (Numerical Recipes 6.2); p-value of chi-square = Q(df/2, x/2).
+    function gammaQ(a, x) {
+      if (x <= 0) return 1;
+      const gln = lnGamma(a);
+      if (x < a + 1) {
+        let sum = 1 / a, del = sum, ap = a;
+        for (let n = 0; n < 1000; n++) { ap += 1; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-15) break; }
+        return 1 - sum * Math.exp(-x + a * Math.log(x) - gln);
       }
-      updateQualityDisplay();
+      let b = x + 1 - a, c = 1 / 1e-300, d = 1 / b, h = d;
+      for (let i = 1; i < 1000; i++) {
+        const an = -i * (i - a); b += 2;
+        d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300;
+        c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300;
+        d = 1 / d; const del = d * c; h *= del;
+        if (Math.abs(del - 1) < 1e-15) break;
+      }
+      return Math.exp(-x + a * Math.log(x) - gln) * h;
+    }
+    // Plug-in Shannon entropy, bits per symbol.
+    function shannon(counts, total) {
+      let h = 0;
+      for (const c of counts) if (c) { const p = c / total; h -= p * Math.log2(p); }
+      return h;
+    }
+    // What an ideal uniform source would score on average with the same sample size
+    // (the plug-in estimate reads low on small samples).
+    function expectedShannon(N, K) {
+      const p = 1 / K, lnN1 = lnGamma(N + 1), lp = Math.log(p), lq = Math.log(1 - p);
+      let s = 0;
+      for (let x = 1; x <= N; x++) {
+        const lpmf = lnN1 - lnGamma(x + 1) - lnGamma(N - x + 1) + x * lp + (N - x) * lq;
+        if (lpmf < -745) { if (x > N * p) break; else continue; }
+        const f = x / N;
+        s += Math.exp(lpmf) * f * Math.log2(f);
+      }
+      return -K * s;
     }
 
     function updateQualityDisplay() {
-      if (bitHistory.length === 0) return;
+      statsQueued = false;
+      const n = histLen;
+      if (n === 0) return;
+      const start = (histPos - n + HISTORY) % HISTORY;
+      const bytes = new Uint8Array(n);
+      for (let i = 0; i < n; i++) bytes[i] = history[(start + i) % HISTORY];
 
-      // ── Bit-level frequency (always shown) ──
-      let zeros = 0, ones = 0;
-      for (let i = 0; i < bitHistory.length; i++) {
-        if (bitHistory[i] === 0) zeros++; else ones++;
-      }
-      const total = zeros + ones;
-      const zeroPct = ((zeros / total) * 100).toFixed(1);
-      const onePct = ((ones / total) * 100).toFixed(1);
-      document.getElementById('bit-counts').textContent = '0s: ' + zeros + '  1s: ' + ones;
-      document.getElementById('bit-bar-zero').style.width = zeroPct + '%';
-      document.getElementById('bit-bar-one').style.width = onePct + '%';
-      document.getElementById('bit-ratio').textContent = 'Ratio: ' + zeroPct + '% / ' + onePct + '% (' + total + ' bits)';
+      // Bit balance
+      let ones = 0;
+      for (let i = 0; i < n; i++) { let v = bytes[i]; while (v) { ones += v & 1; v >>= 1; } }
+      const total = n * 8, zeros = total - ones;
+      const zp = zeros / total * 100, op = ones / total * 100;
+      $('bit-counts').textContent = '0s: ' + fmtInt(zeros) + '  1s: ' + fmtInt(ones);
+      $('bit-bar-zero').style.width = zp + '%';
+      $('bit-bar-one').style.width = op + '%';
+      $('bit-ratio').textContent = zp.toFixed(1) + '% / ' + op.toFixed(1) + '% of ' + fmtInt(total) + ' bits (ideal 50 / 50)';
 
-      // ── Chi-square uniformity ──
-      // Two-tier strategy:
-      //   < 16 bytes:  insufficient data, show progress
-      //   16–1280 bytes: 16-bin nibble test (df=15, valid from ~16 bytes)
-      //   ≥ 1280 bytes: 256-bin byte test (df=255, valid when expected ≥ 5/bin)
-      // 95% CI bounds:
-      //   df=15:  7.26 (lower) ↔ 25.00 (upper), expected ~15
-      //   df=255: 219.04 (lower) ↔ 293.25 (upper), expected ~255
-      const numEl = document.getElementById('chi-num');
-      const dot = document.getElementById('chi-dot');
-      const verdict = document.getElementById('chi-verdict');
-      const totalBytes = Math.floor(bitHistory.length / 8);
-
-      if (totalBytes < 16) {
-        numEl.textContent = '--';
-        dot.className = 'ev-chi-indicator';
-        verdict.textContent = 'Sampling… ' + totalBytes + '/16 bytes minimum';
+      // Chi-square goodness of fit: 16 nibble bins until there are enough bytes for 256 byte bins
+      // (at least 5 expected per bin), then 256 bins.
+      const numEl = $('chi-num'), dot = $('chi-dot'), verdict = $('chi-verdict');
+      const entNum = $('ent-num'), entSub = $('ent-sub');
+      if (n < 16) {
+        numEl.textContent = '--'; dot.className = 'ev-chi-indicator';
+        verdict.textContent = 'Sampling… ' + n + ' of 16 bytes needed';
+        entNum.textContent = '--'; entSub.textContent = 'Needs 16+ bytes';
         return;
       }
+      const useBytes = n >= 1280;
+      const K = useBytes ? 256 : 16;
+      const counts = new Array(K).fill(0);
+      let N;
+      if (useBytes) { for (let i = 0; i < n; i++) counts[bytes[i]]++; N = n; }
+      else { for (let i = 0; i < n; i++) { counts[bytes[i] >> 4]++; counts[bytes[i] & 15]++; } N = n * 2; }
+      const expected = N / K;
+      let chi2 = 0;
+      for (let i = 0; i < K; i++) { const d = counts[i] - expected; chi2 += d * d / expected; }
+      const df = K - 1, p = gammaQ(df / 2, chi2 / 2);
+      numEl.textContent = 'χ² = ' + chi2.toFixed(1) + ' (df ' + df + '), p = ' + (p < 0.001 ? '< 0.001' : p > 0.999 ? '> 0.999' : p.toFixed(3));
+      let cls, word;
+      if (p >= 0.01 && p <= 0.99) { cls = 'good'; word = 'Consistent with uniform'; }
+      else if (p >= 0.001 && p <= 0.999) { cls = 'warning'; word = 'Borderline (a good generator lands here about 2% of the time)'; }
+      else { cls = 'poor'; word = 'Unusual (p beyond 0.001 or 0.999)'; }
+      dot.className = 'ev-chi-indicator ' + cls;
+      verdict.textContent = word + ' · ' + (useBytes ? '256 byte values' : '16 nibble values') + ' · ' + fmtInt(n) + ' bytes';
 
-      // Reconstruct bytes from bits once
-      const bytes = new Array(totalBytes);
-      for (let i = 0; i < totalBytes; i++) {
-        let b = 0;
-        for (let bit = 0; bit < 8; bit++) {
-          b = (b << 1) | bitHistory[i * 8 + bit];
-        }
-        bytes[i] = b;
-      }
-
-      if (totalBytes < 1280) {
-        // Nibble-level chi² (16 bins, df=15)
-        const observed = new Array(16).fill(0);
-        for (let i = 0; i < totalBytes; i++) {
-          observed[(bytes[i] >> 4) & 0xF]++;
-          observed[bytes[i] & 0xF]++;
-        }
-        const expected = (totalBytes * 2) / 16;
-        let chi2 = 0;
-        for (let i = 0; i < 16; i++) {
-          const diff = observed[i] - expected;
-          chi2 += (diff * diff) / expected;
-        }
-        chi2 = Math.round(chi2 * 100) / 100;
-        numEl.textContent = chi2.toFixed(2);
-        if (chi2 >= 7.26 && chi2 <= 25.00) {
-          dot.className = 'ev-chi-indicator good';
-          verdict.textContent = 'Uniform · χ²(15 df) · ' + totalBytes + ' bytes';
-        } else if (chi2 >= 4.60 && chi2 <= 32.80) {
-          dot.className = 'ev-chi-indicator warning';
-          verdict.textContent = 'Marginal · χ²(15 df) · ' + totalBytes + ' bytes';
-        } else {
-          dot.className = 'ev-chi-indicator poor';
-          verdict.textContent = 'Outside expected range · ' + totalBytes + ' bytes';
-        }
-      } else {
-        // Byte-level chi² (256 bins, df=255)
-        const observed = new Array(256).fill(0);
-        for (let i = 0; i < totalBytes; i++) observed[bytes[i]]++;
-        const expected = totalBytes / 256;
-        let chi2 = 0;
-        for (let i = 0; i < 256; i++) {
-          const diff = observed[i] - expected;
-          chi2 += (diff * diff) / expected;
-        }
-        chi2 = Math.round(chi2 * 100) / 100;
-        numEl.textContent = chi2.toFixed(2);
-        if (chi2 >= 219.04 && chi2 <= 293.25) {
-          dot.className = 'ev-chi-indicator good';
-          verdict.textContent = 'Uniform · χ²(255 df) · ' + totalBytes + ' bytes';
-        } else if (chi2 >= 200 && chi2 <= 320) {
-          dot.className = 'ev-chi-indicator warning';
-          verdict.textContent = 'Marginal · χ²(255 df) · ' + totalBytes + ' bytes';
-        } else {
-          dot.className = 'ev-chi-indicator poor';
-          verdict.textContent = 'Outside expected range · ' + totalBytes + ' bytes';
-        }
-      }
+      // Shannon entropy at the same granularity
+      const H = shannon(counts, N), Hmax = Math.log2(K), Hexp = expectedShannon(N, K);
+      entNum.textContent = H.toFixed(4) + ' bits per ' + (useBytes ? 'byte' : 'nibble') + ' (max ' + Hmax + ')';
+      entSub.textContent = 'An ideal source averages ≈' + Hexp.toFixed(4) + ' at this sample size; small samples always read a little under the max.';
     }
 
-    // Quick test: sample enough bytes to give a statistically meaningful
-    // reading immediately, without making the user click generators 64+ times.
-    window.runQuickChiTest = function() {
-      const buf = new Uint8Array(2048); // → 256-bin byte test, expected 8/bin
-      secureFill(buf);
-      trackBits(buf);
-    };
+    $('chi-quick-test').addEventListener('click', function() {
+      secureFill(new Uint8Array(HISTORY)); // 4,096 bytes: 256 bins with 16 expected in each
+    });
+
+    /* =========================================================
+       INPUT HELPERS
+       ========================================================= */
+    function fieldErr(id, msg) {
+      const e = $(id + '-err');
+      e.textContent = msg || '';
+      e.hidden = !msg;
+    }
+    function readInt(id, min, max, label) {
+      const raw = $(id).value.trim();
+      const v = Number(raw);
+      if (raw === '' || !Number.isFinite(v)) return { err: 'Enter ' + label + '.' };
+      if (!Number.isInteger(v)) return { err: 'Use a whole number.' };
+      if (v < min || v > max) return { err: 'Use ' + fmtInt(min) + ' to ' + fmtInt(max) + '.' };
+      return { v: v };
+    }
 
     /* =========================================================
        GENERATORS
        ========================================================= */
-
-    // Integer
     window.generateInteger = function() {
-      const min = parseInt(document.getElementById('int-min').value) || 0;
-      const max = parseInt(document.getElementById('int-max').value) || 100;
-      if (min > max) {
-        setOutput('int-output', 'Error: min must be <= max');
-        return;
-      }
-      const result = secureRandomInt(min, max);
-      setOutput('int-output', result.toString());
-      // track bits
-      const buf = new Uint8Array(4);
-      secureFill(buf);
-      trackBits(buf);
+      const lim = Number.MAX_SAFE_INTEGER;
+      const a = readInt('int-min', -lim, lim, 'a minimum'), b = readInt('int-max', -lim, lim, 'a maximum');
+      const err = a.err || b.err || (a.v > b.v ? 'The minimum must not be larger than the maximum.' : '') ||
+        (b.v - a.v + 1 > Math.pow(2, 53) ? 'The range can be at most 2^53 (9,007,199,254,740,992) numbers wide.' : '');
+      fieldErr('int', err);
+      if (err) return;
+      setOutput('int-output', secureRandomInt(a.v, b.v).toString());
     };
 
-    // Float
     window.generateFloat = function() {
-      let prec = parseInt(document.getElementById('float-prec').value);
-      if (isNaN(prec) || prec < 1) prec = 6;
-      if (prec > 17) prec = 17;
-      const val = secureRandomFloat(prec);
-      setOutput('float-output', val.toFixed(prec));
-      const buf = new Uint8Array(8);
-      secureFill(buf);
-      trackBits(buf);
+      const p = readInt('float-prec', 1, 15, 'a number of decimal places');
+      fieldErr('float', p.err);
+      if (p.err) return;
+      // A uniform integer of p digits, printed after "0." — exactly uniform on that decimal grid, never 1.0.
+      const v = secureRandomInt(0, Math.pow(10, p.v) - 1);
+      setOutput('float-output', '0.' + String(v).padStart(p.v, '0'));
     };
 
-    // Bytes
     window.generateBytes = function() {
-      const len = parseInt(document.getElementById('bytes-len').value) || 32;
+      const len = parseInt($('bytes-len').value, 10) || 32;
       const buf = new Uint8Array(len);
       secureFill(buf);
-      const hex = Array.from(buf).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-      setOutput('bytes-output', hex);
-      trackBits(buf);
+      setOutput('bytes-output', Array.from(buf, function(b) { return b.toString(16).padStart(2, '0'); }).join(''));
     };
 
-    // Password
+    const SETS = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      numbers: '0123456789',
+      symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+    };
     window.generatePassword = function() {
-      let len = parseInt(document.getElementById('pw-len').value) || 20;
-      if (len < 4) len = 4;
-      if (len > 128) len = 128;
-      const upper = document.getElementById('pw-upper').checked;
-      const lower = document.getElementById('pw-lower').checked;
-      const numbers = document.getElementById('pw-numbers').checked;
-      const symbols = document.getElementById('pw-symbols').checked;
-
+      const len = readInt('pw-len', 4, 128, 'a length');
       let charset = '';
-      if (upper) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      if (lower) charset += 'abcdefghijklmnopqrstuvwxyz';
-      if (numbers) charset += '0123456789';
-      if (symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-      if (charset.length === 0) {
-        setOutput('pw-output', 'Error: select at least one character type');
-        return;
-      }
-
+      if ($('pw-upper').checked) charset += SETS.upper;
+      if ($('pw-lower').checked) charset += SETS.lower;
+      if ($('pw-numbers').checked) charset += SETS.numbers;
+      if ($('pw-symbols').checked) charset += SETS.symbols;
+      const err = len.err || (charset ? '' : 'Tick at least one character type.');
+      fieldErr('pw', err);
+      if (err) return;
       let password = '';
-      const buf = new Uint8Array(len);
-      secureFill(buf);
-      for (let i = 0; i < len; i++) {
-        password += charset[secureRandomInt(0, charset.length - 1)];
-      }
+      for (let i = 0; i < len.v; i++) password += charset[secureRandomInt(0, charset.length - 1)];
       setOutput('pw-output', password);
-      trackBits(buf);
+      // Each character is an independent uniform pick, so entropy = length x log2(set size).
+      const bits = len.v * Math.log2(charset.length);
+      $('pw-strength').textContent = '≈ ' + fmtInt(bits) + ' bits of entropy (' + len.v + ' characters × log₂ ' + charset.length + ' = ' + Math.log2(charset.length).toFixed(2) + ' bits each).';
     };
 
-    // Dice
     window.rollDice = function() {
-      let count = parseInt(document.getElementById('dice-count').value) || 1;
-      if (count < 1) count = 1;
-      if (count > 100) count = 100;
-      let sides;
-      const typeVal = document.getElementById('dice-type').value;
-      if (typeVal === 'custom') {
-        sides = parseInt(document.getElementById('dice-custom').value) || 6;
-        if (sides < 2) sides = 2;
-      } else {
-        sides = parseInt(typeVal);
-      }
-
+      const count = readInt('dice-count', 1, 100, 'how many dice');
+      let sides = { v: parseInt($('dice-type').value, 10) };
+      if ($('dice-type').value === 'custom') sides = readInt('dice-custom', 2, 1000000, 'the number of sides');
+      const err = count.err || sides.err;
+      fieldErr('dice', err);
+      if (err) return;
       const results = [];
       let sum = 0;
-      for (let i = 0; i < count; i++) {
-        const val = secureRandomInt(1, sides);
-        results.push(val);
-        sum += val;
-      }
-
-      const container = document.getElementById('dice-results');
-      container.innerHTML = '';
-      results.forEach(function(val) {
-        const div = document.createElement('div');
-        div.className = 'ev-die';
-        div.textContent = val;
-        container.appendChild(div);
+      for (let i = 0; i < count.v; i++) { const v = secureRandomInt(1, sides.v); results.push(v); sum += v; }
+      const box = $('dice-results');
+      box.innerHTML = '';
+      results.forEach(function(v) {
+        const d = document.createElement('div');
+        d.className = 'ev-die';
+        d.textContent = v;
+        box.appendChild(d);
       });
-
-      const stats = document.getElementById('dice-stats');
-      if (count > 1) {
-        const avg = (sum / count).toFixed(2);
-        const min = Math.min.apply(null, results);
-        const max = Math.max.apply(null, results);
-        stats.textContent = 'Sum: ' + sum + '  Avg: ' + avg + '  Min: ' + min + '  Max: ' + max;
-      } else {
-        stats.textContent = count + 'd' + sides + ' = ' + sum;
-      }
-
-      const buf = new Uint8Array(count * 2);
-      secureFill(buf);
-      trackBits(buf);
+      const label = count.v + 'd' + sides.v;
+      $('dice-stats').textContent = count.v > 1
+        ? label + ' · sum ' + fmtInt(sum) + ' · average ' + (sum / count.v).toFixed(2) + ' (expected ' + ((sides.v + 1) / 2).toFixed(2) + ') · min ' + Math.min.apply(null, results) + ' · max ' + Math.max.apply(null, results)
+        : label + ' = ' + sum;
     };
 
-    // Coin
     window.flipCoins = function() {
-      let count = parseInt(document.getElementById('coin-count').value) || 1;
-      if (count < 1) count = 1;
-      if (count > 1000) count = 1000;
-
+      const count = readInt('coin-count', 1, 1000, 'how many flips');
+      fieldErr('coin', count.err);
+      if (count.err) return;
       const results = [];
-      for (let i = 0; i < count; i++) {
-        results.push(secureRandomInt(0, 1));
+      for (let i = 0; i < count.v; i++) results.push(secureRandomInt(0, 1));
+      const box = $('coin-results');
+      box.innerHTML = '';
+      const shown = Math.min(count.v, 200);
+      for (let i = 0; i < shown; i++) {
+        const d = document.createElement('div');
+        d.className = 'ev-coin ' + (results[i] === 0 ? 'ev-coin--heads' : 'ev-coin--tails');
+        d.textContent = results[i] === 0 ? 'H' : 'T';
+        box.appendChild(d);
       }
-
-      const container = document.getElementById('coin-results');
-      container.innerHTML = '';
-      const displayCount = Math.min(count, 200); // cap visual display
-      for (let i = 0; i < displayCount; i++) {
-        const div = document.createElement('div');
-        div.className = 'ev-coin ' + (results[i] === 0 ? 'ev-coin--heads' : 'ev-coin--tails');
-        div.textContent = results[i] === 0 ? 'H' : 'T';
-        container.appendChild(div);
-      }
-      if (count > 200) {
+      if (count.v > 200) {
         const more = document.createElement('span');
-        more.style.cssText = 'font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);margin-left:0.5rem;';
-        more.textContent = '+ ' + (count - 200) + ' more';
-        container.appendChild(more);
+        more.style.cssText = 'font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);margin-left:0.5rem;';
+        more.textContent = '+ ' + fmtInt(count.v - 200) + ' more';
+        box.appendChild(more);
       }
-
-      const heads = results.filter(function(r) { return r === 0; }).length;
-      const tails = count - heads;
-      const stats = document.getElementById('coin-stats');
-      stats.textContent = 'Heads: ' + heads + ' (' + ((heads / count) * 100).toFixed(1) + '%)  Tails: ' + tails + ' (' + ((tails / count) * 100).toFixed(1) + '%)';
-
-      const buf = new Uint8Array(Math.ceil(count / 8));
-      secureFill(buf);
-      trackBits(buf);
+      const heads = results.filter(function(r) { return r === 0; }).length, tails = count.v - heads;
+      $('coin-stats').textContent = 'Heads: ' + fmtInt(heads) + ' (' + (heads / count.v * 100).toFixed(1) + '%)  Tails: ' + fmtInt(tails) + ' (' + (tails / count.v * 100).toFixed(1) + '%)';
     };
 
-    // UUID v4
     window.generateUUIDs = function() {
-      let count = parseInt(document.getElementById('uuid-count').value) || 1;
-      if (count < 1) count = 1;
-      if (count > 50) count = 50;
-
-      const uuids = [];
-      for (let i = 0; i < count; i++) {
-        uuids.push(generateUUIDv4());
-      }
-      setOutput('uuid-output', uuids.join('\n'));
-      const buf = new Uint8Array(count * 16);
-      secureFill(buf);
-      trackBits(buf);
+      const count = readInt('uuid-count', 1, 50, 'how many UUIDs');
+      fieldErr('uuid', count.err);
+      if (count.err) return;
+      const out = [];
+      for (let i = 0; i < count.v; i++) out.push(generateUUIDv4());
+      setOutput('uuid-output', out.join('\n'));
     };
 
+    // RFC 9562 version 4: 122 random bits, version nibble 0100, variant bits 10.
     function generateUUIDv4() {
       const buf = new Uint8Array(16);
       secureFill(buf);
-      // Set version 4 (0100) in byte 6
       buf[6] = (buf[6] & 0x0f) | 0x40;
-      // Set variant 10 in byte 8
       buf[8] = (buf[8] & 0x3f) | 0x80;
-      const hex = Array.from(buf).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-      return hex.slice(0,8) + '-' + hex.slice(8,12) + '-' + hex.slice(12,16) + '-' + hex.slice(16,20) + '-' + hex.slice(20,32);
+      const hex = Array.from(buf, function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+      return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20, 32);
     }
 
     /* =========================================================
-       OUTPUT HELPERS
+       OUTPUT + COPY (falls back to a hidden textarea without clipboard permission)
        ========================================================= */
     function setOutput(id, text) {
-      const el = document.getElementById(id);
-      const span = el.querySelector('.ev-output__text');
-      if (span) {
-        span.textContent = text;
-      }
+      const span = $(id).querySelector('.ev-output__text');
+      if (span) span.textContent = text;
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      return ok;
     }
 
     window.copyOutput = function(btn) {
-      const container = btn.parentElement;
-      const span = container.querySelector('.ev-output__text');
-      if (!span) return;
-      const text = span.textContent;
+      const span = btn.parentElement.querySelector('.ev-output__text');
+      const text = span ? span.textContent : '';
       if (!text || text === '--') return;
-      navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = 'Copied';
-        btn.classList.add('copied');
-        setTimeout(function() {
-          btn.textContent = 'Copy';
-          btn.classList.remove('copied');
-        }, 1500);
-      });
+      const done = function(ok) {
+        btn.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+        btn.classList.toggle('copied', ok);
+        if (!ok) { const r = document.createRange(); r.selectNodeContents(span); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function() { done(true); }, function() { done(fallbackCopy(text)); });
+      } else {
+        done(fallbackCopy(text));
+      }
     };
 
+    // Enter in any generator field runs that generator.
+    document.querySelectorAll('.ev-gen input').forEach(function(inp) {
+      inp.addEventListener('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        const btn = inp.closest('.ev-gen').querySelector('.ev-btn');
+        if (btn) { e.preventDefault(); btn.click(); }
+      });
+    });
+
+    updateMeter();
+    // Show a first result in each panel.
+    window.generateInteger(); window.generateFloat(); window.generateBytes(); window.generatePassword();
+    window.rollDice(); window.flipCoins(); window.generateUUIDs();
   })();
   </script>
   <script defer src="../js/ads.js"></script>

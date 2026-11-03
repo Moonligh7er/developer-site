@@ -91,6 +91,23 @@
     .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
     input[type=range] { width: 100%; }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    /* Additions shared by the four image tools */
+    .form-group input:focus-visible, .form-group select:focus-visible, .file-drop:focus-visible, .calc-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .calc-btn { min-height: 44px; }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .file-drop p + p { margin-top: 0.35rem; }
+    .support-line { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin: -0.25rem 0 1rem; line-height: 1.5; }
+    .status-line { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); min-height: 1.2em; margin: 0.5rem 0 0; }
+    .form-group input[type=color] { padding: 0.2rem; height: 44px; cursor: pointer; }
+    .form-group input[type=range] { padding: 0; border: none; background: transparent; accent-color: var(--teal); min-height: 44px; }
+    .form-group .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; }
+    .form-group .check-row input { width: 18px; height: 18px; padding: 0; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; flex-wrap: wrap; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .tool-note { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; margin-top: 0.75rem; }
+    .tool-note--warn { color: var(--amber); }
+    .preview-box canvas { background: repeating-conic-gradient(#1a1a30 0% 25%, #0f0f1a 0% 50%) 50% / 16px 16px; }
+    .hidden { display: none !important; }
     
   </style>
 </head>
@@ -124,76 +141,135 @@
 
       <div class="calc-card">
         <h1>Image Resizer</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Resize by pixel dimensions, percentage, or target file size. Target-size mode iteratively adjusts quality to hit your desired KB. Aspect-ratio lock on by default; common presets for Instagram, Full HD, etc.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Resize by pixel dimensions, by percentage, or to fit under a file-size limit. Target-size mode searches for the highest quality that fits, and shrinks the dimensions only if it has to. Aspect-ratio lock is on by default; presets crop to fill so nothing gets stretched.</p>
         <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Files stay in your browser.</strong> Everything on this page &mdash; loading, processing, encoding &mdash; runs locally. Your images are never uploaded to any server. Re-encoding also strips EXIF metadata (camera model, GPS coordinates), which is a privacy win.</div>
-        <div class="file-drop" id="drop" tabindex="0" role="button" aria-label="Choose image">
-  <p><strong style="color:var(--teal);">Click here or drop an image</strong></p>
-  <input type="file" id="file" accept="image/*" style="display:none;">
-</div>
-<div class="form-grid">
-  <div class="form-group">
-    <label for="mode">Resize Mode</label>
-    <select id="mode">
-      <option value="dims">Pixel dimensions</option>
-      <option value="pct">Percentage</option>
-      <option value="target">Target file size (KB)</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="preset">Preset</label>
-    <select id="preset">
-      <option value="">-- None --</option>
-      <option value="1920x1080">Full HD 1920×1080</option>
-      <option value="1280x720">HD 1280×720</option>
-      <option value="1080x1080">Instagram square 1080×1080</option>
-      <option value="1080x1350">Instagram portrait 1080×1350</option>
-      <option value="1920x1005">Twitter/X header 1920×1005</option>
-      <option value="1200x630">Open Graph 1200×630</option>
-      <option value="800x600">Web thumbnail 800×600</option>
-    </select>
-  </div>
-</div>
-<div class="form-grid" id="dims-fields">
-  <div class="form-group"><label for="width">Width (px)</label><input type="number" id="width" min="1" step="1"></div>
-  <div class="form-group"><label for="height">Height (px)</label><input type="number" id="height" min="1" step="1"></div>
-  <div class="form-group"><label><input type="checkbox" id="lockAspect" checked> Lock aspect ratio</label></div>
-</div>
-<div class="form-grid" id="pct-fields" style="display:none;">
-  <div class="form-group"><label for="pct">Percentage (%)</label><input type="number" id="pct" value="50" min="1" max="500" step="1"></div>
-</div>
-<div class="form-grid" id="target-fields" style="display:none;">
-  <div class="form-group"><label for="targetKB">Target Size (KB)</label><input type="number" id="targetKB" value="200" min="1" step="1"></div>
-  <div class="form-group"><label for="targetFmt">Format</label>
-    <select id="targetFmt"><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select>
-  </div>
-</div>
-<div class="calc-btn-row">
-  <button class="calc-btn" onclick="doResize()">Resize</button>
-</div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
+        <div class="file-drop" id="drop" tabindex="0" role="button" aria-describedby="drop-help">
+          <p><strong style="color:var(--teal);">Choose an image, drop it here, or paste it</strong></p>
+          <p id="drop-help">Any format your browser can open &middot; HEIC in Safari only &middot; up to 100 MB</p>
+          <input type="file" id="file" accept="image/*,.heic,.heif,.avif" hidden>
+        </div>
+        <p class="support-line" id="support">Checking which formats this browser can open and save&hellip;</p>
+        <div class="calc-btn-row">
+          <button type="button" class="calc-btn calc-btn--secondary" id="sample-btn">Try a sample image</button>
+        </div>
+        <form id="resize-form" novalidate>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="mode">Resize by</label>
+              <select id="mode">
+                <option value="dims">Pixel dimensions</option>
+                <option value="pct">Percentage</option>
+                <option value="target">Target file size</option>
+              </select>
+            </div>
+            <div class="form-group" id="preset-group">
+              <label for="preset">Preset</label>
+              <select id="preset">
+                <option value="">&mdash; None &mdash;</option>
+                <option value="1920x1080">Full HD 1920&times;1080</option>
+                <option value="1280x720">HD 1280&times;720</option>
+                <option value="1080x1080">Instagram square 1080&times;1080</option>
+                <option value="1080x1350">Instagram portrait 1080&times;1350</option>
+                <option value="1500x500">X (Twitter) header 1500&times;500</option>
+                <option value="1200x630">Open Graph link preview 1200&times;630</option>
+                <option value="800x600">Web thumbnail 800&times;600</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid" id="dims-fields">
+            <div class="form-group">
+              <label for="width">Width (px)</label>
+              <input type="number" id="width" min="1" max="32767" step="1" inputmode="numeric" aria-describedby="width-err">
+              <span class="calc-error" id="width-err"></span>
+            </div>
+            <div class="form-group">
+              <label for="height">Height (px)</label>
+              <input type="number" id="height" min="1" max="32767" step="1" inputmode="numeric" aria-describedby="height-err">
+              <span class="calc-error" id="height-err"></span>
+            </div>
+            <div class="form-group">
+              <span class="hint" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-secondary);">Aspect ratio</span>
+              <label class="check-row" for="lockAspect"><input type="checkbox" id="lockAspect" checked> Keep proportions</label>
+            </div>
+            <div class="form-group hidden" id="fit-group">
+              <label for="fit">If the shape differs</label>
+              <select id="fit">
+                <option value="cover">Crop to fill (keeps the centre)</option>
+                <option value="contain">Fit inside (one side comes out smaller)</option>
+                <option value="stretch">Stretch to exact size</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid hidden" id="pct-fields">
+            <div class="form-group">
+              <label for="pct">Percentage of original (%)</label>
+              <input type="number" id="pct" value="50" min="1" max="1000" step="any" inputmode="decimal" aria-describedby="pct-err">
+              <span class="calc-error" id="pct-err"></span>
+            </div>
+          </div>
+          <div class="form-grid hidden" id="target-fields">
+            <div class="form-group">
+              <label for="targetKB">Target size (KB)</label>
+              <input type="number" id="targetKB" value="200" min="1" step="any" inputmode="decimal" aria-describedby="target-hint targetKB-err">
+              <span class="hint" id="target-hint">1 KB = 1,024 bytes. The result is the largest file found at or under this.</span>
+              <span class="calc-error" id="targetKB-err"></span>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="outFmt">Output format</label>
+              <select id="outFmt">
+                <option value="same">Same as original (where possible)</option>
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/png">PNG</option>
+                <option value="image/webp">WebP</option>
+                <option value="image/avif" disabled>AVIF (checking support&hellip;)</option>
+              </select>
+              <span class="hint" id="fmt-hint"></span>
+            </div>
+            <div class="form-group" id="quality-group">
+              <label for="quality">Quality (1&ndash;100)</label>
+              <div class="slider-row">
+                <input type="range" id="quality" min="1" max="100" value="90">
+                <output id="qualityVal" for="quality" style="font-family:var(--font-mono);color:var(--teal);min-width:2.5rem;text-align:right;">90</output>
+              </div>
+            </div>
+            <div class="form-group hidden" id="bg-group">
+              <label for="bg">Fill transparent areas with</label>
+              <input type="color" id="bg" value="#ffffff">
+              <span class="hint">JPEG can&rsquo;t store transparency.</span>
+            </div>
+          </div>
+          <div class="calc-btn-row">
+            <button type="submit" class="calc-btn" id="resize-btn">Resize</button>
+          </div>
+        </form>
+        <div class="calc-error" id="err" role="alert"></div>
+        <p class="status-line" id="status" aria-live="polite"></p>
+        <div class="calc-results" id="results">
           <h4>Result</h4>
-<div class="preview-wrap">
-  <div class="preview-box"><h5>Original</h5><canvas id="orig-canvas"></canvas><p class="preview-meta" id="orig-meta"></p></div>
-  <div class="preview-box"><h5>Resized</h5><canvas id="res-canvas"></canvas><p class="preview-meta" id="res-meta"></p></div>
-</div>
-<div id="stats"></div>
-<div class="calc-btn-row" style="margin-top:1rem;">
-  <button class="calc-btn" onclick="doDownload()">Download Resized</button>
-</div>
+          <div class="preview-wrap">
+            <div class="preview-box"><h5>Original</h5><canvas id="orig-canvas" role="img" aria-label="Original image preview"></canvas><p class="preview-meta" id="orig-meta"></p></div>
+            <div class="preview-box"><h5>Resized</h5><canvas id="res-canvas" role="img" aria-label="Resized image preview"></canvas><p class="preview-meta" id="res-meta"></p></div>
+          </div>
+          <div id="stats" aria-live="polite"></div>
+          <p class="tool-note tool-note--warn hidden" id="resize-note"></p>
+          <div class="calc-btn-row" style="margin-top:1rem;">
+            <button type="button" class="calc-btn" id="download-btn" disabled>Download resized</button>
+          </div>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Three modes, one use case each</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Pixel dimensions:</strong> when you need an exact width or height. Aspect-ratio lock (on by default) keeps the image from stretching &mdash; the other dimension is computed automatically. Presets cover the most common cases (Full HD, Instagram, OG image sizes).</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Percentage:</strong> when you want &ldquo;half the size&rdquo; without doing math. 50% = each dimension halved (image is 1/4 the pixel count).</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Target file size:</strong> when you have a hard file-size limit (email attachment, upload cap, avatar image). The tool iteratively adjusts JPG/WebP quality (binary search) to land within ±10% of your target. Only works for lossy formats; a target-size PNG would require quantization.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Upscaling caveats</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Making an image larger than its original resolution doesn&apos;t add detail &mdash; it invents pixels via interpolation. Browsers use bilinear or bicubic interpolation for Canvas resizing, which is fine for modest upscales (1.5-2×) but visibly blurry beyond that. For serious upscaling use a neural network tool (Real-ESRGAN, waifu2x); those are not in-browser.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Quality drops with each re-save</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Every time you re-save a JPG or WebP, you re-apply lossy compression. Resize once from your original; if you need multiple sizes, resize the original separately each time rather than resizing an already-resized copy.</p>
-</section>
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Three modes, one use case each</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Pixel dimensions:</strong> when you need an exact width or height. With &ldquo;Keep proportions&rdquo; on, the other side is worked out for you (width &times; original height &divide; original width, rounded). Presets set an exact box; with proportions off you choose what happens when the shapes differ: crop to fill from the centre (the default), fit inside the box, or stretch.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Percentage:</strong> &ldquo;half the size&rdquo; without doing the maths. 50% halves each side, so the image has a quarter of the pixels.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Target file size:</strong> for hard limits (email attachments, upload caps, avatars). The tool binary-searches the JPEG/WebP/AVIF quality setting for the largest file at or under your target. If even the lowest quality is too big, it shrinks the dimensions and searches again, and tells you the size and quality it settled on. PNG has no quality setting, so it isn&apos;t offered in this mode.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Upscaling caveats</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Making an image larger than its original doesn&apos;t add detail &mdash; the browser invents pixels by interpolation. That&apos;s fine for modest upscales (1.5&ndash;2&times;) but looks soft beyond that. Large reductions are done in halving steps, which keeps fine detail cleaner than a single jump.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Quality drops with each re-save</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Every time you re-save a JPEG or WebP, lossy compression is applied again. Resize once from your original; if you need several sizes, resize the original each time rather than an already-resized copy. Transparent areas are kept for PNG, WebP and AVIF and filled with your chosen colour for JPEG.</p>
+      </section>
     </div>
 
     <aside class="calc-other">
@@ -226,190 +302,508 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      
-// Shared image utilities. Files never leave the browser.
-async function loadImage(file){
-  // createImageBitmap with imageOrientation:'from-image' respects EXIF rotation on iOS/Android photos
-  try {
-    return await createImageBitmap(file, { imageOrientation: 'from-image' });
-  } catch(e) {
-    // Fallback: HTMLImageElement (won't fix EXIF but works)
-    return await new Promise((res, rej) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => { URL.revokeObjectURL(url); res(img); };
-      img.onerror = rej;
-      img.src = url;
-    });
-  }
-}
-function bytesToHuman(b){
-  if (b < 1024) return b + ' B';
-  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/(1024*1024)).toFixed(2) + ' MB';
-}
-function detectAvifSupport(){
-  return new Promise(res => {
-    const c = document.createElement('canvas');
-    c.width = c.height = 2;
-    if (!c.toBlob) return res(false);
-    c.toBlob(b => res(!!b && b.type === 'image/avif'), 'image/avif');
-    setTimeout(()=>res(false), 500);
-  });
-}
-function downloadBlob(blob, name){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-}
-function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
-function extFromType(type){ return type.split('/')[1].replace('jpeg','jpg'); }
+    (function () {
+      'use strict';
+      /* ---- Shared image utilities (the same block is in image-compressor, -converter, -resizer and -cropper).
+         Everything runs in this tab: files are decoded, drawn and re-encoded locally and never uploaded. ---- */
+      const MAX_FILE_BYTES = 100 * 1024 * 1024;
+      // 16,384 x 16,384: the largest canvas area Chrome and Firefox allow. Safari on iPhone/iPad allows less;
+      // there the encode step fails and we say so instead of freezing.
+      const MAX_PIXELS = 268435456;
+      const MIME_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' };
+      const MIME_LABEL = { 'image/jpeg': 'JPEG', 'image/png': 'PNG', 'image/webp': 'WebP', 'image/avif': 'AVIF', 'image/gif': 'GIF', 'image/bmp': 'BMP', 'image/heic': 'HEIC', 'image/heif': 'HEIF', 'image/svg+xml': 'SVG', 'image/tiff': 'TIFF', 'image/x-icon': 'ICO', 'image/vnd.microsoft.icon': 'ICO' };
+      // 1x1 test images used to check which formats this browser can open (Modernizr's feature tests).
+      const PROBE = {
+        'image/webp': 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
+        'image/avif': 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A='
+      };
+      const $ = id => document.getElementById(id);
 
-
-      const err = document.getElementById('err');
-      const results = document.getElementById('results');
-      function showErr(m){ err.textContent = m; err.classList.add('visible'); results.classList.remove('visible'); }
-      function hideErr(){ err.classList.remove('visible'); }
-      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
-      function row(label,value,cls){ cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
-
-      let currentImage = null, currentBlob = null;
-const drop = document.getElementById('drop'), fileInput = document.getElementById('file');
-drop.addEventListener('click', () => fileInput.click());
-drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
-drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
-drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); });
-
-document.getElementById('mode').addEventListener('change', ()=>{
-  const m = document.getElementById('mode').value;
-  document.getElementById('dims-fields').style.display = m==='dims' ? '' : 'none';
-  document.getElementById('pct-fields').style.display = m==='pct' ? '' : 'none';
-  document.getElementById('target-fields').style.display = m==='target' ? '' : 'none';
-});
-document.getElementById('preset').addEventListener('change', ()=>{
-  const v = document.getElementById('preset').value;
-  if (!v) return;
-  const [w,h] = v.split('x').map(Number);
-  document.getElementById('mode').value = 'dims';
-  document.getElementById('mode').dispatchEvent(new Event('change'));
-  document.getElementById('lockAspect').checked = false;
-  document.getElementById('width').value = w;
-  document.getElementById('height').value = h;
-});
-document.getElementById('width').addEventListener('input', ()=>{
-  if (!currentImage || !document.getElementById('lockAspect').checked) return;
-  const w = parseFloat(document.getElementById('width').value);
-  if (w > 0) document.getElementById('height').value = Math.round(w * currentImage.height / currentImage.width);
-});
-document.getElementById('height').addEventListener('input', ()=>{
-  if (!currentImage || !document.getElementById('lockAspect').checked) return;
-  const h = parseFloat(document.getElementById('height').value);
-  if (h > 0) document.getElementById('width').value = Math.round(h * currentImage.width / currentImage.height);
-});
-
-async function handle(file){
-  hideErr();
-  if (!file.type.startsWith('image/')) return showErr('Please choose an image.');
-  if (file.size > 50*1024*1024) return showErr('File exceeds 50MB.');
-  try {
-    currentImage = await loadImage(file);
-    currentImage._origName = file.name;
-    currentImage._origSize = file.size;
-    currentImage._origType = file.type;
-    drawOrig();
-    document.getElementById('width').value = currentImage.width;
-    document.getElementById('height').value = currentImage.height;
-    results.classList.add('visible');
-    set('res-meta', 'Click Resize to process');
-  } catch(e) { showErr('Could not load: ' + e.message); }
-}
-function drawOrig(){
-  const c = document.getElementById('orig-canvas');
-  const maxDim = 400;
-  const scale = Math.min(1, maxDim / Math.max(currentImage.width, currentImage.height));
-  c.width = currentImage.width * scale; c.height = currentImage.height * scale;
-  c.getContext('2d').drawImage(currentImage, 0, 0, c.width, c.height);
-  set('orig-meta', currentImage._origName + '<br>' + currentImage.width + '×' + currentImage.height + ' &middot; ' + bytesToHuman(currentImage._origSize));
-}
-async function resizeToBlob(w, h, format, quality){
-  const oc = document.createElement('canvas');
-  oc.width = w; oc.height = h;
-  const ctx = oc.getContext('2d');
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(currentImage, 0, 0, w, h);
-  return await new Promise(res => oc.toBlob(res, format, quality));
-}
-window.doResize = async function(){
-  if (!currentImage) return showErr('Load an image first.');
-  const mode = document.getElementById('mode').value;
-  let w, h, format = currentImage._origType.includes('png') ? 'image/png' : 'image/jpeg', quality = 0.92;
-  if (mode === 'dims') {
-    w = parseInt(document.getElementById('width').value, 10);
-    h = parseInt(document.getElementById('height').value, 10);
-    if (!w || !h || w<=0 || h<=0) return showErr('Enter width and height.');
-  } else if (mode === 'pct') {
-    const p = parseInt(document.getElementById('pct').value, 10) / 100;
-    if (!p || p<=0) return showErr('Enter a percentage.');
-    w = Math.round(currentImage.width * p);
-    h = Math.round(currentImage.height * p);
-  } else {
-    // target size — iterative quality search
-    const targetKB = parseInt(document.getElementById('targetKB').value, 10);
-    if (!targetKB || targetKB<=0) return showErr('Enter target KB.');
-    format = document.getElementById('targetFmt').value;
-    w = currentImage.width; h = currentImage.height;
-    // Binary search on quality between 0.1 and 1.0
-    let lo = 0.1, hi = 1.0, bestBlob = null;
-    for (let i=0; i<8; i++) {
-      const q = (lo + hi) / 2;
-      const b = await resizeToBlob(w, h, format, q);
-      if (!b) break;
-      const kb = b.size / 1024;
-      if (kb > targetKB) hi = q;
-      else { lo = q; bestBlob = b; }
-    }
-    // If even quality 0.1 too big, reduce dimensions
-    if (!bestBlob) {
-      let scale = 1;
-      while (scale > 0.1) {
-        scale *= 0.8;
-        const b = await resizeToBlob(Math.round(w*scale), Math.round(h*scale), format, 0.85);
-        if (b && b.size/1024 <= targetKB) { bestBlob = b; break; }
+      function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+      function fmtDims(w, h) { return fmtInt(w) + ' × ' + fmtInt(h) + ' px'; }
+      function fmtBytes(b) {
+        b = Math.max(0, Math.round(b));
+        if (b < 1024) return fmtInt(b) + ' B';
+        if (b < 1024 * 1024) return (b / 1024).toLocaleString('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + ' KB';
+        return (b / 1048576).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) + ' MB';
       }
-    }
-    if (bestBlob) {
-      currentBlob = bestBlob;
-      await showResult(bestBlob);
-    } else {
-      showErr('Could not hit target size — try a higher target or accept smaller quality.');
-    }
-    return;
-  }
-  currentBlob = await resizeToBlob(w, h, format, quality);
-  if (!currentBlob) return showErr('Resize failed.');
-  await showResult(currentBlob);
-};
-async function showResult(blob){
-  const bm = await createImageBitmap(blob);
-  const c = document.getElementById('res-canvas');
-  const maxDim = 400;
-  const scale = Math.min(1, maxDim / Math.max(bm.width, bm.height));
-  c.width = bm.width * scale; c.height = bm.height * scale;
-  c.getContext('2d').drawImage(bm, 0, 0, c.width, c.height);
-  set('res-meta', bm.width + '×' + bm.height + '<br>' + bytesToHuman(blob.size));
-  set('stats', row('Original size', bytesToHuman(currentImage._origSize)) + row('Resized', bm.width + '×' + bm.height + ' &middot; ' + bytesToHuman(blob.size), 'teal'));
-}
-window.doDownload = function(){
-  if (!currentBlob) return showErr('Resize first.');
-  const base = stripExt(currentImage._origName);
-  downloadBlob(currentBlob, base + '-resized.' + extFromType(currentBlob.type));
-};
+      // "-63.2%" style change, with a real minus sign and never "-0.0%".
+      function fmtChange(before, after) {
+        if (!before) return '';
+        const pct = (after - before) / before * 100;
+        const r = Math.round(pct * 10) / 10;
+        if (r === 0) return '0%';
+        return (r > 0 ? '+' : '−') + Math.abs(r).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+      }
+      function typeLabel(file) {
+        if (MIME_LABEL[file.type]) return MIME_LABEL[file.type];
+        const m = /\.([a-z0-9]+)$/i.exec(file.name || '');
+        return m ? m[1].toUpperCase() : 'image';
+      }
+      function baseName(name) {
+        let b = String(name || '').replace(/\.[^.\\/]+$/, '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').trim();
+        if (!b || b === 'image') b = 'image';
+        return b.slice(0, 80);
+      }
+      function canDecode(uri) {
+        return new Promise(res => {
+          const img = new Image();
+          img.onload = () => res(img.width > 0);
+          img.onerror = () => res(false);
+          img.src = uri;
+        });
+      }
+      function canEncode(type) {
+        return new Promise(res => {
+          const c = document.createElement('canvas');
+          c.width = c.height = 2;
+          if (!c.toBlob) return res(false);
+          // Browsers that can't encode a type quietly return PNG instead, so check the type we got back.
+          c.toBlob(b => res(!!b && b.type === type), type, 0.8);
+        });
+      }
+      async function detectSupport() {
+        const [webpD, avifD, webpE, avifE] = await Promise.all([
+          canDecode(PROBE['image/webp']), canDecode(PROBE['image/avif']), canEncode('image/webp'), canEncode('image/avif')
+        ]);
+        return {
+          decode: { 'image/webp': webpD, 'image/avif': avifD },
+          encode: { 'image/jpeg': true, 'image/png': true, 'image/webp': webpE, 'image/avif': avifE }
+        };
+      }
+      function supportSummary(s) {
+        const opens = ['JPEG', 'PNG', 'GIF', 'BMP'];
+        if (s.decode['image/webp']) opens.push('WebP');
+        if (s.decode['image/avif']) opens.push('AVIF');
+        const saves = ['JPEG', 'PNG'];
+        if (s.encode['image/webp']) saves.push('WebP');
+        if (s.encode['image/avif']) saves.push('AVIF');
+        return 'This browser can open ' + opens.join(', ') + ' (HEIC only in Safari) and save ' + saves.join(', ') + '.';
+      }
+      function decodeFailureMessage(file) {
+        const n = (file.name || '').toLowerCase(), t = file.type || '';
+        if (/hei[cf]/.test(t) || /\.hei[cf]$/.test(n)) return 'This browser can’t open HEIC/HEIF photos. Safari on Mac, iPhone and iPad can; Chrome, Edge and Firefox can’t yet. On an iPhone, Settings → Camera → Formats → Most Compatible saves new photos as JPEG.';
+        if (/avif/.test(t) || /\.avif$/.test(n)) return 'This browser can’t open AVIF files. Current Chrome, Edge, Firefox and Safari can.';
+        if (/tiff?/.test(t) || /\.tiff?$/.test(n)) return 'Only Safari can open TIFF files. Export the image as PNG or JPEG first.';
+        if (/\.(psd|raw|cr2|cr3|nef|arw|dng|orf|rw2)$/.test(n)) return 'Browsers can’t open camera RAW or Photoshop files. Export a JPEG or PNG first.';
+        if (t && !t.startsWith('image/')) return 'That file isn’t an image (' + t + ').';
+        return 'Couldn’t read this file as an image. It may be damaged, or in a format this browser can’t open.';
+      }
+      // Decodes off the main thread where the browser allows it and applies the EXIF orientation tag,
+      // so phone photos come out the right way up.
+      async function decodeImage(file) {
+        if (typeof createImageBitmap === 'function') {
+          try { return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (e) { /* try an <img> next */ }
+        }
+        const url = URL.createObjectURL(file);
+        try {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = url;
+          await img.decode();
+          return img;
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+      function imageSize(src) { return { w: src.naturalWidth || src.width, h: src.naturalHeight || src.height }; }
+      function releaseImage(src) { if (src && typeof src.close === 'function') src.close(); }
+      function freeCanvas(c) { if (c) { c.width = 0; c.height = 0; } }
+      // Checks a small copy of the image for any pixel that isn't fully opaque.
+      function hasTransparency(src, w, h) {
+        const s = Math.min(1, 256 / Math.max(w, h));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(w * s));
+        c.height = Math.max(1, Math.round(h * s));
+        const x = c.getContext('2d', { willReadFrequently: true });
+        x.drawImage(src, 0, 0, c.width, c.height);
+        const d = x.getImageData(0, 0, c.width, c.height).data;
+        let found = false;
+        for (let i = 3; i < d.length; i += 4) { if (d[i] < 255) { found = true; break; } }
+        freeCanvas(c);
+        return found;
+      }
+      // Big reductions are done in halving steps; one huge downscale step skips pixels and looks jagged.
+      function drawScaled(ctx, src, sx, sy, sw, sh, dw, dh) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        let cur = src, cx = sx, cy = sy, cw = sw, ch = sh;
+        const temps = [];
+        while (cw / 2 >= dw && ch / 2 >= dh) {
+          const c = document.createElement('canvas');
+          c.width = Math.max(dw, Math.round(cw / 2));
+          c.height = Math.max(dh, Math.round(ch / 2));
+          const x = c.getContext('2d');
+          x.imageSmoothingEnabled = true;
+          x.imageSmoothingQuality = 'high';
+          x.drawImage(cur, cx, cy, cw, ch, 0, 0, c.width, c.height);
+          temps.push(c);
+          cur = c; cx = 0; cy = 0; cw = c.width; ch = c.height;
+        }
+        ctx.drawImage(cur, cx, cy, cw, ch, 0, 0, dw, dh);
+        temps.forEach(freeCanvas);
+      }
+      // o: { sx, sy, sw, sh (source rect, optional), w, h (output size), type, quality (0-1), background (for JPEG) }
+      async function renderToBlob(src, o) {
+        const size = imageSize(src);
+        const sx = o.sx || 0, sy = o.sy || 0, sw = o.sw || size.w, sh = o.sh || size.h;
+        const w = Math.max(1, Math.round(o.w || sw)), h = Math.max(1, Math.round(o.h || sh));
+        if (w * h > MAX_PIXELS) throw new Error('That output (' + fmtDims(w, h) + ') is larger than a browser canvas can hold.');
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        if (!ctx) { freeCanvas(c); throw new Error('This browser couldn’t make a ' + fmtDims(w, h) + ' canvas. Try a smaller size.'); }
+        if (o.type === 'image/jpeg') {
+          // JPEG has no transparency: paint the chosen background first so see-through areas don't turn black.
+          ctx.fillStyle = o.background || '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+        }
+        drawScaled(ctx, src, sx, sy, sw, sh, w, h);
+        const lossy = o.type !== 'image/png';
+        const blob = await new Promise(res => c.toBlob(res, o.type, lossy ? o.quality : undefined));
+        freeCanvas(c);
+        if (!blob) throw new Error('The browser ran out of room encoding ' + fmtDims(w, h) + '. Try a smaller size (the Image Resizer can shrink it first).');
+        return blob;
+      }
+      // Fits the image into a preview canvas no larger than maxDim on its long side.
+      function drawPreview(canvas, src, maxDim) {
+        const { w, h } = imageSize(src);
+        const s = Math.min(1, maxDim / Math.max(w, h));
+        canvas.width = Math.max(1, Math.round(w * s));
+        canvas.height = Math.max(1, Math.round(h * s));
+        const x = canvas.getContext('2d');
+        x.clearRect(0, 0, canvas.width, canvas.height);
+        drawScaled(x, src, 0, 0, w, h, canvas.width, canvas.height);
+      }
+      function downloadBlob(blob, name) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // Give slow devices time to start the download before the URL is released.
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+      function pickFile(dt) {
+        if (!dt) return null;
+        if (dt.files && dt.files.length) return dt.files[0];
+        for (const item of (dt.items || [])) {
+          if (item.kind === 'file') { const f = item.getAsFile(); if (f) return f; }
+        }
+        return null;
+      }
+      // Click or keyboard on the drop zone opens the picker; drag-and-drop and paste (Ctrl/Cmd+V) also work.
+      function wireFileInput(onFile) {
+        const drop = $('drop'), input = $('file');
+        drop.addEventListener('click', () => input.click());
+        drop.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+        });
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) onFile(input.files[0]);
+          input.value = '';
+        });
+        ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+        ['dragleave', 'dragend'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('dragover')));
+        drop.addEventListener('drop', e => {
+          e.preventDefault();
+          drop.classList.remove('dragover');
+          const f = pickFile(e.dataTransfer);
+          if (f) onFile(f);
+        });
+        // A drop that misses the zone would otherwise open the file in the tab and leave the page.
+        window.addEventListener('dragover', e => e.preventDefault());
+        window.addEventListener('drop', e => e.preventDefault());
+        document.addEventListener('paste', e => {
+          const f = pickFile(e.clipboardData);
+          if (f && /^image\//.test(f.type)) { e.preventDefault(); onFile(f); }
+        });
+      }
+      // A synthetic test picture (gradient, shapes, text and a see-through corner) for trying the tool.
+      function makeSample() {
+        const w = 1600, h = 1000;
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const x = c.getContext('2d');
+        const g = x.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#0b1a3a'); g.addColorStop(0.55, '#1d6f8f'); g.addColorStop(1, '#f2b45a');
+        x.fillStyle = g;
+        x.fillRect(0, 0, w, h);
+        for (let i = 0; i < 40; i++) {
+          x.beginPath();
+          x.arc((i * 397) % w, (i * 211) % h, 20 + (i * 13) % 90, 0, Math.PI * 2);
+          x.fillStyle = 'hsla(' + ((i * 37) % 360) + ', 70%, 60%, 0.35)';
+          x.fill();
+        }
+        x.fillStyle = '#ffffff';
+        x.font = '600 120px "Space Grotesk", sans-serif';
+        x.fillText('Sample 1600×1000', 90, h - 120);
+        x.clearRect(w - 360, 0, 360, 260); // transparent corner
+        return new Promise((res, rej) => c.toBlob(b => {
+          freeCanvas(c);
+          b ? res(new File([b], 'sample.png', { type: 'image/png' })) : rej(new Error('sample'));
+        }, 'image/png'));
+      }
+      /* ---- end of shared block ---- */
+
+      const err = $('err'), results = $('results'), statusEl = $('status');
+      function showErr(m) { err.textContent = m; err.classList.add('visible'); }
+      function hideErr() { err.classList.remove('visible'); }
+      function setStatus(m) { statusEl.textContent = m; }
+      function fieldErr(id, m) { const e = $(id + '-err'); e.textContent = m || ''; e.classList.toggle('visible', !!m); $(id).setAttribute('aria-invalid', m ? 'true' : 'false'); }
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
+
+      const MAX_SIDE = 32767;
+      const modeSel = $('mode'), presetSel = $('preset'), widthIn = $('width'), heightIn = $('height'), lock = $('lockAspect');
+      const fitSel = $('fit'), pctIn = $('pct'), targetIn = $('targetKB'), fmtSel = $('outFmt');
+      const quality = $('quality'), qualityVal = $('qualityVal'), bgInput = $('bg'), downloadBtn = $('download-btn'), note = $('resize-note');
+      const state = { src: null, file: null, w: 0, h: 0, alpha: false, blob: null, out: null, outW: 0, outH: 0 };
+      let support = { encode: { 'image/jpeg': true, 'image/png': true, 'image/webp': false, 'image/avif': false } };
+      let busy = false, pending = false, timer = 0;
+
+      detectSupport().then(s => {
+        support = s;
+        $('support').textContent = supportSummary(s);
+        const avif = fmtSel.querySelector('option[value="image/avif"]');
+        avif.disabled = !s.encode['image/avif'];
+        avif.textContent = s.encode['image/avif'] ? 'AVIF' : 'AVIF (this browser can’t save it)';
+        if (!s.encode['image/webp']) {
+          const webp = fmtSel.querySelector('option[value="image/webp"]');
+          webp.disabled = true;
+          webp.textContent = 'WebP (this browser can’t save it)';
+        }
+        updateControls();
+      });
+
+      wireFileInput(load);
+      $('sample-btn').addEventListener('click', () => makeSample().then(load).catch(() => showErr('Couldn’t make the sample image in this browser.')));
+      $('resize-form').addEventListener('submit', e => { e.preventDefault(); clearTimeout(timer); run(); });
+      modeSel.addEventListener('change', () => { updateControls(); schedule(); });
+      presetSel.addEventListener('change', () => {
+        const v = presetSel.value;
+        if (!v) return;
+        const [w, h] = v.split('x').map(Number);
+        modeSel.value = 'dims';
+        lock.checked = false;
+        fitSel.value = 'cover';
+        widthIn.value = w;
+        heightIn.value = h;
+        updateControls();
+        schedule();
+      });
+      widthIn.addEventListener('input', () => {
+        presetSel.value = '';
+        const w = parseFloat(widthIn.value);
+        if (state.src && lock.checked && w > 0) heightIn.value = Math.max(1, Math.round(w * state.h / state.w));
+        schedule();
+      });
+      heightIn.addEventListener('input', () => {
+        presetSel.value = '';
+        const h = parseFloat(heightIn.value);
+        if (state.src && lock.checked && h > 0) widthIn.value = Math.max(1, Math.round(h * state.w / state.h));
+        schedule();
+      });
+      lock.addEventListener('change', () => {
+        if (lock.checked && state.src) {
+          const w = parseFloat(widthIn.value);
+          if (w > 0) heightIn.value = Math.max(1, Math.round(w * state.h / state.w));
+        }
+        updateControls();
+        schedule();
+      });
+      [fitSel, fmtSel].forEach(el => el.addEventListener('change', () => { updateControls(); schedule(); }));
+      [pctIn, targetIn, bgInput].forEach(el => el.addEventListener('input', () => schedule()));
+      quality.addEventListener('input', () => { qualityVal.textContent = quality.value; schedule(); });
+      downloadBtn.addEventListener('click', () => {
+        if (!state.blob) return;
+        downloadBlob(state.blob, baseName(state.file.name) + '-' + state.outW + 'x' + state.outH + '.' + MIME_EXT[state.blob.type]);
+      });
+
+      // The format actually written. "Same as original" falls back when the browser can't write that format.
+      function outputType() {
+        const mode = modeSel.value;
+        let t = fmtSel.value;
+        if (t === 'same') {
+          t = state.file && support.encode[state.file.type] ? state.file.type : (state.alpha ? 'image/png' : 'image/jpeg');
+        }
+        if (mode === 'target' && t === 'image/png') t = support.encode['image/webp'] && state.alpha ? 'image/webp' : 'image/jpeg';
+        return t;
+      }
+
+      function updateControls() {
+        const mode = modeSel.value;
+        $('dims-fields').classList.toggle('hidden', mode !== 'dims');
+        $('preset-group').classList.toggle('hidden', mode !== 'dims');
+        $('pct-fields').classList.toggle('hidden', mode !== 'pct');
+        $('target-fields').classList.toggle('hidden', mode !== 'target');
+        $('fit-group').classList.toggle('hidden', mode !== 'dims' || lock.checked);
+        const t = outputType();
+        $('quality-group').classList.toggle('hidden', t === 'image/png' || mode === 'target');
+        $('bg-group').classList.toggle('hidden', !(state.alpha && t === 'image/jpeg'));
+        const hints = [];
+        if (state.src) hints.push('Writes ' + MIME_LABEL[t] + '.');
+        if (mode === 'target' && fmtSel.value === 'image/png') hints.push('PNG has no quality setting, so target size uses ' + MIME_LABEL[t] + '.');
+        $('fmt-hint').textContent = hints.join(' ');
+      }
+
+      async function load(file) {
+        hideErr();
+        if (file.size > MAX_FILE_BYTES) return showErr('That file is ' + fmtBytes(file.size) + '. This tool holds the whole image in memory, so the limit is 100 MB.');
+        setStatus('Reading ' + (file.name || 'image') + '…');
+        let src;
+        try { src = await decodeImage(file); } catch (e) { setStatus(''); return showErr(decodeFailureMessage(file)); }
+        const { w, h } = imageSize(src);
+        if (!w || !h) { releaseImage(src); setStatus(''); return showErr(decodeFailureMessage(file)); }
+        if (w * h > MAX_PIXELS) { releaseImage(src); setStatus(''); return showErr('This image is ' + fmtDims(w, h) + ', more than a browser canvas can hold. Try a smaller image.'); }
+        releaseImage(state.src);
+        releaseImage(state.out);
+        Object.assign(state, { src, file, w, h, blob: null, out: null, alpha: file.type !== 'image/jpeg' && hasTransparency(src, w, h) });
+        $('orig-meta').innerHTML = (file.name ? escapeHtml(file.name) + '<br>' : '') + typeLabel(file) + ' &middot; ' + fmtDims(w, h) + ' &middot; ' + fmtBytes(file.size);
+        drawPreview($('orig-canvas'), src, 400);
+        if (!presetSel.value) { widthIn.value = w; heightIn.value = h; }
+        updateControls();
+        results.classList.add('visible');
+        clearTimeout(timer);
+        run();
+      }
+
+      function schedule() {
+        if (!state.src) return;
+        clearTimeout(timer);
+        timer = setTimeout(run, 500);
+      }
+
+      function readNum(id, min, max, label) {
+        const raw = $(id).value.trim();
+        const v = Number(raw);
+        if (raw === '' || !isFinite(v)) { fieldErr(id, 'Enter ' + label + '.'); return null; }
+        if (v < min || v > max) { fieldErr(id, 'Use ' + (min < 1 ? 'more than 0' : 'at least ' + fmtInt(min)) + ' and at most ' + fmtInt(max) + '.'); return null; }
+        fieldErr(id, '');
+        return v;
+      }
+
+      // Works out the source rectangle and output size, or returns null after flagging the bad field.
+      function plan() {
+        const W = state.w, H = state.h, mode = modeSel.value;
+        if (mode === 'pct') {
+          const p = readNum('pct', 0.1, 1000, 'a percentage');
+          if (p === null) return null;
+          const w = Math.max(1, Math.round(W * p / 100)), h = Math.max(1, Math.round(H * p / 100));
+          if (w > MAX_SIDE || h > MAX_SIDE) { fieldErr('pct', 'That makes the image ' + fmtDims(w, h) + ', too large for a browser canvas.'); return null; }
+          return { sx: 0, sy: 0, sw: W, sh: H, w, h };
+        }
+        if (mode === 'target') {
+          const kb = readNum('targetKB', 1, 1e6, 'a target size');
+          if (kb === null) return null;
+          return { sx: 0, sy: 0, sw: W, sh: H, w: W, h: H, targetBytes: kb * 1024 };
+        }
+        let w = readNum('width', 1, MAX_SIDE, 'a width');
+        let h = readNum('height', 1, MAX_SIDE, 'a height');
+        if (w === null || h === null) return null;
+        w = Math.round(w); h = Math.round(h);
+        if (lock.checked || fitSel.value === 'stretch') return { sx: 0, sy: 0, sw: W, sh: H, w, h };
+        if (fitSel.value === 'contain') {
+          const s = Math.min(w / W, h / H);
+          return { sx: 0, sy: 0, sw: W, sh: H, w: Math.max(1, Math.round(W * s)), h: Math.max(1, Math.round(H * s)) };
+        }
+        // cover: scale so the box is filled, then take the centred part of the source that fits
+        const s = Math.max(w / W, h / H);
+        const sw = Math.min(W, w / s), sh = Math.min(H, h / s);
+        return { sx: (W - sw) / 2, sy: (H - sh) / 2, sw, sh, w, h };
+      }
+
+      async function run() {
+        if (!state.src) return;
+        if (busy) { pending = true; return; }
+        const p = plan();
+        if (!p) { setStatus(''); return; }
+        busy = true;
+        downloadBtn.disabled = true;
+        const type = outputType();
+        try {
+          let blob, usedQ = null, w = p.w, h = p.h;
+          if (p.targetBytes) {
+            const r = await fitTarget(p, type);
+            if (!r) throw new Error('Couldn’t get under ' + fmtBytes(p.targetBytes) + ' even at 1% of the original size. Try a larger target.');
+            ({ blob, w, h } = r); usedQ = r.q;
+          } else {
+            setStatus('Resizing to ' + fmtDims(w, h) + '…');
+            const q = parseInt(quality.value, 10);
+            blob = await renderToBlob(state.src, { sx: p.sx, sy: p.sy, sw: p.sw, sh: p.sh, w, h, type, quality: q / 100, background: bgInput.value });
+            if (type !== 'image/png') usedQ = q / 100;
+          }
+          const out = await createImageBitmap(blob);
+          releaseImage(state.out);
+          Object.assign(state, { blob, out, outW: w, outH: h });
+          hideErr();
+          showResult(p, usedQ);
+          setStatus('');
+        } catch (e) {
+          setStatus('');
+          showErr(e && e.message ? e.message : 'Resizing failed in this browser.');
+        } finally {
+          busy = false;
+          if (pending) { pending = false; run(); }
+        }
+      }
+
+      // Largest file at or under the target: binary-search quality; if the lowest quality is still too big, shrink and retry.
+      async function fitTarget(p, type) {
+        const target = p.targetBytes;
+        let scale = 1;
+        for (let round = 0; round < 12; round++) {
+          const w = Math.max(1, Math.round(p.w * scale)), h = Math.max(1, Math.round(p.h * scale));
+          const enc = q => renderToBlob(state.src, { w, h, type, quality: q, background: bgInput.value });
+          setStatus('Trying ' + fmtDims(w, h) + ' at the lowest quality…');
+          const QMIN = 0.05;
+          const low = await enc(QMIN);
+          if (low.size > target) {
+            if (w === 1 && h === 1) return null;
+            scale *= Math.min(0.9, Math.max(0.3, Math.sqrt(target / low.size) * 0.95));
+            if (scale < 0.01) return null;
+            continue;
+          }
+          let best = { blob: low, q: QMIN };
+          const top = await enc(1);
+          if (top.size <= target) return { blob: top, q: 1, w, h };
+          let lo = QMIN, hi = 1;
+          for (let i = 0; i < 7; i++) {
+            const q = (lo + hi) / 2;
+            setStatus('Trying quality ' + Math.round(q * 100) + ' at ' + fmtDims(w, h) + '…');
+            const b = await enc(q);
+            if (b.size <= target) { best = { blob: b, q }; lo = q; } else { hi = q; }
+          }
+          return { blob: best.blob, q: best.q, w, h };
+        }
+        return null;
+      }
+
+      function showResult(p, usedQ) {
+        const { blob, file, w, h, outW, outH } = state;
+        const type = blob.type;
+        $('res-meta').innerHTML = MIME_LABEL[type] + ' &middot; ' + fmtDims(outW, outH) + '<br>' + fmtBytes(blob.size);
+        const diff = blob.size - file.size;
+        let html =
+          row('Original', typeLabel(file) + ' &middot; ' + fmtDims(w, h) + ' &middot; ' + fmtBytes(file.size)) +
+          row('Resized', MIME_LABEL[type] + ' &middot; ' + fmtDims(outW, outH) + ' &middot; ' + fmtBytes(blob.size), 'teal') +
+          row('Size change', (diff > 0 ? '+' : diff < 0 ? '−' : '') + fmtBytes(Math.abs(diff)) + ' (' + fmtChange(file.size, blob.size) + ')', diff > 0 ? 'amber' : 'teal');
+        if (usedQ !== null) html += row('Quality used', String(Math.round(usedQ * 100)));
+        if (p.targetBytes) html += row('Target', fmtBytes(p.targetBytes) + (blob.size <= p.targetBytes ? ' — met' : ''));
+        $('stats').innerHTML = html;
+        const notes = [];
+        if (outW > w || outH > h) notes.push('This is larger than the original, so the extra pixels are interpolated and will look soft.');
+        if (p.targetBytes && (outW !== w || outH !== h)) notes.push('Even the lowest quality was over the target at full size, so the image was scaled down to ' + fmtDims(outW, outH) + '.');
+        if (p.sw < w - 0.5 || p.sh < h - 0.5) notes.push('Cropped from the centre to fill ' + fmtDims(outW, outH) + ' without stretching.');
+        note.textContent = notes.join(' ');
+        note.classList.toggle('hidden', !notes.length);
+        drawPreview($('res-canvas'), state.out, 400);
+        downloadBtn.disabled = false;
+      }
     })();
   </script>
   <script defer src="../js/ads.js"></script>

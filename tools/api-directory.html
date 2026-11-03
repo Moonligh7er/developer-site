@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Nexus — Public API Directory | Free APIs for Developers | Moonlit Social Labs</title>
-  <meta name="description" content="Curated public API directory with 50+ APIs for developers. AI, voice, payments, government data, traffic, analytics and more. Documentation links, auth types, and pricing info.">
+  <title>The Nexus — Public API Directory for Developers | Moonlit Social Labs</title>
+  <meta name="description" content="A curated directory of 40+ public APIs for developers: AI, voice, payments, government data, traffic, analytics and more, with documentation links, auth types and free-tier notes checked November 2026.">
   <meta name="keywords" content="public API directory, free APIs for developers, API list, REST API collection, developer APIs, AI APIs, government APIs, data APIs, voice APIs, payment APIs">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "The Nexus — Public API Directory | Moonlit Social Labs",
-    "description": "Curated public API directory with 50+ APIs across AI, voice, payments, government data, traffic, analytics and more. Free documentation links, auth types, and pricing info for developers.",
+    "description": "A curated directory of 40+ public APIs across AI, voice, payments, government data, traffic, analytics and more, with documentation links, auth types and free-tier notes.",
     "url": "https://moonligh7er.github.io/developer-site/tools/api-directory.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="The Nexus — Public API Directory for Developers">
-  <meta property="og:description" content="Curated directory of 50+ public APIs. AI, voice, payments, government data, traffic, analytics and more. Documentation links, auth types, and pricing.">
+  <meta property="og:description" content="A curated directory of 40+ public APIs: AI, voice, payments, government data, traffic, analytics and more, with documentation links, auth types and free-tier notes.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/api-directory.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The Nexus — Public API Directory | Moonlit Social Labs">
-  <meta name="twitter:description" content="Curated directory of 50+ public APIs for developers. AI, voice, payments, government data, traffic, analytics and more.">
+  <meta name="twitter:description" content="A curated directory of 40+ public APIs for developers: AI, voice, payments, government data, traffic, analytics and more.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -206,6 +206,9 @@
         grid-template-columns: 1fr;
       }
     }
+    @media (max-width: 600px) {
+      .nx-controls, .nx-tabs-wrap, .nx-grid { padding: 0 1rem; }
+    }
 
     /* ── API Card ── */
     .nx-card {
@@ -256,7 +259,19 @@
       font-size: 1.1rem;
       font-weight: 400;
       color: var(--text-bright);
+      margin: 0;
     }
+    .nx-checked {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin: 0.75rem auto 0;
+      max-width: 60ch;
+      line-height: 1.6;
+    }
+    .nx-tab, .nx-sort { min-height: 44px; }
+    .nx-card__link { min-height: 32px; }
+    .nx-tab:focus-visible, .nx-card__link:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
     .nx-card__desc {
       font-size: 0.82rem;
       color: var(--text-secondary);
@@ -332,6 +347,7 @@
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
 
   <nav class="nav" role="navigation" aria-label="Main">
     <a href="../index.html" class="nav__logo">
@@ -355,6 +371,7 @@
       <span class="section-label">API Reference</span>
       <h1 class="heading-xl">The Nexus</h1>
       <p class="text-body">A curated directory of public APIs used across real projects. Documentation links, auth types, and pricing tiers — all in one place.</p>
+      <p class="nx-checked">Links, auth and free-tier notes checked 3 November 2026. Pricing changes; confirm on each provider&rsquo;s site.</p>
     </section>
 
     <!-- Ad Unit: Top -->
@@ -363,28 +380,30 @@
     <!-- Search & Controls -->
     <div class="nx-controls">
       <div class="nx-search-row">
-        <input type="text" class="nx-search" id="nxSearch" placeholder="Search APIs by name, category, or keyword..." aria-label="Search APIs">
-        <select class="nx-sort" id="nxSort" aria-label="Sort APIs">
+        <label for="nxSearch" class="visually-hidden">Search APIs</label>
+        <input type="search" class="nx-search" id="nxSearch" placeholder="Search APIs by name, category, or keyword..." autocomplete="off">
+        <label for="nxSort" class="visually-hidden">Sort APIs</label>
+        <select class="nx-sort" id="nxSort">
           <option value="category">Sort: Category</option>
           <option value="alpha">Sort: A-Z</option>
         </select>
-        <div class="nx-count">Showing <span id="nxCount">0</span> APIs</div>
+        <div class="nx-count" aria-live="polite">Showing <span id="nxCount">0</span> APIs</div>
       </div>
     </div>
 
     <!-- Category Tabs -->
     <div class="nx-tabs-wrap">
-      <div class="nx-tabs" role="tablist" id="nxTabs">
-        <button class="nx-tab active" data-cat="all">All</button>
-        <button class="nx-tab" data-cat="ai">AI &amp; ML</button>
-        <button class="nx-tab" data-cat="voice">Voice &amp; Audio</button>
-        <button class="nx-tab" data-cat="backend">Backend &amp; DB</button>
-        <button class="nx-tab" data-cat="data">Data &amp; Intel</button>
-        <button class="nx-tab" data-cat="gov">Government</button>
-        <button class="nx-tab" data-cat="traffic">Traffic</button>
-        <button class="nx-tab" data-cat="monetization">Monetization</button>
-        <button class="nx-tab" data-cat="comms">Communication</button>
-        <button class="nx-tab" data-cat="social">Social</button>
+      <div class="nx-tabs" role="group" aria-label="Filter by category" id="nxTabs">
+        <button type="button" class="nx-tab active" data-cat="all" aria-pressed="true">All</button>
+        <button type="button" class="nx-tab" data-cat="ai" aria-pressed="false">AI &amp; ML</button>
+        <button type="button" class="nx-tab" data-cat="voice" aria-pressed="false">Voice &amp; Audio</button>
+        <button type="button" class="nx-tab" data-cat="backend" aria-pressed="false">Backend &amp; DB</button>
+        <button type="button" class="nx-tab" data-cat="data" aria-pressed="false">Data &amp; Intel</button>
+        <button type="button" class="nx-tab" data-cat="gov" aria-pressed="false">Government</button>
+        <button type="button" class="nx-tab" data-cat="traffic" aria-pressed="false">Traffic</button>
+        <button type="button" class="nx-tab" data-cat="monetization" aria-pressed="false">Monetization</button>
+        <button type="button" class="nx-tab" data-cat="comms" aria-pressed="false">Communication</button>
+        <button type="button" class="nx-tab" data-cat="social" aria-pressed="false">Social</button>
       </div>
     </div>
 
@@ -419,55 +438,56 @@
      THE NEXUS — API Directory Logic
      ════════════════════════════════════════════════════════════════ */
 
+  // Links, auth and pricing checked against each provider's own pages on 2026-11-03.
+  // pricing: "free" = no paid plan needed for normal use; "freemium" = free tier or credits plus paid plans; "paid" = no free tier.
   const APIs = [
     // ── AI & Machine Learning ──
-    { name: "Anthropic Claude API", icon: "\u{1F9E0}", desc: "LLM for text generation, analysis, and code generation", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://docs.anthropic.com" },
-    { name: "Voyage AI", icon: "\u{1F50D}", desc: "Embeddings and semantic search", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://docs.voyageai.com" },
-    { name: "DeepInfra", icon: "\u26A1", desc: "Inference API for open-source models", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://deepinfra.com/docs" },
+    { name: "Anthropic Claude API", icon: "\u{1F9E0}", desc: "Claude models for text, code, analysis and tool use. Pay per token; no free tier.", cat: "ai", catLabel: "AI & ML", pricing: "paid", auth: "API Key", docs: "https://platform.claude.com/docs/en/home" },
+    { name: "Voyage AI", icon: "\u{1F50D}", desc: "Embeddings and rerankers for semantic search; free token allowance to start", cat: "ai", catLabel: "AI & ML", pricing: "freemium", auth: "API Key", docs: "https://docs.voyageai.com" },
+    { name: "DeepInfra", icon: "⚡", desc: "Pay-per-token inference API for open-source and other hosted models", cat: "ai", catLabel: "AI & ML", pricing: "paid", auth: "API Key", docs: "https://docs.deepinfra.com/" },
 
     // ── Voice & Audio ──
     { name: "ElevenLabs", icon: "\u{1F3A4}", desc: "AI voice synthesis and text-to-speech", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://elevenlabs.io/docs" },
-    { name: "Deepgram", icon: "\u{1F4AC}", desc: "Speech-to-text transcription", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://developers.deepgram.com" },
-    { name: "Google TTS", icon: "\u{1F50A}", desc: "Text-to-speech API", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://cloud.google.com/text-to-speech/docs" },
+    { name: "Deepgram", icon: "\u{1F4AC}", desc: "Speech-to-text transcription; free starting credit", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://developers.deepgram.com" },
+    { name: "Google Cloud Text-to-Speech", icon: "\u{1F50A}", desc: "Text-to-speech with a monthly free character allowance", cat: "voice", catLabel: "Voice & Audio", pricing: "freemium", auth: "API Key", docs: "https://docs.cloud.google.com/text-to-speech/docs" },
 
     // ── Backend & Database ──
-    { name: "Supabase", icon: "\u{1F5C4}", desc: "Open-source Firebase alternative \u2014 Postgres + Auth + Realtime", cat: "backend", catLabel: "Backend & DB", pricing: "freemium", auth: "API Key", docs: "https://supabase.com/docs" },
-    { name: "Stripe", icon: "\u{1F4B3}", desc: "Payments, subscriptions, and billing", cat: "backend", catLabel: "Backend & DB", pricing: "paid", auth: "API Key", docs: "https://stripe.com/docs/api" },
+    { name: "Supabase", icon: "\u{1F5C4}", desc: "Open-source Firebase alternative — Postgres + Auth + Realtime", cat: "backend", catLabel: "Backend & DB", pricing: "freemium", auth: "API Key", docs: "https://supabase.com/docs" },
+    { name: "Stripe", icon: "\u{1F4B3}", desc: "Payments, subscriptions, and billing (per-transaction fees)", cat: "backend", catLabel: "Backend & DB", pricing: "paid", auth: "API Key", docs: "https://docs.stripe.com/api" },
     { name: "Firebase", icon: "\u{1F525}", desc: "Push notifications, auth, and cloud messaging", cat: "backend", catLabel: "Backend & DB", pricing: "freemium", auth: "API Key", docs: "https://firebase.google.com/docs" },
 
     // ── Data & Intelligence ──
     { name: "OpenAQ", icon: "\u{1F32C}", desc: "Global air quality data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://docs.openaq.org" },
-    { name: "PurpleAir", icon: "\u{1F7E3}", desc: "Real-time air quality sensors", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://api.purpleair.com" },
+    { name: "PurpleAir", icon: "\u{1F7E3}", desc: "Real-time air quality sensors; new accounts get free API points, more can be bought", cat: "data", catLabel: "Data & Intel", pricing: "freemium", auth: "API Key", docs: "https://api.purpleair.com" },
     { name: "AirNow", icon: "\u{1F4A8}", desc: "EPA air quality index", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://docs.airnowapi.org" },
-    { name: "NASA FIRMS", icon: "\u{1F6F0}", desc: "Active fire data from satellites", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://firms.modaps.eosdis.nasa.gov" },
-    { name: "OpenWeather", icon: "\u26C5", desc: "Weather data and forecasts", cat: "data", catLabel: "Data & Intel", pricing: "freemium", auth: "API Key", docs: "https://openweathermap.org/api" },
+    { name: "NASA FIRMS", icon: "\u{1F6F0}", desc: "Active fire data from satellites (free MAP_KEY)", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://firms.modaps.eosdis.nasa.gov/api/" },
+    { name: "OpenWeather", icon: "⛅", desc: "Weather data and forecasts", cat: "data", catLabel: "Data & Intel", pricing: "freemium", auth: "API Key", docs: "https://openweathermap.org/api" },
     { name: "AISStream", icon: "\u{1F6A2}", desc: "Real-time vessel tracking", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://aisstream.io/documentation" },
-    { name: "OpenSky Network", icon: "\u2708", desc: "Live aircraft tracking", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "None", docs: "https://openskynetwork.github.io/opensky-api" },
-    { name: "ACLED", icon: "\u{1F4CA}", desc: "Armed conflict and crisis data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "API Key", docs: "https://apidocs.acleddata.com" },
-    { name: "Copernicus", icon: "\u{1F30D}", desc: "EU earth observation satellite data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "OAuth", docs: "https://dataspace.copernicus.eu" },
+    { name: "OpenSky Network", icon: "✈", desc: "Live aircraft tracking; anonymous access with daily limits, accounts via OAuth2", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "Optional OAuth", docs: "https://openskynetwork.github.io/opensky-api" },
+    { name: "ACLED", icon: "\u{1F4CA}", desc: "Armed conflict and crisis data; free for eligible research use, licensed for commercial use", cat: "data", catLabel: "Data & Intel", pricing: "freemium", auth: "OAuth", docs: "https://acleddata.com/api-documentation/getting-started" },
+    { name: "Copernicus Data Space", icon: "\u{1F30D}", desc: "EU earth observation satellite data", cat: "data", catLabel: "Data & Intel", pricing: "free", auth: "OAuth", docs: "https://documentation.dataspace.copernicus.eu/APIs.html" },
 
     // ── Government & Transparency ──
-    { name: "OpenSecrets", icon: "\u{1F4B0}", desc: "Campaign finance and lobbying data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.opensecrets.org/open-data/api" },
-    { name: "FEC API", icon: "\u{1F3DB}", desc: "Federal Election Commission data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://api.open.fec.gov" },
-    { name: "Senate LDA", icon: "\u{1F4DC}", desc: "Lobbying disclosure reports", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://lda.senate.gov" },
-    { name: "Follow The Money", icon: "\u{1F4B5}", desc: "State-level campaign finance", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.followthemoney.org/our-data/apis" },
+    { name: "FEC API", icon: "\u{1F3DB}", desc: "Federal Election Commission campaign finance data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://api.open.fec.gov" },
+    { name: "LDA.gov", icon: "\u{1F4DC}", desc: "Federal lobbying disclosure reports (moved from lda.senate.gov); optional free key raises rate limits", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://lda.gov/api/" },
+    { name: "Follow The Money", icon: "\u{1F4B5}", desc: "State-level campaign finance; data runs through the 2024 election and the site is no longer updated", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.followthemoney.org/our-data/apis" },
     { name: "Regulations.gov", icon: "\u{1F4DD}", desc: "Federal rulemaking comments", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://open.gsa.gov/api/regulationsgov/" },
-    { name: "CourtListener", icon: "\u2696", desc: "Federal court opinions and PACER data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.courtlistener.com/api" },
-    { name: "MuckRock", icon: "\u{1F4F0}", desc: "FOIA requests and documents", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.muckrock.com/api" },
-    { name: "OpenSanctions", icon: "\u{1F6A8}", desc: "Global sanctions and PEP data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://www.opensanctions.org/api" },
-    { name: "OpenCorporates", icon: "\u{1F3E2}", desc: "Global corporate registry", cat: "gov", catLabel: "Government", pricing: "freemium", auth: "API Key", docs: "https://api.opencorporates.com" },
-    { name: "Data.gov", icon: "\u{1F5C3}", desc: "US government open data", cat: "gov", catLabel: "Government", pricing: "free", auth: "API Key", docs: "https://catalog.data.gov" },
+    { name: "CourtListener", icon: "⚖", desc: "Court opinions, dockets and PACER data; free daily limits, more with membership", cat: "gov", catLabel: "Government", pricing: "freemium", auth: "API Key", docs: "https://wiki.free.law/c/courtlistener/help/api" },
+    { name: "MuckRock", icon: "\u{1F4F0}", desc: "FOIA requests and documents", cat: "gov", catLabel: "Government", pricing: "free", auth: "Account token", docs: "https://www.muckrock.com/api/" },
+    { name: "OpenSanctions", icon: "\u{1F6A8}", desc: "Global sanctions and PEP data; free credits and free keys for journalism and research", cat: "gov", catLabel: "Government", pricing: "freemium", auth: "API Key", docs: "https://www.opensanctions.org/api/" },
+    { name: "OpenCorporates", icon: "\u{1F3E2}", desc: "Global corporate registry; free for open-data projects, paid otherwise", cat: "gov", catLabel: "Government", pricing: "freemium", auth: "API Key", docs: "https://api.opencorporates.com" },
+    { name: "Data.gov", icon: "\u{1F5C3}", desc: "US government open data catalog", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://resources.data.gov/catalog-api/" },
     { name: "BTS", icon: "\u{1F68C}", desc: "Bureau of Transportation Statistics", cat: "gov", catLabel: "Government", pricing: "free", auth: "None", docs: "https://data.bts.gov" },
 
     // ── Traffic & Transportation ──
     { name: "WSDOT", icon: "\u{1F6E3}", desc: "Washington State DOT traffic data", cat: "traffic", catLabel: "Traffic", pricing: "free", auth: "API Key", docs: "https://wsdot.wa.gov/traffic/api" },
-    { name: "ODOT", icon: "\u{1F6A6}", desc: "Oregon DOT traffic data", cat: "traffic", catLabel: "Traffic", pricing: "free", auth: "None", docs: null },
-    { name: "TrafficLand", icon: "\u{1F4F7}", desc: "Traffic camera feeds", cat: "traffic", catLabel: "Traffic", pricing: "freemium", auth: "API Key", docs: "https://api.trafficland.com/docs" },
+    { name: "ODOT TripCheck", icon: "\u{1F6A6}", desc: "Oregon DOT incidents, cameras, message signs and weather stations", cat: "traffic", catLabel: "Traffic", pricing: "free", auth: "API Key", docs: "https://www.tripcheck.com/Pages/API" },
+    { name: "TrafficLand", icon: "\u{1F4F7}", desc: "Traffic camera feeds for partners and customers", cat: "traffic", catLabel: "Traffic", pricing: "paid", auth: "API Key", docs: "https://api.trafficland.com/docs" },
     { name: "INRIX", icon: "\u{1F697}", desc: "Real-time traffic data", cat: "traffic", catLabel: "Traffic", pricing: "paid", auth: "API Key", docs: "https://docs.inrix.com" },
 
     // ── Monetization & Analytics ──
-    { name: "RevenueCat", icon: "\u{1F4B2}", desc: "In-app subscriptions management", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://www.revenuecat.com/docs/api-v1" },
-    { name: "LemonSqueezy", icon: "\u{1F34B}", desc: "Digital product payments", cat: "monetization", catLabel: "Monetization", pricing: "paid", auth: "API Key", docs: "https://docs.lemonsqueezy.com/api" },
+    { name: "RevenueCat", icon: "\u{1F4B2}", desc: "In-app subscriptions management", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://www.revenuecat.com/docs/api-v2" },
+    { name: "LemonSqueezy", icon: "\u{1F34B}", desc: "Digital product payments (per-transaction fees)", cat: "monetization", catLabel: "Monetization", pricing: "paid", auth: "API Key", docs: "https://docs.lemonsqueezy.com/api" },
     { name: "Google AdMob", icon: "\u{1F4F1}", desc: "Mobile advertising", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "OAuth", docs: "https://developers.google.com/admob" },
     { name: "Google AdSense", icon: "\u{1F4E2}", desc: "Web advertising", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "OAuth", docs: "https://developers.google.com/adsense" },
     { name: "PostHog", icon: "\u{1F994}", desc: "Product analytics and feature flags", cat: "monetization", catLabel: "Monetization", pricing: "freemium", auth: "API Key", docs: "https://posthog.com/docs/api" },
@@ -476,11 +496,11 @@
     { name: "GoatCounter", icon: "\u{1F410}", desc: "Privacy-friendly web analytics", cat: "monetization", catLabel: "Monetization", pricing: "free", auth: "API Key", docs: "https://www.goatcounter.com/help/api" },
 
     // ── Communication ──
-    { name: "Resend", icon: "\u2709", desc: "Email API for developers", cat: "comms", catLabel: "Communication", pricing: "freemium", auth: "API Key", docs: "https://resend.com/docs/api-reference" },
-    { name: "SMTP", icon: "\u{1F4E8}", desc: "Standard email protocol", cat: "comms", catLabel: "Communication", pricing: "free", auth: "None", docs: null },
+    { name: "Resend", icon: "✉", desc: "Email API for developers", cat: "comms", catLabel: "Communication", pricing: "freemium", auth: "API Key", docs: "https://resend.com/docs/api-reference" },
+    { name: "SMTP", icon: "\u{1F4E8}", desc: "The standard email-sending protocol (RFC 5321); auth depends on your mail server", cat: "comms", catLabel: "Communication", pricing: "free", auth: "Varies", docs: "https://www.rfc-editor.org/rfc/rfc5321.html" },
 
     // ── Social ──
-    { name: "Reddit API", icon: "\u{1F4AC}", desc: "Reddit data and content", cat: "social", catLabel: "Social", pricing: "free", auth: "OAuth", docs: "https://www.reddit.com/dev/api" }
+    { name: "Reddit API", icon: "\u{1F4AC}", desc: "Reddit posts, comments and communities; new apps need Reddit's approval and commercial use is paid", cat: "social", catLabel: "Social", pricing: "freemium", auth: "OAuth", docs: "https://www.reddit.com/dev/api" }
   ];
 
   const grid = document.getElementById('nxGrid');
@@ -502,19 +522,19 @@
 
     let docsLink = '';
     if (api.docs) {
-      docsLink = `<a href="${api.docs}" target="_blank" rel="noopener noreferrer" class="nx-card__link">View Docs \u2192</a>`;
+      docsLink = `<a href="${api.docs}" target="_blank" rel="noopener noreferrer" class="nx-card__link" aria-label="${api.name} documentation (opens in a new tab)">View Docs \u2192</a>`;
     }
 
     card.innerHTML = `
       <div class="nx-card__header">
-        <span class="nx-card__icon">${api.icon}</span>
-        <span class="nx-card__name">${api.name}</span>
+        <span class="nx-card__icon" aria-hidden="true">${api.icon}</span>
+        <h2 class="nx-card__name">${api.name}</h2>
       </div>
       <div class="nx-card__desc">${api.desc}</div>
       <div class="nx-card__badges">
         <span class="nx-badge nx-badge--category">${api.catLabel}</span>
         <span class="nx-badge ${pricingClass}">${pricingLabel}</span>
-        <span class="nx-badge nx-badge--auth">${api.auth}</span>
+        <span class="nx-badge nx-badge--auth">Auth: ${api.auth}</span>
       </div>
       ${docsLink}
     `;
@@ -554,10 +574,12 @@
 
   // Tab switching
   tabsContainer.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('nx-tab')) return;
-    tabsContainer.querySelectorAll('.nx-tab').forEach(t => t.classList.remove('active'));
-    e.target.classList.add('active');
-    activeCategory = e.target.dataset.cat;
+    const tab = e.target.closest('.nx-tab');
+    if (!tab) return;
+    tabsContainer.querySelectorAll('.nx-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-pressed', 'false'); });
+    tab.classList.add('active');
+    tab.setAttribute('aria-pressed', 'true');
+    activeCategory = tab.dataset.cat;
     renderCards();
   });
 

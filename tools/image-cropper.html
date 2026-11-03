@@ -91,11 +91,47 @@
     .slider-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; }
     input[type=range] { width: 100%; }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
-    .crop-wrap { position: relative; margin: 1rem 0; overflow: auto; max-width: 100%; border: 1px solid var(--border); background: #000; touch-action: none; }
+    /* Additions shared by the four image tools */
+    .form-group input:focus-visible, .form-group select:focus-visible, .file-drop:focus-visible, .calc-btn:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .calc-btn { min-height: 44px; }
+    .calc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .file-drop p + p { margin-top: 0.35rem; }
+    .support-line { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-dim); margin: -0.25rem 0 1rem; line-height: 1.5; }
+    .status-line { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); min-height: 1.2em; margin: 0.5rem 0 0; }
+    .form-group input[type=color] { padding: 0.2rem; height: 44px; cursor: pointer; }
+    .form-group input[type=range] { padding: 0; border: none; background: transparent; accent-color: var(--teal); min-height: 44px; }
+    .form-group .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; }
+    .form-group .check-row input { width: 18px; height: 18px; padding: 0; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; flex-wrap: wrap; }
+    .result-value { text-align: right; overflow-wrap: anywhere; }
+    .tool-note { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; margin-top: 0.75rem; }
+    .tool-note--warn { color: var(--amber); }
+    .preview-box canvas { background: repeating-conic-gradient(#1a1a30 0% 25%, #0f0f1a 0% 50%) 50% / 16px 16px; }
+    .hidden { display: none !important; }
+    .crop-stage { display: flex; justify-content: center; margin: 1rem 0; }
+    .crop-wrap { position: relative; display: inline-block; max-width: 100%; overflow: hidden; border: 1px solid var(--border); background: #000; touch-action: none; user-select: none; -webkit-user-select: none; }
     .crop-canvas { display: block; }
-    .crop-selection { position: absolute; border: 2px dashed var(--teal); background: rgba(0, 212, 170, 0.1); pointer-events: none; box-sizing: border-box; }
-    .crop-handles { position: absolute; pointer-events: none; }
-    .crop-handle { position: absolute; width: 14px; height: 14px; background: var(--teal); border: 2px solid var(--deep); border-radius: 50%; pointer-events: auto; cursor: pointer; }
+    .crop-selection { position: absolute; border: 2px dashed var(--teal); box-sizing: border-box; cursor: move; box-shadow: 0 0 0 9999px rgba(7, 7, 13, 0.6); touch-action: none; }
+    .crop-selection:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+    .crop-selection::before, .crop-selection::after { content: ''; position: absolute; pointer-events: none; border: 0 solid rgba(255, 255, 255, 0.25); }
+    .crop-selection::before { left: 33.333%; right: 33.333%; top: 0; bottom: 0; border-left-width: 1px; border-right-width: 1px; }
+    .crop-selection::after { top: 33.333%; bottom: 33.333%; left: 0; right: 0; border-top-width: 1px; border-bottom-width: 1px; }
+    /* 44px touch target, 14px visible dot */
+    .crop-handle { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; touch-action: none; z-index: 2; }
+    .crop-handle::after { content: ''; position: absolute; left: 15px; top: 15px; width: 14px; height: 14px; background: var(--teal); border: 2px solid var(--deep); border-radius: 50%; box-sizing: border-box; }
+    .crop-handle[data-pos=nw] { left: 0; top: 0; cursor: nwse-resize; }
+    .crop-handle[data-pos=n] { left: 50%; top: 0; cursor: ns-resize; }
+    .crop-handle[data-pos=ne] { left: 100%; top: 0; cursor: nesw-resize; }
+    .crop-handle[data-pos=e] { left: 100%; top: 50%; cursor: ew-resize; }
+    .crop-handle[data-pos=se] { left: 100%; top: 100%; cursor: nwse-resize; }
+    .crop-handle[data-pos=s] { left: 50%; top: 100%; cursor: ns-resize; }
+    .crop-handle[data-pos=sw] { left: 0; top: 100%; cursor: nesw-resize; }
+    .crop-handle[data-pos=w] { left: 0; top: 50%; cursor: ew-resize; }
+    .crop-fields { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+    @media (max-width: 600px) { .crop-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .crop-out { display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap; }
+    .crop-out canvas { max-width: 160px; max-height: 160px; border: 1px solid var(--border); background: repeating-conic-gradient(#1a1a30 0% 25%, #0f0f1a 0% 50%) 50% / 16px 16px; }
+    .crop-out #crop-meta { flex: 1; min-width: 200px; }
   </style>
 </head>
 <body>
@@ -128,47 +164,88 @@
 
       <div class="calc-card">
         <h1>Image Cropper</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Crop images with a draggable selection box. Freeform or fixed ratio (1:1, 4:3, 16:9, passport 2×2"). Touch-optimized for phone use. Download the cropped result as PNG.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Crop with a draggable box, freeform or locked to a ratio (1:1, 4:3, 16:9, 9:16, 3:2, 2:3, 4:5, passport 2&times;2&Prime;). Drag with a mouse or finger, nudge with the arrow keys, or type exact pixel values. Downloads in the original format where possible, or PNG, JPEG or WebP.</p>
         <div class="inline-warn" style="border-color:var(--teal);color:var(--text-secondary);background:transparent;"><strong style="color:var(--teal);">Files stay in your browser.</strong> Everything on this page &mdash; loading, processing, encoding &mdash; runs locally. Your images are never uploaded to any server. Re-encoding also strips EXIF metadata (camera model, GPS coordinates), which is a privacy win.</div>
-        <div class="file-drop" id="drop" tabindex="0" role="button" aria-label="Choose image">
-  <p><strong style="color:var(--teal);">Click here or drop an image</strong></p>
-  <input type="file" id="file" accept="image/*" style="display:none;">
-</div>
-<div class="form-grid">
-  <div class="form-group">
-    <label for="ratio">Aspect Ratio</label>
-    <select id="ratio">
-      <option value="0">Freeform</option>
-      <option value="1">1:1 (square)</option>
-      <option value="1.333">4:3</option>
-      <option value="1.777">16:9</option>
-      <option value="0.5625">9:16 (vertical video)</option>
-      <option value="0.6667">2:3</option>
-      <option value="1">2×2" passport</option>
-    </select>
-  </div>
-</div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <div class="crop-wrap" id="crop-wrap">
-  <canvas class="crop-canvas" id="crop-canvas"></canvas>
-  <div class="crop-selection" id="sel"></div>
-</div>
-<div id="crop-meta"></div>
-<div class="calc-btn-row" style="margin-top:1rem;">
-  <button class="calc-btn" onclick="doCrop()">Crop &amp; Download</button>
-</div>
+        <div class="file-drop" id="drop" tabindex="0" role="button" aria-describedby="drop-help">
+          <p><strong style="color:var(--teal);">Choose an image, drop it here, or paste it</strong></p>
+          <p id="drop-help">Any format your browser can open &middot; HEIC in Safari only &middot; up to 100 MB</p>
+          <input type="file" id="file" accept="image/*,.heic,.heif,.avif" hidden>
+        </div>
+        <p class="support-line" id="support">Checking which formats this browser can open and save&hellip;</p>
+        <div class="calc-btn-row">
+          <button type="button" class="calc-btn calc-btn--secondary" id="sample-btn">Try a sample image</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="ratio">Aspect ratio</label>
+            <select id="ratio">
+              <option value="free">Freeform</option>
+              <option value="1:1">1:1 (square)</option>
+              <option value="4:3">4:3</option>
+              <option value="3:2">3:2 (35 mm photo)</option>
+              <option value="16:9">16:9 (widescreen)</option>
+              <option value="9:16">9:16 (vertical video)</option>
+              <option value="4:5">4:5 (Instagram portrait)</option>
+              <option value="2:3">2:3 (portrait print)</option>
+              <option value="1:1p">2&times;2 in passport (1:1)</option>
+              <option value="orig">Original image ratio</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="outFmt">Download as</label>
+            <select id="outFmt">
+              <option value="same">Same as original (where possible)</option>
+              <option value="image/png">PNG (lossless)</option>
+              <option value="image/jpeg">JPEG (quality 92)</option>
+              <option value="image/webp">WebP (quality 92)</option>
+            </select>
+          </div>
+          <div class="form-group hidden" id="bg-group">
+            <label for="bg">Fill transparent areas with</label>
+            <input type="color" id="bg" value="#ffffff">
+            <span class="hint">JPEG can&rsquo;t store transparency.</span>
+          </div>
+        </div>
+        <div class="calc-error" id="err" role="alert"></div>
+        <p class="status-line" id="status" aria-live="polite"></p>
+        <div class="calc-results" id="results">
+          <h4>Drag the box or its handles</h4>
+          <div class="crop-stage">
+            <div class="crop-wrap" id="crop-wrap">
+              <canvas class="crop-canvas" id="crop-canvas" role="img" aria-label="Image being cropped"></canvas>
+              <div class="crop-selection" id="sel" tabindex="0" role="group" aria-label="Crop area. Arrow keys move it; Shift plus arrow keys resize it." aria-describedby="crop-meta">
+                <div class="crop-handle" data-pos="nw"></div><div class="crop-handle" data-pos="n"></div><div class="crop-handle" data-pos="ne"></div><div class="crop-handle" data-pos="e"></div>
+                <div class="crop-handle" data-pos="se"></div><div class="crop-handle" data-pos="s"></div><div class="crop-handle" data-pos="sw"></div><div class="crop-handle" data-pos="w"></div>
+              </div>
+            </div>
+          </div>
+          <p class="calc-subhead">Crop area in original pixels</p>
+          <div class="crop-fields">
+            <div class="form-group"><label for="cx">Left (px)</label><input type="number" id="cx" min="0" step="1" inputmode="numeric"></div>
+            <div class="form-group"><label for="cy">Top (px)</label><input type="number" id="cy" min="0" step="1" inputmode="numeric"></div>
+            <div class="form-group"><label for="cw">Width (px)</label><input type="number" id="cw" min="1" step="1" inputmode="numeric"></div>
+            <div class="form-group"><label for="ch">Height (px)</label><input type="number" id="ch" min="1" step="1" inputmode="numeric"></div>
+          </div>
+          <span class="calc-error" id="fields-err"></span>
+          <div class="crop-out">
+            <canvas id="crop-preview" role="img" aria-label="Preview of the cropped image"></canvas>
+            <div id="crop-meta" aria-live="polite"></div>
+          </div>
+          <div class="calc-btn-row" style="margin-top:1rem;">
+            <button type="button" class="calc-btn" id="crop-btn" disabled>Crop &amp; download</button>
+            <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset box</button>
+          </div>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Using the cropper</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Drop or choose an image. A selection box appears in the middle. Drag the box to move it, drag the corner handles to resize. If you set an aspect ratio, dragging any handle keeps that ratio. Click Crop &amp; Download to save the cropped region as PNG (lossless).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common ratios</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>1:1 square</strong> for Instagram feed posts and most profile photos. <strong>4:3</strong> traditional photo, TV. <strong>16:9</strong> HD video, YouTube thumbnails, laptop screens. <strong>9:16</strong> vertical for TikTok, Instagram Reels/Stories, mobile-first video. <strong>2:3</strong> classic portrait aspect for print. <strong>2×2 inch passport</strong>: technically requires specific dimensions in pixels for print quality (600×600 @ 300 DPI is standard for US passport); this preset just enforces the 1:1 aspect &mdash; you&apos;ll want to resize afterwards to hit the exact pixel spec.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Touch support</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Handles are 14px targets sized for finger use. Drag anywhere inside the selection to reposition; drag a corner handle to resize. If the image is bigger than the viewport, scroll around inside the wrap frame.</p>
-</section>
+        <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Using the cropper</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Open an image and a box appears over the middle of it. Drag inside the box to move it; drag a corner or edge handle to resize. With a ratio chosen, resizing keeps that ratio. You can also tab to the box and use the arrow keys (Shift + arrows to resize), or type the exact left, top, width and height in original-image pixels. The download is cropped from the full-resolution image, not the on-screen preview.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Common ratios</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>1:1</strong> for profile photos and square posts. <strong>4:5</strong> for Instagram portrait posts. <strong>4:3</strong> for many phone and compact-camera photos. <strong>3:2</strong> for 35 mm and most DSLR photos and 4&times;6 prints. <strong>16:9</strong> for HD video, YouTube thumbnails and most screens. <strong>9:16</strong> for vertical video (TikTok, Reels, Stories). <strong>2:3</strong> for portrait prints. <strong>2&times;2 inch passport</strong>: this preset only enforces the square shape. US passport photos also need the head 1&ndash;1 3/8 inches tall and, for digital submissions, at least 600&times;600 pixels &mdash; check the current rules for your country, and use the Image Resizer afterwards to hit an exact pixel size.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Formats</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">By default the crop is saved in the same format as the original where your browser can write it (JPEG and WebP at quality 92), and as PNG otherwise. PNG keeps every pixel exactly but makes large files from photos. Transparent areas stay transparent in PNG and WebP; for JPEG you pick the fill colour. Phone photos are turned upright using their rotation tag before you crop.</p>
+      </section>
     </div>
 
     <aside class="calc-other">
@@ -201,184 +278,498 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      
-// Shared image utilities. Files never leave the browser.
-async function loadImage(file){
-  // createImageBitmap with imageOrientation:'from-image' respects EXIF rotation on iOS/Android photos
-  try {
-    return await createImageBitmap(file, { imageOrientation: 'from-image' });
-  } catch(e) {
-    // Fallback: HTMLImageElement (won't fix EXIF but works)
-    return await new Promise((res, rej) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => { URL.revokeObjectURL(url); res(img); };
-      img.onerror = rej;
-      img.src = url;
-    });
-  }
-}
-function bytesToHuman(b){
-  if (b < 1024) return b + ' B';
-  if (b < 1024*1024) return (b/1024).toFixed(1) + ' KB';
-  return (b/(1024*1024)).toFixed(2) + ' MB';
-}
-function detectAvifSupport(){
-  return new Promise(res => {
-    const c = document.createElement('canvas');
-    c.width = c.height = 2;
-    if (!c.toBlob) return res(false);
-    c.toBlob(b => res(!!b && b.type === 'image/avif'), 'image/avif');
-    setTimeout(()=>res(false), 500);
-  });
-}
-function downloadBlob(blob, name){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(url), 1000);
-}
-function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
-function extFromType(type){ return type.split('/')[1].replace('jpeg','jpg'); }
+    (function () {
+      'use strict';
+      /* ---- Shared image utilities (the same block is in image-compressor, -converter, -resizer and -cropper).
+         Everything runs in this tab: files are decoded, drawn and re-encoded locally and never uploaded. ---- */
+      const MAX_FILE_BYTES = 100 * 1024 * 1024;
+      // 16,384 x 16,384: the largest canvas area Chrome and Firefox allow. Safari on iPhone/iPad allows less;
+      // there the encode step fails and we say so instead of freezing.
+      const MAX_PIXELS = 268435456;
+      const MIME_EXT = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' };
+      const MIME_LABEL = { 'image/jpeg': 'JPEG', 'image/png': 'PNG', 'image/webp': 'WebP', 'image/avif': 'AVIF', 'image/gif': 'GIF', 'image/bmp': 'BMP', 'image/heic': 'HEIC', 'image/heif': 'HEIF', 'image/svg+xml': 'SVG', 'image/tiff': 'TIFF', 'image/x-icon': 'ICO', 'image/vnd.microsoft.icon': 'ICO' };
+      // 1x1 test images used to check which formats this browser can open (Modernizr's feature tests).
+      const PROBE = {
+        'image/webp': 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA',
+        'image/avif': 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A='
+      };
+      const $ = id => document.getElementById(id);
 
+      function fmtInt(n) { return Math.round(n).toLocaleString('en-US'); }
+      function fmtDims(w, h) { return fmtInt(w) + ' × ' + fmtInt(h) + ' px'; }
+      function fmtBytes(b) {
+        b = Math.max(0, Math.round(b));
+        if (b < 1024) return fmtInt(b) + ' B';
+        if (b < 1024 * 1024) return (b / 1024).toLocaleString('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + ' KB';
+        return (b / 1048576).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 }) + ' MB';
+      }
+      // "-63.2%" style change, with a real minus sign and never "-0.0%".
+      function fmtChange(before, after) {
+        if (!before) return '';
+        const pct = (after - before) / before * 100;
+        const r = Math.round(pct * 10) / 10;
+        if (r === 0) return '0%';
+        return (r > 0 ? '+' : '−') + Math.abs(r).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+      }
+      function typeLabel(file) {
+        if (MIME_LABEL[file.type]) return MIME_LABEL[file.type];
+        const m = /\.([a-z0-9]+)$/i.exec(file.name || '');
+        return m ? m[1].toUpperCase() : 'image';
+      }
+      function baseName(name) {
+        let b = String(name || '').replace(/\.[^.\\/]+$/, '').replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '-').replace(/\s+/g, ' ').trim();
+        if (!b || b === 'image') b = 'image';
+        return b.slice(0, 80);
+      }
+      function canDecode(uri) {
+        return new Promise(res => {
+          const img = new Image();
+          img.onload = () => res(img.width > 0);
+          img.onerror = () => res(false);
+          img.src = uri;
+        });
+      }
+      function canEncode(type) {
+        return new Promise(res => {
+          const c = document.createElement('canvas');
+          c.width = c.height = 2;
+          if (!c.toBlob) return res(false);
+          // Browsers that can't encode a type quietly return PNG instead, so check the type we got back.
+          c.toBlob(b => res(!!b && b.type === type), type, 0.8);
+        });
+      }
+      async function detectSupport() {
+        const [webpD, avifD, webpE, avifE] = await Promise.all([
+          canDecode(PROBE['image/webp']), canDecode(PROBE['image/avif']), canEncode('image/webp'), canEncode('image/avif')
+        ]);
+        return {
+          decode: { 'image/webp': webpD, 'image/avif': avifD },
+          encode: { 'image/jpeg': true, 'image/png': true, 'image/webp': webpE, 'image/avif': avifE }
+        };
+      }
+      function supportSummary(s) {
+        const opens = ['JPEG', 'PNG', 'GIF', 'BMP'];
+        if (s.decode['image/webp']) opens.push('WebP');
+        if (s.decode['image/avif']) opens.push('AVIF');
+        const saves = ['JPEG', 'PNG'];
+        if (s.encode['image/webp']) saves.push('WebP');
+        if (s.encode['image/avif']) saves.push('AVIF');
+        return 'This browser can open ' + opens.join(', ') + ' (HEIC only in Safari) and save ' + saves.join(', ') + '.';
+      }
+      function decodeFailureMessage(file) {
+        const n = (file.name || '').toLowerCase(), t = file.type || '';
+        if (/hei[cf]/.test(t) || /\.hei[cf]$/.test(n)) return 'This browser can’t open HEIC/HEIF photos. Safari on Mac, iPhone and iPad can; Chrome, Edge and Firefox can’t yet. On an iPhone, Settings → Camera → Formats → Most Compatible saves new photos as JPEG.';
+        if (/avif/.test(t) || /\.avif$/.test(n)) return 'This browser can’t open AVIF files. Current Chrome, Edge, Firefox and Safari can.';
+        if (/tiff?/.test(t) || /\.tiff?$/.test(n)) return 'Only Safari can open TIFF files. Export the image as PNG or JPEG first.';
+        if (/\.(psd|raw|cr2|cr3|nef|arw|dng|orf|rw2)$/.test(n)) return 'Browsers can’t open camera RAW or Photoshop files. Export a JPEG or PNG first.';
+        if (t && !t.startsWith('image/')) return 'That file isn’t an image (' + t + ').';
+        return 'Couldn’t read this file as an image. It may be damaged, or in a format this browser can’t open.';
+      }
+      // Decodes off the main thread where the browser allows it and applies the EXIF orientation tag,
+      // so phone photos come out the right way up.
+      async function decodeImage(file) {
+        if (typeof createImageBitmap === 'function') {
+          try { return await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch (e) { /* try an <img> next */ }
+        }
+        const url = URL.createObjectURL(file);
+        try {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = url;
+          await img.decode();
+          return img;
+        } finally {
+          URL.revokeObjectURL(url);
+        }
+      }
+      function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+      function imageSize(src) { return { w: src.naturalWidth || src.width, h: src.naturalHeight || src.height }; }
+      function releaseImage(src) { if (src && typeof src.close === 'function') src.close(); }
+      function freeCanvas(c) { if (c) { c.width = 0; c.height = 0; } }
+      // Checks a small copy of the image for any pixel that isn't fully opaque.
+      function hasTransparency(src, w, h) {
+        const s = Math.min(1, 256 / Math.max(w, h));
+        const c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(w * s));
+        c.height = Math.max(1, Math.round(h * s));
+        const x = c.getContext('2d', { willReadFrequently: true });
+        x.drawImage(src, 0, 0, c.width, c.height);
+        const d = x.getImageData(0, 0, c.width, c.height).data;
+        let found = false;
+        for (let i = 3; i < d.length; i += 4) { if (d[i] < 255) { found = true; break; } }
+        freeCanvas(c);
+        return found;
+      }
+      // Big reductions are done in halving steps; one huge downscale step skips pixels and looks jagged.
+      function drawScaled(ctx, src, sx, sy, sw, sh, dw, dh) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        let cur = src, cx = sx, cy = sy, cw = sw, ch = sh;
+        const temps = [];
+        while (cw / 2 >= dw && ch / 2 >= dh) {
+          const c = document.createElement('canvas');
+          c.width = Math.max(dw, Math.round(cw / 2));
+          c.height = Math.max(dh, Math.round(ch / 2));
+          const x = c.getContext('2d');
+          x.imageSmoothingEnabled = true;
+          x.imageSmoothingQuality = 'high';
+          x.drawImage(cur, cx, cy, cw, ch, 0, 0, c.width, c.height);
+          temps.push(c);
+          cur = c; cx = 0; cy = 0; cw = c.width; ch = c.height;
+        }
+        ctx.drawImage(cur, cx, cy, cw, ch, 0, 0, dw, dh);
+        temps.forEach(freeCanvas);
+      }
+      // o: { sx, sy, sw, sh (source rect, optional), w, h (output size), type, quality (0-1), background (for JPEG) }
+      async function renderToBlob(src, o) {
+        const size = imageSize(src);
+        const sx = o.sx || 0, sy = o.sy || 0, sw = o.sw || size.w, sh = o.sh || size.h;
+        const w = Math.max(1, Math.round(o.w || sw)), h = Math.max(1, Math.round(o.h || sh));
+        if (w * h > MAX_PIXELS) throw new Error('That output (' + fmtDims(w, h) + ') is larger than a browser canvas can hold.');
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        if (!ctx) { freeCanvas(c); throw new Error('This browser couldn’t make a ' + fmtDims(w, h) + ' canvas. Try a smaller size.'); }
+        if (o.type === 'image/jpeg') {
+          // JPEG has no transparency: paint the chosen background first so see-through areas don't turn black.
+          ctx.fillStyle = o.background || '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+        }
+        drawScaled(ctx, src, sx, sy, sw, sh, w, h);
+        const lossy = o.type !== 'image/png';
+        const blob = await new Promise(res => c.toBlob(res, o.type, lossy ? o.quality : undefined));
+        freeCanvas(c);
+        if (!blob) throw new Error('The browser ran out of room encoding ' + fmtDims(w, h) + '. Try a smaller size (the Image Resizer can shrink it first).');
+        return blob;
+      }
+      // Fits the image into a preview canvas no larger than maxDim on its long side.
+      function drawPreview(canvas, src, maxDim) {
+        const { w, h } = imageSize(src);
+        const s = Math.min(1, maxDim / Math.max(w, h));
+        canvas.width = Math.max(1, Math.round(w * s));
+        canvas.height = Math.max(1, Math.round(h * s));
+        const x = canvas.getContext('2d');
+        x.clearRect(0, 0, canvas.width, canvas.height);
+        drawScaled(x, src, 0, 0, w, h, canvas.width, canvas.height);
+      }
+      function downloadBlob(blob, name) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        // Give slow devices time to start the download before the URL is released.
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+      function pickFile(dt) {
+        if (!dt) return null;
+        if (dt.files && dt.files.length) return dt.files[0];
+        for (const item of (dt.items || [])) {
+          if (item.kind === 'file') { const f = item.getAsFile(); if (f) return f; }
+        }
+        return null;
+      }
+      // Click or keyboard on the drop zone opens the picker; drag-and-drop and paste (Ctrl/Cmd+V) also work.
+      function wireFileInput(onFile) {
+        const drop = $('drop'), input = $('file');
+        drop.addEventListener('click', () => input.click());
+        drop.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+        });
+        input.addEventListener('change', () => {
+          if (input.files && input.files[0]) onFile(input.files[0]);
+          input.value = '';
+        });
+        ['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('dragover'); }));
+        ['dragleave', 'dragend'].forEach(t => drop.addEventListener(t, () => drop.classList.remove('dragover')));
+        drop.addEventListener('drop', e => {
+          e.preventDefault();
+          drop.classList.remove('dragover');
+          const f = pickFile(e.dataTransfer);
+          if (f) onFile(f);
+        });
+        // A drop that misses the zone would otherwise open the file in the tab and leave the page.
+        window.addEventListener('dragover', e => e.preventDefault());
+        window.addEventListener('drop', e => e.preventDefault());
+        document.addEventListener('paste', e => {
+          const f = pickFile(e.clipboardData);
+          if (f && /^image\//.test(f.type)) { e.preventDefault(); onFile(f); }
+        });
+      }
+      // A synthetic test picture (gradient, shapes, text and a see-through corner) for trying the tool.
+      function makeSample() {
+        const w = 1600, h = 1000;
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const x = c.getContext('2d');
+        const g = x.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#0b1a3a'); g.addColorStop(0.55, '#1d6f8f'); g.addColorStop(1, '#f2b45a');
+        x.fillStyle = g;
+        x.fillRect(0, 0, w, h);
+        for (let i = 0; i < 40; i++) {
+          x.beginPath();
+          x.arc((i * 397) % w, (i * 211) % h, 20 + (i * 13) % 90, 0, Math.PI * 2);
+          x.fillStyle = 'hsla(' + ((i * 37) % 360) + ', 70%, 60%, 0.35)';
+          x.fill();
+        }
+        x.fillStyle = '#ffffff';
+        x.font = '600 120px "Space Grotesk", sans-serif';
+        x.fillText('Sample 1600×1000', 90, h - 120);
+        x.clearRect(w - 360, 0, 360, 260); // transparent corner
+        return new Promise((res, rej) => c.toBlob(b => {
+          freeCanvas(c);
+          b ? res(new File([b], 'sample.png', { type: 'image/png' })) : rej(new Error('sample'));
+        }, 'image/png'));
+      }
+      /* ---- end of shared block ---- */
 
-      const err = document.getElementById('err');
-      const results = document.getElementById('results');
-      function showErr(m){ err.textContent = m; err.classList.add('visible'); results.classList.remove('visible'); }
-      function hideErr(){ err.classList.remove('visible'); }
-      function set(id, html){ const e=document.getElementById(id); if(e) e.innerHTML = html; }
-      function row(label,value,cls){ cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+      const err = $('err'), results = $('results'), statusEl = $('status');
+      function showErr(m) { err.textContent = m; err.classList.add('visible'); }
+      function hideErr() { err.classList.remove('visible'); }
+      function setStatus(m) { statusEl.textContent = m; }
+      function row(label, value, cls) {
+        return '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+      }
 
-      let currentImage = null, imgScale = 1;
-let sel = { x: 100, y: 100, w: 200, h: 200 };
-let dragMode = null, dragStart = null;
-const drop = document.getElementById('drop'), fileInput = document.getElementById('file');
-const canvas = document.getElementById('crop-canvas'), selEl = document.getElementById('sel');
-const wrap = document.getElementById('crop-wrap');
-drop.addEventListener('click', () => fileInput.click());
-drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
-drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
-drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('dragover'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
-fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); });
+      const canvas = $('crop-canvas'), wrap = $('crop-wrap'), selEl = $('sel'), ratioSel = $('ratio'), fmtSel = $('outFmt');
+      const fields = { x: $('cx'), y: $('cy'), w: $('cw'), h: $('ch') };
+      const cropBtn = $('crop-btn'), preview = $('crop-preview');
+      const MIN = 8; // smallest crop side, in original pixels
+      // sel is kept in original-image pixels; scale converts to on-screen pixels.
+      const state = { src: null, file: null, w: 0, h: 0, alpha: false, scale: 1, sel: { x: 0, y: 0, w: 0, h: 0 } };
+      let support = { encode: { 'image/jpeg': true, 'image/png': true, 'image/webp': false } };
+      let drag = null, rafId = 0;
 
-async function handle(file){
-  hideErr();
-  if (!file.type.startsWith('image/')) return showErr('Please choose an image.');
-  if (file.size > 50*1024*1024) return showErr('File exceeds 50MB.');
-  try {
-    currentImage = await loadImage(file);
-    currentImage._origName = file.name;
-    drawImage();
-    results.classList.add('visible');
-    setupHandles();
-  } catch(e) { showErr('Could not load: ' + e.message); }
-}
-function drawImage(){
-  const maxW = Math.min(900, window.innerWidth - 100);
-  imgScale = Math.min(1, maxW / currentImage.width);
-  canvas.width = currentImage.width * imgScale;
-  canvas.height = currentImage.height * imgScale;
-  canvas.getContext('2d').drawImage(currentImage, 0, 0, canvas.width, canvas.height);
-  // Reset selection to center 50%
-  sel.w = canvas.width * 0.5; sel.h = canvas.height * 0.5;
-  sel.x = (canvas.width - sel.w) / 2; sel.y = (canvas.height - sel.h) / 2;
-  applyRatio();
-  updateSel();
-}
-function updateSel(){
-  selEl.style.left = sel.x + 'px'; selEl.style.top = sel.y + 'px';
-  selEl.style.width = sel.w + 'px'; selEl.style.height = sel.h + 'px';
-  document.getElementById('crop-meta').innerHTML = row('Selection', Math.round(sel.w/imgScale) + '×' + Math.round(sel.h/imgScale) + ' px');
-}
-function applyRatio(){
-  const r = parseFloat(document.getElementById('ratio').value);
-  if (r > 0) sel.h = sel.w / r;
-}
-document.getElementById('ratio').addEventListener('change', () => { applyRatio(); updateSel(); });
+      detectSupport().then(s => {
+        support = s;
+        $('support').textContent = supportSummary(s);
+        if (!s.encode['image/webp']) {
+          const webp = fmtSel.querySelector('option[value="image/webp"]');
+          webp.disabled = true;
+          webp.textContent = 'WebP (this browser can’t save it)';
+        }
+        updateMeta();
+      });
 
-function setupHandles(){
-  // Corner handles as absolutely positioned children of wrap
-  wrap.querySelectorAll('.crop-handle').forEach(e=>e.remove());
-  const handles = ['nw','ne','sw','se'];
-  for (const pos of handles) {
-    const h = document.createElement('div');
-    h.className = 'crop-handle'; h.dataset.pos = pos;
-    h.style.zIndex = 10;
-    wrap.appendChild(h);
-    h.addEventListener('pointerdown', e => startDrag(e, pos));
-  }
-  positionHandles();
-  selEl.style.pointerEvents = 'auto';
-  selEl.style.cursor = 'move';
-  selEl.addEventListener('pointerdown', e => startDrag(e, 'move'));
-  window.addEventListener('pointermove', doDrag);
-  window.addEventListener('pointerup', endDrag);
-}
-function positionHandles(){
-  wrap.querySelectorAll('.crop-handle').forEach(h=>{
-    const p = h.dataset.pos;
-    const cx = p.includes('e') ? sel.x + sel.w : sel.x;
-    const cy = p.includes('s') ? sel.y + sel.h : sel.y;
-    h.style.left = (cx - 7) + 'px';
-    h.style.top = (cy - 7) + 'px';
-  });
-}
-function startDrag(e, mode){
-  e.preventDefault();
-  dragMode = mode;
-  const rect = wrap.getBoundingClientRect();
-  dragStart = { x: e.clientX - rect.left, y: e.clientY - rect.top, sel: {...sel} };
-  e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId);
-}
-function doDrag(e){
-  if (!dragMode) return;
-  const rect = wrap.getBoundingClientRect();
-  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
-  const dx = cx - dragStart.x, dy = cy - dragStart.y;
-  const r = parseFloat(document.getElementById('ratio').value);
-  if (dragMode === 'move') {
-    sel.x = Math.max(0, Math.min(canvas.width - sel.w, dragStart.sel.x + dx));
-    sel.y = Math.max(0, Math.min(canvas.height - sel.h, dragStart.sel.y + dy));
-  } else {
-    // Corner resize
-    let nx = dragStart.sel.x, ny = dragStart.sel.y, nw = dragStart.sel.w, nh = dragStart.sel.h;
-    if (dragMode.includes('e')) nw = Math.max(20, dragStart.sel.w + dx);
-    if (dragMode.includes('w')) { nw = Math.max(20, dragStart.sel.w - dx); nx = dragStart.sel.x + dx; }
-    if (dragMode.includes('s')) nh = Math.max(20, dragStart.sel.h + dy);
-    if (dragMode.includes('n')) { nh = Math.max(20, dragStart.sel.h - dy); ny = dragStart.sel.y + dy; }
-    if (r > 0) {
-      // Enforce ratio — derive one from the other
-      nh = nw / r;
-      if (dragMode.includes('n')) ny = dragStart.sel.y + dragStart.sel.h - nh;
-    }
-    // Constrain to canvas
-    if (nx < 0) { nw += nx; nx = 0; }
-    if (ny < 0) { nh += ny; ny = 0; }
-    if (nx + nw > canvas.width) nw = canvas.width - nx;
-    if (ny + nh > canvas.height) nh = canvas.height - ny;
-    if (r > 0) nh = nw / r;
-    sel = { x: nx, y: ny, w: nw, h: nh };
-  }
-  updateSel(); positionHandles();
-}
-function endDrag(){ dragMode = null; }
+      wireFileInput(load);
+      $('sample-btn').addEventListener('click', () => makeSample().then(load).catch(() => showErr('Couldn’t make the sample image in this browser.')));
+      ratioSel.addEventListener('change', () => { if (state.src) { resetBox(); } });
+      fmtSel.addEventListener('change', updateMeta);
+      $('bg').addEventListener('input', updateMeta);
+      $('reset-btn').addEventListener('click', () => { if (state.src) resetBox(); });
+      cropBtn.addEventListener('click', doCrop);
+      window.addEventListener('resize', () => { if (state.src) layout(); });
 
-window.doCrop = function(){
-  if (!currentImage) return showErr('Load an image first.');
-  const sx = sel.x / imgScale, sy = sel.y / imgScale;
-  const sw = sel.w / imgScale, sh = sel.h / imgScale;
-  const oc = document.createElement('canvas');
-  oc.width = Math.round(sw); oc.height = Math.round(sh);
-  oc.getContext('2d').drawImage(currentImage, sx, sy, sw, sh, 0, 0, sw, sh);
-  oc.toBlob(blob => {
-    if (!blob) return showErr('Crop failed.');
-    const base = stripExt(currentImage._origName);
-    downloadBlob(blob, base + '-cropped.png');
-  }, 'image/png');
-};
+      function ratio() {
+        const v = ratioSel.value;
+        if (v === 'free') return 0;
+        if (v === 'orig') return state.w / state.h;
+        const m = /^(\d+):(\d+)/.exec(v);
+        return m ? Number(m[1]) / Number(m[2]) : 0;
+      }
+      function outputType() {
+        const t = fmtSel.value;
+        if (t !== 'same') return t;
+        const f = state.file && state.file.type;
+        if (f === 'image/jpeg' || f === 'image/png' || (f === 'image/webp' && support.encode['image/webp'])) return f;
+        return 'image/png';
+      }
+
+      async function load(file) {
+        hideErr();
+        if (file.size > MAX_FILE_BYTES) return showErr('That file is ' + fmtBytes(file.size) + '. This tool holds the whole image in memory, so the limit is 100 MB.');
+        setStatus('Reading ' + (file.name || 'image') + '…');
+        let src;
+        try { src = await decodeImage(file); } catch (e) { setStatus(''); return showErr(decodeFailureMessage(file)); }
+        const { w, h } = imageSize(src);
+        if (!w || !h) { releaseImage(src); setStatus(''); return showErr(decodeFailureMessage(file)); }
+        if (w * h > MAX_PIXELS) { releaseImage(src); setStatus(''); return showErr('This image is ' + fmtDims(w, h) + ', more than a browser canvas can hold. Try a smaller image.'); }
+        releaseImage(state.src);
+        Object.assign(state, { src, file, w, h, alpha: file.type !== 'image/jpeg' && hasTransparency(src, w, h) });
+        results.classList.add('visible');
+        setStatus('');
+        layout();
+        resetBox();
+        cropBtn.disabled = false;
+      }
+
+      // Draws the on-screen copy at a size that fits the card (never enlarged).
+      function layout() {
+        const avail = Math.max(120, wrap.parentElement.clientWidth - 2);
+        const maxH = Math.max(240, Math.round(window.innerHeight * 0.7));
+        const s = Math.min(1, avail / state.w, maxH / state.h);
+        state.scale = s;
+        canvas.width = Math.max(1, Math.round(state.w * s));
+        canvas.height = Math.max(1, Math.round(state.h * s));
+        const x = canvas.getContext('2d');
+        drawScaled(x, state.src, 0, 0, state.w, state.h, canvas.width, canvas.height);
+        render();
+      }
+
+      // Largest box of the chosen ratio covering 80% of the image, centred.
+      function resetBox() {
+        const r = ratio(), W = state.w, H = state.h;
+        let w = W * 0.8, h = H * 0.8;
+        if (r) { if (w / h > r) w = h * r; else h = w / r; }
+        state.sel = { x: (W - w) / 2, y: (H - h) / 2, w, h };
+        render();
+      }
+
+      function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+      // Resizes from a handle, keeping the opposite edge (or the centre line for edge handles) fixed.
+      function resizeFrom(pos, start, dx, dy) {
+        const W = state.w, H = state.h, r = ratio();
+        const n = pos.includes('n'), s = pos.includes('s'), e = pos.includes('e'), w = pos.includes('w');
+        let x0 = start.x, y0 = start.y, x1 = start.x + start.w, y1 = start.y + start.h;
+        if (w) x0 = clamp(x0 + dx, 0, x1 - MIN);
+        if (e) x1 = clamp(x1 + dx, x0 + MIN, W);
+        if (n) y0 = clamp(y0 + dy, 0, y1 - MIN);
+        if (s) y1 = clamp(y1 + dy, y0 + MIN, H);
+        if (!r) return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+        const horiz = e || w, vert = n || s;
+        const ax = w ? start.x + start.w : start.x, ay = n ? start.y + start.h : start.y;
+        const cx = start.x + start.w / 2, cy = start.y + start.h / 2;
+        const maxW = horiz ? (w ? ax : W - ax) : 2 * Math.min(cx, W - cx);
+        const maxH = vert ? (n ? ay : H - ay) : 2 * Math.min(cy, H - cy);
+        // Corners follow whichever axis the pointer has moved further (relative to the box size).
+        const ww = x1 - x0, hh = y1 - y0;
+        let width = horiz && !vert ? ww : vert && !horiz ? hh * r
+          : (Math.abs(ww - start.w) / start.w >= Math.abs(hh - start.h) / start.h ? ww : hh * r);
+        width = Math.max(Math.min(width, maxW, maxH * r), Math.min(MIN * Math.max(1, r), maxW, maxH * r));
+        const height = width / r;
+        return {
+          x: horiz ? (w ? ax - width : ax) : cx - width / 2,
+          y: vert ? (n ? ay - height : ay) : cy - height / 2,
+          w: width, h: height
+        };
+      }
+
+      function onDown(e) {
+        if (!state.src || e.button > 0) return;
+        const handle = e.target.closest('.crop-handle');
+        drag = { pos: handle ? handle.dataset.pos : 'move', x: e.clientX, y: e.clientY, start: Object.assign({}, state.sel), id: e.pointerId };
+        try { selEl.setPointerCapture(e.pointerId); } catch (x) { /* pointer already gone */ }
+        e.preventDefault();
+      }
+      function onMove(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = (e.clientX - drag.x) / state.scale, dy = (e.clientY - drag.y) / state.scale;
+        const st = drag.start;
+        if (drag.pos === 'move') {
+          state.sel = { x: clamp(st.x + dx, 0, state.w - st.w), y: clamp(st.y + dy, 0, state.h - st.h), w: st.w, h: st.h };
+        } else {
+          state.sel = resizeFrom(drag.pos, st, dx, dy);
+        }
+        if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; render(); });
+      }
+      function onUp(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        drag = null;
+        render();
+      }
+      selEl.addEventListener('pointerdown', onDown);
+      selEl.addEventListener('pointermove', onMove);
+      selEl.addEventListener('pointerup', onUp);
+      selEl.addEventListener('pointercancel', onUp);
+
+      selEl.addEventListener('keydown', e => {
+        const k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+        if (!k || !state.src) return;
+        e.preventDefault();
+        const step = Math.max(1, Math.round((e.altKey ? 1 : 10) / state.scale));
+        const st = state.sel;
+        if (e.shiftKey) state.sel = resizeFrom('se', st, k[0] * step, k[1] * step);
+        else state.sel = { x: clamp(st.x + k[0] * step, 0, state.w - st.w), y: clamp(st.y + k[1] * step, 0, state.h - st.h), w: st.w, h: st.h };
+        render();
+      });
+
+      // Typed values, in original pixels.
+      Object.keys(fields).forEach(key => fields[key].addEventListener('change', () => {
+        if (!state.src) return;
+        const v = {};
+        for (const k of Object.keys(fields)) v[k] = Number(fields[k].value);
+        const ferr = $('fields-err');
+        if (Object.values(v).some(n => !isFinite(n)) || v.w < 1 || v.h < 1 || v.x < 0 || v.y < 0) {
+          ferr.textContent = 'Use whole numbers: left and top from 0, width and height from 1.';
+          ferr.classList.add('visible');
+          return;
+        }
+        ferr.classList.remove('visible');
+        const r = ratio();
+        if (r && (key === 'w' || key === 'h')) { if (key === 'w') v.h = v.w / r; else v.w = v.h * r; }
+        let w = clamp(v.w, 1, state.w), h = clamp(v.h, 1, state.h);
+        if (r) { if (w / h > r) w = h * r; else h = w / r; }
+        state.sel = { x: clamp(v.x, 0, state.w - w), y: clamp(v.y, 0, state.h - h), w, h };
+        render();
+      }));
+
+      // The rectangle that gets exported, in whole pixels.
+      function cropRect() {
+        const s = state.sel;
+        const x = clamp(Math.round(s.x), 0, state.w - 1), y = clamp(Math.round(s.y), 0, state.h - 1);
+        return { x, y, w: clamp(Math.round(s.w), 1, state.w - x), h: clamp(Math.round(s.h), 1, state.h - y) };
+      }
+
+      function render() {
+        if (!state.src) return;
+        const s = state.scale, sel = state.sel;
+        selEl.style.left = (sel.x * s) + 'px';
+        selEl.style.top = (sel.y * s) + 'px';
+        selEl.style.width = (sel.w * s) + 'px';
+        selEl.style.height = (sel.h * s) + 'px';
+        const r = cropRect();
+        if (document.activeElement !== fields.x) fields.x.value = r.x;
+        if (document.activeElement !== fields.y) fields.y.value = r.y;
+        if (document.activeElement !== fields.w) fields.w.value = r.w;
+        if (document.activeElement !== fields.h) fields.h.value = r.h;
+        fields.x.max = state.w - 1; fields.y.max = state.h - 1; fields.w.max = state.w; fields.h.max = state.h;
+        if (!drag) drawCropPreview(r);
+        updateMeta();
+      }
+
+      function drawCropPreview(r) {
+        const s = Math.min(1, 160 / Math.max(r.w, r.h));
+        preview.width = Math.max(1, Math.round(r.w * s));
+        preview.height = Math.max(1, Math.round(r.h * s));
+        const x = preview.getContext('2d');
+        x.clearRect(0, 0, preview.width, preview.height);
+        drawScaled(x, state.src, r.x, r.y, r.w, r.h, preview.width, preview.height);
+      }
+
+      function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+      function updateMeta() {
+        const type = outputType();
+        $('bg-group').classList.toggle('hidden', !(state.alpha && type === 'image/jpeg'));
+        if (!state.src) return;
+        const r = cropRect(), g = gcd(r.w, r.h);
+        const simple = r.w / g <= 50 && r.h / g <= 50 ? ' (' + (r.w / g) + ':' + (r.h / g) + ')' : '';
+        $('crop-meta').innerHTML =
+          row('Original', typeLabel(state.file) + ' &middot; ' + fmtDims(state.w, state.h)) +
+          row('Crop', fmtDims(r.w, r.h) + simple, 'teal') +
+          row('Position', 'left ' + fmtInt(r.x) + ', top ' + fmtInt(r.y)) +
+          row('Saves as', MIME_LABEL[type]);
+      }
+
+      async function doCrop() {
+        if (!state.src) return showErr('Open an image first.');
+        const r = cropRect(), type = outputType();
+        hideErr();
+        setStatus('Cropping ' + fmtDims(r.w, r.h) + '…');
+        cropBtn.disabled = true;
+        try {
+          const blob = await renderToBlob(state.src, { sx: r.x, sy: r.y, sw: r.w, sh: r.h, w: r.w, h: r.h, type, quality: 0.92, background: $('bg').value });
+          downloadBlob(blob, baseName(state.file.name) + '-crop-' + r.w + 'x' + r.h + '.' + MIME_EXT[blob.type]);
+          setStatus('Saved ' + MIME_LABEL[blob.type] + ', ' + fmtDims(r.w, r.h) + ', ' + fmtBytes(blob.size) + '.');
+        } catch (e) {
+          setStatus('');
+          showErr(e && e.message ? e.message : 'Cropping failed in this browser.');
+        } finally {
+          cropBtn.disabled = false;
+        }
+      }
     })();
   </script>
   <script defer src="../js/ads.js"></script>

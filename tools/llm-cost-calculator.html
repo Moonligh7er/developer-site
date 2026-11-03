@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free LLM Token Counter &amp; API Cost Calculator (32 Models) | Moonlit Social Labs</title>
-  <meta name="description" content="Count tokens and compare monthly API costs across Claude, GPT, Gemini, Grok, and DeepSeek. Live pricing table with source URLs. No signup, 100% client-side.">
+  <title>Free LLM Token Counter &amp; API Cost Calculator (Claude, GPT, Gemini, Grok, DeepSeek) | Moonlit Social Labs</title>
+  <meta name="description" content="Estimate tokens and compare monthly API costs across current Claude, GPT, Gemini, Grok and DeepSeek models, with prompt caching, batch and long-prompt pricing. Dated prices linked to each provider. Runs in your browser.">
   <meta name="keywords" content="LLM token counter, API cost calculator, Claude vs GPT pricing, Gemini cost, OpenAI pricing calculator, LLM pricing comparison, token counter tool">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "LLM Token Counter &amp; API Cost Calculator",
-    "description": "Free tool to count LLM tokens and compare monthly API costs across 32 models (Anthropic, OpenAI, Google, xAI, DeepSeek).",
+    "description": "Estimate LLM tokens and compare monthly API costs across current Anthropic, OpenAI, Google, xAI and DeepSeek models, including caching, batch and long-prompt pricing.",
     "url": "https://moonligh7er.github.io/developer-site/tools/llm-cost-calculator.html",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="LLM Token Counter &amp; API Cost Calculator (32 Models)">
-  <meta property="og:description" content="Count tokens and compare monthly API costs across Claude, GPT, Gemini, Grok, and DeepSeek. Live pricing table with source URLs.">
+  <meta property="og:title" content="LLM Token Counter &amp; API Cost Calculator">
+  <meta property="og:description" content="Estimate tokens and compare monthly API costs across Claude, GPT, Gemini, Grok and DeepSeek, with caching and batch pricing. Dated prices with source links.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/llm-cost-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="LLM Token Counter &amp; API Cost Calculator">
-  <meta name="twitter:description" content="Compare monthly API costs across 32 LLM models. Live pricing table with source URLs.">
+  <meta name="twitter:description" content="Compare monthly LLM API costs with caching, batch and long-prompt pricing. Dated prices with source links.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +58,9 @@
       background: rgba(0,212,170,0.05); border-left: 2px solid var(--teal, #00d4aa);
       padding: 0.6rem 0.9rem; margin: 0 0 1rem;
     }
+    .data-vintage { flex-wrap: wrap; }
     .data-vintage strong { color: var(--teal, #00d4aa); text-transform: uppercase; letter-spacing: 0.15em; }
+    .data-vintage__verify { margin-left: auto; }
     .data-vintage span { color: var(--text-secondary); }
 
     .form-group { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.9rem; }
@@ -111,9 +113,23 @@
       text-align: left; padding: 0.75rem 0.9rem;
       font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--text-dim); border-bottom: 1px solid var(--border);
-      cursor: pointer; user-select: none; white-space: nowrap;
+      user-select: none; white-space: nowrap;
     }
-    .compare-table th:hover { color: var(--teal); }
+    .compare-table th button { font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; min-height: 32px; text-align: inherit; }
+    .compare-table th:hover, .compare-table th button:focus-visible { color: var(--teal); }
+    .compare-table th button:focus-visible, .compare-table-wrap:focus-visible, .form-group input:focus-visible, .form-group textarea:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+    .compare-table .tags { display: block; font-size: 0.62rem; font-weight: 400; color: var(--text-dim); margin-top: 0.2rem; letter-spacing: 0.04em; }
+    .compare-table tr.nofit td { opacity: 0.55; }
+    .compare-table .nofit-msg { color: var(--amber); font-size: 0.7rem; }
+    .compare-table .ref-notes { font-size: 0.72rem; color: var(--text-dim); min-width: 220px; }
+    .table-msg { text-align: center; padding: 2rem !important; color: var(--text-secondary); }
+    .field-err { display: none; color: var(--rose); font-family: var(--font-mono); font-size: 0.7rem; }
+    .field-err.visible { display: block; }
+    .form-group .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; cursor: pointer; text-transform: none; letter-spacing: 0.02em; font-size: 0.75rem; }
+    .form-group .check-row input { width: 18px; height: 18px; padding: 0; accent-color: var(--teal); flex: none; }
+    .calc-summary { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; margin: 1rem 0 0; }
+    .source-link { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; color: var(--teal); text-decoration: none; margin: 0 1.25rem 0.4rem 0; min-height: 24px; }
+    .source-link:hover { text-decoration: underline; }
     .compare-table th.sort-asc::after { content: ' \25B2'; color: var(--teal); }
     .compare-table th.sort-desc::after { content: ' \25BC'; color: var(--teal); }
     .compare-table th.num, .compare-table td.num { text-align: right; }
@@ -193,16 +209,16 @@
 
       <div class="calc-card">
         <h1>LLM Token Counter &amp; API Cost Calculator</h1>
-        <p class="calc-intro">Estimate token counts and compare monthly API costs across 32 models from Anthropic, OpenAI, Google, xAI, and DeepSeek. Live prices sourced directly from each provider &mdash; not from training data.</p>
+        <p class="calc-intro">Estimate token counts and compare monthly API costs across current models from Anthropic, OpenAI, Google, xAI and DeepSeek, including prompt caching, batch discounts and long-prompt surcharges. The prices are copied by hand from each provider&rsquo;s pricing page and dated below &mdash; not recalled by an AI model.</p>
 
         <div class="data-vintage">
-          <strong>Prices as of</strong><span id="vintage-date">loading...</span>
-          <strong style="margin-left:auto">Verify with provider before committing</strong>
+          <strong>Prices as of</strong><span id="vintage-date">loading&hellip;</span>
+          <strong class="data-vintage__verify">Verify with the provider before committing</strong>
         </div>
 
         <div class="method-note">
           <strong>Honest token counting</strong><br>
-          Character and word counts are exact. Token counts are <strong>estimates</strong> because tokenizers differ per model family and only OpenAI publishes theirs (<code>tiktoken</code>). This tool uses per-family chars-per-token heuristics tuned to published averages. For byte-exact OpenAI counts use <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener" style="color:var(--teal);">OpenAI&rsquo;s official tokenizer</a>.
+          Character, word, line and byte counts are exact. Token counts are <strong>estimates</strong>: every model family splits text differently. OpenAI publishes its tokenizer (<code>tiktoken</code>); Anthropic and Google offer token-counting API endpoints, which need an API key, so this page uses per-family characters-per-token ratios instead. Expect English prose to land within roughly &plusmn;15%, and code or non-English text to vary more. For exact OpenAI counts use <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener" style="color:var(--teal);">OpenAI&rsquo;s tokenizer</a>.
         </div>
 
         <!-- ===================== TOKEN COUNTER ===================== -->
@@ -210,61 +226,75 @@
         <div class="form-group">
           <label for="token-input">Paste text to analyze</label>
           <textarea id="token-input" placeholder="Paste a prompt, document, code snippet, or any text..."></textarea>
+          <span class="hint">Stays in this page; nothing is sent anywhere.</span>
         </div>
 
-        <div class="token-summary">
+        <div class="token-summary" aria-live="polite">
           <div class="token-stat"><span class="num" id="stat-chars">0</span><span class="lbl">Characters</span></div>
           <div class="token-stat"><span class="num" id="stat-words">0</span><span class="lbl">Words</span></div>
           <div class="token-stat"><span class="num" id="stat-lines">0</span><span class="lbl">Lines</span></div>
           <div class="token-stat"><span class="num" id="stat-bytes">0</span><span class="lbl">UTF-8 Bytes</span></div>
         </div>
 
-        <div class="token-family">
-          <div class="token-family__row"><div class="fam">OpenAI (cl100k / o200k)</div><div class="val" id="tok-openai">0</div></div>
+        <div class="token-family" aria-live="polite">
+          <div class="token-family__row"><div class="fam">OpenAI (o200k)</div><div class="val" id="tok-openai">0</div></div>
           <div class="token-family__row"><div class="fam">Anthropic Claude</div><div class="val" id="tok-anthropic">0</div></div>
           <div class="token-family__row"><div class="fam">Google Gemini</div><div class="val" id="tok-google">0</div></div>
           <div class="token-family__row"><div class="fam">xAI Grok</div><div class="val" id="tok-xai">0</div></div>
           <div class="token-family__row"><div class="fam">DeepSeek</div><div class="val" id="tok-deepseek">0</div></div>
         </div>
+        <p class="hint" style="margin-top:0.6rem;">&asymp; = estimated tokens. The cost table below uses each model&rsquo;s own family estimate for input when you paste text here.</p>
       </div>
 
       <!-- ===================== COST CALCULATOR ===================== -->
       <div class="calc-card">
         <h2>2. Compare monthly costs</h2>
-        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">Enter your expected per-request tokens and request volume. Uses the token counts above as defaults, or override manually.</p>
+        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">Enter tokens per request and requests per month. If you paste text above, input tokens follow each model family&rsquo;s estimate until you type your own number here.</p>
 
         <div class="calc-inputs">
           <div class="form-group">
             <label for="in-tokens">Input tokens / request</label>
-            <input type="number" id="in-tokens" value="1000" min="0" step="100">
-            <span class="hint">use "Count tokens" above to autofill</span>
+            <input type="number" id="in-tokens" value="1000" min="0" step="100" inputmode="numeric" aria-describedby="in-tokens-err in-tokens-hint">
+            <span class="hint" id="in-tokens-hint">prompt + context you send</span>
+            <span class="field-err" id="in-tokens-err"></span>
           </div>
           <div class="form-group">
             <label for="out-tokens">Output tokens / request</label>
-            <input type="number" id="out-tokens" value="500" min="0" step="100">
+            <input type="number" id="out-tokens" value="500" min="0" step="100" inputmode="numeric" aria-describedby="out-tokens-err out-tokens-hint">
+            <span class="hint" id="out-tokens-hint">reply, incl. any reasoning tokens</span>
+            <span class="field-err" id="out-tokens-err"></span>
           </div>
           <div class="form-group">
             <label for="requests">Requests / month</label>
-            <input type="number" id="requests" value="10000" min="0" step="1000">
+            <input type="number" id="requests" value="10000" min="0" step="1000" inputmode="numeric" aria-describedby="requests-err">
+            <span class="field-err" id="requests-err"></span>
           </div>
           <div class="form-group">
-            <label for="cache-pct">Cached input %</label>
-            <input type="number" id="cache-pct" value="0" min="0" max="100" step="5">
-            <span class="hint">e.g. 80% if reusing system prompts</span>
+            <label for="cache-pct">Input read from cache (%)</label>
+            <input type="number" id="cache-pct" value="0" min="0" max="100" step="5" inputmode="numeric" aria-describedby="cache-pct-err cache-pct-hint">
+            <span class="hint" id="cache-pct-hint">e.g. 80 if a long system prompt repeats</span>
+            <span class="field-err" id="cache-pct-err"></span>
+          </div>
+          <div class="form-group">
+            <span class="hint" style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-secondary);">Batch API</span>
+            <label class="check-row" for="batch"><input type="checkbox" id="batch"> Use batch prices (async, usually 50% off)</label>
           </div>
         </div>
 
-        <div class="compare-table-wrap">
+        <p class="calc-summary" id="calc-summary" aria-live="polite"></p>
+
+        <div class="compare-table-wrap" tabindex="0" role="region" aria-label="Monthly cost by model (scrolls sideways on small screens)">
           <table class="compare-table" id="compare-table">
+            <caption class="visually-hidden">Estimated monthly cost per model for the inputs above</caption>
             <thead>
               <tr>
-                <th data-sort="provider">Provider</th>
-                <th data-sort="name">Model</th>
-                <th data-sort="input" class="num">Input $/MTok</th>
-                <th data-sort="output" class="num">Output $/MTok</th>
-                <th data-sort="cached_input" class="num">Cached $/MTok</th>
-                <th data-sort="context" class="num">Context</th>
-                <th data-sort="monthly" class="num sort-asc">Monthly $</th>
+                <th data-sort="provider" scope="col"><button type="button">Provider</button></th>
+                <th data-sort="name" scope="col"><button type="button">Model</button></th>
+                <th data-sort="input" class="num" scope="col"><button type="button">Input $/MTok</button></th>
+                <th data-sort="output" class="num" scope="col"><button type="button">Output $/MTok</button></th>
+                <th data-sort="cached_input" class="num" scope="col"><button type="button">Cache read $/MTok</button></th>
+                <th data-sort="context" class="num" scope="col"><button type="button">Context</button></th>
+                <th data-sort="monthly" class="num" scope="col" aria-sort="ascending"><button type="button">Monthly $</button></th>
               </tr>
             </thead>
             <tbody id="compare-body"></tbody>
@@ -272,7 +302,7 @@
         </div>
 
         <p class="disclaimer">
-          <strong>Verify before committing.</strong> Pricing changes frequently and varies by tier, region, and features (batch discounts, priority tiers, volume commits). Some providers list off-peak or promotional rates &mdash; peak/standard-tier rates may be higher. Cached-input pricing applies only to reused prefixes; write-time cache costs are omitted for readability. This tool is a planning aid, not a bill.
+          <strong>Planning estimate, not a bill.</strong> Rates shown are the ones applied to your inputs (batch, long-prompt and scheduled price changes included). Cached tokens are counted at the cache-read price; the one-off premium for writing the cache (see the reference table) isn&rsquo;t included, so heavy caching with frequent rewrites costs a little more. Not included: taxes, regional or data-residency surcharges (often +10%), fast/priority tiers, tool fees (web search etc.), image/audio tokens and volume discounts. Prices change often &mdash; check the provider&rsquo;s page before you commit.
         </p>
       </div>
 
@@ -281,50 +311,57 @@
       <!-- ===================== REFERENCE TABLE ===================== -->
       <div class="calc-card">
         <h2>3. Model reference</h2>
-        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">All 32 models tracked. Sort by any column. Click any provider name for its official pricing page.</p>
+        <p class="calc-intro" style="font-size:0.88rem;margin-bottom:0.75rem;">Every model tracked, at standard rates in USD per million tokens. Sort by any column; each provider link opens its official pricing page.</p>
         <div id="sources-list" style="margin-bottom:1rem;"></div>
-        <div class="compare-table-wrap">
+        <div class="compare-table-wrap" tabindex="0" role="region" aria-label="Model reference table (scrolls sideways on small screens)">
           <table class="compare-table" id="ref-table">
+            <caption class="visually-hidden">Published prices per model</caption>
             <thead>
               <tr>
-                <th data-sort="provider" class="sort-asc">Provider</th>
-                <th data-sort="family">Family</th>
-                <th data-sort="name">Model</th>
-                <th data-sort="input" class="num">Input</th>
-                <th data-sort="output" class="num">Output</th>
-                <th data-sort="cached_input" class="num">Cached</th>
-                <th data-sort="context" class="num">Context</th>
-                <th>Notes</th>
+                <th data-sort="provider" scope="col" aria-sort="ascending"><button type="button">Provider</button></th>
+                <th data-sort="name" scope="col"><button type="button">Model</button></th>
+                <th data-sort="input" class="num" scope="col"><button type="button">Input</button></th>
+                <th data-sort="output" class="num" scope="col"><button type="button">Output</button></th>
+                <th data-sort="cached_input" class="num" scope="col"><button type="button">Cache read</button></th>
+                <th data-sort="cache_write" class="num" scope="col"><button type="button">Cache write</button></th>
+                <th data-sort="batch_input" class="num" scope="col"><button type="button">Batch in / out</button></th>
+                <th data-sort="context" class="num" scope="col"><button type="button">Context</button></th>
+                <th scope="col">Notes</th>
               </tr>
             </thead>
             <tbody id="ref-body"></tbody>
           </table>
         </div>
+        <p class="hint" style="margin-top:0.75rem;">Cache write: Anthropic 5-minute / 1-hour writes, OpenAI 30-minute / 12-hour writes. Google bills cache storage per hour instead (see its page). A dash means the provider doesn&rsquo;t publish that rate.</p>
       </div>
     </div>
 
     <!-- ===================== SEO CONTENT ===================== -->
     <section class="content-section">
       <h2>How to estimate LLM API costs before you commit</h2>
-      <p>Model pricing shifts monthly, tokenizers differ per family, and every provider prices things a little differently &mdash; per-million tokens vs. per-thousand, cached vs. fresh input, batch vs. real-time. This tool gives you an apples-to-apples monthly-cost view across the current lineup without you memorizing anyone&rsquo;s pricing page.</p>
+      <p>Model pricing shifts monthly, tokenizers differ per family, and every provider prices things a little differently &mdash; cached vs. fresh input, batch vs. real-time, short vs. very long prompts. This tool puts the current lineup on one monthly-cost view so you can compare like with like.</p>
+
+      <h3>How the monthly figure is worked out</h3>
+      <p>For each model: <em>(fresh input tokens &times; input rate + cached input tokens &times; cache-read rate + output tokens &times; output rate) &divide; 1,000,000 &times; requests per month</em>. Fresh input is your input tokens minus the cached share. If a request&rsquo;s prompt is over a model&rsquo;s long-prompt threshold (Anthropic Haiku 5.5: 100K; Google Gemini 3.1 Pro: 200K; xAI: 200K; OpenAI&rsquo;s larger models: 272K), the higher rates apply to the whole request, as the providers bill it. Requests that don&rsquo;t fit a model&rsquo;s context window are flagged.</p>
 
       <h3>Why token counts are estimates (and why that&rsquo;s honest)</h3>
-      <p>Only OpenAI publishes their tokenizer (<code>tiktoken</code>). Anthropic, Google, and xAI keep theirs private. Every &ldquo;Claude token counter&rdquo; tool you see online is estimating, whether they admit it or not. Common heuristics: chars-per-token ~4 for English on GPT models, ~3.5 for Claude, ~4 for Gemini. Real content varies with language, code density, and punctuation. Treat estimates as within &plusmn;15%.</p>
+      <p>OpenAI publishes its tokenizer (<code>tiktoken</code>); Anthropic and Google expose counting endpoints that need an API key; DeepSeek publishes a rough ratio. This page uses characters-per-token ratios: about 4 for OpenAI and Google on English text, about 3.3 for DeepSeek (its docs say 1 English character &asymp; 0.3 tokens), and about 2.7 for current Claude models (roughly 3.5 on older ones, and Anthropic says its newer tokenizer produces about 30% more tokens for the same text). Real content varies with language, code density and punctuation.</p>
 
       <h3>What matters more than exact token counts</h3>
       <ul>
-        <li><strong>Input/output ratio.</strong> Chat apps skew toward long inputs, short outputs. Code assistants flip that. Output tokens are usually 2&ndash;10x the price of input.</li>
-        <li><strong>Cached input.</strong> Reusing system prompts across requests can drop input costs 80%+ on models that support it. Anthropic, OpenAI, and Google all publish cache rates; xAI and DeepSeek partial support.</li>
-        <li><strong>Context window matters for the workload, not the pricing tier.</strong> Bigger context isn&rsquo;t inherently more expensive per token, but some providers charge more for prompts above certain thresholds (Google: &gt;200k, xAI: &gt;200k). Watch the notes column.</li>
-        <li><strong>Batch discounts.</strong> Not shown here because they aren&rsquo;t consistently published; typically 50% off for offline batch workloads (OpenAI, Anthropic). Ask before committing to a big batch job.</li>
+        <li><strong>Input/output ratio.</strong> Chat apps skew toward long inputs and short outputs; code and reasoning models flip that. Output tokens usually cost 2&ndash;10&times; input, and reasoning models bill their hidden thinking as output.</li>
+        <li><strong>Cached input.</strong> Reusing a long system prompt or document can cut input costs sharply: cache reads cost 2.5&ndash;50% of the normal input price depending on the provider and model. All five providers here publish cache-read prices.</li>
+        <li><strong>Long prompts.</strong> Bigger context isn&rsquo;t automatically more expensive per token, but several providers charge more once a prompt passes a threshold (see above). Watch the notes column.</li>
+        <li><strong>Batch discounts.</strong> Anthropic, OpenAI and Google publish batch prices, usually 50% off for jobs that can wait up to a day. Tick &ldquo;Use batch prices&rdquo; to compare; models without published batch prices stay at standard rates and are marked.</li>
+        <li><strong>Off-peak and introductory prices.</strong> DeepSeek halves its prices outside weekday business hours in China (listed here at the higher, peak rate). Some Google and OpenAI prices are introductory with an announced end date; the table switches to the announced price on that date.</li>
       </ul>
 
       <h3>Data source and freshness</h3>
-      <p>Prices are pulled from each provider&rsquo;s own pricing page and stored in <code>llm-pricing.json</code> with per-entry source URLs. Retrieval date is shown prominently at the top of the tool. We aim to refresh quarterly &mdash; if you spot a stale figure, the source URL is one click away. Never trust an LLM-generated pricing summary (including one from us) without verifying against the provider&rsquo;s page.</p>
+      <p>Prices are copied from each provider&rsquo;s own pricing page and stored in <code>llm-pricing.json</code> with the provider&rsquo;s pricing URL and the date they were checked (shown at the top of the tool). Retired and no-longer-listed models are removed at each refresh; we aim to refresh quarterly. If you spot a stale figure, the source link is one click away. Never trust an AI-written pricing summary (including one from us) without checking the provider&rsquo;s page.</p>
 
       <h3>Related tools</h3>
       <ul>
-        <li><a href="api-directory.html">API Directory (500+ public APIs)</a> &mdash; browse other developer APIs beyond LLMs.</li>
+        <li><a href="api-directory.html">API Directory</a> &mdash; a curated list of public APIs for AI, voice, data, government records and more.</li>
         <li><a href="dev-tools.html">Developer Tools Suite</a> &mdash; JSON, JWT, regex, and more.</li>
         <li><a href="freelance-rate-calculator.html">Freelance Rate Calculator</a> &mdash; work out what your billable rate needs to be to make LLM API spend sustainable.</li>
       </ul>
@@ -366,222 +403,248 @@
   (function() {
     'use strict';
 
-    // ------- Per-family chars-per-token heuristics (English text) -------
-    // Sources: OpenAI cookbook (~4), Anthropic docs (~3.5 with tokenizer variance),
-    // Google Vertex docs (~4 for text), general BPE observations.
-    const CHARS_PER_TOKEN = {
-      openai:    4.0,
-      anthropic: 3.5,
-      google:    4.0,
-      xai:       4.0,
-      deepseek:  3.6
-    };
+    // ------- Per-family characters-per-token ratios (English text) -------
+    // OpenAI cookbook: ~4 chars/token. Google Gemini docs: ~4. DeepSeek docs: 1 English char ~ 0.3 token (3.3 chars).
+    // Anthropic: ~3.5 chars/token on older Claude models; its pricing page (checked 2026-11-03) says Claude 4.7+
+    // use a tokenizer producing ~30% more tokens for the same text, so 3.5 / 1.3 ~ 2.7. xAI publishes no ratio; 4 assumed.
+    const CHARS_PER_TOKEN = { openai: 4.0, anthropic: 2.7, google: 4.0, xai: 4.0, deepseek: 3.3 };
+    const TOKENS_PER_WORD = { openai: 1.3, anthropic: 1.9, google: 1.3, xai: 1.3, deepseek: 1.4 };
+    const FAMILY = { OpenAI: 'openai', Anthropic: 'anthropic', Google: 'google', xAI: 'xai', DeepSeek: 'deepseek' };
 
     function estimateTokens(text, family) {
       if (!text) return 0;
-      const cpt = CHARS_PER_TOKEN[family] || 4.0;
-      // Blend chars/cpt with words*1.3 to reduce error on very-short strings
-      const chars = text.length;
+      // Words give a floor for very short strings, where the character ratio undercounts.
       const words = (text.trim().match(/\S+/g) || []).length;
-      const byChars = chars / cpt;
-      const byWords = words * (family === 'anthropic' ? 1.45 : 1.3);
-      return Math.max(byChars, byWords);
+      return Math.max(text.length / CHARS_PER_TOKEN[family], words * TOKENS_PER_WORD[family]);
     }
 
-    function fmt(n, dp) {
-      if (!isFinite(n)) return '—';
-      dp = (dp === undefined) ? 0 : dp;
-      return n.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp });
-    }
+    const $ = id => document.getElementById(id);
+    const intFmt = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+    function fmt(n) { return Number.isFinite(n) ? intFmt.format(n) : '—'; }
     function fmtMoney(n) {
-      if (!isFinite(n)) return '—';
-      if (n < 0.01) return '$' + n.toFixed(4);
-      if (n < 10) return '$' + n.toFixed(2);
-      if (n < 1000) return '$' + n.toFixed(2);
-      return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+      if (!Number.isFinite(n)) return '—';
+      const digits = n === 0 ? 2 : n < 0.01 ? 4 : n < 1000 ? 2 : 0;
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: Math.min(2, digits), maximumFractionDigits: digits }).format(n);
+    }
+    // Per-million rates: at least 2 decimals, up to 4, no trailing noise (0.075 stays 0.075, not 0.08).
+    function fmtRate(n) {
+      if (n === null || n === undefined || !Number.isFinite(n)) return '—';
+      return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
     }
     function fmtCtx(n) {
       if (!n) return '—';
-      if (n >= 1000000) return (n/1000000) + 'M';
-      if (n >= 1000) return (n/1000) + 'k';
+      if (n >= 1000000) return (Math.round(n / 10000) / 100) + 'M';
+      if (n >= 1000) return Math.round(n / 1000) + 'K';
       return String(n);
     }
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
     let PRICING = null;
-    let currentSort = { table: 'compare', key: 'monthly', dir: 'asc' };
-    let refSort = { key: 'provider', dir: 'asc' };
+    const compareSort = { key: 'monthly', dir: 'asc' };
+    const refSort = { key: 'provider', dir: 'asc' };
+    const TODAY = new Date().toISOString().slice(0, 10);
 
     // ------- Token counter -------
-    const tokenInput = document.getElementById('token-input');
+    const tokenInput = $('token-input');
+    let familyTokens = null; // per-family estimates while pasted text drives the input field
     function updateTokenCounts() {
       const text = tokenInput.value;
-      const chars = text.length;
-      const words = (text.trim().match(/\S+/g) || []).length;
-      const lines = text ? text.split('\n').length : 0;
-      const bytes = new Blob([text]).size;
-      document.getElementById('stat-chars').textContent = fmt(chars);
-      document.getElementById('stat-words').textContent = fmt(words);
-      document.getElementById('stat-lines').textContent = fmt(lines);
-      document.getElementById('stat-bytes').textContent = fmt(bytes);
-      const openai = Math.round(estimateTokens(text, 'openai'));
-      document.getElementById('tok-openai').textContent = fmt(openai);
-      document.getElementById('tok-anthropic').textContent = fmt(Math.round(estimateTokens(text, 'anthropic')));
-      document.getElementById('tok-google').textContent = fmt(Math.round(estimateTokens(text, 'google')));
-      document.getElementById('tok-xai').textContent = fmt(Math.round(estimateTokens(text, 'xai')));
-      document.getElementById('tok-deepseek').textContent = fmt(Math.round(estimateTokens(text, 'deepseek')));
-      // Autofill input-tokens field if user hasn't manually touched it recently
-      const inField = document.getElementById('in-tokens');
-      if (!inField.dataset.userSet && text.trim().length > 0) {
-        inField.value = openai;
-        renderCompareTable();
+      $('stat-chars').textContent = fmt([...text].length);
+      $('stat-words').textContent = fmt((text.trim().match(/\S+/g) || []).length);
+      $('stat-lines').textContent = fmt(text ? text.split('\n').length : 0);
+      $('stat-bytes').textContent = fmt(new TextEncoder().encode(text).length);
+      const est = {};
+      for (const f of Object.keys(CHARS_PER_TOKEN)) {
+        est[f] = Math.round(estimateTokens(text, f));
+        $('tok-' + f).textContent = fmt(est[f]);
       }
+      const inField = $('in-tokens');
+      if (!inField.dataset.userSet && text.trim().length > 0) {
+        familyTokens = est;
+        inField.value = est.openai;
+        $('in-tokens-hint').textContent = 'from the text above, per model family (type to override)';
+      } else if (!text.trim()) {
+        familyTokens = null;
+        $('in-tokens-hint').textContent = 'prompt + context you send';
+      }
+      renderCompareTable();
     }
     tokenInput.addEventListener('input', updateTokenCounts);
-    document.getElementById('in-tokens').addEventListener('input', function() { this.dataset.userSet = '1'; renderCompareTable(); });
-    document.getElementById('out-tokens').addEventListener('input', renderCompareTable);
-    document.getElementById('requests').addEventListener('input', renderCompareTable);
-    document.getElementById('cache-pct').addEventListener('input', renderCompareTable);
+    $('in-tokens').addEventListener('input', function() {
+      this.dataset.userSet = '1';
+      familyTokens = null;
+      $('in-tokens-hint').textContent = 'prompt + context you send';
+      renderCompareTable();
+    });
+    ['out-tokens', 'requests', 'cache-pct'].forEach(id => $(id).addEventListener('input', renderCompareTable));
+    $('batch').addEventListener('change', renderCompareTable);
 
-    // ------- Cost calculation -------
-    function monthlyCost(m) {
-      const inTok  = parseFloat(document.getElementById('in-tokens').value)  || 0;
-      const outTok = parseFloat(document.getElementById('out-tokens').value) || 0;
-      const req    = parseFloat(document.getElementById('requests').value)   || 0;
-      const cachePct = Math.min(100, Math.max(0, parseFloat(document.getElementById('cache-pct').value) || 0)) / 100;
+    // ------- Inputs (inline validation; nothing invalid reaches the maths) -------
+    function readField(id, max, label) {
+      const el = $(id), err = $(id + '-err'), raw = el.value.trim(), v = Number(raw);
+      let msg = '';
+      if (raw === '') msg = 'Enter ' + label + '.';
+      else if (!Number.isFinite(v) || v < 0) msg = 'Use a number of 0 or more.';
+      else if (v > max) msg = 'Use at most ' + fmt(max) + '.';
+      err.textContent = msg;
+      err.classList.toggle('visible', !!msg);
+      el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      return msg ? null : v;
+    }
+    function readInputs() {
+      const inTok = readField('in-tokens', 10000000, 'input tokens');
+      const outTok = readField('out-tokens', 10000000, 'output tokens');
+      const req = readField('requests', 1e12, 'requests per month');
+      const cache = readField('cache-pct', 100, 'a percentage');
+      if (inTok === null || outTok === null || req === null || cache === null) return null;
+      return { inTok, outTok, req, cacheShare: cache / 100, batch: $('batch').checked };
+    }
 
-      const cachedTokens = inTok * cachePct;
-      const freshTokens  = inTok - cachedTokens;
+    // ------- Prices in effect for one model and one request size -------
+    function currentBase(m) {
+      let base = m;
+      for (const c of (m.changes || [])) if (c.from <= TODAY) base = Object.assign({}, base, c);
+      return base;
+    }
+    function effectiveRates(m, inTok, batch) {
+      const base = currentBase(m);
+      const long = m.long_context && inTok > m.long_context.over;
+      const src = long ? Object.assign({}, base, m.long_context) : base;
+      const canBatch = batch && src.batch_input !== undefined && src.batch_input !== null;
+      let input = src.input, output = src.output, cached = src.cached_input;
+      if (canBatch) {
+        input = src.batch_input;
+        output = src.batch_output;
+        cached = src.batch_cached_input === null || src.batch_cached_input === undefined ? src.batch_input : src.batch_cached_input;
+      }
+      if (cached === null || cached === undefined) cached = input; // no caching discount published
+      return { input, output, cached, long, batchApplied: canBatch, batchMissing: batch && !canBatch, changed: base !== m };
+    }
 
-      const cachedRate = (m.cached_input != null) ? m.cached_input : m.input;
-      const totalInputCost = (freshTokens * m.input + cachedTokens * cachedRate) / 1e6;
-      const totalOutputCost = (outTok * m.output) / 1e6;
-      const perRequest = totalInputCost + totalOutputCost;
-      return perRequest * req;
+    function rowTokens(m, inp) {
+      return familyTokens ? familyTokens[FAMILY[m.provider]] : inp.inTok;
+    }
+
+    function monthlyCost(m, inp) {
+      const inTok = rowTokens(m, inp);
+      const r = effectiveRates(m, inTok, inp.batch);
+      const cachedTok = inTok * inp.cacheShare, freshTok = inTok - cachedTok;
+      const perRequest = (freshTok * r.input + cachedTok * r.cached + inp.outTok * r.output) / 1e6;
+      return { monthly: perRequest * inp.req, rates: r, inTok, fits: !m.context || inTok + inp.outTok <= m.context };
     }
 
     // ------- Compare table -------
+    function sortRows(rows, sort, get) {
+      const dir = sort.dir === 'asc' ? 1 : -1;
+      return rows.sort((a, b) => {
+        const av = get(a, sort.key), bv = get(b, sort.key);
+        if (typeof av === 'string') return av.localeCompare(bv) * dir;
+        return ((av === null ? Infinity : av) - (bv === null ? Infinity : bv)) * dir;
+      });
+    }
+
     function renderCompareTable() {
       if (!PRICING) return;
-      const body = document.getElementById('compare-body');
-      const rows = PRICING.models.map(m => ({ m: m, monthly: monthlyCost(m) }));
-
-      const sortKey = currentSort.key;
-      const dir = currentSort.dir === 'asc' ? 1 : -1;
-      rows.sort((a, b) => {
-        let av, bv;
-        if (sortKey === 'monthly') { av = a.monthly; bv = b.monthly; }
-        else if (sortKey === 'context' || sortKey === 'input' || sortKey === 'output' || sortKey === 'cached_input') {
-          av = a.m[sortKey] || 0; bv = b.m[sortKey] || 0;
-        } else { av = (a.m[sortKey] || '').toString().toLowerCase(); bv = (b.m[sortKey] || '').toString().toLowerCase(); }
-        if (av < bv) return -1 * dir;
-        if (av > bv) return  1 * dir;
-        return 0;
-      });
-
-      const minCost = Math.min(...rows.map(r => r.monthly));
-      const maxCost = Math.max(...rows.map(r => r.monthly));
-
+      const body = $('compare-body');
+      const inp = readInputs();
+      if (!inp) {
+        body.innerHTML = '<tr><td colspan="7" class="table-msg">Fix the highlighted field to see costs.</td></tr>';
+        $('calc-summary').textContent = '';
+        return;
+      }
+      const rows = PRICING.models.map(m => Object.assign({ m }, monthlyCost(m, inp)));
+      sortRows(rows, compareSort, (r, k) => k === 'monthly' ? r.monthly : k === 'input' || k === 'output' ? r.rates[k] : k === 'cached_input' ? r.rates.cached : k === 'context' ? (r.m.context || 0) : String(r.m[k] || '').toLowerCase());
+      const fitting = rows.filter(r => r.fits).map(r => r.monthly);
+      const minCost = Math.min(...fitting), maxCost = Math.max(...fitting);
       body.innerHTML = rows.map(r => {
-        const m = r.m;
-        const costClass = (r.monthly === minCost) ? 'cost cheap' : (r.monthly === maxCost) ? 'cost exp' : 'cost';
-        const cachedDisp = (m.cached_input != null) ? '$' + m.cached_input.toFixed(3) : '—';
-        return `<tr>
-          <td class="prov">${escapeHtml(m.provider)}</td>
-          <td class="model-name">${escapeHtml(m.name)}</td>
-          <td class="num">$${m.input.toFixed(2)}</td>
-          <td class="num">$${m.output.toFixed(2)}</td>
-          <td class="num">${cachedDisp}</td>
-          <td class="num ctx">${fmtCtx(m.context)}</td>
-          <td class="num ${costClass}">${fmtMoney(r.monthly)}</td>
-        </tr>`;
+        const m = r.m, tags = [];
+        if (r.rates.long) tags.push('long-prompt rate');
+        if (r.rates.batchApplied) tags.push('batch');
+        if (r.rates.batchMissing) tags.push('no batch price');
+        if (r.rates.changed) tags.push('new price in effect');
+        if (familyTokens) tags.push('≈' + fmt(r.inTok) + ' input tok');
+        const cls = !r.fits ? 'cost' : r.monthly === minCost ? 'cost cheap' : r.monthly === maxCost ? 'cost exp' : 'cost';
+        return '<tr' + (r.fits ? '' : ' class="nofit"') + '>' +
+          '<td class="prov">' + escapeHtml(m.provider) + '</td>' +
+          '<td class="model-name">' + escapeHtml(m.name) + (tags.length ? '<span class="tags">' + tags.map(escapeHtml).join(' · ') + '</span>' : '') + '</td>' +
+          '<td class="num">' + fmtRate(r.rates.input) + '</td>' +
+          '<td class="num">' + fmtRate(r.rates.output) + '</td>' +
+          '<td class="num">' + (m.cached_input === undefined ? '—' : fmtRate(r.rates.cached)) + '</td>' +
+          '<td class="num ctx">' + fmtCtx(m.context) + '</td>' +
+          '<td class="num ' + cls + '">' + (r.fits ? fmtMoney(r.monthly) : '<span class="nofit-msg">exceeds context</span>') + '</td>' +
+          '</tr>';
       }).join('');
-
-      // Update sort indicators
-      document.querySelectorAll('#compare-table th').forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-        if (th.dataset.sort === sortKey) th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
-      });
+      updateSortHeaders('#compare-table', compareSort);
+      const cheapest = rows.filter(r => r.fits).sort((a, b) => a.monthly - b.monthly)[0];
+      const totalIn = familyTokens ? 'about ' + fmt(familyTokens.openai) + ' (OpenAI estimate)' : fmt(inp.inTok);
+      $('calc-summary').textContent = fmt(inp.req) + ' requests/month × ' + totalIn + ' input + ' + fmt(inp.outTok) + ' output tokens' +
+        (inp.cacheShare ? ', ' + Math.round(inp.cacheShare * 100) + '% of input from cache' : '') + (inp.batch ? ', batch prices' : '') +
+        (cheapest ? '. Lowest: ' + cheapest.m.name + ' at ' + fmtMoney(cheapest.monthly) + '/month.' : '.');
     }
 
     // ------- Reference table -------
     function renderRefTable() {
       if (!PRICING) return;
-      const body = document.getElementById('ref-body');
-      const rows = PRICING.models.slice();
-      const sortKey = refSort.key;
-      const dir = refSort.dir === 'asc' ? 1 : -1;
-      rows.sort((a, b) => {
-        let av, bv;
-        if (['input','output','cached_input','context'].includes(sortKey)) {
-          av = a[sortKey] || 0; bv = b[sortKey] || 0;
-        } else {
-          av = (a[sortKey] || '').toString().toLowerCase();
-          bv = (b[sortKey] || '').toString().toLowerCase();
-        }
-        if (av < bv) return -1 * dir;
-        if (av > bv) return  1 * dir;
-        return 0;
+      const rows = sortRows(PRICING.models.map(m => ({ m, b: currentBase(m) })), refSort, (r, k) => {
+        if (['input', 'output', 'cached_input', 'cache_write', 'batch_input'].includes(k)) return r.b[k] === undefined ? null : r.b[k];
+        if (k === 'context') return r.m.context || 0;
+        return String(r.m[k] || '').toLowerCase();
       });
-
-      body.innerHTML = rows.map(m => {
-        const cached = (m.cached_input != null) ? '$' + m.cached_input.toFixed(3) : '—';
-        return `<tr>
-          <td class="prov">${escapeHtml(m.provider)}</td>
-          <td>${escapeHtml(m.family || '')}</td>
-          <td class="model-name">${escapeHtml(m.name)}</td>
-          <td class="num">$${m.input.toFixed(2)}</td>
-          <td class="num">$${m.output.toFixed(2)}</td>
-          <td class="num">${cached}</td>
-          <td class="num ctx">${fmtCtx(m.context)}</td>
-          <td style="font-size:0.72rem;color:var(--text-dim);">${escapeHtml(m.notes || '')}</td>
-        </tr>`;
+      $('ref-body').innerHTML = rows.map(({ m, b }) => {
+        const write = b.cache_write === undefined ? '—' : fmtRate(b.cache_write) + (b.cache_write_long !== undefined ? ' / ' + fmtRate(b.cache_write_long) : '');
+        const batch = b.batch_input === undefined ? '—' : fmtRate(b.batch_input) + ' / ' + fmtRate(b.batch_output);
+        return '<tr>' +
+          '<td class="prov">' + escapeHtml(m.provider) + '</td>' +
+          '<td class="model-name">' + escapeHtml(m.name) + '<span class="tags">' + escapeHtml(m.id) + '</span></td>' +
+          '<td class="num">' + fmtRate(b.input) + '</td>' +
+          '<td class="num">' + fmtRate(b.output) + '</td>' +
+          '<td class="num">' + fmtRate(b.cached_input) + '</td>' +
+          '<td class="num">' + write + '</td>' +
+          '<td class="num">' + batch + '</td>' +
+          '<td class="num ctx">' + fmtCtx(m.context) + '</td>' +
+          '<td class="ref-notes">' + escapeHtml(m.notes || '') + '</td>' +
+          '</tr>';
       }).join('');
-
-      document.querySelectorAll('#ref-table th').forEach(th => {
-        th.classList.remove('sort-asc', 'sort-desc');
-        if (th.dataset.sort === sortKey) th.classList.add(refSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
-      });
+      updateSortHeaders('#ref-table', refSort);
     }
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function updateSortHeaders(sel, sort) {
+      document.querySelectorAll(sel + ' th[data-sort]').forEach(th => {
+        const on = th.dataset.sort === sort.key;
+        th.classList.toggle('sort-asc', on && sort.dir === 'asc');
+        th.classList.toggle('sort-desc', on && sort.dir === 'desc');
+        if (on) th.setAttribute('aria-sort', sort.dir === 'asc' ? 'ascending' : 'descending'); else th.removeAttribute('aria-sort');
+      });
     }
-
-    // Sort click handlers
-    document.querySelectorAll('#compare-table th').forEach(th => {
-      th.addEventListener('click', () => {
-        const key = th.dataset.sort;
-        if (currentSort.key === key) currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
-        else { currentSort.key = key; currentSort.dir = (key === 'monthly' || key === 'input' || key === 'output' || key === 'cached_input' || key === 'context') ? 'asc' : 'asc'; }
-        renderCompareTable();
+    function wireSort(sel, sort, render) {
+      document.querySelectorAll(sel + ' th[data-sort] button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.parentElement.dataset.sort;
+          if (sort.key === key) sort.dir = sort.dir === 'asc' ? 'desc' : 'asc';
+          else { sort.key = key; sort.dir = 'asc'; }
+          render();
+        });
       });
-    });
-    document.querySelectorAll('#ref-table th').forEach(th => {
-      th.addEventListener('click', () => {
-        const key = th.dataset.sort;
-        if (refSort.key === key) refSort.dir = refSort.dir === 'asc' ? 'desc' : 'asc';
-        else { refSort.key = key; refSort.dir = 'asc'; }
-        renderRefTable();
-      });
-    });
+    }
+    wireSort('#compare-table', compareSort, renderCompareTable);
+    wireSort('#ref-table', refSort, renderRefTable);
 
     // ------- Load pricing data -------
     fetch('llm-pricing.json', { cache: 'no-cache' })
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(data => {
         PRICING = data;
-        document.getElementById('vintage-date').textContent = data.retrieved + ' (' + data.models.length + ' models)';
-        // Render source list
-        const srcHtml = Object.entries(data.sources).map(([provider, url]) =>
-          `<a href="${url}" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:0.7rem;color:var(--teal);text-decoration:none;margin-right:1.25rem;">${provider} pricing &rarr;</a>`
+        const d = new Date(data.retrieved + 'T12:00:00Z');
+        $('vintage-date').textContent = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) + ' · ' + data.models.length + ' models';
+        $('sources-list').innerHTML = Object.entries(data.sources).map(([provider, url]) =>
+          '<a href="' + escapeHtml(url) + '" target="_blank" rel="noopener" class="source-link">' + escapeHtml(provider) + ' pricing &rarr;</a>'
         ).join('');
-        document.getElementById('sources-list').innerHTML = srcHtml;
         renderCompareTable();
         renderRefTable();
       })
-      .catch(err => {
-        document.getElementById('vintage-date').textContent = 'ERROR loading pricing data';
-        document.getElementById('compare-body').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--rose);">Failed to load pricing data. Refresh the page.</td></tr>';
+      .catch(() => {
+        $('vintage-date').textContent = 'couldn’t load the pricing data';
+        $('compare-body').innerHTML = '<tr><td colspan="7" class="table-msg" style="color:var(--rose);">Couldn’t load the pricing data. Check your connection and refresh the page.</td></tr>';
       });
 
     updateTokenCounts();

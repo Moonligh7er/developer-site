@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Solar Savings Estimator (Honest Range) | Moonlit Social Labs</title>
-  <meta name="description" content="Estimate solar panel system size, cost, payback period, and 25-year savings based on your state, monthly bill, and electricity rate. Uses NREL state averages. 2026 federal credit reflects OBBBA termination.">
+  <meta name="description" content="Estimate solar panel system size, cost, payback period, and 25-year savings based on your state, monthly bill, and electricity rate. Uses NREL-derived sun hours and 2026 EIA electricity prices. Reflects the end of the federal 25D credit after 2025.">
   <meta name="keywords" content="solar savings calculator, solar panel cost calculator, solar payback period, residential solar estimator, solar ROI calculator, home solar cost">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Solar Savings Estimator",
-    "description": "Free tool to estimate residential solar system size, upfront cost, payback period, and 25-year savings using NREL-derived state peak-sun-hour data. Federal credit status reflects the 2025 OBBBA termination of IRC §25D.",
+    "description": "Free tool to estimate residential solar system size, upfront cost, payback period, and 25-year savings using NREL-derived state peak-sun-hour data. Uses 2026 EIA electricity prices; reflects the end of the IRC §25D credit for systems placed in service after 2025.",
     "url": "https://moonligh7er.github.io/developer-site/tools/solar-savings-estimator.html",
     "applicationCategory": "UtilitiesApplication",
     "operatingSystem": "Any",
@@ -27,7 +27,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Solar Savings Estimator (Honest Range)">
-  <meta property="og:description" content="Estimate solar system size, cost, payback, and 25-year savings for your state. Uses NREL data. 2026 federal credit is 0% (OBBBA sunset).">
+  <meta property="og:description" content="Estimate solar system size, cost, payback, and 25-year savings for your state. Uses NREL sun-hour data and 2026 EIA prices. Federal 25D credit is 0% for 2026 installs.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/solar-savings-estimator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -123,6 +123,31 @@
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.25s ease; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); background: transparent; box-shadow: 0 0 20px var(--violet-dim); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .form-group input, .form-group select { min-height: 42px; }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-section { padding: 1rem; } }
+    .result-block .big { overflow-wrap: anywhere; }
+    @media (max-width: 420px) { .input-inline { grid-template-columns: 1fr; } .data-vintage strong[style] { margin-left: 0 !important; } }
   </style>
 </head>
 <body>
@@ -153,18 +178,18 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; Solar Savings Estimator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Solar Savings Estimator</h1>
-        <p class="calc-intro">Rough-order-of-magnitude estimate of system size, upfront cost, payback period, and 25-year savings &mdash; an <strong>honest range machine</strong>, not a precision quote. Uses NREL-derived state peak-sun-hours and EIA electricity rates. Every output is a range because too many variables (roof orientation, shading, equipment quality, local utility) are unknown until an installer visits.</p>
+        <p class="calc-intro">Rough-order-of-magnitude estimate of system size, upfront cost, payback period and 25-year savings &mdash; an <strong>honest range machine</strong>, not a precision quote. Uses NREL-derived state peak-sun-hours and 2026 EIA electricity prices. Every output is a range because roof orientation, shading, equipment and your utility&apos;s rules stay unknown until an installer visits.</p>
 
         <div class="data-vintage">
-          <strong>Data as of</strong><span id="vintage-date">loading...</span>
+          <strong>Data as of</strong><span id="vintage-date">loading&hellip;</span>
           <strong style="margin-left:auto">Get 3+ installer quotes before deciding</strong>
         </div>
 
-        <div class="federal-alert" id="federal-alert">
-          <strong>Federal credit &mdash; loading...</strong>
-          <span id="federal-alert-body">Loading current status...</span>
+        <div class="federal-alert" id="federal-alert" role="note">
+          <strong id="federal-alert-title">Federal credit &mdash; loading&hellip;</strong>
+          <span id="federal-alert-body">Loading current status&hellip;</span>
         </div>
 
         <div class="rate-layout">
@@ -174,50 +199,57 @@
               <h3>Your situation</h3>
               <div class="form-group">
                 <label for="state">State</label>
-                <select id="state"></select>
-                <span class="hint">Sets defaults for peak sun hours & electricity rate.</span>
+                <select id="state" aria-describedby="state-hint"></select>
+                <span class="hint" id="state-hint">Fills in typical sun hours and electricity price; you can override both.</span>
               </div>
               <div class="form-group">
                 <label for="bill">Average monthly electric bill ($)</label>
-                <input type="number" id="bill" value="180" min="0" step="10">
+                <input type="number" id="bill" value="180" min="0" step="10" inputmode="decimal" aria-describedby="bill-msg">
+                <span class="field-msg" id="bill-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="rate">Electricity rate (¢/kWh)</label>
-                <input type="number" id="rate" value="16.5" min="0" step="0.1">
-                <span class="hint">Auto-populated from state average; check your actual bill.</span>
+                <label for="rate">Electricity price (&cent;/kWh)</label>
+                <input type="number" id="rate" value="18.2" min="0" step="0.1" inputmode="decimal" aria-describedby="rate-hint rate-msg">
+                <span class="hint" id="rate-hint">State average for Jan&ndash;Aug 2026 (EIA); your bill shows your own.</span>
+                <span class="field-msg" id="rate-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="psh">Peak sun hours/day</label>
-                <input type="number" id="psh" value="4.5" min="0" step="0.1">
-                <span class="hint">Annual state average; auto-populated. Roof orientation & shading can shift this ±20-30%.</span>
+                <label for="psh">Peak sun hours (per day)</label>
+                <input type="number" id="psh" value="4.5" min="0" max="10" step="0.1" inputmode="decimal" aria-describedby="psh-hint psh-msg">
+                <span class="hint" id="psh-hint">Annual state average. Roof direction and shade can move it 20&ndash;30%.</span>
+                <span class="field-msg" id="psh-msg" hidden></span>
               </div>
             </div>
 
             <div class="form-section" style="margin-top:1rem;">
               <h3>System assumptions</h3>
               <div class="form-group">
-                <label for="cost-per-watt">Installed cost ($/watt)</label>
-                <input type="number" id="cost-per-watt" value="3.10" min="0" step="0.10">
-                <span class="hint">US residential average pre-incentive. Simple roofs lower, complex higher.</span>
+                <label for="cost-per-watt">Installed cost ($ per watt)</label>
+                <input type="number" id="cost-per-watt" value="3.10" min="0" max="10" step="0.10" inputmode="decimal" aria-describedby="cost-per-watt-hint cost-per-watt-msg">
+                <span class="hint" id="cost-per-watt-hint">Before incentives. Recent US quotes mostly run about $2.60&ndash;$3.60/W; simple roofs lower, complex higher.</span>
+                <span class="field-msg" id="cost-per-watt-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="offset-pct">Bill offset target %</label>
-                <input type="number" id="offset-pct" value="100" min="10" max="150">
-                <span class="hint">100% means fully covering current usage. Consider 80&ndash;95% to avoid oversizing.</span>
+                <label for="offset-pct">Share of your usage to cover (%)</label>
+                <input type="number" id="offset-pct" value="100" min="10" max="150" step="any" inputmode="decimal" aria-describedby="offset-pct-hint offset-pct-msg">
+                <span class="hint" id="offset-pct-hint">100% sizes the system to your current use; 80&ndash;95% avoids oversizing.</span>
+                <span class="field-msg" id="offset-pct-msg" hidden></span>
               </div>
             </div>
 
             <div class="form-section" style="margin-top:1rem;">
               <h3>Incentives</h3>
               <div class="form-group">
-                <label for="fed-credit">Federal tax credit %</label>
-                <input type="number" id="fed-credit" value="0" min="0" max="30" step="1">
-                <span class="hint">Default 0% for 2026+ (IRC §25D terminated). Override if new legislation applies.</span>
+                <label for="fed-credit">Federal tax credit (%)</label>
+                <input type="number" id="fed-credit" value="0" min="0" max="30" step="1" inputmode="decimal" aria-describedby="fed-credit-hint fed-credit-msg">
+                <span class="hint" id="fed-credit-hint">0% for systems bought and installed in 2026 (IRC 25D ended after 2025). Change it only if the law changes.</span>
+                <span class="field-msg" id="fed-credit-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="state-incentive">Estimated state/utility incentive ($)</label>
-                <input type="number" id="state-incentive" value="0" min="0" step="100">
-                <span class="hint">Rebates, credits, SRECs. Look yours up at <a href="https://www.dsireusa.org/" target="_blank" rel="noopener" style="color:var(--teal);">DSIREUSA.org</a>.</span>
+                <label for="state-incentive">State / utility incentives ($)</label>
+                <input type="number" id="state-incentive" value="0" min="0" step="100" inputmode="decimal" aria-describedby="state-incentive-hint state-incentive-msg">
+                <span class="hint" id="state-incentive-hint">Rebates, state credits, SRECs. Look yours up at <a href="https://www.dsireusa.org/" target="_blank" rel="noopener" style="color:var(--teal);">DSIREUSA.org</a>.</span>
+                <span class="field-msg" id="state-incentive-msg" hidden></span>
               </div>
             </div>
 
@@ -225,59 +257,66 @@
               <h3>Long-term assumptions</h3>
               <div class="input-inline">
                 <div class="form-group">
-                  <label for="rate-inflation">Rate inflation %/yr</label>
-                  <input type="number" id="rate-inflation" value="3.0" min="0" max="10" step="0.1">
+                  <label for="rate-inflation">Price rise (%/yr)</label>
+                  <input type="number" id="rate-inflation" value="3.0" min="-5" max="10" step="0.1" inputmode="decimal" aria-describedby="rate-inflation-msg">
+                  <span class="field-msg" id="rate-inflation-msg" hidden></span>
                 </div>
                 <div class="form-group">
-                  <label for="degrade">Panel degrade %/yr</label>
-                  <input type="number" id="degrade" value="0.5" min="0" max="2" step="0.1">
+                  <label for="degrade">Panel loss (%/yr)</label>
+                  <input type="number" id="degrade" value="0.5" min="0" max="3" step="0.1" inputmode="decimal" aria-describedby="degrade-msg">
+                  <span class="field-msg" id="degrade-msg" hidden></span>
                 </div>
               </div>
+            </div>
+            <div class="calc-btn-row" style="margin-top:1rem;">
+              <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+              <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
             </div>
           </div>
 
           <!-- RIGHT: Outputs -->
-          <div>
+          <div id="results" aria-live="polite">
+            <p class="calc-placeholder" id="out-msg" hidden></p>
             <div class="rate-mini-grid">
               <div class="rate-mini">
-                <div class="num" id="sys-size">0 kW</div>
+                <div class="num" id="sys-size">&mdash;</div>
                 <div class="lbl">System Size</div>
                 <div class="range" id="sys-size-range">&mdash;</div>
               </div>
               <div class="rate-mini">
-                <div class="num" id="annual-prod">0 kWh</div>
-                <div class="lbl">Annual Production</div>
+                <div class="num" id="annual-prod">&mdash;</div>
+                <div class="lbl">Yearly Production</div>
                 <div class="range" id="annual-prod-range">&mdash;</div>
               </div>
             </div>
 
             <div class="result-block">
               <div class="lbl">Upfront Cost (After Incentives)</div>
-              <div class="big" id="net-cost">$0</div>
+              <div class="big" id="net-cost">&mdash;</div>
               <div class="range" id="net-cost-range">&mdash;</div>
             </div>
 
             <div class="result-block">
               <div class="lbl">Payback Period</div>
-              <div class="big" id="payback">— years</div>
+              <div class="big" id="payback">&mdash;</div>
               <div class="range" id="payback-range">&mdash;</div>
             </div>
 
             <div class="result-block emph">
               <div class="lbl">25-Year Net Savings</div>
-              <div class="big" id="savings-25">$0</div>
+              <div class="big" id="savings-25">&mdash;</div>
               <div class="range" id="savings-25-range">&mdash;</div>
             </div>
 
             <div class="method-note">
-              <strong>Ranges shown</strong>
-              Low/high account for &plusmn;15% production variance (roof orientation, shading, weather years), &plusmn;10% install-cost variance, and rate-inflation uncertainty. Actual results can fall outside this range on either end.
+              <strong>How the numbers work</strong>
+              Yearly use = bill &divide; price &times; 12. System kW = use &times; share to cover &divide; (sun hours &times; 365 &times; 0.86 for wiring, inverter and heat losses). Savings = production &times; electricity price each year, with prices rising and panels losing output at your rates. Ranges: &plusmn;15% production, &plusmn;10% install cost, and &plusmn;1 point of price rise for the 25-year figure. Real results can fall outside them.
             </div>
           </div>
         </div>
 
         <p class="disclaimer">
-          <strong>Rough estimate based on state averages.</strong> Actual production depends on your roof pitch, azimuth (south-facing best), shading (trees, chimneys, neighboring buildings), panel/inverter equipment, local utility net-metering rules, and time-of-use rate structure. Payback assumes constant rate inflation and steady panel degradation &mdash; neither is guaranteed. <strong>Get multiple professional quotes</strong> and verify current federal, state, and utility incentives at <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS.gov</a> and <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIREUSA.org</a>. This is educational, not financial or engineering advice.
+          <strong>Rough estimate based on state averages.</strong> Actual production depends on roof pitch and direction (south-facing is best in the US), shade, equipment and your utility&apos;s net-metering and time-of-use rules. Savings assume every kWh is worth your full retail price; where exports earn less (California&apos;s current net billing, for example) savings will be lower. Bills include fixed charges that solar doesn&apos;t remove, so usage is slightly overstated. Inverter replacement and maintenance aren&apos;t included. <strong>Get several professional quotes</strong> and check incentives at <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS.gov</a> and <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIREUSA.org</a>. Educational, not financial or engineering advice.
         </p>
       </div>
     </div>
@@ -287,8 +326,8 @@
     <!-- ===================== SEO CONTENT ===================== -->
     <section class="content-section">
       <h2>What changed for residential solar in 2026</h2>
-      <p>The 30% federal Residential Clean Energy Credit (IRC §25D) that homeowners relied on from 2022&ndash;2025 was <strong>terminated for property placed in service after December 31, 2025</strong> by the One Big Beautiful Bill Act, signed in 2025. This is a real and material change: a $25,000 system that would have received a $7,500 federal tax credit in December 2025 receives $0 federal credit in January 2026 and later, unless new legislation restores it.</p>
-      <p>Any tool, calculator, article, or salesperson still quoting a 30% federal credit for a 2026 installation is out of date. Verify at <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS.gov</a> before signing anything.</p>
+      <p>The 30% federal Residential Clean Energy Credit (IRC §25D) that homeowners used from 2022 to 2025 <strong>ended for property placed in service after December 31, 2025</strong>, under the One Big Beautiful Bill Act signed on July 4, 2025. In practice: a $25,000 system finished in December 2025 could earn a $7,500 credit; the same system finished in January 2026 or later earns $0 from the federal government, unless new legislation brings the credit back. The credit is claimed for the year the system is installed, not merely bought, and unused credit from a 2025 or earlier installation can still carry forward to later tax years.</p>
+      <p>A quote that counts a 30% federal credit for a system you buy and install in 2026 is out of date; check the <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS page</a> before signing. <strong>Leases and power-purchase agreements are different:</strong> the company that owns the panels may still claim a business credit (IRC &sect;48E) for systems that begin construction by July 4, 2026 or are placed in service by the end of 2027, and that can show up as a lower monthly price. This estimator models buying the system outright.</p>
 
       <h3>What still applies in 2026</h3>
       <ul>
@@ -300,15 +339,15 @@
 
       <h3>Why this calculator is a range, not a number</h3>
       <p>Solar is one of the most assumption-laden purchases a homeowner makes. Roof orientation shifts production ±25%. A single mature oak tree on the south side can drop output 30%. Two identical systems in the same ZIP code can differ 20% in annual output due to microclimate alone. Panel quality varies. Inverter reliability varies. Your utility&rsquo;s net-metering policy can change during the payback period. Rate inflation is not a straight line.</p>
-      <p>Any calculator that hands you a single confident number is lying to you. Ours doesn&rsquo;t. Use the range as a sanity check &mdash; if an installer&rsquo;s bid falls wildly outside these ranges, ask why.</p>
+      <p>A single confident number would hide all of that, so this shows a range. Use it as a sanity check: if an installer&rsquo;s bid falls far outside it, ask why.</p>
 
       <h3>Data sources</h3>
       <ul>
         <li>Peak sun hours: <a href="https://www.nlr.gov/gis/maps" target="_blank" rel="noopener">NREL state solar resource maps</a> (NREL is now the National Laboratory of the Rockies; the original latitude-tilt maps were not carried over, so this links its current map library).</li>
-        <li>Electricity rates: <a href="https://www.eia.gov/electricity/monthly/" target="_blank" rel="noopener">EIA Electric Power Monthly</a> (state residential averages).</li>
+        <li>Electricity prices: <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_b" target="_blank" rel="noopener">EIA Electric Power Monthly, Table 5.6.B</a> &mdash; average residential price by state, January&ndash;August 2026 (retrieved November 3, 2026).</li>
         <li>Federal credit status: <a href="https://www.irs.gov/credits-deductions/residential-clean-energy-credit" target="_blank" rel="noopener">IRS Residential Clean Energy Credit page</a>.</li>
         <li>State/utility incentives: <a href="https://www.dsireusa.org/" target="_blank" rel="noopener">DSIRE database</a>.</li>
-        <li>Install cost reference: <a href="https://www.nlr.gov/solar/market-research-analysis/solar-installed-system-cost" target="_blank" rel="noopener">NREL installed cost data</a>.</li>
+        <li>Install cost reference: <a href="https://emp.lbl.gov/research-areas/tracking-sun" target="_blank" rel="noopener">Berkeley Lab &ldquo;Tracking the Sun&rdquo;</a> and EnergySage marketplace data; the $3.10/W default sits between their recent figures.</li>
       </ul>
 
       <h3>Related tools</h3>
@@ -351,183 +390,176 @@
   <script src="../js/player.js"></script>
 
   <script>
-  (function() {
+  (function () {
     'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+    // State data, credit status and defaults live in solar-defaults.json (sources and dates inside).
     let DATA = null;
-    let userOverrode = { rate: false, psh: false, costPerWatt: false, fedCredit: false };
-
-    const el = id => document.getElementById(id);
-    const num = id => parseFloat(el(id).value) || 0;
-
-    function fmtMoney(n) {
-      if (!isFinite(n)) return '$0';
-      if (Math.abs(n) < 1000) return '$' + Math.round(n).toLocaleString();
-      return '$' + Math.round(n).toLocaleString('en-US');
-    }
-    function fmtKw(n) { return n.toFixed(1) + ' kW'; }
-    function fmtKwh(n) { return Math.round(n).toLocaleString('en-US') + ' kWh'; }
+    const userOverrode = { rate: false, psh: false };
+    const fmtKw = n => n.toFixed(1) + ' kW';
+    const fmtKwh = n => Math.round(n).toLocaleString('en-US') + ' kWh';
     function fmtYears(n) {
-      if (!isFinite(n) || n < 0 || n > 100) return '> 25 yrs';
+      if (!isFinite(n)) return 'Doesn’t pay back';
       return n.toFixed(1) + ' yrs';
     }
 
     function populateStates() {
-      const sel = el('state');
-      const states = Object.entries(DATA.states).sort((a,b) => a[1].name.localeCompare(b[1].name));
-      states.forEach(([code, s]) => {
-        const o = document.createElement('option');
-        o.value = code;
-        o.textContent = s.name;
+      const sel = $('state');
+      Object.entries(DATA.states).sort((a, b) => a[1].name.localeCompare(b[1].name)).forEach(([code, s]) => {
+        const o = new Option(s.name, code);
         o.dataset.psh = s.peak_sun_hours;
         o.dataset.rate = s.electricity_rate_cents;
-        sel.appendChild(o);
+        if (code === 'CA') { o.defaultSelected = true; o.selected = true; }
+        sel.add(o);
       });
-      sel.value = 'CA';
+    }
+    function applyStateDefaults() {
+      const opt = $('state').selectedOptions[0];
+      if (!opt) return;
+      if (!userOverrode.rate) $('rate').value = opt.dataset.rate;
+      if (!userOverrode.psh) $('psh').value = opt.dataset.psh;
     }
 
-    function applyStateDefaults() {
-      const sel = el('state');
-      const opt = sel.selectedOptions[0];
-      if (!opt) return;
-      if (!userOverrode.rate) el('rate').value = opt.dataset.rate;
-      if (!userOverrode.psh)  el('psh').value  = opt.dataset.psh;
+    const OUT = ['sys-size', 'sys-size-range', 'annual-prod', 'annual-prod-range', 'net-cost', 'net-cost-range', 'payback', 'payback-range', 'savings-25', 'savings-25-range'];
+    function clearOut(msg) {
+      OUT.forEach(id => { $(id).textContent = '—'; });
+      $('out-msg').textContent = msg; $('out-msg').hidden = !msg;
     }
 
     function calc() {
       if (!DATA) return;
-      const bill = num('bill');
-      const rate = num('rate');  // cents/kWh
-      const psh  = num('psh');
-      const cpw  = num('cost-per-watt');
-      const offsetPct = num('offset-pct') / 100;
-      const fedCredit = num('fed-credit') / 100;
-      const stateInc = num('state-incentive');
-      const rateInf = num('rate-inflation') / 100;
-      const degrade = num('degrade') / 100;
+      const bill = num('bill', { required: true, min: 1, reqMsg: 'Enter your monthly bill.', minMsg: 'Enter a bill above $0.' });
+      const rate = num('rate', { required: true, min: 1, max: 100, minMsg: 'Enter a price of at least 1¢.' });
+      const psh = num('psh', { required: true, min: 0.5, max: 10 });
+      const cpw = num('cost-per-watt', { required: true, min: 0, max: 10 });
+      const offsetPct = num('offset-pct', { required: true, min: 10, max: 150 }) / 100;
+      const fedCredit = num('fed-credit', { min: 0, max: 30 }) / 100;
+      const stateInc = num('state-incentive', { min: 0 });
+      const rateInf = num('rate-inflation', { min: -5, max: 10 }) / 100;
+      const degrade = num('degrade', { min: 0, max: 3 }) / 100;
+      if ([bill, rate, psh, cpw, offsetPct, fedCredit, stateInc, rateInf, degrade].some(Number.isNaN)) return clearOut('Fix the highlighted field to see the estimate.');
+      clearOut('');
 
-      if (rate <= 0 || psh <= 0 || bill <= 0) return;
-
-      // Monthly kWh used = bill / (rate/100)
-      const monthlyKwh = bill / (rate / 100);
-      const annualKwh = monthlyKwh * 12;
+      const annualKwh = bill / (rate / 100) * 12;
       const kwhToOffset = annualKwh * offsetPct;
-
-      // Production per kW installed per year = psh * 365 * derate (0.86 typical)
-      const derate = DATA.defaults.typical_efficiency_derate;
-      const kwhPerKwPerYear = psh * 365 * derate;
-
-      // System size
+      const kwhPerKwPerYear = psh * 365 * DATA.defaults.typical_efficiency_derate;
       const systemKw = kwhToOffset / kwhPerKwPerYear;
       const annualProduction = systemKw * kwhPerKwPerYear;
+      const prodLow = annualProduction * 0.85, prodHigh = annualProduction * 1.15;
 
-      // Ranges: ±15% production, ±10% cost
-      const prodLow = annualProduction * 0.85;
-      const prodHigh = annualProduction * 1.15;
-      const systemKwLow = kwhToOffset / (kwhPerKwPerYear * 1.15);
-      const systemKwHigh = kwhToOffset / (kwhPerKwPerYear * 0.85);
+      const net = k => Math.max(0, systemKw * 1000 * cpw * k * (1 - fedCredit) - stateInc);
+      const netCost = net(1), netCostLow = net(0.9), netCostHigh = net(1.1);
 
-      // Cost
-      const grossCost = systemKw * 1000 * cpw;
-      const grossCostLow = systemKw * 1000 * cpw * 0.90;
-      const grossCostHigh = systemKw * 1000 * cpw * 1.10;
-
-      const fedRebate = grossCost * fedCredit;
-      const netCost = grossCost - fedRebate - stateInc;
-      const netCostLow = grossCostLow - grossCostLow * fedCredit - stateInc;
-      const netCostHigh = grossCostHigh - grossCostHigh * fedCredit - stateInc;
-
-      // 25-year savings with rate inflation + degradation
-      function twentyFiveYearSavings(prod, cost, rateInflationAnnual) {
-        let cumSavings = 0;
-        let currentProd = prod;
-        let currentRate = rate / 100; // $/kWh
-        for (let y = 0; y < 25; y++) {
-          const yearSavings = currentProd * currentRate;
-          cumSavings += yearSavings;
-          currentProd *= (1 - degrade);
-          currentRate *= (1 + rateInflationAnnual);
-        }
-        return cumSavings - cost;
+      function savings25(prod, cost, inf) {
+        let cum = 0, p = prod, r = rate / 100;
+        for (let y = 0; y < 25; y++) { cum += p * r; p *= 1 - degrade; r *= 1 + inf; }
+        return cum - cost;
       }
-      const savings25 = twentyFiveYearSavings(annualProduction, netCost, rateInf);
-      const savings25Low = twentyFiveYearSavings(prodLow, netCostHigh, Math.max(0, rateInf - 0.01));
-      const savings25High = twentyFiveYearSavings(prodHigh, netCostLow, rateInf + 0.01);
-
-      // Payback (simple, first-year savings basis with 3yr rate inflation avg)
-      function paybackYears(prod, cost) {
-        let cum = 0;
-        let currentProd = prod;
-        let currentRate = rate / 100;
+      // Years until cumulative savings cover the cost (fractional within the payback year).
+      function payback(prod, cost) {
+        if (cost <= 0) return 0;
+        let cum = 0, p = prod, r = rate / 100;
         for (let y = 0; y < 100; y++) {
-          const yearSavings = currentProd * currentRate;
-          if (cum + yearSavings >= cost) {
-            return y + (cost - cum) / yearSavings;
-          }
-          cum += yearSavings;
-          currentProd *= (1 - degrade);
-          currentRate *= (1 + rateInf);
+          const s = p * r;
+          if (s > 0 && cum + s >= cost) return y + (cost - cum) / s;
+          cum += s; p *= 1 - degrade; r *= 1 + rateInf;
         }
-        return 100;
+        return Infinity;
       }
-      const payback = paybackYears(annualProduction, netCost);
-      const paybackLow = paybackYears(prodHigh, netCostLow);   // best case = shorter
-      const paybackHigh = paybackYears(prodLow, netCostHigh);  // worst case = longer
+      const pb = payback(annualProduction, netCost), pbLow = payback(prodHigh, netCostLow), pbHigh = payback(prodLow, netCostHigh);
 
-      // Render
-      el('sys-size').textContent = fmtKw(systemKw);
-      el('sys-size-range').textContent = 'range: ' + fmtKw(systemKwLow) + ' – ' + fmtKw(systemKwHigh);
-      el('annual-prod').textContent = fmtKwh(annualProduction);
-      el('annual-prod-range').textContent = 'range: ' + fmtKwh(prodLow) + ' – ' + fmtKwh(prodHigh);
-      el('net-cost').textContent = fmtMoney(netCost);
-      el('net-cost-range').textContent = 'range: ' + fmtMoney(netCostLow) + ' – ' + fmtMoney(netCostHigh);
-      el('payback').textContent = fmtYears(payback);
-      el('payback-range').textContent = 'range: ' + fmtYears(paybackLow) + ' – ' + fmtYears(paybackHigh);
-      el('savings-25').textContent = fmtMoney(savings25);
-      el('savings-25-range').textContent = 'range: ' + fmtMoney(savings25Low) + ' – ' + fmtMoney(savings25High);
+      $('sys-size').textContent = fmtKw(systemKw);
+      $('sys-size-range').textContent = 'range: ' + fmtKw(kwhToOffset / (kwhPerKwPerYear * 1.15)) + ' – ' + fmtKw(kwhToOffset / (kwhPerKwPerYear * 0.85));
+      $('annual-prod').textContent = fmtKwh(annualProduction);
+      $('annual-prod-range').textContent = 'range: ' + fmtKwh(prodLow) + ' – ' + fmtKwh(prodHigh);
+      $('net-cost').textContent = money0(netCost);
+      $('net-cost-range').textContent = 'range: ' + money0(netCostLow) + ' – ' + money0(netCostHigh);
+      $('payback').textContent = fmtYears(pb) + (isFinite(pb) && pb > 25 ? ' (past a typical 25-year warranty)' : '');
+      $('payback-range').textContent = fmtYears(pbLow) === fmtYears(pbHigh) ? 'range: ' + fmtYears(pbLow) : 'range: ' + fmtYears(pbLow) + ' – ' + fmtYears(pbHigh);
+      $('savings-25').textContent = money0(savings25(annualProduction, netCost, rateInf));
+      $('savings-25-range').textContent = 'range: ' + money0(savings25(prodLow, netCostHigh, rateInf - 0.01)) + ' – ' + money0(savings25(prodHigh, netCostLow, rateInf + 0.01));
     }
 
-    // Boot
-    fetch('solar-defaults.json', { cache: 'no-cache' })
-      .then(r => r.json())
-      .then(data => {
-        DATA = data;
-        el('vintage-date').textContent = data.retrieved;
-        // Federal alert
-        const fc = data.defaults.federal_credit_pct_2026;
-        if (fc === 0) {
-          el('federal-alert').querySelector('strong').textContent = 'Federal Credit: 0% for 2026 installs';
-          el('federal-alert-body').innerHTML = data.defaults.federal_credit_note +
-            ' Any tool showing a default 30% credit is out of date. ' +
-            '<a href="' + data.sources.federal_credit_status + '" target="_blank" rel="noopener">Verify at IRS.gov</a>.';
-        } else {
-          el('federal-alert').querySelector('strong').textContent = 'Federal Credit: ' + fc + '%';
-          el('federal-alert-body').innerHTML = data.defaults.federal_credit_note +
-            ' <a href="' + data.sources.federal_credit_status + '" target="_blank" rel="noopener">Verify at IRS.gov</a>.';
-        }
-        el('cost-per-watt').value = data.defaults.system_cost_per_watt.toFixed(2);
-        el('rate-inflation').value = data.defaults.electricity_rate_inflation_annual_pct.toFixed(1);
-        el('degrade').value = data.defaults.system_degradation_annual_pct.toFixed(1);
-        populateStates();
-        applyStateDefaults();
-        calc();
-      })
-      .catch(err => {
-        el('vintage-date').textContent = 'ERROR loading defaults';
-        el('federal-alert-body').textContent = 'Failed to load defaults. Refresh the page.';
-      });
+    function boot(data) {
+      DATA = data;
+      $('vintage-date').textContent = data.retrieved + ' · prices: ' + data.rates_vintage;
+      const fc = data.defaults.federal_credit_pct_2026;
+      $('federal-alert-title').textContent = fc === 0 ? 'Federal credit: 0% for systems bought and installed in 2026' : 'Federal credit: ' + fc + '%';
+      const body = $('federal-alert-body');
+      body.textContent = data.defaults.federal_credit_note + ' ' + (data.defaults.federal_credit_lease_note || '') + ' ';
+      const a = document.createElement('a');
+      a.href = data.sources.federal_credit_status; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'IRS page';
+      body.appendChild(a); body.appendChild(document.createTextNode('.'));
+      populateStates();
+      applyStateDefaults();
+      $('calc-card').addEventListener('reset-done', () => { userOverrode.rate = false; userOverrode.psh = false; applyStateDefaults(); });
+      $('state').addEventListener('change', () => { userOverrode.rate = false; userOverrode.psh = false; applyStateDefaults(); });
+      $('rate').addEventListener('input', () => { userOverrode.rate = true; });
+      $('psh').addEventListener('input', () => { userOverrode.psh = true; });
+      wire($('calc-card'), calc);
+    }
 
-    // Wire up events
-    el('state').addEventListener('change', () => { userOverrode.rate = false; userOverrode.psh = false; applyStateDefaults(); calc(); });
-    el('bill').addEventListener('input', calc);
-    el('rate').addEventListener('input', () => { userOverrode.rate = true; calc(); });
-    el('psh').addEventListener('input', () => { userOverrode.psh = true; calc(); });
-    el('cost-per-watt').addEventListener('input', calc);
-    el('offset-pct').addEventListener('input', calc);
-    el('fed-credit').addEventListener('input', calc);
-    el('state-incentive').addEventListener('input', calc);
-    el('rate-inflation').addEventListener('input', calc);
-    el('degrade').addEventListener('input', calc);
+    fetch('solar-defaults.json', { cache: 'no-cache' })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(boot)
+      .catch(() => {
+        $('vintage-date').textContent = 'couldn’t load';
+        $('federal-alert-title').textContent = 'Federal credit: 0% for systems installed in 2026';
+        $('federal-alert-body').textContent = 'The state data file didn’t load, so no estimate is shown. Refresh the page to try again.';
+        clearOut('State data didn’t load. Refresh the page to try again.');
+      });
   })();
   </script>
   <script defer src="../js/ads.js"></script>

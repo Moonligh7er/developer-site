@@ -14,7 +14,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Rent vs. Buy Calculator &mdash; See Which is Cheaper Over N Years",
+    "name": "Free Rent vs. Buy Calculator — See Which is Cheaper Over N Years",
     "description": "Compare the total cost of renting vs. buying over any time horizon. Accounts for down payment, mortgage, taxes, maintenance, appreciation, and investment returns on the difference.",
     "url": "https://moonligh7er.github.io/developer-site/tools/rent-vs-buy-calculator.html",
     "applicationCategory": "FinanceApplication",
@@ -45,7 +45,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
     .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
     .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
@@ -76,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
     .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
     .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
@@ -88,6 +85,22 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -118,51 +131,53 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Rent vs. Buy Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Rent vs. Buy Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A fair rent-vs-buy comparison over N years. Accounts for what you actually spend on both sides: mortgage + taxes + insurance + maintenance vs. rent, plus what a renter earns by investing the down-payment difference in the market.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">A side-by-side of buying and renting over the years you expect to stay. Both households spend the same cash every month: the buyer pays the mortgage, tax, insurance, upkeep and HOA; the renter pays rent and invests whatever is left over (starting with the down payment and closing costs). At the end, the buyer sells, and the calculator compares what each one has.</p>
 
         <p class="calc-subhead">Time Horizon</p>
 <div class="form-grid">
-  <div class="form-group"><label for="years">Years to Compare</label><input type="number" id="years" placeholder="7" min="1" step="1"></div>
+  <div class="form-group"><label for="years">Years you expect to stay</label><input type="number" id="years" value="7" min="1" max="50" step="1" inputmode="numeric" aria-describedby="years-msg"><span class="field-msg" id="years-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">Buying</p>
 <div class="form-grid">
-  <div class="form-group"><label for="price">Home Price ($)</label><input type="number" id="price" placeholder="400000" min="0" step="any"></div>
-  <div class="form-group"><label for="down">Down Payment ($)</label><input type="number" id="down" placeholder="80000" min="0" step="any"></div>
-  <div class="form-group"><label for="rate">Mortgage Rate (% APR)</label><input type="number" id="rate" placeholder="6.5" min="0" step="any"></div>
-  <div class="form-group"><label for="term">Mortgage Term (Years)</label><input type="number" id="term" placeholder="30" min="1" step="1"></div>
-  <div class="form-group"><label for="taxPct">Property Tax (%/yr)</label><input type="number" id="taxPct" placeholder="1.2" min="0" step="any"></div>
-  <div class="form-group"><label for="insAnnual">Insurance ($/yr)</label><input type="number" id="insAnnual" placeholder="1500" min="0" step="any"></div>
-  <div class="form-group"><label for="maintPct">Maintenance (%/yr of home price)</label><input type="number" id="maintPct" placeholder="1" min="0" step="any"></div>
-  <div class="form-group"><label for="appPct">Home Appreciation (%/yr)</label><input type="number" id="appPct" placeholder="3" min="0" step="any"></div>
-  <div class="form-group"><label for="sellPct">Selling Costs (% of sale)</label><input type="number" id="sellPct" placeholder="6" min="0" step="any"></div>
+  <div class="form-group"><label for="price">Home price ($)</label><input type="number" id="price" value="400000" min="0" step="any" inputmode="decimal" aria-describedby="price-msg"><span class="field-msg" id="price-msg" hidden></span></div>
+  <div class="form-group"><label for="down">Down payment ($)</label><input type="number" id="down" value="80000" min="0" step="any" inputmode="decimal" aria-describedby="down-msg"><span class="field-msg" id="down-msg" hidden></span></div>
+  <div class="form-group"><label for="closePct">Closing costs (% of price)</label><input type="number" id="closePct" value="3" min="0" max="15" step="any" inputmode="decimal" aria-describedby="closePct-msg"><span class="field-msg" id="closePct-msg" hidden></span></div>
+  <div class="form-group"><label for="rate">Mortgage rate (% APR)</label><input type="number" id="rate" value="6.5" min="0" max="30" step="any" inputmode="decimal" aria-describedby="rate-msg"><span class="field-msg" id="rate-msg" hidden></span></div>
+  <div class="form-group"><label for="term">Mortgage term (years)</label><input type="number" id="term" value="30" min="1" max="50" step="1" inputmode="numeric" aria-describedby="term-msg"><span class="field-msg" id="term-msg" hidden></span></div>
+  <div class="form-group"><label for="pmiPct">PMI (%/yr of loan, below 20% equity)</label><input type="number" id="pmiPct" value="0.5" min="0" max="5" step="any" inputmode="decimal" aria-describedby="pmiPct-msg"><span class="field-msg" id="pmiPct-msg" hidden></span></div>
+  <div class="form-group"><label for="taxPct">Property tax (% of value/yr)</label><input type="number" id="taxPct" value="1.1" min="0" max="10" step="any" inputmode="decimal" aria-describedby="taxPct-msg"><span class="field-msg" id="taxPct-msg" hidden></span></div>
+  <div class="form-group"><label for="insAnnual">Homeowners insurance ($/yr)</label><input type="number" id="insAnnual" value="2000" min="0" step="any" inputmode="decimal" aria-describedby="insAnnual-msg"><span class="field-msg" id="insAnnual-msg" hidden></span></div>
+  <div class="form-group"><label for="maintPct">Maintenance (% of value/yr)</label><input type="number" id="maintPct" value="1" min="0" max="10" step="any" inputmode="decimal" aria-describedby="maintPct-msg"><span class="field-msg" id="maintPct-msg" hidden></span></div>
+  <div class="form-group"><label for="hoa">HOA dues ($/month)</label><input type="number" id="hoa" value="0" min="0" step="any" inputmode="decimal" aria-describedby="hoa-msg"><span class="field-msg" id="hoa-msg" hidden></span></div>
+  <div class="form-group"><label for="appPct">Home appreciation (%/yr)</label><input type="number" id="appPct" value="3" min="-20" max="30" step="any" inputmode="decimal" aria-describedby="appPct-msg"><span class="field-msg" id="appPct-msg" hidden></span></div>
+  <div class="form-group"><label for="sellPct">Selling costs (% of sale price)</label><input type="number" id="sellPct" value="6" min="0" max="20" step="any" inputmode="decimal" aria-describedby="sellPct-msg"><span class="field-msg" id="sellPct-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">Renting</p>
 <div class="form-grid">
-  <div class="form-group"><label for="rent">Monthly Rent ($)</label><input type="number" id="rent" placeholder="2200" min="0" step="any"></div>
-  <div class="form-group"><label for="rentGrow">Rent Growth (%/yr)</label><input type="number" id="rentGrow" placeholder="3" min="0" step="any"></div>
-  <div class="form-group"><label for="invReturn">Investment Return (%/yr)</label><input type="number" id="invReturn" placeholder="6" min="0" step="any"></div>
+  <div class="form-group"><label for="rent">Monthly rent ($)</label><input type="number" id="rent" value="2200" min="0" step="any" inputmode="decimal" aria-describedby="rent-msg"><span class="field-msg" id="rent-msg" hidden></span></div>
+  <div class="form-group"><label for="rentGrow">Rent increase (%/yr)</label><input type="number" id="rentGrow" value="3" min="-20" max="30" step="any" inputmode="decimal" aria-describedby="rentGrow-msg"><span class="field-msg" id="rentGrow-msg" hidden></span></div>
+  <div class="form-group"><label for="invReturn">Return on invested savings (%/yr)</label><input type="number" id="invReturn" value="6" min="-20" max="30" step="any" inputmode="decimal" aria-describedby="invReturn-msg"><span class="field-msg" id="invReturn-msg" hidden></span></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Verdict</h4><div id="out-main"></div><p class="calc-subhead">Breakdown</p><div id="out-totals"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Verdict</h4><div id="out-main"></div>
+          <div id="out-more"><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Wealth at the End of Each Year (if you left then)</p><div class="growth-table-wrap" id="out-table" style="max-height:360px;"></div></div>
+          <p class="calc-note">An estimate under the assumptions above, not financial advice. Small changes to appreciation, rent growth or returns can flip the answer.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">Why most rent-vs-buy calculators lie</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The naive comparison &mdash; &ldquo;$2,200 rent vs. $2,000 mortgage, buying wins!&rdquo; &mdash; ignores the biggest costs on the buying side (property tax, insurance, maintenance, selling costs) and the biggest earning opportunity on the renting side (investing the down payment). Both matter. A lot.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator actually compares</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Over your chosen horizon, we track the buyer&apos;s total out-of-pocket: mortgage payments + property tax + insurance + maintenance, then at horizon end subtract the home&apos;s appreciated sale value minus remaining mortgage balance minus selling costs. That leaves the buyer&apos;s <em>net cost</em>.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">For the renter, we track cumulative rent (growing yearly) plus a parallel investment portfolio: the renter starts with the down payment invested, and each month adds any dollar amount by which the buyer&apos;s costs exceed the renter&apos;s costs. That portfolio compounds at your chosen return rate. The renter&apos;s net position at horizon is portfolio value minus rent paid.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The naive comparison, &ldquo;$2,200 rent vs. a $2,000 mortgage, so buying wins&rdquo;, leaves out the biggest costs of owning (property tax, insurance, maintenance, closing and selling costs) and the biggest advantage of renting (the down payment stays invested). This calculator puts both on the same footing.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Day one:</strong> the buyer pays the down payment and closing costs; the renter invests the same amount. <strong>Every month:</strong> the buyer pays principal and interest, PMI while the loan is above 80% of the purchase price, property tax and maintenance (as a share of the current home value), insurance and HOA dues. The renter pays rent. Whichever costs less that month, that household invests the difference, so both spend identical cash. Home value and rent step up once a year; investments compound monthly. <strong>At the end:</strong> the buyer sells, pays selling costs and the remaining loan, and keeps the rest plus any investments. The verdict compares the two households&apos; wealth.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this does not model</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Mortgage-interest tax deduction (mostly moot post-2017 for most filers), PMI, HOA fees, moving costs, quality-of-life factors (yard, control, stability), housing-market crashes, or the psychological value of paying off a mortgage vs. a landlord. Do not treat the answer as gospel &mdash; treat it as a starting point for the parts you can actually price.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Income taxes (the mortgage-interest deduction only helps if you itemize; investment gains may be taxed, while up to $250,000 of home-sale gain, $500,000 for couples, is usually tax-free), renter&apos;s insurance, moving costs, refinancing, rent control, a housing downturn, or quality-of-life factors like space, control and stability. Treat the answer as a starting point for the parts you can price.</p>
 </section>
     </div>
 
@@ -210,103 +225,148 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
-      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
-      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
-      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
-      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
-      function hideErr() { document.getElementById('err').classList.remove('visible'); }
-      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
-      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      // Equal-cash comparison: whichever household spends less in a month invests the difference.
+      function simulate(o) {
+        const loan = o.price - o.down;
+        const r = o.rate / 100 / 12, n = o.term * 12;
+        const pi = loan <= 0 ? 0 : r === 0 ? loan / n : loan * r / (1 - Math.pow(1 + r, -n));
+        const inv = Math.pow(1 + o.invReturn / 100, 1 / 12) - 1;
+        const upfront = o.down + o.price * o.closePct / 100;
+        let bal = Math.max(0, loan), value = o.price, rent = o.rent;
+        let buyPort = 0, rentPort = upfront, buySpent = upfront, rentSpent = 0, outflow = upfront;
+        const years = [];
+        for (let m = 1; m <= o.years * 12; m++) {
+          const interest = bal * r;
+          const pmt = bal > 0 ? Math.min(pi, bal + interest) : 0;
+          const pmi = bal > 0.8 * o.price ? bal * o.pmiPct / 100 / 12 : 0;
+          bal = Math.max(0, bal + interest - pmt);
+          const own = pmt + pmi + value * (o.taxPct + o.maintPct) / 100 / 12 + o.insAnnual / 12 + o.hoa;
+          buySpent += own; rentSpent += rent;
+          buyPort *= 1 + inv; rentPort *= 1 + inv;
+          if (own > rent) rentPort += own - rent; else buyPort += rent - own;
+          outflow += Math.max(own, rent);
+          if (m % 12 === 0) {
+            value *= 1 + o.appPct / 100;
+            rent *= 1 + o.rentGrow / 100;
+            years.push({ y: m / 12, buyer: value * (1 - o.sellPct / 100) - bal + buyPort, renter: rentPort });
+          }
+        }
+        const equity = value * (1 - o.sellPct / 100) - bal;
+        return { pi, upfront, bal, value, equity, buyPort, rentPort, buySpent, rentSpent, outflow,
+                 buyer: equity + buyPort, renter: rentPort, years };
+      }
 
       function calc() {
-  hideErr();
-  const years=n('years'), price=n('price'), down=n('down')||0;
-  const rate=n('rate'), term=n('term'), taxPct=(n('taxPct')||0)/100;
-  const insAnnual=n('insAnnual')||0, maintPct=(n('maintPct')||0)/100;
-  const appPct=(n('appPct')||0)/100, sellPct=(n('sellPct')||0)/100;
-  const rent=n('rent'), rentGrow=(n('rentGrow')||0)/100, invReturn=(n('invReturn')||0)/100;
-  if (years===null||years<=0) return showErr('Enter comparison horizon in years.');
-  if (price===null||price<=0) return showErr('Enter home price.');
-  if (rate===null||term===null) return showErr('Enter mortgage rate + term.');
-  if (rent===null||rent<=0) return showErr('Enter monthly rent.');
+        const o = {
+          years: num('years', { required: true, int: true, min: 1, max: 50 }),
+          price: num('price', { required: true, min: 1, reqMsg: 'Enter the home price.', minMsg: 'Enter a price above $0.' }),
+          down: num('down', { min: 0 }),
+          closePct: num('closePct', { min: 0, max: 15 }),
+          rate: num('rate', { required: true, min: 0, max: 30 }),
+          term: num('term', { required: true, int: true, min: 1, max: 50 }),
+          pmiPct: num('pmiPct', { min: 0, max: 5 }),
+          taxPct: num('taxPct', { min: 0, max: 10 }),
+          insAnnual: num('insAnnual', { min: 0 }),
+          maintPct: num('maintPct', { min: 0, max: 10 }),
+          hoa: num('hoa', { min: 0 }),
+          appPct: num('appPct', { min: -20, max: 30 }),
+          sellPct: num('sellPct', { min: 0, max: 20 }),
+          rent: num('rent', { required: true, min: 0, reqMsg: 'Enter the monthly rent.' }),
+          rentGrow: num('rentGrow', { min: -20, max: 30 }),
+          invReturn: num('invReturn', { min: -20, max: 30 })
+        };
+        if (!Number.isNaN(o.down) && !Number.isNaN(o.price) && o.down > o.price) { flag('down', 'Can’t exceed the home price.'); o.down = NaN; }
+        if (Object.values(o).some(Number.isNaN)) {
+          $('out-main').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see the comparison.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
+        const s = simulate(o);
+        const diff = s.buyer - s.renter;
+        const yrs = o.years + (o.years === 1 ? ' year' : ' years');
+        let verdict;
+        if (Math.abs(diff) < 1) verdict = row('About even after ' + yrs, money0(0), 'amber');
+        else if (diff > 0) verdict = row('Buying comes out ahead after ' + yrs + ' by', money0(diff), 'teal');
+        else verdict = row('Renting comes out ahead after ' + yrs + ' by', money0(-diff), 'violet');
+        // first year-end at which buying is ahead and stays ahead
+        let be = null;
+        for (let i = s.years.length - 1; i >= 0 && s.years[i].buyer > s.years[i].renter; i--) be = s.years[i].y;
+        verdict += row('Buying pulls ahead (and stays ahead) from', be === null ? 'Not within ' + yrs : 'Year ' + be);
+        $('out-main').innerHTML = verdict;
+        $('out-totals').innerHTML =
+          row('Monthly principal &amp; interest', money(s.pi)) +
+          row('Buyer: down payment + closing costs', money0(s.upfront)) +
+          row('Buyer: total spent on the home', money0(s.buySpent), 'rose') +
+          row('Home value at the end', money0(s.value)) +
+          row('Loan balance at the end', money0(s.bal)) +
+          row('Buyer: equity after selling costs', money0(s.equity), 'teal') +
+          (s.buyPort > 0.5 ? row('Buyer: invested savings', money0(s.buyPort), 'teal') : '') +
+          row('Buyer: wealth at the end', money0(s.buyer), 'violet') +
+          row('Renter: total rent paid', money0(s.rentSpent), 'rose') +
+          row('Renter: invested savings = wealth at the end', money0(s.renter), 'violet') +
+          row('Cash each household spent in total', money0(s.outflow));
+        let t = '';
+        for (const y of s.years) t += '<tr><td>' + y.y + '</td><td class="num">' + money0(y.buyer) + '</td><td class="num">' + money0(y.renter) + '</td><td>' + (y.buyer >= y.renter ? 'Buy' : 'Rent') + '</td></tr>';
+        $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Year</th><th scope="col" class="num">Buyer wealth</th><th scope="col" class="num">Renter wealth</th><th scope="col">Ahead</th></tr></thead><tbody>' + t + '</tbody></table>';
+      }
 
-  const loanAmt = Math.max(0, price - down);
-  const rMonthly = (rate/100)/12;
-  const nMonths = term * 12;
-  const piMonthly = rMonthly===0 ? loanAmt/nMonths : loanAmt*(rMonthly*Math.pow(1+rMonthly,nMonths))/(Math.pow(1+rMonthly,nMonths)-1);
-
-  // Buyer path: run through years, month by month
-  let buyerOOP = down; // down payment counts as spent
-  let mortBalance = loanAmt;
-  let currentPrice = price;
-  let currentRent = rent;
-  let renterOOP = 0;
-  let renterInvest = down; // renter invests the down payment
-  const invMonthly = Math.pow(1+invReturn, 1/12) - 1;
-
-  for (let m=1; m<=years*12; m++) {
-    // Buyer costs this month
-    const intPmt = mortBalance * rMonthly;
-    const prinPmt = Math.min(mortBalance, piMonthly - intPmt);
-    mortBalance -= prinPmt;
-    const monthlyTax = (currentPrice * taxPct) / 12;
-    const monthlyIns = insAnnual / 12;
-    const monthlyMaint = (currentPrice * maintPct) / 12;
-    const buyerMonthly = piMonthly + monthlyTax + monthlyIns + monthlyMaint;
-    buyerOOP += buyerMonthly;
-
-    // Renter costs this month
-    renterOOP += currentRent;
-
-    // Renter invests the difference (if buyer > renter) — else buyer would invest, but we simplify: buyer's excess isn't invested
-    const diff = buyerMonthly - currentRent;
-    if (diff > 0) renterInvest += diff;
-    renterInvest *= (1 + invMonthly);
-
-    // Yearly bumps
-    if (m % 12 === 0) {
-      currentPrice *= (1 + appPct);
-      currentRent *= (1 + rentGrow);
-    }
-  }
-
-  // Buyer's terminal position: sell home, pay off mortgage
-  const saleProceeds = currentPrice * (1 - sellPct) - mortBalance;
-  const buyerNet = buyerOOP - saleProceeds; // positive = net cost
-  const renterNet = renterOOP - renterInvest; // positive = net cost
-
-  let mainHtml = '';
-  if (buyerNet < renterNet) {
-    mainHtml = row('BUYING WINS by', fmtMoneyR(renterNet - buyerNet) + ' over ' + years + ' yrs', 'teal');
-  } else if (renterNet < buyerNet) {
-    mainHtml = row('RENTING WINS by', fmtMoneyR(buyerNet - renterNet) + ' over ' + years + ' yrs', 'violet');
-  } else {
-    mainHtml = row('BREAK-EVEN over', years + ' yrs', 'amber');
-  }
-  set('out-main', mainHtml);
-
-  let h = '';
-  h += row('Buyer: total out-of-pocket', fmtMoneyR(buyerOOP), 'rose');
-  h += row('Buyer: sale proceeds after payoff', fmtMoneyR(saleProceeds), 'teal');
-  h += row('Buyer: net cost', fmtMoneyR(buyerNet));
-  h += row('Renter: total rent paid', fmtMoneyR(renterOOP), 'rose');
-  h += row('Renter: investment portfolio', fmtMoneyR(renterInvest), 'teal');
-  h += row('Renter: net cost', fmtMoneyR(renterNet));
-  h += row('Home value at horizon end', fmtMoneyR(currentPrice));
-  h += row('Mortgage balance remaining', fmtMoneyR(mortBalance));
-  set('out-totals', h);
-  document.getElementById('results').classList.add('visible');
-}
-
-      window.calc = calc;
-      window.clearForm = function() {
-        ['years','price','down','rate','term','taxPct','insAnnual','maintPct','appPct','sellPct','rent','rentGrow','invReturn'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Retirement / 401(k) Calculator with Employer Match | Moonlit Social Labs</title>
-  <meta name="description" content="Project your 401(k) or IRA balance at retirement. Handles contributions, employer match, annual salary raises, and inflation-adjusted results.">
+  <meta name="description" content="Project a 401(k) or IRA balance at retirement with 2026 IRS contribution limits (including the age 60-63 catch-up), employer match, salary raises and inflation-adjusted results.">
   <meta name="keywords" content="401k calculator, retirement calculator, 401k growth calculator, employer match calculator, retirement savings calculator, IRA calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Retirement / 401(k) Calculator with Employer Match",
-    "description": "Project your 401(k) or IRA balance at retirement. Handles contributions, employer match, annual salary raises, and inflation-adjusted results.",
+    "description": "Project a 401(k) or IRA balance at retirement with 2026 IRS contribution limits (including the age 60-63 catch-up), employer match, salary raises and inflation-adjusted results.",
     "url": "https://moonligh7er.github.io/developer-site/tools/retirement-401k-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Retirement / 401(k) Calculator with Employer Match">
-  <meta property="og:description" content="Project your 401(k) or IRA balance at retirement. Handles contributions, employer match, annual salary raises, and inflation-adjusted results.">
+  <meta property="og:description" content="Project a 401(k) or IRA balance at retirement with 2026 IRS contribution limits (including the age 60-63 catch-up), employer match, salary raises and inflation-adjusted results.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/retirement-401k-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Retirement / 401(k) Calculator with Employer Match">
-  <meta name="twitter:description" content="Project your 401(k) or IRA balance at retirement. Handles contributions, employer match, annual salary raises, and inflation-adjusted results.">
+  <meta name="twitter:description" content="Project a 401(k) or IRA balance at retirement with 2026 IRS contribution limits (including the age 60-63 catch-up), employer match, salary raises and inflation-adjusted results.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
     .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
     .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
@@ -76,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
     .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
     .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
@@ -88,6 +85,22 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -118,48 +131,59 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Retirement / 401(k) Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Retirement / 401(k) Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Project your retirement balance from current savings, ongoing contributions, employer match, and expected market returns. Shows both nominal and inflation-adjusted (today's dollars) results.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Project a 401(k) or IRA balance from what you have now, what you and your employer add each year, and an assumed return. Contributions are held to the 2026 IRS limits, including the age 50+ and age 60&ndash;63 catch-ups. Shows the result in future dollars and in today&apos;s dollars.</p>
 
         <p class="calc-subhead">You</p>
 <div class="form-grid">
-  <div class="form-group"><label for="age">Current Age</label><input type="number" id="age" placeholder="30" min="0" step="1"></div>
-  <div class="form-group"><label for="retAge">Retirement Age</label><input type="number" id="retAge" placeholder="65" min="0" step="1"></div>
-  <div class="form-group"><label for="salary">Annual Salary ($)</label><input type="number" id="salary" placeholder="75000" min="0" step="any"></div>
-  <div class="form-group"><label for="current">Current Balance ($)</label><input type="number" id="current" placeholder="15000" min="0" step="any"></div>
+  <div class="form-group"><label for="acct">Account type</label>
+    <select id="acct">
+      <option value="401k" selected>401(k), 403(b) or 457(b)</option>
+      <option value="ira">IRA (traditional or Roth)</option>
+    </select>
+  </div>
+  <div class="form-group"><label for="age">Current age (years)</label><input type="number" id="age" value="30" min="14" max="99" step="1" inputmode="numeric" aria-describedby="age-msg"><span class="field-msg" id="age-msg" hidden></span></div>
+  <div class="form-group"><label for="retAge">Retirement age (years)</label><input type="number" id="retAge" value="65" min="15" max="100" step="1" inputmode="numeric" aria-describedby="retAge-msg"><span class="field-msg" id="retAge-msg" hidden></span></div>
+  <div class="form-group"><label for="salary">Annual salary ($)</label><input type="number" id="salary" value="75000" min="0" step="any" inputmode="decimal" aria-describedby="salary-msg"><span class="field-msg" id="salary-msg" hidden></span></div>
+  <div class="form-group"><label for="current">Current balance ($)</label><input type="number" id="current" value="15000" min="0" step="any" inputmode="decimal" aria-describedby="current-msg"><span class="field-msg" id="current-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">Contributions</p>
 <div class="form-grid">
-  <div class="form-group"><label for="contribPct">Your Contribution (% of salary)</label><input type="number" id="contribPct" placeholder="10" min="0" step="any"></div>
-  <div class="form-group"><label for="matchPct">Employer Match (% of salary)</label><input type="number" id="matchPct" placeholder="4" min="0" step="any"></div>
-  <div class="form-group"><label for="raise">Annual Salary Raise (%)</label><input type="number" id="raise" placeholder="3" min="0" step="any"></div>
+  <div class="form-group"><label for="contribPct">Your contribution (% of salary)</label><input type="number" id="contribPct" value="10" min="0" max="100" step="any" inputmode="decimal" aria-describedby="contribPct-msg contribPct-warn"><span class="field-msg" id="contribPct-msg" hidden></span><span class="field-warn" id="contribPct-warn" hidden></span></div>
+  <div class="form-group" data-k401><label for="matchRate">Employer match (% of what you put in)</label><input type="number" id="matchRate" value="100" min="0" max="300" step="any" inputmode="decimal" aria-describedby="matchRate-hint matchRate-msg"><span class="hint" id="matchRate-hint">100 = dollar for dollar; 50 = 50 cents per dollar</span><span class="field-msg" id="matchRate-msg" hidden></span></div>
+  <div class="form-group" data-k401><label for="matchCap">&hellip; on contributions up to (% of salary)</label><input type="number" id="matchCap" value="4" min="0" max="100" step="any" inputmode="decimal" aria-describedby="matchCap-msg"><span class="field-msg" id="matchCap-msg" hidden></span></div>
+  <div class="form-group"><label for="raise">Annual salary raise (%)</label><input type="number" id="raise" value="3" min="-20" max="30" step="any" inputmode="decimal" aria-describedby="raise-msg"><span class="field-msg" id="raise-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">Growth &amp; Inflation</p>
 <div class="form-grid">
-  <div class="form-group"><label for="returnPct">Expected Annual Return (%)</label><input type="number" id="returnPct" placeholder="7" min="0" step="any"></div>
-  <div class="form-group"><label for="infl">Inflation Rate (%)</label><input type="number" id="infl" placeholder="2.5" min="0" step="any"></div>
+  <div class="form-group"><label for="returnPct">Expected annual return (%)</label><input type="number" id="returnPct" value="7" min="-20" max="30" step="any" inputmode="decimal" aria-describedby="returnPct-msg"><span class="field-msg" id="returnPct-msg" hidden></span></div>
+  <div class="form-group"><label for="infl">Inflation rate (%/year)</label><input type="number" id="infl" value="2.5" min="-5" max="20" step="any" inputmode="decimal" aria-describedby="infl-hint infl-msg"><span class="hint" id="infl-hint">Also used to grow the IRS limits each year</span><span class="field-msg" id="infl-msg" hidden></span></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Projected Retirement Balance</h4><div id="out-main"></div><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Balance by Year</p><div class="growth-table-wrap" id="out-table"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Projected Retirement Balance</h4><div id="out-main"></div>
+          <div id="out-more"><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Balance by Year</p><div class="growth-table-wrap" id="out-table" style="max-height:360px;"></div></div>
+          <p class="calc-note">A straight-line projection, not a forecast or investment advice. Real returns vary year to year, and fees, taxes and withdrawals are not included.</p>
         </div>
       </div>
 
       <section class="calc-card">
   <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this projection works</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Each year, the calculator adds your contribution (% of current salary) plus your employer&apos;s match to the balance, then applies the expected annual return. Salary grows by your raise percentage each year, so contributions grow with it. Inflation-adjusted results divide the final nominal balance by (1 + inflation)<sup>years</sup> to show what the money is worth in today&apos;s dollars.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The employer match is free money &mdash; capture it</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Most 401(k) plans match a percentage of your contribution up to a cap (e.g., &ldquo;100% of the first 4%&rdquo; means if you contribute 4% of salary, your employer adds another 4%). Not contributing enough to get the full match is leaving compensation on the table. This calculator assumes the match percentage you enter is fully vested and contributed.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What the return assumption really means</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">7% is a reasonable long-run nominal return for a diversified stock-heavy portfolio (historical S&amp;P 500 has averaged ~10% nominal / ~7% real). Bond-heavy portfolios and target-date funds near retirement return less. Real markets are volatile and you will not see a smooth 7% every year &mdash; the projection is a straight-line best-guess, not a promise.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not include</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Contribution limits ($23,000 for 401(k) in 2024, plus catch-up if 50+), Roth vs. traditional tax treatment, RMDs, Social Security, other retirement accounts, or fees. Actual returns will vary. Consult a fiduciary financial planner for a retirement plan you can rely on.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Each year your contribution (a percentage of that year&apos;s salary, capped at the IRS limit for your age) and your employer&apos;s match are paid in monthly, like payroll deductions, and the balance grows at the expected return, compounded monthly. Salary then rises by your raise percentage. The &ldquo;today&apos;s dollars&rdquo; figure divides the final balance by (1 + inflation)<sup>years</sup>.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2026 contribution limits</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>401(k), 403(b), most 457(b):</strong> $24,500 of your own deferrals. Age 50 and over: plus $8,000 (total $32,500). Age 60 to 63: plus $11,250 instead (total $35,750). Your contributions plus employer money can&apos;t exceed $72,000 (catch-ups sit on top), and only the first $360,000 of salary counts. <strong>IRA:</strong> $7,500, plus $1,100 at age 50 and over. Source: <a href="https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500" target="_blank" rel="noopener" style="color:var(--teal);">IRS IR-2025-111</a> and Notice 2025-67 (November 2025). The calculator grows these limits with your inflation figure in later years; the IRS actually raises them in $500 or $100 steps.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Starting in 2026, if your Social Security wages from the employer were over $150,000 the year before, your catch-up contributions must go in as Roth (after-tax). That changes the tax treatment, not the amount, so this projection is unaffected.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The employer match</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A typical formula is &ldquo;100% of the first 4%&rdquo; (put in 4% of salary and your employer adds 4%) or &ldquo;50% of the first 6%&rdquo; (put in 6%, get 3%). Contributing less than the cap leaves part of the match unclaimed. This calculator treats the match as fully vested.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What the return assumption means</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">7% nominal is a common planning figure for a stock-heavy portfolio; bond-heavy mixes and target-date funds near retirement usually assume less. Markets don&apos;t deliver a smooth 7% a year, so treat the result as one path among many.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator doesn&apos;t include</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Investment fees, taxes on withdrawals (traditional) or the up-front tax cost (Roth), vesting schedules, IRA income limits, required minimum distributions, Social Security or other accounts. A fee-only planner can build a plan around the full picture.</p>
 </section>
     </div>
 
@@ -207,66 +231,137 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
-      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
-      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
-      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
-      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
-      function hideErr() { document.getElementById('err').classList.remove('visible'); }
-      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
-      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      // 2026 limits: IRS IR-2025-111 / Notice 2025-67 (Nov 13, 2025; retrieved 2026-11-03).
+      const LIM = { k401: 24500, catch50: 8000, catch6063: 11250, total415: 72000, comp: 360000, ira: 7500, iraCatch: 1100 };
+
+      function syncAcct() {
+        const ira = $('acct').value === 'ira';
+        document.querySelectorAll('[data-k401]').forEach(g => { g.hidden = ira; });
+      }
 
       function calc() {
-  hideErr();
-  const age=n('age'), retAge=n('retAge'), salary=n('salary'), current=n('current')||0;
-  const contribPct=n('contribPct')||0, matchPct=n('matchPct')||0, raise=(n('raise')||0)/100;
-  const ret=(n('returnPct')||0)/100, infl=(n('infl')||0)/100;
-  if (age===null||retAge===null||retAge<=age) return showErr('Enter valid current + retirement ages.');
-  if (salary===null||salary<=0) return showErr('Enter a valid annual salary.');
-  const years = retAge - age;
-  let balance = current;
-  let curSalary = salary;
-  let totalContrib = 0, totalMatch = 0, totalGrowth = 0;
-  const yearly = [];
-  for (let y=1; y<=years; y++) {
-    const c = curSalary * (contribPct/100);
-    const m = curSalary * (matchPct/100);
-    totalContrib += c;
-    totalMatch += m;
-    const preGrowth = balance + c + m;
-    const growth = preGrowth * ret;
-    balance = preGrowth + growth;
-    totalGrowth += growth;
-    yearly.push({year:y, age:age+y, contrib:c, match:m, balance:balance});
-    curSalary *= (1+raise);
-  }
-  const realBal = balance / Math.pow(1+infl, years);
-  set('out-main', row('At age '+retAge+' (nominal)', fmtMoneyR(balance), 'teal') +
-    row('In today&apos;s dollars', fmtMoneyR(realBal), 'violet'));
-  let h = '';
-  h += row('Starting Balance', fmtMoneyR(current));
-  h += row('Your Total Contributions', fmtMoneyR(totalContrib));
-  h += row('Employer Match Contributions', fmtMoneyR(totalMatch), 'teal');
-  h += row('Investment Growth', fmtMoneyR(totalGrowth), 'amber');
-  h += row('Years to Retirement', years+' years');
-  set('out-totals', h);
-  let t = '<table class="growth-table"><thead><tr><th>Year</th><th>Age</th><th>Your Contrib</th><th>Match</th><th>Balance</th></tr></thead><tbody>';
-  for (const y of yearly) {
-    t += '<tr><td>'+y.year+'</td><td>'+y.age+'</td><td>'+fmtMoneyR(y.contrib)+'</td><td>'+fmtMoneyR(y.match)+'</td><td>'+fmtMoneyR(y.balance)+'</td></tr>';
-  }
-  t += '</tbody></table>';
-  set('out-table', t);
-  document.getElementById('results').classList.add('visible');
-}
+        syncAcct();
+        const ira = $('acct').value === 'ira';
+        const age = num('age', { required: true, int: true, min: 14, max: 99 });
+        const retAge = num('retAge', { required: true, int: true, min: 15, max: 100 });
+        const salary = num('salary', { required: true, min: 0 });
+        const current = num('current', { min: 0 });
+        const contribPct = num('contribPct', { min: 0, max: 100 });
+        const matchRate = ira ? 0 : num('matchRate', { min: 0, max: 300 });
+        const matchCap = ira ? 0 : num('matchCap', { min: 0, max: 100 });
+        const raise = num('raise', { min: -20, max: 30 }) / 100;
+        const ret = num('returnPct', { required: true, min: -20, max: 30 }) / 100;
+        const infl = num('infl', { min: -5, max: 20 }) / 100;
+        if (!Number.isNaN(age) && !Number.isNaN(retAge) && retAge <= age) flag('retAge', 'Must be after your current age.');
+        const bad = [age, retAge, salary, current, contribPct, matchRate, matchCap, raise, ret, infl].some(Number.isNaN) || retAge <= age;
+        $('contribPct-warn').hidden = true;
+        if (bad) {
+          $('out-main').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see your projection.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
 
-      window.calc = calc;
-      window.clearForm = function() {
-        ['age','retAge','salary','current','contribPct','matchPct','raise','returnPct','infl'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        const years = retAge - age;
+        const rm = Math.pow(1 + ret, 1 / 12) - 1;
+        const fv12 = rm === 0 ? 12 : (Math.pow(1 + rm, 12) - 1) / rm; // 12 end-of-month deposits of 1
+        let bal = current, sal = salary, totC = 0, totM = 0, cappedYears = 0, firstC = 0, firstM = 0, firstLimit = 0;
+        let t = '';
+        for (let y = 1; y <= years; y++) {
+          const a = age + y - 1;                                  // age during this plan year
+          const idx = Math.max(1, Math.pow(1 + infl, y - 1));     // limits never go down
+          const pay = ira ? sal : Math.min(sal, LIM.comp * idx);
+          const base = (ira ? LIM.ira : LIM.k401) * idx;
+          const catchUp = ira ? (a >= 50 ? LIM.iraCatch * idx : 0)
+                              : (a >= 60 && a <= 63 ? LIM.catch6063 * idx : a >= 50 ? LIM.catch50 * idx : 0);
+          const want = Math.max(0, pay * contribPct / 100);
+          const c = Math.min(want, base + catchUp);
+          if (want > base + catchUp + 0.005) cappedYears++;
+          let m = ira ? 0 : pay * Math.min(contribPct, matchCap) / 100 * matchRate / 100;
+          if (!ira) m = Math.max(0, Math.min(m, LIM.total415 * idx - Math.min(c, base)));
+          if (y === 1) { firstC = c; firstM = m; firstLimit = base + catchUp; }
+          const start = bal;
+          bal = bal * (1 + ret) + (c + m) / 12 * fv12;
+          totC += c; totM += m;
+          t += '<tr><td>' + y + '</td><td>' + (a + 1) + '</td><td class="num">' + money0(c) + '</td>' + (ira ? '' : '<td class="num">' + money0(m) + '</td>') + '<td class="num">' + money0(bal - start - c - m) + '</td><td class="num">' + money0(bal) + '</td></tr>';
+          sal *= 1 + raise;
+        }
+        const growth = bal - current - totC - totM;
+        const real = bal / Math.pow(1 + infl, years);
+
+        if (cappedYears) {
+          const w = $('contribPct-warn');
+          w.textContent = 'Above the IRS limit in ' + cappedYears + ' of ' + years + ' years; the excess isn’t counted (2026 limit for you: ' + money0(firstLimit) + ').';
+          w.hidden = false;
+        }
+        $('out-main').innerHTML = row('At age ' + retAge + ' (future dollars)', money0(bal), 'teal') +
+          row('In today&apos;s dollars (' + pct(infl * 100, 1) + ' inflation)', money0(real), 'violet');
+        $('out-totals').innerHTML =
+          row('Starting balance', money0(current)) +
+          row('Your total contributions', money0(totC)) +
+          (ira ? '' : row('Employer match', money0(totM), 'teal')) +
+          row('Investment growth', money0(growth), growth < 0 ? 'rose' : 'amber') +
+          row('First-year contribution' + (ira ? '' : ' + match'), money0(firstC) + (ira ? '' : ' + ' + money0(firstM))) +
+          row('Years of contributions', years + (years === 1 ? ' year' : ' years'));
+        $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Year</th><th scope="col">Age at end</th><th scope="col" class="num">You</th>' + (ira ? '' : '<th scope="col" class="num">Match</th>') + '<th scope="col" class="num">Growth</th><th scope="col" class="num">Balance</th></tr></thead><tbody>' + t + '</tbody></table>';
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

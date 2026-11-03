@@ -14,7 +14,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Auto Loan Calculator with Sales Tax &amp; Trade-In",
+    "name": "Free Auto Loan Calculator with Sales Tax & Trade-In",
     "description": "Calculate your monthly auto loan payment, total interest, and payoff schedule. Handles down payment, trade-in value, and sales tax.",
     "url": "https://moonligh7er.github.io/developer-site/tools/auto-loan-calculator.html",
     "applicationCategory": "FinanceApplication",
@@ -45,7 +45,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
     .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
     .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
@@ -76,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
     .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
     .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
@@ -88,6 +85,22 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -118,37 +131,43 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Auto Loan Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Auto Loan Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Calculate the true monthly cost of a car loan &mdash; including down payment, trade-in credit, and sales tax on the taxable amount. Also shows total interest and payoff time.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">The monthly payment on a car loan once the down payment, trade-in, sales tax and any financed fees are counted, plus total interest and a year-by-year payoff schedule. Results update as you type.</p>
 
         <p class="calc-subhead">Vehicle &amp; Loan</p>
 <div class="form-grid">
-  <div class="form-group"><label for="price">Vehicle Price ($)</label><input type="number" id="price" placeholder="30000" min="0" step="any"></div>
-  <div class="form-group"><label for="down">Down Payment ($)</label><input type="number" id="down" placeholder="3000" min="0" step="any"></div>
-  <div class="form-group"><label for="trade">Trade-In Value ($)</label><input type="number" id="trade" placeholder="0" min="0" step="any"></div>
-  <div class="form-group"><label for="salestax">Sales Tax (%)</label><input type="number" id="salestax" placeholder="6.25" min="0" step="any"></div>
-  <div class="form-group"><label for="rate">Interest Rate (% APR)</label><input type="number" id="rate" placeholder="7.5" min="0" step="any"></div>
-  <div class="form-group"><label for="term">Term (Months)</label><input type="number" id="term" placeholder="60" min="1" step="1"></div>
+  <div class="form-group"><label for="price">Vehicle price ($)</label><input type="number" id="price" value="35000" min="0" step="any" inputmode="decimal" aria-describedby="price-msg"><span class="field-msg" id="price-msg" hidden></span></div>
+  <div class="form-group"><label for="down">Down payment ($)</label><input type="number" id="down" value="5000" min="0" step="any" inputmode="decimal" aria-describedby="down-msg"><span class="field-msg" id="down-msg" hidden></span></div>
+  <div class="form-group"><label for="trade">Trade-in value ($)</label><input type="number" id="trade" value="0" min="0" step="any" inputmode="decimal" aria-describedby="trade-msg"><span class="field-msg" id="trade-msg" hidden></span></div>
+  <div class="form-group"><label for="salestax">Sales tax rate (%)</label><input type="number" id="salestax" value="6.25" min="0" max="20" step="any" inputmode="decimal" aria-describedby="salestax-msg"><span class="field-msg" id="salestax-msg" hidden></span></div>
+  <div class="form-group"><label for="fees">Fees added to the loan ($)</label><input type="number" id="fees" value="0" min="0" step="any" inputmode="decimal" aria-describedby="fees-hint fees-msg"><span class="hint" id="fees-hint">Doc, title or registration fees you finance</span><span class="field-msg" id="fees-msg" hidden></span></div>
+  <div class="form-group"><label for="rate">Interest rate (% APR)</label><input type="number" id="rate" value="7.5" min="0" max="40" step="any" inputmode="decimal" aria-describedby="rate-msg"><span class="field-msg" id="rate-msg" hidden></span></div>
+  <div class="form-group"><label for="term">Loan term (months)</label><input type="number" id="term" value="60" min="1" max="120" step="1" inputmode="numeric" aria-describedby="term-msg"><span class="field-msg" id="term-msg" hidden></span></div>
 </div>
+<label class="check-row" for="tradeCredit"><input type="checkbox" id="tradeCredit" checked> Trade-in lowers the taxable price (true in most states)</label>
 
-        <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+        <div class="calc-btn-row" style="margin-top:1rem;">
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Monthly Payment</h4><div id="out-main"></div><p class="calc-subhead">Loan Totals</p><div id="out-totals"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Monthly Payment</h4><div id="out-main"></div>
+          <div id="out-more"><p class="calc-subhead">Loan Totals</p><div id="out-totals"></div>
+          <div id="sched"><p class="calc-subhead">Payoff Schedule by Year</p><div class="growth-table-wrap" id="out-table"></div></div></div>
+          <p class="calc-note">An estimate, not a loan offer. Lenders round the payment to the cent and adjust the final payment, so real totals can differ by a few cents.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How auto loans work</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Auto loans use the same amortization math as any fixed-rate installment loan: <code style="font-family:var(--font-mono);color:var(--teal);">M = P &middot; r(1+r)<sup>n</sup> / ((1+r)<sup>n</sup> &minus; 1)</code>. The tricky part is figuring out <em>P</em>, the actual loan amount, because vehicle price alone is not what you finance.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Sales tax + trade-in in most US states</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">In most states, sales tax applies to the vehicle price <em>minus</em> your trade-in value &mdash; a trade-in credit reduces your taxable amount. This calculator uses that model. A handful of states (CA, HI, MI, VA, and a few others as of 2026) tax the full sticker regardless of trade-in; check your state DMV if you need exact figures. Down payment is applied after tax to reduce the loan amount you finance.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Auto loans use the same amortization math as any fixed-rate installment loan: <code style="font-family:var(--font-mono);color:var(--teal);">M = P &middot; r(1+r)<sup>n</sup> / ((1+r)<sup>n</sup> &minus; 1)</code>, where <em>r</em> is the APR divided by 12 and <em>n</em> is the number of months (at 0% APR the payment is simply <em>P</em> / <em>n</em>). The part that takes care is <em>P</em>, the amount financed: price + sales tax + financed fees &minus; down payment &minus; trade-in.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Sales tax and trade-ins</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">In most states sales tax applies to the price <em>minus</em> your trade-in, so a trade-in also saves tax. A few states tax the full price anyway (California, Hawaii and Virginia, for example) and some cap the credit; untick the box above if that&apos;s you, and check your state&apos;s motor vehicle agency for the exact rule. The down payment is cash you put in, so it reduces the amount financed but not the tax.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why the APR you get matters more than the sticker</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Auto loan APRs vary widely with credit score &mdash; the spread between a 720+ FICO and a 620 FICO can be 5+ percentage points, which on a $25k / 60mo loan is thousands in extra interest. Get pre-approved by your credit union or bank before you shop; dealer financing quotes look better when you already have a competing offer.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Auto loan APRs vary widely with credit score; the gap between a strong and a weak score can be several percentage points, which on a $25k, 60-month loan is thousands in extra interest. A pre-approval from a credit union or bank before you shop gives you something to compare the dealer&apos;s offer against.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The 2025&ndash;2028 car loan interest deduction</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">For tax years 2025 through 2028, the One Big Beautiful Bill Act lets you deduct up to $10,000 a year of interest on a loan taken out after 2024 to buy a <em>new</em> personal-use vehicle whose final assembly was in the US, whether or not you itemize. It phases out above $100,000 of modified AGI ($200,000 joint). This calculator shows interest before any tax saving; see the <a href="https://www.irs.gov/newsroom/treasury-irs-provide-guidance-on-the-new-deduction-for-car-loan-interest-under-the-one-big-beautiful-bill" target="_blank" rel="noopener" style="color:var(--teal);">IRS guidance</a> for who qualifies.</p>
 </section>
     </div>
 
@@ -196,48 +215,120 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
-      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
-      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
-      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
-      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
-      function hideErr() { document.getElementById('err').classList.remove('visible'); }
-      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
-      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
       function calc() {
-  hideErr();
-  const price=n('price'), down=n('down')||0, trade=n('trade')||0, tax=n('salestax')||0, rate=n('rate'), term=n('term');
-  if (price===null||price<=0) return showErr('Enter a vehicle price.');
-  if (rate===null||rate<0) return showErr('Enter a valid interest rate.');
-  if (term===null||term<=0) return showErr('Enter a term in months.');
-  const taxable = Math.max(0, price - trade);
-  const salesTax = taxable * (tax/100);
-  const loanAmt = Math.max(0, price + salesTax - down - trade);
-  const r = (rate/100)/12;
-  const M = r===0 ? loanAmt/term : loanAmt*(r*Math.pow(1+r,term))/(Math.pow(1+r,term)-1);
-  const totalPaid = M * term;
-  const totalInt = totalPaid - loanAmt;
-  set('out-main', row('Monthly Payment', fmtMoney(M), 'teal'));
-  let h = '';
-  h += row('Sales Tax', fmtMoney(salesTax));
-  h += row('Down Payment', fmtMoney(down));
-  h += row('Trade-In Credit', fmtMoney(trade));
-  h += row('Amount Financed', fmtMoney(loanAmt), 'violet');
-  h += row('Total Interest', fmtMoney(totalInt), 'rose');
-  h += row('Total of All Payments', fmtMoney(totalPaid));
-  set('out-totals', h);
-  document.getElementById('results').classList.add('visible');
-}
+        const price = num('price', { required: true, min: 0.01, reqMsg: 'Enter the vehicle price.', minMsg: 'Enter a price above $0.' });
+        const down = num('down', { min: 0 });
+        const trade = num('trade', { min: 0 });
+        const taxPct = num('salestax', { min: 0, max: 20 });
+        const fees = num('fees', { min: 0 });
+        const apr = num('rate', { required: true, min: 0, max: 40 });
+        const term = num('term', { required: true, int: true, min: 1, max: 120, minMsg: 'At least 1 month.', maxMsg: '120 months or less.' });
+        if ([price, down, trade, taxPct, fees, apr, term].some(Number.isNaN)) {
+          $('out-main').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see your payment.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
 
-      window.calc = calc;
-      window.clearForm = function() {
-        ['price','down','trade','salestax','rate','term'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        const taxable = $('tradeCredit').checked ? Math.max(0, price - trade) : price;
+        const salesTax = taxable * taxPct / 100;
+        const financed = price + salesTax + fees - down - trade;
+
+        if (financed <= 0) {
+          $('out-main').innerHTML = row('Monthly payment', money(0), 'teal');
+          $('out-totals').innerHTML = row('Sales tax', money(salesTax)) +
+            row('Nothing left to finance', 'Down payment and trade-in cover ' + money(price + salesTax + fees));
+          $('sched').hidden = true;
+          return;
+        }
+        $('sched').hidden = false;
+
+        const r = apr / 100 / 12;
+        const pmt = r === 0 ? financed / term : financed * r / (1 - Math.pow(1 + r, -term));
+        const totalPaid = pmt * term;
+        const totalInt = totalPaid - financed;
+
+        // Year-by-year schedule
+        let bal = financed, t = '';
+        for (let y = 1; y <= Math.ceil(term / 12); y++) {
+          let yi = 0, yp = 0;
+          for (let m = (y - 1) * 12 + 1; m <= Math.min(term, y * 12); m++) {
+            const i = bal * r;
+            const p = m === term ? bal : pmt - i;
+            yi += i; yp += p; bal -= p;
+          }
+          t += '<tr><td>' + y + '</td><td class="num">' + money(yi + yp) + '</td><td class="num">' + money(yp) + '</td><td class="num">' + money(yi) + '</td><td class="num">' + money(Math.max(0, bal)) + '</td></tr>';
+        }
+        const yrs = Math.floor(term / 12), mos = term % 12;
+        const span = (yrs ? yrs + (yrs === 1 ? ' year' : ' years') : '') + (yrs && mos ? ', ' : '') + (mos ? mos + (mos === 1 ? ' month' : ' months') : '');
+
+        $('out-main').innerHTML = row('Monthly payment (' + term + ' payments)', money(pmt), 'teal');
+        $('out-totals').innerHTML =
+          row('Sales tax' + (taxPct > 0 ? ' (' + pct(taxPct, 3).replace(/\.?0+%$/, '%') + ' of ' + money0(taxable) + ')' : ''), money(salesTax)) +
+          row('Amount financed', money(financed), 'violet') +
+          row('Total interest', money(totalInt), 'rose') +
+          row('Total of all payments', money(totalPaid)) +
+          row('Total cost incl. down payment &amp; trade-in', money(totalPaid + down + trade)) +
+          row('Paid off in', span);
+        $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Year</th><th scope="col" class="num">Paid</th><th scope="col" class="num">Principal</th><th scope="col" class="num">Interest</th><th scope="col" class="num">Balance</th></tr></thead><tbody>' + t + '</tbody></table>';
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

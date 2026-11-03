@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Inflation Calculator &mdash; Purchasing Power Over Time | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta name="description" content="See what a dollar amount from any year since 1913 is worth in another year, using official BLS CPI-U data through September 2026, or project purchasing power at a rate you choose.">
   <meta name="keywords" content="inflation calculator, purchasing power calculator, dollar value over time, future value inflation, inflation impact calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Inflation Calculator &mdash; Purchasing Power Over Time",
-    "description": "Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.",
+    "name": "Free Inflation Calculator — Purchasing Power Over Time",
+    "description": "See what a dollar amount from any year since 1913 is worth in another year, using official BLS CPI-U data through September 2026, or project purchasing power at a rate you choose.",
     "url": "https://moonligh7er.github.io/developer-site/tools/inflation-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -27,12 +27,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Inflation Calculator &mdash; Purchasing Power Over Time">
-  <meta property="og:description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta property="og:description" content="See what a dollar amount from any year since 1913 is worth in another year, using official BLS CPI-U data through September 2026, or project purchasing power at a rate you choose.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/inflation-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Free Inflation Calculator &mdash; Purchasing Power Over Time">
-  <meta name="twitter:description" content="Calculate what a dollar amount is worth after inflation. See how much your money loses purchasing power over 5, 10, 20, or 30 years.">
+  <meta name="twitter:description" content="See what a dollar amount from any year since 1913 is worth in another year, using official BLS CPI-U data through September 2026, or project purchasing power at a rate you choose.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
     .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
     .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
@@ -76,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
     .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
     .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
@@ -88,6 +85,24 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
+    .data-vintage { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.05em; color: var(--text-secondary); border-left: 2px solid var(--teal); padding: 0.5rem 0.9rem; margin: 0 0 1.25rem; line-height: 1.6; }
+    .data-vintage strong { color: var(--teal); font-weight: 500; }
   </style>
 </head>
 <body>
@@ -118,39 +133,54 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Inflation Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Inflation Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter a dollar amount and a number of years to see how inflation erodes purchasing power. Works both ways: what today's money will be worth later, or what a past amount would be worth today.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1rem;">Two ways to look at inflation. <strong>Historical</strong> uses the official US Consumer Price Index (CPI-U) from 1913 to the latest month, so you can see what an amount from one year equals in another. <strong>Projection</strong> applies a steady rate you choose, for planning ahead.</p>
+        <p class="data-vintage"><strong>CPI data through September 2026</strong> &middot; BLS CPI-U, U.S. city average, all items (series CUUR0000SA0), retrieved November 3, 2026</p>
 
         <div class="form-grid">
-  <div class="form-group"><label for="amount">Amount ($)</label><input type="number" id="amount" placeholder="10000" min="0" step="any"></div>
-  <div class="form-group"><label for="years">Number of Years</label><input type="number" id="years" placeholder="20" min="1" step="1"></div>
-  <div class="form-group"><label for="rate">Annual Inflation Rate (%)</label><input type="number" id="rate" placeholder="3" min="0" step="any"></div>
+  <div class="form-group"><label for="mode">Method</label>
+    <select id="mode">
+      <option value="cpi" selected>Historical &mdash; US CPI-U (1913 to 2026)</option>
+      <option value="rate">Projection &mdash; a fixed yearly rate</option>
+    </select>
+  </div>
+  <div class="form-group"><label for="amount">Amount ($)</label><input type="number" id="amount" value="100" min="0" step="any" inputmode="decimal" aria-describedby="amount-msg"><span class="field-msg" id="amount-msg" hidden></span></div>
+</div>
+<div class="form-grid" id="cpi-fields">
+  <div class="form-group"><label for="fromYear">In year</label><select id="fromYear" aria-describedby="fromYear-msg"></select><span class="field-msg" id="fromYear-msg" hidden></span></div>
+  <div class="form-group"><label for="toYear">Is worth in year</label><select id="toYear"></select></div>
+</div>
+<div class="form-grid" id="rate-fields" hidden>
+  <div class="form-group"><label for="years">Number of years</label><input type="number" id="years" value="20" min="1" max="200" step="1" inputmode="numeric" aria-describedby="years-msg"><span class="field-msg" id="years-msg" hidden></span></div>
+  <div class="form-group"><label for="rate">Annual inflation rate (%)</label><input type="number" id="rate" value="3" min="-10" max="50" step="any" inputmode="decimal" aria-describedby="rate-msg"><span class="field-msg" id="rate-msg" hidden></span></div>
   <div class="form-group"><label for="direction">Direction</label>
     <select id="direction">
-      <option value="forward">Future value (today &rarr; N years from now)</option>
-      <option value="backward">Past value (amount N years ago &rarr; today)</option>
+      <option value="forward" selected>Today &rarr; N years from now</option>
+      <option value="backward">N years ago &rarr; today</option>
     </select>
   </div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Result</h4><div id="out-main"></div><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Year-by-Year</p><div class="growth-table-wrap" id="out-table"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Result</h4><div id="out-main"></div>
+          <div id="out-more"><p class="calc-subhead">Breakdown</p><div id="out-totals"></div><p class="calc-subhead">Year by Year</p><div class="growth-table-wrap" id="out-table" style="max-height:360px;"></div></div>
+          <p class="calc-note" id="out-note"></p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How inflation math works</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Inflation compounds. If prices rise 3% per year, then after <em>n</em> years the same basket of goods costs <code style="font-family:var(--font-mono);color:var(--teal);">(1.03)<sup>n</sup></code> times as much. To find future value at inflation rate <em>r</em>: <code style="font-family:var(--font-mono);color:var(--teal);">FV = PV &middot; (1+r)<sup>n</sup></code>. To find what a past dollar is worth today: <code style="font-family:var(--font-mono);color:var(--teal);">Now = Then &middot; (1+r)<sup>n</sup></code>. To find the present-day purchasing power of a future dollar: divide instead of multiply.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Historical US inflation averages</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Long-run US CPI inflation has averaged roughly 2.5&ndash;3.5% per year over the last century, with wide variation: 13%+ during the 1979&ndash;1981 spike, near 0% during 2009, and 6%+ in 2021&ndash;2022. The Federal Reserve targets 2% inflation as monetary policy. For long-horizon planning, 2.5&ndash;3% is a reasonable default assumption.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Historical:</strong> the value in the later year = amount &times; CPI<sub>later</sub> / CPI<sub>earlier</sub>. Each full year uses the Bureau of Labor Statistics annual average CPI-U (1982&ndash;84 = 100). 2026 isn&apos;t over yet, so it uses the latest monthly index, September 2026 (336.940). The average yearly rate shown treats each annual average as mid-year, so it is approximate. October 2025 was never collected because of the 2025 federal funding lapse; BLS built the 2025 annual average from the other eleven months.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;"><strong>Projection:</strong> prices compound, so after <em>n</em> years at rate <em>r</em> they are <code style="font-family:var(--font-mono);color:var(--teal);">(1+r)<sup>n</sup></code> times higher. A sum that buys something today needs to be that many times larger in <em>n</em> years, and a future dollar buys <code style="font-family:var(--font-mono);color:var(--teal);">1/(1+r)<sup>n</sup></code> of what a dollar buys now.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Historical US inflation</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">From the 1913 annual average to September 2026, CPI-U rose about 34-fold, an average near 3.2% a year, with wide swings: 13.5% in 1980, slightly negative in 2009, 8.0% in 2022 (annual averages). The Federal Reserve aims for 2% a year over time (measured with a different price index, PCE). For long-range planning, many people use 2.5&ndash;3%.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Why 3% matters more than it sounds</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">At 3% inflation, a dollar loses roughly half its purchasing power every 24 years. That means $100k of retirement savings at age 40 is worth ~$50k in today&apos;s purchasing power by age 64 even if the nominal balance doesn&apos;t change. Inflation is why cash-under-the-mattress is a losing strategy over long horizons.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">At 3% a year, a dollar loses about half its purchasing power in 23&ndash;24 years. $100,000 that sits still from age 40 to 64 buys roughly what $49,000 buys today. CPI-U is an average across urban consumers; your own basket (rent, healthcare, tuition) can rise faster or slower.</p>
 </section>
     </div>
 
@@ -198,62 +228,144 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
-      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
-      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
-      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
-      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
-      function hideErr() { document.getElementById('err').classList.remove('visible'); }
-      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
-      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
+
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      // CPI-U, U.S. city average, all items, not seasonally adjusted, 1982-84=100.
+      // BLS series CUUR0000SA0, pulled from the BLS Public Data API (v1) on 2026-11-03.
+      // CPI_ANNUAL[i] is the BLS annual average for year 1913 + i (1913-2025).
+      // 2025's annual average is BLS's own 11-month figure (Oct 2025 was not collected: 2025 lapse in appropriations).
+      // The current year uses the latest monthly index: September 2026 = 336.940 (released October 2026).
+      const CPI_ANNUAL = [9.9,10,10.1,10.9,12.8,15.1,17.3,20,17.9,16.8,17.1,17.1,17.5,17.7,17.4,17.1,17.1,16.7,15.2,13.7,13,13.4,13.7,13.9,14.4,14.1,13.9,14,14.7,16.3,17.3,17.6,18,19.5,22.3,24.1,23.8,24.1,26,26.5,26.7,26.9,26.8,27.2,28.1,28.9,29.1,29.6,29.9,30.2,30.6,31,31.5,32.4,33.4,34.8,36.7,38.8,40.5,41.8,44.4,49.3,53.8,56.9,60.6,65.2,72.6,82.4,90.9,96.5,99.6,103.9,107.6,109.6,113.6,118.3,124,130.7,136.2,140.3,144.5,148.2,152.4,156.9,160.5,163,166.6,172.2,177.1,179.9,184,188.9,195.3,201.6,207.342,215.303,214.537,218.056,224.939,229.594,232.957,236.736,237.017,240.007,245.12,251.107,255.657,258.811,270.97,292.655,304.702,313.689,321.943];
+      const FIRST = 1913, LATEST = { year: 2026, month: 'September', index: 336.940, t: 2026 + 8.5 / 12 };
+      const cpi = y => (y === LATEST.year ? LATEST.index : CPI_ANNUAL[y - FIRST]);
+      const when = y => (y === LATEST.year ? 'Sep ' + y : String(y));
+      const mid = y => (y === LATEST.year ? LATEST.t : y + 0.5);
+
+      (function fillYears() {
+        for (const [id, def] of [['fromYear', 2000], ['toYear', LATEST.year]]) {
+          const sel = $(id);
+          for (let y = LATEST.year; y >= FIRST; y--) {
+            const o = new Option(y === LATEST.year ? y + ' (Sep, latest)' : String(y), String(y));
+            if (y === def) { o.defaultSelected = true; o.selected = true; }
+            sel.add(o);
+          }
+        }
+      })();
 
       function calc() {
-  hideErr();
-  const amt=n('amount'), yrs=n('years'), rate=(n('rate')||0)/100, dir=s('direction');
-  if (amt===null||amt<=0) return showErr('Enter a valid amount.');
-  if (yrs===null||yrs<=0) return showErr('Enter a valid number of years.');
-  const factor = Math.pow(1+rate, yrs);
-  let result, lossOrGain;
-  if (dir === 'forward') {
-    // Future nominal is amt * factor, but "purchasing power of $amt in N years" is amt / factor
-    // Show BOTH: what you need in N years to match today's purchasing power, and what $amt today will be worth then
-    const equivFuture = amt * factor;
-    const purchasingPower = amt / factor;
-    set('out-main', row('$'+fmtMoney(amt).slice(1)+' today &rarr; equivalent purchasing power in '+yrs+' years', fmtMoneyR(equivFuture), 'teal') +
-      row('$'+fmtMoney(amt).slice(1)+' in '+yrs+' years &rarr; worth in today&apos;s dollars', fmtMoneyR(purchasingPower), 'violet'));
-    const loss = amt - purchasingPower;
-    let h = '';
-    h += row('Compounded inflation factor', factor.toFixed(3)+'x');
-    h += row('Purchasing power lost', fmtMoneyR(loss), 'rose');
-    h += row('Purchasing power retained', fmtPct((purchasingPower/amt)*100), 'amber');
-    set('out-totals', h);
-  } else {
-    const now = amt * factor;
-    set('out-main', row('$'+fmtMoney(amt).slice(1)+' from '+yrs+' years ago &rarr; today', fmtMoneyR(now), 'teal'));
-    let h = '';
-    h += row('Compounded inflation factor', factor.toFixed(3)+'x');
-    h += row('Increase', fmtMoneyR(now - amt), 'amber');
-    set('out-totals', h);
-  }
-  let t = '<table class="growth-table"><thead><tr><th>Year</th><th>Cumulative Factor</th><th>' + (dir==='forward'?'Equivalent Value':'Value Today')+'</th></tr></thead><tbody>';
-  for (let y=1; y<=yrs; y++) {
-    const f = Math.pow(1+rate, y);
-    const v = dir==='forward' ? amt*f : amt*f;
-    t += '<tr><td>'+y+'</td><td>'+f.toFixed(3)+'x</td><td>'+fmtMoneyR(v)+'</td></tr>';
-  }
-  t += '</tbody></table>';
-  set('out-table', t);
-  document.getElementById('results').classList.add('visible');
-}
+        const cpiMode = $('mode').value === 'cpi';
+        $('cpi-fields').hidden = !cpiMode;
+        $('rate-fields').hidden = cpiMode;
+        const amt = num('amount', { required: true, min: 0, reqMsg: 'Enter an amount.', minMsg: 'Amount can’t be negative.' });
+        const years = cpiMode ? 0 : num('years', { required: true, int: true, min: 1, max: 200 });
+        const ratePct = cpiMode ? 0 : num('rate', { required: true, min: -10, max: 50 });
+        if ([amt, years, ratePct].some(Number.isNaN)) {
+          $('out-main').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see the result.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
+        let t = '';
 
-      window.calc = calc;
-      window.clearForm = function() {
-        ['amount','years','rate'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        if (cpiMode) {
+          const from = Number($('fromYear').value), to = Number($('toYear').value);
+          const ratio = cpi(to) / cpi(from);
+          const value = amt * ratio;
+          const span = Math.abs(mid(to) - mid(from));
+          const avg = span > 0 ? (Math.pow(cpi(Math.max(from, to)) / cpi(Math.min(from, to)), 1 / span) - 1) * 100 : 0;
+          $('out-main').innerHTML = row(money(amt) + ' in ' + when(from) + (to >= from ? ' has the buying power of' : ' had the buying power of'), money(value) + ' in ' + when(to), 'teal');
+          $('out-totals').innerHTML =
+            row('CPI-U ' + when(from) + ' &rarr; ' + when(to), cpi(from).toFixed(3).replace(/0+$/, '').replace(/\.$/, '') + ' &rarr; ' + cpi(to).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')) +
+            row('Cumulative price change', (ratio >= 1 ? '+' : '') + pct((ratio - 1) * 100, 1), ratio >= 1 ? 'rose' : 'teal') +
+            (span > 0 ? row('Average yearly inflation (approx.)', pct(avg, 2), 'amber') : '') +
+            (span > 0 ? row(money(amt) + ' kept as cash from ' + when(Math.min(from, to)) + ' to ' + when(Math.max(from, to)) + ' buys what this bought in ' + when(Math.min(from, to)), money(amt * cpi(Math.min(from, to)) / cpi(Math.max(from, to))), 'violet') : '');
+          const lo = Math.min(from, to), hi = Math.max(from, to);
+          for (let y = lo; y <= hi; y++) {
+            t += '<tr><td>' + when(y) + '</td><td class="num">' + cpi(y) + '</td><td class="num">' + money(amt * cpi(y) / cpi(from)) + '</td></tr>';
+          }
+          $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Year</th><th scope="col" class="num">CPI-U</th><th scope="col" class="num">' + money(amt) + ' of ' + when(from) + ' money</th></tr></thead><tbody>' + t + '</tbody></table>';
+          $('out-note').textContent = 'Based on official CPI-U data; an estimate of average price change, not of any one person’s costs. Not financial advice.';
+          return;
+        }
+
+        const r = ratePct / 100, fwd = $('direction').value === 'forward', yrs = years + (years === 1 ? ' year' : ' years');
+        const factor = Math.pow(1 + r, years);
+        if (fwd) {
+          $('out-main').innerHTML =
+            row('To match what ' + money(amt) + ' buys today, in ' + yrs + ' you need', money(amt * factor), 'teal') +
+            row(money(amt) + ' received in ' + yrs + ' buys what this buys today', money(amt / factor), 'violet');
+          $('out-totals').innerHTML =
+            row('Compounded price factor', factor.toFixed(3) + '&times;') +
+            row('Purchasing power lost on ' + money(amt) + ' held as cash', money(amt - amt / factor), 'rose') +
+            row('Purchasing power kept', pct(100 / factor, 1), 'amber');
+        } else {
+          $('out-main').innerHTML = row(money(amt) + ' from ' + yrs + ' ago is worth today', money(amt * factor), 'teal');
+          $('out-totals').innerHTML =
+            row('Compounded price factor', factor.toFixed(3) + '&times;') +
+            row(factor >= 1 ? 'Increase' : 'Decrease', money(Math.abs(amt * factor - amt)), 'amber');
+        }
+        for (let y = 1; y <= years; y++) {
+          const f = Math.pow(1 + r, y);
+          t += '<tr><td>' + y + '</td><td class="num">' + f.toFixed(3) + '&times;</td><td class="num">' + money(amt * f) + '</td><td class="num">' + money(amt / f) + '</td></tr>';
+        }
+        $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Year</th><th scope="col" class="num">Price factor</th><th scope="col" class="num">Needed to match ' + money(amt) + '</th><th scope="col" class="num">What ' + money(amt) + ' buys</th></tr></thead><tbody>' + t + '</tbody></table>';
+        $('out-note').textContent = 'A projection at a constant rate you chose; real inflation varies year to year. Not financial advice.';
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

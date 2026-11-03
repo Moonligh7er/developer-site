@@ -72,8 +72,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
     .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
     .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
@@ -84,6 +82,22 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -114,48 +128,50 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Finance</a> &rarr; Disability Insurance Needs</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Disability Insurance Needs</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Calculate the monthly disability insurance coverage gap between your existing employer LTD and the 60&ndash;70% income replacement most planners recommend.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Estimate the monthly gap between what your employer&apos;s long-term disability (LTD) plan would pay and the 60&ndash;70% income replacement many planners suggest, and whether the benefit would cover your essential bills. Results update as you type.</p>
 
         <p class="calc-subhead">Income &amp; Expenses</p>
 <div class="form-grid">
-  <div class="form-group"><label for="income">Gross Monthly Income ($)</label><input type="number" id="income" placeholder="8000" min="0" step="any"></div>
-  <div class="form-group"><label for="expenses">Essential Monthly Expenses ($)</label><input type="number" id="expenses" placeholder="5500" min="0" step="any"><span class="hint">Rent/mortgage, food, utilities, minimums</span></div>
-  <div class="form-group"><label for="target">Target Replacement (%)</label><input type="number" id="target" value="65" min="0" max="100" step="any"><span class="hint">Convention: 60-70% of gross</span></div>
+  <div class="form-group"><label for="income">Gross monthly income ($)</label><input type="number" id="income" value="8000" min="0" step="any" inputmode="decimal" aria-describedby="income-msg"><span class="field-msg" id="income-msg" hidden></span></div>
+  <div class="form-group"><label for="expenses">Essential monthly expenses ($)</label><input type="number" id="expenses" value="5500" min="0" step="any" inputmode="decimal" aria-describedby="expenses-hint expenses-msg"><span class="hint" id="expenses-hint">Housing, food, utilities, insurance, minimum debt payments</span><span class="field-msg" id="expenses-msg" hidden></span></div>
+  <div class="form-group"><label for="target">Target replacement (% of gross)</label><input type="number" id="target" value="65" min="0" max="100" step="any" inputmode="decimal" aria-describedby="target-hint target-msg"><span class="hint" id="target-hint">Common guideline: 60&ndash;70%</span><span class="field-msg" id="target-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">Existing Coverage</p>
 <div class="form-grid">
-  <div class="form-group"><label for="ltdPct">Employer LTD Coverage (% of income)</label><input type="number" id="ltdPct" placeholder="60" min="0" max="100" step="any"><span class="hint">Group LTD typically covers 50-70%</span></div>
-  <div class="form-group"><label for="ltdCap">Employer LTD Monthly Cap ($)</label><input type="number" id="ltdCap" placeholder="10000" min="0" step="any"><span class="hint">Many group policies cap the monthly benefit</span></div>
-  <div class="form-group"><label for="ltdTaxed">Is Employer LTD Taxable?</label>
+  <div class="form-group"><label for="ltdPct">Employer LTD benefit (% of income)</label><input type="number" id="ltdPct" value="60" min="0" max="100" step="any" inputmode="decimal" aria-describedby="ltdPct-hint ltdPct-msg"><span class="hint" id="ltdPct-hint">Group LTD typically pays 50&ndash;70%; enter 0 if you have none</span><span class="field-msg" id="ltdPct-msg" hidden></span></div>
+  <div class="form-group"><label for="ltdCap">LTD monthly maximum ($)</label><input type="number" id="ltdCap" value="10000" min="0" step="any" inputmode="decimal" aria-describedby="ltdCap-hint ltdCap-msg"><span class="hint" id="ltdCap-hint">Leave blank if your plan has no cap</span><span class="field-msg" id="ltdCap-msg" hidden></span></div>
+  <div class="form-group"><label for="ltdTaxed">Who pays the LTD premium?</label>
     <select id="ltdTaxed">
-      <option value="yes">Yes (employer paid premium)</option>
-      <option value="no">No (you paid premium with after-tax dollars)</option>
+      <option value="yes" selected>Employer, or me pre-tax (benefit is taxable)</option>
+      <option value="no">Me, with after-tax pay (benefit is tax-free)</option>
     </select>
   </div>
-  <div class="form-group"><label for="otherIncome">Other Monthly Income if Disabled ($)</label><input type="number" id="otherIncome" placeholder="0" min="0" step="any"><span class="hint">Spouse income, SSDI est, investment income</span></div>
+  <div class="form-group" id="taxRate-group"><label for="taxRate">Tax on a taxable benefit (%)</label><input type="number" id="taxRate" value="20" min="0" max="60" step="any" inputmode="decimal" aria-describedby="taxRate-hint taxRate-msg"><span class="hint" id="taxRate-hint">Your rough combined federal + state rate on the benefit; 15&ndash;25% is common</span><span class="field-msg" id="taxRate-msg" hidden></span></div>
+  <div class="form-group"><label for="otherIncome">Other monthly income if disabled ($, after tax)</label><input type="number" id="otherIncome" value="0" min="0" step="any" inputmode="decimal" aria-describedby="otherIncome-hint otherIncome-msg"><span class="hint" id="otherIncome-hint">Spouse&apos;s pay, investment income. Group LTD usually subtracts any SSDI, so don&apos;t add SSDI on top of it.</span><span class="field-msg" id="otherIncome-msg" hidden></span></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Coverage Gap</h4><div id="out-headline"></div><p class="calc-subhead">Breakdown</p><div id="out-detail"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Coverage Gap</h4><div id="out-headline"></div>
+          <div id="out-more"><p class="calc-subhead">Breakdown</p><div id="out-detail"></div></div>
+          <p class="calc-note">An estimate, not insurance advice or a quote. Plan details (definition of disability, elimination period, offsets) decide what is actually paid; your benefits booklet has them.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">The 60&ndash;70% convention</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Financial planners typically recommend replacing 60&ndash;70% of pre-disability gross income. Why not 100%? Two reasons: private disability policies almost never sell coverage above 60&ndash;70% of income (moral hazard &mdash; if you got paid the same disabled as working, the incentive to return to work weakens), and being disabled typically reduces work-related expenses (commuting, business clothes, work meals) so you need less than 100%.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Group LTD gotchas</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">If your employer pays the LTD premium, benefits are typically <strong>taxable</strong> to you. That 60% policy becomes ~42&ndash;48% net-of-tax. If you pay the premium yourself with after-tax dollars (or via a &ldquo;gross-up&rdquo; election), benefits are tax-free &mdash; effectively giving you the full stated coverage. This calculator applies a rough 30% tax haircut when you mark employer LTD as taxable.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Also watch for: <strong>caps</strong> (group policies commonly cap monthly benefit around $10&ndash;$15k regardless of income &mdash; a real problem for high earners), <strong>own-occupation vs. any-occupation</strong> definitions (own-occ pays if you can&apos;t do <em>your</em> job; any-occ requires you to be unable to do <em>any</em> job you&apos;re qualified for &mdash; much harder to collect on), and <strong>elimination periods</strong> (waiting period before benefits start, typically 90&ndash;180 days).</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Supplementing group LTD</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Individual disability insurance stacks on top of group coverage. It&apos;s typically own-occupation, non-cancellable, and portable (follows you between employers). Premiums are age- and health-underwritten &mdash; buy young if you can. Physicians and other high earners often need individual coverage to reach the 60% replacement figure given group caps.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works: the 60&ndash;70% guideline</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Planners often suggest a disability benefit of 60&ndash;70% of gross income. Insurers rarely sell more than that, so you keep a reason to return to work, and an individually bought policy pays benefits tax-free, which makes 60&ndash;70% of gross land close to typical take-home pay. So the calculator treats the target as a <em>tax-free</em> monthly amount: your target % &times; gross income.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Your group LTD benefit is the plan % &times; income, limited by the plan maximum. If the employer pays the premium (or you pay it pre-tax), the benefit is taxable, so the calculator reduces it by your tax rate to compare like with like. Other after-tax income is then added, and the shortfall against the target is the coverage gap. A second line compares the same total with your essential expenses.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Group LTD details to check</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Look for the <strong>monthly maximum</strong> (often $10,000&ndash;$15,000, which caps the benefit for high earners), the <strong>definition of disability</strong> (own-occupation pays if you can&apos;t do <em>your</em> job; any-occupation only if you can&apos;t do <em>any</em> job you&apos;re suited for, which is a much higher bar, and many group plans switch to it after two years), <strong>offsets</strong> (most group plans reduce the benefit by Social Security disability and similar payments), and the <strong>elimination period</strong> (the wait before benefits start, commonly 90&ndash;180 days, so an emergency fund matters).</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Filling a gap</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">An individual disability policy can sit on top of group coverage. These are often own-occupation, non-cancelable and portable between jobs, and they are priced on age and health, so they cost less when bought younger. High earners such as physicians often need one to reach 60% replacement because of group caps.</p>
 </section>
     </div>
 
@@ -193,56 +209,106 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
-      function calc(){
-  hideErr();
-  const income=n('income'), exp=n('expenses')||0, target=(n('target')||65)/100;
-  const ltdPct=(n('ltdPct')||0)/100, ltdCap=n('ltdCap')||Infinity, taxed=s('ltdTaxed'), other=n('otherIncome')||0;
-  if (!income||income<=0) return showErr('Enter monthly income.');
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
 
-  const targetIncome = income * target;
-  let ltdGross = Math.min(income * ltdPct, ltdCap);
-  const ltdNet = taxed === 'yes' ? ltdGross * 0.70 : ltdGross; // ~30% tax haircut if taxable
-  const totalReplaced = ltdNet + other;
-  const gap = Math.max(0, targetIncome - totalReplaced);
-  const gapVsExpenses = Math.max(0, exp - totalReplaced);
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      function calc() {
+        const taxed = $('ltdTaxed').value === 'yes';
+        $('taxRate-group').hidden = !taxed;
+        const income = num('income', { required: true, min: 0.01, reqMsg: 'Enter your monthly income.', minMsg: 'Enter income above $0.' });
+        const exp = num('expenses', { min: 0 });
+        const target = num('target', { required: true, min: 0, max: 100 }) / 100;
+        const ltdPct = num('ltdPct', { min: 0, max: 100 }) / 100;
+        const capRaw = $('ltdCap').value.trim();
+        const ltdCap = capRaw === '' ? Infinity : num('ltdCap', { min: 0 });
+        if (capRaw === '') flag('ltdCap', '');
+        const taxRate = taxed ? num('taxRate', { min: 0, max: 60 }) / 100 : 0;
+        const other = num('otherIncome', { min: 0 });
+        if ([income, exp, target, ltdPct, ltdCap, taxRate, other].some(Number.isNaN)) {
+          $('out-headline').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see your coverage gap.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
 
-  set('out-headline',
-    row('Monthly income target (' + (target*100).toFixed(0) + '%)', money(targetIncome), 'teal') +
-    row('Current replacement (LTD + other)', money(totalReplaced)) +
-    row('Monthly coverage gap', money(gap), gap > 0 ? 'rose' : 'teal') +
-    (exp > 0 ? row('Gap vs. essential expenses', money(gapVsExpenses), gapVsExpenses > 0 ? 'rose' : 'teal') : '')
-  );
+        const targetIncome = income * target;
+        const ltdUncapped = income * ltdPct;
+        const ltdGross = Math.min(ltdUncapped, ltdCap);
+        const ltdNet = ltdGross * (1 - taxRate);
+        const replaced = ltdNet + other;
+        const gap = Math.max(0, targetIncome - replaced);
+        const gapExp = Math.max(0, exp - replaced);
 
-  let h = '';
-  h += row('Gross monthly income', money(income));
-  h += row('Employer LTD (' + (ltdPct*100).toFixed(0) + '%)', money(income * ltdPct));
-  if (ltdCap < Infinity && income * ltdPct > ltdCap) h += row('LTD capped at', money(ltdCap), 'amber');
-  h += row('LTD after tax adjustment', money(ltdNet));
-  if (other > 0) h += row('Other income while disabled', money(other));
-  h += row('Total monthly replacement', money(totalReplaced));
-  h += row('60&ndash;70% target range', money(income*0.6) + ' – ' + money(income*0.7));
-  set('out-detail', h);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['income','expenses','ltdCap','otherIncome'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('target').value='65';document.getElementById('ltdPct').value='';document.getElementById('ltdTaxed').value='yes';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        $('out-headline').innerHTML =
+          row('Monthly target (' + pct(target * 100, 0) + ' of gross, tax-free)', money0(targetIncome), 'teal') +
+          row('What you&apos;d have now (after tax)', money0(replaced)) +
+          row(gap > 0 ? 'Monthly coverage gap (extra tax-free benefit to look for)' : 'Monthly coverage gap', money0(gap), gap > 0 ? 'rose' : 'teal') +
+          (exp > 0 ? row(gapExp > 0 ? 'Short of essential expenses by' : 'Essential expenses covered, with room to spare', money0(gapExp > 0 ? gapExp : replaced - exp), gapExp > 0 ? 'rose' : 'teal') : '');
+
+        let h = row('Gross monthly income', money0(income));
+        h += row('Employer LTD at ' + pct(ltdPct * 100, 0), money0(ltdUncapped));
+        if (ltdUncapped > ltdCap) h += row('Limited by the plan maximum to', money0(ltdCap), 'amber');
+        h += row(taxed ? 'LTD after ' + pct(taxRate * 100, 0) + ' tax' : 'LTD (tax-free)', money0(ltdNet));
+        if (other > 0) h += row('Other income while disabled', money0(other));
+        h += row('Total monthly replacement', money0(replaced));
+        h += row('Replacement as % of gross', pct(replaced / income * 100, 0));
+        h += row('60&ndash;70% guideline range', money0(income * 0.6) + ' &ndash; ' + money0(income * 0.7));
+        $('out-detail').innerHTML = h;
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

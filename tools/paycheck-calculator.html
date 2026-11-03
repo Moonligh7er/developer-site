@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Paycheck / Take-Home Pay Calculator (2026 Federal) | Moonlit Social Labs</title>
-  <meta name="description" content="Calculate your federal take-home pay for 2026. Handles gross pay, pay frequency, filing status, pre-tax deductions (401k, HSA, health), FICA, and Social Security wage base. Full support for the 9 US states with no income tax.">
+  <meta name="description" content="Estimate 2026 take-home pay: federal income tax, Social Security (wage base $184,500) and Medicare, with pay frequency, filing status and pre-tax 401(k), HSA and health deductions. Covers the nine states with no tax on wages, including Washington and Alaska payroll programs.">
   <meta name="keywords" content="paycheck calculator, take home pay calculator, 2026 paycheck calculator, federal withholding calculator, FICA calculator, take home calculator, salary calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
@@ -15,7 +15,7 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Free Paycheck / Take-Home Pay Calculator (2026 Federal)",
-    "description": "Calculate your federal take-home pay for 2026. Full support for the 9 US states with no income tax.",
+    "description": "Estimate 2026 take-home pay: federal income tax, Social Security and Medicare, with pre-tax deductions. Covers the nine states with no tax on wages.",
     "url": "https://moonligh7er.github.io/developer-site/tools/paycheck-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -27,7 +27,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
   <meta property="og:title" content="Free Paycheck Calculator (2026 Federal)">
-  <meta property="og:description" content="Federal take-home pay for 2026. Handles 401k, HSA, health premiums, FICA. Full support for the 9 no-income-tax states.">
+  <meta property="og:description" content="Estimate 2026 take-home pay: federal income tax, FICA, 401(k)/HSA/health deductions, and the nine states with no tax on wages.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/paycheck-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
@@ -75,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .state-notice { padding: 0.75rem 1rem; margin: 0.75rem 0; border: 1px solid var(--amber); background: rgba(245, 158, 11, 0.05); color: var(--text-secondary); font-size: 0.85rem; display: none; }
     .state-notice.visible { display: block; }
     .breakdown-bar { display: flex; height: 24px; margin: 1rem 0; border: 1px solid var(--border); overflow: hidden; }
@@ -88,6 +86,25 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
+    .bar-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0 0 0.5rem; padding: 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-secondary); }
+    .bar-legend li { display: flex; align-items: center; gap: 0.4rem; }
+    .bar-legend i { width: 0.8rem; height: 0.8rem; display: inline-block; border: 1px solid var(--border); }
   </style>
 </head>
 <body>
@@ -118,128 +135,151 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Paycheck Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <span class="tax-year-badge">Tax Year 2026 &middot; Federal + FICA</span>
         <h1>Paycheck / Take-Home Pay Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your gross pay and see what actually hits your bank account. Handles pay frequency, pre-tax deductions (401(k), HSA, health premiums), Social Security cap, and the additional Medicare tax on high earners. Full state support for the 9 US states with no income tax; other states are federal-only until state modules land (see roadmap below).</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your gross pay and see roughly what reaches your bank account in 2026. Handles pay frequency, pre-tax deductions (401(k), HSA/FSA, health premiums), the Social Security wage cap and the extra Medicare tax on high earners. For the nine states with no tax on wages it also adds the small state payroll programs some of them run (Washington and Alaska). Other states: federal and FICA only for now. Results update as you type.</p>
 
         <p class="calc-subhead">Your Pay</p>
         <div class="form-grid">
           <div class="form-group">
-            <label for="freq">Pay Frequency</label>
+            <label for="freq">Pay frequency</label>
             <select id="freq">
-              <option value="annual">Annual salary</option>
-              <option value="monthly">Monthly</option>
-              <option value="semimonthly">Semi-Monthly (24/yr)</option>
-              <option value="biweekly">Bi-Weekly (26/yr)</option>
+              <option value="annual" selected>Annual salary</option>
+              <option value="monthly">Monthly (12/yr)</option>
+              <option value="semimonthly">Semi-monthly (24/yr)</option>
+              <option value="biweekly">Bi-weekly (26/yr)</option>
               <option value="weekly">Weekly (52/yr)</option>
-              <option value="hourly">Hourly + hours</option>
+              <option value="hourly">Hourly (paid weekly)</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="gross">Gross Pay ($)</label>
-            <input type="number" id="gross" placeholder="75000" min="0" step="any">
+            <label for="gross" id="gross-label">Gross pay ($ per year)</label>
+            <input type="number" id="gross" value="75000" min="0" step="any" inputmode="decimal" aria-describedby="gross-msg">
+            <span class="field-msg" id="gross-msg" hidden></span>
           </div>
-          <div class="form-group" id="hourly-group" style="display:none;">
-            <label for="hours">Hours per Week</label>
-            <input type="number" id="hours" placeholder="40" min="0" step="any">
+          <div class="form-group" id="hourly-group" hidden>
+            <label for="hours">Hours per week</label>
+            <input type="number" id="hours" value="40" min="0" max="168" step="any" inputmode="decimal" aria-describedby="hours-msg">
+            <span class="field-msg" id="hours-msg" hidden></span>
           </div>
         </div>
 
         <p class="calc-subhead">Filing &amp; Location</p>
         <div class="form-grid">
           <div class="form-group">
-            <label for="filing">Filing Status</label>
-            <select id="filing">
-              <option value="single">Single</option>
-              <option value="mfj">Married Filing Jointly</option>
-              <option value="mfs">Married Filing Separately</option>
-              <option value="hoh">Head of Household</option>
+            <label for="filing">Filing status</label>
+            <select id="filing" aria-describedby="filing-hint">
+              <option value="single" selected>Single</option>
+              <option value="mfj">Married filing jointly</option>
+              <option value="mfs">Married filing separately</option>
+              <option value="hoh">Head of household</option>
             </select>
+            <span class="hint" id="filing-hint">Joint assumes this is the household&apos;s only wage income</span>
           </div>
           <div class="form-group">
-            <label for="state">State</label>
+            <label for="state">State where you work</label>
             <select id="state">
-              <option value="none">-- Federal only --</option>
+              <option value="none" selected>&mdash; Federal only &mdash;</option>
               <option value="AK">Alaska (no income tax)</option>
               <option value="FL">Florida (no income tax)</option>
               <option value="NV">Nevada (no income tax)</option>
-              <option value="NH">New Hampshire (no wage tax)</option>
+              <option value="NH">New Hampshire (no income tax)</option>
               <option value="SD">South Dakota (no income tax)</option>
               <option value="TN">Tennessee (no income tax)</option>
               <option value="TX">Texas (no income tax)</option>
-              <option value="WA">Washington (no wage tax)</option>
+              <option value="WA">Washington (no tax on wages)</option>
               <option value="WY">Wyoming (no income tax)</option>
-              <option value="OTHER">Other state (has income tax &mdash; not yet supported)</option>
+              <option value="OTHER">Another state (has income tax &mdash; not yet included)</option>
             </select>
           </div>
-        </div>
-        <div class="state-notice" id="state-notice"></div>
-
-        <p class="calc-subhead">Pre-Tax Deductions (Annual)</p>
-        <div class="form-grid">
           <div class="form-group">
-            <label for="k401-pct">401(k) Contribution (%)</label>
-            <input type="number" id="k401-pct" placeholder="10" min="0" max="100" step="any">
-            <span class="hint">% of gross pay, pre-tax</span>
-          </div>
-          <div class="form-group">
-            <label for="k401-dollar">401(k) Contribution ($/yr)</label>
-            <input type="number" id="k401-dollar" placeholder="0" min="0" step="any">
-            <span class="hint">Or specify dollar amount instead</span>
-          </div>
-          <div class="form-group">
-            <label for="hsa">HSA / FSA Annual ($)</label>
-            <input type="number" id="hsa" placeholder="0" min="0" step="any">
-          </div>
-          <div class="form-group">
-            <label for="health">Health Premiums Annual ($)</label>
-            <input type="number" id="health" placeholder="0" min="0" step="any">
+            <label for="age">Your age in 2026</label>
+            <select id="age" aria-describedby="age-hint">
+              <option value="u50" selected>Under 50</option>
+              <option value="50">50&ndash;59 or 64+</option>
+              <option value="60">60&ndash;63</option>
+            </select>
+            <span class="hint" id="age-hint">Sets your 401(k) limit</span>
           </div>
         </div>
+        <label class="check-row" for="wacares" id="wacares-row" hidden><input type="checkbox" id="wacares"> I have an approved WA Cares exemption</label>
+        <div class="state-notice" id="state-notice" role="status"></div>
 
-        <p class="calc-subhead">Post-Tax Deductions (Annual)</p>
+        <p class="calc-subhead">Pre-Tax Deductions</p>
         <div class="form-grid">
           <div class="form-group">
-            <label for="posttax">Other Post-Tax Deductions ($)</label>
-            <input type="number" id="posttax" placeholder="0" min="0" step="any">
-            <span class="hint">Roth 401(k), garnishments, etc.</span>
+            <label for="k401-mode">401(k) / 403(b) entered as</label>
+            <select id="k401-mode">
+              <option value="pct" selected>% of gross pay</option>
+              <option value="dollar">$ per year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="k401" id="k401-label">Pre-tax 401(k) (% of pay)</label>
+            <input type="number" id="k401" value="0" min="0" step="any" inputmode="decimal" aria-describedby="k401-msg k401-warn">
+            <span class="field-msg" id="k401-msg" hidden></span><span class="field-warn" id="k401-warn" hidden></span>
+          </div>
+          <div class="form-group">
+            <label for="hsa">HSA / health FSA ($ per year)</label>
+            <input type="number" id="hsa" value="0" min="0" step="any" inputmode="decimal" aria-describedby="hsa-hint hsa-msg">
+            <span class="hint" id="hsa-hint">2026 limits: HSA $4,400 self-only / $8,750 family; health FSA $3,400</span>
+            <span class="field-msg" id="hsa-msg" hidden></span>
+          </div>
+          <div class="form-group">
+            <label for="health">Health premiums ($ per year)</label>
+            <input type="number" id="health" value="0" min="0" step="any" inputmode="decimal" aria-describedby="health-hint health-msg">
+            <span class="hint" id="health-hint">Your share, taken pre-tax through payroll</span>
+            <span class="field-msg" id="health-msg" hidden></span>
+          </div>
+        </div>
+
+        <p class="calc-subhead">After-Tax Deductions</p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="posttax">Other after-tax deductions ($ per year)</label>
+            <input type="number" id="posttax" value="0" min="0" step="any" inputmode="decimal" aria-describedby="posttax-hint posttax-msg">
+            <span class="hint" id="posttax-hint">Roth 401(k), union dues, garnishments and so on</span>
+            <span class="field-msg" id="posttax-msg" hidden></span>
           </div>
         </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
+        <div class="calc-results visible" id="results" aria-live="polite">
           <h4>Take-Home Pay</h4>
           <div id="out-headline"></div>
-          <div class="breakdown-bar" id="out-bar"></div>
+          <div id="out-more">
+          <div class="breakdown-bar" id="out-bar" role="img"></div>
+          <ul class="bar-legend" id="out-legend"></ul>
           <p class="calc-subhead">Annual Breakdown</p>
           <div id="out-annual"></div>
-          <p class="calc-subhead">Per-Paycheck</p>
+          <p class="calc-subhead">Per Paycheck</p>
           <div id="out-perpay"></div>
           <p class="calc-subhead">Tax Rates</p>
           <div id="out-rates"></div>
+          </div>
+          <p class="calc-note">An estimate, not tax advice. Your real paychecks follow your W-4 and your employer&apos;s withholding tables, so they won&apos;t match to the dollar; this shows what the year&apos;s tax should come to.</p>
         </div>
 
-        <div class="roadmap-note"><strong>Roadmap:</strong> All-state support coming. Currently: federal + FICA for everyone, plus full computation for the 9 no-income-tax states. State income tax modules will be added incrementally.</div>
+        <div class="roadmap-note"><strong>Roadmap:</strong> income tax for the 41 states (and DC) that tax wages isn&apos;t included yet. Until then, &ldquo;Another state&rdquo; shows federal + FICA only.</div>
       </div>
 
       <section class="calc-card">
         <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How this calculator works</h2>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This calculator uses the <strong>annualized method</strong> that most payroll systems use for federal withholding. Your gross pay is annualized to a full-year figure. Pre-tax deductions (401(k), HSA, health premiums) reduce taxable wages before federal income tax and, for HSA and health, also before FICA. The standard deduction for your filing status is subtracted to get taxable income, which is run through the 2026 IRS brackets. FICA (Social Security 6.2% up to the $184,500 wage base + Medicare 1.45%) is calculated on gross wages minus HSA and health premium contributions. Additional Medicare tax (0.9%) kicks in above $200k single / $250k MFJ / $125k MFS.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Your pay is annualized. Pre-tax 401(k) contributions, HSA/FSA and health premiums come off before federal income tax; HSA/FSA and premiums taken through a cafeteria (Section 125) plan also escape Social Security and Medicare, but 401(k) deferrals don&apos;t. The 2026 standard deduction for your filing status is subtracted, and what&apos;s left runs through the 2026 brackets. Social Security is 6.2% of wages up to $184,500; Medicare is 1.45% of all wages, plus 0.9% on wages above $200,000 (single, head of household), $250,000 (joint) or $125,000 (separate). Employers start withholding that extra 0.9% at $200,000 regardless of status, so the true-up for some couples happens on the tax return.</p>
 
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2026 tax data</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Federal brackets come from <a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf" target="_blank" rel="noopener" style="color:var(--teal);">IRS Rev. Proc. 2025-32</a> (issued October 2025). The Social Security wage base for 2026 is $184,500 per the <a href="https://www.ssa.gov" target="_blank" rel="noopener" style="color:var(--teal);">SSA COLA announcement</a>. The One Big Beautiful Bill Act (OBBBA) of 2025 made the seven-bracket structure permanent and gave the bottom two brackets a larger inflation adjustment than the top five &mdash; that&apos;s already baked into the 2026 figures.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2026 figures and sources</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Brackets and standard deductions ($16,100 single and separate, $32,200 joint, $24,150 head of household): <a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf" target="_blank" rel="noopener" style="color:var(--teal);">IRS Rev. Proc. 2025-32</a>, October 2025, which includes the One Big Beautiful Bill Act changes. Social Security wage base $184,500: <a href="https://www.ssa.gov/news/en/cola/factsheets/2026.html" target="_blank" rel="noopener" style="color:var(--teal);">SSA 2026 fact sheet</a>. 401(k) limit $24,500, plus $8,000 at 50+ or $11,250 at 60&ndash;63: <a href="https://www.irs.gov/newsroom/401k-limit-increases-to-24500-for-2026-ira-limit-increases-to-7500" target="_blank" rel="noopener" style="color:var(--teal);">IRS IR-2025-111</a>. From 2026, if your prior-year Social Security wages from the employer were over $150,000, catch-up contributions must be Roth (after-tax); enter those under after-tax deductions.</p>
 
-        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The nine no-income-tax states</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, and Wyoming do not tax wage income. NH taxes interest and dividends only (fully phased out for wages as of 2025), and WA has a capital gains tax on high earners but no wage tax. If you live in one of these states, this calculator is complete for your federal + state situation. Other states apply state income tax on top of what this calculator shows &mdash; use with awareness of that gap until state modules ship.</p>
+        <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">The nine states with no tax on wages</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington and Wyoming don&apos;t tax wages. New Hampshire&apos;s old tax on interest and dividends was repealed from January 1, 2025, and Washington taxes only large capital gains. Two of them do take small payroll deductions, which this calculator includes: <strong>Washington</strong> &mdash; WA Cares long-term-care premium, 0.58% of all wages (unless you hold an approved exemption), and the Paid Family &amp; Medical Leave employee share, 71.43% of the 1.13% 2026 premium (0.807%) on wages up to $184,500 (<a href="https://esd.wa.gov/node/1109" target="_blank" rel="noopener" style="color:var(--teal);">WA ESD</a>). <strong>Alaska</strong> &mdash; unemployment insurance employee contribution, 0.5% of the first $54,200 of wages in 2026 (<a href="https://labor.alaska.gov/estax/2026-experience-rates.html" target="_blank" rel="noopener" style="color:var(--teal);">Alaska DOL</a>). Some cities and counties levy their own taxes; those aren&apos;t included.</p>
 
         <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this calculator does not include</h3>
-        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">State income tax (except the 9 no-tax states), local/city tax (NYC, Philadelphia, etc.), disability tax (CA SDI, NJ, NY), specific W-4 elections (additional withholding, dependents, credits), the child tax credit and other credits, itemized deductions, AMT, or benefits like commuter pre-tax. This is a working estimate of the biggest three (federal income tax + Social Security + Medicare), not a substitute for a payroll statement or a tax preparer.</p>
+        <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">State income tax outside the nine states above, local or city tax (NYC, Philadelphia and others), state disability programs (CA SDI, NJ, NY and others), W-4 entries (extra withholding, dependents, other income), the Child Tax Credit and other credits, itemized deductions, the 2025&ndash;2028 deductions for tips, overtime and seniors, AMT, and commuter benefits. It covers the three biggest pieces (federal income tax, Social Security and Medicare) as a working estimate, not a substitute for a pay stub or a tax preparer.</p>
       </section>
     </div>
 
@@ -287,79 +327,110 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    /* Paycheck calc — 2026 federal + FICA.
-       Tax data inline (not fetched) so the tool works offline and doesn't
-       depend on network for correctness. Update this constant when the
-       tax-data-2026.json companion file changes.
+    /* Paycheck calculator: 2026 federal income tax + FICA, plus the payroll programs of the
+       no-wage-tax states. Data is inline (not fetched) so the tool works offline; keep it in
+       step with tools/tax-data-2026.json. All figures re-checked 2026-11-03 against:
+         - Brackets, standard deduction: IRS Rev. Proc. 2025-32, secs. 4.01 and 4.14
+           https://www.irs.gov/pub/irs-drop/rp-25-32.pdf (Oct 2025, includes OBBBA)
+         - SS wage base $184,500, rates 6.2% / 1.45%: SSA 2026 COLA fact sheet
+           https://www.ssa.gov/news/en/cola/factsheets/2026.html
+         - Additional Medicare Tax 0.9% over $200k / $250k MFJ / $125k MFS (IRC 3101(b)(2), not indexed)
+         - 401(k) $24,500; catch-up $8,000 (50+), $11,250 (60-63): IRS IR-2025-111 / Notice 2025-67
+         - WA PFML 1.13% total, employees 71.43% (WA ESD, for 2026); WA Cares 0.58%, no wage cap
+         - AK UI employee 0.50% on the first $54,200 (Alaska DOL 2026 rates)
 
-       ============================================================
-       END-TO-END TEST CASES (verified against hand-computed math)
-       ============================================================
-       These test the FULL gross→net pipeline (not just the bracket
-       function). Standard deduction IS subtracted before brackets;
-       verified 2026-09-04.
-
-       T1: $75,000 gross, single, no pre-tax deductions
-           - Taxable: 75,000 − 16,100 std ded = 58,900
-           - Fed: 10%×12,400 + 12%×38,000 + 22%×8,500 = $7,669.88
-           - SS: 75,000 × 6.2% = $4,650
-           - Medicare: 75,000 × 1.45% = $1,087.50
-           - Take-home: $61,592.62
-
-       T2: $120,000 gross, MFJ, 10% 401(k) = $12,000 pre-tax
-           - fedTaxableWages: 120,000 − 12,000 = 108,000
-           - Taxable: 108,000 − 32,200 std ded = 75,800
-           - Fed: 10%×24,800 + 12%×51,000 = $8,599.98
-           - SS: 120,000 × 6.2% = $7,440 (401k still subject to FICA)
-           - Medicare: 120,000 × 1.45% = $1,740
-           - Take-home: $90,220.02
-
-       T3: $250,000 gross, single (exercises SS wage-base cap + add'l Medicare)
-           - Taxable: 250,000 − 16,100 = 233,900
-           - Fed: through 32% bracket = $51,303.78
-           - SS capped: 184,500 × 6.2% = $11,439 (not 250k × 6.2%)
-           - Medicare base: 250,000 × 1.45% = $3,625
-           - Add'l Medicare: (250,000 − 200,000) × 0.9% = $450
-           - Take-home: $183,182.22
-       ============================================================ */
+       END-TO-END CHECKS (hand-computed; brackets are "over $X" thresholds)
+       T1 $75,000 single, no deductions: taxable 58,900; fed 1,240 + 4,560 + 22% x 8,500 = 7,670.00;
+          SS 4,650.00; Medicare 1,087.50; take-home 61,592.50
+       T2 $120,000 MFJ, 10% 401(k): taxable 108,000 - 32,200 = 75,800; fed 2,480 + 12% x 51,000 = 8,600.00;
+          SS 7,440.00; Medicare 1,740.00; take-home 90,220.00
+       T3 $250,000 single: taxable 233,900; fed 41,024 + 32% x 32,125 = 51,304.00; SS 11,439.00;
+          Medicare 3,625 + 0.9% x 50,000 = 4,075.00; take-home 183,182.00 */
     const TAX_DATA = {
       taxYear: 2026,
+      // [taxable income over, rate]
       brackets: {
-        single:  [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[640601,0.37]],
-        mfj:     [[0,0.10],[24801,0.12],[100801,0.22],[211401,0.24],[403551,0.32],[512451,0.35],[768701,0.37]],
-        mfs:     [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[384351,0.37]],
-        hoh:     [[0,0.10],[17701,0.12],[67451,0.22],[105701,0.24],[201776,0.32],[256201,0.35],[640601,0.37]]
+        single: [[0, 0.10], [12400, 0.12], [50400, 0.22], [105700, 0.24], [201775, 0.32], [256225, 0.35], [640600, 0.37]],
+        mfj:    [[0, 0.10], [24800, 0.12], [100800, 0.22], [211400, 0.24], [403550, 0.32], [512450, 0.35], [768700, 0.37]],
+        mfs:    [[0, 0.10], [12400, 0.12], [50400, 0.22], [105700, 0.24], [201775, 0.32], [256225, 0.35], [384350, 0.37]],
+        hoh:    [[0, 0.10], [17700, 0.12], [67450, 0.22], [105700, 0.24], [201750, 0.32], [256200, 0.35], [640600, 0.37]]
       },
       standardDeduction: { single: 16100, mfj: 32200, mfs: 16100, hoh: 24150 },
       fica: {
-        ssRate: 0.062,
-        ssWageBase: 184500,
-        medicareRate: 0.0145,
-        addlMedicareRate: 0.009,
+        ssRate: 0.062, ssWageBase: 184500, medicareRate: 0.0145, addlMedicareRate: 0.009,
         addlMedicareThreshold: { single: 200000, mfj: 250000, mfs: 125000, hoh: 200000 }
+      },
+      k401Limit: { u50: 24500, 50: 32500, 60: 35750 },
+      statePayroll: {
+        WA: [{ key: 'pfml', label: 'WA Paid Family &amp; Medical Leave (0.807%)', rate: 0.0113 * 0.7143, cap: 184500 },
+             { key: 'cares', label: 'WA Cares long-term care (0.58%)', rate: 0.0058, cap: Infinity }],
+        AK: [{ key: 'ui', label: 'Alaska unemployment insurance (0.5%)', rate: 0.005, cap: 54200 }]
       }
     };
-    const NO_TAX_STATES = new Set(['AK','FL','NV','NH','SD','TN','TX','WA','WY']);
-    const PAY_PERIODS = { annual:1, monthly:12, semimonthly:24, biweekly:26, weekly:52, hourly:52 };
+    const NO_TAX_STATES = new Set(['AK', 'FL', 'NV', 'NH', 'SD', 'TN', 'TX', 'WA', 'WY']);
+    const PAY_PERIODS = { annual: 1, monthly: 12, semimonthly: 24, biweekly: 26, weekly: 52, hourly: 52 };
+    const FREQ_LABEL = { annual: 'per year', monthly: 'per month', semimonthly: 'per paycheck', biweekly: 'per paycheck', weekly: 'per week', hourly: 'per hour' };
 
-    (function() {
-      const el = id => document.getElementById(id);
-      const n = id => { const e=el(id); if(!e||e.value==='')return null; const v=parseFloat(e.value); return isNaN(v)?null:v; };
-      const s = id => { const e=el(id); return e?e.value:''; };
-      const money = x => '$'+Math.round(x).toLocaleString('en-US');
-      const moneyC = x => '$'+x.toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
-      const pct = x => x.toFixed(2)+'%';
-      const set = (id,html) => { const e=el(id); if(e)e.innerHTML=html; };
-      const showErr = msg => { const e=el('err'); e.textContent=msg; e.classList.add('visible'); el('results').classList.remove('visible'); };
-      const hideErr = () => el('err').classList.remove('visible');
-      const row = (label, value, cls) => `<div class="result-row"><span class="result-label">${label}</span><span class="result-value${cls?' result-value--'+cls:''}">${value}</span></div>`;
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
-      // Federal income tax from taxable income (progressive brackets)
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
       function federalTax(taxable, filing) {
         const br = TAX_DATA.brackets[filing];
         let tax = 0, marginal = br[0][1];
-        for (let i=0; i<br.length; i++) {
-          const lo = br[i][0], hi = i+1<br.length?br[i+1][0]:Infinity;
+        for (let i = 0; i < br.length; i++) {
+          const lo = br[i][0], hi = i + 1 < br.length ? br[i + 1][0] : Infinity;
           if (taxable <= lo) break;
           tax += (Math.min(taxable, hi) - lo) * br[i][1];
           marginal = br[i][1];
@@ -367,157 +438,128 @@
         return { tax, marginal };
       }
 
-      // Frequency handling
-      function annualize() {
-        const freq = s('freq');
-        const g = n('gross');
-        if (g === null || g <= 0) return null;
-        if (freq === 'hourly') {
-          const h = n('hours');
-          if (h === null || h <= 0) return null;
-          return g * h * 52; // hourly * hrs/wk * 52
-        }
-        return g * (PAY_PERIODS[freq] || 1);
+      function syncForm() {
+        const freq = $('freq').value, st = $('state').value;
+        $('hourly-group').hidden = freq !== 'hourly';
+        $('gross-label').textContent = 'Gross pay ($ ' + FREQ_LABEL[freq] + ')';
+        $('k401-label').textContent = $('k401-mode').value === 'pct' ? 'Pre-tax 401(k) (% of pay)' : 'Pre-tax 401(k) ($ per year)';
+        $('wacares-row').hidden = st !== 'WA';
+        const notice = $('state-notice');
+        if (st === 'OTHER') {
+          notice.textContent = 'State income tax isn’t included for this state yet. The figures below are federal + FICA only; your state (and possibly city) will take more.';
+          notice.classList.add('visible');
+        } else if (NO_TAX_STATES.has(st)) {
+          const name = $('state').selectedOptions[0].text.replace(/\s*\(.*\)$/, '');
+          notice.textContent = name + ' doesn’t tax wages.' + (TAX_DATA.statePayroll[st] ? ' Its employee payroll programs are included below.' : ' There are no state payroll deductions to add.');
+          notice.classList.add('visible');
+        } else notice.classList.remove('visible');
       }
 
-      // State notice update
-      el('state').addEventListener('change', function() {
-        const v = this.value;
-        const notice = el('state-notice');
-        if (v === 'OTHER') {
-          notice.textContent = 'State income tax for this state is not yet supported. Results below are federal + FICA only — you will owe additional state (and possibly local) tax on top of this figure.';
-          notice.classList.add('visible');
-        } else if (NO_TAX_STATES.has(v)) {
-          const name = this.options[this.selectedIndex].text;
-          notice.textContent = name.replace(/\s*\(.*\)$/,'') + ' has no wage income tax, so results below are complete for your federal + state situation.';
-          notice.classList.add('visible');
-        } else {
-          notice.classList.remove('visible');
-        }
-      });
-
-      // Frequency toggle for hourly
-      el('freq').addEventListener('change', function() {
-        el('hourly-group').style.display = this.value === 'hourly' ? '' : 'none';
-      });
-
-      window.calc = function() {
-        hideErr();
-        const annualGross = annualize();
-        if (annualGross === null) return showErr('Enter valid gross pay (and hours if hourly).');
-        const filing = s('filing');
-
-        // Pre-tax deductions (annual)
-        let k401 = 0;
-        const k401Pct = n('k401-pct') || 0;
-        const k401Dol = n('k401-dollar') || 0;
-        if (k401Pct > 0) k401 = annualGross * (k401Pct/100);
-        else if (k401Dol > 0) k401 = k401Dol;
-        const hsa = n('hsa') || 0;
-        const health = n('health') || 0;
-        const posttax = n('posttax') || 0;
-
-        // Federal income taxable wages: gross - all pre-tax
-        const fedTaxableWages = Math.max(0, annualGross - k401 - hsa - health);
-        // Standard deduction (assumes taking standard, not itemized)
-        const stdDed = TAX_DATA.standardDeduction[filing];
-        const taxableIncome = Math.max(0, fedTaxableWages - stdDed);
-        const { tax: fedTax, marginal } = federalTax(taxableIncome, filing);
-
-        // FICA wages: gross - HSA - health (401(k) still subject to FICA)
-        const ficaWages = Math.max(0, annualGross - hsa - health);
-        const ss = Math.min(ficaWages, TAX_DATA.fica.ssWageBase) * TAX_DATA.fica.ssRate;
-        const medicareBase = ficaWages * TAX_DATA.fica.medicareRate;
-        const addlThresh = TAX_DATA.fica.addlMedicareThreshold[filing];
-        const addlMedicare = Math.max(0, ficaWages - addlThresh) * TAX_DATA.fica.addlMedicareRate;
-        const medicare = medicareBase + addlMedicare;
-
-        // Total annual withholding + take-home
-        const totalTax = fedTax + ss + medicare;
-        const annualTakeHome = annualGross - k401 - hsa - health - totalTax - posttax;
-        const effective = annualGross > 0 ? ((fedTax / annualGross) * 100) : 0;
-
-        // Per-paycheck
-        const freq = s('freq');
-        const periods = PAY_PERIODS[freq] || 1;
-        const perPay = {
-          gross: annualGross / periods,
-          k401: k401 / periods,
-          hsa: hsa / periods,
-          health: health / periods,
-          fed: fedTax / periods,
-          ss: ss / periods,
-          medicare: medicare / periods,
-          posttax: posttax / periods,
-          takeHome: annualTakeHome / periods
+      function calc() {
+        syncForm();
+        const freq = $('freq').value, filing = $('filing').value, st = $('state').value;
+        const g = num('gross', { required: true, min: 0, reqMsg: 'Enter your gross pay.' });
+        const hours = freq === 'hourly' ? num('hours', { required: true, min: 0.01, max: 168, minMsg: 'Enter hours above 0.' }) : 0;
+        const pctMode = $('k401-mode').value === 'pct';
+        const k401In = num('k401', pctMode ? { min: 0, max: 100 } : { min: 0 });
+        const hsa = num('hsa', { min: 0 });
+        const health = num('health', { min: 0 });
+        const posttax = num('posttax', { min: 0 });
+        $('k401-warn').hidden = true;
+        const stop = msg => {
+          $('out-headline').innerHTML = '<p class="calc-placeholder">' + msg + '</p>';
+          $('out-more').hidden = true;
         };
+        if ([g, hours, k401In, hsa, health, posttax].some(Number.isNaN)) return stop('Fix the highlighted field to see your take-home pay.');
+        const annualGross = freq === 'hourly' ? g * hours * 52 : g * PAY_PERIODS[freq];
+        if (annualGross <= 0) { flag('gross', 'Enter pay above $0.'); return stop('Enter your pay to see your take-home.'); }
 
-        // Headline
-        set('out-headline',
-          row('Annual take-home', money(annualTakeHome), 'teal') +
-          row('Per paycheck (' + freq + ')', moneyC(perPay.takeHome), 'violet')
-        );
+        // 401(k): capped at the 2026 limit for your age band.
+        const limit = TAX_DATA.k401Limit[$('age').value];
+        let k401 = pctMode ? annualGross * k401In / 100 : k401In;
+        if (k401 > limit) {
+          $('k401-warn').textContent = 'Capped at your 2026 limit, ' + money0(limit) + ' (you entered ' + money0(k401) + ').';
+          $('k401-warn').hidden = false;
+          k401 = limit;
+        }
+        const preTax = k401 + hsa + health;
+        if (preTax > annualGross) {
+          flag(hsa + health > 0 ? (hsa > 0 ? 'hsa' : 'health') : 'k401', 'Pre-tax deductions add up to more than your pay.');
+          return stop('Fix the highlighted field to see your take-home pay.');
+        }
+        $('out-more').hidden = false;
 
-        // Breakdown bar
-        const takeHomePct = Math.max(0, annualTakeHome / annualGross * 100);
-        const fedPct = fedTax / annualGross * 100;
-        const ficaPct = (ss + medicare) / annualGross * 100;
-        const preTaxPct = (k401 + hsa + health) / annualGross * 100;
-        const postTaxPct = posttax / annualGross * 100;
-        let bar = '';
-        if (takeHomePct > 0) bar += `<div style="width:${takeHomePct}%;background:var(--teal);">${takeHomePct>8?'Take-home '+takeHomePct.toFixed(0)+'%':''}</div>`;
-        if (fedPct > 0) bar += `<div style="width:${fedPct}%;background:var(--rose);">${fedPct>5?'Fed '+fedPct.toFixed(0)+'%':''}</div>`;
-        if (ficaPct > 0) bar += `<div style="width:${ficaPct}%;background:var(--amber);">${ficaPct>5?'FICA '+ficaPct.toFixed(0)+'%':''}</div>`;
-        if (preTaxPct > 0) bar += `<div style="width:${preTaxPct}%;background:var(--violet);">${preTaxPct>5?'Pre-tax '+preTaxPct.toFixed(0)+'%':''}</div>`;
-        if (postTaxPct > 0) bar += `<div style="width:${postTaxPct}%;background:#666;">${postTaxPct>5?'Post-tax '+postTaxPct.toFixed(0)+'%':''}</div>`;
-        set('out-bar', bar);
+        const fedWages = annualGross - preTax;
+        const stdDed = TAX_DATA.standardDeduction[filing];
+        const taxable = Math.max(0, fedWages - stdDed);
+        const fed = federalTax(taxable, filing);
+        const fedTax = fed.tax;
 
-        // Annual breakdown
-        let ann = '';
-        ann += row('Gross pay', money(annualGross));
-        if (k401 > 0) ann += row('&minus; 401(k) contribution', money(k401), 'violet');
+        const F = TAX_DATA.fica;
+        const ficaWages = Math.max(0, annualGross - hsa - health); // 401(k) deferrals stay in FICA wages
+        const ss = Math.min(ficaWages, F.ssWageBase) * F.ssRate;
+        const addlMed = Math.max(0, ficaWages - F.addlMedicareThreshold[filing]) * F.addlMedicareRate;
+        const medicare = ficaWages * F.medicareRate + addlMed;
+
+        const statePrograms = (TAX_DATA.statePayroll[st] || [])
+          .filter(p => !(p.key === 'cares' && $('wacares').checked))
+          .map(p => ({ label: p.label, amt: Math.min(annualGross, p.cap) * p.rate }));
+        const stateAmt = statePrograms.reduce((a, p) => a + p.amt, 0);
+
+        const takeHome = annualGross - preTax - fedTax - ss - medicare - stateAmt - posttax;
+        const periods = PAY_PERIODS[freq];
+        const perDiv = freq === 'annual' ? 12 : periods;
+        const payLabel = freq === 'annual' ? 'Per month' : (freq === 'hourly' || freq === 'weekly') ? 'Per weekly paycheck' : 'Per paycheck (' + periods + ' a year)';
+
+        $('out-headline').innerHTML = row('Annual take-home', money0(takeHome), takeHome < 0 ? 'rose' : 'teal') +
+          row(payLabel, money(takeHome / perDiv), 'violet');
+
+        // Bar with a text legend, so colour is never the only cue.
+        const parts = [
+          ['Take-home', Math.max(0, takeHome), 'var(--teal)'],
+          ['Federal income tax', fedTax, 'var(--rose)'],
+          ['Social Security + Medicare', ss + medicare, 'var(--amber)'],
+          ['State payroll programs', stateAmt, 'var(--text-secondary)'],
+          ['Pre-tax deductions', preTax, 'var(--violet)'],
+          ['After-tax deductions', posttax, 'var(--text-faint)']
+        ].filter(p => p[1] > 0.005);
+        const share = v => v / annualGross * 100;
+        $('out-bar').innerHTML = parts.map(p => '<div style="width:' + share(p[1]).toFixed(3) + '%;background:' + p[2] + ';"></div>').join('');
+        $('out-bar').setAttribute('aria-label', 'Where your gross pay goes: ' + parts.map(p => p[0] + ' ' + share(p[1]).toFixed(0) + '%').join(', '));
+        $('out-legend').innerHTML = parts.map(p => '<li><i style="background:' + p[2] + ';"></i>' + p[0] + ' ' + pct(share(p[1]), 1) + '</li>').join('');
+
+        let ann = row('Gross pay', money(annualGross));
+        if (k401 > 0) ann += row('&minus; 401(k) (pre-tax)', money(k401), 'violet');
         if (hsa > 0) ann += row('&minus; HSA / FSA', money(hsa), 'violet');
         if (health > 0) ann += row('&minus; Health premiums', money(health), 'violet');
         ann += row('&minus; Federal income tax', money(fedTax), 'rose');
-        ann += row('&minus; Social Security (6.2%, capped)', money(ss), 'rose');
-        ann += row('&minus; Medicare (1.45% + add\'l)', money(medicare), 'rose');
-        if (posttax > 0) ann += row('&minus; Other post-tax', money(posttax));
-        ann += row('<strong>= Annual take-home</strong>', '<strong>' + money(annualTakeHome) + '</strong>', 'teal');
-        set('out-annual', ann);
+        ann += row('&minus; Social Security (6.2% up to $184,500)', money(ss), 'rose');
+        ann += row('&minus; Medicare (1.45%' + (addlMed > 0 ? ' + 0.9% extra' : '') + ')', money(medicare), 'rose');
+        for (const p of statePrograms) ann += row('&minus; ' + p.label, money(p.amt), 'rose');
+        if (posttax > 0) ann += row('&minus; After-tax deductions', money(posttax));
+        ann += row('<strong>= Annual take-home</strong>', '<strong>' + money(takeHome) + '</strong>', 'teal');
+        $('out-annual').innerHTML = ann;
 
-        // Per-paycheck breakdown
-        let pp = '';
-        pp += row('Gross per paycheck', moneyC(perPay.gross));
-        if (k401 > 0) pp += row('401(k)', moneyC(perPay.k401), 'violet');
-        pp += row('Federal income tax', moneyC(perPay.fed), 'rose');
-        pp += row('Social Security', moneyC(perPay.ss), 'rose');
-        pp += row('Medicare', moneyC(perPay.medicare), 'rose');
-        pp += row('<strong>Take-home per paycheck</strong>', '<strong>' + moneyC(perPay.takeHome) + '</strong>', 'teal');
-        pp += row('Paychecks per year', periods + '');
-        set('out-perpay', pp);
+        let pp = row('Gross', money(annualGross / perDiv));
+        if (preTax > 0) pp += row('Pre-tax deductions', money(preTax / perDiv), 'violet');
+        pp += row('Federal income tax', money(fedTax / perDiv), 'rose');
+        pp += row('Social Security', money(ss / perDiv), 'rose');
+        pp += row('Medicare', money(medicare / perDiv), 'rose');
+        if (stateAmt > 0) pp += row('State payroll programs', money(stateAmt / perDiv), 'rose');
+        if (posttax > 0) pp += row('After-tax deductions', money(posttax / perDiv));
+        pp += row('<strong>Take-home</strong>', '<strong>' + money(takeHome / perDiv) + '</strong>', 'teal');
+        pp += row('Paychecks per year', freq === 'annual' ? 'Shown per month' : String(periods));
+        $('out-perpay').innerHTML = pp;
 
-        // Rates
-        set('out-rates',
-          row('Federal marginal rate', pct(marginal*100), 'amber') +
-          row('Federal effective rate', pct(effective), 'teal') +
-          row('Take-home % of gross', pct(takeHomePct), 'violet')
-        );
+        $('out-rates').innerHTML =
+          row('Taxable income after the ' + money0(stdDed) + ' standard deduction', money(taxable)) +
+          row('Federal marginal rate', pct(fed.marginal * 100, 0), 'amber') +
+          row('Federal income tax as % of gross', pct(fedTax / annualGross * 100), 'teal') +
+          row('All taxes as % of gross', pct((fedTax + ss + medicare + stateAmt) / annualGross * 100), 'rose') +
+          row('Take-home as % of gross', pct(takeHome / annualGross * 100), 'violet');
+      }
 
-        el('results').classList.add('visible');
-      };
-
-      window.clearForm = function() {
-        ['gross','hours','k401-pct','k401-dollar','hsa','health','posttax'].forEach(id => {
-          const e = el(id); if (e) e.value = '';
-        });
-        el('freq').value = 'annual';
-        el('filing').value = 'single';
-        el('state').value = 'none';
-        el('hourly-group').style.display = 'none';
-        el('state-notice').classList.remove('visible');
-        hideErr();
-        el('results').classList.remove('visible');
-      };
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

@@ -118,6 +118,31 @@
     .calc-other__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem; }
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
+    .calc-btn { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.25s ease; }
+    .calc-btn:hover { background: var(--teal-glow); box-shadow: 0 0 20px var(--teal-dim); color: var(--text-bright); }
+    .calc-btn--secondary { border-color: var(--border); color: var(--text-secondary); }
+    .calc-btn--secondary:hover { border-color: var(--violet); color: var(--violet); background: transparent; box-shadow: 0 0 20px var(--violet-dim); }
+    .calc-btn-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .form-group input, .form-group select { min-height: 42px; }
+    @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-section { padding: 1rem; } }
+    .breakdown-row .label { min-width: 0; }
+    @media (max-width: 420px) { .rate-mini-grid { grid-template-columns: 1fr 1fr; } .input-inline { grid-template-columns: 1fr; } .rate-result .big { font-size: 2.1rem; } }
   </style>
 </head>
 <body>
@@ -148,9 +173,9 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Freelance Rate Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Freelance Rate Calculator</h1>
-        <p class="calc-intro">The rate that gets you the take-home you want &mdash; after self-employment tax, income tax, overhead, health insurance, retirement, and the hours you actually bill (not the hours you work). Pairs with the <a href="freelancer-tax-calculator.html" style="color:var(--teal);">Freelancer Tax Estimator</a>.</p>
+        <p class="calc-intro">The rate that gets you the take-home you want &mdash; after self-employment tax, federal and state income tax, overhead, health insurance, retirement savings, and the hours you actually bill (not the hours you work). Uses 2026 federal figures. Pairs with the <a href="freelancer-tax-calculator.html" style="color:var(--teal);">Freelancer Tax Estimator</a>.</p>
 
         <div class="rate-layout">
           <!-- LEFT: Inputs -->
@@ -158,22 +183,29 @@
             <div class="form-section">
               <h3>Income goal</h3>
               <div class="form-group">
-                <label for="target-th">Target annual take-home ($)</label>
-                <input type="number" id="target-th" value="80000" min="0" step="1000">
-                <span class="hint">What you want in your pocket after all taxes & business expenses.</span>
+                <label for="target-th">Target take-home ($ per year)</label>
+                <input type="number" id="target-th" value="80000" min="0" step="1000" inputmode="decimal" aria-describedby="target-th-hint target-th-msg">
+                <span class="hint" id="target-th-hint">What you want to keep after all taxes, business costs, health insurance and retirement saving.</span>
+                <span class="field-msg" id="target-th-msg" hidden></span>
               </div>
               <div class="form-group">
                 <label for="filing">Filing status</label>
                 <select id="filing">
-                  <option value="single">Single</option>
-                  <option value="mfj">Married Filing Jointly</option>
-                  <option value="hoh">Head of Household</option>
+                  <option value="single" selected>Single</option>
+                  <option value="mfj">Married filing jointly</option>
+                  <option value="hoh">Head of household</option>
                 </select>
               </div>
               <div class="form-group">
                 <label for="state">State</label>
-                <select id="state"></select>
-                <span class="hint">Flat approximation; brackets vary. NH/TN have no wage tax.</span>
+                <select id="state" aria-describedby="state-hint"></select>
+                <span class="hint" id="state-hint">2026 brackets (Tax Foundation, rates as of Jan 1, 2026), applied as an approximation.</span>
+              </div>
+              <div class="form-group">
+                <label for="local">Local income tax (%)</label>
+                <input type="number" id="local" value="0" min="0" max="10" step="any" inputmode="decimal" aria-describedby="local-hint local-msg">
+                <span class="hint" id="local-hint">City or county tax if you have one (e.g. NYC, Maryland counties, many Ohio cities).</span>
+                <span class="field-msg" id="local-msg" hidden></span>
               </div>
             </div>
 
@@ -181,70 +213,81 @@
               <h3>Billable capacity</h3>
               <div class="input-inline">
                 <div class="form-group">
-                  <label for="hours">Hours/week worked</label>
-                  <input type="number" id="hours" value="40" min="1" max="80">
+                  <label for="hours">Hours worked / week</label>
+                  <input type="number" id="hours" value="40" min="1" max="100" step="any" inputmode="decimal" aria-describedby="hours-msg">
+                  <span class="field-msg" id="hours-msg" hidden></span>
                 </div>
                 <div class="form-group">
-                  <label for="weeks">Weeks worked/year</label>
-                  <input type="number" id="weeks" value="48" min="1" max="52">
-                  <span class="hint">52 &minus; PTO &minus; holidays.</span>
+                  <label for="weeks">Weeks worked / year</label>
+                  <input type="number" id="weeks" value="48" min="1" max="52" step="any" inputmode="decimal" aria-describedby="weeks-hint weeks-msg">
+                  <span class="hint" id="weeks-hint">52 &minus; vacation &minus; holidays &minus; sick days.</span>
+                  <span class="field-msg" id="weeks-msg" hidden></span>
                 </div>
               </div>
               <div class="form-group">
-                <label for="util">Utilization %</label>
-                <input type="number" id="util" value="65" min="10" max="100">
-                <span class="hint">Share of worked hours actually billable. Rest = sales, admin, prospecting, learning. 60&ndash;70% is realistic; 80%+ is aggressive.</span>
+                <label for="util">Billable share of hours (%)</label>
+                <input type="number" id="util" value="65" min="1" max="100" step="any" inputmode="decimal" aria-describedby="util-hint util-msg">
+                <span class="hint" id="util-hint">The rest goes to sales, admin, invoicing, learning. Many freelancers land around 60&ndash;70%; 80%+ is a stretch.</span>
+                <span class="field-msg" id="util-msg" hidden></span>
               </div>
             </div>
 
             <div class="form-section" style="margin-top:1rem;">
               <h3>Costs</h3>
               <div class="form-group">
-                <label for="overhead">Annual business overhead ($)</label>
-                <input type="number" id="overhead" value="6000" min="0" step="500">
-                <span class="hint">Software, equipment, coworking, business insurance, tools, subscriptions.</span>
+                <label for="overhead">Business overhead ($ per year)</label>
+                <input type="number" id="overhead" value="6000" min="0" step="500" inputmode="decimal" aria-describedby="overhead-hint overhead-msg">
+                <span class="hint" id="overhead-hint">Software, equipment, coworking, business insurance, subscriptions.</span>
+                <span class="field-msg" id="overhead-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="health">Annual health insurance ($)</label>
-                <input type="number" id="health" value="9000" min="0" step="500">
-                <span class="hint">Premiums you pay for individual/family coverage.</span>
+                <label for="health">Health insurance ($ per year)</label>
+                <input type="number" id="health" value="9000" min="0" step="500" inputmode="decimal" aria-describedby="health-hint health-msg">
+                <span class="hint" id="health-hint">Premiums you pay for individual or family coverage (deducted as self-employed health insurance).</span>
+                <span class="field-msg" id="health-msg" hidden></span>
               </div>
               <div class="form-group">
-                <label for="retirement">Annual retirement contribution ($)</label>
-                <input type="number" id="retirement" value="12000" min="0" step="1000">
-                <span class="hint">Traditional SEP/Solo 401(k)/IRA contribution; reduces taxable income and comes off your take-home target.</span>
+                <label for="retirement">Retirement contribution ($ per year)</label>
+                <input type="number" id="retirement" value="12000" min="0" step="1000" inputmode="decimal" aria-describedby="retirement-hint retirement-msg retirement-warn">
+                <span class="hint" id="retirement-hint">Pre-tax SEP-IRA or solo 401(k). Lowers taxable income; still comes out of your cash.</span>
+                <span class="field-msg" id="retirement-msg" hidden></span><span class="field-warn" id="retirement-warn" hidden></span>
               </div>
+              <label class="check-row" for="sstb"><input type="checkbox" id="sstb"> My work is a &ldquo;specified service&rdquo; for the QBI deduction (consulting, law, accounting, health, finance, performing arts&hellip;)</label>
             </div>
           </div>
 
           <!-- RIGHT: Outputs -->
-          <div>
+          <div aria-live="polite" id="results">
             <div class="rate-result">
               <div class="lbl">Required Hourly Rate</div>
-              <div class="big" id="hourly">$0</div>
+              <div class="big" id="hourly">&mdash;</div>
               <div class="sub" id="hourly-sub">to hit your take-home target</div>
             </div>
 
             <div class="rate-mini-grid">
-              <div class="rate-mini"><div class="num" id="day-rate">$0</div><div class="lbl">Day Rate (8h)</div></div>
-              <div class="rate-mini"><div class="num" id="week-rate">$0</div><div class="lbl">Week Rate</div></div>
-              <div class="rate-mini"><div class="num" id="billable-hours">0</div><div class="lbl">Billable Hrs/Yr</div></div>
+              <div class="rate-mini"><div class="num" id="day-rate">&mdash;</div><div class="lbl">Day Rate (8 billable h)</div></div>
+              <div class="rate-mini"><div class="num" id="week-rate">&mdash;</div><div class="lbl">Per Week Worked</div></div>
+              <div class="rate-mini"><div class="num" id="billable-hours">&mdash;</div><div class="lbl">Billable Hrs / Yr</div></div>
             </div>
 
             <div class="breakdown">
-              <h3>Where every dollar goes</h3>
+              <h3>Where every dollar goes (per year)</h3>
               <div id="breakdown-body"></div>
             </div>
 
             <div class="method-note">
               <strong>Math</strong>
-              Iteratively solves gross → after subtracting overhead, SE tax (15.3% on 92.35% of net; SS capped at $184,500), fed income tax (2026 brackets), state tax, health insurance, and retirement, take-home matches your target. 2026 constants from IRS Rev. Proc. 2025&nbsp;32.
+              Searches for the gross billings at which, after overhead, self-employment tax (15.3% of 92.35% of profit; the 12.4% Social Security part stops at $184,500), the 0.9% extra Medicare tax, federal income tax (2026 brackets, standard deduction, half of SE tax, health insurance, retirement and the QBI deduction), state and local tax, health insurance and retirement, what&apos;s left equals your target.
+            </div>
+            <div class="calc-btn-row" style="margin:1rem 0 0;">
+              <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+              <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
             </div>
           </div>
         </div>
 
         <p class="disclaimer">
-          <strong>Estimate only.</strong> Not tax or financial advice. Real-world variables: quarterly estimated tax timing, self-employed health insurance deduction eligibility, retirement contribution limits by plan type (SEP-IRA vs. Solo 401(k) differ significantly), state tax brackets (this uses flat rates), Additional Medicare Tax (0.9% on income above $200k/$250k), business-use-of-home deductions, section 199A QBI deduction, and dependent situations. For actual planning, cross-check with a CPA and use the <a href="freelancer-tax-calculator.html" style="color:var(--teal);">Freelancer Tax Estimator</a> once you have real numbers to plug in.
+          <strong>Estimate only.</strong> Not tax or financial advice. Not modeled: quarterly estimated-payment timing, state rules that differ from these brackets (state deductions, credits, married brackets &mdash; approximated here as double the single brackets), Social Security wages from a W&#8209;2 job (which would lower your SE tax), business use of home, dependents and credits. Retirement limits differ by plan: a SEP-IRA allows about 20% of profit after half of SE tax; a solo 401(k) adds up to $24,500 of your own deferrals (2026), with a $72,000 combined cap before catch-ups. Cross-check with a CPA, and use the <a href="freelancer-tax-calculator.html" style="color:var(--teal);">Freelancer Tax Estimator</a> once you have real numbers.
         </p>
       </div>
     </div>
@@ -260,16 +303,16 @@
       <p>As a W&#8209;2 employee, your employer pays 7.65% of your wages toward Social Security and Medicare. As a freelancer, you pay both halves &mdash; 15.3% self-employment tax on 92.35% of your net earnings. On $100k of net profit that&rsquo;s roughly $14,130 before you touch federal income tax. Half of it is deductible, which softens the blow, but the cash still leaves your account.</p>
 
       <h3>2. Unbillable hours</h3>
-      <p>A 40-hour workweek doesn&rsquo;t mean 40 billable hours. Sales calls, proposals, invoicing, admin, learning, marketing, and the gaps between projects all eat into what a client actually pays for. Industry averages land around 60&ndash;70% utilization. A generous 70% utilization on a 40-hour week is 28 billable hours &mdash; not 40.</p>
+      <p>A 40-hour workweek doesn&rsquo;t mean 40 billable hours. Sales calls, proposals, invoicing, admin, learning, marketing, and the gaps between projects all eat into what a client actually pays for. Many freelancers find 60&ndash;70% of their hours end up billable. At 70%, a 40-hour week is 28 billable hours &mdash; not 40.</p>
 
       <h3>3. No employer benefits</h3>
-      <p>Health insurance premiums that a large employer buys at group rates for $500/month can run $700&ndash;$1,500/month on the individual market. Retirement contributions have no employer match. No paid time off, no sick leave, no short-term disability, no dental. Every one of those comes out of your billable rate.</p>
+      <p>Health insurance that an employer largely paid for becomes your bill in full, and individual-market premiums without subsidies often run from several hundred to well over a thousand dollars a month. Retirement contributions have no employer match. No paid time off, no sick leave, no short-term disability, no dental. Every one of those comes out of your billable rate.</p>
 
       <h3>4. Overhead that never showed up on your salary</h3>
       <p>Your employer paid for the software, the laptop, the office, the electricity, the ergonomic chair, the professional licenses, and often the training. As a freelancer, all of it comes off the top. Even a lean solo setup runs $4k&ndash;$10k/year.</p>
 
       <h3>The rule-of-thumb doesn&rsquo;t work anymore</h3>
-      <p>You&rsquo;ll see &ldquo;multiply your target salary by 2 or 2.5 for your freelance rate&rdquo; a lot online. That worked when health insurance was $200/month and SE tax was smaller as a share of income. Today, for most US freelancers at typical take-home targets, the multiplier lands closer to 2.5&ndash;3.5x depending on state, health insurance costs, and retirement contribution. The calculator above works it out from the actual numbers instead of a rule of thumb.</p>
+      <p>You&rsquo;ll see &ldquo;multiply your target salary by 2 or 2.5 for your freelance rate&rdquo; a lot online. A rule of thumb can&rsquo;t see your health insurance, taxes or billable hours. With the defaults above, the hourly rate comes out near 2.8&times; the salary-equivalent hourly figure ($80,000 &divide; 2,080 hours), and it moves with your state, health insurance costs, retirement saving and billable hours. The calculator above works it out from the actual numbers instead of a rule of thumb.</p>
 
       <h3>Related tools</h3>
       <ul>
@@ -312,176 +355,243 @@
   <script src="../js/player.js"></script>
 
   <script>
-  (function() {
+  (function () {
     'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
-    // 2026 constants (IRS Rev. Proc. 2025-32, mirrored from paycheck-calculator.html)
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
+
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+    // 2026 federal figures (re-checked 2026-11-03):
+    //   brackets, standard deduction, QBI thresholds: IRS Rev. Proc. 2025-32 secs. 4.01, 4.14, 4.26
+    //   SS wage base $184,500: SSA 2026 fact sheet; Additional Medicare thresholds: IRC 1401(b)(2) (not indexed)
+    //   QBI $400 minimum deduction (QBI >= $1,000): OBBBA sec. 70105, effective 2026
     const TAX_2026 = {
       brackets: {
-        single: [[0,0.10],[12401,0.12],[50401,0.22],[105701,0.24],[201776,0.32],[256226,0.35],[640601,0.37]],
-        mfj:    [[0,0.10],[24801,0.12],[100801,0.22],[211401,0.24],[403551,0.32],[512451,0.35],[768701,0.37]],
-        hoh:    [[0,0.10],[17701,0.12],[67451,0.22],[105701,0.24],[201776,0.32],[256201,0.35],[640601,0.37]]
+        single: [[0, 0.10], [12400, 0.12], [50400, 0.22], [105700, 0.24], [201775, 0.32], [256225, 0.35], [640600, 0.37]],
+        mfj:    [[0, 0.10], [24800, 0.12], [100800, 0.22], [211400, 0.24], [403550, 0.32], [512450, 0.35], [768700, 0.37]],
+        hoh:    [[0, 0.10], [17700, 0.12], [67450, 0.22], [105700, 0.24], [201750, 0.32], [256200, 0.35], [640600, 0.37]]
       },
       stdDed: { single: 16100, mfj: 32200, hoh: 24150 },
-      ssRate: 0.062, medRate: 0.0145,
-      ssWageBase: 184500,
-      addlMedRate: 0.009,
-      addlMedThresh: { single: 200000, mfj: 250000, hoh: 200000 }
+      ssRate: 0.062, medRate: 0.0145, ssWageBase: 184500,
+      addlMedRate: 0.009, addlMedThresh: { single: 200000, mfj: 250000, hoh: 200000 },
+      qbiThresh: { single: 201750, mfj: 403500, hoh: 201750 },
+      qbiRange: { single: 75000, mfj: 150000, hoh: 75000 }
     };
 
-    // State flat approximations (mirror freelancer-tax-calculator.html for consistency)
+    // State income tax, single-filer brackets for 2026 as [over $, rate %].
+    // Source: Tax Foundation, "State Individual Income Tax Rates and Brackets, 2026" (rates as of
+    // Jan 1, 2026; published Feb 2026; retrieved 2026-11-03). Applied to federal taxable income
+    // before QBI; married-joint thresholds approximated as 2x single; local taxes excluded.
     const STATES = [
-      ['none','No State Income Tax',0],
-      ['AL','Alabama',5.00],['AZ','Arizona',2.50],['AR','Arkansas',4.40],
-      ['CA','California',9.30],['CO','Colorado',4.40],['CT','Connecticut',5.00],
-      ['DE','Delaware',6.60],['GA','Georgia',5.49],['HI','Hawaii',8.25],
-      ['ID','Idaho',5.80],['IL','Illinois',4.95],['IN','Indiana',3.05],
-      ['IA','Iowa',5.70],['KS','Kansas',5.70],['KY','Kentucky',4.00],
-      ['LA','Louisiana',4.25],['ME','Maine',7.15],['MD','Maryland',5.75],
-      ['MA','Massachusetts',5.00],['MI','Michigan',4.25],['MN','Minnesota',7.85],
-      ['MS','Mississippi',5.00],['MO','Missouri',4.95],['MT','Montana',5.90],
-      ['NE','Nebraska',5.84],['NJ','New Jersey',6.37],['NM','New Mexico',5.90],
-      ['NY','New York',6.85],['NC','North Carolina',4.50],['ND','North Dakota',2.50],
-      ['OH','Ohio',3.50],['OK','Oklahoma',4.75],['OR','Oregon',9.00],
-      ['PA','Pennsylvania',3.07],['RI','Rhode Island',5.99],['SC','South Carolina',6.40],
-      ['UT','Utah',4.65],['VT','Vermont',7.60],['VA','Virginia',5.75],
-      ['WV','West Virginia',5.12],['WI','Wisconsin',5.30],['DC','Washington DC',8.50]
+      ['none', 'No state income tax (AK, FL, NV, NH, SD, TN, TX, WA, WY)', [[0, 0]]],
+      ['AL', 'Alabama', [[0, 2], [500, 4], [3000, 5]]],
+      ['AZ', 'Arizona', [[0, 2.5]]],
+      ['AR', 'Arkansas', [[0, 2], [4600, 3.9]]],
+      ['CA', 'California', [[0, 1], [11079, 2], [26264, 4], [41452, 6], [57542, 8], [72724, 9.3], [371479, 10.3], [445771, 11.3], [742953, 12.3], [1000000, 13.3]]],
+      ['CO', 'Colorado', [[0, 4.4]]],
+      ['CT', 'Connecticut', [[0, 2], [10000, 4.5], [50000, 5.5], [100000, 6], [200000, 6.5], [250000, 6.9], [500000, 6.99]]],
+      ['DE', 'Delaware', [[0, 0], [2000, 2.2], [5000, 3.9], [10000, 4.8], [20000, 5.2], [25000, 5.55], [60000, 6.6]]],
+      ['DC', 'District of Columbia', [[0, 4], [10000, 6], [40000, 6.5], [60000, 8.5], [250000, 9.25], [500000, 9.75], [1000000, 10.75]]],
+      ['GA', 'Georgia', [[0, 5.19]]],
+      ['HI', 'Hawaii', [[0, 1.4], [9600, 3.2], [14400, 5.5], [19200, 6.4], [24000, 6.8], [36000, 7.2], [48000, 7.6], [125000, 7.9], [175000, 8.25], [225000, 9], [275000, 10], [325000, 11]]],
+      ['ID', 'Idaho', [[0, 0], [4811, 5.3]]],
+      ['IL', 'Illinois', [[0, 4.95]]],
+      ['IN', 'Indiana', [[0, 2.95]]],
+      ['IA', 'Iowa', [[0, 3.8]]],
+      ['KS', 'Kansas', [[0, 5.2], [23000, 5.58]]],
+      ['KY', 'Kentucky', [[0, 3.5]]],
+      ['LA', 'Louisiana', [[0, 3]]],
+      ['ME', 'Maine', [[0, 5.8], [27399, 6.75], [64849, 7.15]]],
+      ['MD', 'Maryland (state only)', [[0, 2], [1000, 3], [2000, 4], [3000, 4.75], [100000, 5], [125000, 5.25], [150000, 5.5], [250000, 5.75], [500000, 6.25], [1000000, 6.5]]],
+      ['MA', 'Massachusetts', [[0, 5], [1083150, 9]]],
+      ['MI', 'Michigan', [[0, 4.25]]],
+      ['MN', 'Minnesota', [[0, 5.35], [33310, 6.8], [109430, 7.85], [203150, 9.85]]],
+      ['MS', 'Mississippi', [[0, 0], [10000, 4]]],
+      ['MO', 'Missouri', [[0, 0], [1348, 2], [2696, 2.5], [4044, 3], [5392, 3.5], [6740, 4], [8088, 4.5], [9436, 4.7]]],
+      ['MT', 'Montana', [[0, 4.7], [47500, 5.65]]],
+      ['NE', 'Nebraska', [[0, 2.46], [4130, 3.51], [24760, 4.55]]],
+      ['NJ', 'New Jersey', [[0, 1.4], [20000, 1.75], [35000, 3.5], [40000, 5.53], [75000, 6.37], [500000, 8.97], [1000000, 10.75]]],
+      ['NM', 'New Mexico', [[0, 1.5], [5500, 3.2], [16500, 4.3], [33500, 4.7], [66500, 4.9], [210000, 5.9]]],
+      ['NY', 'New York (state only)', [[0, 3.9], [8500, 4.4], [11700, 5.15], [13900, 5.4], [80650, 5.9], [215400, 6.85], [1077550, 9.65], [5000000, 10.3], [25000000, 10.9]]],
+      ['NC', 'North Carolina', [[0, 3.99]]],
+      ['ND', 'North Dakota', [[0, 0], [48475, 1.95], [244825, 2.5]]],
+      ['OH', 'Ohio', [[0, 0], [26050, 2.75]]],
+      ['OK', 'Oklahoma', [[0, 0], [3750, 2.5], [4900, 3.5], [7200, 4.5]]],
+      ['OR', 'Oregon', [[0, 4.75], [4550, 6.75], [11400, 8.75], [125000, 9.9]]],
+      ['PA', 'Pennsylvania', [[0, 3.07]]],
+      ['RI', 'Rhode Island', [[0, 3.75], [82050, 4.75], [186450, 5.99]]],
+      ['SC', 'South Carolina', [[0, 0], [3640, 3], [18230, 6]]],
+      ['UT', 'Utah', [[0, 4.5]]],
+      ['VT', 'Vermont', [[0, 3.35], [49400, 6.6], [119700, 7.6], [249700, 8.75]]],
+      ['VA', 'Virginia', [[0, 2], [3000, 3], [5000, 5], [17000, 5.75]]],
+      ['WV', 'West Virginia', [[0, 2.22], [10000, 2.96], [25000, 3.33], [40000, 4.44], [60000, 4.82]]],
+      ['WI', 'Wisconsin', [[0, 3.5], [15110, 4.4], [51950, 5.3], [332720, 7.65]]]
     ];
-
-    // Populate state select
-    const stateSel = document.getElementById('state');
-    STATES.forEach(([code,name,rate]) => {
-      const o = document.createElement('option');
-      o.value = code; o.textContent = rate>0 ? `${name} (${rate.toFixed(2)}%)` : name;
-      o.dataset.rate = rate;
-      stateSel.appendChild(o);
+    const STATE_BR = {};
+    const stateSel = $('state');
+    STATES.forEach(([code, name, br]) => {
+      STATE_BR[code] = br;
+      const o = new Option(name, code);
+      if (code === 'none') { o.defaultSelected = true; o.selected = true; }
+      stateSel.add(o);
     });
 
-    // Federal income tax from taxable income (progressive brackets)
-    function federalTax(taxable, filing) {
-      const br = TAX_2026.brackets[filing];
+    function progressive(income, br, scale) {
       let tax = 0;
       for (let i = 0; i < br.length; i++) {
-        const lo = br[i][0], hi = i+1 < br.length ? br[i+1][0] : Infinity;
-        if (taxable <= lo) break;
-        tax += (Math.min(taxable, hi) - lo) * br[i][1];
+        const lo = br[i][0] * scale, hi = i + 1 < br.length ? br[i + 1][0] * scale : Infinity;
+        if (income <= lo) break;
+        tax += (Math.min(income, hi) - lo) * br[i][1];
       }
       return tax;
     }
 
-    // Self-employment tax (15.3% on 92.35% of net profit, SS capped)
-    function seTaxAndDeductible(netProfit) {
+    // Everything that happens to a given amount of gross billings in a year.
+    function computeFinances(gross, o) {
+      const netProfit = Math.max(0, gross - o.overhead);
       const seEarnings = netProfit * 0.9235;
-      if (seEarnings <= 0) return { tax: 0, deductible: 0 };
-      const ssPortion = Math.min(seEarnings, TAX_2026.ssWageBase) * (TAX_2026.ssRate * 2); // 12.4%
-      const medPortion = seEarnings * (TAX_2026.medRate * 2); // 2.9%
-      const tax = ssPortion + medPortion;
-      return { tax: tax, deductible: tax / 2 };
-    }
-
-    function additionalMedicare(seEarnings, filing) {
-      // Additional Medicare Tax 0.9% on earnings above threshold
-      const thresh = TAX_2026.addlMedThresh[filing];
-      return Math.max(0, seEarnings - thresh) * TAX_2026.addlMedRate;
-    }
-
-    // Given gross billings, compute all outflows and take-home
-    function computeFinances(gross, opts) {
-      const { overhead, health, retirement, filing, stateRate } = opts;
-      const netProfit = Math.max(0, gross - overhead);
-      const se = seTaxAndDeductible(netProfit);
-      const seEarnings = netProfit * 0.9235;
-      const addlMed = additionalMedicare(seEarnings, filing);
-      // Taxable income = net profit - half SE - retirement - self-employed health insurance - std deduction
-      const taxable = Math.max(0, netProfit - se.deductible - retirement - health - TAX_2026.stdDed[filing]);
-      const fed = federalTax(taxable, filing);
-      const state = taxable * (stateRate / 100);
-      // Take-home cash = gross - overhead - se - fed - state - addlMed - health - retirement (retirement is "saved", still comes out of cash)
-      const takeHome = gross - overhead - se.tax - fed - state - addlMed - health - retirement;
-      return { gross, overhead, seTax: se.tax, addlMed, fed, state, health, retirement, netProfit, taxable, takeHome };
-    }
-
-    // Binary search for required gross to hit target take-home
-    function requiredGross(target, opts) {
-      let lo = target, hi = Math.max(target * 4, target + 200000);
-      for (let i = 0; i < 40; i++) {
-        const mid = (lo + hi) / 2;
-        const th = computeFinances(mid, opts).takeHome;
-        if (th < target) lo = mid; else hi = mid;
+      const seTax = Math.min(seEarnings, TAX_2026.ssWageBase) * TAX_2026.ssRate * 2 + seEarnings * TAX_2026.medRate * 2;
+      const halfSe = seTax / 2;
+      const addlMed = Math.max(0, seEarnings - TAX_2026.addlMedThresh[o.filing]) * TAX_2026.addlMedRate;
+      const seHealth = Math.min(o.health, Math.max(0, netProfit - halfSe - o.retirement));
+      const agi = Math.max(0, netProfit - halfSe - seHealth - o.retirement);
+      const tiBeforeQbi = Math.max(0, agi - TAX_2026.stdDed[o.filing]);
+      // QBI deduction (sec. 199A), sole proprietor with no employees or depreciable property:
+      // 20% of QBI, capped at 20% of taxable income, phased out above the threshold.
+      const qbi = Math.max(0, netProfit - halfSe - seHealth - o.retirement);
+      let qbiDed = 0;
+      if (qbi > 0) {
+        const f = Math.min(1, Math.max(0, (tiBeforeQbi - TAX_2026.qbiThresh[o.filing]) / TAX_2026.qbiRange[o.filing]));
+        qbiDed = 0.2 * qbi * (1 - f) * (o.sstb ? 1 - f : 1);
+        if (qbi >= 1000) qbiDed = Math.max(qbiDed, 400);
+        qbiDed = Math.min(qbiDed, 0.2 * tiBeforeQbi);
       }
-      return (lo + hi) / 2;
+      const taxable = Math.max(0, tiBeforeQbi - qbiDed);
+      const fed = progressive(taxable, TAX_2026.brackets[o.filing], 1);
+      const state = progressive(tiBeforeQbi, STATE_BR[o.state], o.filing === 'mfj' ? 2 : 1) / 100 + tiBeforeQbi * o.local / 100;
+      const takeHome = gross - o.overhead - seTax - addlMed - fed - state - o.health - o.retirement;
+      return { gross, overhead: o.overhead, seTax, halfSe, addlMed, fed, state, health: o.health, retirement: o.retirement, netProfit, qbiDed, taxable, takeHome };
     }
 
-    function fmtMoney(n) {
-      if (!isFinite(n) || n < 0) n = 0;
-      return '$' + Math.round(n).toLocaleString('en-US');
-    }
-
-    function fmtRate(n) {
-      if (!isFinite(n) || n < 0) return '$0';
-      return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    // Take-home rises with gross, so bisect; widen the upper bound until it covers the target.
+    function requiredGross(target, o) {
+      if (computeFinances(0, o).takeHome >= target) return 0;
+      let lo = 0, hi = Math.max(1000, target * 2 + o.overhead + o.health + o.retirement);
+      for (let k = 0; k < 60 && computeFinances(hi, o).takeHome < target; k++) hi *= 2;
+      for (let i = 0; i < 100; i++) {
+        const mid = (lo + hi) / 2;
+        if (computeFinances(mid, o).takeHome < target) lo = mid; else hi = mid;
+      }
+      return hi;
     }
 
     function calc() {
-      const target = parseFloat(document.getElementById('target-th').value) || 0;
-      const hoursPerWeek = parseFloat(document.getElementById('hours').value) || 0;
-      const weeksPerYear = parseFloat(document.getElementById('weeks').value) || 0;
-      const utilPct = parseFloat(document.getElementById('util').value) || 0;
-      const overhead = parseFloat(document.getElementById('overhead').value) || 0;
-      const health = parseFloat(document.getElementById('health').value) || 0;
-      const retirement = parseFloat(document.getElementById('retirement').value) || 0;
-      const filing = document.getElementById('filing').value;
-      const stateCode = stateSel.value;
-      const stateRate = parseFloat(stateSel.selectedOptions[0].dataset.rate || 0);
-
-      const billableHours = hoursPerWeek * weeksPerYear * (utilPct / 100);
-      if (billableHours <= 0 || target <= 0) {
-        document.getElementById('hourly').textContent = '—';
-        document.getElementById('day-rate').textContent = '—';
-        document.getElementById('week-rate').textContent = '—';
-        document.getElementById('billable-hours').textContent = '0';
-        document.getElementById('breakdown-body').innerHTML = '<div style="color:var(--text-dim);font-family:var(--font-mono);font-size:0.8rem;text-align:center;padding:1rem;">Enter values to see breakdown</div>';
+      const target = num('target-th', { required: true, min: 0, reqMsg: 'Enter a take-home target.' });
+      const hours = num('hours', { required: true, min: 1, max: 100 });
+      const weeks = num('weeks', { required: true, min: 1, max: 52 });
+      const util = num('util', { required: true, min: 1, max: 100 });
+      const overhead = num('overhead', { min: 0 });
+      const health = num('health', { min: 0 });
+      const retirement = num('retirement', { min: 0 });
+      const local = num('local', { min: 0, max: 10 });
+      $('retirement-warn').hidden = true;
+      const dash = '—';
+      if ([target, hours, weeks, util, overhead, health, retirement, local].some(Number.isNaN)) {
+        ['hourly', 'day-rate', 'week-rate', 'billable-hours'].forEach(id => { $(id).textContent = dash; });
+        $('hourly-sub').textContent = 'fix the highlighted field';
+        $('breakdown-body').innerHTML = '<p class="calc-placeholder" style="text-align:center;padding:1rem;">Fix the highlighted field to see the breakdown.</p>';
         return;
       }
-
-      const opts = { overhead, health, retirement, filing, stateRate };
-      const gross = requiredGross(target, opts);
-      const fin = computeFinances(gross, opts);
+      const o = { overhead, health, retirement, local, filing: $('filing').value, state: stateSel.value, sstb: $('sstb').checked };
+      const billableHours = hours * weeks * util / 100;
+      const gross = requiredGross(target, o);
+      const fin = computeFinances(gross, o);
       const hourly = gross / billableHours;
 
-      document.getElementById('hourly').textContent = fmtRate(hourly);
-      document.getElementById('day-rate').textContent = fmtMoney(hourly * 8);
-      document.getElementById('week-rate').textContent = fmtMoney(hourly * hoursPerWeek * (utilPct / 100));
-      document.getElementById('billable-hours').textContent = Math.round(billableHours).toLocaleString();
+      $('hourly').textContent = money(hourly);
+      $('hourly-sub').textContent = 'per billable hour, to keep ' + money0(target) + ' a year';
+      $('day-rate').textContent = money0(hourly * 8);
+      $('week-rate').textContent = money0(hourly * hours * util / 100);
+      $('billable-hours').textContent = Math.round(billableHours).toLocaleString('en-US');
 
-      // Breakdown
+      // Retirement plan ceiling at this income (solo 401(k): $24,500 deferral + 20% employer, $72,000 cap).
+      const base = Math.max(0, fin.netProfit - fin.halfSe);
+      const solo401k = Math.min(72000, Math.min(24500, base) + 0.2 * base, base);
+      if (retirement > solo401k + 1) {
+        $('retirement-warn').textContent = 'More than a solo 401(k) allows at this income (about ' + money0(solo401k) + ' before catch-ups); the extra would have to be after-tax savings.';
+        $('retirement-warn').hidden = false;
+      }
+
       const rows = [
         { label: 'Gross billings', amt: gross, cls: 'total' },
         { label: 'Business overhead', amt: fin.overhead, cls: 'expense' },
         { label: 'Health insurance premiums', amt: fin.health, cls: 'expense' },
-        { label: 'Self-employment tax (15.3%)', amt: fin.seTax, cls: 'tax' },
+        { label: 'Self-employment tax (15.3%)', amt: fin.seTax, cls: 'tax' }
       ];
       if (fin.addlMed > 0) rows.push({ label: 'Additional Medicare tax (0.9%)', amt: fin.addlMed, cls: 'tax' });
       rows.push(
         { label: 'Federal income tax', amt: fin.fed, cls: 'tax' },
-        { label: 'State income tax', amt: fin.state, cls: 'tax' },
+        { label: 'State' + (local > 0 ? ' + local' : '') + ' income tax', amt: fin.state, cls: 'tax' },
         { label: 'Retirement contribution', amt: fin.retirement, cls: 'expense' },
         { label: 'Take-home in your pocket', amt: fin.takeHome, cls: 'takehome' }
       );
-      const body = rows.map(r => {
-        const pctText = (r.cls === 'total') ? '' : (r.amt / gross * 100).toFixed(1) + '%';
-        return `<div class="breakdown-row ${r.cls}"><span class="label">${r.label}</span><span class="amt">${fmtMoney(r.amt)}</span><span class="pct">${pctText}</span></div>`;
-      }).join('');
-      document.getElementById('breakdown-body').innerHTML = body;
+      $('breakdown-body').innerHTML = rows.map(r => {
+        const share = r.cls === 'total' || gross <= 0 ? '' : pct(r.amt / gross * 100, 1);
+        return '<div class="breakdown-row ' + r.cls + '"><span class="label">' + r.label + '</span><span class="amt">' + money0(r.amt) + '</span><span class="pct">' + share + '</span></div>';
+      }).join('') +
+        '<p class="calc-note">QBI deduction used: ' + money0(fin.qbiDed) + ' &middot; federal taxable income: ' + money0(fin.taxable) + '. Effective rate on gross: ' + (gross >= 0.5 ? pct((fin.seTax + fin.addlMed + fin.fed + fin.state) / gross * 100, 1) : pct(0, 1)) + ' all-in tax.</p>';
     }
 
-    ['target-th','hours','weeks','util','overhead','health','retirement','filing','state'].forEach(id => {
-      const el = document.getElementById(id);
-      el.addEventListener('input', calc);
-      el.addEventListener('change', calc);
-    });
-
-    calc();
+    wire($('calc-card'), calc);
   })();
   </script>
   <script defer src="../js/ads.js"></script>

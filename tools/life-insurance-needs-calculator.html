@@ -72,8 +72,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
     .compare-col { padding: 1rem; border: 1px solid var(--border); background: var(--deep); }
     .compare-col h5 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
@@ -84,6 +82,22 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } .compare-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
   </style>
 </head>
 <body>
@@ -114,48 +128,49 @@
     <div class="calc-standalone-wrap">
       <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Finance</a> &rarr; Life Insurance Needs Calculator</p>
 
-      <div class="calc-card">
+      <div class="calc-card" id="calc-card">
         <h1>Life Insurance Needs Calculator</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Two methods, side by side. DIME sums the specific dollar needs your family would face; the multiple method uses a simple 10&ndash;15× income rule. Both subtract existing coverage and liquid assets so the result is the coverage <em>gap</em>.</p>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Two quick methods, side by side. DIME adds up the specific dollar needs your family would face; the income-multiple method uses a 10&ndash;15&times; income rule of thumb. Both subtract the coverage and savings you already have, so the result is the coverage <em>gap</em>. Results update as you type.</p>
 
         <p class="calc-subhead">Income &amp; Family</p>
 <div class="form-grid">
-  <div class="form-group"><label for="income">Annual Income ($)</label><input type="number" id="income" placeholder="75000" min="0" step="any"></div>
-  <div class="form-group"><label for="yearsReplace">Years of Income Replacement</label><input type="number" id="yearsReplace" placeholder="10" min="0" step="any"><span class="hint">Common: 10-20 yrs; longer if young kids</span></div>
-  <div class="form-group"><label for="multiplier">Multiple Method (× income)</label><input type="number" id="multiplier" value="12" min="1" step="1"><span class="hint">Common range: 10-15×</span></div>
+  <div class="form-group"><label for="income">Annual income ($)</label><input type="number" id="income" value="75000" min="0" step="any" inputmode="decimal" aria-describedby="income-msg"><span class="field-msg" id="income-msg" hidden></span></div>
+  <div class="form-group"><label for="yearsReplace">Years of income to replace</label><input type="number" id="yearsReplace" value="10" min="0" max="60" step="any" inputmode="decimal" aria-describedby="yearsReplace-hint yearsReplace-msg"><span class="hint" id="yearsReplace-hint">Often 10&ndash;20 years; longer with young children</span><span class="field-msg" id="yearsReplace-msg" hidden></span></div>
+  <div class="form-group"><label for="multiplier">Income multiple (&times; income)</label><input type="number" id="multiplier" value="12" min="1" max="30" step="any" inputmode="decimal" aria-describedby="multiplier-hint multiplier-msg"><span class="hint" id="multiplier-hint">Common rule of thumb: 10&ndash;15&times;</span><span class="field-msg" id="multiplier-msg" hidden></span></div>
 </div>
 <p class="calc-subhead">DIME Inputs</p>
 <div class="form-grid">
-  <div class="form-group"><label for="debts">Total Debts (excl. mortgage, $)</label><input type="number" id="debts" placeholder="15000" min="0" step="any"></div>
-  <div class="form-group"><label for="mortgage">Mortgage Balance ($)</label><input type="number" id="mortgage" placeholder="250000" min="0" step="any"></div>
-  <div class="form-group"><label for="education">Education Costs ($)</label><input type="number" id="education" placeholder="100000" min="0" step="any"><span class="hint">Per child × number of children</span></div>
-  <div class="form-group"><label for="funeral">Final Expenses / Funeral ($)</label><input type="number" id="funeral" placeholder="15000" min="0" step="any"></div>
+  <div class="form-group"><label for="debts">Debts other than the mortgage ($)</label><input type="number" id="debts" value="15000" min="0" step="any" inputmode="decimal" aria-describedby="debts-msg"><span class="field-msg" id="debts-msg" hidden></span></div>
+  <div class="form-group"><label for="mortgage">Mortgage balance ($)</label><input type="number" id="mortgage" value="250000" min="0" step="any" inputmode="decimal" aria-describedby="mortgage-msg"><span class="field-msg" id="mortgage-msg" hidden></span></div>
+  <div class="form-group"><label for="education">Education costs, all children ($)</label><input type="number" id="education" value="100000" min="0" step="any" inputmode="decimal" aria-describedby="education-msg"><span class="field-msg" id="education-msg" hidden></span></div>
+  <div class="form-group"><label for="funeral">Final expenses / funeral ($)</label><input type="number" id="funeral" value="15000" min="0" step="any" inputmode="decimal" aria-describedby="funeral-msg"><span class="field-msg" id="funeral-msg" hidden></span></div>
 </div>
-<p class="calc-subhead">Existing Coverage &amp; Assets (Subtract)</p>
+<p class="calc-subhead">Already in Place (Subtracted)</p>
 <div class="form-grid">
-  <div class="form-group"><label for="existingLife">Existing Life Insurance ($)</label><input type="number" id="existingLife" placeholder="100000" min="0" step="any"><span class="hint">Include employer group life</span></div>
-  <div class="form-group"><label for="liquid">Liquid Assets ($)</label><input type="number" id="liquid" placeholder="50000" min="0" step="any"><span class="hint">Savings + investments (not retirement)</span></div>
+  <div class="form-group"><label for="existingLife">Existing life insurance ($)</label><input type="number" id="existingLife" value="100000" min="0" step="any" inputmode="decimal" aria-describedby="existingLife-hint existingLife-msg"><span class="hint" id="existingLife-hint">Include employer group life (it usually ends when the job does)</span><span class="field-msg" id="existingLife-msg" hidden></span></div>
+  <div class="form-group"><label for="liquid">Savings and investments ($)</label><input type="number" id="liquid" value="50000" min="0" step="any" inputmode="decimal" aria-describedby="liquid-hint liquid-msg"><span class="hint" id="liquid-hint">Money your family could use; leave out retirement accounts if they&apos;re meant for retirement</span><span class="field-msg" id="liquid-msg" hidden></span></div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
 
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Recommended Coverage Range</h4><div id="out-headline"></div><p class="calc-subhead">Method Comparison</p><div class="compare-grid"><div class="compare-col"><h5>DIME Method</h5><div id="out-dime"></div></div><div class="compare-col"><h5>Income Multiple Method</h5><div id="out-multi"></div></div></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Coverage Gap</h4><div id="out-headline"></div>
+          <div id="out-more"><p class="calc-subhead">Method Comparison</p><div class="compare-grid"><div class="compare-col"><h5>DIME Method</h5><div id="out-dime"></div></div><div class="compare-col"><h5>Income Multiple Method</h5><div id="out-multi"></div></div></div></div>
+          <p class="calc-note">A rough sizing, not insurance advice or a quote. A licensed agent or fee-only planner can do a fuller needs analysis.</p>
         </div>
       </div>
 
       <section class="calc-card">
-  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">DIME vs. multiple &mdash; both are shortcuts</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The <strong>DIME method</strong> (Debt + Income replacement + Mortgage + Education) adds up the specific dollar needs your family would face if you died today. It&apos;s more detailed than a rule of thumb but relies on you estimating each line accurately. The <strong>income multiple method</strong> uses a simple heuristic: coverage = annual income × 10 to 15. It underweights specific debts and family circumstances but is quick and easy for a first pass.</p>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Neither is a substitute for a real needs analysis with a fee-only planner. When the two methods disagree by a lot &mdash; usually because you have a big mortgage or young children &mdash; the DIME number is typically more defensible.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Coverage duration matters as much as amount</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The amount you need drops over time as your mortgage amortizes, kids age out of education costs, and your assets grow. Most people don&apos;t need permanent (whole life) coverage for the full DIME amount &mdash; a level term policy sized for the peak-need years is usually cheaper and cleaner. See the <a href="term-vs-whole-life-calculator.html" style="color:var(--teal);">term vs. whole life comparison</a> for the tradeoff math.</p>
+  <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How it works: DIME vs. a multiple, both shortcuts</h2>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The <strong>DIME method</strong> adds Debt + Income replacement (annual income &times; years) + Mortgage + Education, plus final expenses, then subtracts existing coverage and savings. It is more specific than a rule of thumb but only as good as each estimate. The <strong>income-multiple method</strong> is coverage = income &times; a multiple (10&ndash;15&times; is the usual range), minus the same existing coverage and savings. It is quick but ignores your particular debts and family.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Neither replaces a real needs analysis. When the two disagree by a lot, usually because of a large mortgage or young children, the DIME number tends to be easier to defend. DIME doesn&apos;t discount future income for investment growth or inflation, and it replaces your full income even though your own living costs would stop; those two effects partly cancel.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">How long you need it matters as much as how much</h3>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The need usually shrinks over time as the mortgage is paid down, children finish school and savings grow. Many people don&apos;t need permanent coverage for the full DIME amount; a level term policy sized for the peak-need years is often cheaper and simpler. The <a href="term-vs-whole-life-calculator.html" style="color:var(--teal);">term vs. whole life comparison</a> walks through that tradeoff.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Get real quotes before deciding</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Premiums vary enormously by age, health class, gender, tobacco use, coverage amount, and term length. Any &ldquo;typical premium&rdquo; number online is illustrative at best. Compare 3&ndash;5 real quotes from an independent broker who represents multiple carriers &mdash; not a captive agent tied to one company &mdash; before committing.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Premiums vary a great deal with age, health class, tobacco use, coverage amount and term length, so any &ldquo;typical premium&rdquo; online is illustrative at best. Comparing several quotes, for example through an independent broker who works with multiple insurers, is the reliable way to price it.</p>
 </section>
     </div>
 
@@ -193,71 +208,114 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id){const e=document.getElementById(id);if(!e||e.value==='')return null;const v=parseFloat(e.value);return isNaN(v)?null:v;}
-function s(id){const e=document.getElementById(id);return e?e.value:'';}
-function fmt(x,dp){dp=dp==null?2:dp;if(!isFinite(x))return '0';return x.toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});}
-function money(x){return '$'+Math.round(x).toLocaleString('en-US');}
-function moneyC(x){if(!isFinite(x))return '$0';return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function showErr(msg){const e=document.getElementById('err');e.textContent=msg;e.classList.add('visible');document.getElementById('results').classList.remove('visible');}
-function hideErr(){document.getElementById('err').classList.remove('visible');}
-function set(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
-function row(label,value,cls){cls=cls?' result-value--'+cls:'';return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>';}
-const FT_TO_M = 0.3048, IN_TO_CM = 2.54, LB_TO_KG = 0.453592;
-function isMetric(){return document.getElementById('units')?.value==='metric';}
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
-      function calc(){
-  hideErr();
-  const income=n('income')||0, yr=n('yearsReplace')||0, mult=n('multiplier')||10;
-  const debts=n('debts')||0, mort=n('mortgage')||0, edu=n('education')||0, fun=n('funeral')||0;
-  const existing=n('existingLife')||0, liquid=n('liquid')||0;
-  if (income <= 0) return showErr('Enter annual income.');
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
 
-  // DIME
-  const incomeReplacement = income * yr;
-  const dimeGross = debts + incomeReplacement + mort + edu + fun;
-  const dimeNet = Math.max(0, dimeGross - existing - liquid);
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      function calc() {
+        const income = num('income', { required: true, min: 0, reqMsg: 'Enter your income (0 is fine).' });
+        const yr = num('yearsReplace', { min: 0, max: 60 });
+        const mult = num('multiplier', { required: true, min: 1, max: 30 });
+        const debts = num('debts', { min: 0 }), mort = num('mortgage', { min: 0 });
+        const edu = num('education', { min: 0 }), fun = num('funeral', { min: 0 });
+        const existing = num('existingLife', { min: 0 }), liquid = num('liquid', { min: 0 });
+        if ([income, yr, mult, debts, mort, edu, fun, existing, liquid].some(Number.isNaN)) {
+          $('out-headline').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see your coverage gap.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
 
-  // Multiple
-  const multiplierLow = income * (mult - 2);
-  const multiplierHigh = income * (mult + 3);
-  const multiNet = Math.max(0, income * mult - existing - liquid);
+        const have = existing + liquid;
+        const incomeReplacement = income * yr;
+        const dimeGross = debts + incomeReplacement + mort + edu + fun;
+        const dimeNet = Math.max(0, dimeGross - have);
+        const multiGross = income * mult;
+        const multiNet = Math.max(0, multiGross - have);
 
-  // Range: use both methods' nets
-  const rangeLow = Math.min(dimeNet, multiNet);
-  const rangeHigh = Math.max(dimeNet, multiNet);
-  set('out-headline',
-    row('Coverage gap range', money(rangeLow) + ' – ' + money(rangeHigh), 'teal') +
-    row('Median estimate', money((rangeLow+rangeHigh)/2), 'violet')
-  );
+        let head;
+        if (income > 0) {
+          const lo = Math.min(dimeNet, multiNet), hi = Math.max(dimeNet, multiNet);
+          head = row('Coverage gap range (both methods)', lo === hi ? money0(lo) : money0(lo) + ' &ndash; ' + money0(hi), 'teal') +
+            (lo === hi ? '' : row('Midpoint', money0((lo + hi) / 2), 'violet'));
+        } else {
+          head = row('Coverage gap (DIME)', money0(dimeNet), 'teal') +
+            row('Income multiple', 'Not meaningful with no income; DIME still counts debts, mortgage and education');
+        }
+        if (dimeNet === 0 && (income === 0 || multiNet === 0)) head += row('What you have already covers both estimates', money0(have));
+        $('out-headline').innerHTML = head;
 
-  let dime = '';
-  dime += row('Debts (non-mortgage)', money(debts));
-  dime += row('Income replacement ('+yr+' yrs × '+money(income)+')', money(incomeReplacement));
-  dime += row('Mortgage balance', money(mort));
-  dime += row('Education costs', money(edu));
-  dime += row('Final expenses', money(fun));
-  dime += row('DIME gross need', money(dimeGross));
-  dime += row('&minus; Existing coverage', money(existing), 'rose');
-  dime += row('&minus; Liquid assets', money(liquid), 'rose');
-  dime += row('<strong>DIME gap</strong>', '<strong>' + money(dimeNet) + '</strong>', 'teal');
-  set('out-dime', dime);
+        $('out-dime').innerHTML =
+          row('Debts (not mortgage)', money0(debts)) +
+          row('Income replacement (' + yr + ' yrs &times; ' + money0(income) + ')', money0(incomeReplacement)) +
+          row('Mortgage balance', money0(mort)) +
+          row('Education', money0(edu)) +
+          row('Final expenses', money0(fun)) +
+          row('DIME total need', money0(dimeGross)) +
+          row('&minus; Existing coverage', money0(existing), 'rose') +
+          row('&minus; Savings and investments', money0(liquid), 'rose') +
+          row('<strong>DIME gap</strong>', '<strong>' + money0(dimeNet) + '</strong>', 'teal');
 
-  let multi = '';
-  multi += row(mult + '× annual income', money(income * mult));
-  multi += row('Range at ±3× (' + (mult-3) + '×–' + (mult+3) + '×)', money(income*(mult-3)) + ' – ' + money(income*(mult+3)));
-  multi += row('&minus; Existing coverage', money(existing), 'rose');
-  multi += row('&minus; Liquid assets', money(liquid), 'rose');
-  multi += row('<strong>Multiple gap</strong>', '<strong>' + money(multiNet) + '</strong>', 'teal');
-  set('out-multi', multi);
-  document.getElementById('results').classList.add('visible');
-}
-      window.calc = calc;
-      window.clearForm = function() {
-        ['income','yearsReplace','debts','mortgage','education','funeral','existingLife','liquid'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});document.getElementById('multiplier').value='12';
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
-      };
+        $('out-multi').innerHTML =
+          row(mult + '&times; annual income', money0(multiGross)) +
+          row('Common 10&ndash;15&times; range', money0(income * 10) + ' &ndash; ' + money0(income * 15)) +
+          row('&minus; Existing coverage', money0(existing), 'rose') +
+          row('&minus; Savings and investments', money0(liquid), 'rose') +
+          row('<strong>Multiple gap</strong>', '<strong>' + money0(multiNet) + '</strong>', 'teal');
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

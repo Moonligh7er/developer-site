@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Federal Income Tax Bracket Calculator (2024) | Moonlit Social Labs</title>
-  <meta name="description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2024 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
-  <meta name="keywords" content="tax bracket calculator, federal tax calculator, marginal tax rate calculator, effective tax rate calculator, 2024 tax brackets, income tax calculator">
+  <title>Free Federal Income Tax Bracket Calculator (2026) | Moonlit Social Labs</title>
+  <meta name="description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2026 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
+  <meta name="keywords" content="tax bracket calculator, federal tax calculator, marginal tax rate calculator, effective tax rate calculator, 2026 tax brackets, income tax calculator">
   <meta name="theme-color" content="#07070d">
   <link rel="icon" type="image/png" href="../img/moonlit-logo.png">
   <link rel="canonical" href="https://moonligh7er.github.io/developer-site/tools/income-tax-bracket-calculator.html">
@@ -14,8 +14,8 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Federal Income Tax Bracket Calculator (2024)",
-    "description": "See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2024 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.",
+    "name": "Free Federal Income Tax Bracket Calculator (2026)",
+    "description": "See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2026 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.",
     "url": "https://moonligh7er.github.io/developer-site/tools/income-tax-bracket-calculator.html",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
@@ -26,13 +26,13 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Moonlit Social Labs">
-  <meta property="og:title" content="Free Federal Income Tax Bracket Calculator (2024)">
-  <meta property="og:description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2024 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
+  <meta property="og:title" content="Free Federal Income Tax Bracket Calculator (2026)">
+  <meta property="og:description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2026 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
   <meta property="og:url" content="https://moonligh7er.github.io/developer-site/tools/income-tax-bracket-calculator.html">
   <meta property="og:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Free Federal Income Tax Bracket Calculator (2024)">
-  <meta name="twitter:description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2024 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
+  <meta name="twitter:title" content="Free Federal Income Tax Bracket Calculator (2026)">
+  <meta name="twitter:description" content="See your federal income tax bracket, marginal rate, effective rate, and estimated tax owed based on 2026 IRS brackets. Handles single, married-joint, married-separate, and head-of-household.">
   <meta name="twitter:image" content="https://moonligh7er.github.io/developer-site/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,7 +45,6 @@
   <script data-goatcounter="https://moonlitsociallabsportfolio.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
   <style>
-    .calc-hero { text-align: center; padding: 1.5rem 0 0.75rem; }
     .ad-container { max-width: 900px; margin: 1rem auto; text-align: center; min-height: 90px; }
     .calc-standalone-wrap { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
     .calc-breadcrumb { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
@@ -76,8 +75,6 @@
     .result-value--violet { color: var(--violet); }
     .result-value--amber { color: var(--amber); }
     .result-value--rose { color: var(--rose); }
-    .calc-error { color: var(--rose); font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
-    .calc-error.visible { display: block; }
     .growth-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; }
     .growth-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
     .growth-table td { padding: 0.4rem 0.75rem; color: var(--text-primary); border-bottom: 1px solid var(--border); }
@@ -88,6 +85,24 @@
     .calc-other__link { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-secondary); text-decoration: none; padding: 0.55rem 0.75rem; border: 1px solid var(--border); transition: all 0.2s ease; text-align: center; }
     .calc-other__link:hover { color: var(--teal); border-color: var(--teal); }
     @media (max-width: 600px) { .calc-card { padding: 1.25rem; } .form-grid { grid-template-columns: 1fr; } }
+    .calc-btn { min-height: 44px; }
+    .form-group .hint { font-size: 0.7rem; color: var(--text-dim); line-height: 1.5; }
+    .form-group input[aria-invalid="true"], .form-group select[aria-invalid="true"] { border-color: var(--rose); }
+    .field-msg { font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose); }
+    .field-warn { font-family: var(--font-mono); font-size: 0.72rem; color: var(--amber); }
+    .check-row { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: 0.85rem; color: var(--text-secondary); cursor: pointer; }
+    .check-row input { width: 20px; height: 20px; accent-color: var(--teal); flex: none; }
+    .result-row { gap: 1rem; }
+    .result-value { text-align: right; }
+    .calc-note { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); margin-top: 1rem; }
+    .calc-placeholder { font-size: 0.85rem; color: var(--text-dim); }
+    .growth-table-wrap { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .growth-table td, .growth-table th { white-space: nowrap; }
+    .growth-table td.num, .growth-table th.num { text-align: right; }
+    .calc-other__link { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    [hidden] { display: none !important; }
+    .tax-year-badge { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.3rem 0.6rem; border: 1px solid var(--amber); color: var(--amber); margin-bottom: 1rem; }
+    .growth-table tr.is-current td { color: var(--teal); }
   </style>
 </head>
 <body>
@@ -116,48 +131,68 @@
     <div class="ad-container" data-ad-slot="top"></div>
 
     <div class="calc-standalone-wrap">
-      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Federal Income Tax Bracket Calculator (2024)</p>
+      <p class="calc-breadcrumb"><a href="../free-tools.html">Free Tools</a> &rarr; <a href="financial-calculators.html">Financial Calculators</a> &rarr; Federal Income Tax Bracket Calculator (2026)</p>
 
-      <div class="calc-card">
-        <h1>Federal Income Tax Bracket Calculator (2024)</h1>
-        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your taxable income and filing status. This calculator uses the 2024 IRS federal tax brackets to show your marginal rate (the rate on your next dollar), your effective rate (average across all your income), and estimated federal income tax owed. State and local taxes are separate.</p>
+      <div class="calc-card" id="calc-card">
+        <span class="tax-year-badge">Tax year 2026 &middot; IRS Rev. Proc. 2025-32</span>
+        <h1>Federal Income Tax Bracket Calculator (2026)</h1>
+        <p style="color:var(--text-secondary);font-size:0.95rem;line-height:1.6;margin-bottom:1.5rem;">Enter your income and filing status to see your 2026 federal marginal rate (the rate on your next dollar), your effective rate (the average across all of it) and the estimated federal income tax. You can enter taxable income directly, or gross income and let the calculator subtract the 2026 standard deduction. State and payroll taxes are separate.</p>
 
         <div class="form-grid">
-  <div class="form-group"><label for="income">Taxable Income ($)</label><input type="number" id="income" placeholder="75000" min="0" step="any"></div>
-  <div class="form-group"><label for="filing">Filing Status</label>
+  <div class="form-group"><label for="income">Income ($/year)</label><input type="number" id="income" value="75000" min="0" step="any" inputmode="decimal" aria-describedby="income-msg"><span class="field-msg" id="income-msg" hidden></span></div>
+  <div class="form-group"><label for="basis">That income is</label>
+    <select id="basis">
+      <option value="taxable" selected>Taxable income (after deductions)</option>
+      <option value="gross">Gross income &mdash; take the standard deduction</option>
+    </select>
+  </div>
+  <div class="form-group"><label for="filing">Filing status</label>
     <select id="filing">
-      <option value="single">Single</option>
-      <option value="mfj">Married Filing Jointly</option>
-      <option value="mfs">Married Filing Separately</option>
-      <option value="hoh">Head of Household</option>
+      <option value="single" selected>Single</option>
+      <option value="mfj">Married filing jointly</option>
+      <option value="mfs">Married filing separately</option>
+      <option value="hoh">Head of household</option>
     </select>
   </div>
 </div>
 
         <div class="calc-btn-row">
-          <button class="calc-btn" onclick="calc()">Calculate</button>
-          <button class="calc-btn calc-btn--secondary" onclick="clearForm()">Clear</button>
+          <button type="button" class="calc-btn" id="calc-btn">Calculate</button>
+          <button type="button" class="calc-btn calc-btn--secondary" id="reset-btn">Reset</button>
         </div>
-        <div class="calc-error" id="err"></div>
-        <div class="calc-results" id="results" aria-live="polite">
-          <h4>Your Tax Position</h4><div id="out-main"></div><p class="calc-subhead">Bracket Breakdown</p><div id="out-table"></div>
+        <div class="calc-results visible" id="results" aria-live="polite">
+          <h4>Your Tax Position</h4><div id="out-main"></div>
+          <div id="out-more"><p class="calc-subhead">2026 Brackets for Your Filing Status</p><div class="growth-table-wrap" id="out-table"></div></div>
+          <p class="calc-note">An estimate of regular federal income tax only, not tax advice. Credits, other deductions, capital-gains rates and AMT can change the real number.</p>
         </div>
       </div>
 
       <section class="calc-card">
   <h2 style="font-family:var(--font-display);font-size:1.2rem;font-weight:400;color:var(--text-bright);margin-bottom:1rem;">How US federal tax brackets actually work</h2>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">The most common tax misconception: &ldquo;If I take that raise it&apos;ll bump me into a higher bracket and I&apos;ll take home less!&rdquo; That is not how it works. US federal income tax is <em>marginal</em>: each dollar is taxed at the rate for its bracket, not the whole income at your top rate. A single filer in 2024 pays 10% on the first $11,600, 12% on income from $11,600&ndash;$47,150, 22% on income from $47,150&ndash;$100,525, and so on. Your <em>marginal</em> rate is the bracket your last dollar sits in; your <em>effective</em> rate is total tax divided by total income &mdash; always lower than marginal.</p>
-  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2024 IRS brackets (single)</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">10% up to $11,600 &middot; 12% $11,601&ndash;$47,150 &middot; 22% $47,151&ndash;$100,525 &middot; 24% $100,526&ndash;$191,950 &middot; 32% $191,951&ndash;$243,725 &middot; 35% $243,726&ndash;$609,350 &middot; 37% $609,351+</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">A common worry: &ldquo;If I take that raise it&apos;ll bump me into a higher bracket and I&apos;ll take home less.&rdquo; That isn&apos;t how it works. Federal income tax is <em>marginal</em>: each slice of income is taxed at the rate for its own bracket, not the whole income at your top rate. A single filer in 2026 pays 10% on the first $12,400 of taxable income, 12% on the part from $12,400 to $50,400, 22% from $50,400 to $105,700, and so on. Your <em>marginal</em> rate is the bracket your last dollar sits in; your <em>effective</em> rate is total tax divided by income, which is never higher and usually lower.</p>
+  <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">2026 brackets (taxable income over&hellip;)</h3>
+  <div class="growth-table-wrap"><table class="growth-table">
+    <thead><tr><th scope="col">Rate</th><th scope="col" class="num">Single</th><th scope="col" class="num">Married jointly</th><th scope="col" class="num">Married separately</th><th scope="col" class="num">Head of household</th></tr></thead>
+    <tbody>
+      <tr><td>10%</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0</td></tr>
+      <tr><td>12%</td><td class="num">$12,400</td><td class="num">$24,800</td><td class="num">$12,400</td><td class="num">$17,700</td></tr>
+      <tr><td>22%</td><td class="num">$50,400</td><td class="num">$100,800</td><td class="num">$50,400</td><td class="num">$67,450</td></tr>
+      <tr><td>24%</td><td class="num">$105,700</td><td class="num">$211,400</td><td class="num">$105,700</td><td class="num">$105,700</td></tr>
+      <tr><td>32%</td><td class="num">$201,775</td><td class="num">$403,550</td><td class="num">$201,775</td><td class="num">$201,750</td></tr>
+      <tr><td>35%</td><td class="num">$256,225</td><td class="num">$512,450</td><td class="num">$256,225</td><td class="num">$256,200</td></tr>
+      <tr><td>37%</td><td class="num">$640,600</td><td class="num">$768,700</td><td class="num">$384,350</td><td class="num">$640,600</td></tr>
+    </tbody>
+  </table></div>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin:1rem 0;">Source: <a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf" target="_blank" rel="noopener" style="color:var(--teal);">IRS Rev. Proc. 2025-32</a>, section 4.01 (October 2025), which includes the One Big Beautiful Bill Act changes. These apply to income earned in 2026, on returns filed in 2027.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">Taxable income vs. gross income</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">This calculator takes <em>taxable income</em>, which is your gross income after subtracting either the standard deduction ($14,600 single / $29,200 MFJ in 2024) or itemized deductions, plus pre-tax retirement contributions, HSA, etc. If you enter gross income by mistake, results will overstate your tax.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1rem;">Brackets apply to <em>taxable</em> income: gross income minus pre-tax retirement and HSA contributions and other adjustments, then minus either the standard deduction or your itemized deductions. The 2026 standard deduction is $16,100 single or married filing separately, $32,200 married filing jointly and $24,150 head of household. People 65 or older (or blind) get an extra $1,650 each ($2,050 if unmarried), and for 2025&ndash;2028 there is a further senior deduction of up to $6,000 that phases out at higher incomes. Choosing &ldquo;gross income&rdquo; above subtracts only the basic standard deduction.</p>
   <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:400;color:var(--text-bright);margin:1.5rem 0 0.5rem;">What this doesn&apos;t include</h3>
-  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">FICA (Social Security + Medicare = 7.65% up to wage base), state and local income tax, AMT, capital-gains treatment, credits (Child Tax Credit, EITC, etc.), or itemized-deduction phase-outs. This is <em>federal ordinary-income</em> tax only. For a full picture, use tax-prep software or a CPA.</p>
+  <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Social Security and Medicare (see the <a href="paycheck-calculator.html" style="color:var(--teal);">paycheck calculator</a>), state and local income tax, AMT, the lower rates on long-term capital gains and qualified dividends, credits (Child Tax Credit, EITC and others) and the newer deductions for tips, overtime and car loan interest. It is <em>federal ordinary-income</em> tax only; tax software or a preparer will give the full picture.</p>
 </section>
     </div>
 
     <aside class="tool-disclaimer" role="note" style="max-width:900px;margin:1.5rem auto 0;padding:1rem 1.25rem;border:1px solid var(--border);background:var(--surface);font-size:0.85rem;line-height:1.6;color:var(--text-secondary);">
-      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Based on published 2024 federal brackets; your actual liability depends on deductions, credits, filing details, state tax, and any AMT that applies.</p>
+      <p style="margin:0;"><strong style="font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:0.5rem;">Estimate Only</strong>Educational estimates only &mdash; not financial, tax, or investment advice. Verify with a qualified professional before making decisions. <a href="../disclaimer.html" style="color:var(--teal);">Full disclaimers</a>. Based on published 2026 federal brackets (IRS Rev. Proc. 2025-32); your actual liability depends on deductions, credits, filing details, state tax, and any AMT that applies.</p>
     </aside>
 
     <aside class="calc-other">
@@ -200,68 +235,112 @@
   <script src="../js/main.js"></script>
   <script src="../js/player.js"></script>
   <script>
-    (function() {
-      function n(id) { const el=document.getElementById(id); if(!el||el.value==='')return null; const v=parseFloat(el.value); return isNaN(v)?null:v; }
-      function s(id) { const el=document.getElementById(id); return el?el.value:''; }
-      function fmtMoney(x) { if(!isFinite(x))return '$0'; return '$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-      function fmtMoneyR(x) { if(!isFinite(x))return '$0'; return '$'+Math.round(x).toLocaleString('en-US'); }
-      function fmtPct(x) { if(!isFinite(x))return '0%'; return x.toFixed(2)+'%'; }
-      function showErr(msg) { const e=document.getElementById('err'); e.textContent=msg; e.classList.add('visible'); document.getElementById('results').classList.remove('visible'); }
-      function hideErr() { document.getElementById('err').classList.remove('visible'); }
-      function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
-      function row(label, value, cls) { cls=cls?' result-value--'+cls:''; return '<div class="result-row"><span class="result-label">'+label+'</span><span class="result-value'+cls+'">'+value+'</span></div>'; }
+    (function () {
+      'use strict';
+      const $ = id => document.getElementById(id);
+      const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+      const USD0 = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+      // Never let -0, NaN or Infinity reach the page.
+      const tidy = (x, unit) => (Math.abs(x) < unit / 2 ? 0 : x);
+      const money = x => (isFinite(x) ? USD.format(tidy(x, 0.01)) : '—');
+      const money0 = x => (isFinite(x) ? USD0.format(tidy(x, 1)) : '—');
+      const pct = (x, dp) => { dp = dp == null ? 2 : dp; return isFinite(x) ? tidy(x, Math.pow(10, -dp)).toFixed(dp) + '%' : '—'; };
+      const row = (label, value, cls) => '<div class="result-row"><span class="result-label">' + label + '</span><span class="result-value' + (cls ? ' result-value--' + cls : '') + '">' + value + '</span></div>';
 
-      // 2024 IRS federal brackets. Each entry: [lower_bound, rate].
-const BRACKETS = {
-  single: [[0,0.10],[11600,0.12],[47150,0.22],[100525,0.24],[191950,0.32],[243725,0.35],[609350,0.37]],
-  mfj:    [[0,0.10],[23200,0.12],[94300,0.22],[201050,0.24],[383900,0.32],[487450,0.35],[731200,0.37]],
-  mfs:    [[0,0.10],[11600,0.12],[47150,0.22],[100525,0.24],[191950,0.32],[243725,0.35],[365600,0.37]],
-  hoh:    [[0,0.10],[16550,0.12],[63100,0.22],[100500,0.24],[191950,0.32],[243700,0.35],[609350,0.37]],
-};
-function calc() {
-  hideErr();
-  const income = n('income');
-  const status = s('filing');
-  if (income === null || income < 0) return showErr('Enter valid taxable income.');
-  const brackets = BRACKETS[status];
-  let tax = 0;
-  let marginalRate = brackets[0][1];
-  const perBracket = [];
-  for (let i=0; i<brackets.length; i++) {
-    const lower = brackets[i][0];
-    const upper = i+1 < brackets.length ? brackets[i+1][0] : Infinity;
-    const rate = brackets[i][1];
-    if (income <= lower) break;
-    const taxable = Math.min(income, upper) - lower;
-    const bracketTax = taxable * rate;
-    tax += bracketTax;
-    marginalRate = rate;
-    perBracket.push({lower, upper: upper===Infinity?null:upper, rate, taxable, bracketTax});
-  }
-  const effective = income > 0 ? (tax / income) * 100 : 0;
-  set('out-main',
-    row('Taxable Income', fmtMoney(income)) +
-    row('Estimated Federal Tax', fmtMoney(tax), 'rose') +
-    row('Marginal Rate', fmtPct(marginalRate*100), 'amber') +
-    row('Effective Rate', fmtPct(effective), 'teal') +
-    row('Take-Home (after fed. income tax only)', fmtMoney(income - tax), 'violet')
-  );
-  let t = '<table class="growth-table"><thead><tr><th>Bracket</th><th>Rate</th><th>Taxable in Bracket</th><th>Tax in Bracket</th></tr></thead><tbody>';
-  for (const b of perBracket) {
-    const range = '$' + b.lower.toLocaleString() + (b.upper === null ? '+' : '&ndash;$' + b.upper.toLocaleString());
-    t += '<tr><td>'+range+'</td><td>'+(b.rate*100).toFixed(0)+'%</td><td>'+fmtMoney(b.taxable)+'</td><td>'+fmtMoney(b.bracketTax)+'</td></tr>';
-  }
-  t += '</tbody></table>';
-  set('out-table', t);
-  document.getElementById('results').classList.add('visible');
-}
+      // Read a number field. Unusable input gets a short message beside the field and returns NaN.
+      function num(id, o) {
+        o = o || {};
+        const el = $(id), raw = el.value.trim();
+        let v = NaN, msg = '';
+        if (el.validity && el.validity.badInput) msg = 'Enter a number.';
+        else if (raw === '') { if (o.required) msg = o.reqMsg || 'Required.'; else v = o.blank != null ? o.blank : 0; }
+        else {
+          v = Number(raw);
+          if (!isFinite(v)) msg = 'Enter a number.';
+          else if (o.int && !Number.isInteger(v)) msg = 'Use a whole number.';
+          else if (o.min != null && v < o.min) msg = o.minMsg || 'Must be at least ' + o.min + '.';
+          else if (o.max != null && v > o.max) msg = o.maxMsg || 'Must be ' + o.max + ' or less.';
+        }
+        flag(id, msg);
+        return msg ? NaN : v;
+      }
+      function flag(id, msg) {
+        const el = $(id), m = $(id + '-msg');
+        if (m) { m.textContent = msg; m.hidden = !msg; }
+        if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      }
 
-      window.calc = calc;
-      window.clearForm = function() {
-        ['income'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-        hideErr();
-        document.getElementById('results').classList.remove('visible');
+      // Live update (debounced), Enter to calculate, Reset back to the starting values.
+      function wire(card, calc) {
+        let t = 0;
+        card.addEventListener('input', () => { clearTimeout(t); t = setTimeout(calc, 150); });
+        card.addEventListener('change', () => { clearTimeout(t); calc(); });
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && e.target.matches('input, select')) { e.preventDefault(); clearTimeout(t); calc(); }
+        });
+        $('calc-btn').addEventListener('click', () => { clearTimeout(t); calc(); });
+        $('reset-btn').addEventListener('click', () => {
+          card.querySelectorAll('input, select').forEach(el => {
+            if (el.type === 'checkbox') el.checked = el.defaultChecked;
+            else if (el.tagName === 'SELECT') el.value = (el.querySelector('option[selected]') || el.options[0]).value;
+            else el.value = el.defaultValue;
+          });
+          card.dispatchEvent(new Event('reset-done'));
+          calc();
+        });
+        calc();
+      }
+      // 2026 federal brackets: IRS Rev. Proc. 2025-32, sec. 4.01, Tables 1-4 (retrieved 2026-11-03).
+      // Each entry is [taxable income over, rate]. Standard deduction: sec. 4.14.
+      const BRACKETS = {
+        single: [[0, 0.10], [12400, 0.12], [50400, 0.22], [105700, 0.24], [201775, 0.32], [256225, 0.35], [640600, 0.37]],
+        mfj:    [[0, 0.10], [24800, 0.12], [100800, 0.22], [211400, 0.24], [403550, 0.32], [512450, 0.35], [768700, 0.37]],
+        mfs:    [[0, 0.10], [12400, 0.12], [50400, 0.22], [105700, 0.24], [201775, 0.32], [256225, 0.35], [384350, 0.37]],
+        hoh:    [[0, 0.10], [17700, 0.12], [67450, 0.22], [105700, 0.24], [201750, 0.32], [256200, 0.35], [640600, 0.37]]
       };
+      const STD_DED = { single: 16100, mfj: 32200, mfs: 16100, hoh: 24150 };
+
+      function calc() {
+        const income = num('income', { required: true, min: 0, reqMsg: 'Enter your income.', minMsg: 'Income can’t be negative.' });
+        if (Number.isNaN(income)) {
+          $('out-main').innerHTML = '<p class="calc-placeholder">Fix the highlighted field to see your tax.</p>';
+          $('out-more').hidden = true;
+          return;
+        }
+        $('out-more').hidden = false;
+        const status = $('filing').value;
+        const gross = $('basis').value === 'gross';
+        const br = BRACKETS[status];
+        const stdDed = gross ? STD_DED[status] : 0;
+        const taxable = Math.max(0, income - stdDed);
+
+        let tax = 0, marginal = br[0][1], cur = 0, rows = '';
+        for (let i = 0; i < br.length; i++) {
+          const lo = br[i][0], hi = i + 1 < br.length ? br[i + 1][0] : Infinity, rate = br[i][1];
+          const inBracket = Math.max(0, Math.min(taxable, hi) - lo);
+          const t = inBracket * rate;
+          tax += t;
+          if (taxable > lo || i === 0) { marginal = rate; cur = i; }
+          rows += '<tr data-i="' + i + '"><td>' + Math.round(rate * 100) + '%</td><td class="num">' + money0(lo) + (hi === Infinity ? ' +' : ' &ndash; ' + money0(hi)) + '</td><td class="num">' + money(inBracket) + '</td><td class="num">' + money(t) + '</td></tr>';
+        }
+        const next = cur + 1 < br.length ? br[cur + 1][0] : null;
+
+        let main = '';
+        if (gross) main += row('Gross income', money(income)) + row('&minus; 2026 standard deduction', money(stdDed));
+        main += row('Taxable income', money(taxable));
+        main += row('Estimated federal income tax', money(tax), 'rose');
+        main += row('Marginal rate (your top bracket)', pct(marginal * 100, 0), 'amber');
+        main += row('Effective rate on taxable income', taxable > 0 ? pct(tax / taxable * 100) : pct(0), 'teal');
+        if (gross) main += row('Effective rate on gross income', income > 0 ? pct(tax / income * 100) : pct(0), 'teal');
+        if (next !== null) main += row('Next bracket (' + Math.round(br[cur + 1][1] * 100) + '%) starts at', money0(next) + ' taxable (' + money0(next - taxable) + ' away)');
+        main += row('Left after federal income tax', money((gross ? income : taxable) - tax), 'violet');
+        $('out-main').innerHTML = main;
+        $('out-table').innerHTML = '<table class="growth-table"><thead><tr><th scope="col">Rate</th><th scope="col" class="num">Taxable income range</th><th scope="col" class="num">Your income in it</th><th scope="col" class="num">Tax on it</th></tr></thead><tbody>' + rows + '</tbody></table>';
+        const curRow = $('out-table').querySelector('tr[data-i="' + cur + '"]');
+        if (curRow) { curRow.className = 'is-current'; curRow.cells[0].textContent += ' ← you'; }
+      }
+
+      wire($('calc-card'), calc);
     })();
   </script>
   <script defer src="../js/ads.js"></script>

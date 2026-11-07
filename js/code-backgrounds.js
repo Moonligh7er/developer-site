@@ -15,6 +15,8 @@
      "constellation"  — drifting star map; amber signals hop node to node
      "mycelium"       — networks grow from seeds and flash where they meet
      "helix"          — triple helix turning on a diagonal axis
+     "bonfire"        — beach bonfire at night; two people and two dogs run the shoreline on a loop
+     "vines-and-chains" — twin double helixes: flowering vines (left), chains, barbed wire and padlocks (right)
 
    OPTIONS:
      data-intensity="0.7"  — scene brightness, 0..1 (default 0.7)
@@ -39,7 +41,7 @@
   };
 
   const BINARY = '01', SYMBOLS = '{}[]<>():;=+-*/|!~∞∅∆∇⊕◇◆';
-  const THEME = { constellation: '·+*×∘°', mycelium: '/\\|-_.,:;', helix: '∞~=|:·' };
+  const THEME = { constellation: '·+*×∘°', mycelium: '/\\|-_.,:;', helix: '∞~=|:·', bonfire: '^~*.,:', 'vines-and-chains': '@&%~§' };
   const GLYPHS = [...new Set(BINARY + SYMBOLS + Object.values(THEME).join(''))];
   const GLYPH_INDEX = new Map(GLYPHS.map((g, i) => [g, i]));
   const rnd = (a, b) => a + Math.random() * (b - a);
@@ -78,6 +80,20 @@
       const s = this.cell, r = Math.max(.5, w / 2 / s), len = Math.hypot(x2 - x1, y2 - y1) / s;
       const n = Math.max(1, Math.ceil(len / .5)), aa = a * Math.min(1, (len / n) / (2 * r + 1));
       for (let k = 0; k < n; k++) { const t = (k + .5) / n; this.disc((x1 + (x2 - x1) * t) / s - .5, (y1 + (y2 - y1) * t) / s - .5, r, c, aa); }
+    }
+    // filled dot of radius r, in page pixels (disc works in cells)
+    dot(x, y, r, c, a) { this.disc(x / this.cell - .5, y / this.cell - .5, Math.max(.5, r / this.cell), c, a); }
+  }
+
+  // point `len` px from p at angle `ang`, measured from straight down; positive leans toward +x
+  const at = (p, ang, len) => [p[0] + Math.sin(ang) * len, p[1] + Math.cos(ang) * len];
+  const seg = (F, p, q, w, c, a) => F.line(p[0], p[1], q[0], q[1], w, c, a);
+  // fill every cell of the field with colour c(y) at alpha a(y), one row at a time
+  function wash(F, fn) {
+    const { cols, rows, d, cell } = F;
+    for (let j = 0; j < rows; j++) {
+      const [c, a] = fn((j + .5) * cell);
+      for (let i = 0; i < cols; i++) { const k = (j * cols + i) * 3; d[k] += c[0] * a; d[k + 1] += c[1] * a; d[k + 2] += c[2] * a; }
     }
   }
 
@@ -215,7 +231,294 @@
     }
   }
 
-  const SCENES = { constellation: Constellation, mycelium: Mycelium, helix: Helix };
+  // A runner facing right, feet on y = g, S tall; φ is the stride phase (one full
+  // cycle = two steps). Far-side limbs are drawn dimmer so the body reads in depth.
+  function person(F, x, g, S, φ, hoodie, shorts, skin, a) {
+    const hip = [x, g - .5 * S + .03 * S * Math.cos(2 * φ)], sh = at(hip, Math.PI - .2, .3 * S), head = [sh[0] + .06 * S, sh[1] - .1 * S];
+    for (const side of [1, 0]) {
+      const k = side ? .55 : 1, ph = φ + side * Math.PI;
+      // thigh swings ±0.62 rad; the knee folds hardest as the leg swings through
+      const th = .62 * Math.sin(ph), flex = .2 + 1.25 * Math.max(0, Math.cos(ph)) ** 2;
+      const knee = at(hip, th, .25 * S), foot = at(knee, th - flex, .26 * S);
+      const hem = [hip[0] + (knee[0] - hip[0]) * .6, hip[1] + (knee[1] - hip[1]) * .6];
+      seg(F, hip, hem, .13 * S, shorts, a * k);
+      seg(F, hem, knee, .075 * S, skin, a * k * .8);
+      seg(F, knee, foot, .065 * S, skin, a * k * .8);
+      seg(F, foot, [foot[0] + .07 * S, foot[1] + .01 * S], .05 * S, [220, 225, 235], a * k * .7);
+      // arms swing against the leg on the same side, elbows bent
+      const ua = -.8 * Math.sin(ph), elbow = at(sh, ua, .16 * S), hand = at(elbow, ua + 1.5, .14 * S);
+      seg(F, sh, elbow, .085 * S, hoodie, a * k);
+      seg(F, elbow, hand, .075 * S, hoodie, a * k);
+      F.dot(hand[0], hand[1], .03 * S, skin, a * k * .8);
+    }
+    seg(F, hip, sh, .19 * S, hoodie, a);
+    seg(F, [sh[0] - .05 * S, sh[1] + .01 * S], [head[0] - .06 * S, head[1] - .02 * S], .1 * S, hoodie, a * .9); // hood
+    F.dot(head[0], head[1], .065 * S, skin, a * .85);
+  }
+
+  // A dog at a gallop facing right, feet on y = g, D tall at the shoulder.
+  function dog(F, x, g, D, φ, fur, a) {
+    const bob = .06 * D * Math.sin(2 * φ);
+    const rear = [x - .55 * D, g - .95 * D + bob + .05 * D * Math.sin(φ + 1.4)], front = [x + .45 * D, g - D + bob + .05 * D * Math.sin(φ)];
+    const head = [front[0] + .38 * D, front[1] - .32 * D + .04 * D * Math.sin(2 * φ + 1)];
+    // front pair and hind pair are out of phase; each pair is staggered a little (rotary gallop)
+    for (const [hip, off, fore] of [[front, 0, true], [rear, 2.7, false]]) for (const s of [0, 1]) {
+      const ph = φ + off + s * .55, k = s ? .55 : 1, up = .75 * Math.sin(ph), top = [hip[0], hip[1] + .12 * D];
+      const knee = at(top, up, .44 * D), paw = at(knee, up + .7 * Math.max(0, Math.cos(ph)) * (fore ? -1 : 1), .44 * D);
+      seg(F, top, knee, .13 * D, fur, a * k);
+      seg(F, knee, paw, .1 * D, fur, a * k);
+    }
+    seg(F, rear, front, .42 * D, fur, a);
+    F.dot(front[0], front[1] + .05 * D, .25 * D, fur, a * .7);
+    seg(F, front, head, .24 * D, fur, a);
+    F.dot(head[0], head[1], .17 * D, fur, a);
+    seg(F, head, [head[0] + .26 * D, head[1] + .07 * D], .12 * D, fur, a);                          // muzzle
+    seg(F, [head[0] - .04 * D, head[1] - .1 * D], [head[0] - .16 * D, head[1] - .22 * D], .08 * D, fur, a * .9); // ear
+    seg(F, rear, at(rear, Math.PI + .75 + .3 * Math.sin(1.5 * φ), .45 * D), .08 * D, fur, a * .9);    // tail, wagging
+  }
+
+  // Two people in hoodies and shorts and their two dogs. off: place in the group (runner
+  // heights); dy: depth (negative is farther up the beach, toward the water); sc: size.
+  const RUNNERS = [
+    { off: 0, dy: 0, sc: 1, hoodie: 'c1', shorts: 'c2', ph: 0 },
+    { off: -1.15, dy: -.018, sc: .93, hoodie: 'c4', shorts: 'c1', ph: 2.1 },
+    { dog: true, off: 1.3, dy: -.008, sc: 1, fur: [214, 168, 96], ph: .7 },
+    { dog: true, off: 2.55, dy: .008, sc: .9, fur: [150, 118, 196], ph: 3.3 },
+  ];
+
+  // A bonfire on a beach at night. Two people and two dogs run along the wet sand,
+  // left to right, on a loop. Sparks lift off the fire and the firelight warms whoever
+  // passes it; the tide washes in and out and the moon lays a path on the water.
+  class Bonfire {
+    init(W, H) {
+      this.stars = Array.from({ length: Math.round(Math.min(160, Math.max(40, W * H / 12000))) }, () => ({ u: Math.random(), v: Math.random() ** 1.4, m: rnd(.5, 1.2), ph: rnd(0, 6.28), f: rnd(.5, 1.5) }));
+      this.sparks = []; this.spawn = 0;
+    }
+    layout(W, H) {
+      const land = W > H;
+      return {
+        hy: H * .4, sy: H * .565, gy: H * .75,                     // horizon, waterline, where the runners' feet land
+        S: Math.min(190, Math.max(70, Math.min(H * .17, W * .26))),   // a runner's height, smaller on narrow screens
+        fx: W * (land ? .26 : .5), fy: H * (land ? .88 : .9), fs: Math.min(110, Math.max(38, Math.min(W, H) * .09)),
+        mx: W * (land ? .76 : .72), my: H * .13, mr: Math.max(10, Math.min(W, H) * .04),
+      };
+    }
+    step(dt, t, W, H) {
+      const L = this.L = this.layout(W, H);
+      this.spawn -= dt;
+      while (this.spawn <= 0) {
+        this.spawn += .045;
+        this.sparks.push({ x: L.fx + rnd(-.3, .3) * L.fs, y: L.fy - L.fs * rnd(.3, .9), vx: rnd(-12, 12), vy: -rnd(40, 95), life: 0, max: rnd(1.4, 3.2), ph: rnd(0, 6.28) });
+      }
+      for (const s of this.sparks) { s.life += dt; s.x += (s.vx + Math.sin(t * 2.3 + s.ph) * 14) * dt; s.y += s.vy * dt; s.vy *= 1 - .25 * dt; }
+      this.sparks = this.sparks.filter(s => s.life < s.max);
+    }
+    atmosphere(F, p, t, W, H) {
+      const { hy, sy } = this.L || this.layout(W, H), sea = mix(p.c1, p.c2, .4), sand = mix(p.c2, p.c4, .55);
+      wash(F, y => y < hy ? [mix(p.c2, p.c1, y / hy), .035 + .03 * y / hy]
+        : y < sy ? [sea, .06]
+        : [sand, .04 + .025 * (y - sy) / (H - sy)]);
+    }
+    draw(F, W, H, p, t, cell) {
+      const { hy, sy, gy, S, fx, fy, fs, mx, my, mr } = this.L || this.layout(W, H);
+      const flick = .82 + .18 * Math.sin(t * 9.1) * Math.sin(t * 5.3 + 1.7);
+      const FIRE = p.c3, EMBER = p.c4, moon = mix(p.c1, [235, 240, 255], .55), foam = mix(p.c1, [235, 245, 255], .35);
+
+      // sky and moon
+      for (const s of this.stars) F.glow(s.u * W, s.v * hy * .95, cell * 1.3 * s.m, mix(p.c1, [255, 255, 255], .4), .35 + .3 * Math.sin(t * s.f + s.ph));
+      F.glow(mx, my, mr * 4, moon, .12);
+      F.dot(mx, my, mr, moon, .75);
+
+      // sea: dashed swell lines that close up toward the horizon and drift shoreward
+      for (let j = 0; j < 9; j++) {
+        const v = (j + (t * .06) % 1) / 9, y = hy + (sy - hy) * v * v, c = mix(p.c2, p.c1, v);
+        for (let x = 0; x < W; x += 26) {
+          const m = Math.sin(x * .013 * (1.6 - v) + j * 1.7 + t * .35);
+          if (m > .35) F.line(x, y, x + 22, y, cell * .7, c, (.12 + .2 * v) * (m - .35) / .65);
+        }
+      }
+      // moon path on the water
+      for (let k = 0; k < 26; k++) {
+        const u = k / 25, y = hy + (sy - hy) * u * u, hw = (4 + 46 * u) * Math.min(1.4, W / 1200), x = mx + Math.sin(t * 1.4 + k * 2.1) * 6 * u;
+        F.line(x - hw, y, x + hw, y, cell * .8, moon, (.2 + .3 * (.5 + .5 * Math.sin(t * 2.2 + k * 1.9))) * (1 - .4 * u));
+      }
+      // the waterline: tide in and out, foam that sparkles, a thin sheet running up the sand
+      const tide = H * .012 * Math.sin(t * .33), shore = x => sy + tide + H * .006 * Math.sin(x * .011 + t * .5) + H * .004 * Math.sin(x * .027 - t * .8);
+      let px = 0, py = shore(0);
+      for (let x = 12; x <= W + 12; x += 12) {
+        const y = shore(x);
+        F.line(px, py, x, y, cell * 1.1, foam, .28 + .2 * (.5 + .5 * Math.sin(x * .045 - t * 1.6)));
+        F.line(px, py + H * .014, x, y + H * .014, cell * .7, foam, .07 + .05 * Math.sin(t * .33 + 1));
+        px = x; py = y;
+      }
+
+      // the fire: light pool on the sand, logs, embers, flame tongues, hot core, sparks, smoke
+      F.glow(fx, fy - fs * .2, fs * 5, mix(FIRE, EMBER, .3), .16 * flick);
+      const log = mix(EMBER, p.c2, .5);
+      F.line(fx - fs * .75, fy + fs * .12, fx + fs * .65, fy - fs * .1, fs * .16, log, .3);
+      F.line(fx - fs * .6, fy - fs * .12, fx + fs * .75, fy + fs * .14, fs * .16, log, .3);
+      F.glow(fx, fy, fs * .9, EMBER, .5 * flick);
+      for (let k = 0; k < 7; k++) {
+        const o = (k - 3) / 3, h = fs * (1.7 - .7 * Math.abs(o)) * (.72 + .28 * Math.sin(t * (6 + k) + k * 1.3)), bx = fx + o * fs * .42;
+        let prev = [bx, fy - fs * .05];
+        for (let i = 1; i <= 7; i++) {
+          const u = i / 7, cur = [bx + Math.sin(t * 5.5 + k * 1.9 + u * 3) * fs * .1 * u - o * fs * .2 * u, fy - fs * .05 - h * u];
+          seg(F, prev, cur, fs * .17 * (1 - u) ** .8 + cell * .4, mix(FIRE, EMBER, u ** 1.3), .7 * (1 - .4 * u));
+          prev = cur;
+        }
+      }
+      F.glow(fx, fy - fs * .25, fs * .55, mix(FIRE, [255, 236, 190], .5), .85 * flick);
+      for (const s of this.sparks) { const a = 1 - s.life / s.max; F.glow(s.x, s.y, cell * 1.2, mix(FIRE, EMBER, 1 - a), .9 * a); }
+      for (let k = 0; k < 5; k++) {
+        const u = (t * .05 + k / 5) % 1;
+        F.glow(fx + Math.sin(t * .3 + k) * fs * .5 * u, fy - fs * 1.4 - u * H * .35, fs * (.6 + 1.2 * u), p.c2, .05 * (1 - u));
+      }
+
+      // the runners, warmed by the firelight as they pass it
+      const v = S * 1.45, span = W + S * 6, skin = mix(p.c3, p.c4, .45);
+      for (const r of RUNNERS) {
+        const drift = r.dog ? Math.sin(t * .6 + r.ph) * S * .35 : 0;   // the dogs range ahead and drop back
+        const x = ((t * v + r.off * S + drift) % span + span) % span - S * 3;
+        const warm = Math.exp(-(((x - fx) / (W * .22)) ** 2)) * flick, tint = c => mix(c, FIRE, .35 * warm);
+        const g = gy + r.dy * H, sc = S * r.sc, a = .9 * (1 + .4 * warm) * (1 + 4 * r.dy);
+        if (r.dog) dog(F, x, g, sc * .4, t * v / (sc * .4 * 2.3) * 6.283 + r.ph, tint(r.fur), a);
+        else person(F, x, g, sc, t * v / (sc * 1.3) * 6.283 + r.ph, tint(p[r.hoodie]), tint(p[r.shorts]), tint(skin), a);
+      }
+    }
+  }
+
+  // Two double helixes turning side by side. Left, grown: twisted vines with leaves,
+  // opening flowers and twig rungs, petals drifting off. Right, forged: chain-link
+  // strands, barbed-wire rungs and swinging padlocks. Warm light on the left, a cold
+  // blue beam on the right, a dark seam between them.
+  const VINE = { bark: [200, 120, 72], leaf: [104, 172, 98], vein: [176, 212, 128], petal: [255, 196, 178], heart: [232, 168, 60] };
+  const IRON = { link: [72, 132, 212], glint: [180, 220, 255], wire: [128, 172, 224], lock: [96, 128, 178] };
+
+  class VinesAndChains {
+    init(W, H) {
+      const top = -H * .1, bot = H * 1.1;
+      // leaves and flowers sit at fixed heights on the vine, so they turn with it
+      this.leaves = []; this.flowers = []; this.petals = []; this.spawn = 0;
+      for (let k = 0; k < 2; k++) for (let y = top + rnd(0, 20); y < bot; y += rnd(13, 24)) this.leaves.push({ k, y, side: Math.random() < .5 ? -1 : 1, l: rnd(.8, 1.25), ph: rnd(0, 6.28) });
+      for (let k = 0; k < 2; k++) for (let y = top + rnd(0, 80); y < bot; y += rnd(90, 170)) this.flowers.push({ k, y, s: rnd(.8, 1.3), ph: rnd(0, 6.28), rot: rnd(0, 6.28) });
+    }
+    geom(W, H, t) {
+      const land = W > H, pitch = Math.max(H * .55, 320);
+      return {
+        R: Math.min(W * .12, H * .2, 170), xl: W * (land ? .3 : .26), xr: W * (land ? .7 : .74),
+        freq: 6.283 / pitch, rung: pitch / 10, top: -H * .1, bot: H * 1.1, spinL: t * .32, spinR: -t * .27,
+      };
+    }
+    // strand k (0 or 1) of the helix standing at x = cx, at height y: [x, y, depth −1 back … 1 front]
+    pt(g, cx, spin, k, y) {
+      const th = y * g.freq + spin + k * Math.PI, z = Math.cos(th);
+      return [cx + Math.sin(th) * g.R, y + z * g.R * .1, z];   // seen a little from above
+    }
+    step(dt, t, W, H) {
+      const g = this.G = this.geom(W, H, t);
+      this.spawn -= dt;
+      if (this.spawn <= 0 && this.flowers.length) {
+        this.spawn = rnd(.25, .6);
+        const f = this.flowers[Math.floor(Math.random() * this.flowers.length)], [x, y, z] = this.pt(g, g.xl, g.spinL, f.k, f.y);
+        if (z > -.2) this.petals.push({ x, y, vx: rnd(-8, 14), vy: rnd(14, 30), life: 0, max: rnd(4, 7), ph: rnd(0, 6.28) });
+      }
+      for (const q of this.petals) { q.life += dt; q.x += (q.vx + Math.sin(t * 1.3 + q.ph) * 18) * dt; q.y += q.vy * dt; }
+      this.petals = this.petals.filter(q => q.life < q.max && q.y < H + 20);
+    }
+    atmosphere(F, p, t, W, H) {
+      const g = this.G || this.geom(W, H, t), { cols, rows, d, cell } = F, warm = mix(p.c4, p.c3, .45), cold = [36, 104, 206];
+      for (let i = 0; i < cols; i++) {
+        const u = (i + .5) * cell / W, c = mix(warm, cold, smooth(.38, .62, u)), a = .04 - .018 * Math.exp(-(((u - .5) / .08) ** 2));
+        for (let j = 0; j < rows; j++) { const k = (j * cols + i) * 3, aa = a * (.75 + .25 * j / rows); d[k] += c[0] * aa; d[k + 1] += c[1] * aa; d[k + 2] += c[2] * aa; }
+      }
+      F.glow(g.xl, H * .5, g.R * 3.4, warm, .09);
+      for (let k = 0; k <= 6; k++) { const u = k / 6; F.glow(W * (.98 - .22 * u), H * (-.05 + .8 * u), g.R * (1.6 + 1.2 * u), cold, .055); }
+    }
+    draw(F, W, H, p, t, cell) {
+      const g = this.G || this.geom(W, H, t);
+      this.vines(F, g, t, cell);
+      this.chains(F, g, t, cell);
+    }
+    vines(F, g, t, cell) {
+      const cx = g.xl, spin = g.spinL, dz = z => z * .5 + .5;
+      // twig rungs, sagging a little; the half nearer the viewer is brighter
+      for (let y = Math.ceil(g.top / g.rung) * g.rung; y < g.bot; y += g.rung) {
+        const a = this.pt(g, cx, spin, 0, y), b = this.pt(g, cx, spin, 1, y), m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 + g.R * .06];
+        seg(F, a, m, cell * 1.1, VINE.bark, .14 + .22 * dz(a[2]));
+        seg(F, m, b, cell * 1.1, VINE.bark, .14 + .22 * dz(b[2]));
+      }
+      // the two strands, each with a thinner tendril twisting round it
+      for (let k = 0; k < 2; k++) {
+        let prev = this.pt(g, cx, spin, k, g.top), tprev = prev;
+        for (let y = g.top + 6; y <= g.bot; y += 6) {
+          const cur = this.pt(g, cx, spin, k, y), z = dz(cur[2]), tw = [cur[0] + Math.sin(y * .09 + t * .8 + k * 2) * cell * 1.3, cur[1]];
+          seg(F, prev, cur, cell * (1.3 + 1.2 * z), VINE.bark, .26 + .42 * z);
+          seg(F, tprev, tw, cell * .7, mix(VINE.bark, VINE.leaf, .45), .12 + .25 * z);
+          prev = cur; tprev = tw;
+        }
+      }
+      for (const L of this.leaves) {
+        const [x, y, zz] = this.pt(g, cx, spin, L.k, L.y), z = dz(zz), len = cell * 4.8 * L.l * (.7 + .3 * z);
+        const tip = at([x, y], L.side * 2.1 + .18 * Math.sin(t * 1.2 + L.ph), len);   // up and outward, stirring
+        seg(F, [x, y], tip, len * .55, VINE.leaf, .22 + .46 * z);
+        seg(F, [x, y], tip, cell * .5, VINE.vein, .1 + .26 * z);
+      }
+      for (const f of this.flowers) {
+        const [x0, y0, zz] = this.pt(g, cx, spin, f.k, f.y), z = dz(zz), out = Math.sign(x0 - cx) || 1, c = [x0 + out * cell * 1.2, y0 - cell * .6];
+        const r = cell * 2.2 * f.s * (.78 + .22 * Math.sin(t * .35 + f.ph)) * (.75 + .25 * z), a = .2 + .5 * z;   // flowers slowly open and close
+        F.glow(c[0], c[1], r * 4, VINE.petal, .16 * z);
+        for (let i = 0; i < 5; i++) { const an = f.rot + t * .05 + i * 1.2566; F.dot(c[0] + Math.cos(an) * r, c[1] + Math.sin(an) * r, r * .72, VINE.petal, a); }
+        F.dot(c[0], c[1], r * .45, VINE.heart, a);
+      }
+      for (const q of this.petals) F.dot(q.x, q.y, cell * .7, VINE.petal, .5 * (1 - q.life / q.max));
+    }
+    chains(F, g, t, cell) {
+      const cx = g.xr, spin = g.spinR, dz = z => z * .5 + .5, link = Math.max(cell * 3.4, g.R * .26), ly = link * .75;
+      // barbed-wire rungs: two wires twisted together, a barb every few twists, a padlock on every third
+      for (let y = Math.ceil(g.top / g.rung) * g.rung; y < g.bot; y += g.rung) {
+        const a = this.pt(g, cx, spin, 0, y), b = this.pt(g, cx, spin, 1, y), len = Math.hypot(b[0] - a[0], b[1] - a[1]), steps = Math.max(4, Math.round(len / 6));
+        let p0 = a, p1 = a;
+        for (let i = 1; i <= steps; i++) {
+          const u = i / steps, z = dz(a[2] + (b[2] - a[2]) * u), x = a[0] + (b[0] - a[0]) * u, yy = a[1] + (b[1] - a[1]) * u;
+          const tw = Math.sin(u * len * .25) * cell * .45, q0 = [x, yy + tw], q1 = [x, yy - tw], al = .1 + .26 * z;
+          seg(F, p0, q0, cell * .55, IRON.wire, al);
+          seg(F, p1, q1, cell * .55, IRON.wire, al);
+          if (i % 4 === 2) { const s = cell * .9; seg(F, [x - s, yy - s], [x + s, yy + s], cell * .5, IRON.wire, al * 1.2); seg(F, [x - s, yy + s], [x + s, yy - s], cell * .5, IRON.wire, al * 1.2); }
+          p0 = q0; p1 = q1;
+        }
+        const r = Math.round(y / g.rung);
+        if (r % 3 === 0) { const end = a[2] > b[2] ? a : b; this.padlock(F, end, .22 * Math.sin(t * 1.1 + r * 1.7), link * 1.1, dz(end[2]), cell); }
+      }
+      // the strands: links at fixed heights on the helix so they turn with it, alternating
+      // face-on (an oval ring) and edge-on (a bar); a glint runs down each chain
+      for (let k = 0; k < 2; k++) for (let i = Math.floor(g.top / ly); i * ly < g.bot; i++) {
+        const c0 = this.pt(g, cx, spin, k, i * ly), c1 = this.pt(g, cx, spin, k, (i + 1) * ly);
+        const m = [(c0[0] + c1[0]) / 2, (c0[1] + c1[1]) / 2], sp = Math.hypot(c1[0] - c0[0], c1[1] - c0[1]) || 1;
+        const dir = [(c1[0] - c0[0]) / sp, (c1[1] - c0[1]) / sp], nrm = [-dir[1], dir[0]], z = dz((c0[2] + c1[2]) / 2);
+        const glint = Math.max(0, Math.sin(i * ly * .02 - t * 1.6 + k * 3)) ** 8, col = mix(IRON.link, IRON.glint, .25 * z + .6 * glint), a = .16 + .5 * z, A = sp * .62;
+        if (i & 1) {
+          const B = link * .3; let q0 = null;
+          for (let s = 0; s <= 10; s++) {
+            const an = s / 10 * 6.283, q = [m[0] + dir[0] * Math.cos(an) * A + nrm[0] * Math.sin(an) * B, m[1] + dir[1] * Math.cos(an) * A + nrm[1] * Math.sin(an) * B];
+            if (q0) seg(F, q0, q, cell * .75, col, a);
+            q0 = q;
+          }
+        } else seg(F, [m[0] - dir[0] * A, m[1] - dir[1] * A], [m[0] + dir[0] * A, m[1] + dir[1] * A], cell * 1.1, col, a);
+      }
+    }
+    // a padlock hanging by its shackle from `top`, swung `sw` rad off vertical; s sets its size
+    padlock(F, top, sw, s, z, cell) {
+      const a = .25 + .55 * z, w = s * 1.2, h = s, y0 = s * .6;
+      const P = (lx, ly) => [top[0] + Math.cos(sw) * lx + Math.sin(sw) * ly, top[1] - Math.sin(sw) * lx + Math.cos(sw) * ly];
+      let prev = P(-w * .3, y0);
+      for (let i = 1; i <= 8; i++) { const an = Math.PI * i / 8, cur = P(-Math.cos(an) * w * .3, y0 - Math.sin(an) * y0); seg(F, prev, cur, cell * .8, IRON.link, a); prev = cur; }
+      const n = Math.max(2, Math.round(h / (cell * .8)));
+      for (let i = 0; i <= n; i++) { const ly = y0 + h * i / n; seg(F, P(-w / 2, ly), P(w / 2, ly), cell * .9, IRON.lock, a * .6); }
+      seg(F, P(-w / 2, y0), P(-w / 2, y0 + h), cell * .6, IRON.glint, a * .5);   // lit edge
+    }
+  }
+
+  const SCENES = { constellation: Constellation, mycelium: Mycelium, helix: Helix, bonfire: Bonfire, 'vines-and-chains': VinesAndChains };
 
   // ---------- renderer ----------
   class CodeBackground {
@@ -305,7 +608,8 @@
       F.clear();
       this.scene.draw(F, W, H, pal, this.t, this.cell);
       if (this.intensity !== 1) for (let k = 0; k < F.d.length; k++) F.d[k] *= this.intensity;
-      this.atmosphere(F, pal, this.t);
+      // a scene may light its own backdrop (sky, sea, sand); the rest share the ocean wash
+      if (this.scene.atmosphere) this.scene.atmosphere(F, pal, this.t, W, H); else this.atmosphere(F, pal, this.t);
       // swap characters a trickle at a time (same ~10%/s as the jellyfish, no bursts)
       const swaps = Math.round(this.grid.length * .1 * dt);
       for (let s = 0; s < swaps; s++) { const i = Math.floor(Math.random() * this.grid.length); this.grid[i] = this.pick(); this.drawGlyph(i); }

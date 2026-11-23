@@ -49,7 +49,16 @@
   <a href="#main-content" class="skip-link">Skip to content</a>
 
   <!-- Digital Rain Background -->
-  <canvas id="rain-canvas" style="position:fixed;inset:0;z-index:-2;pointer-events:none;"></canvas>
+  <canvas id="home-bg" style="z-index:-2"></canvas>
+  <script>
+    // A different code background on each visit: the jellyfish most often (2 in 5), otherwise
+    // constellation, mycelium or vines & chains. Each at the strength that keeps the hero readable.
+    (function () {
+      var pool = [['jellyfish', 0.8], ['jellyfish', 0.8], ['constellation', 0.5], ['mycelium', 0.5], ['vines-and-chains', 0.4]];
+      var pick = pool[Math.floor(Math.random() * pool.length)], c = document.getElementById('home-bg');
+      c.setAttribute('data-code-bg', pick[0]); c.setAttribute('data-intensity', pick[1]);
+    })();
+  </script>
 
   <!-- Navigation -->
   <nav class="nav" role="navigation" aria-label="Main">
@@ -194,6 +203,7 @@
     <p class="footer__fine">No cookies. No ads. One anonymous page counter.<br>&copy; 2025&ndash;2026 Moonlit Social Labs&trade;</p>
   </footer>
 
+  <script src="js/code-backgrounds.js"></script>
   <script src="js/effects.js"></script>
   <script src="js/main.js"></script>
   <script src="js/player.js"></script>

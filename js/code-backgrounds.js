@@ -15,7 +15,8 @@
      "constellation"  — drifting star map; amber signals hop node to node
      "mycelium"       — networks grow from seeds and flash where they meet
      "helix"          — triple helix turning on a diagonal axis
-     "bonfire"        — beach bonfire at night; two people and two dogs run the shoreline on a loop
+     "bonfire"        — beach bonfire at night under the stars and the moon, waves breaking on the sand
+     "bonfire-runners" — the same beach, with two people and two dogs running the shoreline on a loop
      "vines-and-chains" — twin double helixes: flowering vines (left), chains, barbed wire and padlocks (right)
      "jellyfish"      — Code Ocean: jellyfish rising through light shafts (painted scene)
      "mushroom-cloud" — a slow, rolling mushroom cloud (painted scene)
@@ -48,7 +49,7 @@
   };
 
   const BINARY = '01', SYMBOLS = '{}[]<>():;=+-*/|!~∞∅∆∇⊕◇◆';
-  const THEME = { constellation: '·+*×∘°', mycelium: '/\\|-_.,:;', helix: '∞~=|:·', bonfire: '^~*.,:', 'vines-and-chains': '@&%~§' };
+  const THEME = { constellation: '·+*×∘°', mycelium: '/\\|-_.,:;', helix: '∞~=|:·', bonfire: '^~*.,:', 'bonfire-runners': '^~*.,:', 'vines-and-chains': '@&%~§' };
   // painted scenes keep the character mix they were made with: [characters, share]
   const CHARSETS = {
     jellyfish: [['01{}[]<>():;=+-*/|!~アイウエオカキクケコサシスセソ∞∅∆∇⊕◇◆', .6], ['~≈∿-=.:;_|/\\', .4]],
@@ -474,12 +475,14 @@
   const STAR_W = [.14, .26, .27, .2, .09, .04];
   const starColour = () => { let r = Math.random(); for (let i = 0; i < STAR_T.length; i++) if ((r -= STAR_W[i]) < 0) return STAR_T[i]; return STAR_T[2]; };
 
-  // A bonfire on a beach at night. Two people and two dogs run along the sand, left to right,
-  // on a loop, in front of the surf; the firelight warms them and throws their shadows up the
-  // beach as they pass. Above: stars of different colours and brightness that twinkle more
-  // near the horizon, the Milky Way with its dark rift, a shooting star now and then, and the
-  // moon laying a path on the water. Waves break into foam, wash up the sand and drain back.
+  // A bonfire on a beach at night. Above: stars of different colours and brightness that
+  // twinkle more near the horizon, the Milky Way with its dark rift, a shooting star now and
+  // then, and the moon laying a path on the water. Waves break into foam, wash up the sand and
+  // drain back. "bonfire-runners" (BonfireRunners, below) adds two people and two dogs running
+  // along the sand, left to right, on a loop, in front of the surf; the firelight warms them
+  // and throws their shadows up the beach as they pass.
   class Bonfire {
+    get runners() { return false; }
     init(W, H, cell) {
       this.lay = new Layer(cell);
       const n = Math.round(Math.min(380, Math.max(70, W * H / 4200)));
@@ -618,6 +621,11 @@
 
       // firelight pooled on the sand, then the runners' shadows thrown away from the fire
       F.glow(fx, fy - fs * .2, fs * 5, mix(FIRE, EMBER, .3), .16 * flick);
+      if (this.runners) this.drawRunners(F, W, H, p, t, L, flick);
+      this.drawFire(F, H, p, t, cell, L, flick);
+    }
+    drawRunners(F, W, H, p, t, L, flick) {
+      const { gy, S, fx, fy } = L, FIRE = p.c3;
       const v = S * 1.45, span = W + S * 6, skin = mix(p.c3, p.c4, .45), group = RUNNERS.map(r => {
         const drift = r.dog ? Math.sin(t * .6 + r.wob) * S * r.amp : 0, dist = t * v + drift;   // the dogs range ahead and drop back
         const x = ((dist + r.off * S) % span + span) % span - S * 3, warm = Math.exp(-(((x - fx) / (W * .22)) ** 2)) * flick;
@@ -634,7 +642,9 @@
         if (r.dog) { const D = sc * .4; dog(this.lay, F, x, g, D, ((q.dist / (D * GALLOP.stride) + r.ph) % 1 + 1) % 1, tint(r.fur), a); }
         else person(this.lay, F, x, g, sc, ((q.dist / (sc * RUN.stride) + r.ph) % 1 + 1) % 1, { hoodie: tint(p[r.hoodie]), shorts: tint(p[r.shorts]), skin: tint(skin), shoe: tint(SHOE), hair: tint(r.hair) }, a);
       }
-
+    }
+    drawFire(F, H, p, t, cell, L, flick) {
+      const { fx, fy, fs } = L, FIRE = p.c3, EMBER = p.c4;
       // the fire, in front of everything: a ring of stones, logs, embers, flame tongues, licks
       // tearing off the tips, the hot core, sparks and smoke
       const stone = mix(EMBER, p.c2, .6), log = mix(EMBER, p.c2, .5);
@@ -663,6 +673,7 @@
       }
     }
   }
+  class BonfireRunners extends Bonfire { get runners() { return true; } }
 
   // Two double helixes turning side by side. Left, grown: twisted vines with leaves,
   // opening flowers and twig rungs, petals drifting off. Right, forged: chain-link
@@ -1169,7 +1180,7 @@
     return toneFilterId = 'url(#code-bg-tone)';
   }
 
-  const SCENES = { constellation: Constellation, mycelium: Mycelium, helix: Helix, bonfire: Bonfire, 'vines-and-chains': VinesAndChains, jellyfish: Ocean, 'mushroom-cloud': MushroomCloud };
+  const SCENES = { constellation: Constellation, mycelium: Mycelium, helix: Helix, bonfire: Bonfire, 'bonfire-runners': BonfireRunners, 'vines-and-chains': VinesAndChains, jellyfish: Ocean, 'mushroom-cloud': MushroomCloud };
 
   // ---------- renderer ----------
   class CodeBackground {
